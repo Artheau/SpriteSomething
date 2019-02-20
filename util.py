@@ -3,7 +3,8 @@
 #while looking out the window and dreaming of being outside in the sunshine
 
 
-
+#TODO: Extract palettes from ROM directly
+#TODO: Get palettes for the all the crazy stuff like charge attacks
 #TODO: Change large tiles to supertiles
 #TODO: Try to merge supertiles when they are iff located correctly, and align
 
@@ -29,7 +30,7 @@ Pose:
     upper_tiles = list of upper body Tiles
     lower_tiles = list of lower body Tiles
     tiles = list of all Tiles
-    to_image(palette): retrieve n image of this pose
+    to_image(palette): retrieve an image of this pose
 
 Tile:
     large = True if 16x16
@@ -49,6 +50,18 @@ import csv
 import math
 from PIL import Image
 from pprint import pprint
+
+#There is a bug in Pillow version 5.4.1 that does not display GIF transparency correctly
+#It is because of Line 443 in GifImagePlugin.py not taking into account the disposal method
+#Please help fix this
+#https://github.com/python-pillow/Pillow/issues/3665
+import PIL
+if int(PIL.PILLOW_VERSION.split('.')[0]) <= 5:
+    TRANSPARENCY = 255
+    DISPOSAL = 0
+else:
+    TRANSPARENCY = 0
+    DISPOSAL = 2
 
 rom = None
 
@@ -80,6 +93,58 @@ class Samus:
         palettes = {}
 
         palettes['standard'] = self.get_palette_at(0x9B9400)
+        palettes['power'] = self.get_palette_at(0x9B9400)
+        palettes['varia'] = self.get_palette_at(0x9B9520)
+        palettes['gravity'] = self.get_palette_at(0x9B9800)
+        
+
+        #append the fixed palettes...things like the stark palette for green lightning flashes and white for crystal flash
+        for palette in palettes.keys():
+            samus_palette = palettes[palette]
+
+            white_palette_blueprint = [(0xFF,0xFF,0xFF),(0xEF,0xEF,0xEF),(0xD6,0xD6,0xD6),(0xC6,0xC6,0xC6)]
+            white_palette = [(0x00,0x00,0xFF)] + 3*white_palette_blueprint + white_palette_blueprint[:-1]
+
+            chroma_palette =  [
+                                (0x00,0x00,0xFF),
+                                (0xEF,0x84,0x00),(0xAD,0x00,0x00),(0x42,0x00,0x00),(0x18,0x00,0x00),
+                                (0xEF,0x29,0x00),(0x9C,0x00,0x00),(0x73,0x00,0x00),(0x5A,0x00,0x00),
+                                (0xD6,0xD6,0xFF),(0x00,0xB5,0xFF),(0x00,0x7B,0xDE),(0x00,0x39,0xAD),
+                                (0xFF,0x00,0x00),(0xAD,0x00,0x00),(0x52,0x00,0x00)
+                              ]
+
+            yellow_and_friends_palette = [
+                                            (0x00,0x00,0xFF),
+                                            (0xFF,0xFF,0x5A),(0xBD,0xBD,0x31),(0x52,0x52,0x00),(0x18,0x18,0x00),
+                                            (0xD6,0xD6,0x4A),(0xAD,0xAD,0x18),(0x84,0x84,0x00),(0x73,0x73,0x00),
+                                            (0x00,0xFF,0x00),(0x00,0xBD,0x00),(0x00,0x84,0x00),(0x00,0x42,0x00),
+                                            (0x00,0xC6,0xFF),(0x00,0x7B,0xDE),(0x00,0x39,0xAD)
+                                         ]
+
+            purple_palette = [
+                                (0x00,0x00,0xFF),
+                                (0xD6,0xD6,0xFF),(0xDE,0xCE,0x00),(0xB5,0x84,0x00),
+                                (0x9C,0x42,0x00),(0xEF,0x00,0xFF),(0xA5,0x00,0xB5),
+                                (0x52,0x00,0x63),(0x00,0xFF,0x73),(0x00,0x63,0x29),
+                                (0xA5,0xA5,0xA5),(0x73,0x73,0x73),(0x42,0x42,0x42),
+                                (0x21,0x21,0x4A),(0x42,0x42,0xFF)
+                             ]
+
+            black_palette = [(0,0,0)]*16
+
+            #palette comments given as (in tilemap, in game)
+            palettes[palette] = [   None,                        #0b000
+                                    None,                        #0b001
+                                    samus_palette,               #0b010  (Samus)  <-- definitely Samus.  definitely.
+                                    black_palette,               #0b011  <-- the shadow inside the crystal flash
+                                    samus_palette,               #0b100  <-- ad hoc fix to typos in animations $81,82,$1B, and $1C
+                                    None,                        #0b101
+                                    samus_palette,               #0b110  <-- ad hoc fix to a bug in tilemap of animation 0x50 frame 0
+                                    white_palette                #0b111  <-- I'm not really sure about this, because of palette effects applied during crystal_flash
+                                ]
+
+
+        #TODO: Extract the fixed palettes directly from the ROM, also sort out the palettes in general
 
         return palettes
 
@@ -87,11 +152,9 @@ class Samus:
         raw_palette = get_indexed_values(addr,0,0x02,'2'*0x10)   #retrieve 0x10 2-byte colors in BGR 555 format
         palette = []
         for color in raw_palette:
-            red = 8*(color & 0b11111)
-            green = 8*((color >> 5) & 0b11111)
-            blue = 8*((color >> 10) & 0b11111)
-            palette.append((red,green,blue))
+            palette.append(convert_from_555(color))
         return palette
+
 
 class Animation:
     def __init__(self, index, num_poses, used, description):
@@ -105,7 +168,7 @@ class Animation:
         canvases = [pose.to_canvas() for pose in self.poses]
 
         MARGIN = 0x08
-        BACKGROUND_COLOR = (0,0,255)
+        BACKGROUND_COLOR = '#36393f'
 
         x_min = min([min([x for (x,y) in canvas.keys()]) for canvas in canvases]) - MARGIN
         x_max = max([max([x for (x,y) in canvas.keys()]) for canvas in canvases]) + MARGIN
@@ -119,14 +182,17 @@ class Animation:
         images = []
         for canvas in canvases:
 
-            image = Image.new("RGBA", (width, height),BACKGROUND_COLOR)
+            images.append(Image.new("RGBA", (width, height),BACKGROUND_COLOR))
 
-            pixels = image.load()
+            pixels = images[-1].load()
 
             for (i,j) in canvas.keys():
-                pixels[i+origin[0],j+origin[1]] = palette[canvas[(i,j)]] # set the colour accordingly
-
-            images.append(image)
+                color_index, palette_index = canvas[(i,j)]
+                if palette[palette_index]:
+                    pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
+                else:
+                    print(f"Palette {bin(palette_index)} referenced in animation {self.ID}")
+                
 
         #FRAME_DURATION = 1000/60    #for true-to-NTSC attempts
         FRAME_DURATION = 20          #given GIF limitations, this seems like a good compromise
@@ -136,9 +202,9 @@ class Animation:
         images = [image.resize((zoom*width, zoom*height), Image.NEAREST) for image in images]
 
         if len(durations) > 1:
-            images[0].save(filename, 'GIF', save_all=True, append_images=images[1:], duration=durations, transparency=0, disposal=2, loop=0)
+            images[0].save(filename, 'GIF', save_all=True, append_images=images[1:], duration=durations, transparency=TRANSPARENCY, disposal=DISPOSAL, loop=0)
         else:
-            images[0].save(filename, transparency=0)
+            images[0].save(filename, transparency=TRANSPARENCY)
 
 
 
@@ -202,8 +268,7 @@ class Pose:
     def tiles(self):
         return self.upper_tiles + self.lower_tiles
 
-    def to_image(self,palette):
-        #TODO: zoom
+    def to_image(self,palette,zoom=1):
         canvas = self.to_canvas()
 
         width = 1+max([abs(x) for (x,y) in canvas.keys()])
@@ -216,11 +281,14 @@ class Pose:
         for (i,j) in canvas.keys():
             pixels[i+width,j+height] = palette[canvas[(i,j)]] # set the colour accordingly
 
+        #scale
+        image = image.resize((zoom*width, zoom*height), Image.NEAREST)
+
         return image
 
     def to_canvas(self):
         canvas = {}
-        for tile in self.tiles:
+        for tile in self.tiles[::-1]:
             canvas = tile.draw_on(canvas)
         return canvas
 
@@ -245,21 +313,18 @@ class Tile:
         self.h_flip = raw_tile[4] & 0x40 != 0x00
         self.v_flip = raw_tile[4] & 0x80 != 0x00
         self.priority = raw_tile[4] & 0x20 != 0x00
+        #if not self.priority:
+        #    print(f"priority bit unset, animation {self.ID}")   #only matters for animations $82 and $1C which are just typos
         self.palette = (raw_tile[4] >> 2) & 0b111
+        #if self.palette in [0b100]:
+        #    print(f"Tile {self.ID} uses palette {self.palette}")  #only matters for animations $81,82,$1B, and $1C which are just typos
 
     def draw_on(self,canvas):
-        if self.palette != 0b010:
-            raise AssertionError(f"Received call to palette {self.palette} which is not implemented")
-
-        if self.large:
-            pass   #TODO
-
         for tile_no,addr in enumerate(self.addresses):
             chunk_offsets = [(0,0),(TILE_DIMENSION,0),(0,TILE_DIMENSION),(TILE_DIMENSION,TILE_DIMENSION)]
             pixels = self.retrieve_tile(addr)
 
-            #TODO: implement flips for larger tiles
-            #TODO: implement priority
+
             if self.h_flip:
                 pixels = pixels[::-1]
                 if self.large:
@@ -275,7 +340,7 @@ class Tile:
             for i in range(TILE_DIMENSION):
                 for j in range(TILE_DIMENSION):
                     if pixels[i][j] != 0:             #if not transparent_pixel
-                        canvas[(i+self.x_offset+chunk_offset[0],j+self.y_offset+chunk_offset[1])] = pixels[i][j]
+                        canvas[(i+self.x_offset+chunk_offset[0],j+self.y_offset+chunk_offset[1])] = (pixels[i][j], self.palette)
         return canvas
 
     def retrieve_tile(self, addr):
@@ -370,6 +435,12 @@ def convert_int_to_signed_int(byte):
     else:
         return byte
 
+def convert_from_555(color):
+    red = 8*(color & 0b11111)
+    green = 8*((color >> 5) & 0b11111)
+    blue = 8*((color >> 10) & 0b11111)
+    return (red,green,blue)
+
 
 def load_virtual_VRAM(upper_graphics_data,lower_graphics_data):
     [upper_graphics_ptr,upper_top_row_amt,upper_bottom_row_amt] = upper_graphics_data
@@ -413,6 +484,8 @@ def load_rom_contents(rom_filename):
     return rom
 
 
+
+####################################################
 
 def main():
     data = Samus()
