@@ -275,7 +275,12 @@ class Pose:
         pixels = image.load()
 
         for (i,j) in canvas.keys():
-            pixels[i+width,j+height] = palette[canvas[(i,j)]] # set the colour accordingly
+            color_index, palette_index = canvas[(i,j)]
+            if palette[palette_index]:
+                pixels[i+width,j+height] = palette[palette_index][color_index] # set the colour accordingly
+            else:
+                print(f"Palette {bin(palette_index)} referenced in pose {self.ID}")
+        
 
         #scale
         image = image.resize((zoom*width, zoom*height), Image.NEAREST)
