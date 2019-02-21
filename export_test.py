@@ -1,7 +1,5 @@
 import util
 
-#TODO: Figure out palette issues
-#TODO: Priority bits
 #TODO: Timing issues are actually control flags!
 
 #main data

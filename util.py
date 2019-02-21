@@ -4,7 +4,7 @@
 
 
 #TODO: Extract palettes from ROM directly
-#TODO: Get palettes for the all the crazy stuff like charge attacks
+#TODO: Get palettes for the all the crazy stuff like charge attacks (also sort out palette assignments in general)
 #TODO: Change large tiles to supertiles
 #TODO: Try to merge supertiles when they are iff located correctly, and align
 
@@ -142,10 +142,6 @@ class Samus:
                                     samus_palette,               #0b110  <-- ad hoc fix to a bug in tilemap of animation 0x50 frame 0
                                     white_palette                #0b111  <-- I'm not really sure about this, because of palette effects applied during crystal_flash
                                 ]
-
-
-        #TODO: Extract the fixed palettes directly from the ROM, also sort out the palettes in general
-
         return palettes
 
     def get_palette_at(self, addr):
