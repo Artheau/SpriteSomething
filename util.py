@@ -49,7 +49,8 @@ import struct
 import csv
 import math
 from PIL import Image
-from pprint import pprint
+
+import romload
 
 #There is a bug in Pillow version 5.4.1 that does not display GIF transparency correctly
 #It is because of Line 443 in GifImagePlugin.py not taking into account the disposal method
@@ -71,7 +72,7 @@ TILE_DIMENSION = int(math.sqrt(2 * TILESIZE))           #4 bits per pixel => 2 p
 class Samus:
     def __init__(self, rom_filename="metroid.smc", animation_data_filename="animations.csv"):
         global rom
-        rom = load_rom_contents(rom_filename)
+        rom = romload.load_rom_contents(rom_filename)
         self.animations = self.load_animations(animation_data_filename)
         self.palettes = self.load_palettes()
 
@@ -92,10 +93,11 @@ class Samus:
     def load_palettes(self):
         palettes = {}
 
-        palettes['standard'] = self.get_palette_at(0x9B9400)
         palettes['power'] = self.get_palette_at(0x9B9400)
         palettes['varia'] = self.get_palette_at(0x9B9520)
         palettes['gravity'] = self.get_palette_at(0x9B9800)
+
+        palettes['standard'] = palettes['power']
         
 
         #append the fixed palettes...things like the stark palette for green lightning flashes and white for crystal flash
@@ -105,30 +107,30 @@ class Samus:
             white_palette_blueprint = [(0xFF,0xFF,0xFF),(0xEF,0xEF,0xEF),(0xD6,0xD6,0xD6),(0xC6,0xC6,0xC6)]
             white_palette = [(0x00,0x00,0xFF)] + 3*white_palette_blueprint + white_palette_blueprint[:-1]
 
-            chroma_palette =  [
-                                (0x00,0x00,0xFF),
-                                (0xEF,0x84,0x00),(0xAD,0x00,0x00),(0x42,0x00,0x00),(0x18,0x00,0x00),
-                                (0xEF,0x29,0x00),(0x9C,0x00,0x00),(0x73,0x00,0x00),(0x5A,0x00,0x00),
-                                (0xD6,0xD6,0xFF),(0x00,0xB5,0xFF),(0x00,0x7B,0xDE),(0x00,0x39,0xAD),
-                                (0xFF,0x00,0x00),(0xAD,0x00,0x00),(0x52,0x00,0x00)
-                              ]
+            # chroma_palette =  [
+            #                     (0x00,0x00,0xFF),
+            #                     (0xEF,0x84,0x00),(0xAD,0x00,0x00),(0x42,0x00,0x00),(0x18,0x00,0x00),
+            #                     (0xEF,0x29,0x00),(0x9C,0x00,0x00),(0x73,0x00,0x00),(0x5A,0x00,0x00),
+            #                     (0xD6,0xD6,0xFF),(0x00,0xB5,0xFF),(0x00,0x7B,0xDE),(0x00,0x39,0xAD),
+            #                     (0xFF,0x00,0x00),(0xAD,0x00,0x00),(0x52,0x00,0x00)
+            #                   ]
 
-            yellow_and_friends_palette = [
-                                            (0x00,0x00,0xFF),
-                                            (0xFF,0xFF,0x5A),(0xBD,0xBD,0x31),(0x52,0x52,0x00),(0x18,0x18,0x00),
-                                            (0xD6,0xD6,0x4A),(0xAD,0xAD,0x18),(0x84,0x84,0x00),(0x73,0x73,0x00),
-                                            (0x00,0xFF,0x00),(0x00,0xBD,0x00),(0x00,0x84,0x00),(0x00,0x42,0x00),
-                                            (0x00,0xC6,0xFF),(0x00,0x7B,0xDE),(0x00,0x39,0xAD)
-                                         ]
+            # yellow_and_friends_palette = [
+            #                                 (0x00,0x00,0xFF),
+            #                                 (0xFF,0xFF,0x5A),(0xBD,0xBD,0x31),(0x52,0x52,0x00),(0x18,0x18,0x00),
+            #                                 (0xD6,0xD6,0x4A),(0xAD,0xAD,0x18),(0x84,0x84,0x00),(0x73,0x73,0x00),
+            #                                 (0x00,0xFF,0x00),(0x00,0xBD,0x00),(0x00,0x84,0x00),(0x00,0x42,0x00),
+            #                                 (0x00,0xC6,0xFF),(0x00,0x7B,0xDE),(0x00,0x39,0xAD)
+            #                              ]
 
-            purple_palette = [
-                                (0x00,0x00,0xFF),
-                                (0xD6,0xD6,0xFF),(0xDE,0xCE,0x00),(0xB5,0x84,0x00),
-                                (0x9C,0x42,0x00),(0xEF,0x00,0xFF),(0xA5,0x00,0xB5),
-                                (0x52,0x00,0x63),(0x00,0xFF,0x73),(0x00,0x63,0x29),
-                                (0xA5,0xA5,0xA5),(0x73,0x73,0x73),(0x42,0x42,0x42),
-                                (0x21,0x21,0x4A),(0x42,0x42,0xFF)
-                             ]
+            # purple_palette = [
+            #                     (0x00,0x00,0xFF),
+            #                     (0xD6,0xD6,0xFF),(0xDE,0xCE,0x00),(0xB5,0x84,0x00),
+            #                     (0x9C,0x42,0x00),(0xEF,0x00,0xFF),(0xA5,0x00,0xB5),
+            #                     (0x52,0x00,0x63),(0x00,0xFF,0x73),(0x00,0x63,0x29),
+            #                     (0xA5,0xA5,0xA5),(0x73,0x73,0x73),(0x42,0x42,0x42),
+            #                     (0x21,0x21,0x4A),(0x42,0x42,0xFF)
+            #                  ]
 
             black_palette = [(0,0,0)]*16
 
@@ -136,10 +138,10 @@ class Samus:
             palettes[palette] = [   None,                        #0b000
                                     None,                        #0b001
                                     samus_palette,               #0b010  (Samus)  <-- definitely Samus.  definitely.
-                                    black_palette,               #0b011  <-- the shadow inside the crystal flash
-                                    samus_palette,               #0b100  <-- ad hoc fix to typos in animations $81,82,$1B, and $1C
+                                    black_palette,               #0b011  <-- not sure if this should be all black...it is the shadow inside the crystal flash
+                                    None,                        #0b100
                                     None,                        #0b101
-                                    samus_palette,               #0b110  <-- ad hoc fix to a bug in tilemap of animation 0x50 frame 0
+                                    None,                        #0b110
                                     white_palette                #0b111  <-- I'm not really sure about this, because of palette effects applied during crystal_flash
                                 ]
         return palettes
@@ -184,10 +186,8 @@ class Animation:
 
             for (i,j) in canvas.keys():
                 color_index, palette_index = canvas[(i,j)]
-                if palette[palette_index]:
-                    pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
-                else:
-                    print(f"Palette {bin(palette_index)} referenced in animation {self.ID}")
+                pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
+                    
                 
 
         #FRAME_DURATION = 1000/60    #for true-to-NTSC attempts
@@ -276,10 +276,7 @@ class Pose:
 
         for (i,j) in canvas.keys():
             color_index, palette_index = canvas[(i,j)]
-            if palette[palette_index]:
-                pixels[i+width,j+height] = palette[palette_index][color_index] # set the colour accordingly
-            else:
-                print(f"Palette {bin(palette_index)} referenced in pose {self.ID}")
+            pixels[i+width,j+height] = palette[palette_index][color_index] # set the colour accordingly
         
 
         #scale
@@ -314,11 +311,11 @@ class Tile:
         self.h_flip = raw_tile[4] & 0x40 != 0x00
         self.v_flip = raw_tile[4] & 0x80 != 0x00
         self.priority = raw_tile[4] & 0x20 != 0x00
-        #if not self.priority:
-        #    print(f"priority bit unset, animation {self.ID}")   #only matters for animations $82 and $1C which are just typos
+        if not self.priority:
+            raise AssertionError(f"priority bit unset, tile {self.ID}")   #only matters for animations $82 and $1C which are just typos
         self.palette = (raw_tile[4] >> 2) & 0b111
-        #if self.palette in [0b100]:
-        #    print(f"Tile {self.ID} uses palette {self.palette}")  #only matters for animations $81,82,$1B, and $1C which are just typos
+        if self.palette not in [0b010,0b011,0b111]:
+            raise AssertionError(f"Tile {self.ID} uses palette {self.palette}.  raw_tile = {[hex(raw) for raw in raw_tile]}")  #only matters for animations $81,82,$1B, and $1C which are just typos
 
     def draw_on(self,canvas):
         for tile_no,addr in enumerate(self.addresses):
@@ -477,13 +474,6 @@ def get_tilemap(offset):
             tilemap.append(raw_tile)
 
     return tilemap
-
-
-def load_rom_contents(rom_filename):
-    with open(rom_filename, mode='rb') as file:
-        rom = file.read()
-    return rom
-
 
 
 ####################################################

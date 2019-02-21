@@ -107,10 +107,10 @@
 0x6A;2;True;Normal jump facing left, aiming upleft. Moving optional
 0x6B;2;True;Normal jump facing right, aiming Downright. Moving optional
 0x6C;2;True;Normal jump facing left, aiming Downleft. Moving optional
-0x6D;1;True;Falling facing right, aiming upright
-0x6E;1;True;Falling facing left, aiming upleft
-0x6F;1;True;Falling facing right, aiming Downright
-0x70;1;True;Falling facing left, aiming Downleft
+0x6D;3;True;Falling facing right, aiming upright
+0x6E;3;True;Falling facing left, aiming upleft
+0x6F;3;True;Falling facing right, aiming Downright
+0x70;3;True;Falling facing left, aiming Downleft
 0x71;1;True;Standing to crouching, facing right and aiming upright
 0x72;1;True;Standing to crouching, facing left and aiming upleft
 0x73;1;True;Standing to crouching, facing right and aiming Downright
