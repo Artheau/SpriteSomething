@@ -1,7 +1,5 @@
 import util
 
-#TODO: Timing issues are actually control flags!
-
 #main data
 data = util.Samus()
 

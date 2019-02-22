@@ -119,3 +119,10 @@ def fix_bouncing_shoulder_tiles(rom):
     rom[0x091BF9] = 0xFA            #$929BF9 LoROM
     rom[0x091BFE] = 0xF2            #$929BFE LoROM
     rom[0x091C03] = 0xF2            #$929C03 LoROM
+
+
+def main():
+    raise AssertionError("Compiled utility library directly")
+    
+if __name__ == "__main__":
+    main()

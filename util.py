@@ -14,6 +14,7 @@ ROADMAP:
 
 Samus:
     animations = list of Animations
+    animation_sequence_to_gif(self, filename, many_other_args): save a GIF of an animation sequence
 
 Animation:
     ID = unique identifying string
@@ -76,6 +77,14 @@ class Samus:
         self.animations = self.load_animations(animation_data_filename)
         self.palettes = self.load_palettes()
 
+
+    def animation_sequence_to_gif(self, filename, events={}, starting_pose=0x00, duration=300, \
+        jump_type=0, springball=False, heavy_breathing=0, in_air=False, exhausted=False):
+
+        while(duration > 0):
+            duration -= 1
+
+
     def load_animations(self, animation_data_filename):
         #generated this csv data from community disassembly data (thank you to all contributors)
         #format: [ANIMATION_ID, NUM_POSES, USED, DESCRIPTION]
@@ -84,10 +93,10 @@ class Samus:
             spamreader = csv.reader(csvfile, delimiter=';')
             for row in spamreader:
                 index = int(row[0],0)    #the second argument specifies to determine if it is hex or not automatically
-                num_poses = int(row[1])
+                num_kicks = int(row[1])
                 used = row[2].lower() in ['true','t','y']
                 description = row[3]
-                animations.append(Animation(index, num_poses, used, description))
+                animations.append(Animation(index, num_kicks, used, description))
         return animations
 
     def load_palettes(self):
@@ -100,7 +109,8 @@ class Samus:
         palettes['standard'] = palettes['power']
         
 
-        #append the fixed palettes...things like the stark palette for green lightning flashes and white for crystal flash
+        #append the fixed palettes...these are just guesses at present because it's not clear that white and black palettes
+        # are the correct palettes to use here
         for palette in palettes.keys():
             samus_palette = palettes[palette]
 
@@ -155,23 +165,24 @@ class Samus:
 
 
 class Animation:
-    def __init__(self, index, num_poses, used, description):
+    def __init__(self, index, num_kicks, used, description):
         self.ID = hex(index)
         self.index = index
         self.used = used
         self.description = description
-        self.poses = self.load_poses(num_poses)
+        self.poses = self.load_poses(num_kicks)
 
     def gif(self, filename, palette,zoom=1):
-        canvases = [pose.to_canvas() for pose in self.poses]
+        #TODO: Better control code handling
+        canvases = [pose.to_canvas() for pose in self.poses if pose.duration < 0x80]
 
         MARGIN = 0x08
         BACKGROUND_COLOR = '#36393f'
 
-        x_min = min([min([x for (x,y) in canvas.keys()]) for canvas in canvases]) - MARGIN
-        x_max = max([max([x for (x,y) in canvas.keys()]) for canvas in canvases]) + MARGIN
-        y_min = min([min([y for (x,y) in canvas.keys()]) for canvas in canvases]) - MARGIN
-        y_max = max([max([y for (x,y) in canvas.keys()]) for canvas in canvases]) + MARGIN
+        x_min = min([x for canvas in canvases for (x,y) in canvas.keys()]) - MARGIN
+        x_max = max([x for canvas in canvases for (x,y) in canvas.keys()]) + MARGIN
+        y_min = min([y for canvas in canvases for (x,y) in canvas.keys()]) - MARGIN
+        y_max = max([y for canvas in canvases for (x,y) in canvas.keys()]) + MARGIN
 
         width = x_max-x_min+1
         height = y_max-y_min+1
@@ -179,20 +190,22 @@ class Animation:
 
         images = []
         for canvas in canvases:
+            if canvas.keys():
 
-            images.append(Image.new("RGBA", (width, height),BACKGROUND_COLOR))
+                images.append(Image.new("RGBA", (width, height),BACKGROUND_COLOR))
 
-            pixels = images[-1].load()
+                pixels = images[-1].load()
 
-            for (i,j) in canvas.keys():
-                color_index, palette_index = canvas[(i,j)]
-                pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
-                    
-                
+                for (i,j) in canvas.keys():
+                    color_index, palette_index = canvas[(i,j)]
+                    pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
+                            
 
         #FRAME_DURATION = 1000/60    #for true-to-NTSC attempts
         FRAME_DURATION = 20          #given GIF limitations, this seems like a good compromise
-        durations = [int(FRAME_DURATION*pose.duration) for pose in self.poses]
+
+        #TODO: Better control code handling
+        durations = [int(FRAME_DURATION*pose.duration) for pose in self.poses if pose.duration < 0x80]
 
         #scale
         images = [image.resize((zoom*width, zoom*height), Image.NEAREST) for image in images]
@@ -206,17 +219,19 @@ class Animation:
 
 
 
-    def load_poses(self,num_poses):
+    def load_poses(self,num_kicks):
+        [duration_list_location] = get_indexed_values(0x91B010,self.index,0x02,'2')
+        duration_list_location += 0x910000
+
+        duration_list = self.get_transition_data(duration_list_location, num_kicks)
+
+        num_poses = len(duration_list)-1   #the last pose in the duration_list is always a control code with no pose present
+
         [upper_offset] = get_indexed_values(0x929263,self.index,0x02,'2')
         [lower_offset] = get_indexed_values(0x92945D,self.index,0x02,'2')
 
         upper_tilemap_offsets = get_indexed_values(0x92808D,upper_offset,0x02,'2'*num_poses)
         lower_tilemap_offsets = get_indexed_values(0x92808D,lower_offset,0x02,'2'*num_poses)
-
-        [duration_list_location] = get_indexed_values(0x91B010,self.index,0x02,'2')
-        duration_list_location += 0x910000
-
-        duration_list = get_indexed_values(duration_list_location,0,0x02,'1'*num_poses)
 
         poses = []
         for pose_number in range(num_poses):
@@ -250,6 +265,25 @@ class Animation:
         VRAM = load_virtual_VRAM(upper_graphics_data,lower_graphics_data)
 
         return VRAM
+
+    def get_transition_data(self, duration_list_location, num_kicks):
+        duration_list = []
+        MAX_INSTRUCTIONS = 0x100
+        for _ in range(MAX_INSTRUCTIONS):
+            [duration] = get_indexed_values(duration_list_location,len(duration_list),0x01,'1')
+            duration_list.append(duration)
+
+            if (duration & 0x80) != 0:        #control code
+                #TODO: do control code comprehension
+                if num_kicks > 0:
+                    num_kicks -= 1
+                else:
+                    break                     #out of infinite loop
+        else:      #we never broke out of the loop, just ran out MAX_INSTRUCTIONS
+            raise AssertionError(f"Error in get_transition_data(), did not break out of loop")
+
+        return duration_list
+
 
 
 class Pose:
