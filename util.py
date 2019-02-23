@@ -78,7 +78,6 @@ class Samus:
         self.animations = self.load_animations(animation_data_filename)
         self.palettes = self.load_palettes()
 
-
     def animation_sequence_to_gif(self, filename, zoom=1, starting_animation=0x00, events={}, full_duration=600, \
         palette_type='standard', jump_type=0, springball=False, heavy_breathing=False, in_air=False, exhausted=False):
         animation = self.animations[starting_animation]
@@ -252,7 +251,6 @@ class Samus:
         for color in raw_palette:
             palette.append(convert_from_555(color))
         return palette
-
 
 class Animation:
     def __init__(self, index, num_kicks, used, description):
