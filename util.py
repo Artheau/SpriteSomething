@@ -4,7 +4,7 @@
 
 
 #TODO: Extract palettes from ROM directly
-#TODO: Get palettes for the all the crazy stuff like charge attacks (also sort out palette assignments in general)
+#TODO: Get palettes for the all the crazy stuff like charge attacks and fast running
 #TODO: Change large tiles to supertiles
 #TODO: Try to merge supertiles when they are iff located correctly, and align
 
@@ -14,7 +14,7 @@ ROADMAP:
 
 Samus:
     animations = list of Animations
-    animation_sequence_to_gif(self, filename, many_other_args): save a GIF of an animation sequence
+    animation_sequence_to_gif(self, filename, many_optional_args): save a GIF of an animation sequence
 
 Animation:
     ID = unique identifying string
@@ -69,6 +69,7 @@ rom = None
 
 TILESIZE = 0x20
 TILE_DIMENSION = int(math.sqrt(2 * TILESIZE))           #4 bits per pixel => 2 pixels per byte
+BACKGROUND_COLOR = '#36393f'
 
 class Samus:
     def __init__(self, rom_filename="metroid.smc", animation_data_filename="animations.csv"):
@@ -78,11 +79,100 @@ class Samus:
         self.palettes = self.load_palettes()
 
 
-    def animation_sequence_to_gif(self, filename, events={}, starting_pose=0x00, duration=300, \
-        jump_type=0, springball=False, heavy_breathing=0, in_air=False, exhausted=False):
+    def animation_sequence_to_gif(self, filename, zoom=1, starting_animation=0x00, events={}, full_duration=600, \
+        palette_type='standard', jump_type=0, springball=False, heavy_breathing=False, in_air=False, exhausted=False):
+        animation = self.animations[starting_animation]
+        kicked = False
+        elapsed_frames = 0
+        pose_number = 0
+        control_offset = 0
+        canvases = []
+        image_durations = []
 
-        while(duration > 0):
-            duration -= 1
+        while(elapsed_frames < full_duration):
+            frame_delta = animation.duration_list[pose_number+control_offset]
+            if frame_delta & 0x80 != 0:     #not a duration, actually a control code
+                if frame_delta == 0xF6:     #the heavy breathing check
+                    if heavy_breathing:        #just continue
+                        control_offset += 1
+                    else:                      #reset animation
+                        pose_number = 0
+                        control_offset = 0
+                elif frame_delta == 0xF7:   #the exhausted check
+                    if exhausted:
+                        pose_number += 1       #skip over the pose that you would be stuck at if not exhausted
+                        control_offset += 3    #go over the next conditional loop ($FE $??)
+                    else:
+                        control_offset += 1    #skip over the command and its argument (always $01)
+                elif frame_delta in [0xF8,0xFD]:    #jump to new animation
+                    new_animation_number = animation.duration_list[pose_number+control_offset+1]
+                    animation = self.animations[new_animation_number]
+                    pose_number = 0
+                    control_offset = 0
+                elif frame_delta == 0xF9:   #springball conditional
+                    index_to_ref = (1 if in_air else 0) + 2 * (1 if springball else 0)
+                    new_animation_number = animation.duration_list[pose_number+control_offset+3+index_to_ref]   #add 3 to bypass $F9 and also the next argument (always $0002)
+                    animation = self.animations[new_animation_number]
+                    pose_number = 0
+                    control_offset = 0
+                elif frame_delta == 0xFB:   #jump type conditional
+                    if jump_type == 0:
+                        control_offset += 1
+                    elif jump_type == 1:
+                        control_offset += 11
+                    elif jump_type == 2:
+                        control_offset += 21
+                    else:
+                        raise AssertionError(f"while processing animation sequence, encounter jump_type {jump_type}, not recognized")
+                elif frame_delta == 0xFE:    #go back a number of frames
+                    if kicked:
+                        kicked = False
+                        control_offset += 2
+                    else:
+                        pose_number -= animation.duration_list[pose_number+control_offset+1]
+                elif frame_delta == 0xFF:    #reset animation
+                    if kicked:
+                        kicked = False
+                        control_offset += 1
+                    else:
+                        pose_number = 0
+                        control_offset = 0
+                else:
+                    print(f"Unimplemented control code {hex(frame_delta)} encountered in animation_sequence_to_gif()")
+                    control_offset += 1
+            else:                        #not a control code, so process the duration normally
+                current_canvas = animation.poses[pose_number].to_canvas()
+                pose_number += 1
+                for i in range(elapsed_frames+1,elapsed_frames+1+frame_delta):  #iterate over the interval
+                    if i in events:                                             #likely no events at this time
+                        for event_name in events[i]:                            #but if there are, parse each one
+                            if event_name == 'exhausted':
+                                exhausted = events[i][event_name]
+                            elif event_name == 'heavy_breathing':
+                                heavy_breathing = events[i][event_name]
+                            elif event_name == 'kick':
+                                kicked = True
+                            elif event_name == 'new_animation':
+                                frame_delta = max(1,i-elapsed_frames)
+                                animation = self.animations[events[i][event_name]]
+                                pose_number = 0
+                                control_offset = 0
+                            else:
+                                raise AssertionError(f"Unimplemented event of type {event_name}")
+
+                if current_canvas.keys():       #not an empty canvas
+                    elapsed_frames += frame_delta
+                    image_durations.append(frame_delta)
+                    canvases.append(current_canvas)
+                else:
+                    print(f"empty canvas in animation_sequence_to_gif(): {animation.ID}")
+                
+
+        convert_canvas_to_gif(filename, canvases, image_durations, self.palettes[palette_type], zoom)
+
+
+
+
 
 
     def load_animations(self, animation_data_filename):
@@ -170,62 +260,21 @@ class Animation:
         self.index = index
         self.used = used
         self.description = description
-        self.poses = self.load_poses(num_kicks)
+        self.duration_list, self.pose_mask = self.get_transition_data(num_kicks)
+        self.poses = self.load_poses(num_kicks) if self.used else []
 
     def gif(self, filename, palette,zoom=1):
-        #TODO: Better control code handling
-        canvases = [pose.to_canvas() for pose in self.poses if pose.duration < 0x80]
+        duration_codes = [pose.duration for pose in self.poses]
+        canvases = [pose.to_canvas() for pose in self.poses]
 
-        MARGIN = 0x08
-        BACKGROUND_COLOR = '#36393f'
-
-        x_min = min([x for canvas in canvases for (x,y) in canvas.keys()]) - MARGIN
-        x_max = max([x for canvas in canvases for (x,y) in canvas.keys()]) + MARGIN
-        y_min = min([y for canvas in canvases for (x,y) in canvas.keys()]) - MARGIN
-        y_max = max([y for canvas in canvases for (x,y) in canvas.keys()]) + MARGIN
-
-        width = x_max-x_min+1
-        height = y_max-y_min+1
-        origin = (-x_min,-y_min)
-
-        images = []
-        for canvas in canvases:
-            if canvas.keys():
-
-                images.append(Image.new("RGBA", (width, height),BACKGROUND_COLOR))
-
-                pixels = images[-1].load()
-
-                for (i,j) in canvas.keys():
-                    color_index, palette_index = canvas[(i,j)]
-                    pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
-                            
-
-        #FRAME_DURATION = 1000/60    #for true-to-NTSC attempts
-        FRAME_DURATION = 20          #given GIF limitations, this seems like a good compromise
-
-        #TODO: Better control code handling
-        durations = [int(FRAME_DURATION*pose.duration) for pose in self.poses if pose.duration < 0x80]
-
-        #scale
-        images = [image.resize((zoom*width, zoom*height), Image.NEAREST) for image in images]
-
-        if len(durations) > 1:
-            images[0].save(filename, 'GIF', save_all=True, append_images=images[1:], duration=durations, transparency=TRANSPARENCY, disposal=DISPOSAL, loop=0)
-        else:
-            images[0].save(filename, transparency=TRANSPARENCY)
+        convert_canvas_to_gif(filename, canvases,duration_codes, palette, zoom)
 
 
 
 
 
     def load_poses(self,num_kicks):
-        [duration_list_location] = get_indexed_values(0x91B010,self.index,0x02,'2')
-        duration_list_location += 0x910000
-
-        duration_list = self.get_transition_data(duration_list_location, num_kicks)
-
-        num_poses = len(duration_list)-1   #the last pose in the duration_list is always a control code with no pose present
+        num_poses = len(self.duration_list)-1   #the last pose in the duration_list is always a control code with no pose present
 
         [upper_offset] = get_indexed_values(0x929263,self.index,0x02,'2')
         [lower_offset] = get_indexed_values(0x92945D,self.index,0x02,'2')
@@ -235,15 +284,16 @@ class Animation:
 
         poses = []
         for pose_number in range(num_poses):
-            upper_tilemap = get_tilemap(upper_tilemap_offsets[pose_number])
-            lower_tilemap = get_tilemap(lower_tilemap_offsets[pose_number])
-            
-            poses.append( Pose(f"{self.ID},P{pose_number}", \
-                          self.get_VRAM_data(pose_number), \
-                          duration_list[pose_number],
-                          upper_tilemap, \
-                          lower_tilemap)
-                        )
+            if self.pose_mask[pose_number]:         #don't process the pose if it is just a control code
+                upper_tilemap = get_tilemap(upper_tilemap_offsets[pose_number])
+                lower_tilemap = get_tilemap(lower_tilemap_offsets[pose_number])
+                
+                poses.append( Pose(f"{self.ID},P{pose_number}", \
+                              self.get_VRAM_data(pose_number), \
+                              self.duration_list[pose_number],
+                              upper_tilemap, \
+                              lower_tilemap)
+                            )
 
         return poses
 
@@ -266,23 +316,57 @@ class Animation:
 
         return VRAM
 
-    def get_transition_data(self, duration_list_location, num_kicks):
+    def get_transition_data(self, num_kicks):
+        #anyone who reads this code is going to ask me what a "kick" is.  By this I mean the number of times
+        # the animation can be manually pushed into the next phase by a storyline event
+        # e.g. 2 kicks in crystal flash.  One to kick into the animated silhouette phase, and another to kick out of the orb phase.
+        [duration_list_location] = get_indexed_values(0x91B010,self.index,0x02,'2')
+        duration_list_location += 0x910000
+
         duration_list = []
+        pose_mask = []
         MAX_INSTRUCTIONS = 0x100
         for _ in range(MAX_INSTRUCTIONS):
             [duration] = get_indexed_values(duration_list_location,len(duration_list),0x01,'1')
             duration_list.append(duration)
 
-            if (duration & 0x80) != 0:        #control code
-                #TODO: do control code comprehension
+            if (duration & 0x80) == 0:   #not a control code
+                pose_mask.append(True)   #process normally
+            else:        #control code
+                pose_mask.append(False)
+                if duration == 0xF6:
+                    num_kicks += 1           #pass over this to get the "heavy breathing" frames
+                elif duration == 0xF7:
+                    num_kicks += 2           #this command branches past a controlled loop, so we need to kick past $F7 AND that loop
+                elif duration == 0xF8 or duration == 0xFD:
+                    duration_list.extend(get_indexed_values(duration_list_location,len(duration_list),0x01,'1'))  #get animation to jump to
+                    pose_mask.append(False)
+                elif duration == 0xF9:
+                    duration_list.extend(get_indexed_values(duration_list_location,len(duration_list),0x01,'21111'))  #get springball jump data
+                    pose_mask.extend(5*[False])
+                elif duration == 0xFB:
+                    num_kicks += 3           #kick through this jump branch, and also kick over the next two (different types of jumps)
+                elif duration == 0xFC:
+                    duration_list.extend(get_indexed_values(duration_list_location,len(duration_list),0x01,'211'))  #not present in used animations    
+                    pose_mask.extend(3*[False])
+                elif duration == 0xFE:
+                    duration_list.extend(get_indexed_values(duration_list_location,len(duration_list),0x01,'1'))  #get number of frames to go back
+                    pose_mask.append(False)
+                elif duration == 0xFF:
+                    pass                       #nothing to do in this case, it is just the end of the line (loop to beginning)
+                else:
+                    raise AssertionError(f"In {self.ID}, reached duration code {hex(duration)} which is not implemented.")
+                
                 if num_kicks > 0:
                     num_kicks -= 1
                 else:
                     break                     #out of infinite loop
+
+
         else:      #we never broke out of the loop, just ran out MAX_INSTRUCTIONS
             raise AssertionError(f"Error in get_transition_data(), did not break out of loop")
 
-        return duration_list
+        return duration_list, pose_mask
 
 
 
@@ -298,25 +382,6 @@ class Pose:
     def tiles(self):
         return self.upper_tiles + self.lower_tiles
 
-    def to_image(self,palette,zoom=1):
-        canvas = self.to_canvas()
-
-        width = 1+max([abs(x) for (x,y) in canvas.keys()])
-        height = 1+max([abs(y) for (x,y) in canvas.keys()])
-        
-        image = Image.new("RGBA", (2*width, 2*height), (0, 0, 0))
-
-        pixels = image.load()
-
-        for (i,j) in canvas.keys():
-            color_index, palette_index = canvas[(i,j)]
-            pixels[i+width,j+height] = palette[palette_index][color_index] # set the colour accordingly
-        
-
-        #scale
-        image = image.resize((zoom*width, zoom*height), Image.NEAREST)
-
-        return image
 
     def to_canvas(self):
         canvas = {}
@@ -330,6 +395,9 @@ class Pose:
             tiles.append(Tile(f"{self.ID},T{i}",self.VRAM, raw_tile))
         return tiles
 
+    def to_image(self,palette,zoom=1):
+        return to_image(self,palette,zoom=zoom)
+
 
 class Tile:
     def __init__(self, ID, VRAM, raw_tile):
@@ -339,6 +407,8 @@ class Tile:
             self.addresses = [VRAM[raw_tile[3] + offset] for offset in [0x00,0x01,0x10,0x11]]
         else:
             self.addresses = [VRAM[raw_tile[3]]]
+        if None in self.addresses:
+            raise AssertionError(f"referenced stale VRAM using tile {self.ID}")
         self.auto_flag = raw_tile[1] & 0x01 != 0x00
         self.x_offset = convert_int_to_signed_int(raw_tile[0])# - (1 if self.auto_flag else 0)
         self.y_offset = convert_int_to_signed_int(raw_tile[2])
@@ -350,6 +420,9 @@ class Tile:
         self.palette = (raw_tile[4] >> 2) & 0b111
         if self.palette not in [0b010,0b011,0b111]:
             raise AssertionError(f"Tile {self.ID} uses palette {self.palette}.  raw_tile = {[hex(raw) for raw in raw_tile]}")  #only matters for animations $81,82,$1B, and $1C which are just typos
+
+    def to_image(self,palette,zoom=1):
+        return to_image(self,palette,zoom=zoom)
 
     def draw_on(self,canvas):
         for tile_no,addr in enumerate(self.addresses):
@@ -374,6 +447,9 @@ class Tile:
                     if pixels[i][j] != 0:             #if not transparent_pixel
                         canvas[(i+self.x_offset+chunk_offset[0],j+self.y_offset+chunk_offset[1])] = (pixels[i][j], self.palette)
         return canvas
+
+    def to_canvas(self):
+        return self.draw_on({})
 
     def retrieve_tile(self, addr):
         raw_tile = rom[addr:addr+TILESIZE]
@@ -508,6 +584,64 @@ def get_tilemap(offset):
             tilemap.append(raw_tile)
 
     return tilemap
+
+
+def to_image(object,palette,zoom=1):
+    canvas = object.to_canvas()
+
+    width = 1+max([abs(x) for (x,y) in canvas.keys()])
+    height = 1+max([abs(y) for (x,y) in canvas.keys()])
+    
+    image = Image.new("RGBA", (2*width, 2*height), BACKGROUND_COLOR)
+
+    pixels = image.load()
+
+    for (i,j) in canvas.keys():
+        color_index, palette_index = canvas[(i,j)]
+        pixels[i+width,j+height] = palette[palette_index][color_index] # set the colour accordingly
+
+    #scale
+    image = image.resize((zoom*(2*width), zoom*(2*height)), Image.NEAREST)
+
+    return image
+
+def convert_canvas_to_gif(filename, canvases, frame_durations, palette, zoom=1):
+
+    #FRAME_DURATION = 1000/60    #for true-to-NTSC attempts
+    FRAME_DURATION = 20          #given GIF limitations, this seems like a good compromise
+    
+    MARGIN = 0x08
+
+    x_min = min([x for canvas in canvases for (x,y) in canvas.keys()]) - MARGIN
+    x_max = max([x for canvas in canvases for (x,y) in canvas.keys()]) + MARGIN
+    y_min = min([y for canvas in canvases for (x,y) in canvas.keys()]) - MARGIN
+    y_max = max([y for canvas in canvases for (x,y) in canvas.keys()]) + MARGIN
+
+    width = x_max-x_min+1
+    height = y_max-y_min+1
+    origin = (-x_min,-y_min)
+
+    images = []
+    durations = []
+    for canvas,duration in zip(canvases,frame_durations):
+        if canvas.keys():
+
+            images.append(Image.new("RGBA", (width, height),BACKGROUND_COLOR))
+            durations.append(int(FRAME_DURATION*duration))
+
+            pixels = images[-1].load()
+
+            for (i,j) in canvas.keys():
+                color_index, palette_index = canvas[(i,j)]
+                pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
+
+    #scale
+    images = [image.resize((zoom*width, zoom*height), Image.NEAREST) for image in images]
+
+    if len(durations) > 1:
+        images[0].save(filename, 'GIF', save_all=True, append_images=images[1:], duration=durations, transparency=TRANSPARENCY, disposal=DISPOSAL, loop=0)
+    else:
+        images[0].save(filename, transparency=TRANSPARENCY)
 
 
 ####################################################
