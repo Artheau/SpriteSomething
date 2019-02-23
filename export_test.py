@@ -1,10 +1,12 @@
 import util
-
+import os
 
 def main():
 	#main data
 	data = util.Samus()
 
+	if not os.access("images", os.F_OK):
+		os.mkdir("images")
 
 	EXPORT_CUSTOM_SEQUENCES = True
 	if EXPORT_CUSTOM_SEQUENCES:
@@ -25,7 +27,7 @@ def main():
 					data.animations[animation_number].gif(f"images/test{hex(animation_number)[2:].zfill(2)}.gif", data.palettes['standard'],zoom=2)
 				except AssertionError as e:
 					print(f"AssertionError on animation {hex(animation_number)}: {e.args}")
-					
+
 
 	EXPORT_SPECIFIC_POSE = False
 	if EXPORT_SPECIFIC_POSE:
@@ -46,6 +48,6 @@ def main():
 			img.show()
 			img.save(f"test{tile.ID}.png")
 
-    
+
 if __name__ == "__main__":
     main()
