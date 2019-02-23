@@ -1,0 +1,14 @@
+# no pycache
+__pycache__/
+
+# no images output
+images
+
+# no pip installer
+get-pip.py
+
+# no super nintendo files
+*.smc
+
+# no super famicom files
+*.sfc
