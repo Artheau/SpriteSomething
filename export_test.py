@@ -18,7 +18,7 @@ def main():
 
     pal = command_line_args[PALETTE_ARG_KEY]
 
-    export_custom_sequences(pal)
+    export_custom_sequence(pal)
 
     export_all_raw_animations(pal)
 
@@ -29,12 +29,10 @@ def main():
 
 
 
-def export_custom_sequences(palette_name, zoom=2):
+def export_custom_sequence(palette_name, zoom=2):
     events = { 80:{'kick':True}, \
-               200:{'kick':True}, \
-               200:{'heavy_breathing':True}, \
-               300:{'new_animation':0x0A}, \
-               400:{'new_animation':0x10}, \
+               200:{'heavy_breathing':True,'kick':True}, \
+               400:{'new_animation':0x0A}, \
                500:{'new_animation':0x1A}}   #I'm thinking that this will eventually be JSON
     data.animation_sequence_to_gif('images/test_sequence.gif', zoom=zoom, starting_animation=0xE9, \
         events=events, palette_type=palette_name)

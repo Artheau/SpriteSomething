@@ -5,7 +5,6 @@
 
 #TODO: Extract palettes from ROM directly
 #TODO: Get palettes for the all the crazy stuff like charge attacks and fast running
-#TODO: Change large tiles to supertiles
 #TODO: Try to merge supertiles when they are iff located correctly, and align
 
 
@@ -33,16 +32,15 @@ Pose:
     tiles = list of all Tiles
     to_image(palette): retrieve an image of this pose
 
-Tile:
-    large = True if 16x16
-    addresses = list of ROM addresses that this tile references
+TileRef:
     x_offset = x offset
     y_offset = y offset
     auto_flag = ???
     v_flip = True if v flip
     h_flip = True if h flip
-    priority = True if priority flag set
+    priority = True if priority flag set (it's always set for Samus, except for bugged tiles)
     palette = Palette
+    tiles = list of actual tiles/supertiles that this TileRef is pulling from memory
     draw_on(dict): inject raw pixel data into this dict
 '''
 
@@ -66,6 +64,7 @@ else:
     DISPOSAL = 2
 
 rom = None
+global_tiles = {}
 
 TILESIZE = 0x20
 TILE_DIMENSION = int(math.sqrt(2 * TILESIZE))           #4 bits per pixel => 2 pixels per byte
@@ -77,6 +76,7 @@ class Samus:
         rom = romload.load_rom_contents(rom_filename)
         self.animations = self.load_animations(animation_data_filename)
         self.palettes = self.load_palettes()
+        print(f"Global number of supertiles: {len(global_tiles.keys())}")
 
     def animation_sequence_to_gif(self, filename, zoom=1, starting_animation=0x00, events={}, full_duration=600, \
         palette_type='standard', jump_type=0, springball=False, heavy_breathing=False, in_air=False, exhausted=False):
@@ -390,26 +390,34 @@ class Pose:
     def get_tiles(self, raw_tilemap):
         tiles = []
         for i,raw_tile in enumerate(raw_tilemap):
-            tiles.append(Tile(f"{self.ID},T{i}",self.VRAM, raw_tile))
+            tiles.append(TileRef(f"{self.ID},T{i}",self.VRAM, raw_tile))
         return tiles
 
     def to_image(self,palette,zoom=1):
         return to_image(self,palette,zoom=zoom)
 
 
-class Tile:
+class TileRef:
     def __init__(self, ID, VRAM, raw_tile):
-        self.large = raw_tile[1] & 0x80 != 0x00    #what do bits 1 and 6 of raw_tile[1] do?
+        #what do bits 1 and 6 of raw_tile[1] do?
         self.ID = ID
-        if self.large:
-            self.addresses = [VRAM[raw_tile[3] + offset] for offset in [0x00,0x01,0x10,0x11]]
-        else:
-            self.addresses = [VRAM[raw_tile[3]]]
-        if None in self.addresses:
-            raise AssertionError(f"referenced stale VRAM using tile {self.ID}")
         self.auto_flag = raw_tile[1] & 0x01 != 0x00
         self.x_offset = convert_int_to_signed_int(raw_tile[0])# - (1 if self.auto_flag else 0)
         self.y_offset = convert_int_to_signed_int(raw_tile[2])
+
+        if raw_tile[1] & 0x80 != 0x00:      #if 16x16 tile
+            #need to center the offset as if this was a single 8x8 tile with extra tiles "hanging on"
+            #in order to make the h-flip/v-flip code generic
+            adjust = TILE_DIMENSION//2
+            self.x_offset += adjust           #center the offset on a single 8x8 tile, not a compound 16x16 tile
+            self.y_offset += adjust
+            offsets = [(0,0),(TILE_DIMENSION,0),(0,TILE_DIMENSION),(TILE_DIMENSION,TILE_DIMENSION)]
+            offsets = [(x-adjust,y-adjust) for (x,y) in offsets]
+            addresses = [VRAM[raw_tile[3] + VRAM_offset] for VRAM_offset in [0x00,0x01,0x10,0x11]]
+            self.real_tile = make_tile(addresses,offsets)
+        else:
+            self.real_tile = make_tile([VRAM[raw_tile[3]]], [(0,0)])
+
         self.h_flip = raw_tile[4] & 0x40 != 0x00
         self.v_flip = raw_tile[4] & 0x80 != 0x00
         self.priority = raw_tile[4] & 0x20 != 0x00
@@ -423,33 +431,45 @@ class Tile:
         return to_image(self,palette,zoom=zoom)
 
     def draw_on(self,canvas):
-        for tile_no,addr in enumerate(self.addresses):
-            chunk_offsets = [(0,0),(TILE_DIMENSION,0),(0,TILE_DIMENSION),(TILE_DIMENSION,TILE_DIMENSION)]
-            pixels = self.retrieve_tile(addr)
+        local_canvas = self.real_tile.get_local_canvas()
+        if self.h_flip:
+            local_canvas = {(TILE_DIMENSION-x,y):local_canvas[(x,y)] for (x,y) in local_canvas.keys()}
+        if self.v_flip:
+            local_canvas = {(x,TILE_DIMENSION-y):local_canvas[(x,y)] for (x,y) in local_canvas.keys()}
 
 
-            if self.h_flip:
-                pixels = pixels[::-1]
-                if self.large:
-                    chunk_offsets = [(TILE_DIMENSION-x,y) for (x,y) in chunk_offsets]
-            if self.v_flip:
-                pixels = [row[::-1] for row in pixels]
-                if self.large:
-                    chunk_offsets = [(x,TILE_DIMENSION-y) for (x,y) in chunk_offsets]
+        for (local_x,local_y) in local_canvas.keys():
+            canvas[(local_x+self.x_offset,local_y+self.y_offset)] = (local_canvas[(local_x,local_y)],self.palette)
 
-            chunk_offset = chunk_offsets[tile_no]
-
-
-            for i in range(TILE_DIMENSION):
-                for j in range(TILE_DIMENSION):
-                    if pixels[i][j] != 0:             #if not transparent_pixel
-                        canvas[(i+self.x_offset+chunk_offset[0],j+self.y_offset+chunk_offset[1])] = (pixels[i][j], self.palette)
         return canvas
 
     def to_canvas(self):
         return self.draw_on({})
 
-    def retrieve_tile(self, addr):
+
+
+
+
+
+
+class Tile:
+    def __init__(self, addresses, offsets):
+        self.addresses = addresses
+        self.offsets = offsets
+
+    def get_local_canvas(self):
+        canvas = {}
+        for address,offset in zip(self.addresses,self.offsets):
+            pixels = self.retrieve_small_tile(address)
+
+            for i in range(TILE_DIMENSION):
+                for j in range(TILE_DIMENSION):
+                    if pixels[i][j] != 0:             #if not transparent_pixel
+                        canvas[(i+offset[0],j+offset[1])] = pixels[i][j]
+        return canvas
+
+
+    def retrieve_small_tile(self, addr):
         raw_tile = rom[addr:addr+TILESIZE]
         pixels = [[0 for _ in range(TILE_DIMENSION)] for _ in range(TILE_DIMENSION)]
         for i in range(TILE_DIMENSION):
@@ -470,14 +490,12 @@ class Tile:
         return pixels
 
 
-
-
-
-
-
-
-
-
+def make_tile(addresses,offsets):
+    #if it doesn't exist, make it.  Otherwise just return the one already made
+    if addresses[0] not in global_tiles:
+        global_tiles[addresses[0]] = Tile(addresses,offsets)
+    return global_tiles[addresses[0]]
+    
 
 #######################################
 
