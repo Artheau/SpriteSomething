@@ -29,14 +29,14 @@ def main():
 
 
 
-def export_custom_sequences(palette_name):
+def export_custom_sequences(palette_name, zoom=2):
     events = { 80:{'kick':True}, \
                200:{'kick':True}, \
                200:{'heavy_breathing':True}, \
                300:{'new_animation':0x0A}, \
                400:{'new_animation':0x10}, \
                500:{'new_animation':0x1A}}   #I'm thinking that this will eventually be JSON
-    data.animation_sequence_to_gif('images/test_sequence.gif', zoom=2, starting_animation=0xE9, \
+    data.animation_sequence_to_gif('images/test_sequence.gif', zoom=zoom, starting_animation=0xE9, \
         events=events, palette_type=palette_name)
 
 
@@ -44,7 +44,7 @@ def export_all_raw_animations(palette_name, zoom=2):
     for animation_number in range(len(data.animations)):
         if data.animations[animation_number].used:
             try:
-                data.animations[animation_number].gif(f"images/animation_raw_{hex(animation_number)[2:].zfill(2)}.gif", data.palettes[palette_name])
+                data.animations[animation_number].gif(f"images/animation_raw_{hex(animation_number)[2:].zfill(2)}.gif", data.palettes[palette_name],zoom=zoom)
             except AssertionError as e:
                 print(f"AssertionError on animation {hex(animation_number)}: {e.args}")
 
