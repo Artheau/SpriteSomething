@@ -14,7 +14,7 @@ def main():
 
     #main data
     global data
-    data = util.Samus(rom_filename=command_line_args[ROM_FILENAME_ARG_KEY])
+    data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY])
 
     pal = command_line_args[PALETTE_ARG_KEY]
 
@@ -67,16 +67,14 @@ def process_command_line_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rom",
                         dest=ROM_FILENAME_ARG_KEY,
-                        help="Location of the rom file; e.g. /my_dir/game.smc",
+                        help="Location of the rom file; e.g. /my_dir/sm_orig.sfc",
                         metavar="<rom_filename>",
-                        default='metroid.smc')
-                        #required=False)
+                        default='sm_orig.sfc')
     parser.add_argument("--palette",
                         dest=PALETTE_ARG_KEY,
                         help="Which palette to use; i.e. one of 'standard', 'varia', or 'gravity'",
                         metavar="<palette>",
                         default='standard')
-                        #required=False)
     
     command_line_args = vars(parser.parse_args())
 

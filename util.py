@@ -72,7 +72,7 @@ TILE_DIMENSION = int(math.sqrt(2 * TILESIZE))           #4 bits per pixel => 2 p
 BACKGROUND_COLOR = '#36393f'
 
 class Samus:
-    def __init__(self, rom_filename="metroid.smc", animation_data_filename="animations.csv"):
+    def __init__(self, rom_filename, animation_data_filename="animations.csv"):
         global rom
         rom = romload.load_rom_contents(rom_filename)
         self.animations = self.load_animations(animation_data_filename)
@@ -176,7 +176,7 @@ class Samus:
 
     def load_animations(self, animation_data_filename):
         #generated this csv data from community disassembly data (thank you to all contributors)
-        #format: [ANIMATION_ID, NUM_POSES, USED, DESCRIPTION]
+        #format: [ANIMATION_ID, NUM_KICKS, USED, DESCRIPTION]
         animations = []
         with open(animation_data_filename, 'r') as csvfile:
             spamreader = csv.reader(csvfile, delimiter=';')
