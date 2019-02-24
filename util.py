@@ -4,8 +4,7 @@
 
 
 #TODO: Extract palettes from ROM directly
-#TODO: Get palettes for the all the crazy stuff like charge attacks and fast running
-#TODO: Try to merge supertiles when they are iff located correctly, and align
+#TODO: Get palettes for all the crazy stuff like charge attacks and fast running
 
 
 '''
@@ -53,12 +52,16 @@ import romload
 from constants import *
 
 rom = None
+supertile_info = []
 global_tiles = {}
 
 class Samus:
-    def __init__(self, rom_filename, animation_data_filename="animations.csv"):
+    def __init__(self, rom_filename, animation_data_filename="animations.csv", load_supertiles=True):
         global rom
         rom = romload.load_rom_contents(rom_filename)
+        if load_supertiles:
+            global supertile_info
+            supertile_info = load_supertile_info(SUPERTILE_JSON_FILENAME)
         self.animations = self.load_animations(animation_data_filename)
         self.palettes = self.load_palettes()
         print(f"Global number of supertiles: {len(global_tiles.keys())}")
@@ -122,8 +125,7 @@ class Samus:
                         pose_number = 0
                         control_offset = 0
                 else:
-                    print(f"Unimplemented control code {hex(frame_delta)} encountered in animation_sequence_to_gif()")
-                    control_offset += 1
+                    raise AssertionError(f"Unimplemented control code {hex(frame_delta)} encountered in animation_sequence_to_gif()")
             else:                        #not a control code, so process the duration normally
                 current_canvas = animation.poses[pose_number].to_canvas()
                 pose_number += 1
@@ -149,7 +151,7 @@ class Samus:
                     image_durations.append(frame_delta)
                     canvases.append(current_canvas)
                 else:
-                    print(f"empty canvas in animation_sequence_to_gif(): {animation.ID}")
+                    raise AssertionError(f"empty canvas in animation_sequence_to_gif(): {animation.ID}")
                 
 
         convert_canvas_to_gif(filename, canvases, image_durations, self.palettes[palette_type], zoom)
@@ -375,7 +377,18 @@ class Pose:
     def get_tiles(self, raw_tilemap):
         tiles = []
         for i,raw_tile in enumerate(raw_tilemap):
-            tiles.append(TileRef(f"{self.ID},T{i}",self.VRAM, raw_tile))
+            if raw_tile[1] & 0x80 != 0x00:    #16x16 tile
+                pivot = (8,8)                 #have to do this so that h_flips and v_flips are calculated correctly
+                new_tiles = []
+                for id_in_large_tile in range(4):
+                    new_tiles.append(TileRef(f"{self.ID},T{i}",self.VRAM, raw_tile, pivot, id_in_large_tile))
+            else:                             #8x8 tile
+                pivot = (4,4)                 #have to do this so that h_flips and v_flips are calculated correctly
+                new_tiles = [TileRef(f"{self.ID},T{i}",self.VRAM, raw_tile, pivot)]
+
+            for new_tile in new_tiles:
+                if new_tile.real_tile:          #if the real tile is part of a different supertile, this is None
+                    tiles.append(new_tile)
         return tiles
 
     def to_image(self,palette,zoom=1):
@@ -383,25 +396,24 @@ class Pose:
 
 
 class TileRef:
-    def __init__(self, ID, VRAM, raw_tile):
+    def __init__(self, ID, VRAM, raw_tile, pivot, id_in_large_tile=-1):
+        #pivot is included here so that we have a point to pivot about for h_flips and v_flips
+        # that way the tile still pivots correctly even if it is a supertile
+
         #what do bits 1 and 6 of raw_tile[1] do?
         self.ID = ID
         self.auto_flag = raw_tile[1] & 0x01 != 0x00
-        self.x_offset = convert_int_to_signed_int(raw_tile[0])# - (1 if self.auto_flag else 0)
-        self.y_offset = convert_int_to_signed_int(raw_tile[2])
+        self.x_offset = convert_int_to_signed_int(raw_tile[0]) + pivot[0]# - (1 if self.auto_flag else 0)
+        self.y_offset = convert_int_to_signed_int(raw_tile[2]) + pivot[1]
 
-        if raw_tile[1] & 0x80 != 0x00:      #if 16x16 tile
-            #need to center the offset as if this was a single 8x8 tile with extra tiles "hanging on"
-            #in order to make the h-flip/v-flip code generic
-            adjust = TILE_DIMENSION//2
-            self.x_offset += adjust           #center the offset on a single 8x8 tile, not a compound 16x16 tile
-            self.y_offset += adjust
-            offsets = [(0,0),(TILE_DIMENSION,0),(0,TILE_DIMENSION),(TILE_DIMENSION,TILE_DIMENSION)]
-            offsets = [(x-adjust,y-adjust) for (x,y) in offsets]
-            addresses = [VRAM[raw_tile[3] + VRAM_offset] for VRAM_offset in [0x00,0x01,0x10,0x11]]
-            self.real_tile = make_tile(addresses,offsets)
+        if id_in_large_tile >= 0:
+            VRAM_in_large_tile = VRAM[raw_tile[3] + [0x00,0x01,0x10,0x11][id_in_large_tile]]
+            offset_in_large_tile = [(0,0),(TILE_DIMENSION,0),(0,TILE_DIMENSION),(TILE_DIMENSION,TILE_DIMENSION)][id_in_large_tile]
+            offset_in_large_tile = (offset_in_large_tile[0] - pivot[0], offset_in_large_tile[1] - pivot[1])
+
+            self.real_tile = make_tile(VRAM_in_large_tile, offset_in_large_tile)
         else:
-            self.real_tile = make_tile([VRAM[raw_tile[3]]], [(0,0)])
+            self.real_tile = make_tile(VRAM[raw_tile[3]], (-pivot[0],-pivot[1]))
 
         self.h_flip = raw_tile[4] & 0x40 != 0x00
         self.v_flip = raw_tile[4] & 0x80 != 0x00
@@ -422,9 +434,9 @@ class TileRef:
     def draw_on(self,canvas):
         local_canvas = self.real_tile.get_local_canvas()
         if self.h_flip:
-            local_canvas = {(TILE_DIMENSION-x,y):local_canvas[(x,y)] for (x,y) in local_canvas.keys()}
+            local_canvas = {(-x-1,y):local_canvas[(x,y)] for (x,y) in local_canvas.keys()}
         if self.v_flip:
-            local_canvas = {(x,TILE_DIMENSION-y):local_canvas[(x,y)] for (x,y) in local_canvas.keys()}
+            local_canvas = {(x,-y-1):local_canvas[(x,y)] for (x,y) in local_canvas.keys()}
 
 
         for (local_x,local_y) in local_canvas.keys():
@@ -493,25 +505,31 @@ class Tile:
     def to_image(self,palette,zoom=1):
         return to_image(self,palette,zoom=zoom)
 
-
-def make_tile(addresses,offsets):
-    #if it doesn't exist, make it.  Otherwise just return the one already made
-    if addresses[0] not in global_tiles:
-        global_tiles[addresses[0]] = Tile(addresses,offsets)
-    return global_tiles[addresses[0]]
-    
-
 #######################################
 
 
-
-
-
-
-
-
-
-
+def make_tile(address,offset):
+    #if it doesn't exist, make it.  Otherwise just return the one already made
+    #check to see if it is in a supertile
+    if address in [tile[0] for supertile in supertile_info for tile in supertile]:
+        #if it is the anchor, add the entire supertile
+        try:
+            supertile_location = [supertile[0][0] for supertile in supertile_info].index(address)
+            #anchor found
+            if address not in global_tiles:
+                #Add the entire supertile
+                (x,y) = offset
+                new_offsets = [(x+dx,y+dy) for (st_address,(dx,dy)) in supertile_info[supertile_location]]
+                new_addresses = [st_address for (st_address,(dx,dy)) in supertile_info[supertile_location]]
+                global_tiles[address] = Tile(new_addresses,new_offsets)
+        except ValueError:    #it's in a supertile, but it is not the anchor
+            return None    #early exit -- do not make a tile, since it is already in a supertile somewhere else
+    else:    #not in any supertile
+        if address not in global_tiles:
+            global_tiles[address] = Tile([address],[offset])     #make a singleton
+    
+    return global_tiles[address]
+    
 
 
 
@@ -619,17 +637,12 @@ def to_image(object,palette,zoom=1):
         height = y_max-y_min+1
         origin = (-x_min,-y_min)
 
-        #width = 1+max([abs(x) for (x,y) in canvas.keys()])
-        #height = 1+max([abs(y) for (x,y) in canvas.keys()])
-        
-        #image = Image.new("RGBA", (2*width, 2*height), BACKGROUND_COLOR)
         image = Image.new("RGBA", (width, height), BACKGROUND_COLOR)
 
         pixels = image.load()
 
         for (i,j) in canvas.keys():
             color_index, palette_index = canvas[(i,j)]
-            #pixels[i+width,j+height] = palette[palette_index][color_index] # set the colour accordingly
             pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
 
         #scale
@@ -684,37 +697,41 @@ def supertile_simplification(data):
         for animation in data.animations:
             for pose in animation.poses:
                 for tile_ref in pose.tiles:
-                    if tile_ref.real_tile.location == this_tile:    #found our target tile inside this pose
-                        if appeared_yet:
-                            for neighbor_data in potential_neighbors:
-                                (neighbor,(dx,dy)) = neighbor_data
-                                try:
-                                    neighbor_index = [t.location for t in pose.tiles].index(neighbor)
-                                except ValueError:
-                                    neighbor_index = -1
-                                if neighbor_index >= 0:          #TODO: same tile appears multiple times in a pose
-                                    neighbor_tile_ref = pose.tiles[neighbor_index]
-                                    if neighbor_tile_ref.h_flip == tile_ref.h_flip and neighbor_tile_ref.v_flip == tile_ref.v_flip:
-                                        x_distance = (neighbor_tile_ref.x_offset - tile_ref.x_offset) * (-1 if tile_ref.h_flip else 1)
-                                        y_distance = (neighbor_tile_ref.y_offset - tile_ref.y_offset) * (-1 if tile_ref.v_flip else 1)
-                                        if dx == x_distance and dy == y_distance:
-                                            pass
+                    for (addr,off) in zip(tile_ref.real_tile.addresses,tile_ref.real_tile.offsets):
+                        if addr == this_tile:    #found our target tile inside this pose
+                            if appeared_yet:
+                                for neighbor_data in potential_neighbors:
+                                    (neighbor,(dx,dy)) = neighbor_data
+                                    tile_index = -1    #default in case loop does not identify a location
+                                    for (i,tile) in enumerate(pose.tiles):
+                                        if neighbor in tile.real_tile.addresses:
+                                            tile_index = i
+                                            supertile_index = tile.real_tile.addresses.index(neighbor)
+
+                                    if tile_index >= 0:          #TODO: same tile appears multiple times in a pose
+                                        neighbor_tile_ref = pose.tiles[tile_index]
+                                        if neighbor_tile_ref.h_flip == tile_ref.h_flip and neighbor_tile_ref.v_flip == tile_ref.v_flip:
+                                            x_distance = (neighbor_tile_ref.x_offset - tile_ref.x_offset) * (-1 if tile_ref.h_flip else 1) + adj_off[0]-off[0]
+                                            y_distance = (neighbor_tile_ref.y_offset - tile_ref.y_offset) * (-1 if tile_ref.v_flip else 1) + adj_off[1]-off[1]
+                                            if dx == x_distance and dy == y_distance:
+                                                pass
+                                            else:
+                                                potential_neighbors.remove(neighbor_data)
                                         else:
                                             potential_neighbors.remove(neighbor_data)
                                     else:
                                         potential_neighbors.remove(neighbor_data)
-                                else:
-                                    potential_neighbors.remove(neighbor_data)
 
-                        else:
-                            appeared_yet = True
-                            potential_neighbors = []
-                            for neighbor in pose.tiles:
-                                if neighbor.real_tile.location != this_tile:
-                                    if neighbor.h_flip == tile_ref.h_flip and neighbor.v_flip == tile_ref.v_flip:
-                                        x_distance = (neighbor.x_offset - tile_ref.x_offset) * (-1 if tile_ref.h_flip else 1)
-                                        y_distance = (neighbor.y_offset - tile_ref.y_offset) * (-1 if tile_ref.v_flip else 1)
-                                        potential_neighbors.append((neighbor.real_tile.location,(x_distance,y_distance)))
+                            else:
+                                appeared_yet = True
+                                potential_neighbors = []
+                                for neighbor in pose.tiles:
+                                    for (adj_addr,adj_off) in zip(neighbor.real_tile.addresses,neighbor.real_tile.offsets):
+                                        if adj_addr != this_tile:
+                                            if neighbor.h_flip == tile_ref.h_flip and neighbor.v_flip == tile_ref.v_flip:
+                                                x_distance = (neighbor.x_offset - tile_ref.x_offset) * (-1 if tile_ref.h_flip else 1) + adj_off[0]-off[0]
+                                                y_distance = (neighbor.y_offset - tile_ref.y_offset) * (-1 if tile_ref.v_flip else 1) + adj_off[1]-off[1]
+                                                potential_neighbors.append((neighbor.real_tile.location,(x_distance,y_distance)))
 
         identified_neighbors[this_tile] = potential_neighbors
 
@@ -732,8 +749,14 @@ def supertile_simplification(data):
 
     print(f"Grand sum of tiles likely removed by supertile merges: {sum([-1+ len(sett) for sett in confirmed_bidirectional_neighbors])}")
 
-    with open("supertiles.json","w") as file:
+    with open(SUPERTILE_JSON_FILENAME,"w") as file:
         json.dump(confirmed_bidirectional_neighbors,file)
+
+
+def load_supertile_info(filename):
+    with open(SUPERTILE_JSON_FILENAME,"r") as file:
+        confirmed_bidirectional_neighbors = json.load(file)
+    return confirmed_bidirectional_neighbors
 
 
 

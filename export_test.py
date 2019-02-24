@@ -14,13 +14,15 @@ def main():
 
     command_line_args = process_command_line_args()
 
+    optimize_supertile_command = command_line_args[SUPERTILES_ARG_KEY]
+
     #main data
     global data
-    data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY])
+    data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY], load_supertiles=(not optimize_supertile_command))
 
-
-    if command_line_args[SUPERTILES_ARG_KEY]:      #supertile optimization requested
-        supertile_simplification(data)
+    #TODO: Do not load the supertile file if you are going to simplify the supertiles
+    if optimize_supertile_command:      #supertile optimization requested
+        util.supertile_simplification(data)
     else:
 
         pal = command_line_args[PALETTE_ARG_KEY]
@@ -33,7 +35,7 @@ def main():
 
         #export_tiles(0x1A, -1, pal)          #as (animation number, pose_number, palette_name)
 
-        #export_all_supertiles(pal)           #for the bold
+        export_all_supertiles(pal)           #for the bold
 
 
 

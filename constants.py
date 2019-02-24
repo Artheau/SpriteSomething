@@ -10,6 +10,9 @@ BACKGROUND_COLOR = '#36393f'
 FRAME_DURATION = 20          #given GIF limitations, this seems like a good compromise
 
 
+SUPERTILE_JSON_FILENAME = "supertiles.json"
+
+
 #There is a bug in Pillow version 5.4.1 that does not display GIF transparency correctly
 #It is because of Line 443 in GifImagePlugin.py not taking into account the disposal method
 #Please help fix this
