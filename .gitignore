@@ -4,6 +4,9 @@ __pycache__/
 # no images output
 images
 
+# no tiles output
+tiles
+
 # no pip installer
 get-pip.py
 

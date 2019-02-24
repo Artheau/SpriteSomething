@@ -46,29 +46,14 @@ TileRef:
 
 import struct
 import csv
-import math
+import json
 from PIL import Image
 
 import romload
-
-#There is a bug in Pillow version 5.4.1 that does not display GIF transparency correctly
-#It is because of Line 443 in GifImagePlugin.py not taking into account the disposal method
-#Please help fix this
-#https://github.com/python-pillow/Pillow/issues/3665
-import PIL
-if int(PIL.PILLOW_VERSION.split('.')[0]) <= 5:
-    TRANSPARENCY = 255
-    DISPOSAL = 0
-else:
-    TRANSPARENCY = 0
-    DISPOSAL = 2
+from constants import *
 
 rom = None
 global_tiles = {}
-
-TILESIZE = 0x20
-TILE_DIMENSION = int(math.sqrt(2 * TILESIZE))           #4 bits per pixel => 2 pixels per byte
-BACKGROUND_COLOR = '#36393f'
 
 class Samus:
     def __init__(self, rom_filename, animation_data_filename="animations.csv"):
@@ -427,6 +412,10 @@ class TileRef:
         if self.palette not in [0b010,0b011,0b111]:
             raise AssertionError(f"Tile {self.ID} uses palette {self.palette}.  raw_tile = {[hex(raw) for raw in raw_tile]}")  #only matters for animations $81,82,$1B, and $1C which are just typos
 
+    @property
+    def location(self):
+        return self.real_tile.location
+
     def to_image(self,palette,zoom=1):
         return to_image(self,palette,zoom=zoom)
 
@@ -457,6 +446,14 @@ class Tile:
         self.addresses = addresses
         self.offsets = offsets
 
+    @property
+    def ID(self):
+        return hex(self.addresses[0])
+
+    @property
+    def location(self):
+        return self.addresses[0]
+
     def get_local_canvas(self):
         canvas = {}
         for address,offset in zip(self.addresses,self.offsets):
@@ -467,6 +464,10 @@ class Tile:
                     if pixels[i][j] != 0:             #if not transparent_pixel
                         canvas[(i+offset[0],j+offset[1])] = pixels[i][j]
         return canvas
+
+    def to_canvas(self):
+        local_canvas = self.get_local_canvas()
+        return {(x,y):(local_canvas[(x,y)],0b010) for (x,y) in local_canvas}
 
 
     def retrieve_small_tile(self, addr):
@@ -488,6 +489,9 @@ class Tile:
               # [r0, bp3], [r0, bp4], [r1, bp3], [r1, bp4], [r2, bp3], [r2, bp4], [r3, bp3], [r3, bp4]
               # [r4, bp3], [r4, bp4], [r5, bp3], [r5, bp4], [r6, bp3], [r6, bp4], [r7, bp3], [r7, bp4]
         return pixels
+
+    def to_image(self,palette,zoom=1):
+        return to_image(self,palette,zoom=zoom)
 
 
 def make_tile(addresses,offsets):
@@ -605,27 +609,37 @@ def get_tilemap(offset):
 def to_image(object,palette,zoom=1):
     canvas = object.to_canvas()
 
-    width = 1+max([abs(x) for (x,y) in canvas.keys()])
-    height = 1+max([abs(y) for (x,y) in canvas.keys()])
-    
-    image = Image.new("RGBA", (2*width, 2*height), BACKGROUND_COLOR)
+    if canvas.keys():
+        x_min = min([x for (x,y) in canvas.keys()])
+        x_max = max([x for (x,y) in canvas.keys()])
+        y_min = min([y for (x,y) in canvas.keys()])
+        y_max = max([y for (x,y) in canvas.keys()])
 
-    pixels = image.load()
+        width = x_max-x_min+1
+        height = y_max-y_min+1
+        origin = (-x_min,-y_min)
 
-    for (i,j) in canvas.keys():
-        color_index, palette_index = canvas[(i,j)]
-        pixels[i+width,j+height] = palette[palette_index][color_index] # set the colour accordingly
+        #width = 1+max([abs(x) for (x,y) in canvas.keys()])
+        #height = 1+max([abs(y) for (x,y) in canvas.keys()])
+        
+        #image = Image.new("RGBA", (2*width, 2*height), BACKGROUND_COLOR)
+        image = Image.new("RGBA", (width, height), BACKGROUND_COLOR)
 
-    #scale
-    image = image.resize((zoom*(2*width), zoom*(2*height)), Image.NEAREST)
+        pixels = image.load()
+
+        for (i,j) in canvas.keys():
+            color_index, palette_index = canvas[(i,j)]
+            #pixels[i+width,j+height] = palette[palette_index][color_index] # set the colour accordingly
+            pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
+
+        #scale
+        image = image.resize((zoom*(2*width), zoom*(2*height)), Image.NEAREST)
+    else:                #the canvas is empty
+        image = None
 
     return image
 
 def convert_canvas_to_gif(filename, canvases, frame_durations, palette, zoom=1):
-
-    #FRAME_DURATION = 1000/60    #for true-to-NTSC attempts
-    FRAME_DURATION = 20          #given GIF limitations, this seems like a good compromise
-    
     MARGIN = 0x08
 
     x_min = min([x for canvas in canvases for (x,y) in canvas.keys()]) - MARGIN
@@ -658,6 +672,70 @@ def convert_canvas_to_gif(filename, canvases, frame_durations, palette, zoom=1):
         images[0].save(filename, 'GIF', save_all=True, append_images=images[1:], duration=durations, transparency=TRANSPARENCY, disposal=DISPOSAL, loop=0)
     else:
         images[0].save(filename, transparency=TRANSPARENCY)
+
+
+####################################################
+
+def supertile_simplification(data):
+    #TODO: For the sake of humankind this code must be refactored before it breeds
+    identified_neighbors = {}
+    for this_tile in global_tiles:
+        appeared_yet = False
+        for animation in data.animations:
+            for pose in animation.poses:
+                for tile_ref in pose.tiles:
+                    if tile_ref.real_tile.location == this_tile:    #found our target tile inside this pose
+                        if appeared_yet:
+                            for neighbor_data in potential_neighbors:
+                                (neighbor,(dx,dy)) = neighbor_data
+                                try:
+                                    neighbor_index = [t.location for t in pose.tiles].index(neighbor)
+                                except ValueError:
+                                    neighbor_index = -1
+                                if neighbor_index >= 0:          #TODO: same tile appears multiple times in a pose
+                                    neighbor_tile_ref = pose.tiles[neighbor_index]
+                                    if neighbor_tile_ref.h_flip == tile_ref.h_flip and neighbor_tile_ref.v_flip == tile_ref.v_flip:
+                                        x_distance = (neighbor_tile_ref.x_offset - tile_ref.x_offset) * (-1 if tile_ref.h_flip else 1)
+                                        y_distance = (neighbor_tile_ref.y_offset - tile_ref.y_offset) * (-1 if tile_ref.v_flip else 1)
+                                        if dx == x_distance and dy == y_distance:
+                                            pass
+                                        else:
+                                            potential_neighbors.remove(neighbor_data)
+                                    else:
+                                        potential_neighbors.remove(neighbor_data)
+                                else:
+                                    potential_neighbors.remove(neighbor_data)
+
+                        else:
+                            appeared_yet = True
+                            potential_neighbors = []
+                            for neighbor in pose.tiles:
+                                if neighbor.real_tile.location != this_tile:
+                                    if neighbor.h_flip == tile_ref.h_flip and neighbor.v_flip == tile_ref.v_flip:
+                                        x_distance = (neighbor.x_offset - tile_ref.x_offset) * (-1 if tile_ref.h_flip else 1)
+                                        y_distance = (neighbor.y_offset - tile_ref.y_offset) * (-1 if tile_ref.v_flip else 1)
+                                        potential_neighbors.append((neighbor.real_tile.location,(x_distance,y_distance)))
+
+        identified_neighbors[this_tile] = potential_neighbors
+
+    #check for iff relationship
+    confirmed_bidirectional_neighbors = []
+    for this_tile in sorted(identified_neighbors.keys()):
+        current_group = [(this_tile,(0,0))]
+        for (neighbor,(dx,dy)) in identified_neighbors[this_tile]:
+            if (this_tile,(-dx,-dy)) in identified_neighbors[neighbor]:
+                current_group.append((neighbor,(dx,dy)))
+                identified_neighbors[neighbor] = []
+        identified_neighbors[this_tile] = []
+        if len(current_group) > 1:
+            confirmed_bidirectional_neighbors.append(current_group)
+
+    print(f"Grand sum of tiles likely removed by supertile merges: {sum([-1+ len(sett) for sett in confirmed_bidirectional_neighbors])}")
+
+    with open("supertiles.json","w") as file:
+        json.dump(confirmed_bidirectional_neighbors,file)
+
+
 
 
 ####################################################
