@@ -387,7 +387,6 @@ class Pose:
             else:                             #8x8 tile
                 pivot = (4,4)                 #have to do this so that h_flips and v_flips are calculated correctly
                 new_tiles = [TileRef(f"{self.ID},T{i}",self.VRAM, raw_tile, pivot)]
-
             for new_tile in new_tiles:
                 if new_tile.real_tile:          #if the real tile is part of a different supertile, this is None
                     tiles.append(new_tile)
@@ -470,7 +469,7 @@ class Tile:
 
     def get_local_canvas(self):
         canvas = {}
-        for address,offset in zip(self.addresses,self.offsets):
+        for address,offset in list(zip(self.addresses,self.offsets))[::-1]:
             pixels = self.retrieve_small_tile(address)
 
             for i in range(TILE_DIMENSION):

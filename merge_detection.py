@@ -4,11 +4,17 @@
 #don't look through this code for too long or you will catch indigestion too
 #that's how it works, right?
 
+#TODO: Some supertile merging is disrupting frame drawing order (e.g. shoulderpad in 0xF2)
+
+
 import json
 import argparse
+from itertools import chain
 
 import util
 from constants import *
+
+data = None
 
 
 def supertile_simplification():
@@ -32,17 +38,16 @@ def make_identified_neighbors_list():
 def get_all_tile_locations(this_tile):
     #go looking through all the poses and figure out where this tile appears
     all_locations_dict = {}
-    for (i,animation) in enumerate(util.data.animations):
+    for (i,animation) in enumerate(data.animations):
         for (j,pose) in enumerate(animation.poses):
             location_list = locate_tile_in_pose(this_tile,pose)    #list of (ref_index,supertile_index)
             if location_list:
                 all_locations_dict[(i,j)] = location_list
     return all_locations_dict
 
-
 def find_neighbors(master_location_dict):
     neighbor_groups = []
-    dict_keys = list(master_location_dict.keys())
+    dict_keys = list(master_location_dict.keys()).copy()
     while dict_keys:
         tile1 = dict_keys.pop()
         this_neighbor_group = []
@@ -71,8 +76,8 @@ def locate_tile_in_pose(this_tile,pose):
     return returnvalue
 
 def ratio_test(master_location_dict,tile1,tile2):
-    for location in master_location_dict[tile1]:
-        if location not in master_location_dict[tile2]:
+    for location in chain(master_location_dict[tile1],master_location_dict[tile2]):
+        if location not in master_location_dict[tile1] or location not in master_location_dict[tile2]:
             return False
         #conceivably there is a way later to do things like 2 of this tile for every 1 of another,
         # but this is outside the scope of the present push
@@ -114,7 +119,7 @@ def get_relative_offset_in_one_pose(location, tilelist_1, tilelist_2):
 
 def get_single_offset(location, tile1_index, tile2_index):
     (animation_no, pose_no) = location
-    this_pose = util.data.animations[animation_no].poses[pose_no]
+    this_pose = data.animations[animation_no].poses[pose_no]
     (ref_no_1,addr_no_1) = tile1_index
     (ref_no_2,addr_no_2) = tile2_index
 
@@ -135,6 +140,12 @@ def get_single_offset(location, tile1_index, tile2_index):
 def write_to_json(bidirectional_neighbors):
     with open(SUPERTILE_JSON_FILENAME,"w") as file:
         json.dump(bidirectional_neighbors,file)
+    with open(SUPERTILE_FRIENDLY_FILENAME,"w") as file:
+        for group in bidirectional_neighbors:
+            file.write("New Group:\n")
+            for (addr,coord) in group:
+                file.write("".join([hex(addr),": ",str(coord),"\n"]))
+            file.write("\n\n")
 
 
 ################################################################################
@@ -156,7 +167,9 @@ def process_command_line_args():
 def main():
     command_line_args = process_command_line_args()
 
-    util.data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY],load_supertiles=False)
+    global data
+    data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY],load_supertiles=False)
+
     supertile_simplification()
     
 if __name__ == "__main__":

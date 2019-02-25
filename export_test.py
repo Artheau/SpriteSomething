@@ -17,7 +17,7 @@ def main():
 
     #main data
     global data
-    data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY])
+    data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY], load_supertiles=True)
     pal = command_line_args[PALETTE_ARG_KEY]
 
 
@@ -25,7 +25,7 @@ def main():
 
     export_all_raw_animations(pal)
 
-    #export_specific_pose(0x1A, -1, pal)  #as (animation_number, pose_number, palette_name)
+    #export_specific_pose(0x00, 0, pal)  #as (animation_number, pose_number, palette_name)
 
     #export_tiles(0x1A, -1, pal)          #as (animation number, pose_number, palette_name)
 
@@ -87,7 +87,7 @@ def export_all_supertiles(palette_name, zoom=1):
     for tile in util.global_tiles.values():
         img = tile.to_image(data.palettes[palette_name],zoom=zoom)
         if img:
-            img.save(f"tiles/tile_{tile.ID}.png")   #TODO: fix the size of the tiles
+            img.save(f"tiles/tile_{tile.ID}.png")   #TODO: standardize the size of the tiles
         else:
             Image.new("RGBA", (8, 8), util.BACKGROUND_COLOR).save(f"tiles/tile_{tile.ID}.png")
             

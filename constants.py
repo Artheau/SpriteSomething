@@ -11,6 +11,8 @@ FRAME_DURATION = 20          #given GIF limitations, this seems like a good comp
 
 
 SUPERTILE_JSON_FILENAME = "supertiles.json"
+SUPERTILE_FRIENDLY_FILENAME = "supertiles_debug.txt"
+
 
 
 #There is a bug in Pillow version 5.4.1 that does not display GIF transparency correctly
