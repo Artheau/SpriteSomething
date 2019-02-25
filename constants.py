@@ -4,7 +4,7 @@ SUPERTILES_ARG_KEY = 'supertile_optimize'
 
 TILESIZE = 0x20          #8x8 tiles with 4bpp = 0x20 bytes
 TILE_DIMENSION = 0x08    #8x8 tiles
-BACKGROUND_COLOR = '#36393f'
+BACKGROUND_COLOR = '#000080'#36393f'
 
 #FRAME_DURATION = 1000/60    #for true-to-NTSC attempts
 FRAME_DURATION = 20          #given GIF limitations, this seems like a good compromise

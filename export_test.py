@@ -3,6 +3,7 @@ import os
 from PIL import Image
 
 import util
+import merge_detection
 from constants import *
 
 data = None
@@ -14,28 +15,21 @@ def main():
 
     command_line_args = process_command_line_args()
 
-    optimize_supertile_command = command_line_args[SUPERTILES_ARG_KEY]
-
     #main data
     global data
-    data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY], load_supertiles=(not optimize_supertile_command))
+    data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY])
+    pal = command_line_args[PALETTE_ARG_KEY]
 
-    #TODO: Do not load the supertile file if you are going to simplify the supertiles
-    if optimize_supertile_command:      #supertile optimization requested
-        util.supertile_simplification(data)
-    else:
 
-        pal = command_line_args[PALETTE_ARG_KEY]
+    #export_custom_sequence(pal)
 
-        export_custom_sequence(pal)
+    export_all_raw_animations(pal)
 
-        export_all_raw_animations(pal)
+    #export_specific_pose(0x1A, -1, pal)  #as (animation_number, pose_number, palette_name)
 
-        #export_specific_pose(0x1A, -1, pal)  #as (animation_number, pose_number, palette_name)
+    #export_tiles(0x1A, -1, pal)          #as (animation number, pose_number, palette_name)
 
-        #export_tiles(0x1A, -1, pal)          #as (animation number, pose_number, palette_name)
-
-        export_all_supertiles(pal)           #for the bold
+    export_all_supertiles(pal)           #for the bold
 
 
 
@@ -84,11 +78,6 @@ def process_command_line_args():
                         help="Which palette to use; i.e. one of 'standard', 'varia', or 'gravity'",
                         metavar="<palette>",
                         default='standard')
-    parser.add_argument("--supertiles",
-                        dest=SUPERTILES_ARG_KEY,
-                        help="if present, generate all the supertile mergers and compile to file",
-                        action='store_true',
-                        required=False)
     
     command_line_args = vars(parser.parse_args())
 

@@ -5,6 +5,8 @@
 
 #TODO: Extract palettes from ROM directly
 #TODO: Get palettes for all the crazy stuff like charge attacks and fast running
+#TODO: Death animation
+#TODO: Missile adjustment to cannon port
 
 
 '''
@@ -689,68 +691,6 @@ def convert_canvas_to_gif(filename, canvases, frame_durations, palette, zoom=1):
 
 ####################################################
 
-def supertile_simplification(data):
-    #TODO: For the sake of humankind this code must be refactored before it breeds
-    identified_neighbors = {}
-    for this_tile in global_tiles:
-        appeared_yet = False
-        for animation in data.animations:
-            for pose in animation.poses:
-                for tile_ref in pose.tiles:
-                    for (addr,off) in zip(tile_ref.real_tile.addresses,tile_ref.real_tile.offsets):
-                        if addr == this_tile:    #found our target tile inside this pose
-                            if appeared_yet:
-                                for neighbor_data in potential_neighbors:
-                                    (neighbor,(dx,dy)) = neighbor_data
-                                    tile_index = -1    #default in case loop does not identify a location
-                                    for (i,tile) in enumerate(pose.tiles):
-                                        if neighbor in tile.real_tile.addresses:
-                                            tile_index = i
-                                            supertile_index = tile.real_tile.addresses.index(neighbor)
-
-                                    if tile_index >= 0:          #TODO: same tile appears multiple times in a pose
-                                        neighbor_tile_ref = pose.tiles[tile_index]
-                                        if neighbor_tile_ref.h_flip == tile_ref.h_flip and neighbor_tile_ref.v_flip == tile_ref.v_flip:
-                                            x_distance = (neighbor_tile_ref.x_offset - tile_ref.x_offset) * (-1 if tile_ref.h_flip else 1) + adj_off[0]-off[0]
-                                            y_distance = (neighbor_tile_ref.y_offset - tile_ref.y_offset) * (-1 if tile_ref.v_flip else 1) + adj_off[1]-off[1]
-                                            if dx == x_distance and dy == y_distance:
-                                                pass
-                                            else:
-                                                potential_neighbors.remove(neighbor_data)
-                                        else:
-                                            potential_neighbors.remove(neighbor_data)
-                                    else:
-                                        potential_neighbors.remove(neighbor_data)
-
-                            else:
-                                appeared_yet = True
-                                potential_neighbors = []
-                                for neighbor in pose.tiles:
-                                    for (adj_addr,adj_off) in zip(neighbor.real_tile.addresses,neighbor.real_tile.offsets):
-                                        if adj_addr != this_tile:
-                                            if neighbor.h_flip == tile_ref.h_flip and neighbor.v_flip == tile_ref.v_flip:
-                                                x_distance = (neighbor.x_offset - tile_ref.x_offset) * (-1 if tile_ref.h_flip else 1) + adj_off[0]-off[0]
-                                                y_distance = (neighbor.y_offset - tile_ref.y_offset) * (-1 if tile_ref.v_flip else 1) + adj_off[1]-off[1]
-                                                potential_neighbors.append((neighbor.real_tile.location,(x_distance,y_distance)))
-
-        identified_neighbors[this_tile] = potential_neighbors
-
-    #check for iff relationship
-    confirmed_bidirectional_neighbors = []
-    for this_tile in sorted(identified_neighbors.keys()):
-        current_group = [(this_tile,(0,0))]
-        for (neighbor,(dx,dy)) in identified_neighbors[this_tile]:
-            if (this_tile,(-dx,-dy)) in identified_neighbors[neighbor]:
-                current_group.append((neighbor,(dx,dy)))
-                identified_neighbors[neighbor] = []
-        identified_neighbors[this_tile] = []
-        if len(current_group) > 1:
-            confirmed_bidirectional_neighbors.append(current_group)
-
-    print(f"Grand sum of tiles likely removed by supertile merges: {sum([-1+ len(sett) for sett in confirmed_bidirectional_neighbors])}")
-
-    with open(SUPERTILE_JSON_FILENAME,"w") as file:
-        json.dump(confirmed_bidirectional_neighbors,file)
 
 
 def load_supertile_info(filename):
