@@ -32,7 +32,6 @@ def make_identified_neighbors_list():
     all_locations_all_tiles_dict = {}
     for tile in util.global_tiles:
         all_locations_all_tiles_dict[tile] = get_all_tile_locations(tile)
-    print(all_locations_all_tiles_dict[999136])
     return find_neighbors(all_locations_all_tiles_dict)
 
 

@@ -1,3 +1,9 @@
+#Grapple rotation is just a strange animation in general
+#We'll need to come back and handle that in its own way later
+IGNORED_ANIMATIONS = [0xB2,0xB3]
+
+
+
 ROM_FILENAME_ARG_KEY = 'rom_filename'
 PALETTE_ARG_KEY = 'palette_specified'
 SUPERTILES_ARG_KEY = 'supertile_optimize'
@@ -12,7 +18,6 @@ FRAME_DURATION = 20          #given GIF limitations, this seems like a good comp
 
 SUPERTILE_JSON_FILENAME = "supertiles.json"
 SUPERTILE_FRIENDLY_FILENAME = "supertiles_debug.txt"
-
 
 
 #There is a bug in Pillow version 5.4.1 that does not display GIF transparency correctly

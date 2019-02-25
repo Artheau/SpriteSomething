@@ -174,6 +174,10 @@ class Samus:
                 num_kicks = int(row[1])
                 used = row[2].lower() in ['true','t','y']
                 description = row[3]
+
+                if index in IGNORED_ANIMATIONS:
+                    used = False
+
                 animations.append(Animation(index, num_kicks, used, description))
         return animations
 
