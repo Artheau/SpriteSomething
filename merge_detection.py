@@ -32,6 +32,7 @@ def make_identified_neighbors_list():
     all_locations_all_tiles_dict = {}
     for tile in util.global_tiles:
         all_locations_all_tiles_dict[tile] = get_all_tile_locations(tile)
+    print(all_locations_all_tiles_dict[999136])
     return find_neighbors(all_locations_all_tiles_dict)
 
 
@@ -61,9 +62,27 @@ def find_neighbors(master_location_dict):
             dict_keys.remove(neighbor)
 
         if this_neighbor_group:
-            neighbor_groups.append([(tile1, (0,0))] + this_neighbor_group)
+            sorted_group = sort_group([(tile1, (0,0))] + this_neighbor_group,master_location_dict)
+            neighbor_groups.append(sorted_group)
 
     return neighbor_groups
+
+
+def sort_group(group,master_location_dict):
+    #the idea here is to rank them based upon their relative positions in the individual poses
+    (exemplar_tile, _) = group[0]
+
+    exemplar_pose = next(iter(master_location_dict[exemplar_tile].keys()))
+
+    #rank based upon master_location_dict[tile_addr][exemplar_pose]
+    sorted_group = sorted(group, key=lambda tile: master_location_dict[tile[0]][exemplar_pose][0][0])
+
+    #but now need to re-adjust the offsets so that the first one is the "anchor"
+    anchor_x, anchor_y = sorted_group[0][1]
+
+    sorted_group = [(tile,(x-anchor_x,y-anchor_y)) for (tile,(x,y)) in sorted_group]
+
+    return sorted_group
 
 
 
