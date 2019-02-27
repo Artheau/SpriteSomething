@@ -3,9 +3,8 @@ __pycache__/
 
 # no images output
 images
-
-# no tiles output
 tiles
+animations
 
 # no pip installer
 get-pip.py

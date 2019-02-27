@@ -9,7 +9,7 @@ from constants import *
 data = None
 
 def main():
-    for directory_name in ["images","tiles"]:
+    for directory_name in ["animations","images","tiles"]:
         if not os.access(directory_name, os.F_OK):
             os.mkdir(directory_name)
 
@@ -25,7 +25,9 @@ def main():
 
     export_all_raw_animations(pal)
 
-    #export_specific_pose(0x00, 0, pal)  #as (animation_number, pose_number, palette_name)
+    for anim in range(len(data.animations)):
+        for pose in range(len(data.animations[anim].poses)):
+            export_specific_pose(anim, pose, pal)  #as (animation_number, pose_number, palette_name)
 
     #export_tiles(0x1A, -1, pal)          #as (animation number, pose_number, palette_name)
 
@@ -39,7 +41,7 @@ def export_custom_sequence(palette_name, zoom=2):
                200:{'heavy_breathing':True,'kick':True}, \
                400:{'new_animation':0x0A}, \
                500:{'new_animation':0x1A}}   #I'm thinking that this will eventually be JSON
-    data.animation_sequence_to_gif('images/test_sequence.gif', zoom=zoom, starting_animation=0xE9, \
+    data.animation_sequence_to_gif('animations/test_sequence.gif', zoom=zoom, starting_animation=0xE9, \
         events=events, palette_type=palette_name)
 
 
@@ -47,7 +49,7 @@ def export_all_raw_animations(palette_name, zoom=2):
     for animation_number in range(len(data.animations)):
         if data.animations[animation_number].used:
             try:
-                data.animations[animation_number].gif(f"images/animation_raw_{hex(animation_number)[2:].zfill(2)}.gif", data.palettes[palette_name],zoom=zoom)
+                data.animations[animation_number].gif(f"animations/animation_raw_{hex(animation_number)[2:].zfill(2)}.gif", data.palettes[palette_name],zoom=zoom)
             except AssertionError as e:
                 print(f"AssertionError on animation {hex(animation_number)}: {e.args}")
 

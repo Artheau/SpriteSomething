@@ -4,9 +4,6 @@
 #don't look through this code for too long or you will catch indigestion too
 #that's how it works, right?
 
-#TODO: Some supertile merging is disrupting frame drawing order (e.g. shoulderpad in 0xF2)
-
-
 import json
 import argparse
 from itertools import chain

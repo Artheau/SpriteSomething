@@ -189,52 +189,30 @@ class Samus:
         palettes['gravity'] = self.get_palette_at(0x9B9800)
 
         palettes['standard'] = palettes['power']
+
+
         
 
-        #append the fixed palettes...these are just guesses at present because it's not clear that white and black palettes
-        # are the correct palettes to use here
         for palette in palettes.keys():
             samus_palette = palettes[palette]
 
             white_palette_blueprint = [(0xFF,0xFF,0xFF),(0xEF,0xEF,0xEF),(0xD6,0xD6,0xD6),(0xC6,0xC6,0xC6)]
             white_palette = [(0x00,0x00,0xFF)] + 3*white_palette_blueprint + white_palette_blueprint[:-1]
 
-            # chroma_palette =  [
-            #                     (0x00,0x00,0xFF),
-            #                     (0xEF,0x84,0x00),(0xAD,0x00,0x00),(0x42,0x00,0x00),(0x18,0x00,0x00),
-            #                     (0xEF,0x29,0x00),(0x9C,0x00,0x00),(0x73,0x00,0x00),(0x5A,0x00,0x00),
-            #                     (0xD6,0xD6,0xFF),(0x00,0xB5,0xFF),(0x00,0x7B,0xDE),(0x00,0x39,0xAD),
-            #                     (0xFF,0x00,0x00),(0xAD,0x00,0x00),(0x52,0x00,0x00)
-            #                   ]
-
-            # yellow_and_friends_palette = [
-            #                                 (0x00,0x00,0xFF),
-            #                                 (0xFF,0xFF,0x5A),(0xBD,0xBD,0x31),(0x52,0x52,0x00),(0x18,0x18,0x00),
-            #                                 (0xD6,0xD6,0x4A),(0xAD,0xAD,0x18),(0x84,0x84,0x00),(0x73,0x73,0x00),
-            #                                 (0x00,0xFF,0x00),(0x00,0xBD,0x00),(0x00,0x84,0x00),(0x00,0x42,0x00),
-            #                                 (0x00,0xC6,0xFF),(0x00,0x7B,0xDE),(0x00,0x39,0xAD)
-            #                              ]
-
-            # purple_palette = [
-            #                     (0x00,0x00,0xFF),
-            #                     (0xD6,0xD6,0xFF),(0xDE,0xCE,0x00),(0xB5,0x84,0x00),
-            #                     (0x9C,0x42,0x00),(0xEF,0x00,0xFF),(0xA5,0x00,0xB5),
-            #                     (0x52,0x00,0x63),(0x00,0xFF,0x73),(0x00,0x63,0x29),
-            #                     (0xA5,0xA5,0xA5),(0x73,0x73,0x73),(0x42,0x42,0x42),
-            #                     (0x21,0x21,0x4A),(0x42,0x42,0xFF)
-            #                  ]
-
             black_palette = [(0,0,0)]*16
+
+            death_palette = self.get_palette_at(0x9BA120)
+            flash_palette = self.get_palette_at(0x9B96C0)   #TODO: technically this is a rotating palette
 
             #palette comments given as (in tilemap, in game)
             palettes[palette] = [   None,                        #0b000
                                     None,                        #0b001
                                     samus_palette,               #0b010  (Samus)  <-- definitely Samus.  definitely.
-                                    black_palette,               #0b011  <-- not sure if this should be all black...it is the shadow inside the crystal flash
+                                    death_palette,               #0b011  <-- not sure if this should be all black...it is the shadow inside the crystal flash
                                     None,                        #0b100
                                     None,                        #0b101
                                     None,                        #0b110
-                                    white_palette                #0b111  <-- I'm not really sure about this, because of palette effects applied during crystal_flash
+                                    flash_palette                #0b111  <-- I'm not really sure about this, because of palette effects applied during crystal_flash
                                 ]
         return palettes
 
@@ -465,11 +443,11 @@ class Tile:
 
     @property
     def ID(self):
-        return hex(self.addresses[0])
+        return hex(min(self.addresses))
 
     @property
     def location(self):
-        return self.addresses[0]
+        return min(self.addresses)
 
     def get_local_canvas(self):
         canvas = {}
