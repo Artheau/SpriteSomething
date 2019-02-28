@@ -56,9 +56,10 @@ from constants import *
 rom = None
 supertile_info = []
 global_tiles = {}
+tile_type_restriction = None
 
 class Samus:
-    def __init__(self, rom_filename, animation_data_filename="animations.csv", load_supertiles=True):
+    def __init__(self, rom_filename, animation_data_filename="animations.csv", load_supertiles=True,report_tiles=True):
         global rom
         rom = romload.load_rom_contents(rom_filename)
         if load_supertiles:
@@ -66,7 +67,8 @@ class Samus:
             supertile_info = load_supertile_info(SUPERTILE_JSON_FILENAME)
         self.animations = self.load_animations(animation_data_filename)
         self.palettes = self.load_palettes()
-        print(f"Global number of supertiles: {len(global_tiles.keys())}")
+        if report_tiles:
+            print(f"Global number of tiles: {len(global_tiles.keys())}")
 
     def animation_sequence_to_gif(self, filename, zoom=1, starting_animation=0x00, events={}, full_duration=600, \
         palette_type='standard', jump_type=0, springball=False, heavy_breathing=False, in_air=False, exhausted=False):
@@ -252,17 +254,19 @@ class Animation:
         lower_tilemap_offsets = get_indexed_values(0x92808D,lower_offset,0x02,'2'*num_poses)
 
         poses = []
+        i = 0
         for pose_number in range(num_poses):
             if self.pose_mask[pose_number]:         #don't process the pose if it is just a control code
                 upper_tilemap = get_tilemap(upper_tilemap_offsets[pose_number])
                 lower_tilemap = get_tilemap(lower_tilemap_offsets[pose_number])
                 
-                poses.append( Pose(f"{self.ID},P{pose_number}", \
+                poses.append( Pose(f"{self.ID},P{i}", \
                               self.get_VRAM_data(pose_number), \
                               self.duration_list[pose_number],
                               upper_tilemap, \
                               lower_tilemap)
                             )
+                i += 1
 
         return poses
 
@@ -349,7 +353,14 @@ class Pose:
 
     @property
     def tiles(self):
-        return self.upper_tiles + self.lower_tiles
+        if tile_type_restriction == 'upper':
+            return self.upper_tiles
+        elif tile_type_restriction == 'lower':
+            return self.lower_tiles
+        elif not tile_type_restriction:
+            return self.upper_tiles + self.lower_tiles
+        else:
+            raise AssertionError(f"Unknown tile_type_restriction in {__file__}: {tile_type_restriction}")
 
 
     def to_canvas(self):
@@ -675,9 +686,12 @@ def convert_canvas_to_gif(filename, canvases, frame_durations, palette, zoom=1):
 
 
 def load_supertile_info(filename):
-    with open(SUPERTILE_JSON_FILENAME,"r") as file:
-        confirmed_bidirectional_neighbors = json.load(file)
-    return confirmed_bidirectional_neighbors
+    try:
+        with open(SUPERTILE_JSON_FILENAME,"r") as file:
+            confirmed_bidirectional_neighbors = json.load(file)
+        return confirmed_bidirectional_neighbors
+    except FileNotFoundError:
+        return []
 
 
 
