@@ -36,7 +36,7 @@ Pose:
 TileRef:
     x_offset = x offset
     y_offset = y offset
-    auto_flag = ???
+    auto_flag = flips negative x_offset numbers
     v_flip = True if v flip
     h_flip = True if h flip
     priority = True if priority flag set (it's always set for Samus, except for bugged tiles)
@@ -247,11 +247,11 @@ class Animation:
     def load_poses(self,num_kicks):
         num_poses = len(self.duration_list)-1   #the last pose in the duration_list is always a control code with no pose present
 
-        [upper_offset] = get_indexed_values(0x929263,self.index,0x02,'2')
-        [lower_offset] = get_indexed_values(0x92945D,self.index,0x02,'2')
+        [upper_offset] = get_indexed_values(UPPER_TILEMAP_TABLE_POINTER,self.index,0x02,'2')
+        [lower_offset] = get_indexed_values(LOWER_TILEMAP_TABLE_POINTER,self.index,0x02,'2')
 
-        upper_tilemap_offsets = get_indexed_values(0x92808D,upper_offset,0x02,'2'*num_poses)
-        lower_tilemap_offsets = get_indexed_values(0x92808D,lower_offset,0x02,'2'*num_poses)
+        upper_tilemap_offsets = get_indexed_values(TILEMAP_TABLE,upper_offset,0x02,'2'*num_poses)
+        lower_tilemap_offsets = get_indexed_values(TILEMAP_TABLE,lower_offset,0x02,'2'*num_poses)
 
         poses = []
         i = 0
@@ -397,7 +397,10 @@ class TileRef:
         #what do bits 1 and 6 of raw_tile[1] do?
         self.ID = ID
         self.auto_flag = raw_tile[1] & 0x01 != 0x00
-        self.x_offset = convert_int_to_signed_int(raw_tile[0]) + pivot[0]# - (1 if self.auto_flag else 0)
+        if self.auto_flag:
+            self.x_offset = convert_int_to_signed_int(raw_tile[0]) + pivot[0]
+        else:
+            self.x_offset = raw_tile[0] + pivot[0]
         self.y_offset = convert_int_to_signed_int(raw_tile[2]) + pivot[1]
 
         if id_in_large_tile >= 0:
@@ -569,6 +572,18 @@ def convert_to_rom_address(snes_addr):
 
     return new_address
 
+def convert_to_ram_address(rom_addr):
+    #convert from ROM address to memory address (lorom 0x80)
+    bank = rom_addr // 0x8000
+    offset = rom_addr % 0x8000
+
+    if bank < 0x00:
+        raise AssertionError(f"Function convert_to_ram_address() called on {pretty_hex(rom_addr)}, but this is not a valid SNES address.")
+    
+    new_address = (bank+0x80)*0x10000 + (offset+0x8000)
+
+    return new_address
+
 def convert_int_to_signed_int(byte):
     if byte > 127:
         return (256-byte) * (-1)
@@ -586,8 +601,12 @@ def load_virtual_VRAM(upper_graphics_data,lower_graphics_data):
     [upper_graphics_ptr,upper_top_row_amt,upper_bottom_row_amt] = upper_graphics_data
     [lower_graphics_ptr,lower_top_row_amt,lower_bottom_row_amt] = lower_graphics_data
 
-    VRAM = [None] * 0x20    #initialize
-
+    try:
+        DEBUG_VRAM
+        VRAM = [0xFF000 + i * TILESIZE for i in range(0x20)]
+    except NameError:
+        VRAM = [None] * 0x20    #initialize
+    
     for i in range(upper_top_row_amt//TILESIZE):
         VRAM[i] = convert_to_rom_address(upper_graphics_ptr + i * TILESIZE)
 

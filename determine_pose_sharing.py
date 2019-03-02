@@ -57,7 +57,7 @@ def get_pose_association_dict(command_line_args):
         util.tile_type_restriction = tile_type
 
         data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY],load_supertiles=False,report_tiles=False)
-
+        
         association_dict[tile_type] = {}
 
         for tile in util.global_tiles:

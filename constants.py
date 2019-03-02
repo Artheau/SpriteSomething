@@ -2,6 +2,8 @@
 #We'll need to come back and handle that in its own way later
 IGNORED_ANIMATIONS = [0xB2,0xB3]
 
+#DEBUG_VRAM = True
+#IGNORED_ANIMATIONS = range(0x01,0xFF)
 
 
 ROM_FILENAME_ARG_KEY = 'rom_filename'
@@ -31,3 +33,19 @@ if int(PIL.PILLOW_VERSION.split('.')[0]) <= 5:
 else:
     TRANSPARENCY = 0
     DISPOSAL = 2
+
+
+
+
+
+
+#address information
+SAMUS_TILES_START = 0x0DCC00
+SAMUS_TILES_END = 0x100000
+
+TILEMAP_TABLE = 0x92808D
+UPPER_TILEMAP_TABLE_POINTER = 0x929263
+LOWER_TILEMAP_TABLE_POINTER = 0x92945D
+
+SAMUS_TILEMAPS_START = 0x091700   #there is a little room before this, and also in a separate block a little before this
+SAMUS_TILEMAPS_END = 0x094B00     #there is a little room after this (not much)

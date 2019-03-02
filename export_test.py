@@ -14,9 +14,11 @@ def main():
 
     command_line_args = process_command_line_args()
 
+    #command_line_args[ROM_FILENAME_ARG_KEY] = "sm_orig_modified.sfc"
+
     #main data
     global data
-    data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY], load_supertiles=True)
+    data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY], load_supertiles=False)
     pal = command_line_args[PALETTE_ARG_KEY]
 
 
@@ -24,9 +26,9 @@ def main():
 
     export_all_raw_animations(pal)
 
-    # for anim in range(len(data.animations)):
-    #     for pose in range(len(data.animations[anim].poses)):
-    #         export_specific_pose(anim, pose, pal)  #as (animation_number, pose_number, palette_name)
+    for anim in range(len(data.animations)):
+        for pose in range(len(data.animations[anim].poses)):
+            export_specific_pose(anim, pose, pal)  #as (animation_number, pose_number, palette_name)
 
     #export_tiles(0x1A, -1, pal)          #as (animation number, pose_number, palette_name)
 

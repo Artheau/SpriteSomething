@@ -4,14 +4,20 @@
 
 #includes routines that load the rom and apply bugfixes
 
+import shutil
 import mmap
+import os
 
 def load_rom_contents(rom_filename):
-    # with open(rom_filename, mode='rb') as file:
-    #     rom = file.read()
-    # return rom
+    new_rom_filename = "_modified".join(os.path.splitext(rom_filename))
 
-    with open(rom_filename, "r+b") as f:
+    try:
+        shutil.copyfile(rom_filename, new_rom_filename)
+    except OSError:
+        new_rom_filename = "_modified_second".join(os.path.splitext(rom_filename))
+        shutil.copyfile(rom_filename, new_rom_filename)
+
+    with open(new_rom_filename, "r+b") as f:
         rom = mmap.mmap(f.fileno(), 0)
 
     apply_bugfixes(rom)
