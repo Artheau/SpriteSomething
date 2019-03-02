@@ -1,4 +1,4 @@
-0x00;0;True;Facing forward, ala Elevator pose (Power Suit)
+0x00;1;True;Facing forward, ala Elevator pose (Power Suit)
 0x01;0;True;Facing right, normal
 0x02;0;True;Facing left, normal
 0x03;0;True;Facing right, aiming up
@@ -153,7 +153,7 @@
 0x98;0;True;Turning around from left to right while aiming straight up while crouching
 0x99;0;True;Turning around from right to left while aiming diagonal Down while crouching
 0x9A;0;True;Turning around from left to right while aiming diagonal Down while crouching
-0x9B;0;True;Facing forward, ala Elevator pose (Varia and/or Gravity Suit)
+0x9B;1;True;Facing forward, ala Elevator pose (Varia and/or Gravity Suit)
 0x9C;0;True;Turning around from right to left while aiming diagonal up while standing
 0x9D;0;True;Turning around from left to right while aiming diagonal up while standing
 0x9E;0;True;Turning around from right to left while aiming diagonal up in midair

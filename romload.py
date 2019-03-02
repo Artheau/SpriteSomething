@@ -67,6 +67,14 @@ def fix_tile_palettes(rom):
     #last byte should be $68, like everything else
     rom[0x092EE7] = 0x68                         #$92AEE7 LoROM
 
+    '''
+    TM_06F:
+    DW $0001  
+    DB $F8, $01, $F8, $00, $30 
+    '''
+    #last byte should be $38, just like the other elevator poses
+    rom[0x92132] = 0x38                          #$92A132 LoROM
+
 def fix_bouncing_shoulder_tiles(rom):
     #in the running and moonwalking animations, when the cannon is facing diagonally, the shoulderpad bounces 2 pixels
     #instead of moving with the torso, it sort of flops around.  Fixed by y-offsetting by 1 in the "middle" frame.

@@ -86,7 +86,7 @@ def regex_parse(s):
     else:
         raise AssertionError(f"Bad pose ID in regex_parse: {s}")
 
-def export_specific_pose(animation_number, pose_number, subdir, palette_name='standard', zoom=3):
+def export_specific_pose(animation_number, pose_number, subdir, palette_name='standard', zoom=1):
     pose = data.animations[animation_number].poses[pose_number]
     img = pose.to_image(data.palettes[palette_name],zoom=zoom)
     if img:
@@ -94,7 +94,7 @@ def export_specific_pose(animation_number, pose_number, subdir, palette_name='st
             os.mkdir(f'tiles/{subdir}')
         img.save(f"tiles/{subdir}/pose_{pose.ID}.png")
     else:
-        print(f"No image for animation_number {hex(animation_number)}, pose {pose_number}")
+        pass
 
 
 def main():
@@ -113,7 +113,7 @@ def main():
 
     for tile_type in association_dict.keys():
         util.tile_type_restriction = tile_type
-        print(util.tile_type_restriction)
+        #print(util.tile_type_restriction)
         data = util.Samus(command_line_args[ROM_FILENAME_ARG_KEY],load_supertiles=False,report_tiles=False)
         for key in association_dict[tile_type]:
             hex_anim_num, str_pose_num = regex_parse(key)

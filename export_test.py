@@ -3,7 +3,6 @@ import os
 from PIL import Image
 
 import util
-import merge_detection
 from constants import *
 
 data = None
@@ -25,13 +24,11 @@ def main():
 
     export_all_raw_animations(pal)
 
-    for anim in range(len(data.animations)):
-        for pose in range(len(data.animations[anim].poses)):
-            export_specific_pose(anim, pose, pal)  #as (animation_number, pose_number, palette_name)
+    # for anim in range(len(data.animations)):
+    #     for pose in range(len(data.animations[anim].poses)):
+    #         export_specific_pose(anim, pose, pal)  #as (animation_number, pose_number, palette_name)
 
     #export_tiles(0x1A, -1, pal)          #as (animation number, pose_number, palette_name)
-
-    export_all_supertiles(pal)           #for the bold
 
 
 
@@ -84,14 +81,6 @@ def process_command_line_args():
     command_line_args = vars(parser.parse_args())
 
     return command_line_args
-
-def export_all_supertiles(palette_name, zoom=1):
-    for tile in util.global_tiles.values():
-        img = tile.to_image(data.palettes[palette_name],zoom=zoom)
-        if img:
-            img.save(f"tiles/tile_{tile.ID}.png")   #TODO: standardize the size of the tiles
-        else:
-            Image.new("RGBA", (8, 8), util.BACKGROUND_COLOR).save(f"tiles/tile_{tile.ID}.png")
             
 
 

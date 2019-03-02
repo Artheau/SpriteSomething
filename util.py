@@ -129,7 +129,7 @@ class Samus:
                         pose_number = 0
                         control_offset = 0
                 else:
-                    raise AssertionError(f"Unimplemented control code {hex(frame_delta)} encountered in animation_sequence_to_gif()")
+                    raise AssertionError(f"Unimplemented control code {pretty_hex(frame_delta)} encountered in animation_sequence_to_gif()")
             else:                        #not a control code, so process the duration normally
                 current_canvas = animation.poses[pose_number].to_canvas()
                 pose_number += 1
@@ -210,11 +210,11 @@ class Samus:
             palettes[palette] = [   None,                        #0b000
                                     None,                        #0b001
                                     samus_palette,               #0b010  (Samus)  <-- definitely Samus.  definitely.
-                                    death_palette,               #0b011  <-- not sure if this should be all black...it is the shadow inside the crystal flash
+                                    death_palette,               #0b011  <-- the shadow inside the crystal flash
                                     None,                        #0b100
                                     None,                        #0b101
-                                    None,                        #0b110
-                                    flash_palette                #0b111  <-- I'm not really sure about this, because of palette effects applied during crystal_flash
+                                    samus_palette,               #0b110  <-- used during loading scene for Samus
+                                    flash_palette                #0b111  <-- technically this palette rotates through the crystal flash palette sequence
                                 ]
         return palettes
 
@@ -227,7 +227,7 @@ class Samus:
 
 class Animation:
     def __init__(self, index, num_kicks, used, description):
-        self.ID = hex(index)
+        self.ID = pretty_hex(index)
         self.index = index
         self.used = used
         self.description = description
@@ -328,7 +328,7 @@ class Animation:
                 elif duration == 0xFF:
                     pass                       #nothing to do in this case, it is just the end of the line (loop to beginning)
                 else:
-                    raise AssertionError(f"In {self.ID}, reached duration code {hex(duration)} which is not implemented.")
+                    raise AssertionError(f"In {self.ID}, reached duration code {pretty_hex(duration)} which is not implemented.")
                 
                 if num_kicks > 0:
                     num_kicks -= 1
@@ -415,8 +415,8 @@ class TileRef:
         if not self.priority:
             raise AssertionError(f"priority bit unset, tile {self.ID}")   #only matters for animations $82 and $1C which are just typos
         self.palette = (raw_tile[4] >> 2) & 0b111
-        if self.palette not in [0b010,0b011,0b111]:
-            raise AssertionError(f"Tile {self.ID} uses palette {self.palette}.  raw_tile = {[hex(raw) for raw in raw_tile]}")  #only matters for animations $81,82,$1B, and $1C which are just typos
+        if self.palette not in [0b010,0b011,0b110,0b111]:
+            raise AssertionError(f"Tile {self.ID} uses palette {self.palette}.  raw_tile = {[pretty_hex(raw) for raw in raw_tile]}")  #only matters for animations $81,82,$1B, and $1C which are just typos
 
     @property
     def location(self):
@@ -454,7 +454,7 @@ class Tile:
 
     @property
     def ID(self):
-        return hex(min(self.addresses))
+        return pretty_hex(min(self.addresses))
 
     @property
     def location(self):
@@ -563,7 +563,7 @@ def convert_to_rom_address(snes_addr):
     offset = (snes_addr % 0x10000) - 0x8000
 
     if offset < 0x0000 or bank < 0x00:
-        raise AssertionError(f"Function convert_to_rom_address() called on {hex(snes_addr)}, but this is not a valid SNES address.")
+        raise AssertionError(f"Function convert_to_rom_address() called on {pretty_hex(snes_addr)}, but this is not a valid SNES address.")
     
     new_address = bank*0x8000 + offset
 
@@ -627,6 +627,11 @@ def to_image(object,palette,zoom=1):
         y_min = min([y for (x,y) in canvas.keys()])
         y_max = max([y for (x,y) in canvas.keys()])
 
+        x_min = min(0,x_min)-1
+        x_max = max(0,x_max)+1
+        y_min = min(0,y_min)-1
+        y_max = max(0,y_max)+1
+
         width = x_max-x_min+1
         height = y_max-y_min+1
         origin = (-x_min,-y_min)
@@ -635,12 +640,17 @@ def to_image(object,palette,zoom=1):
 
         pixels = image.load()
 
+        for i in range(x_min,x_max+1):
+            pixels[i+origin[0],origin[1]] = (0xFF,0x80,0xFF)    
+        for j in range(y_min,y_max+1):
+            pixels[origin[0],j+origin[1]] = (0xFF,0x80,0xFF)
+
         for (i,j) in canvas.keys():
             color_index, palette_index = canvas[(i,j)]
             pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
 
         #scale
-        image = image.resize((zoom*(2*width), zoom*(2*height)), Image.NEAREST)
+        image = image.resize((zoom*(width), zoom*(height)), Image.NEAREST)
     else:                #the canvas is empty
         image = None
 
@@ -668,6 +678,11 @@ def convert_canvas_to_gif(filename, canvases, frame_durations, palette, zoom=1):
 
             pixels = images[-1].load()
 
+            for i in range(x_min,x_max+1):
+                pixels[i+origin[0],origin[1]] = (0xFF,0x80,0xFF)    
+            for j in range(y_min,y_max+1):
+                pixels[origin[0],j+origin[1]] = (0xFF,0x80,0xFF)
+
             for (i,j) in canvas.keys():
                 color_index, palette_index = canvas[(i,j)]
                 pixels[i+origin[0],j+origin[1]] = palette[palette_index][color_index] # set the colour accordingly
@@ -679,6 +694,9 @@ def convert_canvas_to_gif(filename, canvases, frame_durations, palette, zoom=1):
         images[0].save(filename, 'GIF', save_all=True, append_images=images[1:], duration=durations, transparency=TRANSPARENCY, disposal=DISPOSAL, loop=0)
     else:
         images[0].save(filename, transparency=TRANSPARENCY)
+
+def pretty_hex(x,digits=2):
+    return '0x' + hex(x)[2:].zfill(digits)
 
 
 ####################################################
