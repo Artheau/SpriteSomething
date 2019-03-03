@@ -59,7 +59,7 @@ global_tiles = {}
 tile_type_restriction = None
 
 class Samus:
-    def __init__(self, rom_filename, animation_data_filename="animations.csv", load_supertiles=True,report_tiles=True):
+    def __init__(self, rom_filename, animation_data_filename="resources/animations.csv", load_supertiles=True,report_tiles=True):
         global rom
         rom = romload.load_rom_contents(rom_filename)
         if load_supertiles:
@@ -416,7 +416,7 @@ class TileRef:
         self.v_flip = raw_tile[4] & 0x80 != 0x00
         self.priority = raw_tile[4] & 0x20 != 0x00
         if not self.priority:
-            raise AssertionError(f"priority bit unset, tile {self.ID}")   #only matters for animations $82 and $1C which are just typos
+            raise AssertionError(f"priority bit unset ({pretty_hex(raw_tile[4])}), tile {self.ID}")
         self.palette = (raw_tile[4] >> 2) & 0b111
         if self.palette not in [0b010,0b011,0b110,0b111]:
             raise AssertionError(f"Tile {self.ID} uses palette {self.palette}.  raw_tile = {[pretty_hex(raw) for raw in raw_tile]}")  #only matters for animations $81,82,$1B, and $1C which are just typos

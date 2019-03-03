@@ -4,30 +4,26 @@
 
 #applies bugfixes to the rom
 #blanks out all Samus tiles!  (Pac Man mode)
-#spreads out the tilemaps to create a "canvas" to paint on.
+#rebuilt the tilemaps to create a "canvas" to paint on.
 
 #TODO: factor out the mutual hex processing code from this file and util.py
 
 import argparse
 import os
 import struct
+import csv
+from PIL import Image
 
 import romload
+import tilemaps
 from constants import *
 
 rom = None
+filemap = None
 
-def process_command_line_args():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--rom",
-                        dest=ROM_FILENAME_ARG_KEY,
-                        help="Location of the rom file; e.g. /my_dir/sm_orig.sfc",
-                        metavar="<rom_filename>",
-                        default='sm_orig.sfc')
-    
-    command_line_args = vars(parser.parse_args())
 
-    return command_line_args
+
+
 
 
 def blank_all_samus_tiles():
@@ -65,98 +61,107 @@ def write_new_tilemaps():
 
 
 def get_raw_upper_tilemaps():
-    #TODO: More tilemaps
-    tilemaps = {}
-
-    this_map = [0x01,0x00]  #one tile in map
-    this_map.extend([0xF3,0x01,0xF0,0x00,0x28])
-
-    tilemaps['test_1x1'] = this_map.copy()
-
-    this_map = [0x01,0x00]  #one tile in map
-    this_map.extend([0xF3,0xC3,0xF0,0x00,0x28])
-
-    tilemaps['test_2x2'] = this_map.copy()
-
-    this_map = [0x03,0x00]  #three tiles in map
-    this_map.extend([0xF3,0xC3,0xF0,0x00,0x28])
-    this_map.extend([0x03,0x00,0xF0,0x02,0x28])
-    this_map.extend([0x03,0x00,0xF8,0x03,0x28])
-
-    tilemaps['test_2x3'] = this_map.copy()
-
-    this_map = [0x06,0x00]  #six tiles in map
-    this_map.extend([0xF3,0xC3,0xF0,0x00,0x28])
-    this_map.extend([0x03,0x00,0xF0,0x02,0x28])
-    this_map.extend([0x03,0x00,0xF8,0x03,0x28])
-    this_map.extend([0xF3,0x01,0x00,0x04,0x28])
-    this_map.extend([0xFB,0x01,0x00,0x05,0x28])
-    this_map.extend([0x03,0x00,0x00,0x06,0x28])
-
-    tilemaps['test_3x3'] = this_map.copy()
-    
-    return tilemaps
+    return tilemaps.upper_tilemaps
 
 def get_raw_lower_tilemaps():
-    #TODO: More tilemaps
-    tilemaps = {}
+    return tilemaps.lower_tilemaps
 
-    this_map = [0x01,0x00]  #one tile in map
-    this_map.extend([0xF3,0x01,0x00,0x08,0x28])
-
-    tilemaps['test_1x1'] = this_map.copy()
-
-    this_map = [0x01,0x00]  #one tile in map
-    this_map.extend([0xF3,0xC3,0x00,0x08,0x28])
-
-    tilemaps['test_2x2'] = this_map.copy()
-
-    this_map = [0x06,0x00]  #six tiles in map
-    this_map.extend([0xF3,0xC3,0x00,0x08,0x28])
-    this_map.extend([0x03,0x00,0x00,0x0A,0x28])
-    this_map.extend([0x03,0x00,0x08,0x0B,0x28])
-    this_map.extend([0xF3,0x01,0x10,0x0C,0x28])
-    this_map.extend([0xFB,0x01,0x10,0x0D,0x28])
-    this_map.extend([0x03,0x00,0x10,0x0E,0x28])
-
-    tilemaps['test_3x3'] = this_map.copy()
-
-    this_map = [0x06,0x00]  #six tiles in map
-    this_map.extend([0xF3,0xC3,0x00,0x08,0x28])
-    this_map.extend([0x03,0x00,0x00,0x0A,0x28])
-    this_map.extend([0x03,0x00,0x08,0x0B,0x28])
-    this_map.extend([0xF3,0xC3,0x10,0x0C,0x28])
-    this_map.extend([0x03,0x00,0x10,0x0E,0x28])
-    this_map.extend([0x03,0x00,0x18,0x0F,0x28])
-
-    tilemaps['test_4x3'] = this_map.copy()
-    
-
-    return tilemaps
 
 def assign_new_tilemaps(upper_map_addresses, lower_map_addresses):
-    animation_number = 0x00
-    [upper_offset] = get_indexed_values(UPPER_TILEMAP_TABLE_POINTER,animation_number,0x02,'2')
-    [lower_offset] = get_indexed_values(LOWER_TILEMAP_TABLE_POINTER,animation_number,0x02,'2')
+    #TODO: Re-factor this to avoid doubled-up code
+    animation_number_list = set([animation_number for (animation_number,timeline_number) in filemap.keys()])
+    for animation_number in animation_number_list:
+        max_timeline = max([timeline_number for (this_animation_number,timeline_number) in filemap.keys() if this_animation_number == animation_number])
+        
+        upper_tilemap_list = []
+        lower_tilemap_list = []
+        for t in range(max_timeline+1):
+            if (animation_number,t) not in filemap:   #as will be the case for control codes
+                upper_tilemap_list.extend([0x00,0x00])
+                lower_tilemap_list.extend([0x00,0x00])
+            else:
+                upper_address_to_insert = upper_map_addresses[filemap[(animation_number,t)]['upper_map']]
+                msb = upper_address_to_insert // 0x100
+                lsb = upper_address_to_insert % 0x100
+                upper_tilemap_list.extend([lsb,msb])
+                
+                lower_address_to_insert = lower_map_addresses[filemap[(animation_number,t)]['lower_map']]
+                msb = lower_address_to_insert // 0x100
+                lsb = lower_address_to_insert % 0x100
+                lower_tilemap_list.extend([lsb,msb])
 
-    animation_upper_tilemap_list = TILEMAP_TABLE + 2 * upper_offset
-    rom_upper_tilemap_pointer_location = convert_to_rom_address(animation_upper_tilemap_list)
+        [upper_offset] = get_indexed_values(UPPER_TILEMAP_TABLE_POINTER,animation_number,0x02,'2')
+        [lower_offset] = get_indexed_values(LOWER_TILEMAP_TABLE_POINTER,animation_number,0x02,'2')
 
-    map_to_insert = upper_map_addresses['test_2x3']
-    msb = map_to_insert // 0x100
-    lsb = map_to_insert % 0x100
+        rom_upper_tilemap_array = convert_to_rom_address(TILEMAP_TABLE + 2 * upper_offset)
+        rom[rom_upper_tilemap_array:rom_upper_tilemap_array+len(upper_tilemap_list)] = bytes(upper_tilemap_list)
 
-    rom[rom_upper_tilemap_pointer_location:rom_upper_tilemap_pointer_location+2] = bytes([lsb,msb])
+        rom_lower_tilemap_array = convert_to_rom_address(TILEMAP_TABLE + 2 * lower_offset)
+        rom[rom_lower_tilemap_array:rom_lower_tilemap_array+len(lower_tilemap_list)] = bytes(lower_tilemap_list)
 
-    animation_lower_tilemap_list = TILEMAP_TABLE + 2 * lower_offset
-    rom_lower_tilemap_pointer_location = convert_to_rom_address(animation_lower_tilemap_list)
 
-    map_to_insert = lower_map_addresses['test_4x3']
-    msb = map_to_insert // 0x100
-    lsb = map_to_insert % 0x100
 
-    rom[rom_lower_tilemap_pointer_location:rom_lower_tilemap_pointer_location+2] = bytes([lsb,msb])
 
+
+
+def convert_file_to_VRAM_data(filename):
+    image = Image.open(filename)
+    pixels = image.load()
+    palette = load_palette_from_file()             #this line placed here so that the palette can be switched per file
+    #TODO: Use the palette and the image file to reverse engineer the indices
+
+    row1,row2 = None,None
+    return row1,row2
+
+
+def load_palette_from_file(filename = "resources/samus_palette.tpl"):
+    palette = []
+    with open(filename, 'rb') as file:
+        _ = file.read(4)       #skip "TPL" + null (4 bytes total)
+        raw_file = file.read()
+    for i in range(0,len(raw_file),3):
+        red = int(raw_file[i])
+        green = int(raw_file[i+1])
+        blue = int(raw_file[i+2])
+        palette.append((red,green,blue))
+    print(palette)
+    return palette
+
+
+
+
+def load_filemap(filename='resources/filemap.csv'):
+    filemap = {}
+    with open(filename, 'r') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=';')
+        next(spamreader)             #skip header
+        for row in spamreader:
+            animation_number = int(row[0])
+            pose_number = int(row[2])
+            timeline_number = int(row[3])
+            upper_map = row[4]
+            upper_file = row[5]
+            lower_map = row[6]
+            lower_file = row[7]
+
+            filemap[(animation_number,timeline_number)] = { 'pose_number': pose_number,
+                                                        'upper_map': upper_map,
+                                                        'upper_file': upper_file,
+                                                        'lower_map': lower_map,
+                                                        'lower_file': lower_file}
+    return filemap
+
+def process_command_line_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--rom",
+                        dest=ROM_FILENAME_ARG_KEY,
+                        help="Location of the rom file; e.g. /my_dir/sm_orig.sfc",
+                        metavar="<rom_filename>",
+                        default='sm_orig.sfc')
+    
+    command_line_args = vars(parser.parse_args())
+
+    return command_line_args
 
 def convert_to_rom_address(snes_addr):
     #convert from memory address to ROM address (lorom 0x80)
@@ -192,7 +197,6 @@ def get_indexed_values(base,index,entry_size,encoding):
 
         extracted_bytes = rom[beginning_of_entry:beginning_of_entry+bytes_to_get]
 
-
         if bytes_to_get == 1:
             unpack_code = 'B'
         elif bytes_to_get == 2:
@@ -211,9 +215,11 @@ def get_indexed_values(base,index,entry_size,encoding):
 
 def main():
     global rom
+    global filemap
 
     command_line_args = process_command_line_args()
     rom = romload.load_rom_contents(command_line_args[ROM_FILENAME_ARG_KEY])
+    filemap = load_filemap()
 
     blank_all_samus_tiles()
 
@@ -222,6 +228,9 @@ def main():
     assign_new_tilemaps(upper_map_addresses, lower_map_addresses)
 
     #the file saves automatically because it is an mmap (see romload.py)
+
+    #TODO: remove
+    load_palette_from_file()
     
 
 if __name__ == "__main__":

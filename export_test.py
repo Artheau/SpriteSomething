@@ -14,7 +14,7 @@ def main():
 
     command_line_args = process_command_line_args()
 
-    #command_line_args[ROM_FILENAME_ARG_KEY] = "sm_orig_modified.sfc"
+    command_line_args[ROM_FILENAME_ARG_KEY] = "sm_orig_modified.sfc"
 
     #main data
     global data
@@ -22,11 +22,13 @@ def main():
     pal = command_line_args[PALETTE_ARG_KEY]
 
 
+    #export_specific_pose(0x00, 0, pal)  #as (animation_number, pose_number, palette_name)
+
     #export_custom_sequence(pal)
 
-    export_all_raw_animations(pal)
+    #export_all_raw_animations(pal)
 
-    for anim in range(len(data.animations)):
+    for anim in range(3):#range(len(data.animations)):
         for pose in range(len(data.animations[anim].poses)):
             export_specific_pose(anim, pose, pal)  #as (animation_number, pose_number, palette_name)
 

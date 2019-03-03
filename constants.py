@@ -2,8 +2,8 @@
 #We'll need to come back and handle that in its own way later
 IGNORED_ANIMATIONS = [0xB2,0xB3]
 
-#DEBUG_VRAM = True
-#IGNORED_ANIMATIONS = range(0x01,0xFF)
+DEBUG_VRAM = True
+IGNORED_ANIMATIONS = range(0x03,0xFF)
 
 
 ROM_FILENAME_ARG_KEY = 'rom_filename'
@@ -12,7 +12,7 @@ SUPERTILES_ARG_KEY = 'supertile_optimize'
 
 TILESIZE = 0x20          #8x8 tiles with 4bpp = 0x20 bytes
 TILE_DIMENSION = 0x08    #8x8 tiles
-BACKGROUND_COLOR = '#000080'#36393f'
+BACKGROUND_COLOR = '#00007F'         #used to be Discord grey: '#36393f'
 
 #FRAME_DURATION = 1000/60    #for true-to-NTSC attempts
 FRAME_DURATION = 20          #given GIF limitations, this seems like a good compromise

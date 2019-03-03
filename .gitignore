@@ -5,6 +5,7 @@ __pycache__/
 images
 tiles
 animations
+new_sprite
 
 # no pip installer
 get-pip.py
