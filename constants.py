@@ -40,12 +40,15 @@ else:
 
 
 #address information
-SAMUS_TILES_START = 0x0DCC00
-SAMUS_TILES_END = 0x100000
+SAMUS_TILES_START = 0x9BCC00 #0x0DCC00 ROM
+SAMUS_TILES_END = 0xA08000   #0x100000 ROM
 
 TILEMAP_TABLE = 0x92808D
 UPPER_TILEMAP_TABLE_POINTER = 0x929263
 LOWER_TILEMAP_TABLE_POINTER = 0x92945D
 
-SAMUS_TILEMAPS_START = 0x091700   #there is a little room before this, and also in a separate block a little before this
-SAMUS_TILEMAPS_END = 0x094B00     #there is a little room after this (not much)
+SAMUS_TILEMAPS_START = 0x929700  #0x091700 ROM   #there is a little room before this, and also in a separate block a little before this
+SAMUS_TILEMAPS_END = 0x92CB00  #0x094B00 ROM   #there is a little room after this (not much)
+
+DMA_ENTRIES_START = 0x92CBEE  #0x94BEE ROM
+DMA_ENTRIES_END = 0x92D910   #maybe a couple more bytes here but that's it.  No more room.

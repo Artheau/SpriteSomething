@@ -7,6 +7,7 @@
 #rebuilt the tilemaps to create a "canvas" to paint on.
 
 #TODO: factor out the mutual hex processing code from this file and util.py
+#TODO: Re-factor as much as possible to avoid doubling up on "upper" and "lower" halves of the code
 
 import argparse
 import os
@@ -27,10 +28,13 @@ filemap = None
 
 
 
-def blank_all_samus_tiles():
+def erase_all_samus_info():
     blank_tile = bytes(8*[0x00,0xFF]+16*[0x00]) #technically this is Samus's yellow color right now (Pac Man mode)
-    for addr in range(SAMUS_TILES_START,SAMUS_TILES_END,TILESIZE):
+    for addr in range(convert_to_rom_address(SAMUS_TILES_START),convert_to_rom_address(SAMUS_TILES_END),TILESIZE):
         rom[addr:addr+TILESIZE] = blank_tile
+    blank_DMA_entry = bytes(7*[0x00])
+    for addr in range(convert_to_rom_address(DMA_ENTRIES_START),convert_to_rom_address(DMA_ENTRIES_END)-0x07,0x07):
+        rom[addr:addr+0x07] = blank_DMA_entry
 
 
 def write_new_tilemaps():
@@ -41,8 +45,9 @@ def write_new_tilemaps():
     for key in tilemaps_to_create:
         tilemap = tilemaps_to_create[key]
         tilemap_size = len(tilemap)
-        rom[current_addr:current_addr+tilemap_size] = bytes(tilemap)
-        upper_map_addresses[key] = convert_to_ram_address(current_addr) - 0x920000
+        rom_addr = convert_to_rom_address(current_addr)
+        rom[rom_addr:rom_addr+tilemap_size] = bytes(tilemap)
+        upper_map_addresses[key] = current_addr - 0x920000
         current_addr += tilemap_size
         if current_addr > SAMUS_TILEMAPS_END:
             raise AssertionError("Made too many tilemaps -- exceeded ROM tilemap allocation")
@@ -52,8 +57,9 @@ def write_new_tilemaps():
     for key in tilemaps_to_create:
         tilemap = tilemaps_to_create[key]
         tilemap_size = len(tilemap)
-        rom[current_addr:current_addr+tilemap_size] = bytes(tilemap)
-        lower_map_addresses[key] = convert_to_ram_address(current_addr) - 0x920000
+        rom_addr = convert_to_rom_address(current_addr)
+        rom[rom_addr:rom_addr+tilemap_size] = bytes(tilemap)
+        lower_map_addresses[key] = current_addr - 0x920000
         current_addr += tilemap_size
         if current_addr > SAMUS_TILEMAPS_END:
             raise AssertionError("Made too many tilemaps -- exceeded ROM tilemap allocation")
@@ -68,8 +74,15 @@ def get_raw_lower_tilemaps():
     return tilemaps.lower_tilemaps
 
 
-def assign_new_tilemaps(upper_map_addresses, lower_map_addresses):
-    #TODO: Re-factor this to avoid doubled-up code
+
+def assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict):
+    #TODO: Need to tell the poses the correct amount of data to load into VRAM each time, and from where
+    # i.e. the AFP/DMA data from the disassembly.
+    #every pose/timeline has one four byte line in the AFP table ($00000000 for null pose), in an array indexed by the animation number
+    # bytes are: upper_dma_table, upper_dma_entry, lower_dma_table, lower_dma_entry
+    # these can be modified in place if needed
+
+
     animation_number_list = set([animation_number for (animation_number,timeline_number) in filemap.keys()])
     for animation_number in animation_number_list:
         max_timeline = max([timeline_number for (this_animation_number,timeline_number) in filemap.keys() if this_animation_number == animation_number])
@@ -102,6 +115,37 @@ def assign_new_tilemaps(upper_map_addresses, lower_map_addresses):
 
 
 
+def write_tiles():
+    DMA_dict = {}
+    tile_ptr = SAMUS_TILES_START
+    upper_files = set(single_pose_dict['upper_file'] for single_pose_dict in filemap.values())
+    lower_files = set(single_pose_dict['lower_file'] for single_pose_dict in filemap.values())
+
+    for file in upper_files:
+        filename = f"new_sprite/upper/{file}.png"
+        row1, row2 = convert_file_to_VRAM_data(filename,lower=False)
+        DMA_dict[file] = (tile_ptr,len(row1),len(row2))
+        tile_ptr = write_single_row_of_tiles(row1, tile_ptr)
+        tile_ptr = write_single_row_of_tiles(row2, tile_ptr)
+    for file in lower_files:
+        filename = f"new_sprite/lower/{file}.png"
+        row1, row2 = convert_file_to_VRAM_data(filename,lower=True)
+        DMA_dict[file] = (tile_ptr,len(row1),len(row2))
+        tile_ptr = write_single_row_of_tiles(row1, tile_ptr)
+        tile_ptr = write_single_row_of_tiles(row2, tile_ptr)
+
+    return DMA_dict
+
+def write_single_row_of_tiles(row,tile_ptr):
+    length = len(row)
+    rom_ptr = convert_to_rom_address(tile_ptr)
+    rom[rom_ptr:rom_ptr+length] = bytes(row)
+
+    tile_ptr += length
+    if tile_ptr > SAMUS_TILES_END:
+        raise AssertionError("Too many tiles have been written into the ROM -- no more space available")
+
+    return tile_ptr
 
 
 
@@ -125,11 +169,11 @@ def convert_file_to_VRAM_data(filename,lower=False):
             raise AssertionError(f"color {color} is present in image {filename}, but it is not in the corresponding palette")
 
     image_raw_pixels = list(image.getdata())
-    rows, cols = image.size
+    cols, rows = image.size
 
     #sadly this next data structure will need to be indexed by index_pixels[row][col],
     # which is opposite the math intution (i.e. must use index_pixels[y_coord][x_coord])
-    index_pixels = np.reshape(list(map(lambda x: reverse_palette[x], image_raw_pixels)), (cols,rows))
+    index_pixels = np.reshape(list(map(lambda x: reverse_palette[x], image_raw_pixels)), (rows,cols))
     
     #####now flatten the image out in the 4bpp tile format
 
@@ -138,30 +182,31 @@ def convert_file_to_VRAM_data(filename,lower=False):
     #big tiles first
     for y in range(0,rows-8,16):
         for x in range(0,cols-8,16):
-            row1.append(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))  #top left
-            row1.append(extract_vram_tile(index_pixels[y  :y+8 ,x+8:x+16]))  #top right
-            row2.append(extract_vram_tile(index_pixels[y+8:y+16,x  :x+8 ]))  #bottom left
-            row2.append(extract_vram_tile(index_pixels[y+8:y+16,x+8:x+16]))  #bottom right
+            row1.extend(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))  #top left
+            row1.extend(extract_vram_tile(index_pixels[y  :y+8 ,x+8:x+16]))  #top right
+            row2.extend(extract_vram_tile(index_pixels[y+8:y+16,x  :x+8 ]))  #bottom left
+            row2.extend(extract_vram_tile(index_pixels[y+8:y+16,x+8:x+16]))  #bottom right
     #rightmost column if necessary
     if cols % 16 != 0:
         x = cols - (cols % 16)
         for y in range(0,rows-8,16):
-            row1.append(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))  #top
-            row2.append(extract_vram_tile(index_pixels[y+8:y+16,x  :x+8 ]))  #bottom
+            row1.extend(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))  #top
+            row2.extend(extract_vram_tile(index_pixels[y+8:y+16,x  :x+8 ]))  #bottom
     #bottom row if necessary
     if rows % 16 != 0:
         y = rows - (rows % 16)
         for x in range(0,cols-8,16):
-            row1.append(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))  #left
-            row2.append(extract_vram_tile(index_pixels[y  :y+8 ,x+8:x+16]))  #right
+            row1.extend(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))  #left
+            row2.extend(extract_vram_tile(index_pixels[y  :y+8 ,x+8:x+16]))  #right
     #bottom right corner, if necessary
     if rows % 16 != 0 and cols % 16 != 0:
         x = cols - (cols % 16)
         y = rows - (rows % 16)
-        row1.append(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))
+        row1.extend(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))
     
     #so there's this thing with row2 in the lower body section where they used the rightmost two tiles
-    # for other stuff like cannon ports, so we need to stay out of there
+    # for other stuff like cannon ports, so we need to stay out of there, unless we are rendering something that
+    # we know will never use those tiles (e.g. space jump does not render cannon port, and so can use those tiles)
     if lower and len(row2)//TILESIZE > 0x06:
         #move last tile from row2 up to row1
         row1.extend(row2[0x06*TILESIZE:])
@@ -170,7 +215,6 @@ def convert_file_to_VRAM_data(filename,lower=False):
 
     if len(row1)//TILESIZE > 0x08 or len(row2)//TILESIZE > 0x08:
         raise AssertionError(f"Too many tiles created for {filename}")
-    
 
     return row1,row2
 
@@ -196,6 +240,58 @@ def extract_vram_tile(tile):
                 (0,2),(0,3),(1,2),(1,3),(2,2),(2,3),(3,2),(3,3),
                 (4,2),(4,3),(5,2),(5,3),(6,2),(6,3),(7,2),(7,3)]
             ]            
+
+
+
+def create_DMA_tables(DMA_dict):
+    #DMA tables:
+    # a bunch of 7 byte instructions: long ptr to tiles, bytes in top row, bytes in bottom row
+    # in theory these could be modified in place, but the original pose crosstalk might change the way these need to work
+    #
+    # can probably write DMA info from $92CBEE up to $92D91D, but after that you have to find somewhere else
+    #
+    #There will need to be exactly one DMA table for every image file (i.e. for every entry in DMA_dict)
+    # Probably just better to strong-arm this instead of being ginger with the pointer overwrites
+
+    upper_files = set(single_pose_dict['upper_file'] for single_pose_dict in filemap.values())
+    lower_files = set(single_pose_dict['lower_file'] for single_pose_dict in filemap.values())
+
+    DMA_info_address_dict = {}
+
+    DMA_ptr = DMA_ENTRIES_START
+    for file in upper_files:
+        DMA_info_address_dict[file] = DMA_ptr
+        DMA_ptr = write_single_DMA_entry(DMA_dict[file], DMA_ptr)
+    for file in lower_files:
+        DMA_info_address_dict[file] = DMA_ptr
+        DMA_ptr = write_single_DMA_entry(DMA_dict[file], DMA_ptr)
+
+    return DMA_info_address_dict
+
+
+
+def write_single_DMA_entry(entry,DMA_ptr):
+    rom_ptr = convert_to_rom_address(DMA_ptr)
+
+    ptr = entry[0]
+    size1 = entry[1]
+    size2 = entry[2]
+    rom[rom_ptr:rom_ptr+0x03] = little_endian(ptr,3)
+    rom[rom_ptr+0x03:rom_ptr+0x05] = little_endian(size1,2)
+    rom[rom_ptr+0x05:rom_ptr+0x07] = little_endian(size2,2)
+
+    DMA_ptr += 0x07
+    if DMA_ptr > DMA_ENTRIES_END:
+        raise AssertionError("Too many DMA entries have been made -- there is no more room for DMA info")
+
+    return DMA_ptr
+
+def little_endian(x,num_bytes):
+    result = []
+    for i in range(num_bytes):
+        result.append(x % 0x100)
+        x = x // 0x100
+    return bytes(result)
 
 
 def load_palette_from_file(filename = "resources/samus_palette.tpl"):
@@ -304,17 +400,16 @@ def main():
     rom = romload.load_rom_contents(command_line_args[ROM_FILENAME_ARG_KEY])
     filemap = load_filemap()
 
-    blank_all_samus_tiles()
+    erase_all_samus_info()   #technically this is not needed, but it provides a stronger argument that there are no bugs/oversights
 
     upper_map_addresses, lower_map_addresses = write_new_tilemaps()
 
-    assign_new_tilemaps(upper_map_addresses, lower_map_addresses)
+    DMA_dict = write_tiles()
+    DMA_info_address_dict = create_DMA_tables(DMA_dict)
+
+    assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict)
 
     #the file saves automatically because it is an mmap (see romload.py)
-
-    #TODO: need to do this for every file, then actually store it in the tile data section of the ROM
-    convert_file_to_VRAM_data('new_sprite/lower/l_elevator_streak0.png')
-    #TODO: Then need to tell the poses the correct amount of data to load into VRAM each time
     
 
 if __name__ == "__main__":
