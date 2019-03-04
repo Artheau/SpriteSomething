@@ -12,6 +12,7 @@ import argparse
 import os
 import struct
 import csv
+import numpy as np
 from PIL import Image
 
 import romload
@@ -104,14 +105,97 @@ def assign_new_tilemaps(upper_map_addresses, lower_map_addresses):
 
 
 
-def convert_file_to_VRAM_data(filename):
+def convert_file_to_VRAM_data(filename,lower=False):
+    #TODO: Don't trust that the image is correctly sized
+    #TODO: Non-rectangular templates
     image = Image.open(filename)
     pixels = image.load()
     palette = load_palette_from_file()             #this line placed here so that the palette can be switched per file
-    #TODO: Use the palette and the image file to reverse engineer the indices
+    
+    reverse_palette = {(r,g,b,0xFF):index for (index,(r,g,b)) in enumerate(palette)}
+    image_colors = [color for (count,color) in image.getcolors()]
 
-    row1,row2 = None,None
+    for (r,g,b,a) in image_colors:
+        if a == 0:
+            reverse_palette[(r,g,b,a)] = 0      #force all the transparent colors to index 0
+
+    #audit the colors in the image to make sure we CAN translate them all using the palette
+    for color in image_colors:
+        if color not in reverse_palette:
+            raise AssertionError(f"color {color} is present in image {filename}, but it is not in the corresponding palette")
+
+    image_raw_pixels = list(image.getdata())
+    rows, cols = image.size
+
+    #sadly this next data structure will need to be indexed by index_pixels[row][col],
+    # which is opposite the math intution (i.e. must use index_pixels[y_coord][x_coord])
+    index_pixels = np.reshape(list(map(lambda x: reverse_palette[x], image_raw_pixels)), (cols,rows))
+    
+    #####now flatten the image out in the 4bpp tile format
+
+    row1,row2 = [],[]
+
+    #big tiles first
+    for y in range(0,rows-8,16):
+        for x in range(0,cols-8,16):
+            row1.append(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))  #top left
+            row1.append(extract_vram_tile(index_pixels[y  :y+8 ,x+8:x+16]))  #top right
+            row2.append(extract_vram_tile(index_pixels[y+8:y+16,x  :x+8 ]))  #bottom left
+            row2.append(extract_vram_tile(index_pixels[y+8:y+16,x+8:x+16]))  #bottom right
+    #rightmost column if necessary
+    if cols % 16 != 0:
+        x = cols - (cols % 16)
+        for y in range(0,rows-8,16):
+            row1.append(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))  #top
+            row2.append(extract_vram_tile(index_pixels[y+8:y+16,x  :x+8 ]))  #bottom
+    #bottom row if necessary
+    if rows % 16 != 0:
+        y = rows - (rows % 16)
+        for x in range(0,cols-8,16):
+            row1.append(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))  #left
+            row2.append(extract_vram_tile(index_pixels[y  :y+8 ,x+8:x+16]))  #right
+    #bottom right corner, if necessary
+    if rows % 16 != 0 and cols % 16 != 0:
+        x = cols - (cols % 16)
+        y = rows - (rows % 16)
+        row1.append(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))
+    
+    #so there's this thing with row2 in the lower body section where they used the rightmost two tiles
+    # for other stuff like cannon ports, so we need to stay out of there
+    if lower and len(row2)//TILESIZE > 0x06:
+        #move last tile from row2 up to row1
+        row1.extend(row2[0x06*TILESIZE:])
+        row2 = row2[:0x06*TILESIZE]
+
+
+    if len(row1)//TILESIZE > 0x08 or len(row2)//TILESIZE > 0x08:
+        raise AssertionError(f"Too many tiles created for {filename}")
+    
+
     return row1,row2
+
+def extract_vram_tile(tile):
+    #pasting this again because my head explodes every time I try to do something with 4bpp
+    # (this condition is not congenital)
+    #from https://mrclick.zophar.net/TilEd/download/consolegfx.txt
+    # [r0, bp1], [r0, bp2], [r1, bp1], [r1, bp2], [r2, bp1], [r2, bp2], [r3, bp1], [r3, bp2]
+    # [r4, bp1], [r4, bp2], [r5, bp1], [r5, bp2], [r6, bp1], [r6, bp2], [r7, bp1], [r7, bp2]
+    # [r0, bp3], [r0, bp4], [r1, bp3], [r1, bp4], [r2, bp3], [r2, bp4], [r3, bp3], [r3, bp4]
+    # [r4, bp3], [r4, bp4], [r5, bp3], [r5, bp4], [r6, bp3], [r6, bp4], [r7, bp3], [r7, bp4]
+
+    vram_dict = {}
+    for bitplane in range(4):
+        bitmask = 0x01 << bitplane
+        for i,row in enumerate(tile.tolist()):
+            vram_dict[(i,bitplane)] = 0
+            for j,pixel in enumerate(row):
+                vram_dict[(i,bitplane)] = (vram_dict[(i,bitplane)] << 1) + (1 if (pixel & bitmask != 0) else 0)
+    return  [vram_dict[coord] for coord in [ \
+                (0,0),(0,1),(1,0),(1,1),(2,0),(2,1),(3,0),(3,1),
+                (4,0),(4,1),(5,0),(5,1),(6,0),(6,1),(7,0),(7,1),
+                (0,2),(0,3),(1,2),(1,3),(2,2),(2,3),(3,2),(3,3),
+                (4,2),(4,3),(5,2),(5,3),(6,2),(6,3),(7,2),(7,3)]
+            ]            
 
 
 def load_palette_from_file(filename = "resources/samus_palette.tpl"):
@@ -124,7 +208,6 @@ def load_palette_from_file(filename = "resources/samus_palette.tpl"):
         green = int(raw_file[i+1])
         blue = int(raw_file[i+2])
         palette.append((red,green,blue))
-    print(palette)
     return palette
 
 
@@ -229,8 +312,9 @@ def main():
 
     #the file saves automatically because it is an mmap (see romload.py)
 
-    #TODO: remove
-    load_palette_from_file()
+    #TODO: need to do this for every file, then actually store it in the tile data section of the ROM
+    convert_file_to_VRAM_data('new_sprite/lower/l_elevator_streak0.png')
+    #TODO: Then need to tell the poses the correct amount of data to load into VRAM each time
     
 
 if __name__ == "__main__":
