@@ -24,7 +24,7 @@ rom = None
 filemap = None
 
 
-
+#TODO: Remove the right chest tile at ROM D5620 (used to break symmetry in elevator poses; no longer necessary)
 
 
 
@@ -75,34 +75,43 @@ def get_raw_lower_tilemaps():
 
 
 
-def assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict):
-    #TODO: Need to tell the poses the correct amount of data to load into VRAM each time, and from where
-    # i.e. the AFP/DMA data from the disassembly.
+def assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict, DMA_info_address_dict):
     #every pose/timeline has one four byte line in the AFP table ($00000000 for null pose), in an array indexed by the animation number
     # bytes are: upper_dma_table, upper_dma_entry, lower_dma_table, lower_dma_entry
     # these can be modified in place if needed
+    #
+    #from $92D94E, index by animation number
+    # to get ptr AFP_T??, tells me where the animation's timeline data is
+    #When I get there, there is four bytes for each timeline entry, call them a,b (upper).  There are two more for lower
+    #Take these numbers to $92D91E (upper) or $92D938 (lower)
+    #use a to index and get UT_DMAa ptr
+    #go there and get entry #b (7 byte array entries).
+
 
 
     animation_number_list = set([animation_number for (animation_number,timeline_number) in filemap.keys()])
     for animation_number in animation_number_list:
         max_timeline = max([timeline_number for (this_animation_number,timeline_number) in filemap.keys() if this_animation_number == animation_number])
+
+
         
         upper_tilemap_list = []
         lower_tilemap_list = []
+        afp_list = []
         for t in range(max_timeline+1):
             if (animation_number,t) not in filemap:   #as will be the case for control codes
                 upper_tilemap_list.extend([0x00,0x00])
                 lower_tilemap_list.extend([0x00,0x00])
+                afp_list.extend([0x00,0x00,0x00,0x00])
             else:
                 upper_address_to_insert = upper_map_addresses[filemap[(animation_number,t)]['upper_map']]
-                msb = upper_address_to_insert // 0x100
-                lsb = upper_address_to_insert % 0x100
-                upper_tilemap_list.extend([lsb,msb])
+                upper_tilemap_list.extend(little_endian(upper_address_to_insert,2))
+
+                afp_list.extend(DMA_info_address_dict[filemap[(animation_number,t)]['upper_file']])
                 
                 lower_address_to_insert = lower_map_addresses[filemap[(animation_number,t)]['lower_map']]
-                msb = lower_address_to_insert // 0x100
-                lsb = lower_address_to_insert % 0x100
-                lower_tilemap_list.extend([lsb,msb])
+                lower_tilemap_list.extend(little_endian(lower_address_to_insert,2))
+                afp_list.extend(DMA_info_address_dict[filemap[(animation_number,t)]['lower_file']])
 
         [upper_offset] = get_indexed_values(UPPER_TILEMAP_TABLE_POINTER,animation_number,0x02,'2')
         [lower_offset] = get_indexed_values(LOWER_TILEMAP_TABLE_POINTER,animation_number,0x02,'2')
@@ -112,6 +121,12 @@ def assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict):
 
         rom_lower_tilemap_array = convert_to_rom_address(TILEMAP_TABLE + 2 * lower_offset)
         rom[rom_lower_tilemap_array:rom_lower_tilemap_array+len(lower_tilemap_list)] = bytes(lower_tilemap_list)
+
+        [afp_table_location] = get_indexed_values(AFP_TABLE_ARRAY,animation_number,0x02,'2')
+        afp_table_location += 0x920000
+
+        afp_table_in_rom = convert_to_rom_address(afp_table_location)
+        rom[afp_table_in_rom:afp_table_in_rom+len(afp_list)] = bytes(afp_list)
 
 
 
@@ -258,13 +273,30 @@ def create_DMA_tables(DMA_dict):
 
     DMA_info_address_dict = {}
 
+    DMA_PAGESIZE = 0x20
     DMA_ptr = DMA_ENTRIES_START
+    index = 0
     for file in upper_files:
-        DMA_info_address_dict[file] = DMA_ptr
+        if index % DMA_PAGESIZE == 0x00:    #start a new DMA 'page' every DMA_PAGESIZE entries
+            page_number = index // DMA_PAGESIZE
+            if page_number > 0x0C:
+                raise AssertionError("Exceeded Upper DMA Pointer Table limit")
+            target_addr = convert_to_rom_address(UPPER_DMA_POINTER_TABLE + 2 * page_number)
+            rom[target_addr:target_addr+2] = little_endian(DMA_ptr-0x920000,2)
+        DMA_info_address_dict[file] = [index // DMA_PAGESIZE,index % DMA_PAGESIZE]
         DMA_ptr = write_single_DMA_entry(DMA_dict[file], DMA_ptr)
+        index += 1
+    index = 0
     for file in lower_files:
-        DMA_info_address_dict[file] = DMA_ptr
+        if index % DMA_PAGESIZE == 0x00:    #start a new DMA 'page' every DMA_PAGESIZE entries
+            page_number = index // DMA_PAGESIZE
+            if page_number > 0x0A:
+                raise AssertionError("Exceeded Lower DMA Pointer Table limit")
+            target_addr = convert_to_rom_address(LOWER_DMA_POINTER_TABLE + 2 * page_number)
+            rom[target_addr:target_addr+2] = little_endian(DMA_ptr-0x920000,2)
+        DMA_info_address_dict[file] = [index // DMA_PAGESIZE,index % DMA_PAGESIZE]
         DMA_ptr = write_single_DMA_entry(DMA_dict[file], DMA_ptr)
+        index += 1
 
     return DMA_info_address_dict
 
@@ -407,7 +439,7 @@ def main():
     DMA_dict = write_tiles()
     DMA_info_address_dict = create_DMA_tables(DMA_dict)
 
-    assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict)
+    assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict, DMA_info_address_dict)
 
     #the file saves automatically because it is an mmap (see romload.py)
     

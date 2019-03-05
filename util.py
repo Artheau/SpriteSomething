@@ -61,7 +61,7 @@ tile_type_restriction = None
 class Samus:
     def __init__(self, rom_filename, animation_data_filename="resources/animations.csv", load_supertiles=True,report_tiles=True):
         global rom
-        rom = romload.load_rom_contents(rom_filename)
+        rom = romload.load_rom_contents(rom_filename,apply_fixes=APPLY_BUGFIXES)
         if load_supertiles:
             global supertile_info
             supertile_info = load_supertile_info(SUPERTILE_JSON_FILENAME)
@@ -646,10 +646,10 @@ def to_image(object,palette,zoom=1):
         y_min = min([y for (x,y) in canvas.keys()])
         y_max = max([y for (x,y) in canvas.keys()])
 
-        x_min = min(0,x_min)-1
-        x_max = max(0,x_max)+1
-        y_min = min(0,y_min)-1
-        y_max = max(0,y_max)+1
+        x_min = min(0,x_min)-PNG_MARGIN
+        x_max = max(0,x_max)+PNG_MARGIN
+        y_min = min(0,y_min)-PNG_MARGIN
+        y_max = max(0,y_max)+PNG_MARGIN
 
         width = x_max-x_min+1
         height = y_max-y_min+1
@@ -676,12 +676,10 @@ def to_image(object,palette,zoom=1):
     return image
 
 def convert_canvas_to_gif(filename, canvases, frame_durations, palette, zoom=1):
-    MARGIN = 0x08
-
-    x_min = min([x for canvas in canvases for (x,y) in canvas.keys()]) - MARGIN
-    x_max = max([x for canvas in canvases for (x,y) in canvas.keys()]) + MARGIN
-    y_min = min([y for canvas in canvases for (x,y) in canvas.keys()]) - MARGIN
-    y_max = max([y for canvas in canvases for (x,y) in canvas.keys()]) + MARGIN
+    x_min = min([x for canvas in canvases for (x,y) in canvas.keys()]) - GIF_MARGIN
+    x_max = max([x for canvas in canvases for (x,y) in canvas.keys()]) + GIF_MARGIN
+    y_min = min([y for canvas in canvases for (x,y) in canvas.keys()]) - GIF_MARGIN
+    y_max = max([y for canvas in canvases for (x,y) in canvas.keys()]) + GIF_MARGIN
 
     width = x_max-x_min+1
     height = y_max-y_min+1
@@ -709,10 +707,8 @@ def convert_canvas_to_gif(filename, canvases, frame_durations, palette, zoom=1):
     #scale
     images = [image.resize((zoom*width, zoom*height), Image.NEAREST) for image in images]
 
-    if len(durations) > 1:
-        images[0].save(filename, 'GIF', save_all=True, append_images=images[1:], duration=durations, transparency=TRANSPARENCY, disposal=DISPOSAL, loop=0)
-    else:
-        images[0].save(filename, transparency=TRANSPARENCY)
+    gif_save(images,durations,filename)
+
 
 def pretty_hex(x,digits=2):
     return '0x' + hex(x)[2:].zfill(digits)
@@ -730,13 +726,46 @@ def load_supertile_info(filename):
     except FileNotFoundError:
         return []
 
+####################################################
 
+#pillow does not save gifs correctly if adjacent images match.  It screws up the duration list and throws a TypeError.
+#this is the workaround
+def gif_save(images, durations, filename):
+    new_images = [images[0]]
+    new_durations = [durations[0]]
+    for i in range(1,len(images)):
+        if list(images[i].getdata()) == list(new_images[-1].getdata()):
+            new_durations[-1] += durations[i]
+        else:
+            new_images.append(images[i])
+            new_durations.append(durations[i])
+    if len(new_durations) > 1:
+        new_images[0].save(filename, 'GIF', save_all=True, append_images=new_images[1:], duration=new_durations, transparency=TRANSPARENCY, disposal=DISPOSAL, loop=0)
+    else:
+        new_images[0].save(filename, transparency=TRANSPARENCY)
+    
+
+def compare_images(image1, image2):
+  # compare image dimensions
+  if image1.size != image2.size:
+    return False
+
+  rows, cols = image1.size
+
+  # compare image pixels
+  for row in range(rows):
+    for col in range(cols):
+      input_pixel = image1.getpixel((row, col))
+      output_pixel = image2.getpixel((row, col))
+      if input_pixel != output_pixel:
+        return False
+
+  return True
 
 
 ####################################################
 
 def main():
-    data = Samus()
     raise AssertionError("Compiled utility library directly")
     
 if __name__ == "__main__":

@@ -5,6 +5,10 @@ IGNORED_ANIMATIONS = [0xB2,0xB3]
 DEBUG_VRAM = True
 IGNORED_ANIMATIONS = range(0x03,0xFF)
 
+GIF_MARGIN = 0x08      #for exporting images, a margin this large is produced
+PNG_MARGIN = 0x01
+APPLY_BUGFIXES = False   #turn on to fix vanilla bugs, but off for my custom tilemaps
+
 
 ROM_FILENAME_ARG_KEY = 'rom_filename'
 PALETTE_ARG_KEY = 'palette_specified'
@@ -52,3 +56,10 @@ SAMUS_TILEMAPS_END = 0x92CB00  #0x094B00 ROM   #there is a little room after thi
 
 DMA_ENTRIES_START = 0x92CBEE  #0x94BEE ROM
 DMA_ENTRIES_END = 0x92D910   #maybe a couple more bytes here but that's it.  No more room.
+
+AFP_TABLE_ARRAY = 0x92D94E  #POSE POINTERS TO ANIMATION FRAME PROGRESSION TABLES
+
+DMA_PAGESIZE = 0x20 #might be used for quick lookup, but more likely just the effective LSB for image number (MSB is page number)
+
+UPPER_DMA_POINTER_TABLE = 0x92D91E
+LOWER_DMA_POINTER_TABLE = 0x92D938

@@ -8,7 +8,7 @@ import shutil
 import mmap
 import os
 
-def load_rom_contents(rom_filename):
+def load_rom_contents(rom_filename,apply_fixes=True):
     new_rom_filename = "_modified".join(os.path.splitext(rom_filename))
 
     try:
@@ -20,7 +20,8 @@ def load_rom_contents(rom_filename):
     with open(new_rom_filename, "r+b") as f:
         rom = mmap.mmap(f.fileno(), 0)
 
-    apply_bugfixes(rom)
+    if apply_fixes:
+        apply_bugfixes(rom)
 
     return rom
 
