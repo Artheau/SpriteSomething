@@ -6,8 +6,14 @@
 #blanks out all Samus tiles!  (Pac Man mode)
 #rebuilt the tilemaps to create a "canvas" to paint on.
 
-#TODO: factor out the mutual hex processing code from this file and util.py
-#TODO: Re-factor as much as possible to avoid doubling up on "upper" and "lower" halves of the code
+
+
+#TODO: Remove the right chest tile at ROM D5620 (used to break symmetry in elevator poses; no longer necessary)
+#TODO: There is no animation allocated for facing left as morphball.  Will need to construct one and tie it in correctly
+#TODO: Make left/right animations for screw attack without space jump
+#TODO: Assign all unused animations to null pointers, just in case (after testing without making them null) <--especially DMA loads
+#TODO: Consider unfusing the fused upper/lower animations (e.g. morphball pointers) <-- there are more that break the existing animations
+
 
 import argparse
 import os
@@ -22,9 +28,6 @@ from constants import *
 
 rom = None
 filemap = None
-
-
-#TODO: Remove the right chest tile at ROM D5620 (used to break symmetry in elevator poses; no longer necessary)
 
 
 
@@ -92,8 +95,6 @@ def assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict, DMA_
     animation_number_list = set([animation_number for (animation_number,timeline_number) in filemap.keys()])
     for animation_number in animation_number_list:
         max_timeline = max([timeline_number for (this_animation_number,timeline_number) in filemap.keys() if this_animation_number == animation_number])
-
-
         
         upper_tilemap_list = []
         lower_tilemap_list = []
@@ -139,12 +140,18 @@ def write_tiles():
     for file in upper_files:
         filename = f"new_sprite/upper/{file}.png"
         row1, row2 = convert_file_to_VRAM_data(filename,lower=False)
+        length = len(row1+row2)
+        if (tile_ptr+length) % 0x10000 < 0x8000:   #will write over two banks -- this is bad for DMA
+            tile_ptr = ((tile_ptr+length)//0x10000)*0x10000 + 0x8000  #go to next bank
         DMA_dict[file] = (tile_ptr,len(row1),len(row2))
         tile_ptr = write_single_row_of_tiles(row1, tile_ptr)
         tile_ptr = write_single_row_of_tiles(row2, tile_ptr)
     for file in lower_files:
         filename = f"new_sprite/lower/{file}.png"
         row1, row2 = convert_file_to_VRAM_data(filename,lower=True)
+        length = len(row1+row2)
+        if (tile_ptr+length) % 0x10000 < 0x8000:   #will write over two banks -- this is bad for DMA
+            tile_ptr = ((tile_ptr+length)//0x10000)*0x10000 + 0x8000  #go to next bank
         DMA_dict[file] = (tile_ptr,len(row1),len(row2))
         tile_ptr = write_single_row_of_tiles(row1, tile_ptr)
         tile_ptr = write_single_row_of_tiles(row2, tile_ptr)
@@ -380,7 +387,7 @@ def convert_to_rom_address(snes_addr):
     offset = (snes_addr % 0x10000) - 0x8000
 
     if offset < 0x0000 or bank < 0x00:
-        raise AssertionError(f"Function convert_to_rom_address() called on {pretty_hex(snes_addr)}, but this is not a valid SNES address.")
+        raise AssertionError(f"Function convert_to_rom_address() called on {hex(snes_addr)}, but this is not a valid SNES address.")
     
     new_address = bank*0x8000 + offset
 
@@ -392,7 +399,7 @@ def convert_to_ram_address(rom_addr):
     offset = rom_addr % 0x8000
 
     if bank < 0x00:
-        raise AssertionError(f"Function convert_to_ram_address() called on {pretty_hex(rom_addr)}, but this is not a valid SNES address.")
+        raise AssertionError(f"Function convert_to_ram_address() called on {hex(rom_addr)}, but this is not a valid SNES address.")
     
     new_address = (bank+0x80)*0x10000 + (offset+0x8000)
 

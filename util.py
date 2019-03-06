@@ -435,7 +435,6 @@ class TileRef:
         if self.v_flip:
             local_canvas = {(x,-y-1):local_canvas[(x,y)] for (x,y) in local_canvas.keys()}
 
-
         for (local_x,local_y) in local_canvas.keys():
             canvas[(local_x+self.x_offset,local_y+self.y_offset)] = (local_canvas[(local_x,local_y)],self.palette)
 

@@ -1,112 +1,1206 @@
-Animation;Hex;Pose;Timeline;Upper Tilemap;Upper File;Lower Tilemap;Lower File
-0;0;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator
-0;0;1;2;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;2;3;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;3;4;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;4;5;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;5;6;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;6;7;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;7;8;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;8;9;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;9;10;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;10;11;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;11;12;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;12;13;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;13;14;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;14;15;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;15;16;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;16;17;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;17;18;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;18;19;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;19;20;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;20;21;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;21;22;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;22;23;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;23;24;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;24;25;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;25;26;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;26;27;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;27;28;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;28;29;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;29;30;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;30;31;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;31;32;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;32;33;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;33;34;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;34;35;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;35;36;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;36;37;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;37;38;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;38;39;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;39;40;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;40;41;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;41;42;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;42;43;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;43;44;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;44;45;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;45;46;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;46;47;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;47;48;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;48;49;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;49;50;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;50;51;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;51;52;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;52;53;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;53;54;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;54;55;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;55;56;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;56;57;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;57;58;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;58;59;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;59;60;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;60;61;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;61;62;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;62;63;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;63;64;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;64;65;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;65;66;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;66;67;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;67;68;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;68;69;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;69;70;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;70;71;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;71;72;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;72;73;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;73;74;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1
-0;0;74;75;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;75;76;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2
-0;0;76;77;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;77;78;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3
-0;0;78;79;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;79;80;3x3 up, alt palette;u_elevator_streak4;3x3 down, alt palette;l_elevator_streak4
-0;0;80;81;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;81;82;3x3 up, alt palette;u_elevator_streak5;3x3 down, alt palette;l_elevator_streak5
-0;0;82;83;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;83;84;3x3 up, alt palette;u_elevator_streak6;3x3 down, alt palette;l_elevator_streak6
-0;0;84;85;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;85;86;3x3 up, alt palette;u_elevator_streak7;3x3 down, alt palette;l_elevator_streak7
-0;0;86;87;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;87;88;3x3 up, alt palette;u_elevator_streak8;3x3 down, alt palette;l_elevator_streak8
-0;0;88;89;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;89;90;3x3 up, alt palette;u_elevator_streak6;3x3 down, alt palette;l_elevator_streak6
-0;0;90;91;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;91;92;3x3 up, alt palette;u_elevator_streak7;3x3 down, alt palette;l_elevator_streak7
-0;0;92;93;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-0;0;93;94;3x3 up, alt palette;u_elevator_streak8;3x3 down, alt palette;l_elevator_streak8
-0;0;94;95;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0
-1;1;0;0;3x3 up, straddle right 4;u_stand_right0;3x4 down;l_stand_right0
-1;1;1;1;3x3 up, straddle right 4;u_stand_right1;3x4 down;l_stand_right1
-1;1;2;2;3x3 up, straddle right 4;u_stand_right2;3x4 down;l_stand_right2
-1;1;3;3;3x3 up, straddle right 4;u_stand_right1;3x4 down;l_stand_right1
-1;1;4;5;3x3 up, straddle right 4;u_stand_right0;3x4 down;l_stand_right0
-1;1;5;6;3x3 up, straddle right 4;u_stand_right1;3x4 down;l_stand_right1
-1;1;6;7;3x3 up, straddle right 4;u_stand_right2_alt;3x4 down;l_stand_right2
-1;1;7;8;3x3 up, straddle right 4;u_stand_right1;3x4 down;l_stand_right1
-2;2;0;0;3x3 up, straddle left 4;u_stand_left0;3x4 down;l_stand_left0
-2;2;1;1;3x3 up, straddle left 4;u_stand_left1;3x4 down;l_stand_left1
-2;2;2;2;3x3 up, straddle left 4;u_stand_left2;3x4 down;l_stand_left2
-2;2;3;3;3x3 up, straddle left 4;u_stand_left1;3x4 down;l_stand_left1
-2;2;4;5;3x3 up, straddle left 4;u_stand_left0;3x4 down;l_stand_left0
-2;2;5;6;3x3 up, straddle left 4;u_stand_left1;3x4 down;l_stand_left1
-2;2;6;7;3x3 up, straddle left 4;u_stand_left2_alt;3x4 down;l_stand_left2
-2;2;7;8;3x3 up, straddle left 4;u_stand_left1;3x4 down;l_stand_left1
+Animation;Hex;Pose;Timeline;Upper Tilemap;Upper File;Lower Tilemap;Lower File;;;;
+0;0;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;;;;
+0;0;1;2;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;2;3;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;3;4;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;4;5;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;5;6;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;6;7;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;7;8;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;8;9;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;9;10;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;10;11;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;11;12;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;12;13;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;13;14;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;14;15;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;15;16;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;16;17;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;17;18;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;18;19;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;19;20;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;20;21;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;21;22;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;22;23;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;23;24;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;24;25;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;25;26;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;26;27;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;27;28;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;28;29;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;29;30;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;30;31;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;31;32;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;32;33;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;33;34;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;34;35;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;35;36;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;36;37;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;37;38;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;38;39;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;39;40;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;40;41;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;41;42;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;42;43;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;43;44;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;44;45;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;45;46;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;46;47;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;47;48;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;48;49;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;49;50;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;50;51;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;51;52;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;52;53;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;53;54;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;54;55;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;55;56;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;56;57;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;57;58;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;58;59;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;59;60;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;60;61;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;61;62;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;62;63;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;63;64;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;64;65;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;65;66;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;66;67;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;67;68;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;68;69;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;69;70;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;70;71;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;71;72;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;72;73;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;73;74;3x3 up, alt palette;u_elevator_streak1;3x3 down, alt palette;l_elevator_streak1;;;;
+0;0;74;75;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;75;76;3x3 up, alt palette;u_elevator_streak2;3x3 down, alt palette;l_elevator_streak2;;;;
+0;0;76;77;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;77;78;3x3 up, alt palette;u_elevator_streak3;3x3 down, alt palette;l_elevator_streak3;;;;
+0;0;78;79;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;79;80;3x3 up, alt palette;u_elevator_streak4;3x3 down, alt palette;l_elevator_streak4;;;;
+0;0;80;81;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;81;82;3x3 up, alt palette;u_elevator_streak5;3x3 down, alt palette;l_elevator_streak5;;;;
+0;0;82;83;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;83;84;3x3 up, alt palette;u_elevator_streak6;3x3 down, alt palette;l_elevator_streak6;;;;
+0;0;84;85;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;85;86;3x3 up, alt palette;u_elevator_streak7;3x3 down, alt palette;l_elevator_streak7;;;;
+0;0;86;87;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;87;88;3x3 up, alt palette;u_elevator_streak8;3x3 down, alt palette;l_elevator_streak8;;;;
+0;0;88;89;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;89;90;3x3 up, alt palette;u_elevator_streak6;3x3 down, alt palette;l_elevator_streak6;;;;
+0;0;90;91;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;91;92;3x3 up, alt palette;u_elevator_streak7;3x3 down, alt palette;l_elevator_streak7;;;;
+0;0;92;93;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+0;0;93;94;3x3 up, alt palette;u_elevator_streak8;3x3 down, alt palette;l_elevator_streak8;;;;
+0;0;94;95;3x3 up, alt palette;u_elevator_streak0;3x3 down, alt palette;l_elevator_streak0;;;;
+1;1;0;0;3x3 up, straddle right 4;u_stand_right0;3x4 down;l_stand_right0;;;;
+1;1;1;1;3x3 up, straddle right 4;u_stand_right1;3x4 down;l_stand_right1;;;;
+1;1;2;2;3x3 up, straddle right 4;u_stand_right2;3x4 down;l_stand_right2;;;;
+1;1;3;3;3x3 up, straddle right 4;u_stand_right1;3x4 down;l_stand_right1;;;;
+1;1;4;5;3x3 up, straddle right 4;u_stand_right0;3x4 down;l_stand_right0;;;;
+1;1;5;6;3x3 up, straddle right 4;u_stand_right1;3x4 down;l_stand_right1;;;;
+1;1;6;7;3x3 up, straddle right 4;u_stand_right2_alt;3x4 down;l_stand_right2;;;;
+1;1;7;8;3x3 up, straddle right 4;u_stand_right1;3x4 down;l_stand_right1;;;;
+2;2;0;0;3x3 up, straddle left 4;u_stand_left0;3x4 down;l_stand_left0;;;;
+2;2;1;1;3x3 up, straddle left 4;u_stand_left1;3x4 down;l_stand_left1;;;;
+2;2;2;2;3x3 up, straddle left 4;u_stand_left2;3x4 down;l_stand_left2;;;;
+2;2;3;3;3x3 up, straddle left 4;u_stand_left1;3x4 down;l_stand_left1;;;;
+2;2;4;5;3x3 up, straddle left 4;u_stand_left0;3x4 down;l_stand_left0;;;;
+2;2;5;6;3x3 up, straddle left 4;u_stand_left1;3x4 down;l_stand_left1;;;;
+2;2;6;7;3x3 up, straddle left 4;u_stand_left2_alt;3x4 down;l_stand_left2;;;;
+2;2;7;8;3x3 up, straddle left 4;u_stand_left1;3x4 down;l_stand_left1;;;;
+3;3;0;0;4x3 up, right 8, down 1;u_aim_up_and_right;3x4 down;l_stand_right_braced;;;;
+3;3;1;1;3x4 up, down 1;u_facing_right_aim_up;3x4 down;l_stand_right_braced;;;;
+4;4;0;0;4x3 up, left 8, down 1;u_aim_up_and_left;3x4 down;l_stand_left_braced;;;;
+4;4;1;1;3x4 up, down 1;u_facing_left_aim_up;3x4 down;l_stand_left_braced;;;;
+5;5;0;0;4x3 up, right 8, down 1;u_aim_up_and_right;3x4 down;l_stand_right_braced;;LT linked to 03;;
+6;6;0;0;4x3 up, left 8, down 1;u_aim_up_and_left;3x4 down;l_stand_left_braced;;LT linked to 04;;
+7;7;0;0;4x4 center, right 8, up 4;u_aim_down_and_right;3x4 down;l_stand_right_braced;;LT linked to 03;;
+8;8;0;0;4x4 center, left 8, up 4;u_aim_down_and_left;3x4 down;l_stand_left_braced;;LT linked to 04;;
+9;9;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+9;9;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+9;9;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+9;9;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+9;9;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+9;9;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+9;9;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+9;9;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+9;9;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+9;9;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+10;A;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+10;A;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+10;A;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+10;A;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+10;A;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+10;A;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+10;A;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+10;A;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+10;A;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+10;A;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+11;B;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+11;B;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+11;B;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+11;B;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+11;B;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+11;B;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+11;B;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+11;B;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+11;B;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+11;B;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+12;C;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+12;C;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+12;C;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+12;C;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+12;C;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+12;C;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+12;C;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+12;C;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+12;C;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+12;C;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+15;F;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+15;F;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+15;F;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+15;F;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+15;F;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+15;F;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+15;F;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+15;F;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+15;F;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+15;F;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+16;10;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+16;10;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+16;10;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+16;10;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+16;10;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+16;10;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+16;10;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+16;10;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+16;10;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+16;10;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+17;11;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+17;11;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+17;11;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+17;11;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+17;11;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+17;11;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+17;11;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+17;11;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+17;11;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+17;11;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 09;;
+18;12;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+18;12;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+18;12;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+18;12;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+18;12;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+18;12;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+18;12;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+18;12;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+18;12;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+18;12;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 0A;;
+19;13;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+19;13;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+20;14;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+20;14;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+21;15;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+21;15;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+22;16;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+22;16;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+23;17;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+23;17;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+24;18;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+24;18;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+25;19;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+25;19;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+25;19;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+25;19;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+25;19;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+25;19;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+25;19;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+25;19;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+25;19;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+25;19;9;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+26;1A;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+26;1A;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+26;1A;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+26;1A;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+26;1A;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+26;1A;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+26;1A;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+26;1A;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+26;1A;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+26;1A;9;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+27;1B;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+27;1B;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+27;1B;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+27;1B;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+27;1B;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+27;1B;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+27;1B;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+27;1B;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+27;1B;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+27;1B;9;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+28;1C;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+28;1C;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+28;1C;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+28;1C;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+28;1C;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+28;1C;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+28;1C;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+28;1C;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+28;1C;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+28;1C;9;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+29;1D;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+29;1D;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+29;1D;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+29;1D;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+29;1D;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+29;1D;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+29;1D;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+29;1D;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+29;1D;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+30;1E;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+30;1E;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+30;1E;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+30;1E;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+30;1E;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+30;1E;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+30;1E;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+30;1E;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+30;1E;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+31;1F;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+31;1F;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+31;1F;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+31;1F;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+31;1F;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+31;1F;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+31;1F;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+31;1F;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+31;1F;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+37;25;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+37;25;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+37;25;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+38;26;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+38;26;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+38;26;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+39;27;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+39;27;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+39;27;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+39;27;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+39;27;4;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+39;27;5;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+39;27;6;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+39;27;7;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+40;28;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+40;28;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+40;28;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+40;28;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+40;28;4;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+40;28;5;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+40;28;6;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+40;28;7;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+41;29;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+41;29;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+41;29;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+41;29;3;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+41;29;4;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+42;2A;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+42;2A;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+42;2A;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+42;2A;3;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+42;2A;4;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+43;2B;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+43;2B;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+43;2B;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+44;2C;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+44;2C;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+44;2C;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+45;2D;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+45;2D;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+46;2E;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+46;2E;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+47;2F;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 25;;
+47;2F;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 25;;
+47;2F;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 25;;
+48;30;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 26;;
+48;30;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 26;;
+48;30;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 26;;
+49;31;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;full link;
+49;31;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;full link;
+49;31;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;full link;
+49;31;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;full link;
+49;31;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;full link;
+49;31;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;full link;
+49;31;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;full link;
+49;31;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;full link;
+49;31;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;full link;
+50;32;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;Bugged - should be linked to 41;full link
+50;32;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;Bugged - should be linked to 41;full link
+50;32;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;Bugged - should be linked to 41;full link
+50;32;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;Bugged - should be linked to 41;full link
+50;32;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;Bugged - should be linked to 41;full link
+50;32;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;Bugged - should be linked to 41;full link
+50;32;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;Bugged - should be linked to 41;full link
+50;32;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;Bugged - should be linked to 41;full link
+50;32;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 1D;Bugged - should be linked to 41;full link
+53;35;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+54;36;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+55;37;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+55;37;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+56;38;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+56;38;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+59;3B;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 35;full link;
+60;3C;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 36;full link;
+61;3D;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+61;3D;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+62;3E;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+62;3E;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+65;41;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+65;41;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+65;41;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+65;41;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+65;41;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+65;41;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+65;41;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+65;41;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+65;41;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+67;43;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 2F;full link;
+67;43;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 2F;full link;
+67;43;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 2F;full link;
+68;44;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 30;full link;
+68;44;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 30;full link;
+68;44;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 30;full link;
+73;49;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+73;49;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+73;49;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+73;49;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+73;49;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+73;49;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+74;4A;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+74;4A;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+74;4A;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+74;4A;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+74;4A;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+74;4A;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+75;4B;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+76;4C;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+77;4D;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+77;4D;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+77;4D;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+77;4D;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+77;4D;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+77;4D;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+78;4E;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+78;4E;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+78;4E;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+78;4E;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+78;4E;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+78;4E;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+79;4F;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+79;4F;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+79;4F;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+79;4F;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+79;4F;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+79;4F;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+79;4F;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+79;4F;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+79;4F;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+79;4F;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+80;50;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+80;50;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+80;50;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+80;50;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+80;50;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+80;50;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+80;50;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+80;50;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+80;50;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+80;50;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+81;51;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+81;51;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+82;52;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+82;52;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+83;53;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+83;53;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+84;54;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+84;54;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+85;55;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4B;;
+86;56;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4C;;
+87;57;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 05;LT linked to 4B;
+88;58;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 06;LT linked to 4C;
+89;59;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 07;LT linked to 4B;
+90;5A;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 08;LT linked to 4C;
+103;67;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 29;;
+103;67;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 29;;
+103;67;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 29;;
+103;67;3;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 29;;
+103;67;4;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 29;;
+104;68;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 2A;;
+104;68;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 2A;;
+104;68;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 2A;;
+104;68;3;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 2A;;
+104;68;4;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 2A;;
+105;69;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+105;69;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+106;6A;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+106;6A;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+107;6B;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+107;6B;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+108;6C;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+108;6C;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+109;6D;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+109;6D;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+109;6D;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+110;6E;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+110;6E;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+110;6E;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+111;6F;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+111;6F;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+111;6F;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+112;70;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+112;70;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+112;70;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+113;71;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+114;72;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+115;73;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+116;74;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+117;75;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+117;75;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+117;75;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+117;75;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+117;75;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+117;75;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+118;76;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+118;76;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+118;76;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+118;76;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+118;76;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+118;76;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+119;77;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+119;77;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+119;77;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+119;77;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+119;77;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+119;77;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 49;;
+120;78;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+120;78;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+120;78;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+120;78;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+120;78;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+120;78;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 4A;;
+121;79;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+121;79;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+121;79;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+121;79;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+121;79;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+121;79;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+121;79;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+121;79;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+121;79;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+122;7A;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+122;7A;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+122;7A;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+122;7A;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+122;7A;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+122;7A;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+122;7A;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+122;7A;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+122;7A;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT and LT tilemaps fused;;
+123;7B;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+123;7B;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+123;7B;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+123;7B;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+123;7B;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+123;7B;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+123;7B;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+123;7B;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+123;7B;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+124;7C;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+124;7C;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+124;7C;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+124;7C;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+124;7C;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+124;7C;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+124;7C;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+124;7C;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+124;7C;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+125;7D;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+125;7D;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+125;7D;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+125;7D;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+125;7D;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+125;7D;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+125;7D;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+125;7D;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+125;7D;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+126;7E;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+126;7E;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+126;7E;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+126;7E;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+126;7E;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+126;7E;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+126;7E;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+126;7E;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+126;7E;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+127;7F;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+127;7F;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+127;7F;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+127;7F;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+127;7F;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+127;7F;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+127;7F;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+127;7F;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+127;7F;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 79;full link;
+128;80;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+128;80;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+128;80;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+128;80;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+128;80;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+128;80;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+128;80;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+128;80;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+128;80;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 7A;full link;
+129;81;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;10;10;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;11;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;12;12;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;13;13;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;14;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;15;15;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;16;16;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;17;17;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;18;18;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;19;19;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;20;20;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;21;21;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;22;22;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;23;23;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;24;24;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+129;81;25;27;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;10;10;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;11;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;12;12;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;13;13;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;14;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;15;15;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;16;16;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;17;17;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;18;18;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;19;19;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;20;20;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;21;21;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;22;22;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;23;23;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;24;24;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+130;82;25;27;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;2;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;3;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;4;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;5;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;6;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;7;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;9;10;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;10;13;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;11;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;12;15;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;13;16;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;14;17;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;15;18;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;16;19;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;17;20;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;18;23;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;19;24;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;20;25;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;21;26;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;22;27;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;23;28;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;24;29;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;25;30;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;26;31;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;27;32;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;28;33;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;29;34;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;30;35;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;31;36;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;32;37;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;33;38;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;34;39;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;35;40;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;36;41;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;37;42;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;38;43;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;39;44;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;40;45;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+131;83;41;46;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;2;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;3;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;4;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;5;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;6;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;7;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;9;10;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;10;13;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;11;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;12;15;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;13;16;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;14;17;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;15;18;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;16;19;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;17;20;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;18;23;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;19;24;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;20;25;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;21;26;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;22;27;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;23;28;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;24;29;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;25;30;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;26;31;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;27;32;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;28;33;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;29;34;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;30;35;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;31;36;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;32;37;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;33;38;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;34;39;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;35;40;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;36;41;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;37;42;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;38;43;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;39;44;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;40;45;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+132;84;41;46;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+133;85;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+133;85;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+134;86;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+134;86;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+135;87;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 2F;full link;
+135;87;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 2F;full link;
+135;87;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 2F;full link;
+136;88;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 30;UT linked;not LT linked, probably a bug
+136;88;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 30;UT linked;not LT linked, probably a bug
+136;88;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 30;UT linked;not LT linked, probably a bug
+137;89;0;0;3x3 up, straddle right 4;u_stand_right0;3x4 down;l_stand_right0;;AFP linked to 01;full link;
+138;8A;0;0;3x3 up, straddle left 4;u_stand_left0;3x4 down;l_stand_left0;;AFP linked to 02;full link;
+139;8B;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 25;;
+139;8B;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 25;;
+139;8B;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 25;;
+140;8C;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 26;;
+140;8C;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 26;;
+140;8C;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 26;;
+141;8D;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 25;;
+141;8D;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 25;;
+141;8D;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 25;;
+142;8E;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 26;;
+142;8E;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 26;;
+142;8E;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to 26;;
+143;8F;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8B;LT linked to 2F;
+143;8F;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8B;LT linked to 2F;
+143;8F;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8B;LT linked to 2F;
+144;90;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8C;LT linked to 30;
+144;90;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8C;LT linked to 30;
+144;90;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8C;LT linked to 30;
+145;91;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8D;LT linked to 2F;
+145;91;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8D;LT linked to 2F;
+145;91;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8D;LT linked to 2F;
+146;92;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8E;LT linked to 30;
+146;92;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8E;LT linked to 30;
+146;92;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 8E;LT linked to 30;
+147;93;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+147;93;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+147;93;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+148;94;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+148;94;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+148;94;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+149;95;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 91;full link;
+149;95;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 91;full link;
+149;95;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 91;full link;
+150;96;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 92;UT linked;LT linked to 88, probably a bug
+150;96;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 92;UT linked;LT linked to 88, probably a bug
+150;96;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 92;UT linked;LT linked to 88, probably a bug
+151;97;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+151;97;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+151;97;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+152;98;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;full link;
+152;98;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;full link;
+152;98;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;full link;
+153;99;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 91;full link;
+153;99;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 91;full link;
+153;99;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 91;full link;
+154;9A;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 92;full link;
+154;9A;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 92;full link;
+154;9A;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 92;full link;
+155;9B;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;1;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;2;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;3;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;4;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;5;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;6;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;7;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;8;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;9;10;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;10;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;11;12;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;12;13;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;13;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;14;15;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;15;16;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;16;17;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;17;18;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;18;19;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;19;20;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;20;21;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;21;22;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;22;23;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;23;24;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;24;25;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;25;26;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;26;27;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;27;28;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;28;29;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;29;30;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;30;31;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;31;32;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;32;33;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;33;34;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;34;35;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;35;36;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;36;37;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;37;38;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;38;39;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;39;40;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;40;41;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;41;42;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;42;43;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;43;44;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;44;45;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;45;46;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;46;47;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;47;48;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;48;49;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;49;50;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;50;51;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;51;52;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;52;53;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;53;54;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;54;55;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;55;56;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;56;57;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;57;58;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;58;59;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;59;60;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;60;61;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;61;62;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;62;63;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;63;64;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;64;65;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;65;66;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;66;67;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;67;68;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;68;69;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;69;70;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;70;71;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;71;72;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;72;73;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;73;74;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;74;75;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;75;76;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;76;77;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;77;78;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;78;79;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;79;80;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;80;81;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;81;82;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;82;83;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;83;84;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;84;85;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;85;86;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;86;87;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;87;88;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;88;89;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;89;90;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;90;91;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;91;92;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;92;93;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;93;94;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+155;9B;94;95;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+156;9C;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8B;full link;
+156;9C;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8B;full link;
+156;9C;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8B;full link;
+157;9D;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8C;full link;
+157;9D;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8C;full link;
+157;9D;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8C;full link;
+158;9E;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+158;9E;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+158;9E;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+159;9F;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;full link;
+159;9F;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;full link;
+159;9F;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;full link;
+160;A0;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+160;A0;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+160;A0;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+161;A1;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+161;A1;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+161;A1;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+162;A2;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+162;A2;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+162;A2;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8F;full link;
+163;A3;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;full link;
+163;A3;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;full link;
+163;A3;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 90;full link;
+164;A4;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+164;A4;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+165;A5;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+165;A5;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+166;A6;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+166;A6;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+166;A6;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+167;A7;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+167;A7;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+167;A7;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;10;10;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;11;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;12;12;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;13;13;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;14;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;15;15;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;16;16;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;17;17;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;18;18;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;19;19;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;20;20;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;21;21;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;22;22;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;23;23;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;24;24;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;25;25;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;26;26;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;27;27;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;28;28;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;29;29;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;30;30;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;31;31;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;32;32;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;33;33;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;34;34;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;35;35;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;36;36;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;37;37;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;38;38;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;39;39;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;40;40;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;41;41;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;42;42;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;43;43;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;44;44;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;45;45;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;46;46;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;47;47;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;48;48;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;49;49;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;50;50;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;51;51;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;52;52;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;53;53;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;54;54;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;55;55;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;56;56;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;57;57;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;58;58;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;59;59;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;60;60;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;61;61;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;62;62;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;63;63;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;64;64;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;65;65;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+178;B2;66;66;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;6;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;7;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;8;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;9;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;10;10;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;11;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;12;12;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;13;13;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;14;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;15;15;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;16;16;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;17;17;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;18;18;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;19;19;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;20;20;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;21;21;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;22;22;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;23;23;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;24;24;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;25;25;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;26;26;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;27;27;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;28;28;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;29;29;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;30;30;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;31;31;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;32;32;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;33;33;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;34;34;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;35;35;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;36;36;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;37;37;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;38;38;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;39;39;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;40;40;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;41;41;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;42;42;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;43;43;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;44;44;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;45;45;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;46;46;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;47;47;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;48;48;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;49;49;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;50;50;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;51;51;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;52;52;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;53;53;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;54;54;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;55;55;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;56;56;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;57;57;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;58;58;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;59;59;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;60;60;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;61;61;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;62;62;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;63;63;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;64;64;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;65;65;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+179;B3;66;66;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+184;B8;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+185;B9;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+186;BA;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+187;BB;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to BA;;
+188;BC;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to BA;;
+189;BD;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to BA;;
+190;BE;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+190;BE;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+190;BE;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+190;BE;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+190;BE;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+190;BE;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+191;BF;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 25;full link;
+191;BF;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 25;full link;
+191;BF;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 25;full link;
+192;C0;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 26;full link;
+192;C0;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 26;full link;
+192;C0;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 26;full link;
+193;C1;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8B;full link;
+193;C1;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8B;full link;
+193;C1;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8B;full link;
+194;C2;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8C;full link;
+194;C2;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8C;full link;
+194;C2;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8C;full link;
+195;C3;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8D;full link;
+195;C3;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8D;full link;
+195;C3;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8D;full link;
+196;C4;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8E;full link;
+196;C4;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8E;full link;
+196;C4;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 8E;full link;
+199;C7;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4D;full link;
+199;C7;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4D;full link;
+199;C7;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4D;full link;
+199;C7;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4D;full link;
+199;C7;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4D;full link;
+199;C7;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4D;full link;
+200;C8;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4E;full link;
+200;C8;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4E;full link;
+200;C8;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4E;full link;
+200;C8;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4E;full link;
+200;C8;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4E;full link;
+200;C8;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 4E;full link;
+201;C9;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+202;CA;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+203;CB;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+204;CC;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+205;CD;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+206;CE;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+207;CF;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 05;full link;
+208;D0;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 06;full link;
+209;D1;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 07;full link;
+210;D2;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 08;full link;
+211;D3;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+211;D3;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+211;D3;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+211;D3;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+211;D3;4;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+211;D3;5;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+211;D3;6;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+211;D3;7;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+211;D3;8;12;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+211;D3;9;13;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+211;D3;10;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;4;6;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;5;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;6;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;7;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;8;12;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;9;13;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+212;D4;10;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+213;D5;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+213;D5;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+213;D5;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+213;D5;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+213;D5;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+214;D6;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+214;D6;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+214;D6;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+214;D6;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+214;D6;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+215;D7;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+215;D7;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+215;D7;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+215;D7;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+215;D7;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+215;D7;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+216;D8;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+216;D8;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+216;D8;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+216;D8;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+216;D8;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+216;D8;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+217;D9;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to D5;;
+217;D9;1;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to D5;;
+217;D9;2;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to D5;;
+217;D9;3;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to D5;;
+217;D9;4;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to D5;;
+218;DA;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to D6;;
+218;DA;1;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to D6;;
+218;DA;2;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to D6;;
+218;DA;3;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to D6;;
+218;DA;4;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to D6;;
+224;E0;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 55;LT linked to A4;
+224;E0;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 55;LT linked to A4;
+225;E1;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 56;LT linked to A5;
+225;E1;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 56;LT linked to A5;
+226;E2;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 05;LT linked to A4;
+226;E2;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 05;LT linked to A4;
+227;E3;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 06;LT linked to A5;
+227;E3;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 06;LT linked to A5;
+228;E4;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 07;LT linked to A4;
+228;E4;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 07;LT linked to A4;
+229;E5;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 08;LT linked to A5;
+229;E5;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;UT linked to 08;LT linked to A5;
+230;E6;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+230;E6;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+230;E6;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+231;E7;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+231;E7;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+231;E7;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+232;E8;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+232;E8;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+232;E8;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+232;E8;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+232;E8;4;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+232;E8;5;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+232;E8;6;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+232;E8;7;10;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+232;E8;8;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+232;E8;9;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;3;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;4;7;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;5;8;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;6;9;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;7;10;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;8;11;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;9;14;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;10;15;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;11;16;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;12;19;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;13;20;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;14;21;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;15;22;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;16;23;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;17;26;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+233;E9;18;29;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+234;EA;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+234;EA;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+234;EA;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+234;EA;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+234;EA;4;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+235;EB;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+235;EB;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+235;EB;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+235;EB;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+235;EB;4;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+236;EC;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+237;ED;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to EC;;
+238;EE;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to EC;;
+239;EF;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;LT linked to EC;;
+240;F0;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+240;F0;1;1;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+240;F0;2;2;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+240;F0;3;3;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+240;F0;4;4;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+240;F0;5;5;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;;;
+241;F1;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 55;full link;
+242;F2;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 56;full link;
+243;F3;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 57;full link;
+244;F4;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 58;full link;
+245;F5;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 59;full link;
+246;F6;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 5A;full link;
+247;F7;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 55;full link;
+248;F8;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 56;full link;
+249;F9;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 57;full link;
+250;FA;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 58;full link;
+251;FB;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 59;full link;
+252;FC;0;0;3x2 up, left 1;u_elevator;3x4 down, left 1;l_elevator;TODO;AFP linked to 5A;full link;
