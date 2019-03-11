@@ -1,12 +1,10 @@
-#Grapple rotation is just a strange animation in general
-#We'll need to come back and handle that in its own way later
-IGNORED_ANIMATIONS = []#[0xB2,0xB3]
+USE_MODIFIED_ROM = True     #use the output of rom_modify.py to make animations/poses
 
-USE_MODIFIED_ROM = False     #use the output of rom_modify.py to make animations/poses
+APPLY_BUGFIXES = not USE_MODIFIED_ROM   #turn on to fix vanilla bugs, but off for my custom tilemaps
 
 DEBUG_VRAM = False
 
-APPLY_BUGFIXES = not USE_MODIFIED_ROM   #turn on to fix vanilla bugs, but off for my custom tilemaps
+IGNORED_ANIMATIONS = []
 
 GIF_MARGIN = 0x08      #for exporting images, a margin this large is produced
 PNG_MARGIN = 0x01
