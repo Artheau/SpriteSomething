@@ -410,7 +410,10 @@ class TileRef:
 
             self.real_tile = make_tile(VRAM_in_large_tile, offset_in_large_tile)
         else:
-            self.real_tile = make_tile(VRAM[raw_tile[3]], (-pivot[0],-pivot[1]))
+            try:
+                self.real_tile = make_tile(VRAM[raw_tile[3]], (-pivot[0],-pivot[1]))
+            except IndexError:
+                raise AssertionError(f"Could not access VRAM tile at {hex(raw_tile[3])} in {self.ID}")
 
         self.h_flip = raw_tile[4] & 0x40 != 0x00
         self.v_flip = raw_tile[4] & 0x80 != 0x00

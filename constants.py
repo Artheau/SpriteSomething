@@ -1,13 +1,12 @@
 #Grapple rotation is just a strange animation in general
 #We'll need to come back and handle that in its own way later
-IGNORED_ANIMATIONS = [0xB2,0xB3]
+IGNORED_ANIMATIONS = []#[0xB2,0xB3]
 
-DEBUG_MODE = True
+USE_MODIFIED_ROM = False     #use the output of rom_modify.py to make animations/poses
 
-DEBUG_VRAM = DEBUG_MODE
-#IGNORED_ANIMATIONS.extend((range(0x27,0xFF) if DEBUG_MODE else []))
+DEBUG_VRAM = False
 
-APPLY_BUGFIXES = not DEBUG_MODE   #turn on to fix vanilla bugs, but off for my custom tilemaps
+APPLY_BUGFIXES = not USE_MODIFIED_ROM   #turn on to fix vanilla bugs, but off for my custom tilemaps
 
 GIF_MARGIN = 0x08      #for exporting images, a margin this large is produced
 PNG_MARGIN = 0x01
@@ -44,11 +43,9 @@ else:
 
 
 
-
-
 #address information
 SAMUS_TILES_START = 0x9BCC00 #0x0DCC00 ROM
-SAMUS_TILES_START = 0x9C8000 #0x0DCC00 ROM
+#SAMUS_TILES_START = 0x9C8000 #0x0DCC00 ROM
 SAMUS_TILES_END = 0xA08000   #0x100000 ROM
 
 TILEMAP_TABLE = 0x92808D

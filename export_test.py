@@ -14,7 +14,7 @@ def main():
 
     command_line_args = process_command_line_args()
 
-    if DEBUG_MODE:
+    if USE_MODIFIED_ROM:
         command_line_args[ROM_FILENAME_ARG_KEY] = "sm_orig_modified.sfc"
     else:
         command_line_args[ROM_FILENAME_ARG_KEY] = "sm_orig.sfc"

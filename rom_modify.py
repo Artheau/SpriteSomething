@@ -93,6 +93,7 @@ def assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict, DMA_
 
 
     animation_number_list = set([animation_number for (animation_number,timeline_number) in filemap.keys()])
+    #animation_number_list = list(animation_number_list)[::-1]
     for animation_number in animation_number_list:
         max_timeline = max([timeline_number for (this_animation_number,timeline_number) in filemap.keys() if this_animation_number == animation_number])
         
@@ -118,9 +119,17 @@ def assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict, DMA_
         [lower_offset] = get_indexed_values(LOWER_TILEMAP_TABLE_POINTER,animation_number,0x02,'2')
 
         rom_upper_tilemap_array = convert_to_rom_address(TILEMAP_TABLE + 2 * upper_offset)
+        # if(animation_number == 0x1A):
+        #     print(hex(rom_upper_tilemap_array))
+        # if(0x90F55 in range(rom_upper_tilemap_array,rom_upper_tilemap_array+len(upper_tilemap_list))):
+        #     print(hex(animation_number))
         rom[rom_upper_tilemap_array:rom_upper_tilemap_array+len(upper_tilemap_list)] = bytes(upper_tilemap_list)
 
         rom_lower_tilemap_array = convert_to_rom_address(TILEMAP_TABLE + 2 * lower_offset)
+        # if(animation_number == 0x1A):
+        #     print(hex(rom_lower_tilemap_array))
+        # if(0x90f6d in range(rom_lower_tilemap_array,rom_lower_tilemap_array+len(lower_tilemap_list))):
+        #     print(hex(animation_number))
         rom[rom_lower_tilemap_array:rom_lower_tilemap_array+len(lower_tilemap_list)] = bytes(lower_tilemap_list)
 
         [afp_table_location] = get_indexed_values(AFP_TABLE_ARRAY,animation_number,0x02,'2')
@@ -134,21 +143,23 @@ def assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict, DMA_
 def write_tiles():
     DMA_dict = {}
     tile_ptr = SAMUS_TILES_START
-    upper_files = set(single_pose_dict['upper_file'] for single_pose_dict in filemap.values())
-    lower_files = set(single_pose_dict['lower_file'] for single_pose_dict in filemap.values())
+    upper_files = set((single_pose_dict['upper_file'],single_pose_dict['upper_palette']) \
+                             for single_pose_dict in filemap.values())
+    lower_files = set((single_pose_dict['lower_file'],single_pose_dict['lower_palette']) \
+                             for single_pose_dict in filemap.values())
 
-    for file in upper_files:
+    for file, palette in upper_files:
         filename = f"new_sprite/upper/{file}.png"
-        row1, row2 = convert_file_to_VRAM_data(filename,lower=False)
+        row1, row2 = convert_file_to_VRAM_data(filename,palette)
         length = len(row1+row2)
         if (tile_ptr+length) % 0x10000 < 0x8000:   #will write over two banks -- this is bad for DMA
             tile_ptr = ((tile_ptr+length)//0x10000)*0x10000 + 0x8000  #go to next bank
         DMA_dict[file] = (tile_ptr,len(row1),len(row2))
         tile_ptr = write_single_row_of_tiles(row1, tile_ptr)
         tile_ptr = write_single_row_of_tiles(row2, tile_ptr)
-    for file in lower_files:
+    for file, palette in lower_files:
         filename = f"new_sprite/lower/{file}.png"
-        row1, row2 = convert_file_to_VRAM_data(filename,lower=True)
+        row1, row2 = convert_file_to_VRAM_data(filename,palette)
         length = len(row1+row2)
         if (tile_ptr+length) % 0x10000 < 0x8000:   #will write over two banks -- this is bad for DMA
             tile_ptr = ((tile_ptr+length)//0x10000)*0x10000 + 0x8000  #go to next bank
@@ -171,12 +182,10 @@ def write_single_row_of_tiles(row,tile_ptr):
 
 
 
-def convert_file_to_VRAM_data(filename,lower=False):
-    #TODO: Don't trust that the image is correctly sized
-    #TODO: Non-rectangular templates
+def convert_file_to_VRAM_data(filename,palette_filename):
     image = Image.open(filename)
     pixels = image.load()
-    palette = load_palette_from_file()             #this line placed here so that the palette can be switched per file
+    palette = load_palette_from_file(f"resources/{palette_filename}.tpl")
     
     reverse_palette = {(r,g,b,0xFF):index for (index,(r,g,b)) in enumerate(palette)}
     image_colors = [color for (count,color) in image.getcolors()]
@@ -192,6 +201,9 @@ def convert_file_to_VRAM_data(filename,lower=False):
 
     image_raw_pixels = list(image.getdata())
     cols, rows = image.size
+
+    if cols % 8 != 0 or rows % 8 != 0:
+        raise AssertionError(f"image {filename} is not sized correctly for 8x8 tiles")
 
     #sadly this next data structure will need to be indexed by index_pixels[row][col],
     # which is opposite the math intution (i.e. must use index_pixels[y_coord][x_coord])
@@ -225,14 +237,6 @@ def convert_file_to_VRAM_data(filename,lower=False):
         x = cols - (cols % 16)
         y = rows - (rows % 16)
         row1.extend(extract_vram_tile(index_pixels[y  :y+8 ,x  :x+8 ]))
-    
-    #so there's this thing with row2 in the lower body section where they used the rightmost two tiles
-    # for other stuff like cannon ports, so we need to stay out of there, unless we are rendering something that
-    # we know will never use those tiles (e.g. space jump does not render cannon port, and so can use those tiles)
-    if lower and len(row2)//TILESIZE > 0x06:
-        #move last tile from row2 up to row1
-        row1.extend(row2[0x06*TILESIZE:])
-        row2 = row2[:0x06*TILESIZE]
 
 
     if len(row1)//TILESIZE > 0x08 or len(row2)//TILESIZE > 0x08:
@@ -359,14 +363,18 @@ def load_filemap(filename='resources/filemap.csv'):
             timeline_number = int(row[3])
             upper_map = row[4]
             upper_file = row[5]
-            lower_map = row[6]
-            lower_file = row[7]
+            upper_palette = row[6]
+            lower_map = row[7]
+            lower_file = row[8]
+            lower_palette = row[9]
 
             filemap[(animation_number,timeline_number)] = { 'pose_number': pose_number,
                                                         'upper_map': upper_map,
                                                         'upper_file': upper_file,
+                                                        'upper_palette': upper_palette,
                                                         'lower_map': lower_map,
-                                                        'lower_file': lower_file}
+                                                        'lower_file': lower_file,
+                                                        'lower_palette': lower_palette}
     return filemap
 
 def process_command_line_args():

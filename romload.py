@@ -32,6 +32,7 @@ def apply_bugfixes(rom):
 def fix_tilemaps(rom):
     fix_tile_palettes(rom)
     fix_bouncing_shoulder_tiles(rom)
+    fix_left_rolling_ball(rom)
 
 def fix_animation_sequences(rom):
     fix_falling_facing_diagonal(rom)
@@ -135,6 +136,16 @@ def fix_bouncing_shoulder_tiles(rom):
     rom[0x091BFE] = 0xF2            #$929BFE LoROM
     rom[0x091C03] = 0xF2            #$929C03 LoROM
 
+
+def fix_left_rolling_ball(rom):
+    '''
+    The following should not be linked -- left is in there accidentally with right.  Need to set this pointer correctly
+    ;E508
+    AFP_T1D:;Facing right as morphball, no springball
+    AFP_T31:;Midair morphball facing right without springball
+    AFP_T32:;Midair morphball facing left without springball
+    '''
+    rom[0x959B2:0x959B4] = bytes([0x30,0xE5])      #$92D9B2-$92D9B3 LoROM
 
 def main():
     raise AssertionError("Compiled utility library directly")
