@@ -50,8 +50,8 @@ import csv
 import json
 from PIL import Image
 
-import romload
-from constants import *
+from lib import romload
+from lib.constants import *
 
 rom = None
 supertile_info = []

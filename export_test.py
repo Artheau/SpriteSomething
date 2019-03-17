@@ -2,8 +2,8 @@ import argparse
 import os
 from PIL import Image
 
-import util
-from constants import *
+from lib import util
+from lib.constants import *
 
 data = None
 

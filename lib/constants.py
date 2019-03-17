@@ -11,6 +11,8 @@ PNG_MARGIN = 0x01
 
 
 ROM_FILENAME_ARG_KEY = 'rom_filename'
+SPRITE_SHEET_FILENAME_ARG_KEY = 'sprite_sheet_filename'
+LAYOUT_FILENAME_ARG_KEY = 'layout_filename'
 PALETTE_ARG_KEY = 'palette_specified'
 SUPERTILES_ARG_KEY = 'supertile_optimize'
 

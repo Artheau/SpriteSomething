@@ -2,17 +2,29 @@
 #in March, 2019
 #while sipping flavorful coffee loudly
 
-#applies bugfixes to the rom
-#blanks out all Samus tiles!  (Pac Man mode)
-#rebuilt the tilemaps to create a "canvas" to paint on.
+#Takes a new sprite sheet and inserts it into a rom
+#Right now, defaults to samus.png and sm_orig.sfc
+#But you can specify other files on the command line (ask --help)
+#Saves the modified rom as <orig_name>_modified.<ext>
 
+#KNOWN ISSUES:
+#Bad things happen if some of the image names are shared between the upper and lower columns of the filemap
+# (not sure why yet)
+#Spin jump is hard-wired in the game to not display its lower tilemap...but then it cannot easily be converted
+# to use the sparks in order to implement screw attack without space jump
+#Some animations are fused between their upper/lower animations (e.g. morphball pointers) <-- there are more that break the existing animations
+# Other poses are hard fused either in tilemaps, AFP, or both, between poses in different animations
 
-
-#TODO: Remove the right chest tile at ROM D5620 (used to break symmetry in elevator poses; no longer necessary)
-#TODO: There is no animation allocated for facing left as morphball.  Will need to construct one and tie it in correctly
-#TODO: Make left/right animations for screw attack without space jump
-#TODO: Assign all unused animations to null pointers, just in case (after testing without making them null) <--especially DMA loads
-#TODO: Consider unfusing the fused upper/lower animations (e.g. morphball pointers) <-- there are more that break the existing animations
+#TODO:
+#Inject palettes from the sprite sheet, not the TLP files
+#Gun ports (probably have to fix their vanilla placement anyway, since they were not originally placed with pixel perfect precision)
+#Inject death sequence (also ideally move this animation somewhere where there is more room, so that the artist is not confined to the hourglass shape)
+#Check grapple to make sure it is attaching to the glue energy effect correctly, and adjust the filemap if not
+#Make left/right animations for screw attack without space jump (requires some engine editing/disassembly)
+#Assign all unused animations to null pointers, just in case (after testing without making them null) <--especially DMA loads
+#Consider unfusing the fused upper/lower animations (e.g. morphball pointers) <-- there are more that break the existing animations
+#Do more "prayer/quake" separation using whatever tile space remains
+#Blank the tile at $D5620 (this was used for symmetry breaks in elevator pose, and is no longer needed)
 
 
 import argparse
@@ -22,12 +34,14 @@ import csv
 import numpy as np
 from PIL import Image
 
-import romload
-import tilemaps
-from constants import *
+from lib import romload
+from resources import tilemaps
+from lib.constants import *
 
 rom = None
 filemap = None
+sprite_sheet = None
+global_layout = None
 
 
 
@@ -119,17 +133,9 @@ def assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict, DMA_
         [lower_offset] = get_indexed_values(LOWER_TILEMAP_TABLE_POINTER,animation_number,0x02,'2')
 
         rom_upper_tilemap_array = convert_to_rom_address(TILEMAP_TABLE + 2 * upper_offset)
-        # if(animation_number == 0x1A):
-        #     print(hex(rom_upper_tilemap_array))
-        # if(0x90F55 in range(rom_upper_tilemap_array,rom_upper_tilemap_array+len(upper_tilemap_list))):
-        #     print(hex(animation_number))
         rom[rom_upper_tilemap_array:rom_upper_tilemap_array+len(upper_tilemap_list)] = bytes(upper_tilemap_list)
 
         rom_lower_tilemap_array = convert_to_rom_address(TILEMAP_TABLE + 2 * lower_offset)
-        # if(animation_number == 0x1A):
-        #     print(hex(rom_lower_tilemap_array))
-        # if(0x90f6d in range(rom_lower_tilemap_array,rom_lower_tilemap_array+len(lower_tilemap_list))):
-        #     print(hex(animation_number))
         rom[rom_lower_tilemap_array:rom_lower_tilemap_array+len(lower_tilemap_list)] = bytes(lower_tilemap_list)
 
         [afp_table_location] = get_indexed_values(AFP_TABLE_ARRAY,animation_number,0x02,'2')
@@ -148,18 +154,8 @@ def write_tiles():
     lower_files = set((single_pose_dict['lower_file'],single_pose_dict['lower_palette']) \
                              for single_pose_dict in filemap.values())
 
-    for file, palette in upper_files:
-        filename = f"new_sprite/upper/{file}.png"
-        row1, row2 = convert_file_to_VRAM_data(filename,palette)
-        length = len(row1+row2)
-        if (tile_ptr+length) % 0x10000 < 0x8000:   #will write over two banks -- this is bad for DMA
-            tile_ptr = ((tile_ptr+length)//0x10000)*0x10000 + 0x8000  #go to next bank
-        DMA_dict[file] = (tile_ptr,len(row1),len(row2))
-        tile_ptr = write_single_row_of_tiles(row1, tile_ptr)
-        tile_ptr = write_single_row_of_tiles(row2, tile_ptr)
-    for file, palette in lower_files:
-        filename = f"new_sprite/lower/{file}.png"
-        row1, row2 = convert_file_to_VRAM_data(filename,palette)
+    for file, palette in upper_files|lower_files:
+        row1, row2 = get_VRAM_data(file,palette)
         length = len(row1+row2)
         if (tile_ptr+length) % 0x10000 < 0x8000:   #will write over two banks -- this is bad for DMA
             tile_ptr = ((tile_ptr+length)//0x10000)*0x10000 + 0x8000  #go to next bank
@@ -182,9 +178,10 @@ def write_single_row_of_tiles(row,tile_ptr):
 
 
 
-def convert_file_to_VRAM_data(filename,palette_filename):
-    image = Image.open(filename)
+def get_VRAM_data(image_name,palette_filename):
+    image = extract_sub_image(sprite_sheet, image_name)
     pixels = image.load()
+
     palette = load_palette_from_file(f"resources/{palette_filename}.tpl")
     
     reverse_palette = {(r,g,b,0xFF):index for (index,(r,g,b)) in enumerate(palette)}
@@ -197,13 +194,13 @@ def convert_file_to_VRAM_data(filename,palette_filename):
     #audit the colors in the image to make sure we CAN translate them all using the palette
     for color in image_colors:
         if color not in reverse_palette:
-            raise AssertionError(f"color {color} is present in image {filename}, but it is not in the corresponding palette")
+            raise AssertionError(f"color {color} is present in image {image_name}, but it is not in the corresponding palette")
 
     image_raw_pixels = list(image.getdata())
     cols, rows = image.size
 
     if cols % 8 != 0 or rows % 8 != 0:
-        raise AssertionError(f"image {filename} is not sized correctly for 8x8 tiles")
+        raise AssertionError(f"image {image_name} is not sized correctly for 8x8 tiles")
 
     #sadly this next data structure will need to be indexed by index_pixels[row][col],
     # which is opposite the math intution (i.e. must use index_pixels[y_coord][x_coord])
@@ -240,7 +237,7 @@ def convert_file_to_VRAM_data(filename,palette_filename):
 
 
     if len(row1)//TILESIZE > 0x08 or len(row2)//TILESIZE > 0x08:
-        raise AssertionError(f"Too many tiles created for {filename}")
+        raise AssertionError(f"Too many tiles created for {image_name}")
 
     return row1,row2
 
@@ -351,7 +348,6 @@ def load_palette_from_file(filename = "resources/samus_palette.tpl"):
 
 
 
-
 def load_filemap(filename='resources/filemap.csv'):
     filemap = {}
     with open(filename, 'r') as csvfile:
@@ -377,6 +373,70 @@ def load_filemap(filename='resources/filemap.csv'):
                                                         'lower_palette': lower_palette}
     return filemap
 
+
+def load_sprite_sheet(filename):
+    return Image.open(filename)
+
+def load_layout(filename):
+    #TODO: JSON this part
+    from resources import layout
+
+    new_layout = flatten_layout(layout.layout)
+
+    return new_layout
+
+def flatten_layout(layout):
+    if 'offset' in layout:
+        master_offset = layout['offset']
+    else:
+        master_offset = [0,0]
+        #raise AssertionError(f"Missing offset in layout file, only found {layout.keys()}")  #TODO: Reinsert this assertion
+
+    images = {}
+
+    if 'images' in layout:
+        #append images
+        append_to_image_list(layout['images'],images,master_offset)
+    if 'blocks' in layout:
+        #append flatten_layout on the blocks
+        for block in layout['blocks'].values():
+            append_to_image_list(flatten_layout(block),images,master_offset)
+
+    return images
+
+def append_to_image_list(append_dict,image_list,master_offset):
+    for key in append_dict:
+        append_item = append_dict[key]
+        for tile_ref in append_item:
+            for i in range(2):
+                tile_ref['source'][i] += master_offset[i]   #apply the master offset
+        if key not in image_list:
+            image_list[key] = append_item
+        else:
+            raise AssertionError(f"Tried to add image {key} from layout file, but it was defined twice")
+
+
+def extract_sub_image(sprite_sheet, image_name):
+    if image_name not in global_layout:
+        raise AssertionError(f"image name {image_name} was not found in the layout file")
+
+    final_size = [max([supertile['dest'][i]+supertile['size'][i] for supertile in global_layout[image_name]]) for i in range(2)]
+    cropped_image = Image.new("RGBA",tuple(final_size),(0,0,0,0))
+
+    for supertile in global_layout[image_name]:
+        source = supertile['source']
+        dest = supertile['dest']
+        size = supertile['size']
+        cropped_image.paste(sprite_sheet.crop((source[0],source[1],source[0]+size[0],source[1]+size[1])),tuple(dest))
+
+    if (0,0,127,255) in [color for (_,color) in cropped_image.getcolors()]:         #TODO: Comment out
+        print(f"Processed image {image_name}")
+        cropped_image.show()
+        print(cropped_image.getcolors())
+        exit(0)
+
+    return cropped_image
+
 def process_command_line_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--rom",
@@ -384,7 +444,17 @@ def process_command_line_args():
                         help="Location of the rom file; e.g. /my_dir/sm_orig.sfc",
                         metavar="<rom_filename>",
                         default='sm_orig.sfc')
-    
+    parser.add_argument("--sheet",
+                        dest=SPRITE_SHEET_FILENAME_ARG_KEY,
+                        help="Location of the sprite sheet; e.g. /my_dir/samus.png",
+                        metavar="<sprite_sheet_filename>",
+                        default='resources/samus.png')
+    parser.add_argument("--layout",
+                        dest=LAYOUT_FILENAME_ARG_KEY,
+                        help="Location of the layout file; e.g. /my_dir/layout.json",
+                        metavar="<layout_filename>",
+                        default='resources/layout.json')
+
     command_line_args = vars(parser.parse_args())
 
     return command_line_args
@@ -442,10 +512,14 @@ def get_indexed_values(base,index,entry_size,encoding):
 def main():
     global rom
     global filemap
+    global sprite_sheet
+    global global_layout
 
     command_line_args = process_command_line_args()
     rom = romload.load_rom_contents(command_line_args[ROM_FILENAME_ARG_KEY])
     filemap = load_filemap()
+    sprite_sheet = load_sprite_sheet(command_line_args[SPRITE_SHEET_FILENAME_ARG_KEY])
+    global_layout = load_layout(command_line_args[LAYOUT_FILENAME_ARG_KEY])
 
     erase_all_samus_info()   #technically this is not needed, but it provides a stronger argument that there are no bugs/oversights
 
