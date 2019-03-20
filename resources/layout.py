@@ -1699,16 +1699,20 @@ layout = {
 			}
 		},
 		'death_block': {
+			'offset': [0,0],
 			'blocks': {
 				'death_pieces': {
+					'offset': [0,0]
 					#TODO
 				},
 				'death_frames': {
+					'offset': [0,0]
 					#TODO
 				}
 			}
 		},
 		'cannon_ports': {
+			'offset': [0,0]
 			#TODO
 		},
 		'palette': {
@@ -1734,10 +1738,8 @@ layout = {
 							{'source': [283,10], 'dest': [14,0], 'size': [1,1]},
 							{'source': [304,10], 'dest': [15,0], 'size': [1,1]}
 						],
-						'visor_color_sequence': [
-							{'source': [73,-11], 'dest': [0,0], 'size': [1,1]},
-							{'source': [73,-32], 'dest': [1,0], 'size': [1,1]},
-							{'source': [73,-53], 'dest': [2,0], 'size': [1,1]}
+						'visor_nightvision_color': [
+							{'source': [73,-11], 'dest': [0,0], 'size': [1,1]}
 						],
 						'visor_static_color': [
 							{'source': [73,10], 'dest': [0,0], 'size': [1,1]}
@@ -1789,7 +1791,7 @@ layout = {
 					}
 				},
 				'death_palette_block': {
-					'offset': [189,-83],
+					'offset': [147,-83],
 					'images': {
 						'death_palette': [
 							{'source': [10,10], 'dest': [1,0], 'size': [1,1]},
@@ -1807,6 +1809,16 @@ layout = {
 							{'source': [52,52], 'dest': [13,0], 'size': [1,1]},
 							{'source': [73,52], 'dest': [14,0], 'size': [1,1]},
 							{'source': [94,52], 'dest': [15,0], 'size': [1,1]}
+						]
+					}
+				},
+				'ship_palette_block': {
+					'offset': [294,-83],
+					'images': {
+						'ship_palette': [
+							{'source': [10,10], 'dest': [0,0], 'size': [1,1]},
+							{'source': [10,31], 'dest': [1,0], 'size': [1,1]},
+							{'source': [10,52], 'dest': [2,0], 'size': [1,1]}
 						]
 					}
 				}

@@ -16,15 +16,15 @@
 # Other poses are hard fused either in tilemaps, AFP, or both, between poses in different animations
 
 #TODO:
-#Inject palettes from the sprite sheet, not the TLP files
 #Gun ports (probably have to fix their vanilla placement anyway, since they were not originally placed with pixel perfect precision)
+# Gun ports are at positions $D1A00, $D1C00, ... $D3000 with a bunch of transparent tiles inbetween
 #Inject death sequence (also ideally move this animation somewhere where there is more room, so that the artist is not confined to the hourglass shape)
-#Check grapple to make sure it is attaching to the glue energy effect correctly, and adjust the filemap if not
+# Death sequence is located at position $D8000, in optimized form
+#Check grapple to make sure it is attaching to the blue energy effect correctly, and adjust the filemap if not
 #Make left/right animations for screw attack without space jump (requires some engine editing/disassembly)
 #Assign all unused animations to null pointers, just in case (after testing without making them null) <--especially DMA loads
 #Consider unfusing the fused upper/lower animations (e.g. morphball pointers) <-- there are more that break the existing animations
 #Do more "prayer/quake" separation using whatever tile space remains
-#Blank the tile at $D5620 (this was used for symmetry breaks in elevator pose, and is no longer needed)
 
 
 import argparse
@@ -53,6 +53,237 @@ def erase_all_samus_info():
     for addr in range(convert_to_rom_address(DMA_ENTRIES_START),convert_to_rom_address(DMA_ENTRIES_END)-0x07,0x07):
         rom[addr:addr+0x07] = blank_DMA_entry
 
+    #Blank the tile at $D5620 (this was used for symmetry breaks in elevator pose, and is no longer needed)
+    transparent_tile = bytes(TILESIZE*[0x00])
+    sym_break_tile_addr = 0xd5620
+    rom[sym_break_tile_addr:sym_break_tile_addr+TILESIZE] = transparent_tile
+
+def write_new_palettes():
+    power_palette = load_palette_from_image("power_palette")
+    varia_palette = load_palette_from_image("varia_palette")
+    gravity_palette = load_palette_from_image("gravity_palette")
+    death_palette = load_palette_from_image("death_palette")
+    flash_palette = load_palette_from_image("flash_palette")
+    nightvision_color = load_palette_from_image("visor_nightvision_color")
+    ship_palette = load_palette_from_image("ship_palette")
+    ship_color_body = ship_palette[0]
+    ship_color_window = ship_palette[1]
+    ship_glow_color = ship_palette[2]
+
+    set_palettes_at(0x1652C,[power_palette[4]]) #visor inside doors
+
+    set_palettes_at(0x6DB8F,power_palette, modifier=(0,10,15)) #elevator palettes (power suit)
+    set_palettes_at(0x6DC2D,power_palette, modifier=(0,5,15))
+    set_palettes_at(0x6DC7C,power_palette, modifier=(0,0,10))
+    set_palettes_at(0x6DBDE,power_palette, modifier=(0,10,15))
+
+    set_palettes_at(0x6DCF5,varia_palette, modifier=(0,10,15)) #elevator palettes (varia suit)
+    set_palettes_at(0x6DD44,varia_palette, modifier=(0,5,15))
+    set_palettes_at(0x6DD93,varia_palette, modifier=(0,0,10))
+    set_palettes_at(0x6DDE2,varia_palette, modifier=(0,10,15))
+
+    set_palettes_at(0x6DE5B,gravity_palette, modifier=(0,10,15)) #elevator palettes (gravity suit)
+    set_palettes_at(0x6DEAA,gravity_palette, modifier=(0,5,15))
+    set_palettes_at(0x6DEF9,gravity_palette, modifier=(0,0,10))
+    set_palettes_at(0x6DF48,gravity_palette, modifier=(0,10,15))
+
+    set_palettes_at(0x6DB6B,power_palette) #loader palettes (power suit) <-- not sure what these do but SMILE thinks they're important
+    set_palettes_at(0x6DBBA,power_palette)
+    set_palettes_at(0x6DC09,power_palette)
+    set_palettes_at(0x6DC58,power_palette)
+    set_palettes_at(0x6DCA4,power_palette)
+
+    set_palettes_at(0x6DCD1,varia_palette) #loader palettes (varia suit)
+    set_palettes_at(0x6DD20,varia_palette)
+    set_palettes_at(0x6DD6F,varia_palette)
+    set_palettes_at(0x6DDBE,varia_palette)
+    set_palettes_at(0x6DE0A,varia_palette)
+
+    set_palettes_at(0x6DE37,gravity_palette) #loader palettes (gravity suit)
+    set_palettes_at(0x6DE86,gravity_palette)
+    set_palettes_at(0x6DED5,gravity_palette)
+    set_palettes_at(0x6DF24,gravity_palette)
+    set_palettes_at(0x6DF70,gravity_palette)
+
+    for i in range(16):
+        set_palettes_at(0x6E466+i*0x22,power_palette,heat_mod(i)) #heat palettes (power suit)
+        set_palettes_at(0x6E692+i*0x22,varia_palette,heat_mod(i)) #heat palettes (varia suit)
+        set_palettes_at(0x6E8BE+i*0x22,gravity_palette,heat_mod(i)) #heat palettes (gravity suit)
+    
+
+    set_palettes_at(0x66569,sepia(power_palette)) #Samus sepia during intro storyline
+    set_palettes_at(0xDA380,sepia(power_palette), fade=0.6) #a sepia palette used when Samus is hurt in the intro animations
+    set_palettes_at(0xDA3A0,sepia(power_palette)) #a sepia palette used when Samus is hurt in the intro animations
+
+
+    set_palettes_at(0xD9400,power_palette) #power suit
+    set_palettes_at(0xD9520,varia_palette) #varia suit
+    for i in range(8):
+        set_palettes_at(0xDA120+0x20*i, death_palette, fade = float(i)/8.0)   #death palette
+    for i in range(6):
+        set_palettes_at(0xD9C6A+0x20*i, flash_rotate(flash_palette,i))  #crystal flash bubble colors
+    set_palettes_at(0xD9800,gravity_palette) #gravity suit
+
+    for base_address,suit_palette in zip([0xD9820,0xD9920,0xD9A20],[power_palette, varia_palette, gravity_palette]):
+        #charge
+        for i in range(8):
+            set_palettes_at(base_address + 0x20*i, suit_palette, fade = float(i)/8.0)
+
+
+    for base_address,suit_palette in zip([0xD9B20,0xD9D20,0xD9F20],[power_palette, varia_palette, gravity_palette]):
+        #speed boost
+        set_palettes_at(base_address       , suit_palette, modifier=(0,0,0))
+        set_palettes_at(base_address + 0x20, suit_palette, modifier=(0,0,10))
+        set_palettes_at(base_address + 0x40, suit_palette, modifier=(0,5,20))
+        set_palettes_at(base_address + 0x60, suit_palette, modifier=(0,15,20))
+
+    for base_address,suit_palette in zip([0xD9BA0,0xD9DA0,0xD9FA0],[power_palette, varia_palette, gravity_palette]):
+        #speed squat
+        for i in range(4):
+            set_palettes_at(base_address + 0x20*i, suit_palette, fade = float(i)/4.0)
+
+    for base_address,suit_palette in zip([0xD9C20,0xD9E20,0xDA020],[power_palette, varia_palette, gravity_palette]):
+        #shine spark classic
+        # set_palettes_at(base_address       , suit_palette, modifier=(0,0,0))
+        # set_palettes_at(base_address + 0x20, suit_palette, modifier=(10,10,5))
+        # set_palettes_at(base_address + 0x40, suit_palette, modifier=(16,16,0))
+        # set_palettes_at(base_address + 0x60, suit_palette, modifier=(26,26,10))
+        #but my eyes hurt with so much yellow so I tried this instead
+        set_palettes_at(base_address       , suit_palette, modifier=(0,0,0))
+        set_palettes_at(base_address + 0x20, suit_palette, modifier=(8,8,4))
+        set_palettes_at(base_address + 0x40, suit_palette, modifier=(13,13,0))
+        set_palettes_at(base_address + 0x60, suit_palette, modifier=(22,22,8))
+
+    for base_address,suit_palette in zip([0xD9CA0,0xD9EA0,0xDA0A0],[power_palette, varia_palette, gravity_palette]):
+        #screw attack
+        set_palettes_at(base_address       , suit_palette, modifier=(0,0,0))
+        set_palettes_at(base_address + 0x20, suit_palette, modifier=(0,10,0))
+        set_palettes_at(base_address + 0x40, suit_palette, modifier=(0,20,0))
+        set_palettes_at(base_address + 0x60, suit_palette, modifier=(0,30,5))
+
+    for i in range(3):
+        set_palettes_at(0xDA3C6 + 0x02*i,nightvision_color, fade = float(i)/5.0, fade_color = (0,0,0)) #nightvision/xray visor colors (negative fade is intentional)
+
+    for i in range(10):   #rainbow palette
+        set_palettes_at(0xDA240 + 0x20*i, rainbow(power_palette,i))
+
+    #erase_palettes_at(0xD9420,0x10) #an all yellow palette that Samus flashes when about to die (and other things?)
+    #erase_palettes_at(0x8D7A2,0x01) #charge release
+
+    set_palettes_at(0x1125A0,get_dark_ship_colors(ship_color_body,ship_color_window))
+    set_palettes_at(0x6668B,get_bright_ship_colors(ship_color_body,ship_color_window))   #ship in space
+    for i in range(0x0E):
+        set_palettes_at(0x6CA54+i*0x06, [ship_glow_color], fade = abs((7-i)/7.0), fade_color = (0,0,0))   #ship glowing underside
+    for i in range(0x10):
+        set_palettes_at(0x6D6C2+i*0x24,get_bright_ship_colors(ship_color_body,ship_color_window), fade = (15.0-float(i))/15.0)   #ship at endgame
+    
+
+def erase_palettes_at(addr, size, erase_color = None):
+    if not erase_color:
+        erase_color = [0x00,0x02] #(a deep green in BGR 555 little endian format)
+
+    erase_info = bytes(size*erase_color)
+    rom[addr:addr+2*size] = erase_info
+
+def set_palettes_at(addr,color_list,modifier=(0,0,0), fade = 0.0, fade_color = (248,248,248)):
+    #modifier = strict color addition
+    #fade = scale from 0 to 1 of how much to proportionally fade to white (technically white is 8 * 0x1F = 248)
+    #fade_color = color to fade towards (usually white, but sometimes black)
+    delta_red, delta_green, delta_blue = modifier
+    for (red,green,blue) in color_list.copy():
+        if fade < 0:
+            print(f"raw: {(red,green,blue)}")
+        red = (1.0-fade)*red + fade_color[0]*fade + delta_red*8
+        green = (1.0-fade)*green + fade_color[1]*fade + delta_green*8
+        blue = (1.0-fade)*blue + fade_color[2]*fade + delta_blue*8
+        [red, green, blue] = [int(max(0,min(255,color))) for color in [red,green,blue]]   #make sure it is a proper color
+        if fade < 0:
+            print(f"modified: {(red,green,blue)}")
+        color_555 = ((blue//8) << 10) + ((green//8) << 5) + (red//8)   #convert to 555 format
+        rom[addr:addr+2] = little_endian(color_555,2)        #write to rom in little endian format
+        addr += 2 
+
+def heat_mod(step):
+    if step == 0:
+        return (0,0,0)
+    elif step <= 2 or step >= 13:
+        return (1,0,0)
+    elif step <= 4 or step >= 11:
+        return (2,0,0)
+    elif step <= 6 or step >= 9:
+        return (3,0,0)
+    else:
+        return (5,0,0)
+
+def grayscale(palette):
+    gray_palette = []
+    for (r,g,b) in palette:
+        #x = 0.21*r + 0.72*g + 0.07*b   #luminosity formula attempt
+        x = 0.31*r + 0.52*g + 0.17*b    #modified luminosity
+        #x = (r+g+b)//3                 #rote averaging
+        gray_palette.append((x,x,x))
+    max_visor = max(palette[4])
+    gray_palette[4] = (max_visor,max_visor,max_visor)  #visor should be essentially white (as bright as the brightest color)
+    return gray_palette
+
+def sepia(palette):
+    return [(r,g,b*14.0/16.0) for (r,g,b) in grayscale(palette)]
+
+def rainbow(palette,frame):
+    base_color = [  (0x16,0x04,0x04),
+                    (0x16,0x0D,0x02),
+                    (0x16,0x16,0x00),
+                    (0x0B,0x16,0x00),
+                    (0x00,0x16,0x00),
+                    (0x01,0x11,0x08),
+                    (0x01,0x0C,0x10),
+                    (0x0A,0x06,0x12),
+                    (0x12,0x00,0x12),
+                    (0x15,0x02,0x0B)][frame]
+    new_palette = []
+    for (x,_,_) in grayscale(palette):
+        new_palette.append((8*base_color[0]+x/3,8*base_color[1]+x/3,8*base_color[2]+x/3))
+
+    return new_palette
+
+def get_dark_ship_colors(ship_color_body,ship_color_window):
+    color_list = []
+    color_list.append(ship_color_body)
+    color_list.append(tuple(16/21*color for color in ship_color_body))
+    color_list.append(tuple( 3/21*color for color in ship_color_body))
+    color_list.append(tuple( 1/21*color for color in ship_color_body))
+    color_list.append(tuple(17/21*color for color in ship_color_body))
+    color_list.append(tuple(13/21*color for color in ship_color_body))
+    color_list.append(tuple( 9/21*color for color in ship_color_body))
+    color_list.append(tuple(4 /21*color for color in ship_color_body))
+    color_list.append(ship_color_window)
+    color_list.append(tuple(0.7*color for color in ship_color_window))
+    color_list.append(tuple(0.4*color for color in ship_color_window))
+
+    return color_list
+
+def get_bright_ship_colors(ship_color_body,ship_color_window):
+    color_list = []
+    color_list.append(tuple(color+72 for color in ship_color_body))
+    color_list.append(tuple(25/21*color for color in ship_color_body))
+    color_list.append(tuple(10/21*color for color in ship_color_body))
+    color_list.append(tuple( 0/21*color for color in ship_color_body))
+    color_list.append(tuple(color+5 for color in ship_color_body))
+    color_list.append(tuple(22/21*color for color in ship_color_body))
+    color_list.append(tuple(18/21*color for color in ship_color_body))
+    color_list.append(tuple(13/21*color for color in ship_color_body))
+    color_list.append(ship_color_window)
+    color_list.append(tuple(0.7*color for color in ship_color_window))
+    color_list.append(tuple(0.4*color for color in ship_color_window))
+
+    return color_list
+
+def flash_rotate(flash_palette,shift):
+    flash_palette = flash_palette.copy()
+    for _ in range(shift):
+        last_color = flash_palette.pop()
+        flash_palette.insert(0, last_color)
+    return flash_palette
 
 def write_new_tilemaps():
     current_addr = SAMUS_TILEMAPS_START
@@ -182,9 +413,15 @@ def get_VRAM_data(image_name,palette_filename):
     image = extract_sub_image(sprite_sheet, image_name)
     pixels = image.load()
 
-    palette = load_palette_from_file(f"resources/{palette_filename}.tpl")
     
-    reverse_palette = {(r,g,b,0xFF):index for (index,(r,g,b)) in enumerate(palette)}
+    if palette_filename == 'flash_palette':
+        palette = [(15,0,0)]*10 + load_palette_from_image(palette_filename)
+        start_index = 10
+    else:
+        palette = load_palette_from_image(palette_filename)
+        start_index = 1
+
+    reverse_palette = {(r,g,b,0xFF):index for (index,(r,g,b)) in enumerate(palette) if index >= start_index}
     image_colors = [color for (count,color) in image.getcolors()]
 
     for (r,g,b,a) in image_colors:
@@ -346,6 +583,9 @@ def load_palette_from_file(filename = "resources/samus_palette.tpl"):
         palette.append((red,green,blue))
     return palette
 
+def load_palette_from_image(palette_name):
+    pixels = extract_sub_image(sprite_sheet, palette_name).getdata()
+    return ([(r,g,b) for (r,g,b,a) in pixels])
 
 
 def load_filemap(filename='resources/filemap.csv'):
@@ -389,8 +629,7 @@ def flatten_layout(layout):
     if 'offset' in layout:
         master_offset = layout['offset']
     else:
-        master_offset = [0,0]
-        #raise AssertionError(f"Missing offset in layout file, only found {layout.keys()}")  #TODO: Reinsert this assertion
+        raise AssertionError(f"Missing offset in layout file, only found {layout.keys()}")
 
     images = {}
 
@@ -428,12 +667,6 @@ def extract_sub_image(sprite_sheet, image_name):
         dest = supertile['dest']
         size = supertile['size']
         cropped_image.paste(sprite_sheet.crop((source[0],source[1],source[0]+size[0],source[1]+size[1])),tuple(dest))
-
-    if (0,0,127,255) in [color for (_,color) in cropped_image.getcolors()]:         #TODO: Comment out
-        print(f"Processed image {image_name}")
-        cropped_image.show()
-        print(cropped_image.getcolors())
-        exit(0)
 
     return cropped_image
 
@@ -515,6 +748,7 @@ def main():
     global sprite_sheet
     global global_layout
 
+
     command_line_args = process_command_line_args()
     rom = romload.load_rom_contents(command_line_args[ROM_FILENAME_ARG_KEY])
     filemap = load_filemap()
@@ -529,6 +763,8 @@ def main():
     DMA_info_address_dict = create_DMA_tables(DMA_dict)
 
     assign_new_tilemaps(upper_map_addresses, lower_map_addresses, DMA_dict, DMA_info_address_dict)
+
+    write_new_palettes()
 
     #the file saves automatically because it is an mmap (see romload.py)
     
