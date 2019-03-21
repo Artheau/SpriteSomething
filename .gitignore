@@ -3,7 +3,6 @@ __pycache__/
 
 # no images output
 images
-tiles
 animations
 
 # no pip installer

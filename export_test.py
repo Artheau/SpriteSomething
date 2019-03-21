@@ -8,7 +8,7 @@ from lib.constants import *
 data = None
 
 def main():
-    for directory_name in ["animations","images","tiles"]:
+    for directory_name in ["animations","images"]:
         if not os.access(directory_name, os.F_OK):
             os.mkdir(directory_name)
 

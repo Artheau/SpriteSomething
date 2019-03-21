@@ -17,13 +17,13 @@
 
 #TODO:
 #Gun ports (probably have to fix their vanilla placement anyway, since they were not originally placed with pixel perfect precision)
-# Gun ports are at positions $D1A00, $D1C00, ... $D3000 with a bunch of transparent tiles inbetween
+#  Gun ports are at positions $D1A00, $D1C00, ... $D3000 with a bunch of transparent tiles inbetween
+#  The pointers to these tiles are known, and the positioning is also known -- need to implement them in util.py (try to reference pointers as far back as known)
 #Inject death sequence (also ideally move this animation somewhere where there is more room, so that the artist is not confined to the hourglass shape)
-# Death sequence is located at position $D8000, in optimized form
-#Check grapple to make sure it is attaching to the blue energy effect correctly, and adjust the filemap if not
+#  Death sequence is located at position $D8000, in optimized form
 #Make left/right animations for screw attack without space jump (requires some engine editing/disassembly)
+#  Maybe there is a workaround that homogenizes the screw attack frames and uses the free pointer positions for control codes?
 #Assign all unused animations to null pointers, just in case (after testing without making them null) <--especially DMA loads
-#Consider unfusing the fused upper/lower animations (e.g. morphball pointers) <-- there are more that break the existing animations
 #Do more "prayer/quake" separation using whatever tile space remains
 
 
@@ -55,8 +55,8 @@ def erase_all_samus_info():
 
     #Blank the tile at $D5620 (this was used for symmetry breaks in elevator pose, and is no longer needed)
     transparent_tile = bytes(TILESIZE*[0x00])
-    sym_break_tile_addr = 0xd5620
-    rom[sym_break_tile_addr:sym_break_tile_addr+TILESIZE] = transparent_tile
+    SYM_BREAK_TILE_ADDRESS = 0xd5620
+    rom[SYM_BREAK_TILE_ADDRESS:SYM_BREAK_TILE_ADDRESS+TILESIZE] = transparent_tile
 
 def write_new_palettes():
     power_palette = load_palette_from_image("power_palette")
@@ -177,13 +177,14 @@ def write_new_palettes():
     for i in range(0x10):
         set_palettes_at(0x6D6C2+i*0x24,get_bright_ship_colors(ship_color_body,ship_color_window), fade = (15.0-float(i))/15.0)   #ship at endgame
     
-
+'''
 def erase_palettes_at(addr, size, erase_color = None):
     if not erase_color:
         erase_color = [0x00,0x02] #(a deep green in BGR 555 little endian format)
 
     erase_info = bytes(size*erase_color)
     rom[addr:addr+2*size] = erase_info
+'''
 
 def set_palettes_at(addr,color_list,modifier=(0,0,0), fade = 0.0, fade_color = (248,248,248)):
     #modifier = strict color addition
