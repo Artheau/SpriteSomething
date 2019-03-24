@@ -14,11 +14,10 @@
 # to use the sparks in order to implement screw attack without space jump
 #Some animations are fused between their upper/lower animations (e.g. morphball pointers) <-- there are more that break the existing animations
 # Other poses are hard fused either in tilemaps, AFP, or both, between poses in different animations
+#The death sequence injection only has the left facing frames... I know where the tilemaps are,
+# but where is the DMA pointer so that I can intercept it and make it load something else/more stuff/etc.?
 
 #TODO:
-#Gun ports (probably have to fix their vanilla placement anyway, since they were not originally placed with pixel perfect precision)
-#  Gun ports are at positions $D1A00, $D1C00, ... $D3000 with a bunch of transparent tiles inbetween
-#  The pointers to these tiles are known, and the positioning is also known -- need to implement them in util.py (try to reference pointers as far back as known)
 #Inject death sequence (also ideally move this animation somewhere where there is more room, so that the artist is not confined to the hourglass shape)
 #  Death sequence is located at position $D8000, in optimized form
 #Make left/right animations for screw attack without space jump (requires some engine editing/disassembly)
@@ -31,6 +30,7 @@ import argparse
 import os
 import struct
 import csv
+import itertools
 import numpy as np
 from PIL import Image
 
@@ -64,8 +64,9 @@ def write_new_palettes():
     gravity_palette = load_palette_from_image("gravity_palette")
     death_palette = load_palette_from_image("death_palette")
     flash_palette = load_palette_from_image("flash_palette")
-    nightvision_color = load_palette_from_image("visor_nightvision_color")
+    nightvision_colors = [load_palette_from_image(f"visor_nightvision_color{i}") for i in range(3)]
     ship_palette = load_palette_from_image("ship_palette")
+    file_select_palette = load_palette_from_image("file_select_palette")
     ship_color_body = ship_palette[0]
     ship_color_window = ship_palette[1]
     ship_glow_color = ship_palette[2]
@@ -162,7 +163,7 @@ def write_new_palettes():
         set_palettes_at(base_address + 0x60, suit_palette, modifier=(0,30,5))
 
     for i in range(3):
-        set_palettes_at(0xDA3C6 + 0x02*i,nightvision_color, fade = float(i)/5.0, fade_color = (0,0,0)) #nightvision/xray visor colors (negative fade is intentional)
+        set_palettes_at(0xDA3C6 + 0x02*i,nightvision_colors[i]) #nightvision/xray visor colors
 
     for i in range(10):   #rainbow palette
         set_palettes_at(0xDA240 + 0x20*i, rainbow(power_palette,i))
@@ -177,6 +178,8 @@ def write_new_palettes():
     for i in range(0x10):
         set_palettes_at(0x6D6C2+i*0x24,get_bright_ship_colors(ship_color_body,ship_color_window), fade = (15.0-float(i))/15.0)   #ship at endgame
     
+    set_palettes_at(0x765E0,file_select_palette)
+
 '''
 def erase_palettes_at(addr, size, erase_color = None):
     if not erase_color:
@@ -289,38 +292,41 @@ def flash_rotate(flash_palette,shift):
 def write_new_tilemaps():
     current_addr = SAMUS_TILEMAPS_START
 
+    #upper body tilemaps
     upper_map_addresses = {}
-    tilemaps_to_create = get_raw_upper_tilemaps()
+    tilemaps_to_create = tilemaps.upper_tilemaps
     for key in tilemaps_to_create:
-        tilemap = tilemaps_to_create[key]
-        tilemap_size = len(tilemap)
-        rom_addr = convert_to_rom_address(current_addr)
-        rom[rom_addr:rom_addr+tilemap_size] = bytes(tilemap)
         upper_map_addresses[key] = current_addr - 0x920000
-        current_addr += tilemap_size
-        if current_addr > SAMUS_TILEMAPS_END:
-            raise AssertionError("Made too many tilemaps -- exceeded ROM tilemap allocation")
+        current_addr = write_tilemap(tilemaps_to_create[key], current_addr)
 
+    #lower body tilemaps
     lower_map_addresses = {}
-    tilemaps_to_create = get_raw_lower_tilemaps()
+    tilemaps_to_create = tilemaps.lower_tilemaps
     for key in tilemaps_to_create:
-        tilemap = tilemaps_to_create[key]
-        tilemap_size = len(tilemap)
-        rom_addr = convert_to_rom_address(current_addr)
-        rom[rom_addr:rom_addr+tilemap_size] = bytes(tilemap)
         lower_map_addresses[key] = current_addr - 0x920000
-        current_addr += tilemap_size
-        if current_addr > SAMUS_TILEMAPS_END:
-            raise AssertionError("Made too many tilemaps -- exceeded ROM tilemap allocation")
+        current_addr = write_tilemap(tilemaps_to_create[key], current_addr)
 
+    #tilemaps for the death sequence
+    for i,tilemap in enumerate(tilemaps.deathmaps.values()):
+        pointer_location = convert_to_rom_address(0x9290C5+2*i)
+        rom[pointer_location:pointer_location+2] = little_endian(current_addr - 0x920000,2)
+        current_addr = write_tilemap(tilemap, current_addr)
+
+    #tilemaps for the missile ports (only need to change them to not be flipped)
+    for i in range(10):
+        write_location = convert_to_rom_address(0x90C792 + 2*i)
+        rom[write_location] = 0x28
     return upper_map_addresses, lower_map_addresses
 
 
-def get_raw_upper_tilemaps():
-    return tilemaps.upper_tilemaps
-
-def get_raw_lower_tilemaps():
-    return tilemaps.lower_tilemaps
+def write_tilemap(tilemap, current_addr):
+    tilemap_size = len(tilemap)
+    rom_addr = convert_to_rom_address(current_addr)
+    rom[rom_addr:rom_addr+tilemap_size] = bytes(tilemap)
+    current_addr += tilemap_size
+    if current_addr > SAMUS_TILEMAPS_END:
+        raise AssertionError("Made too many tilemaps -- exceeded ROM tilemap allocation")
+    return current_addr
 
 
 
@@ -386,7 +392,7 @@ def write_tiles():
     lower_files = set((single_pose_dict['lower_file'],single_pose_dict['lower_palette']) \
                              for single_pose_dict in filemap.values())
 
-    for file, palette in upper_files|lower_files:
+    for file, palette in list(upper_files)+list(lower_files): #ordering this to have upper tiles first, like in original data
         row1, row2 = get_VRAM_data(file,palette)
         length = len(row1+row2)
         if (tile_ptr+length) % 0x10000 < 0x8000:   #will write over two banks -- this is bad for DMA
@@ -394,6 +400,54 @@ def write_tiles():
         DMA_dict[file] = (tile_ptr,len(row1),len(row2))
         tile_ptr = write_single_row_of_tiles(row1, tile_ptr)
         tile_ptr = write_single_row_of_tiles(row2, tile_ptr)
+
+    #write the missile port tiles
+    pose_list = [   'port_aim_up_facing_right',
+                    'port_up_and_right',
+                    'port_right',
+                    'port_down_and_right',
+                    'port_aim_down_facing_right',
+                    'port_aim_down_facing_left',
+                    'port_down_and_left',
+                    'port_left',
+                    'port_up_and_left',
+                    'port_aim_up_facing_left']
+    for pose_number, name in enumerate(pose_list):
+        for i in range(3):   #3 port graphics for each direction
+            single_tile, _ = get_VRAM_data(f"{name}{i}", "power_palette")
+            write_single_row_of_tiles(single_tile, 0x9A9A00+0x80*pose_number+0x20*i)
+
+    #write the file select tiles
+    row1A, row2A = get_VRAM_data("file_select_direct_injection0", "file_select_palette")
+    row1B, row2B = get_VRAM_data("file_select_direct_injection1", "file_select_palette")
+    row3A, _ = get_VRAM_data("file_select_direct_injection2", "file_select_palette")
+    row3B, row4 = get_VRAM_data("file_select_direct_injection3", "file_select_palette")
+
+    write_single_row_of_tiles(row1A,0x8EA600)
+    write_single_row_of_tiles(row1B,0x8EA700)
+    write_single_row_of_tiles(row2A,0x8EA800)
+    write_single_row_of_tiles(row2B,0x8EA900)
+    write_single_row_of_tiles(row3A,0x8EAA00)
+    write_single_row_of_tiles(row3B,0x8EAB00)
+    write_single_row_of_tiles(row4[-0x40:],0x8EADC0)
+
+    
+    #write the death tiles
+    rows = {}
+    for i in range(0,10,2):
+        rows[f"{i+1}A"], rows[f"{i+2}A"] = get_VRAM_data(f"death_direct_injection{i}", "death_palette")
+        rows[f"{i+1}B"], rows[f"{i+2}B"] = get_VRAM_data(f"death_direct_injection{i+1}", "death_palette")
+
+        row1A, row2A = get_VRAM_data(f"death_direct_injection_alt{i}", "power_palette")
+        row1B, row2B = get_VRAM_data(f"death_direct_injection_alt{i+1}", "power_palette")
+        rows[f"{i+1}A"] = list(map(sum,itertools.zip_longest(rows[f"{i+1}A"],row1A,fillvalue = 0)))
+        rows[f"{i+1}B"] = list(map(sum,itertools.zip_longest(rows[f"{i+1}B"],row1B,fillvalue = 0)))
+        rows[f"{i+2}A"] = list(map(sum,itertools.zip_longest(rows[f"{i+2}A"],row2A,fillvalue = 0)))
+        rows[f"{i+2}B"] = list(map(sum,itertools.zip_longest(rows[f"{i+2}B"],row2B,fillvalue = 0)))
+
+    for i in range(10):
+        write_single_row_of_tiles(rows[f"{i+1}A"],0x9B8000+0x200*i)
+        write_single_row_of_tiles(rows[f"{i+1}B"],0x9B8100+0x200*i)
 
     return DMA_dict
 
@@ -412,6 +466,9 @@ def write_single_row_of_tiles(row,tile_ptr):
 
 def get_VRAM_data(image_name,palette_filename):
     image = extract_sub_image(sprite_sheet, image_name)
+    if not image:    #empty retrieval
+        return [], []
+
     pixels = image.load()
 
     
@@ -432,6 +489,7 @@ def get_VRAM_data(image_name,palette_filename):
     #audit the colors in the image to make sure we CAN translate them all using the palette
     for color in image_colors:
         if color not in reverse_palette:
+            image.show()
             raise AssertionError(f"color {color} is present in image {image_name}, but it is not in the corresponding palette")
 
     image_raw_pixels = list(image.getdata())
@@ -521,6 +579,8 @@ def create_DMA_tables(DMA_dict):
 
     DMA_PAGESIZE = 0x20
     DMA_ptr = DMA_ENTRIES_START
+
+    #Samus upper body DMA
     index = 0
     for file in upper_files:
         if index % DMA_PAGESIZE == 0x00:    #start a new DMA 'page' every DMA_PAGESIZE entries
@@ -532,6 +592,8 @@ def create_DMA_tables(DMA_dict):
         DMA_info_address_dict[file] = [index // DMA_PAGESIZE,index % DMA_PAGESIZE]
         DMA_ptr = write_single_DMA_entry(DMA_dict[file], DMA_ptr)
         index += 1
+
+    #Samus lower body DMA
     index = 0
     for file in lower_files:
         if index % DMA_PAGESIZE == 0x00:    #start a new DMA 'page' every DMA_PAGESIZE entries
@@ -543,6 +605,29 @@ def create_DMA_tables(DMA_dict):
         DMA_info_address_dict[file] = [index // DMA_PAGESIZE,index % DMA_PAGESIZE]
         DMA_ptr = write_single_DMA_entry(DMA_dict[file], DMA_ptr)
         index += 1
+
+    #Samus missile port locations (TODO: Pull out constants to a single source)
+    payload = [ bytes([0x00, 0x00, 0x00, 0x9A, 0x20, 0x9A, 0x40, 0x9A]),   #vertical
+                bytes([0x00, 0x00, 0x80, 0x9A, 0xA0, 0x9A, 0xC0, 0x9A]),   #up right
+                bytes([0x00, 0x00, 0x00, 0x9B, 0x20, 0x9B, 0x40, 0x9B]),   #right
+                bytes([0x00, 0x00, 0x80, 0x9B, 0xA0, 0x9B, 0xC0, 0x9B]),   #down left (h-flipped)
+                bytes([0x00, 0x00, 0x00, 0x9C, 0x20, 0x9C, 0x40, 0x9C]),   #vertical (v-flipped)
+                bytes([0x00, 0x00, 0x80, 0x9C, 0xA0, 0x9C, 0xC0, 0x9C]),   #vertical (hv-flipped)
+                bytes([0x00, 0x00, 0x00, 0x9D, 0x20, 0x9D, 0x40, 0x9D]),   #down left
+                bytes([0x00, 0x00, 0x80, 0x9D, 0xA0, 0x9D, 0xC0, 0x9D]),   #right (h-flipped)
+                bytes([0x00, 0x00, 0x00, 0x9E, 0x20, 0x9E, 0x40, 0x9E]),   #up right (h-flipped)
+                bytes([0x00, 0x00, 0x80, 0x9E, 0xA0, 0x9E, 0xC0, 0x9E])]   #vertical (h-flipped)
+
+    missile_gfx_data_ptr = 0x90F800   #free space at end of bank is now used for writing tile addresses
+    for i in range(10):
+        #start at 90C7A5
+        target_addr = convert_to_rom_address(0x90C7A5+2*i)
+        #write a pointer to somewhere near 90F800
+        rom[target_addr:target_addr+2] = little_endian(missile_gfx_data_ptr-0x900000,2)
+        target_addr = convert_to_rom_address(missile_gfx_data_ptr)
+        #at that spot, write 8 bytes
+        rom[target_addr:target_addr+8] = payload[i]
+        missile_gfx_data_ptr += 8
 
     return DMA_info_address_dict
 
@@ -659,6 +744,8 @@ def append_to_image_list(append_dict,image_list,master_offset):
 def extract_sub_image(sprite_sheet, image_name):
     if image_name not in global_layout:
         raise AssertionError(f"image name {image_name} was not found in the layout file")
+    if not global_layout[image_name]:  #if empty
+        return None
 
     final_size = [max([supertile['dest'][i]+supertile['size'][i] for supertile in global_layout[image_name]]) for i in range(2)]
     cropped_image = Image.new("RGBA",tuple(final_size),(0,0,0,0))

@@ -238,6 +238,70 @@ layout = {
 				}
 			}
 		},
+		'file_select_block': {
+			'offset': [929,41],
+			'blocks': {
+				'palette':{
+					'offset': [54,-1],
+					'images': {
+						'file_select_palette': [
+							{'source': [1,1], 'dest': [1,0], 'size': [1,1]},
+							{'source': [5,1], 'dest': [2,0], 'size': [1,1]},
+							{'source': [9,1], 'dest': [3,0], 'size': [1,1]},
+							{'source': [13,1], 'dest': [4,0], 'size': [1,1]},
+							{'source': [17,1], 'dest': [5,0], 'size': [1,1]},
+							{'source': [21,1], 'dest': [6,0], 'size': [1,1]},
+							{'source': [25,1], 'dest': [7,0], 'size': [1,1]},
+							{'source': [29,1], 'dest': [8,0], 'size': [1,1]},
+							{'source': [33,1], 'dest': [9,0], 'size': [1,1]},
+							{'source': [37,1], 'dest': [10,0], 'size': [1,1]},
+							{'source': [41,1], 'dest': [11,0], 'size': [1,1]},
+							{'source': [45,1], 'dest': [12,0], 'size': [1,1]},
+							{'source': [49,1], 'dest': [13,0], 'size': [1,1]},
+							{'source': [53,1], 'dest': [14,0], 'size': [1,1]},
+							{'source': [57,1], 'dest': [15,0], 'size': [1,1]},
+						]
+					}
+				}
+			},
+			'images': {
+				'file_select_direct_injection0': [
+					{'source': [46,3], 'dest': [0,0], 'size': [24,16]},   #top of head0
+					{'source': [71,3], 'dest': [24,0], 'size': [24,16]},  #top of head1
+					{'source': [96,3], 'dest': [48,0], 'size': [16,16]}   #left 2/3 of top of head2
+				],
+				'file_select_direct_injection1': [
+					{'source': [112,3], 'dest': [0,0], 'size': [8,16]},   #right 1/3 of top of head2
+					{'source': [125,13], 'dest': [8,0], 'size': [16,8]},  #visor0
+					{'source': [150,13], 'dest': [24,0], 'size': [16,8]}, #visor1
+					{'source': [175,13], 'dest': [40,0], 'size': [16,8]}, #visor2
+					{'source': [28,1], 'dest': [56,0], 'size': [8,8]},    #left cursor2
+					{'source': [200,13], 'dest': [8,8], 'size': [16,8]},  #visor3
+					{'source': [225,13], 'dest': [24,8], 'size': [16,8]}, #visor4
+					{'source': [19,10], 'dest': [40,8], 'size': [8,8]},   #V pipe
+					{'source': [28,10], 'dest': [48,8], 'size': [8,8]},   #left cursor1
+					{'source': [37,1], 'dest': [56,8], 'size': [8,8]}     #right cursor2
+				],
+				'file_select_direct_injection2': [
+					{'source': [46,19], 'dest': [0,0], 'size': [24,8]},   #bottom of head0
+					{'source': [71,19], 'dest': [24,0], 'size': [24,8]},  #bottom of head1
+					{'source': [96,19], 'dest': [48,0], 'size': [16,8]},  #left 2/3 of bottom of head2
+					{'source': [46,19], 'dest': [64,16], 'size': [0,0]}   #dummy pixel to artificially size the image
+				],
+				'file_select_direct_injection3': [
+					{'source': [112,19], 'dest': [0,0], 'size': [8,8]}, #bottom right corner of head2
+					{'source': [1,1], 'dest': [8,0], 'size': [8,8]}, #NW pipe
+					{'source': [10,1], 'dest': [16,0], 'size': [8,8]}, #H pipe
+					{'source': [19,1], 'dest': [24,0], 'size': [8,8]}, #NE pipe
+					{'source': [1,19], 'dest': [32,0], 'size': [8,8]}, #SW pipe
+					{'source': [19,19], 'dest': [40,0], 'size': [8,8]}, #SE pipe
+					{'source': [28,19], 'dest': [48,0], 'size': [8,8]}, #left cursor0
+					{'source': [37,10], 'dest': [56,0], 'size': [8,8]}, #right cursor1
+					{'source': [28,-8], 'dest': [48,8], 'size': [8,8]}, #left cursor3
+					{'source': [37,19], 'dest': [56,8], 'size': [8,8]}  #right cursor0
+				]
+			}
+		},
 		'crystal_flash': {
 			'offset': [514,100],
 			'blocks': {
@@ -1699,21 +1763,194 @@ layout = {
 			}
 		},
 		'death_block': {
-			'offset': [0,0],
-			'blocks': {
-				'death_pieces': {
-					'offset': [0,0]
-					#TODO
-				},
-				'death_frames': {
-					'offset': [0,0]
-					#TODO
-				}
+			'offset': [456,876],
+			'images': {
+				'death_direct_injection0': [
+					{'source': [134,9], 'dest': [24,0], 'size': [24,16]},  #top of death1
+					{'source': [109,1], 'dest': [48,0], 'size': [16,16]}   #left 2/3 of top of death2
+				],
+				'death_direct_injection1': [
+					{'source': [125,1], 'dest': [0,0], 'size': [8,16]},   #right 1/3 of top of death2
+					{'source': [84,1], 'dest': [8,0], 'size': [24,16]},  #top of death3
+					{'source': [59,1], 'dest': [32,0], 'size': [24,16]},   #top of death4
+				],
+				'death_direct_injection2': [
+					{'source': [134,25], 'dest': [24,0], 'size': [24,16]},  #3rd/4th rows of death1
+					{'source': [109,17], 'dest': [48,0], 'size': [16,16]}   #left 2/3 of 3rd/4th rows of death2
+				],
+				'death_direct_injection3': [
+					{'source': [125,17], 'dest': [0,0], 'size': [8,16]},   #right 1/3 of 3rd/4th rows of death2
+					{'source': [84,17], 'dest': [8,0], 'size': [24,16]},  #3rd/4th rows of death3
+					{'source': [59,17], 'dest': [32,0], 'size': [24,16]},   #3rd/4th rows of death4
+				],
+				'death_direct_injection4': [
+					{'source': [134,41], 'dest': [24,0], 'size': [24,16]},  #bottom of death1
+					{'source': [109,33], 'dest': [48,0], 'size': [16,16]},   #left 2/3 of 5th/6th rows of death2
+					{'source': [34,1], 'dest': [0,8], 'size': [24,8]}   #top of death5 (one row only)
+				],
+				'death_direct_injection5': [
+					{'source': [125,33], 'dest': [0,0], 'size': [8,16]},   #right 1/3 of 5th/6th rows of death2
+					{'source': [84,33], 'dest': [8,0], 'size': [24,16]},  #5th/6th rows of death3
+					{'source': [59,33], 'dest': [32,0], 'size': [24,16]},   #5th/6th rows of death4
+				],
+				'death_direct_injection6': [
+					{'source': [34,9], 'dest': [0,0], 'size': [24,16]},   #2nd/3rd rows of death5
+					{'source': [34,41], 'dest': [24,0], 'size': [24,16]},  #bottom of death5
+					{'source': [109,49], 'dest': [48,0], 'size': [16,8]},   #left 2/3 of bottom of death2 (one row only)
+					{'source': [1,17], 'dest': [56,8], 'size': [8,8]}   #3rd tile down from death6
+				],
+				'death_direct_injection7': [
+					{'source': [125,49], 'dest': [0,0], 'size': [8,8]},   #right 1/3 of bottom of death2 (one row only)
+					{'source': [84,49], 'dest': [8,0], 'size': [24,8]},  #bottom of death3 (one row only)
+					{'source': [59,49], 'dest': [32,0], 'size': [24,8]},   #bottom of death4 (one row only)
+					{'source': [9,17], 'dest': [0,8], 'size': [24,8]},   #right 3/4 of 3rd row of death6 (one row only)
+					{'source': [1,41], 'dest': [24,8], 'size': [32,8]},   #6th row of death6 (one row only)
+				],
+				'death_direct_injection8': [
+					{'source': [34,25], 'dest': [0,0], 'size': [24,16]},   #4th/5th rows of death5
+					{'source': [1,1], 'dest': [24,0], 'size': [32,16]},  #top of death6
+					{'source': [1,25], 'dest': [56,0], 'size': [8,16]}   #left 1/4 of 4th/5th rows of death6
+				],
+				'death_direct_injection9': [
+					{'source': [9,25], 'dest': [0,0], 'size': [24,16]},   #right 3/4 of 4th/5th of death6
+					{'source': [1,49], 'dest': [24,0], 'size': [32,8]},  #bottom row of death6 (one row only)
+				],
+				'death_direct_injection_alt0': [
+					{'source': [159,13], 'dest': [0,0], 'size': [24,16]},   #top of death0
+				],
+				'death_direct_injection_alt1': [
+					{'source': [-81,35], 'dest': [56,0], 'size': [8,8]},   #yellow0
+					{'source': [-72,35], 'dest': [56,8], 'size': [8,8]}   #yellow1
+				],
+				'death_direct_injection_alt2': [
+					{'source': [159,29], 'dest': [0,0], 'size': [24,16]},   #3rd/4th rows of death0
+				],
+				'death_direct_injection_alt3': [
+					{'source': [-63,35], 'dest': [56,0], 'size': [8,8]},   #yellow2
+					{'source': [-54,35], 'dest': [56,8], 'size': [8,8]}   #yellow3
+				],
+				'death_direct_injection_alt4': [
+					{'source': [159,45], 'dest': [0,0], 'size': [24,8]},   #bottom of death0 (one row only)
+					{'source': [0,0], 'dest': [0,16], 'size': [0,0]},   #dummy pixel
+				],
+				'death_direct_injection_alt5': [
+					{'source': [-45,35], 'dest': [56,0], 'size': [8,8]},   #yellow4
+					{'source': [-36,35], 'dest': [56,8], 'size': [8,8]}   #yellow5
+				],
+				'death_direct_injection_alt6': [
+					{'source': [-18,26], 'dest': [48,8], 'size': [8,8]},   #green0
+				],
+				'death_direct_injection_alt7': [
+					{'source': [-27,35], 'dest': [56,0], 'size': [8,8]},   #yellow6
+					{'source': [-18,35], 'dest': [56,8], 'size': [8,8]}   #yellow7
+				],
+				'death_direct_injection_alt8': [
+					#intentionally empty -- there are no powersuit colored tiles here
+				],
+				'death_direct_injection_alt9': [
+					{'source': [-9,35], 'dest': [56,0], 'size': [8,8]},   #yellow8
+					{'source': [-36,17], 'dest': [24,8], 'size': [8,8]},   #red0
+					{'source': [-27,17], 'dest': [32,8], 'size': [8,8]},   #red1
+					{'source': [-18,17], 'dest': [40,8], 'size': [8,8]},   #red2
+					{'source': [-9,17], 'dest': [48,8], 'size': [8,8]},   #red3
+					{'source': [-9,26], 'dest': [56,8], 'size': [8,8]}   #green1
+				]
 			}
 		},
 		'cannon_ports': {
-			'offset': [0,0]
-			#TODO
+			'offset': [951,671],  #top left corner of starburst
+			'images': {
+				'port_aim_up_facing_left0': [
+					{'source': [28,19], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_up_facing_left1': [
+					{'source': [28,10], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_up_facing_left2': [
+					{'source': [28,1], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_up_facing_right0': [
+					{'source': [37,19], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_up_facing_right1': [
+					{'source': [37,10], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_up_facing_right2': [
+					{'source': [37,1], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_up_and_right0': [
+					{'source': [46,19], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_up_and_right1': [
+					{'source': [55,10], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_up_and_right2': [
+					{'source': [64,1], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_right0': [
+					{'source': [46,28], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_right1': [
+					{'source': [55,28], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_right2': [
+					{'source': [64,28], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_down_and_right0': [
+					{'source': [46,37], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_down_and_right1': [
+					{'source': [55,46], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_down_and_right2': [
+					{'source': [64,55], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_down_facing_right0': [
+					{'source': [37,37], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_down_facing_right1': [
+					{'source': [37,46], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_down_facing_right2': [
+					{'source': [37,55], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_down_facing_left0': [
+					{'source': [28,37], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_down_facing_left1': [
+					{'source': [28,46], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_aim_down_facing_left2': [
+					{'source': [28,55], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_down_and_left0': [
+					{'source': [19,37], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_down_and_left1': [
+					{'source': [10,46], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_down_and_left2': [
+					{'source': [1,55], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_left0': [
+					{'source': [19,28], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_left1': [
+					{'source': [10,28], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_left2': [
+					{'source': [1,28], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_up_and_left0': [
+					{'source': [19,19], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_up_and_left1': [
+					{'source': [10,10], 'dest': [0,0], 'size': [8,8]}
+				],
+				'port_up_and_left2': [
+					{'source': [1,1], 'dest': [0,0], 'size': [8,8]}
+				]
+			}
 		},
 		'palette': {
 			'offset': [934,859],
@@ -1738,7 +1975,13 @@ layout = {
 							{'source': [283,10], 'dest': [14,0], 'size': [1,1]},
 							{'source': [304,10], 'dest': [15,0], 'size': [1,1]}
 						],
-						'visor_nightvision_color': [
+						'visor_nightvision_color0': [
+							{'source': [73,-53], 'dest': [0,0], 'size': [1,1]}
+						],
+						'visor_nightvision_color1': [
+							{'source': [73,-32], 'dest': [0,0], 'size': [1,1]}
+						],
+						'visor_nightvision_color2': [
 							{'source': [73,-11], 'dest': [0,0], 'size': [1,1]}
 						],
 						'visor_static_color': [
