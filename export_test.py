@@ -16,8 +16,6 @@ def main():
 
     if USE_MODIFIED_ROM:
         command_line_args[ROM_FILENAME_ARG_KEY] = "sm_orig_modified.sfc"
-    else:
-        command_line_args[ROM_FILENAME_ARG_KEY] = "sm_orig.sfc"
 
     #main data
     global data
