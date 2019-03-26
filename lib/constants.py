@@ -14,6 +14,8 @@ ROM_FILENAME_ARG_KEY = 'rom_filename'
 SPRITE_SHEET_FILENAME_ARG_KEY = 'sprite_sheet_filename'
 LAYOUT_FILENAME_ARG_KEY = 'layout_filename'
 PALETTE_ARG_KEY = 'palette_specified'
+ANI_ARG_KEY = 'animation_id_specified'
+POSE_ARG_KEY = 'pose_id_specified'
 SUPERTILES_ARG_KEY = 'supertile_optimize'
 
 TILESIZE = 0x20          #8x8 tiles with 4bpp = 0x20 bytes
