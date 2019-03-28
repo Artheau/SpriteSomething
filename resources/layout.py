@@ -1200,8 +1200,7 @@ layout = {
 							'offset': [1,1],
 							'images': {
 								'l_run_left9': [
-									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [0,24], 'dest': [0,24], 'size': [24,8]}
+									{'source': [0,0], 'dest': [0,0], 'size': [32,32]}
 								]
 							}
 						},
@@ -1210,8 +1209,8 @@ layout = {
 							'images': {
 								'l_run_left8': [
 									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [0,24], 'dest': [0,24], 'size': [16,8]},
-									{'source': [-8,20], 'dest': [16,24], 'size': [8,8]}   #the stray foot tile
+									{'source': [0,24], 'dest': [0,24], 'size': [24,8]},
+									{'source': [-8,20], 'dest': [24,24], 'size': [8,8]}   #the stray foot tile
 								]
 							}
 						},
@@ -1219,9 +1218,7 @@ layout = {
 							'offset': [85,1],
 							'images': {
 								'l_run_left7': [
-									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [8,24], 'dest': [8,24], 'size': [16,8]},
-									{'source': [24,24], 'dest': [0,24], 'size': [8,8]} #corner swap
+									{'source': [0,0], 'dest': [0,0], 'size': [32,32]}
 								]
 							}
 						},
@@ -1245,8 +1242,7 @@ layout = {
 							'offset': [200,1],
 							'images': {
 								'l_run_left4': [
-									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [0,24], 'dest': [0,24], 'size': [24,8]}
+									{'source': [0,0], 'dest': [0,0], 'size': [32,32]}
 								]
 							}
 						},
@@ -1255,8 +1251,8 @@ layout = {
 							'images': {
 								'l_run_left3': [
 									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [0,24], 'dest': [0,24], 'size': [16,8]},
-									{'source': [-8,20], 'dest': [16,24], 'size': [8,8]}   #the stray foot tile
+									{'source': [0,24], 'dest': [0,24], 'size': [24,8]},
+									{'source': [-8,20], 'dest': [24,24], 'size': [8,8]}   #the stray foot tile
 								]
 							}
 						},
@@ -1264,9 +1260,7 @@ layout = {
 							'offset': [284,1],
 							'images': {
 								'l_run_left2': [
-									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [8,24], 'dest': [8,24], 'size': [16,8]},
-									{'source': [24,24], 'dest': [0,24], 'size': [8,8]} #corner swap
+									{'source': [0,0], 'dest': [0,0], 'size': [32,32]}
 								]
 							}
 						},
@@ -1306,8 +1300,7 @@ layout = {
 							'offset': [467,1],
 							'images': {
 								'l_run_right2': [
-									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [0,24], 'dest': [0,24], 'size': [24,8]}
+									{'source': [0,0], 'dest': [0,0], 'size': [32,32]}
 								]
 							}
 						},
@@ -1316,9 +1309,8 @@ layout = {
 							'images': {
 								'l_run_right3': [
 									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [16,24], 'dest': [16,24], 'size': [8,8]},
-									{'source': [24,24], 'dest': [0,24], 'size': [8,8]}, #corner swap
-									{'source': [32,20], 'dest': [8,24], 'size': [8,8]}   #the stray foot tile
+									{'source': [8,24], 'dest': [8,24], 'size': [24,8]},
+									{'source': [32,20], 'dest': [0,24], 'size': [8,8]}   #the stray foot tile
 								]
 							}
 						},
@@ -1326,9 +1318,7 @@ layout = {
 							'offset': [551,1],
 							'images': {
 								'l_run_right4': [
-									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [8,24], 'dest': [8,24], 'size': [16,8]},
-									{'source': [24,24], 'dest': [0,24], 'size': [8,8]} #corner swap
+									{'source': [0,0], 'dest': [0,0], 'size': [32,32]}
 								]
 							}
 						},
@@ -1352,8 +1342,7 @@ layout = {
 							'offset': [666,1],
 							'images': {
 								'l_run_right7': [
-									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [0,24], 'dest': [0,24], 'size': [24,8]}
+									{'source': [0,0], 'dest': [0,0], 'size': [32,32]}
 								]
 							}
 						},
@@ -1362,9 +1351,8 @@ layout = {
 							'images': {
 								'l_run_right8': [
 									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [16,24], 'dest': [16,24], 'size': [8,8]},
-									{'source': [24,24], 'dest': [0,24], 'size': [8,8]}, #corner swap
-									{'source': [32,20], 'dest': [8,24], 'size': [8,8]}   #the stray foot tile
+									{'source': [8,24], 'dest': [8,24], 'size': [24,8]},
+									{'source': [32,20], 'dest': [0,24], 'size': [8,8]}   #the stray foot tile
 								]
 							}
 						},
@@ -1372,9 +1360,7 @@ layout = {
 							'offset': [750,1],
 							'images': {
 								'l_run_right9': [
-									{'source': [0,0], 'dest': [0,0], 'size': [32,24]},
-									{'source': [8,24], 'dest': [8,24], 'size': [16,8]},
-									{'source': [24,24], 'dest': [0,24], 'size': [8,8]} #corner swap
+									{'source': [0,0], 'dest': [0,0], 'size': [32,32]}
 								]
 							}
 						}

@@ -3,12 +3,6 @@
 #while looking out the window and dreaming of being outside in the sunshine
 
 
-#TODO: Extract palettes from ROM directly
-#TODO: Get palettes for all the crazy stuff like charge attacks and fast running
-#TODO: Death animation
-#TODO: Missile adjustment to cannon port
-
-
 '''
 ROADMAP:
 
@@ -607,7 +601,7 @@ def load_virtual_VRAM(upper_graphics_data,lower_graphics_data):
         DEBUG_VRAM
         VRAM = [0xFF000 + i * TILESIZE for i in range(0x20)]
     except NameError:
-        VRAM = [None] * 0x20    #initialize
+        VRAM = [None] * VRAM_SIZE    #initialize
     
     for i in range(upper_top_row_amt//TILESIZE):
         VRAM[i] = convert_to_rom_address(upper_graphics_ptr + i * TILESIZE)

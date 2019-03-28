@@ -14,14 +14,8 @@
 # to use the sparks in order to implement screw attack without space jump
 #Some animations are fused between their upper/lower animations (e.g. morphball pointers) <-- there are more that break the existing animations
 # Other poses are hard fused either in tilemaps, AFP, or both, between poses in different animations
-#The death sequence injection only has the left facing frames... I know where the tilemaps are,
-# but where is the DMA pointer so that I can intercept it and make it load something else/more stuff/etc.?
 
 #TODO:
-#Inject death sequence (also ideally move this animation somewhere where there is more room, so that the artist is not confined to the hourglass shape)
-#  Death sequence is located at position $D8000, in optimized form
-#Make left/right animations for screw attack without space jump (requires some engine editing/disassembly)
-#  Maybe there is a workaround that homogenizes the screw attack frames and uses the free pointer positions for control codes?
 #Assign all unused animations to null pointers, just in case (after testing without making them null) <--especially DMA loads
 #Do more "prayer/quake" separation using whatever tile space remains
 
@@ -312,10 +306,13 @@ def write_new_tilemaps():
         rom[pointer_location:pointer_location+2] = little_endian(current_addr - 0x920000,2)
         current_addr = write_tilemap(tilemap, current_addr)
 
-    #tilemaps for the missile ports (only need to change them to not be flipped)
+    #tilemaps for the missile ports (change to access tile $22 and do not flip)
     for i in range(10):
-        write_location = convert_to_rom_address(0x90C792 + 2*i)
-        rom[write_location] = 0x28
+        write_location = convert_to_rom_address(0x90C791 + 2*i)
+        rom[write_location:write_location+2] = bytes([0x22,0x28])
+    #change the VRAM index that the DMA places the gun port into (change to $22)
+    rom[0x84786:0x84788] = little_endian(0x6220,2)
+
     return upper_map_addresses, lower_map_addresses
 
 
@@ -423,13 +420,24 @@ def write_tiles():
     row3A, _ = get_VRAM_data("file_select_direct_injection2", "file_select_palette")
     row3B, row4 = get_VRAM_data("file_select_direct_injection3", "file_select_palette")
 
-    write_single_row_of_tiles(row1A,0x8EA600)
-    write_single_row_of_tiles(row1B,0x8EA700)
-    write_single_row_of_tiles(row2A,0x8EA800)
-    write_single_row_of_tiles(row2B,0x8EA900)
-    write_single_row_of_tiles(row3A,0x8EAA00)
-    write_single_row_of_tiles(row3B,0x8EAB00)
-    write_single_row_of_tiles(row4[-0x40:],0x8EADC0)
+    #write the images for the Japanese section of the file select screen
+    direct_write_tiles(row1A,0x8EA600)
+    direct_write_tiles(row1B,0x8EA700)
+    direct_write_tiles(row2A,0x8EA800)
+    direct_write_tiles(row2B,0x8EA900)
+    direct_write_tiles(row3A,0x8EAA00)
+    direct_write_tiles(row3B,0x8EAB00)
+    direct_write_tiles(row4[-0x40:],0x8EADC0)       #final missile (both)
+
+    #write the images for the English section of the file select screen
+    direct_write_tiles(row1A,0xB6DA00)
+    direct_write_tiles(row1B,0xB6DB00)
+    direct_write_tiles(row2A,0xB6DC00)
+    direct_write_tiles(row2B,0xB6DD00)
+    direct_write_tiles(row3A,0xB6DE00)
+    direct_write_tiles(row3B,0xB6DF00)
+    direct_write_tiles(row4[-0x40:-0x20],0xB6D900)  #final missile body
+    direct_write_tiles(row4[-0x20:],0xB6D980)       #final missile warhead
 
     
     #write the death tiles
@@ -446,23 +454,24 @@ def write_tiles():
         rows[f"{i+2}B"] = list(map(sum,itertools.zip_longest(rows[f"{i+2}B"],row2B,fillvalue = 0)))
 
     for i in range(10):
-        write_single_row_of_tiles(rows[f"{i+1}A"],0x9B8000+0x200*i)
-        write_single_row_of_tiles(rows[f"{i+1}B"],0x9B8100+0x200*i)
+        direct_write_tiles(rows[f"{i+1}A"],0x9B8000+0x200*i)
+        direct_write_tiles(rows[f"{i+1}B"],0x9B8100+0x200*i)
 
     return DMA_dict
 
 def write_single_row_of_tiles(row,tile_ptr):
+    tile_ptr = direct_write_tiles(row,tile_ptr)
+    if tile_ptr > SAMUS_TILES_END:
+        raise AssertionError("Too many tiles have been written into the ROM -- no more space available")
+    return tile_ptr
+
+def direct_write_tiles(row,tile_ptr):
     length = len(row)
     rom_ptr = convert_to_rom_address(tile_ptr)
     rom[rom_ptr:rom_ptr+length] = bytes(row)
-
     tile_ptr += length
-    if tile_ptr > SAMUS_TILES_END:
-        raise AssertionError("Too many tiles have been written into the ROM -- no more space available")
 
     return tile_ptr
-
-
 
 def get_VRAM_data(image_name,palette_filename):
     image = extract_sub_image(sprite_sheet, image_name)
@@ -769,7 +778,7 @@ def process_command_line_args():
                         dest=SPRITE_SHEET_FILENAME_ARG_KEY,
                         help="Location of the sprite sheet; e.g. /my_dir/samus.png",
                         metavar="<sprite_sheet_filename>",
-                        default='resources/samus.png')
+                        default='resources/megaman.png')
     parser.add_argument("--layout",
                         dest=LAYOUT_FILENAME_ARG_KEY,
                         help="Location of the layout file; e.g. /my_dir/layout.json",
