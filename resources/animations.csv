@@ -1,253 +1,253 @@
-0x00;1;True;Facing forward, ala Elevator pose (Power Suit)
-0x01;0;True;Facing right, normal
-0x02;0;True;Facing left, normal
-0x03;0;True;Facing right, aiming up
-0x04;0;True;Facing left, aiming up
-0x05;0;True;Facing right, aiming upright
-0x06;0;True;Facing left, aiming upleft
-0x07;0;True;Facing right, aiming Downright
-0x08;0;True;Facing left, aiming Downleft
-0x09;0;True;Moving right, not aiming
-0x0A;0;True;Moving left, not aiming
-0x0B;0;True;Moving right, gun extended forward (not aiming)
-0x0C;0;True;Moving left, gun extended forward (not aiming)
-0x0D;0;False;Moving right, aiming straight up (unused?)
-0x0E;0;False;Moving left, aiming straight up (unused?)
-0x0F;0;True;Moving right, aiming upright
-0x10;0;True;Moving left, aiming upleft
-0x11;0;True;Moving right, aiming Downright
-0x12;0;True;Moving left, aiming Downleft
-0x13;0;True;Normal jump facing right, gun extended, not aiming or moving
-0x14;0;True;Normal jump facing left, gun extended, not aiming or moving
-0x15;0;True;Normal jump facing right, aiming up
-0x16;0;True;Normal jump facing left, aiming up
-0x17;0;True;Normal jump facing right, aiming Down
-0x18;0;True;Normal jump facing left, aiming Down
-0x19;1;True;Spin jump right
-0x1A;1;True;Spin jump left
-0x1B;1;True;Space jump right
-0x1C;1;True;Space jump left
-0x1D;1;True;Facing right as morphball, no springball
-0x1E;1;True;Moving right as a morphball on ground without springball
-0x1F;1;True;Moving left as a morphball on ground without springball
-0x20;0;False;Spinjump right. Unused?
-0x21;0;False;Spinjump right. Unused?
-0x22;0;False;Spinjump right. Unused?
-0x23;0;False;Spinjump right. Unused?
-0x24;0;False;Spinjump right. Unused?
-0x25;0;True;starting standing right, turning left
-0x26;0;True;starting standing left, turning right
-0x27;0;True;Crouching, facing right
-0x28;0;True;Crouching, facing left
-0x29;1;True;Falling facing right, normal pose
-0x2A;1;True;Falling facing left, normal pose
-0x2B;0;True;Falling facing right, aiming up
-0x2C;0;True;Falling facing left, aiming up
-0x2D;0;True;Falling facing right, aiming Down
-0x2E;0;True;Falling facing left, aiming Down
-0x2F;0;True;starting with normal jump facing right, turning left
-0x30;0;True;starting with normal jump facing left, turning right
-0x31;1;True;Midair morphball facing right without springball
-0x32;1;True;Midair morphball facing left without springball
-0x33;0;False;Spinjump right. Unused?
-0x34;0;False;Spinjump right. Unused?
-0x35;0;True;Crouch transition, facing right
-0x36;0;True;Crouch transition, facing left
-0x37;0;True;Morphing into ball, facing right. Ground and mid-air
-0x38;0;True;Morphing into ball, facing left. Ground and mid-air
-0x39;0;False;Midair morphing into ball, facing right? May be unused
-0x3A;0;False;Midair morphing into ball, facing left? May be unused
-0x3B;0;True;Standing from crouching, facing right
-0x3C;0;True;Standing from crouching, facing left
-0x3D;0;True;Demorph while facing right. Mid-air and on ground
-0x3E;0;True;Demorph while facing left. Mid-air and on ground
-0x3F;0;False;Some transition with morphball, facing right. Maybe unused
-0x40;0;False;Some transition with morphball, facing left. Maybe unused
-0x41;1;True;Staying still with morphball, facing left, no springball
-0x42;0;False;Spinjump right. Unused?
-0x43;0;True;starting from crouching right, turning left
-0x44;0;True;starting from crouching left, turning right
-0x45;0;False;running, facing right, shooting left. Unused? (Fast moonwalk)
-0x46;0;False;running, facing left, shooting right. Unused? (Fast moonwalk)
-0x47;0;False;Standing, facing right. Unused?
-0x48;0;False;Standing, facing left. Unused?
-0x49;0;True;Moonwalk, facing left
-0x4A;0;True;Moonwalk, facing right
-0x4B;0;True;Normal jump transition from ground(standing or crouching), facing right
-0x4C;0;True;Normal jump transition from ground(standing or crouching), facing left
-0x4D;0;True;Normal jump facing right, gun not extended, not aiming, not moving
-0x4E;0;True;Normal jump facing left, gun not extended, not aiming, not moving
-0x4F;0;True;Hurt roll back, moving right/facing left
-0x50;0;True;Hurt roll back, moving left/facing right
-0x51;0;True;Normal jump facing right, moving forward (gun extended)
-0x52;0;True;Normal jump facing left, moving forward (gun extended)
-0x53;0;True;Hurt, facing right
-0x54;0;True;Hurt, facing left
-0x55;0;True;Normal jump transition from ground, facing right and aiming up
-0x56;0;True;Normal jump transition from ground, facing left and aiming up
-0x57;0;True;Normal jump transition from ground, facing right and aiming upright
-0x58;0;True;Normal jump transition from ground, facing left and aiming upleft
-0x59;0;True;Normal jump transition from ground, facing right and aiming Downright
-0x5A;0;True;Normal jump transition from ground, facing left and aiming Downleft
-0x5B;0;False;Something for grapple (wall jump?), probably unused
-0x5C;0;False;Something for grapple (wall jump?), probably unused
-0x5D;0;False;Broken grapple? Facing clockwise, maybe unused
-0x5E;0;False;Broken grapple? Facing clockwise, maybe unused
-0x5F;0;False;Broken grapple? Facing clockwise, maybe unused
-0x60;0;False;Better broken grapple. Facing clockwise, maybe unused
-0x61;0;False;Nearly normal grapple. Facing clockwise, maybe unused
-0x62;0;False;Nearly normal grapple. Facing counterclockwise, maybe unused
-0x63;0;False;Facing left on grapple blocks, ready to jump. Unused?
-0x64;0;False;Facing right on grapple blocks, ready to jump. Unused?
-0x65;0;False;Glitchy jump, facing left. Used by unused grapple jump?
-0x66;0;False;Glitchy jump, facing right. Used by unused grapple jump?
-0x67;1;True;Facing right, falling, fired a shot
-0x68;1;True;Facing left, falling, fired a shot
-0x69;0;True;Normal jump facing right, aiming upright. Moving optional
-0x6A;0;True;Normal jump facing left, aiming upleft. Moving optional
-0x6B;0;True;Normal jump facing right, aiming Downright. Moving optional
-0x6C;0;True;Normal jump facing left, aiming Downleft. Moving optional
-0x6D;0;True;Falling facing right, aiming upright
-0x6E;0;True;Falling facing left, aiming upleft
-0x6F;0;True;Falling facing right, aiming Downright
-0x70;0;True;Falling facing left, aiming Downleft
-0x71;0;True;Standing to crouching, facing right and aiming upright
-0x72;0;True;Standing to crouching, facing left and aiming upleft
-0x73;0;True;Standing to crouching, facing right and aiming Downright
-0x74;0;True;Standing to crouching, facing left and aiming Downleft
-0x75;0;True;Moonwalk, facing left aiming upleft
-0x76;0;True;Moonwalk, facing right aiming upright
-0x77;0;True;Moonwalk, facing left aiming Downleft
-0x78;0;True;Moonwalk, facing right aiming Downright
-0x79;1;True;Spring ball on ground, facing right
-0x7A;1;True;Spring ball on ground, facing left
-0x7B;1;True;Spring ball on ground, moving right
-0x7C;1;True;Spring ball on ground, moving left
-0x7D;1;True;Spring ball falling, facing/moving right
-0x7E;1;True;Spring ball falling, facing/moving left
-0x7F;1;True;Spring ball jump in air, facing/moving right
-0x80;1;True;Spring ball jump in air, facing/moving left
-0x81;1;True;Screw attack right
-0x82;1;True;Screw attack left
-0x83;0;True;Walljump right
-0x84;0;True;Walljump left
-0x85;0;True;Crouching, facing right aiming up
-0x86;0;True;Crouching, facing left aiming up
-0x87;0;True;Turning from right to left while falling
-0x88;0;True;Turning from left to right while falling
-0x89;0;True;Ran into a wall on right (facing right)
-0x8A;0;True;Ran into a wall on left (facing left)
-0x8B;0;True;Turning around from right to left while aiming straight up while standing
-0x8C;0;True;Turning around from left to right while aiming straight up while standing
-0x8D;0;True;Turn around from right to left while aiming diagonal Down while standing
-0x8E;0;True;Turn around from left to right while aiming diagonal Down while standing
-0x8F;0;True;Turning around from right to left while aiming straight up in midair
-0x90;0;True;Turning around from left to right while aiming straight up in midair
-0x91;0;True;Turning around from right to left while aiming Down or diagonal Down in midair
-0x92;0;True;Turning around from left to right while aiming Down or diagonal Down in midair
-0x93;0;True;Turning around from right to left while aiming straight up while falling
-0x94;0;True;Turning around from left to right while aiming straight up while falling
-0x95;0;True;Turning around from right to left while aiming Down or diagonal Down while falling
-0x96;0;True;Turning around from left to right while aiming Down or diagonal Down while falling
-0x97;0;True;Turning around from right to left while aiming straight up while crouching
-0x98;0;True;Turning around from left to right while aiming straight up while crouching
-0x99;0;True;Turning around from right to left while aiming diagonal Down while crouching
-0x9A;0;True;Turning around from left to right while aiming diagonal Down while crouching
-0x9B;1;True;Facing forward, ala Elevator pose (Varia and/or Gravity Suit)
-0x9C;0;True;Turning around from right to left while aiming diagonal up while standing
-0x9D;0;True;Turning around from left to right while aiming diagonal up while standing
-0x9E;0;True;Turning around from right to left while aiming diagonal up in midair
-0x9F;0;True;Turning around from left to right while aiming diagonal up in midair
-0xA0;0;True;Turning around from right to left while aiming diagonal up while falling
-0xA1;0;True;Turning around from left to right while aiming diagonal up while falling
-0xA2;0;True;Turn around from right to left while aiming diagonal up while crouching
-0xA3;0;True;Turn around from left to right while aiming diagonal up while crouching
-0xA4;0;True;Landing from normal jump, facing right
-0xA5;0;True;Landing from normal jump, facing left
-0xA6;0;True;Landing from spin jump, facing right
-0xA7;0;True;Landing from spin jump, facing left
-0xA8;0;False;Just standing, facing right. Unused? (Grapple movement)
-0xA9;0;False;Just standing, facing left. Unused? (Grapple movement)
-0xAA;0;False;Just standing, facing right aiming Downright. Unused? (Grapple movement)
-0xAB;0;False;Just standing, facing left aiming Downleft. Unused? (Grapple movement)
-0xAC;0;False;jumping, facing right, gun extended. Unused? (Grapple movement)
-0xAD;0;False;jumping, facing left, gun extended. Unused? (Grapple movement)
-0xAE;0;False;jumping, facing right, aiming Down. Unused? (Grapple movement)
-0xAF;0;False;jumping, facing left, aiming Down. Unused? (Grapple movement)
-0xB0;0;False;jumping, facing right, aiming Downright. Unused? (Grapple movement)
-0xB1;0;False;jumping, facing left, aiming Downleft. Unused? (Grapple movement)
-0xB2;0;True;Grapple, facing clockwise
-0xB3;0;True;Grapple, facing counterclockwise
-0xB4;0;False;Crouching, facing right. Unused? (Grapple movement)
-0xB5;0;False;Crouching, facing left. Unused? (Grapple movement)
-0xB6;0;False;Crouching, facing right, aiming Downright. Unused? (Grapple movement)
-0xB7;0;False;Crouching, facing left, aiming Downleft. Unused? (Grapple movement)
-0xB8;0;True;Grapple, attached to a wall on right, facing left
-0xB9;0;True;Grapple, attached to a wall on left, facing right
-0xBA;0;True;Grabbed by Draygon, facing left, not moving
-0xBB;0;True;Grabbed by Draygon, facing left aiming upleft, not moving
-0xBC;0;True;Grabbed by Draygon, facing left and firing
-0xBD;0;True;Grabbed by Draygon, facing left aiming Downleft, not moving
-0xBE;0;True;Grabbed by Draygon, facing left, moving
-0xBF;0;True;jump/Turn right to left while moonwalking.
-0xC0;0;True;jump/Turn left to right while moonwalking.
-0xC1;0;True;jump/Turn right to left while moonwalking and aiming diagonal up.
-0xC2;0;True;jump/Turn left to right while moonwalking and aiming diagonal up.
-0xC3;0;True;jump/Turn right to left while moonwalking and aiming diagonal Down.
-0xC4;0;True;jump/Turn left to right while moonwalking and aiming diagonal Down.
-0xC5;0;False;Morph ball, facing right. Unused? (Grabbed by Draygon movement)
-0xC6;0;False;Morph ball, facing left. Unused? (Grabbed by Draygon movement)
-0xC7;0;True;Super jump windup, facing right
-0xC8;0;True;Super jump windup, facing left
-0xC9;0;True;Horizontal super jump, right
-0xCA;0;True;Horizontal super jump, left
-0xCB;0;True;Vertical super jump, facing right
-0xCC;0;True;Vertical super jump, facing left
-0xCD;0;True;Diagonal super jump, right
-0xCE;0;True;Diagonal super jump, left
-0xCF;0;True;Samus ran right into a wall, is still holding right and is now aiming diagonal up
-0xD0;0;True;Samus ran left into a wall, is still holding left and is now aiming diagonal up
-0xD1;0;True;Samus ran right into a wall, is still holding right and is now aiming diagonal Down
-0xD2;0;True;Samus ran left into a wall, is still holding left and is now aiming diagonal Down
-0xD3;2;True;Crystal flash, facing right
-0xD4;2;True;Crystal flash, facing left
-0xD5;0;True;X-raying right, standing
-0xD6;0;True;X-raying left, standing
-0xD7;0;True;Crystal flash ending, facing right
-0xD8;0;True;Crystal flash ending, facing left
-0xD9;0;True;X-raying right, crouching
-0xDA;0;True;X-raying left, crouching
-0xDB;0;False;Standing transition to morphball, facing right? Unused?
-0xDC;0;False;Standing transition to morphball, facing left? Unused?
-0xDD;0;False;Morphball transition to standing, facing right? Unused?
-0xDE;0;False;Morphball transition to standing, facing left? Unused?
-0xDF;0;False;Samus is facing left as a morphball. Unused? (Grabbed by Draygon movement)
-0xE0;0;True;Landing from normal jump, facing right and aiming up
-0xE1;0;True;Landing from normal jump, facing left and aiming up
-0xE2;0;True;Landing from normal jump, facing right and aiming upright
-0xE3;0;True;Landing from normal jump, facing left and aiming upleft
-0xE4;0;True;Landing from normal jump, facing right and aiming Downright
-0xE5;0;True;Landing from normal jump, facing left and aiming Downleft
-0xE6;0;True;Landing from normal jump, facing right, firing
-0xE7;0;True;Landing from normal jump, facing left, firing
-0xE8;1;True;Samus exhausted(Metroid drain, MB attack), facing right
-0xE9;4;True;Samus exhausted(Metroid drain, MB attack), facing left
-0xEA;1;True;Samus exhausted, looking up to watch Metroid attack MB, facing right
-0xEB;1;True;Samus exhausted, looking up to watch Metroid attack MB, facing left
-0xEC;0;True;Grabbed by Draygon, facing right. Not moving
-0xED;0;True;Grabbed by Draygon, facing right aiming upright. Not moving
-0xEE;0;True;Grabbed by Draygon, facing right and firing.
-0xEF;0;True;Grabbed by Draygon, facing right aiming Downright. Not moving
-0xF0;0;True;Grabbed by Draygon, facing right. Moving
-0xF1;0;True;Crouch transition, facing right and aiming up
-0xF2;0;True;Crouch transition, facing left and aiming up
-0xF3;0;True;Crouch transition, facing right and aiming upright
-0xF4;0;True;Crouch transition, facing left and aiming upleft
-0xF5;0;True;Crouch transition, facing right and aiming Downright
-0xF6;0;True;Crouch transition, facing left and aiming Downleft
-0xF7;0;True;Crouching to standing, facing right and aiming up
-0xF8;0;True;Crouching to standing, facing left and aiming up
-0xF9;0;True;Crouching to standing, facing right and aiming upright
-0xFA;0;True;Crouching to standing, facing left and aiming upleft
-0xFB;0;True;Crouching to standing, facing right and aiming Downright
-0xFC;0;True;Crouching to standing, facing left and aiming Downleft
+0x00;1;True;Facing forward, ala Elevator pose (Power Suit);
+0x01;0;True;Facing right, normal;
+0x02;0;True;Facing left, normal;
+0x03;0;True;Facing right, aiming up;
+0x04;0;True;Facing left, aiming up;
+0x05;0;True;Facing right, aiming upright;
+0x06;0;True;Facing left, aiming upleft;
+0x07;0;True;Facing right, aiming Downright;
+0x08;0;True;Facing left, aiming Downleft;
+0x09;0;True;Moving right, not aiming;
+0x0A;0;True;Moving left, not aiming;
+0x0B;0;True;Moving right, gun extended forward (not aiming);
+0x0C;0;True;Moving left, gun extended forward (not aiming);
+0x0D;0;False;Moving right, aiming straight up (unused?);
+0x0E;0;False;Moving left, aiming straight up (unused?);
+0x0F;0;True;Moving right, aiming upright;
+0x10;0;True;Moving left, aiming upleft;
+0x11;0;True;Moving right, aiming Downright;
+0x12;0;True;Moving left, aiming Downleft;
+0x13;0;True;Normal jump facing right, gun extended, not aiming or moving;
+0x14;0;True;Normal jump facing left, gun extended, not aiming or moving;
+0x15;0;True;Normal jump facing right, aiming up;
+0x16;0;True;Normal jump facing left, aiming up;
+0x17;0;True;Normal jump facing right, aiming Down;
+0x18;0;True;Normal jump facing left, aiming Down;
+0x19;1;True;Spin jump right;
+0x1A;1;True;Spin jump left;
+0x1B;1;True;Space jump right;
+0x1C;1;True;Space jump left;
+0x1D;0;True;Facing right as morphball, no springball;removed kicked squishball (1)
+0x1E;0;True;Moving right as a morphball on ground without springball;removed kicked squishball (1)
+0x1F;0;True;Moving left as a morphball on ground without springball;removed kicked squishball (1)
+0x20;0;False;Spinjump right. Unused?;
+0x21;0;False;Spinjump right. Unused?;
+0x22;0;False;Spinjump right. Unused?;
+0x23;0;False;Spinjump right. Unused?;
+0x24;0;False;Spinjump right. Unused?;
+0x25;0;True;starting standing right, turning left;
+0x26;0;True;starting standing left, turning right;
+0x27;0;True;Crouching, facing right;
+0x28;0;True;Crouching, facing left;
+0x29;1;True;Falling facing right, normal pose;
+0x2A;1;True;Falling facing left, normal pose;
+0x2B;0;True;Falling facing right, aiming up;
+0x2C;0;True;Falling facing left, aiming up;
+0x2D;0;True;Falling facing right, aiming Down;
+0x2E;0;True;Falling facing left, aiming Down;
+0x2F;0;True;starting with normal jump facing right, turning left;
+0x30;0;True;starting with normal jump facing left, turning right;
+0x31;0;True;Midair morphball facing right without springball;removed kicked squishball (1)
+0x32;0;True;Midair morphball facing left without springball;removed kicked squishball (1)
+0x33;0;False;Spinjump right. Unused?;
+0x34;0;False;Spinjump right. Unused?;
+0x35;0;True;Crouch transition, facing right;
+0x36;0;True;Crouch transition, facing left;
+0x37;0;True;Morphing into ball, facing right. Ground and mid-air;
+0x38;0;True;Morphing into ball, facing left. Ground and mid-air;
+0x39;0;False;Midair morphing into ball, facing right? May be unused;
+0x3A;0;False;Midair morphing into ball, facing left? May be unused;
+0x3B;0;True;Standing from crouching, facing right;
+0x3C;0;True;Standing from crouching, facing left;
+0x3D;0;True;Demorph while facing right. Mid-air and on ground;
+0x3E;0;True;Demorph while facing left. Mid-air and on ground;
+0x3F;0;False;Some transition with morphball, facing right. Maybe unused;
+0x40;0;False;Some transition with morphball, facing left. Maybe unused;
+0x41;0;True;Staying still with morphball, facing left, no springball;removed kicked squishball (1)
+0x42;0;False;Spinjump right. Unused?;
+0x43;0;True;starting from crouching right, turning left;
+0x44;0;True;starting from crouching left, turning right;
+0x45;0;False;running, facing right, shooting left. Unused? (Fast moonwalk);
+0x46;0;False;running, facing left, shooting right. Unused? (Fast moonwalk);
+0x47;0;False;Standing, facing right. Unused?;
+0x48;0;False;Standing, facing left. Unused?;
+0x49;0;True;Moonwalk, facing left;
+0x4A;0;True;Moonwalk, facing right;
+0x4B;0;True;Normal jump transition from ground(standing or crouching), facing right;
+0x4C;0;True;Normal jump transition from ground(standing or crouching), facing left;
+0x4D;0;True;Normal jump facing right, gun not extended, not aiming, not moving;
+0x4E;0;True;Normal jump facing left, gun not extended, not aiming, not moving;
+0x4F;0;True;Hurt roll back, moving right/facing left;
+0x50;0;True;Hurt roll back, moving left/facing right;
+0x51;0;True;Normal jump facing right, moving forward (gun extended);
+0x52;0;True;Normal jump facing left, moving forward (gun extended);
+0x53;0;True;Hurt, facing right;
+0x54;0;True;Hurt, facing left;
+0x55;0;True;Normal jump transition from ground, facing right and aiming up;
+0x56;0;True;Normal jump transition from ground, facing left and aiming up;
+0x57;0;True;Normal jump transition from ground, facing right and aiming upright;
+0x58;0;True;Normal jump transition from ground, facing left and aiming upleft;
+0x59;0;True;Normal jump transition from ground, facing right and aiming Downright;
+0x5A;0;True;Normal jump transition from ground, facing left and aiming Downleft;
+0x5B;0;False;Something for grapple (wall jump?), probably unused;
+0x5C;0;False;Something for grapple (wall jump?), probably unused;
+0x5D;0;False;Broken grapple? Facing clockwise, maybe unused;
+0x5E;0;False;Broken grapple? Facing clockwise, maybe unused;
+0x5F;0;False;Broken grapple? Facing clockwise, maybe unused;
+0x60;0;False;Better broken grapple. Facing clockwise, maybe unused;
+0x61;0;False;Nearly normal grapple. Facing clockwise, maybe unused;
+0x62;0;False;Nearly normal grapple. Facing counterclockwise, maybe unused;
+0x63;0;False;Facing left on grapple blocks, ready to jump. Unused?;
+0x64;0;False;Facing right on grapple blocks, ready to jump. Unused?;
+0x65;0;False;Glitchy jump, facing left. Used by unused grapple jump?;
+0x66;0;False;Glitchy jump, facing right. Used by unused grapple jump?;
+0x67;1;True;Facing right, falling, fired a shot;
+0x68;1;True;Facing left, falling, fired a shot;
+0x69;0;True;Normal jump facing right, aiming upright. Moving optional;
+0x6A;0;True;Normal jump facing left, aiming upleft. Moving optional;
+0x6B;0;True;Normal jump facing right, aiming Downright. Moving optional;
+0x6C;0;True;Normal jump facing left, aiming Downleft. Moving optional;
+0x6D;0;True;Falling facing right, aiming upright;
+0x6E;0;True;Falling facing left, aiming upleft;
+0x6F;0;True;Falling facing right, aiming Downright;
+0x70;0;True;Falling facing left, aiming Downleft;
+0x71;0;True;Standing to crouching, facing right and aiming upright;
+0x72;0;True;Standing to crouching, facing left and aiming upleft;
+0x73;0;True;Standing to crouching, facing right and aiming Downright;
+0x74;0;True;Standing to crouching, facing left and aiming Downleft;
+0x75;0;True;Moonwalk, facing left aiming upleft;
+0x76;0;True;Moonwalk, facing right aiming upright;
+0x77;0;True;Moonwalk, facing left aiming Downleft;
+0x78;0;True;Moonwalk, facing right aiming Downright;
+0x79;0;True;Spring ball on ground, facing right;removed kicked squishball (1)
+0x7A;0;True;Spring ball on ground, facing left;removed kicked squishball (1)
+0x7B;0;True;Spring ball on ground, moving right;removed kicked squishball (1)
+0x7C;0;True;Spring ball on ground, moving left;removed kicked squishball (1)
+0x7D;0;True;Spring ball falling, facing/moving right;removed kicked squishball (1)
+0x7E;0;True;Spring ball falling, facing/moving left;removed kicked squishball (1)
+0x7F;0;True;Spring ball jump in air, facing/moving right;removed kicked squishball (1)
+0x80;0;True;Spring ball jump in air, facing/moving left;removed kicked squishball (1)
+0x81;1;True;Screw attack right;
+0x82;1;True;Screw attack left;
+0x83;0;True;Walljump right;
+0x84;0;True;Walljump left;
+0x85;0;True;Crouching, facing right aiming up;
+0x86;0;True;Crouching, facing left aiming up;
+0x87;0;True;Turning from right to left while falling;
+0x88;0;True;Turning from left to right while falling;
+0x89;0;True;Ran into a wall on right (facing right);
+0x8A;0;True;Ran into a wall on left (facing left);
+0x8B;0;True;Turning around from right to left while aiming straight up while standing;
+0x8C;0;True;Turning around from left to right while aiming straight up while standing;
+0x8D;0;True;Turn around from right to left while aiming diagonal Down while standing;
+0x8E;0;True;Turn around from left to right while aiming diagonal Down while standing;
+0x8F;0;True;Turning around from right to left while aiming straight up in midair;
+0x90;0;True;Turning around from left to right while aiming straight up in midair;
+0x91;0;True;Turning around from right to left while aiming Down or diagonal Down in midair;
+0x92;0;True;Turning around from left to right while aiming Down or diagonal Down in midair;
+0x93;0;True;Turning around from right to left while aiming straight up while falling;
+0x94;0;True;Turning around from left to right while aiming straight up while falling;
+0x95;0;True;Turning around from right to left while aiming Down or diagonal Down while falling;
+0x96;0;True;Turning around from left to right while aiming Down or diagonal Down while falling;
+0x97;0;True;Turning around from right to left while aiming straight up while crouching;
+0x98;0;True;Turning around from left to right while aiming straight up while crouching;
+0x99;0;True;Turning around from right to left while aiming diagonal Down while crouching;
+0x9A;0;True;Turning around from left to right while aiming diagonal Down while crouching;
+0x9B;1;True;Facing forward, ala Elevator pose (Varia and/or Gravity Suit);
+0x9C;0;True;Turning around from right to left while aiming diagonal up while standing;
+0x9D;0;True;Turning around from left to right while aiming diagonal up while standing;
+0x9E;0;True;Turning around from right to left while aiming diagonal up in midair;
+0x9F;0;True;Turning around from left to right while aiming diagonal up in midair;
+0xA0;0;True;Turning around from right to left while aiming diagonal up while falling;
+0xA1;0;True;Turning around from left to right while aiming diagonal up while falling;
+0xA2;0;True;Turn around from right to left while aiming diagonal up while crouching;
+0xA3;0;True;Turn around from left to right while aiming diagonal up while crouching;
+0xA4;0;True;Landing from normal jump, facing right;
+0xA5;0;True;Landing from normal jump, facing left;
+0xA6;0;True;Landing from spin jump, facing right;
+0xA7;0;True;Landing from spin jump, facing left;
+0xA8;0;False;Just standing, facing right. Unused? (Grapple movement);
+0xA9;0;False;Just standing, facing left. Unused? (Grapple movement);
+0xAA;0;False;Just standing, facing right aiming Downright. Unused? (Grapple movement);
+0xAB;0;False;Just standing, facing left aiming Downleft. Unused? (Grapple movement);
+0xAC;0;False;jumping, facing right, gun extended. Unused? (Grapple movement);
+0xAD;0;False;jumping, facing left, gun extended. Unused? (Grapple movement);
+0xAE;0;False;jumping, facing right, aiming Down. Unused? (Grapple movement);
+0xAF;0;False;jumping, facing left, aiming Down. Unused? (Grapple movement);
+0xB0;0;False;jumping, facing right, aiming Downright. Unused? (Grapple movement);
+0xB1;0;False;jumping, facing left, aiming Downleft. Unused? (Grapple movement);
+0xB2;0;True;Grapple, facing clockwise;
+0xB3;0;True;Grapple, facing counterclockwise;
+0xB4;0;False;Crouching, facing right. Unused? (Grapple movement);
+0xB5;0;False;Crouching, facing left. Unused? (Grapple movement);
+0xB6;0;False;Crouching, facing right, aiming Downright. Unused? (Grapple movement);
+0xB7;0;False;Crouching, facing left, aiming Downleft. Unused? (Grapple movement);
+0xB8;0;True;Grapple, attached to a wall on right, facing left;
+0xB9;0;True;Grapple, attached to a wall on left, facing right;
+0xBA;0;True;Grabbed by Draygon, facing left, not moving;
+0xBB;0;True;Grabbed by Draygon, facing left aiming upleft, not moving;
+0xBC;0;True;Grabbed by Draygon, facing left and firing;
+0xBD;0;True;Grabbed by Draygon, facing left aiming Downleft, not moving;
+0xBE;0;True;Grabbed by Draygon, facing left, moving;
+0xBF;0;True;jump/Turn right to left while moonwalking.;
+0xC0;0;True;jump/Turn left to right while moonwalking.;
+0xC1;0;True;jump/Turn right to left while moonwalking and aiming diagonal up.;
+0xC2;0;True;jump/Turn left to right while moonwalking and aiming diagonal up.;
+0xC3;0;True;jump/Turn right to left while moonwalking and aiming diagonal Down.;
+0xC4;0;True;jump/Turn left to right while moonwalking and aiming diagonal Down.;
+0xC5;0;False;Morph ball, facing right. Unused? (Grabbed by Draygon movement);
+0xC6;0;False;Morph ball, facing left. Unused? (Grabbed by Draygon movement);
+0xC7;0;True;Super jump windup, facing right;
+0xC8;0;True;Super jump windup, facing left;
+0xC9;0;True;Horizontal super jump, right;
+0xCA;0;True;Horizontal super jump, left;
+0xCB;0;True;Vertical super jump, facing right;
+0xCC;0;True;Vertical super jump, facing left;
+0xCD;0;True;Diagonal super jump, right;
+0xCE;0;True;Diagonal super jump, left;
+0xCF;0;True;Samus ran right into a wall, is still holding right and is now aiming diagonal up;
+0xD0;0;True;Samus ran left into a wall, is still holding left and is now aiming diagonal up;
+0xD1;0;True;Samus ran right into a wall, is still holding right and is now aiming diagonal Down;
+0xD2;0;True;Samus ran left into a wall, is still holding left and is now aiming diagonal Down;
+0xD3;2;True;Crystal flash, facing right;
+0xD4;2;True;Crystal flash, facing left;
+0xD5;0;True;X-raying right, standing;
+0xD6;0;True;X-raying left, standing;
+0xD7;0;True;Crystal flash ending, facing right;
+0xD8;0;True;Crystal flash ending, facing left;
+0xD9;0;True;X-raying right, crouching;
+0xDA;0;True;X-raying left, crouching;
+0xDB;0;False;Standing transition to morphball, facing right? Unused?;
+0xDC;0;False;Standing transition to morphball, facing left? Unused?;
+0xDD;0;False;Morphball transition to standing, facing right? Unused?;
+0xDE;0;False;Morphball transition to standing, facing left? Unused?;
+0xDF;0;False;Samus is facing left as a morphball. Unused? (Grabbed by Draygon movement);
+0xE0;0;True;Landing from normal jump, facing right and aiming up;
+0xE1;0;True;Landing from normal jump, facing left and aiming up;
+0xE2;0;True;Landing from normal jump, facing right and aiming upright;
+0xE3;0;True;Landing from normal jump, facing left and aiming upleft;
+0xE4;0;True;Landing from normal jump, facing right and aiming Downright;
+0xE5;0;True;Landing from normal jump, facing left and aiming Downleft;
+0xE6;0;True;Landing from normal jump, facing right, firing;
+0xE7;0;True;Landing from normal jump, facing left, firing;
+0xE8;1;True;Samus exhausted(Metroid drain, MB attack), facing right;
+0xE9;4;True;Samus exhausted(Metroid drain, MB attack), facing left;
+0xEA;1;True;Samus exhausted, looking up to watch Metroid attack MB, facing right;
+0xEB;1;True;Samus exhausted, looking up to watch Metroid attack MB, facing left;
+0xEC;0;True;Grabbed by Draygon, facing right. Not moving;
+0xED;0;True;Grabbed by Draygon, facing right aiming upright. Not moving;
+0xEE;0;True;Grabbed by Draygon, facing right and firing.;
+0xEF;0;True;Grabbed by Draygon, facing right aiming Downright. Not moving;
+0xF0;0;True;Grabbed by Draygon, facing right. Moving;
+0xF1;0;True;Crouch transition, facing right and aiming up;
+0xF2;0;True;Crouch transition, facing left and aiming up;
+0xF3;0;True;Crouch transition, facing right and aiming upright;
+0xF4;0;True;Crouch transition, facing left and aiming upleft;
+0xF5;0;True;Crouch transition, facing right and aiming Downright;
+0xF6;0;True;Crouch transition, facing left and aiming Downleft;
+0xF7;0;True;Crouching to standing, facing right and aiming up;
+0xF8;0;True;Crouching to standing, facing left and aiming up;
+0xF9;0;True;Crouching to standing, facing right and aiming upright;
+0xFA;0;True;Crouching to standing, facing left and aiming upleft;
+0xFB;0;True;Crouching to standing, facing right and aiming Downright;
+0xFC;0;True;Crouching to standing, facing left and aiming Downleft;

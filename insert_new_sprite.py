@@ -150,11 +150,16 @@ def write_new_palettes():
         set_palettes_at(base_address + 0x60, suit_palette, modifier=(22,22,8))
 
     for base_address,suit_palette in zip([0xD9CA0,0xD9EA0,0xDA0A0],[power_palette, varia_palette, gravity_palette]):
-        #screw attack
+        #screw attack classic
+        # set_palettes_at(base_address       , suit_palette, modifier=(0,0,0))
+        # set_palettes_at(base_address + 0x20, suit_palette, modifier=(0,10,0))
+        # set_palettes_at(base_address + 0x40, suit_palette, modifier=(0,20,0))
+        # set_palettes_at(base_address + 0x60, suit_palette, modifier=(0,30,5))
+        #tends to wash out sprites, so tried this instead
         set_palettes_at(base_address       , suit_palette, modifier=(0,0,0))
-        set_palettes_at(base_address + 0x20, suit_palette, modifier=(0,10,0))
-        set_palettes_at(base_address + 0x40, suit_palette, modifier=(0,20,0))
-        set_palettes_at(base_address + 0x60, suit_palette, modifier=(0,30,5))
+        set_palettes_at(base_address + 0x20, suit_palette, modifier=(0,8,0))
+        set_palettes_at(base_address + 0x40, suit_palette, modifier=(0,16,0))
+        set_palettes_at(base_address + 0x60, suit_palette, modifier=(0,24,5))
 
     for i in range(3):
         set_palettes_at(0xDA3C6 + 0x02*i,nightvision_colors[i]) #nightvision/xray visor colors

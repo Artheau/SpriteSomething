@@ -1,4 +1,4 @@
-USE_MODIFIED_ROM = True     #use the output of rom_modify.py to make animations/poses
+USE_MODIFIED_ROM = True    #use the output of rom_modify.py to make animations/poses
 
 APPLY_BUGFIXES = not USE_MODIFIED_ROM   #turn on to fix vanilla bugs, but off for my custom tilemaps
 

@@ -1711,40 +1711,40 @@ layout = {
 					{'source': [51,1], 'dest': [0,0], 'size': [24,32]}
 				],
 				'u_turn_left_gun_up': [
-					{'source': [1,34], 'dest': [0,0], 'size': [24,24]}
+					{'source': [1,34], 'dest': [0,0], 'size': [24,32]}
 				],
 				'u_turn_gun_up': [
-					{'source': [26,34], 'dest': [0,0], 'size': [24,24]}
+					{'source': [26,34], 'dest': [0,0], 'size': [24,32]}
 				],
 				'u_turn_right_gun_up': [
-					{'source': [51,34], 'dest': [0,0], 'size': [24,24]}
+					{'source': [51,34], 'dest': [0,0], 'size': [24,32]}
 				],
 				'u_turn_left': [
-					{'source': [1,59], 'dest': [0,0], 'size': [24,24]}
+					{'source': [1,67], 'dest': [0,0], 'size': [24,32]}
 				],
 				'u_turn': [
-					{'source': [26,59], 'dest': [0,0], 'size': [24,24]}
+					{'source': [26,67], 'dest': [0,0], 'size': [24,32]}
 				],
 				'u_turn_right': [
-					{'source': [51,59], 'dest': [0,0], 'size': [24,24]}
+					{'source': [51,67], 'dest': [0,0], 'size': [24,32]}
 				],
 				'l_stand_turn_left': [
-					{'source': [1,84], 'dest': [0,0], 'size': [24,32]}
+					{'source': [1,100], 'dest': [0,0], 'size': [24,32]}
 				],
 				'l_stand_turn': [
-					{'source': [26,84], 'dest': [0,0], 'size': [24,32]}
+					{'source': [26,100], 'dest': [0,0], 'size': [24,32]}
 				],
 				'l_stand_turn_right': [
-					{'source': [51,84], 'dest': [0,0], 'size': [24,32]}
+					{'source': [51,100], 'dest': [0,0], 'size': [24,32]}
 				],
 				'l_crouch_turn_left': [
-					{'source': [1,117], 'dest': [0,0], 'size': [24,16]}
+					{'source': [1,133], 'dest': [0,0], 'size': [24,16]}
 				],
 				'l_crouch_turn': [
-					{'source': [26,117], 'dest': [0,0], 'size': [24,16]}
+					{'source': [26,133], 'dest': [0,0], 'size': [24,16]}
 				],
 				'l_crouch_turn_right': [
-					{'source': [51,117], 'dest': [0,0], 'size': [24,16]}
+					{'source': [51,133], 'dest': [0,0], 'size': [24,16]}
 				]
 			}
 		},

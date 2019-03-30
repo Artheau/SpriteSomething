@@ -277,12 +277,12 @@ Animation;Hex;Pose;Timeline;Upper Tilemap;Upper File;Upper palette;Lower Tilemap
 31;1F;6;6;null map;u_null_tile;power_palette;2x2 center;l_left_ball6;power_palette;UT and LT tilemaps fused;;
 31;1F;7;7;null map;u_null_tile;power_palette;2x2 center;l_left_ball7;power_palette;UT and LT tilemaps fused;;
 31;1F;8;9;null map;u_null_tile;power_palette;3x2 center;l_left_squished_ball;power_palette;UT and LT tilemaps fused;;
-37;25;0;0;3x3 up;u_turn_right;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;;;
-37;25;1;1;3x3 up;u_turn;power_palette;3x4 down, up 2;l_stand_turn;power_palette;;;
-37;25;2;2;3x3 up;u_turn_left;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;;;
-38;26;0;0;3x3 up;u_turn_left;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;;;
-38;26;1;1;3x3 up;u_turn;power_palette;3x4 down, up 2;l_stand_turn;power_palette;;;
-38;26;2;2;3x3 up;u_turn_right;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;;;
+37;25;0;0;3x4 up, straddle;u_turn_right;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;;;
+37;25;1;1;3x4 up, straddle;u_turn;power_palette;3x4 down, up 2;l_stand_turn;power_palette;;;
+37;25;2;2;3x4 up, straddle;u_turn_left;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;;;
+38;26;0;0;3x4 up, straddle;u_turn_left;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;;;
+38;26;1;1;3x4 up, straddle;u_turn;power_palette;3x4 down, up 2;l_stand_turn;power_palette;;;
+38;26;2;2;3x4 up, straddle;u_turn_right;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;;;
 39;27;0;0;3x3 up, straddle right 4;u_stand_right0;power_palette;3x2 down;l_crouch_right;power_palette;;;
 39;27;1;1;3x3 up, straddle right 4;u_stand_right1;power_palette;3x2 down;l_crouch_right;power_palette;;;
 39;27;2;2;3x3 up, straddle right 4;u_stand_right2;power_palette;3x2 down;l_crouch_right;power_palette;;;
@@ -319,12 +319,12 @@ Animation;Hex;Pose;Timeline;Upper Tilemap;Upper File;Upper palette;Lower Tilemap
 45;2D;1;1;3x4 center, down 1;u_facing_right_aim_down;power_palette;3x3 down, left 1;l_jump_right1_alt;power_palette;;;
 46;2E;0;0;4x3 up, straddle left 8, up 2;u_run_left_reach0;power_palette;3x3 down, left 4;l_jump_left0;power_palette;;;
 46;2E;1;1;3x4 center, down 1;u_facing_left_aim_down;power_palette;3x3 down, right 1;l_jump_left1_alt;power_palette;;;
-47;2F;0;0;3x3 up;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;UT linked to 25;;
-47;2F;1;1;3x3 up;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;UT linked to 25;;
-47;2F;2;2;3x3 up;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;UT linked to 25;;
-48;30;0;0;3x3 up;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;UT linked to 26;;
-48;30;1;1;3x3 up;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;UT linked to 26;;
-48;30;2;2;3x3 up;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;UT linked to 26;;
+47;2F;0;0;3x4 up, straddle;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;UT linked to 25;;
+47;2F;1;1;3x4 up, straddle;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;UT linked to 25;;
+47;2F;2;2;3x4 up, straddle;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;UT linked to 25;;
+48;30;0;0;3x4 up, straddle;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;UT linked to 26;;
+48;30;1;1;3x4 up, straddle;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;UT linked to 26;;
+48;30;2;2;3x4 up, straddle;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;UT linked to 26;;
 49;31;0;0;null map;u_null_tile;power_palette;2x2 center;l_right_ball0;power_palette;AFP linked to 1D;full link;
 49;31;1;1;null map;u_null_tile;power_palette;2x2 center;l_right_ball1;power_palette;AFP linked to 1D;full link;
 49;31;2;2;null map;u_null_tile;power_palette;2x2 center;l_right_ball2;power_palette;AFP linked to 1D;full link;
@@ -364,12 +364,12 @@ Animation;Hex;Pose;Timeline;Upper Tilemap;Upper File;Upper palette;Lower Tilemap
 65;41;6;6;null map;u_null_tile;power_palette;2x2 center;l_left_ball6;power_palette;UT and LT tilemaps fused;linked to 32;
 65;41;7;7;null map;u_null_tile;power_palette;2x2 center;l_left_ball7;power_palette;UT and LT tilemaps fused;linked to 32;
 65;41;8;9;null map;u_null_tile;power_palette;3x2 center;l_left_squished_ball;power_palette;UT and LT tilemaps fused;linked to 32;
-67;43;0;0;3x3 up;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 2F;full link;
-67;43;1;1;3x3 up;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 2F;full link;
-67;43;2;2;3x3 up;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 2F;full link;
-68;44;0;0;3x3 up;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 30;full link;
-68;44;1;1;3x3 up;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 30;full link;
-68;44;2;2;3x3 up;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 30;full link;
+67;43;0;0;3x4 up, straddle;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 2F;full link;
+67;43;1;1;3x4 up, straddle;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 2F;full link;
+67;43;2;2;3x4 up, straddle;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 2F;full link;
+68;44;0;0;3x4 up, straddle;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 30;full link;
+68;44;1;1;3x4 up, straddle;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 30;full link;
+68;44;2;2;3x4 up, straddle;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 30;full link;
 73;49;0;0;3x3 up, straddle left 4;u_neutral_left;power_palette;3x4 down, up 2;l_moonwalk_face_left0;power_palette;;;
 73;49;1;1;3x3 up, straddle left 4, up 2;u_moonwalk_face_left;power_palette;3x4 down, up 2;l_moonwalk_face_left1;power_palette;;;
 73;49;2;2;3x3 up, straddle left 4, up 2;u_moonwalk_face_left;power_palette;3x4 down, up 2;l_moonwalk_face_left2;power_palette;;;
@@ -700,56 +700,56 @@ Animation;Hex;Pose;Timeline;Upper Tilemap;Upper File;Upper palette;Lower Tilemap
 133;85;1;1;3x4 up, down 1;u_facing_right_aim_up;power_palette;3x2 down;l_crouch_right;power_palette;;;
 134;86;0;0;4x3 up, left 8, down 1;u_aim_up_and_left;power_palette;3x2 down;l_crouch_left;power_palette;;;
 134;86;1;1;3x4 up, down 1;u_facing_left_aim_up;power_palette;3x2 down;l_crouch_left;power_palette;;;
-135;87;0;0;3x3 up;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 2F;full link;
-135;87;1;1;3x3 up;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 2F;full link;
-135;87;2;2;3x3 up;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 2F;full link;
-136;88;0;0;3x3 up;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 30;UT linked;not LT linked, probably a bug
-136;88;1;1;3x3 up;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 30;UT linked;not LT linked, probably a bug
-136;88;2;2;3x3 up;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 30;UT linked;not LT linked, probably a bug
+135;87;0;0;3x4 up, straddle;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 2F;full link;
+135;87;1;1;3x4 up, straddle;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 2F;full link;
+135;87;2;2;3x4 up, straddle;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 2F;full link;
+136;88;0;0;3x4 up, straddle;u_turn_left;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 30;UT linked;not LT linked, probably a bug
+136;88;1;1;3x4 up, straddle;u_turn;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 30;UT linked;not LT linked, probably a bug
+136;88;2;2;3x4 up, straddle;u_turn_right;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 30;UT linked;not LT linked, probably a bug
 137;89;0;0;3x3 up, straddle right 4;u_stand_right0;power_palette;3x4 down, up 2;l_stand_right;power_palette;AFP linked to 01;full link;
 138;8A;0;0;3x3 up, straddle left 4;u_stand_left0;power_palette;3x4 down, up 2;l_stand_left;power_palette;AFP linked to 02;full link;
-139;8B;0;0;3x3 up;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;LT linked to 25;;
-139;8B;1;1;3x3 up;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;LT linked to 25;;
-139;8B;2;2;3x3 up;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;LT linked to 25;;
-140;8C;0;0;3x3 up;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;LT linked to 26;;
-140;8C;1;1;3x3 up;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;LT linked to 26;;
-140;8C;2;2;3x3 up;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;LT linked to 26;;
+139;8B;0;0;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;LT linked to 25;;
+139;8B;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;LT linked to 25;;
+139;8B;2;2;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;LT linked to 25;;
+140;8C;0;0;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;LT linked to 26;;
+140;8C;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;LT linked to 26;;
+140;8C;2;2;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;LT linked to 26;;
 141;8D;0;0;3x4 up, straddle;u_turn_right_gun_down;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;LT linked to 25;;
 141;8D;1;1;3x4 up, straddle;u_turn_gun_down;power_palette;3x4 down, up 2;l_stand_turn;power_palette;LT linked to 25;;
 141;8D;2;2;3x4 up, straddle;u_turn_left_gun_down;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;LT linked to 25;;
 142;8E;0;0;3x4 up, straddle;u_turn_left_gun_down;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;LT linked to 26;;
 142;8E;1;1;3x4 up, straddle;u_turn_gun_down;power_palette;3x4 down, up 2;l_stand_turn;power_palette;LT linked to 26;;
 142;8E;2;2;3x4 up, straddle;u_turn_right_gun_down;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;LT linked to 26;;
-143;8F;0;0;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;UT linked to 8B;LT linked to 2F;
-143;8F;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;UT linked to 8B;LT linked to 2F;
-143;8F;2;2;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;UT linked to 8B;LT linked to 2F;
-144;90;0;0;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;UT linked to 8C;LT linked to 30;
-144;90;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;UT linked to 8C;LT linked to 30;
-144;90;2;2;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;UT linked to 8C;LT linked to 30;
+143;8F;0;0;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;UT linked to 8B;LT linked to 2F;
+143;8F;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;UT linked to 8B;LT linked to 2F;
+143;8F;2;2;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;UT linked to 8B;LT linked to 2F;
+144;90;0;0;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;UT linked to 8C;LT linked to 30;
+144;90;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;UT linked to 8C;LT linked to 30;
+144;90;2;2;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;UT linked to 8C;LT linked to 30;
 145;91;0;0;3x4 up, straddle;u_turn_right_gun_down;power_palette;3x2 down;l_crouch_turn_right;power_palette;UT linked to 8D;LT linked to 2F;
 145;91;1;1;3x4 up, straddle;u_turn_gun_down;power_palette;3x2 down;l_crouch_turn;power_palette;UT linked to 8D;LT linked to 2F;
 145;91;2;2;3x4 up, straddle;u_turn_left_gun_down;power_palette;3x2 down;l_crouch_turn_left;power_palette;UT linked to 8D;LT linked to 2F;
 146;92;0;0;3x4 up, straddle;u_turn_left_gun_down;power_palette;3x2 down;l_crouch_turn_left;power_palette;UT linked to 8E;LT linked to 30;
 146;92;1;1;3x4 up, straddle;u_turn_gun_down;power_palette;3x2 down;l_crouch_turn;power_palette;UT linked to 8E;LT linked to 30;
 146;92;2;2;3x4 up, straddle;u_turn_right_gun_down;power_palette;3x2 down;l_crouch_turn_right;power_palette;UT linked to 8E;LT linked to 30;
-147;93;0;0;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 8F;full link;
-147;93;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 8F;full link;
-147;93;2;2;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 8F;full link;
-148;94;0;0;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
-148;94;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
-148;94;2;2;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+147;93;0;0;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 8F;full link;
+147;93;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 8F;full link;
+147;93;2;2;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 8F;full link;
+148;94;0;0;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+148;94;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+148;94;2;2;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
 149;95;0;0;3x4 up, straddle;u_turn_right_gun_down;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 91;full link;
 149;95;1;1;3x4 up, straddle;u_turn_gun_down;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 91;full link;
 149;95;2;2;3x4 up, straddle;u_turn_left_gun_down;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 91;full link;
 150;96;0;0;3x4 up, straddle;u_turn_left_gun_down;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 92;UT linked;LT linked to 88, probably a bug
 150;96;1;1;3x4 up, straddle;u_turn_gun_down;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 92;UT linked;LT linked to 88, probably a bug
 150;96;2;2;3x4 up, straddle;u_turn_right_gun_down;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 92;UT linked;LT linked to 88, probably a bug
-151;97;0;0;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 8F;full link;
-151;97;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 8F;full link;
-151;97;2;2;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 8F;full link;
-152;98;0;0;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 90;full link;
-152;98;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 90;full link;
-152;98;2;2;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 90;full link;
+151;97;0;0;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 8F;full link;
+151;97;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 8F;full link;
+151;97;2;2;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 8F;full link;
+152;98;0;0;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 90;full link;
+152;98;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 90;full link;
+152;98;2;2;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 90;full link;
 153;99;0;0;3x4 up, straddle;u_turn_right_gun_down;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 91;full link;
 153;99;1;1;3x4 up, straddle;u_turn_gun_down;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 91;full link;
 153;99;2;2;3x4 up, straddle;u_turn_left_gun_down;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 91;full link;
@@ -851,30 +851,30 @@ Animation;Hex;Pose;Timeline;Upper Tilemap;Upper File;Upper palette;Lower Tilemap
 155;9B;92;93;4x3 up, alt palette;u_elevator_varia_streak0;varia_palette;4x3 down, alt palette;l_elevator_varia_streak0;varia_palette;;;
 155;9B;93;94;4x3 up, alt palette;u_elevator_varia_streak8;varia_palette;4x3 down, alt palette;l_elevator_varia_streak8;varia_palette;;;
 155;9B;94;95;4x3 up, alt palette;u_elevator_varia_streak0;varia_palette;4x3 down, alt palette;l_elevator_varia_streak0;varia_palette;;;
-156;9C;0;0;3x3 up;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 8B;full link;
-156;9C;1;1;3x3 up;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 8B;full link;
-156;9C;2;2;3x3 up;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 8B;full link;
-157;9D;0;0;3x3 up;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 8C;full link;
-157;9D;1;1;3x3 up;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 8C;full link;
-157;9D;2;2;3x3 up;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 8C;full link;
-158;9E;0;0;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 8F;full link;
-158;9E;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 8F;full link;
-158;9E;2;2;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 8F;full link;
-159;9F;0;0;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 90;full link;
-159;9F;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 90;full link;
-159;9F;2;2;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 90;full link;
-160;A0;0;0;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 8F;full link;
-160;A0;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 8F;full link;
-160;A0;2;2;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 8F;full link;
-161;A1;0;0;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
-161;A1;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
-161;A1;2;2;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
-162;A2;0;0;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 8F;full link;
-162;A2;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 8F;full link;
-162;A2;2;2;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 8F;full link;
-163;A3;0;0;3x3 up;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 90;full link;
-163;A3;1;1;3x3 up;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 90;full link;
-163;A3;2;2;3x3 up;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 90;full link;
+156;9C;0;0;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 8B;full link;
+156;9C;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 8B;full link;
+156;9C;2;2;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 8B;full link;
+157;9D;0;0;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 8C;full link;
+157;9D;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 8C;full link;
+157;9D;2;2;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 8C;full link;
+158;9E;0;0;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 8F;full link;
+158;9E;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 8F;full link;
+158;9E;2;2;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 8F;full link;
+159;9F;0;0;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 90;full link;
+159;9F;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 90;full link;
+159;9F;2;2;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 90;full link;
+160;A0;0;0;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 8F;full link;
+160;A0;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 8F;full link;
+160;A0;2;2;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 8F;full link;
+161;A1;0;0;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+161;A1;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+161;A1;2;2;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 90;UT linked;LT linked to 88, probably a bug
+162;A2;0;0;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 8F;full link;
+162;A2;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 8F;full link;
+162;A2;2;2;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 8F;full link;
+163;A3;0;0;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x2 down;l_crouch_turn_left;power_palette;AFP linked to 90;full link;
+163;A3;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x2 down;l_crouch_turn;power_palette;AFP linked to 90;full link;
+163;A3;2;2;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x2 down;l_crouch_turn_right;power_palette;AFP linked to 90;full link;
 164;A4;0;0;3x3 up, down 6;u_start_jump_right;power_palette;3x3 down;l_begin_crouch_right;power_palette;;;
 164;A4;1;1;3x3 up, straddle right 2;u_start_jump_right;power_palette;3x4 down, up 2;l_stand_right;power_palette;;;
 165;A5;0;0;3x3 up, down 6;u_start_jump_left;power_palette;3x3 down;l_begin_crouch_left;power_palette;;;
@@ -1029,18 +1029,18 @@ Animation;Hex;Pose;Timeline;Upper Tilemap;Upper File;Upper palette;Lower Tilemap
 190;BE;3;3;3x3 up, straddle left 4;u_run_left8;power_palette;3x4 down, up 2;l_fall_left;power_palette;;;
 190;BE;4;4;3x3 up, straddle left 3, up 2;u_run_left6;power_palette;3x4 down, up 2;l_jump_up_face_left0;power_palette;;;
 190;BE;5;5;3x3 up, straddle left 4;u_run_left0;power_palette;3x4 down, up 2;l_jump_up_face_left1;power_palette;;;
-191;BF;0;0;3x3 up;u_turn_right;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 25;full link;
-191;BF;1;1;3x3 up;u_turn;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 25;full link;
-191;BF;2;2;3x3 up;u_turn_left;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 25;full link;
-192;C0;0;0;3x3 up;u_turn_left;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 26;full link;
-192;C0;1;1;3x3 up;u_turn;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 26;full link;
-192;C0;2;2;3x3 up;u_turn_right;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 26;full link;
-193;C1;0;0;3x3 up;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 8B;full link;
-193;C1;1;1;3x3 up;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 8B;full link;
-193;C1;2;2;3x3 up;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 8B;full link;
-194;C2;0;0;3x3 up;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 8C;full link;
-194;C2;1;1;3x3 up;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 8C;full link;
-194;C2;2;2;3x3 up;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 8C;full link;
+191;BF;0;0;3x4 up, straddle;u_turn_right;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 25;full link;
+191;BF;1;1;3x4 up, straddle;u_turn;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 25;full link;
+191;BF;2;2;3x4 up, straddle;u_turn_left;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 25;full link;
+192;C0;0;0;3x4 up, straddle;u_turn_left;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 26;full link;
+192;C0;1;1;3x4 up, straddle;u_turn;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 26;full link;
+192;C0;2;2;3x4 up, straddle;u_turn_right;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 26;full link;
+193;C1;0;0;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 8B;full link;
+193;C1;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 8B;full link;
+193;C1;2;2;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 8B;full link;
+194;C2;0;0;3x4 up, straddle;u_turn_left_gun_up;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 8C;full link;
+194;C2;1;1;3x4 up, straddle;u_turn_gun_up;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 8C;full link;
+194;C2;2;2;3x4 up, straddle;u_turn_right_gun_up;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 8C;full link;
 195;C3;0;0;3x4 up, straddle;u_turn_right_gun_down;power_palette;3x4 down, up 2;l_stand_turn_right;power_palette;AFP linked to 8D;full link;
 195;C3;1;1;3x4 up, straddle;u_turn_gun_down;power_palette;3x4 down, up 2;l_stand_turn;power_palette;AFP linked to 8D;full link;
 195;C3;2;2;3x4 up, straddle;u_turn_left_gun_down;power_palette;3x4 down, up 2;l_stand_turn_left;power_palette;AFP linked to 8D;full link;
