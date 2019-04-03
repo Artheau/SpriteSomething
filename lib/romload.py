@@ -13,6 +13,52 @@ class SamusRomHandler(RomHandler):
         super().__init__(filename)      #do the usual stuff
         self._apply_bugfixes()
 
+
+    def get_pose_tilemaps(self,animation,pose):
+        lower_tilemaps = self._get_pose_tilemaps_from_addr(0x92945D, animation, pose)
+        upper_tilemaps = self._get_pose_tilemaps_from_addr(0x929263, animation, pose)
+        return lower_tilemaps[::-1] + upper_tilemaps[::-1]   #the tilemaps are rendered in this specific order: backwards lower, backwards upper
+
+
+    def _get_pose_tilemaps_from_addr(self, base_addr, animation, pose):
+        #get the pointer to the list of pose pointers (in disassembly: get P??_UT or P??_LT)
+        animation_all_poses_pointer = self.read_from_snes_address(base_addr + 2*animation, 2)
+        #now get the specific pointer to the tilemap set (in disassembly: get TM_???)
+        pose_tilemaps_pointer = 0x920000 + self.read_from_snes_address(0x92808D + 2*animation_all_poses_pointer, 2)
+        #now use that pointer to find out how many tilemaps there actually are
+        if pose_tilemaps_pointer == 0x920000:    #as will be the case when the pointer is zero, specifying no tiles here
+            num_tilemaps = 0
+        else:
+            num_tilemaps = self.read_from_snes_address(pose_tilemaps_pointer, 2)
+        #and now get the tilemaps!  They start right after the word specifying their number
+        return [self.read_from_snes_address(pose_tilemaps_pointer + 2 + 5*i, "11111") for i in range(num_tilemaps)]
+
+
+    def get_dma_data(self,animation,pose):
+        #get the pointer to the big list of table indices (in disassembly: get AFP_T??)
+        animation_frame_progression_table = 0x920000 + self.read_from_snes_address(0x92D94E, 2)
+        #get two sets of table/entry indices for use in the DMA table
+        top_DMA_table, top_DMA_entry, bottom_DMA_table, bottom_DMA_entry = self.read_from_snes_address(animation_frame_progression_table,"1111")
+        #get the data for each part
+        DMA_writes = {}
+        for (base_addr, table, entry, vram_offset) in \
+                                        [(0x92D938, bottom_DMA_table, bottom_DMA_entry, 0x08), #lower body VRAM
+                                         (0x92D91E, top_DMA_table,    top_DMA_entry,    0x00)]: #upper body VRAM
+            #reference the first index to figure out where the relevant DMA table is
+            this_DMA_table = 0x920000 + self.read_from_snes_address(base_addr,2)
+            #From this table, get the appropriate entry in the list which contains the DMA pointer and the row sizes
+            DMA_pointer, row1_size, row2_size = self.read_from_snes_address(this_DMA_table + 7 * pose, "322")
+            #Read the DMA data
+            row1 = self.read_from_snes_address(DMA_pointer, "1"*row1_size)
+            row2 = self.read_from_snes_address(DMA_pointer+row1_size, "1"*row2_size)
+
+            #add the DMA write information to the dictionary
+            DMA_writes[vram_offset] = row1
+            DMA_writes[0x10+vram_offset] = row2
+            
+        return DMA_writes
+
+
     def _apply_single_fix_to_snes_address(self, snes_address, classic_values, fixed_values, encoding):
         #checks to see if, indeed, a value is still in the classic (bugged) value, and if so, fixes it
         #returns True if the fix was affected and False otherwise

@@ -1,33 +1,12 @@
-USE_MODIFIED_ROM = True    #use the output of rom_modify.py to make animations/poses
-
-APPLY_BUGFIXES = not USE_MODIFIED_ROM   #turn on to fix vanilla bugs, but off for my custom tilemaps
-
-DEBUG_VRAM = False
-
 IGNORED_ANIMATIONS = []
 
 GIF_MARGIN = 0x08      #for exporting images, a margin this large is produced
 PNG_MARGIN = 0x01
 
-
-ROM_FILENAME_ARG_KEY = 'rom_filename'
-SPRITE_SHEET_FILENAME_ARG_KEY = 'sprite_sheet_filename'
-LAYOUT_FILENAME_ARG_KEY = 'layout_filename'
-PALETTE_ARG_KEY = 'palette_specified'
-ANI_ARG_KEY = 'animation_id_specified'
-POSE_ARG_KEY = 'pose_id_specified'
-SUPERTILES_ARG_KEY = 'supertile_optimize'
-
-TILESIZE = 0x20          #8x8 tiles with 4bpp = 0x20 bytes
-TILE_DIMENSION = 0x08    #8x8 tiles
 BACKGROUND_COLOR = '#00007F'         #used to be Discord grey: '#36393f'
 
 #FRAME_DURATION = 1000/60    #for true-to-NTSC attempts
 FRAME_DURATION = 20          #given GIF limitations, this seems like a good compromise
-
-
-SUPERTILE_JSON_FILENAME = "supertiles.json"
-SUPERTILE_FRIENDLY_FILENAME = "supertiles_debug.txt"
 
 
 #There is a bug in Pillow version 5.4.1 that does not display GIF transparency correctly
