@@ -8,6 +8,9 @@ animations
 # no pip installer
 get-pip.py
 
+# do not include the macro used to simulate the command line
+_test_macro.py
+
 # no super nintendo files
 *.smc
 
