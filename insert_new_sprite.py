@@ -82,7 +82,7 @@ def write_new_palettes():
     set_palettes_at(0x6DEF9,gravity_palette, modifier=(0,0,10))
     set_palettes_at(0x6DF48,gravity_palette, modifier=(0,10,15))
 
-    set_palettes_at(0x6DB6B,power_palette) #loader palettes (power suit) <-- not sure what these do but SMILE thinks they're important
+    set_palettes_at(0x6DB6B,power_palette) #loader palettes (power suit) <-- in load screen, alternates between these and the bluer colors above
     set_palettes_at(0x6DBBA,power_palette)
     set_palettes_at(0x6DC09,power_palette)
     set_palettes_at(0x6DC58,power_palette)
@@ -116,7 +116,7 @@ def write_new_palettes():
     for i in range(8):
         set_palettes_at(0xDA120+0x20*i, death_palette, fade = float(i)/8.0)   #death palette
     for i in range(6):
-        set_palettes_at(0xD9C6A+0x20*i, flash_rotate(flash_palette,i))  #crystal flash bubble colors
+        set_palettes_at(0xD96DA+0x20*i, flash_rotate(flash_palette,i))  #crystal flash bubble colors (D96C0)
     set_palettes_at(0xD9800,gravity_palette) #gravity suit
 
     for base_address,suit_palette in zip([0xD9820,0xD9920,0xD9A20],[power_palette, varia_palette, gravity_palette]):
@@ -311,12 +311,12 @@ def write_new_tilemaps():
         rom[pointer_location:pointer_location+2] = little_endian(current_addr - 0x920000,2)
         current_addr = write_tilemap(tilemap, current_addr)
 
-    #tilemaps for the missile ports (change to access tile $22 and do not flip)
+    #tilemaps for the missile ports (change to access tile $20 and do not flip)
     for i in range(10):
         write_location = convert_to_rom_address(0x90C791 + 2*i)
-        rom[write_location:write_location+2] = bytes([0x22,0x28])
-    #change the VRAM index that the DMA places the gun port into (change to $22)
-    rom[0x84786:0x84788] = little_endian(0x6220,2)
+        rom[write_location:write_location+2] = bytes([0x20,0x28])
+    #change the VRAM index that the DMA places the gun port into (change to $20)
+    rom[0x84786:0x84788] = little_endian(0x6200,2)
 
     return upper_map_addresses, lower_map_addresses
 

@@ -8,9 +8,12 @@
     
 if __name__ == "__main__":
     raise AssertionError(f"Called main() on utility library {__file__}")
-else:
-    from .RomHandler.rom import RomHandler      #assumes rom.py is in a subfolder called RomHandler
 
+
+#TODO: Palettes -- the rotation schedule is known in all cases...how to encode?
+
+
+from .RomHandler.rom import RomHandler      #assumes rom.py is in a subfolder called RomHandler
 
 class SamusRomHandler(RomHandler):
     def __init__(self, filename):
@@ -164,9 +167,42 @@ class SamusRomHandler(RomHandler):
             level_of_opening = min(2, frame//4)
             DMA_pointer = 0x900000 + self.read_from_snes_address(DMA_list + 2*(1 + level_of_opening), 2)
 
-            DMA_write = {tile: self.read_from_snes_address(DMA_pointer, "1"*0x20)}
+            #this is where the tile is loaded into in VRAM
+            DMA_destination = (self.read_from_snes_address(0x90C786,2)-0x6000)//0x10
 
-        return tilemap, DMA_write
+            DMA_writes = {DMA_destination: self.read_from_snes_address(DMA_pointer, "1"*0x20)}
+
+        return tilemap, DMA_writes
+
+
+    def get_death_data(self, pose, facing='left'):
+        #get tilemap
+        if facing[0] in ['l','L']:
+            tilemaps = self._get_pose_tilemaps_from_addr(0x92EDDB, 0, pose)
+        elif facing[0] in ['r','R']:
+            tilemaps = self._get_pose_tilemaps_from_addr(0x92EDD0, 0, pose)
+        else:
+            raise AssertionError(f"received call to get_death_data() with invalid facing {facing}")
+
+        #get DMA data
+        DMA_writes = {}
+        write_size = self.read_from_snes_address(0x9BB6DF,2)
+        for i in range(5):
+            dest_tile = (self.read_from_snes_address(0x9BB7C9+2*i,2) - 0x6000)//0x10
+            source_data = 0x9B0000 + self.read_from_snes_address(0x9BB7BF+2*i,2)
+            DMA_writes[dest_tile] = self.read_from_snes_address(source_data, "1"*write_size)
+
+        #how long to hold this pose, and an index to which palette to use
+        duration, palette_index = self.read_from_snes_address(0x9BB823 + 2*pose, "11")
+
+        #get palettes locations.  this will be a list of 4 items containing addresses for palettes: [power,varia,gravity,suitless]
+        palette_location_list = [0x9B0000 + self.read_from_snes_address(0x9BB7D3+2*palette_index+10*suit, 2) for suit in range(4)]
+
+        return tilemaps, DMA_writes, duration, palette_location_list
+
+
+    def get_file_select_dma_data(self):
+        return {0x00: self.read_from_snes_address(0xB6C000, "1"*0x2000)}
 
         
     def _get_duration_list_location(self, animation):
