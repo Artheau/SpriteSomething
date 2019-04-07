@@ -255,9 +255,8 @@ class SamusRomHandler(RomHandler):
             else:
                 raise AssertionError(f"function get_palette() called for charge palette with unknown suit type: {suit_type}")
 
-            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
-            # Probably this is more complex than just cycling through in order of increasing brightness
-            return [(5,self._get_static_palette(base_address + i*0x20)) for i in range(8)]
+            #The charged shot palette advances every frame (determined by manual frame advance)
+            return [(1,self._get_static_palette(base_address + i*0x20)) for i in range(8)]
 
         elif base_type == PaletteType.SPEED_BOOST:
             if suit_type == SuitType.POWER:
@@ -269,9 +268,9 @@ class SamusRomHandler(RomHandler):
             else:
                 raise AssertionError(f"function get_palette() called for speed boost palette with unknown suit type: {suit_type}")
 
-            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
-            # Probably this is more complex than just cycling through in order of increasing brightness
-            return [(5,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
+            #4 frames each during the warm up, then stay at last palette forever (determined by manual frame advance)
+            return [(4,self._get_raw_palette(base_address + i*0x20)) for i in range(3)] + \
+                         [(0,self._get_raw_palette(base_address + 0x60))]
 
         elif base_type == PaletteType.SPEED_SQUAT:
             if suit_type == SuitType.POWER:
@@ -283,9 +282,8 @@ class SamusRomHandler(RomHandler):
             else:
                 raise AssertionError(f"function get_palette() called for speed squat palette with unknown suit type: {suit_type}")
 
-            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
-            # Probably this is more complex than just cycling through in order of increasing brightness
-            return [(5,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
+            #timing and order determined by manual frame advance.  One frame each, oscillates between 0 and 3
+            return [(1,self._get_raw_palette(base_address + i*0x20)) for i in [0,1,2,3,2,1]]
 
         elif base_type == PaletteType.SHINE_SPARK:
             if suit_type == SuitType.POWER:
@@ -297,9 +295,8 @@ class SamusRomHandler(RomHandler):
             else:
                 raise AssertionError(f"function get_palette() called for shine spark palette with unknown suit type: {suit_type}")
 
-            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
-            # Probably this is more complex than just cycling through in order of increasing brightness
-            return [(5,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
+            #timing and order determined by manual frame advance.  1 frame each, goes 0 to 3 then resets
+            return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
 
         elif base_type == PaletteType.SCREW_ATTACK:
             if suit_type == SuitType.POWER:
@@ -311,20 +308,17 @@ class SamusRomHandler(RomHandler):
             else:
                 raise AssertionError(f"function get_palette() called for screw attack palette with unknown suit type: {suit_type}")
 
-            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
-            # Probably this is more complex than just cycling through in order of increasing brightness
-            return [(5,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
+            #timing and order determined by manual frame advance.  One frame each, oscillates between 0 and 3
+            return [(1,self._get_raw_palette(base_address + i*0x20)) for i in [0,1,2,3,2,1]]
 
         elif base_type == PaletteType.HYPER_BEAM:
             base_address = 0x9BA240
             
-            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
-            return [(5,self._get_raw_palette(base_address + i*0x20)) for i in range(10)]
+            #timing and order determined by manual frame advance.  Each frame goes down 1, overall from 9 to 0 then resets
+            return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(9,-1,-1)]
 
         elif base_type == PaletteType.DEATH_SUIT:
             #the colors for the exploding suit pieces can be set to different palettes.
-            #I think that they were set to overlap with charge palette by accident, because there are other palettes available
-            # that seem to be intended for this purpose (e.g. at $9B:9440 for power suit)
 
             #To retrieve these palettes, first need to grab the pointers to the palettes
             if suit_type == SuitType.POWER:
@@ -362,8 +356,8 @@ class SamusRomHandler(RomHandler):
             return full_palette_set
 
         elif base_type == PaletteType.CRYSTAL_FLASH:
-            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
-            return [(5,self._get_raw_palette(0x9B96C0 + i*0x20)) for i in range(6)]
+            #timing determined by manual frame advance
+            return [(2,self._get_raw_palette(0x9B96C0 + i*0x20)) for i in range(6)]
 
         elif base_type == PaletteType.SEPIA:
             return self._get_static_palette(0x8CE569)
@@ -376,16 +370,15 @@ class SamusRomHandler(RomHandler):
 
         elif base_type == PaletteType.DOOR:
             visor_color = self.read_from_snes_address(0x82E52B, 2)
-            #TODO: Need to confirm the color of black used in the remaining palette positions
-            raise NotImplementedError()
-            #return [(0, black palette with visor appended to 4)]
+            base_colors = [0 for _ in range(16)]   #use 0 as the base color...technically this fades upwards into the suit color
+            base_colors[4] = visor_color
+            return [(0, base_colors)]
 
         elif base_type == PaletteType.XRAY:
             _,base_palette = self.get_palette(PaletteType.STANDARD, suit_type)[0]    #recurse to get the regular suit palette
             visor_colors = self.read_from_snes_address(0x9BA3C6, "222")
-            #TODO: Need to append these to the base palette along with durations from...wherever durations come from
-            raise NotImplementedError()
-            #return [(duration, base palette with visor color appended correctly) for bunch of things]
+            #I did manual frame advances to learn that the duration is 6 frames for each visor color
+            return [(6, base_palette[:4]+[color]+base_palette[5:]) for color in visor_colors]
 
         elif base_type == PaletteType.FILE_SELECT:
             return self._get_static_palette(0x8EE5E0)
@@ -394,18 +387,20 @@ class SamusRomHandler(RomHandler):
             base_palette_address = 0xA2A59E    #yes, way over here
             ship_underglow_address = 0x8DCA4E  #yes, way over there
 
+            base_palette = self.read_from_snes_address(base_palette_address,"2"*15)  #intentionally skipping last color
+
             ship_underglow_address += 2    #skip over the control codes
+            full_palette_set = []
             for i in range(14):
                 #now what you're going to get is a list of duration, color, control code (2 bytes each, 14 in total)
                 duration, glow_color = self.read_from_snes_address(ship_underglow_address + 6*i, "22")
+                #the glow color appends at the final index (index 15)
+                full_palette_set.append((duration,base_palette+[glow_color]))
 
-            #TODO: Match up the glow color correctly to the base palette
-            raise NotImplementedError()
-            #return [(duration, ship palette with glow color appended correctly) for bunch of things]
+            return full_palette_set
             
-
         elif base_type == PaletteType.INTRO_SHIP:
-            #TODO: the thrusters alternate white and black according to some code somewhere
+            #Technically the thrusters alternate white and black every frame, but this is a bit much on the eyes
             return self._get_static_palette(0x8CE68B)
 
         elif base_type == PaletteType.OUTRO_SHIP:
