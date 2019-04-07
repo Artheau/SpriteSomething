@@ -9,72 +9,54 @@
 if __name__ == "__main__":
     raise AssertionError(f"Called main() on utility library {__file__}")
 
-
-#TODO: Palettes -- the rotation schedule is known in all cases...how to encode?
-
-
+import enum
 from .RomHandler.rom import RomHandler      #assumes rom.py is in a subfolder called RomHandler
+
+
+#enumeration for the suit types
+class SuitType(enum.Enum):
+    POWER = enum.auto()
+    VARIA = enum.auto()
+    GRAVITY = enum.auto()
+
+class PaletteType(enum.Enum):
+    STANDARD = enum.auto()           #palette used in absence of other effects
+    LOADER = enum.auto()             #used when loading from a save
+    HEAT = enum.auto()               #used in "hot" areas, or when the background is flashing red with alarm
+    CHARGE = enum.auto()             #holding down the fire button
+    SPEED_BOOST = enum.auto()        #running fast
+    SPEED_SQUAT = enum.auto()        #after running fast and then pressing down
+    SHINE_SPARK = enum.auto()        #flying through the air crazy-like
+    SCREW_ATTACK = enum.auto()       #using screw attack
+    HYPER_BEAM = enum.auto()         #the rainbow suit colors
+    DEATH_SUIT = enum.auto()         #colors used to render the suit pieces as they break apart
+    DEATH_FLESH = enum.auto()        #colors used to render suitless Samus during the death sequence
+    CRYSTAL_FLASH = enum.auto()      #crystal flash rotating bubble colors
+    SEPIA = enum.auto()              #during the intro sequence, most of the time
+    SEPIA_HURT = enum.auto()         #during the intro sequence while getting hurt by mother brain
+    SEPIA_ALTERNATE = enum.auto()    #during the intro sequence after getting hurt by mother brain (why is this a thing?)
+    DOOR = enum.auto()               #palette used while Samus is transitioning through doors (basically just visor color)
+    XRAY = enum.auto()               #palette used while Samus is in dark rooms, or when xray is active
+    FILE_SELECT = enum.auto()        #used to render the Samus heads, the cursor, and the frame around SAMUS DATA
+    SHIP = enum.auto()               #used to render Samus's ship in the game (includes underlight glowing)
+    INTRO_SHIP = enum.auto()         #ship while flying to planet Zebes
+    OUTRO_SHIP = enum.auto()         #ship while escaping from Zebes at the end
+
 
 class SamusRomHandler(RomHandler):
     def __init__(self, filename):
         super().__init__(filename)      #do the usual stuff
+
         self._apply_bugfixes()
         self._apply_improvements()
 
 
-    def get_pose_tilemaps(self,animation,pose):
-        lower_tilemaps = self._get_pose_tilemaps_from_addr(0x92945D, animation, pose)
-        upper_tilemaps = self._get_pose_tilemaps_from_addr(0x929263, animation, pose)
+    def get_pose_data(self,animation,pose):
+        tilemaps = self._get_pose_tilemaps(animation,pose)
+        DMA_writes = self._get_dma_data(animation, pose)
+        duration = self._get_pose_duration(animation, pose)
+        return tilemaps, DMA_writes, duration
 
-        #special case here for elevator poses, they have this extra stupid tile
-        #the position is hardcoded into the game at a block starting at $90:868D.
-        #I did not make the code go in there and dig out the offsets because this tile is stupid.
-        if animation in [0x00, 0x9B]:  #elevator poses (power suit/upgraded suit)
-            stupid_tile_tilemap = [[0xF9,0x01,0xF5,0x21,0x38]]   #stupid offsets
-        else:
-            stupid_tile_tilemap = []
-        
-        #the tiles are rendered in this specific order: backwards lower, backwards upper
-        return lower_tilemaps[::-1] + stupid_tile_tilemap + upper_tilemaps[::-1]   
-
-
-    def _get_pose_tilemaps_from_addr(self, base_addr, animation, pose):
-        #get the pointer to the list of pose pointers (in disassembly: get P??_UT or P??_LT)
-        animation_all_poses_index = self.read_from_snes_address(base_addr + 2*animation, 2)
-        #now get the specific pointer to the tilemap set (in disassembly: get TM_???)
-        pose_tilemaps_pointer = 0x920000 + self.read_from_snes_address(0x92808D + 2*animation_all_poses_index, 2)
-        #now use that pointer to find out how many tilemaps there actually are
-        if pose_tilemaps_pointer == 0x920000:    #as will be the case when the pointer is zero, specifying no tiles here
-            num_tilemaps = 0
-        else:
-            num_tilemaps = self.read_from_snes_address(pose_tilemaps_pointer, 2)
-        #and now get the tilemaps!  They start right after the word specifying their number
-        return [self.read_from_snes_address(pose_tilemaps_pointer + 2 + 5*i, "11111") for i in range(num_tilemaps)]
-
-
-    def get_dma_data(self,animation,pose):
-        #get the pointer to the big list of table indices (in disassembly: get AFP_T??)
-        animation_frame_progression_table = 0x920000 + self.read_from_snes_address(0x92D94E, 2)
-        #get two sets of table/entry indices for use in the DMA table
-        top_DMA_table, top_DMA_entry, bottom_DMA_table, bottom_DMA_entry = self.read_from_snes_address(animation_frame_progression_table,"1111")
-        #get the data for each part
-        DMA_writes = {}
-        for (base_addr, table, entry, vram_offset) in \
-                                        [(0x92D938, bottom_DMA_table, bottom_DMA_entry, 0x08), #lower body VRAM
-                                         (0x92D91E, top_DMA_table,    top_DMA_entry,    0x00)]: #upper body VRAM
-            #reference the first index to figure out where the relevant DMA table is
-            this_DMA_table = 0x920000 + self.read_from_snes_address(base_addr,2)
-            #From this table, get the appropriate entry in the list which contains the DMA pointer and the row sizes
-            DMA_pointer, row1_size, row2_size = self.read_from_snes_address(this_DMA_table + 7 * pose, "322")
-            #Read the DMA data
-            row1 = self.read_from_snes_address(DMA_pointer, "1"*row1_size)
-            row2 = self.read_from_snes_address(DMA_pointer+row1_size, "1"*row2_size)
-
-            #add the DMA write information to the dictionary
-            DMA_writes[vram_offset] = row1
-            DMA_writes[0x10+vram_offset] = row2
-            
-        return DMA_writes
 
     def get_default_vram_data(self, equipped_weapon = "standard"):
         #go in and get the data that is by default loaded into the VRAM.
@@ -100,13 +82,6 @@ class SamusRomHandler(RomHandler):
             DMA_writes[0x30] = self.read_from_snes_address(0x9AFA00,'1'*0x100)
 
         return DMA_writes
-
-
-
-    def get_pose_duration(self,animation, pose):
-        #get the duration list pointer (FD_?? in disassembly)
-        duration_list_location = self._get_duration_list_location(animation)
-        return self.read_from_snes_address(duration_list_location,1)
 
 
     def get_pose_control_data(self,animation,pose):
@@ -175,7 +150,7 @@ class SamusRomHandler(RomHandler):
         return tilemap, DMA_writes
 
 
-    def get_death_data(self, pose, facing='left'):
+    def get_death_data(self, pose, facing='left', suit=SuitType.POWER):
         #get tilemap
         if facing[0] in ['l','L']:
             tilemaps = self._get_pose_tilemaps_from_addr(0x92EDDB, 0, pose)
@@ -195,15 +170,330 @@ class SamusRomHandler(RomHandler):
         #how long to hold this pose, and an index to which palette to use
         duration, palette_index = self.read_from_snes_address(0x9BB823 + 2*pose, "11")
 
-        #get palettes locations.  this will be a list of 4 items containing addresses for palettes: [power,varia,gravity,suitless]
-        palette_location_list = [0x9B0000 + self.read_from_snes_address(0x9BB7D3+2*palette_index+10*suit, 2) for suit in range(4)]
+        #commented this out because now going to do palettes in a self-contained manner
+        # if suit == SuitType.POWER:
+        #     suit_number == 0
+        # if suit == SuitType.VARIA:
+        #     suit_number == 1
+        # if suit == SuitType.GRAVITY:
+        #     suit_number == 2
+        # suit_palette_addr = 0x9B0000 + self.read_from_snes_address(0x9BB7D3+2*palette_index+10*suit_number, 2)
+        # suitless_palette_addr = 0x9B0000 + self.read_from_snes_address(0x9BB7D3+2*palette_index+30, 2)
 
-        return tilemaps, DMA_writes, duration, palette_location_list
+        return tilemaps, DMA_writes, duration
+
 
 
     def get_file_select_dma_data(self):
         return {0x00: self.read_from_snes_address(0xB6C000, "1"*0x2000)}
 
+
+    def get_palette(self, base_type, suit_type):
+        #returns a list.  Each element of the list is a tuple, where the first entry is the amount of time that the palette
+        # should display for (here $00 is a special case for static palettes).  The second entry is the 555 palette data.
+
+        PALETTE_READ_SIZE = "2"*0x10
+
+        if base_type == PaletteType.STANDARD:
+            if suit_type == SuitType.POWER:
+                base_address = 0x9B9400    
+            elif suit_type == SuitType.VARIA:
+                base_address = 0x9B9520
+            elif suit_type == SuitType.GRAVITY:
+                base_address = 0x9B9800
+            else:
+                raise AssertionError(f"function get_palette() called for standard palette with unknown suit type: {suit_type}")
+            return [self._get_static_palette(base_address)]
+
+        elif base_type == PaletteType.LOADER:
+            if suit_type == SuitType.POWER:
+                base_address = 0x8DDB62
+            elif suit_type == SuitType.VARIA:
+                base_address = 0x8DDCC8
+            elif suit_type == SuitType.GRAVITY:
+                base_address = 0x8DDE2E
+            else:
+                raise AssertionError(f"function get_palette() called for loader palette with unknown suit type: {suit_type}")
+
+            #this is a set of rotating palettes implemented in microcode (loader is the most complex case of these, thankfully)
+            full_palette_set = []
+            for _ in range(4):    #there are four "cycles" before a special fifth cycle
+                counter = self.read_from_snes_address(base_address + 6, 1)
+                current_palette_set = []
+                base_address += 7               #skip over the control codes for this cycle
+                #each cycle has two palettes each
+                for _ in range(2):
+                    current_palette_set.append(self._get_timed_palette(base_address))
+                    base_address += 0x24         #skip over the duration dbyte, the palette, and the control code
+                full_palette_set.extend(counter*current_palette_set)   #append the whole cycle and all its repetitions
+            #fifth cycle is special (not really a cycle... just a single frame addition to the end)
+            full_palette_set.append(self._get_timed_palette(base_address))
+
+            return full_palette_set
+
+        elif base_type == PaletteType.HEAT:
+            if suit_type == SuitType.POWER:
+                base_address = 0x8DE45E
+            elif suit_type == SuitType.VARIA:
+                base_address = 0x8DE68A
+            elif suit_type == SuitType.GRAVITY:
+                base_address = 0x8DE8B6
+            else:
+                raise AssertionError(f"function get_palette() called for heat palette with unknown suit type: {suit_type}")
+
+            full_palette_set = []
+            base_address += 8                #skip over the control codes
+            return self._get_sequence_of_timed_palettes(base_addr, 16)
+
+        elif base_type == PaletteType.CHARGE:
+            if suit_type == SuitType.POWER:
+                base_address = 0x9B9820
+            elif suit_type == SuitType.VARIA:
+                base_address = 0x9B9920
+            elif suit_type == SuitType.GRAVITY:
+                base_address = 0x9B9A20
+            else:
+                raise AssertionError(f"function get_palette() called for charge palette with unknown suit type: {suit_type}")
+
+            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
+            # Probably this is more complex than just cycling through in order of increasing brightness
+            return [(5,self._get_static_palette(base_address + i*0x20)) for i in range(8)]
+
+        elif base_type == PaletteType.SPEED_BOOST:
+            if suit_type == SuitType.POWER:
+                base_address = 0x9B9B20
+            elif suit_type == SuitType.VARIA:
+                base_address = 0x9B9D20
+            elif suit_type == SuitType.GRAVITY:
+                base_address = 0x9B9F20
+            else:
+                raise AssertionError(f"function get_palette() called for speed boost palette with unknown suit type: {suit_type}")
+
+            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
+            # Probably this is more complex than just cycling through in order of increasing brightness
+            return [(5,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
+
+        elif base_type == PaletteType.SPEED_SQUAT:
+            if suit_type == SuitType.POWER:
+                base_address = 0x9B9BA0
+            elif suit_type == SuitType.VARIA:
+                base_address = 0x9B9DA0
+            elif suit_type == SuitType.GRAVITY:
+                base_address = 0x9B9FA0
+            else:
+                raise AssertionError(f"function get_palette() called for speed squat palette with unknown suit type: {suit_type}")
+
+            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
+            # Probably this is more complex than just cycling through in order of increasing brightness
+            return [(5,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
+
+        elif base_type == PaletteType.SHINE_SPARK:
+            if suit_type == SuitType.POWER:
+                base_address = 0x9B9C20
+            elif suit_type == SuitType.VARIA:
+                base_address = 0x9B9E20
+            elif suit_type == SuitType.GRAVITY:
+                base_address = 0x9BA020
+            else:
+                raise AssertionError(f"function get_palette() called for shine spark palette with unknown suit type: {suit_type}")
+
+            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
+            # Probably this is more complex than just cycling through in order of increasing brightness
+            return [(5,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
+
+        elif base_type == PaletteType.SCREW_ATTACK:
+            if suit_type == SuitType.POWER:
+                base_address = 0x9B9CA0
+            elif suit_type == SuitType.VARIA:
+                base_address = 0x9B9EA0
+            elif suit_type == SuitType.GRAVITY:
+                base_address = 0x9BA0A0
+            else:
+                raise AssertionError(f"function get_palette() called for screw attack palette with unknown suit type: {suit_type}")
+
+            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
+            # Probably this is more complex than just cycling through in order of increasing brightness
+            return [(5,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
+
+        elif base_type == PaletteType.HYPER_BEAM:
+            base_address = 0x9BA240
+            
+            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
+            return [(5,self._get_raw_palette(base_address + i*0x20)) for i in range(10)]
+
+        elif base_type == PaletteType.DEATH_SUIT:
+            #the colors for the exploding suit pieces can be set to different palettes.
+            #I think that they were set to overlap with charge palette by accident, because there are other palettes available
+            # that seem to be intended for this purpose (e.g. at $9B:9440 for power suit)
+
+            #To retrieve these palettes, first need to grab the pointers to the palettes
+            if suit_type == SuitType.POWER:
+                palette_list_pointer = 0x9BB7D3
+            elif suit_type == SuitType.VARIA:
+                palette_list_pointer = 0x9BB7E7
+            elif suit_type == SuitType.GRAVITY:
+                palette_list_pointer = 0x9BB7FB
+            else:
+                raise AssertionError(f"function get_palette() called for screw attack palette with unknown suit type: {suit_type}")
+
+            #There are ten pointers in total, grab them all
+            palette_list = [0x9B0000 + offset for offset in self.read_from_snes_address(palette_list_pointer, "2"*10)]
+
+            #ironically, the code doesn't even use all of these palettes, because that is determined by the next parameters
+            full_palette_set = []
+            for i in range(9):
+                durations,palette_index = self.read_from_snes_address(0x9BB823 + 2*i,"11")
+                full_palette_set.append(duration,palette_list[palette_index])
+
+            return full_palette_set
+
+        elif base_type == PaletteType.DEATH_FLESH:
+            palette_list_pointer = 0x9BB80F
+            
+            #There are ten pointers in total, grab them all
+            palette_list = [0x9B0000 + offset for offset in self.read_from_snes_address(palette_list_pointer, "2"*10)]
+
+            #ironically, the code doesn't even use all of these palettes, because that is determined by the next parameters
+            full_palette_set = []
+            for i in range(9):
+                durations,palette_index = self.read_from_snes_address(0x9BB823 + 2*i,"11")
+                full_palette_set.append(duration,palette_list[palette_index])
+
+            return full_palette_set
+
+        elif base_type == PaletteType.CRYSTAL_FLASH:
+            #TODO: Figure out the timing of this more specifically.  Right now I'm just putting in a guess.
+            return [(5,self._get_raw_palette(0x9B96C0 + i*0x20)) for i in range(6)]
+
+        elif base_type == PaletteType.SEPIA:
+            return self._get_static_palette(0x8CE569)
+
+        elif base_type == PaletteType.SEPIA_HURT:
+            return self._get_static_palette(0x9BA380)
+
+        elif base_type == PaletteType.SEPIA_ALTERNATE:
+            return self._get_static_palette(0x9BA3A0)
+
+        elif base_type == PaletteType.DOOR:
+            visor_color = self.read_from_snes_address(0x82E52B, 2)
+            #TODO: Need to confirm the color of black used in the remaining palette positions
+            raise NotImplementedError()
+            #return [(0, black palette with visor appended to 4)]
+
+        elif base_type == PaletteType.XRAY:
+            _,base_palette = self.get_palette(PaletteType.STANDARD, suit_type)[0]    #recurse to get the regular suit palette
+            visor_colors = self.read_from_snes_address(0x9BA3C6, "222")
+            #TODO: Need to append these to the base palette along with durations from...wherever durations come from
+            raise NotImplementedError()
+            #return [(duration, base palette with visor color appended correctly) for bunch of things]
+
+        elif base_type == PaletteType.FILE_SELECT:
+            return self._get_static_palette(0x8EE5E0)
+
+        elif base_type == PaletteType.SHIP:
+            base_palette_address = 0xA2A59E    #yes, way over here
+            ship_underglow_address = 0x8DCA4E  #yes, way over there
+
+            ship_underglow_address += 2    #skip over the control codes
+            for i in range(14):
+                #now what you're going to get is a list of duration, color, control code (2 bytes each, 14 in total)
+                duration, glow_color = self.read_from_snes_address(ship_underglow_address + 6*i, "22")
+
+            #TODO: Match up the glow color correctly to the base palette
+            raise NotImplementedError()
+            #return [(duration, ship palette with glow color appended correctly) for bunch of things]
+            
+
+        elif base_type == PaletteType.INTRO_SHIP:
+            #TODO: the thrusters alternate white and black according to some code somewhere
+            return self._get_static_palette(0x8CE68B)
+
+        elif base_type == PaletteType.OUTRO_SHIP:
+            base_address = 0x8DD6BA
+            base_address += 2       #skip the control codes
+            return self._get_sequence_of_timed_palettes(base_address, 16)
+
+        else:
+            raise AssertionError(f"function get_palette() called with unknown palette type: {base_type}")
+
+
+    def _get_static_palette(self, snes_addr):
+        return (0, self._get_raw_palette(snes_addr))
+
+    def _get_timed_palette(self, snes_addr):
+        duration = self.read_from_snes_address(snes_addr, 2)
+        palette = self._get_raw_palette(snes_addr + 2)
+        return (duration,palette)
+
+    def _get_sequence_of_timed_palettes(self, snes_addr, num_palettes):
+        #adding 0x24 skips over the duration dbyte, previous palette, and the control code each time
+        return [self._get_timed_palette(base_address + 0x24*i) for i in range(num_palettes)]
+        
+
+    def _get_raw_palette(self,snes_addr):
+        return self.read_from_snes_address(snes_addr, "2"*0x10)
+
+
+    def _get_pose_tilemaps(self,animation,pose):
+        lower_tilemaps = self._get_pose_tilemaps_from_addr(0x92945D, animation, pose)
+        upper_tilemaps = self._get_pose_tilemaps_from_addr(0x929263, animation, pose)
+
+        #special case here for elevator poses, they have this extra stupid tile
+        #the position is hardcoded into the game at a block starting at $90:868D.
+        #I did not make the code go in there and dig out the offsets because this tile is stupid.
+        if animation in [0x00, 0x9B]:  #elevator poses (power suit/upgraded suit)
+            stupid_tile_tilemap = [[0xF9,0x01,0xF5,0x21,0x38]]   #stupid offsets
+        else:
+            stupid_tile_tilemap = []
+        
+        #the tiles are rendered in this specific order: backwards lower, backwards upper
+        return lower_tilemaps[::-1] + stupid_tile_tilemap + upper_tilemaps[::-1]   
+
+
+    def _get_pose_tilemaps_from_addr(self, base_addr, animation, pose):
+        #get the pointer to the list of pose pointers (in disassembly: get P??_UT or P??_LT)
+        animation_all_poses_index = self.read_from_snes_address(base_addr + 2*animation, 2)
+        #now get the specific pointer to the tilemap set (in disassembly: get TM_???)
+        pose_tilemaps_pointer = 0x920000 + self.read_from_snes_address(0x92808D + 2*animation_all_poses_index, 2)
+        #now use that pointer to find out how many tilemaps there actually are
+        if pose_tilemaps_pointer == 0x920000:    #as will be the case when the pointer is zero, specifying no tiles here
+            num_tilemaps = 0
+        else:
+            num_tilemaps = self.read_from_snes_address(pose_tilemaps_pointer, 2)
+        #and now get the tilemaps!  They start right after the word specifying their number
+        return [self.read_from_snes_address(pose_tilemaps_pointer + 2 + 5*i, "11111") for i in range(num_tilemaps)]
+
+
+    def _get_dma_data(self,animation,pose):
+        #get the pointer to the big list of table indices (in disassembly: get AFP_T??)
+        animation_frame_progression_table = 0x920000 + self.read_from_snes_address(0x92D94E, 2)
+        #get two sets of table/entry indices for use in the DMA table
+        top_DMA_table, top_DMA_entry, bottom_DMA_table, bottom_DMA_entry = self.read_from_snes_address(animation_frame_progression_table,"1111")
+        #get the data for each part
+        DMA_writes = {}
+        for (base_addr, table, entry, vram_offset) in \
+                                        [(0x92D938, bottom_DMA_table, bottom_DMA_entry, 0x08), #lower body VRAM
+                                         (0x92D91E, top_DMA_table,    top_DMA_entry,    0x00)]: #upper body VRAM
+            #reference the first index to figure out where the relevant DMA table is
+            this_DMA_table = 0x920000 + self.read_from_snes_address(base_addr,2)
+            #From this table, get the appropriate entry in the list which contains the DMA pointer and the row sizes
+            DMA_pointer, row1_size, row2_size = self.read_from_snes_address(this_DMA_table + 7 * pose, "322")
+            #Read the DMA data
+            row1 = self.read_from_snes_address(DMA_pointer, "1"*row1_size)
+            row2 = self.read_from_snes_address(DMA_pointer+row1_size, "1"*row2_size)
+
+            #add the DMA write information to the dictionary
+            DMA_writes[vram_offset] = row1
+            DMA_writes[0x10+vram_offset] = row2
+            
+        return DMA_writes
+
+
+    def _get_pose_duration(self,animation, pose):
+        #get the duration list pointer (FD_?? in disassembly)
+        duration_list_location = self._get_duration_list_location(animation)
+        return self.read_from_snes_address(duration_list_location,1)
+    
         
     def _get_duration_list_location(self, animation):
         return 0x910000 + self.read_from_snes_address(0x91B010 + 2* animation,2)
