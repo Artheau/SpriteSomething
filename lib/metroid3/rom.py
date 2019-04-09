@@ -10,7 +10,7 @@ if __name__ == "__main__":
     raise AssertionError(f"Called main() on utility library {__file__}")
 
 import enum
-from .RomHandler.rom import RomHandler      #assumes rom.py is in a subfolder called RomHandler
+from lib.RomHandler.rom import RomHandler
 
 
 #enumeration for the suit types
@@ -492,21 +492,6 @@ class SamusRomHandler(RomHandler):
         
     def _get_duration_list_location(self, animation):
         return 0x910000 + self.read_from_snes_address(0x91B010 + 2* animation,2)
-
-
-    def _apply_single_fix_to_snes_address(self, snes_address, classic_values, fixed_values, encoding):
-        #checks to see if, indeed, a value is still in the classic (bugged) value, and if so, fixes it
-        #returns True if the fix was affected and False otherwise
-
-        #first make sure the input makes sense -- either all integers or matching length lists
-        if type(encoding) is not int and len(classic_values) != len(fixed_values):
-            raise AssertionError(f"function _apply_single_fix_to_snes_address() called with different length lists:\n{classic_values}\n{fixed_values}")
-
-        if self.read_from_snes_address(snes_address, encoding) == classic_values:
-            self.write_to_snes_address(snes_address, fixed_values, encoding)
-            return True
-        else:
-            return False
 
 
     def _apply_improvements(self):
