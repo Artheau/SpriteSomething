@@ -11,7 +11,7 @@ class Zelda3(Game):
         }
         self.rom_data = RomHandler()
         self.meta_data = None
-        self.sprites = {"Samus": M3Samus(rom_data, meta_data)}
+        self.sprites = {"Link": Z3Link(rom_data, meta_data)}
 
 class Zelda3Sprite(Zspr):   #ALttP Sprites
     def __init__(self):

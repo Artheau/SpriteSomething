@@ -30,14 +30,17 @@ class SpriteSomethingMainFrame(tk.Frame):
         panes = tk.PanedWindow(self, orient=tk.HORIZONTAL)
         panes.pack(fill=tk.BOTH, expand=1)
 
-        #for now, just show the default picture
-        self._background = self.add_background(panes)
-        #self.attach_sprites(self._background)
+        self._canvas = tk.Canvas(panes)
+        panes.add(self._canvas)
+
+        self._sprites = {}
+        self._background_ID = self.set_initial_background(self._canvas, Image.open("resources/metroid3/backgrounds/title.png"))
+        self._sprite_ID = self.attach_sprite(self._canvas, Image.open("resources/zelda3/backgrounds/throne.png"), (100,100))
 
         right = tk.Label(panes, text="right pane")
         panes.add(right,stretch="always")
 
-        #self.scale_background_image(2)
+        self.scale_background_image(2)
 
         #button example
         #show_image_button = tk.Button(self, text="Show Background", command=self.show_image)
@@ -107,17 +110,11 @@ class SpriteSomethingMainFrame(tk.Frame):
         #attach to the menu bar
         menu.add_cascade(label="Help", menu=help_menu)
 
-    def popup_NYI(self):
-        messagebox.showinfo("Not Implemented", "This feature is not yet implemented")
-
     def addDummyMenuOption(self,text,menuObject):
         menuObject.add_command(label=text, command=self.popup_NYI)
 
-    def scale_background_image(self,factor):
-        new_size = [2*x for x in self._raw_background.size]
-        new_background_image = ImageTk.PhotoImage(self._raw_background.resize(new_size))
-        self._background.image = new_background_image
-        self._background.configure(image=new_background_image)
+    def popup_NYI(self):
+        messagebox.showinfo("Not Implemented", "This feature is not yet implemented")
 
     def create_random_title(self):
         with open("resources/app_names.json") as name_file:
@@ -132,19 +129,21 @@ class SpriteSomethingMainFrame(tk.Frame):
             app_name.append(f" {suffix}")
         self.master.title("".join(app_name))
 
-    def add_background(self, panes):
-        self._raw_background = Image.open("resources/metroid3/title.png")  #TODO: Placeholder until this is loaded dynamically
-        background = ImageTk.PhotoImage(self._raw_background)
-        background_label = tk.Label(panes, image=background)
-        background_label.image = background
-        panes.add(background_label)
-        return background_label
+    def set_initial_background(self, canvas, background_raw_image):
+        self._raw_background = background_raw_image
+        self._background_image = ImageTk.PhotoImage(background_raw_image)
+        return canvas.create_image(0,0,image=self._background_image,anchor=tk.NW)   #return the object ID of the background
 
-    def attach_sprite(self,background,sprite_raw_image,location):
+    def scale_background_image(self,factor):
+        new_size = tuple(factor*dim for dim in self._raw_background.size)
+        self._background_image = ImageTk.PhotoImage(self._raw_background.resize(new_size))
+        self._canvas.itemconfig(self._background_ID, image = self._background_image)
+
+    def attach_sprite(self,canvas,sprite_raw_image,location):
         sprite = ImageTk.PhotoImage(sprite_raw_image)
-        sprite_label = tk.Label(background, image=sprite, borderwidth=0, highlightthickness=0)
-        sprite_label.image = sprite
-        sprite_label.place(location)  #prev: (x=100,y=100)
+        ID = canvas.create_image(location[0], location[1],image=sprite, anchor = tk.NW)
+        self._sprites[ID] = sprite     #if you skip this part, then the auto-destructor will get rid of your picture!
+        return ID
 
 
     def exit(self):
