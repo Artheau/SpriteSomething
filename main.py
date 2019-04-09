@@ -25,29 +25,8 @@ class SpriteSomethingMainFrame(tk.Frame):
         #main frame should take up the whole window
         self.pack(fill=tk.BOTH, expand=1)
 
-        #create the menu bar
-        menu = tk.Menu(self.master)
-        self.master.config(menu=menu)
-
-        #create the file menu
-        file_menu = tk.Menu(menu, tearoff=0)
-        file_menu.add_command(label="Load Sprite", command=self.popup_NYI)
-        file_menu.add_command(label="Export to ROM", command=self.popup_NYI)
-        file_menu.add_command(label="Exit", command=self.exit)
-        #attach to the menu bar
-        menu.add_cascade(label="File", menu=file_menu)
-
-        #create the edit menu
-        image_menu = tk.Menu(menu, tearoff=0)
-        image_menu.add_command(label="Create GIF", command=self.popup_NYI)
-        #attach to the menu bar
-        menu.add_cascade(label="Image", menu=image_menu)
-
-        #create the help menu
-        help_menu = tk.Menu(menu, tearoff=0)
-        help_menu.add_command(label="About", command=self.popup_NYI)
-        #attach to the menu bar
-        menu.add_cascade(label="Help", menu=help_menu)
+        self.create_menu_bar()
+        
 
         panes = tk.PanedWindow(self, orient=tk.HORIZONTAL)
         panes.pack(fill=tk.BOTH, expand=1)
@@ -65,6 +44,71 @@ class SpriteSomethingMainFrame(tk.Frame):
         #button example
         #show_image_button = tk.Button(self, text="Show Background", command=self.show_image)
         #show_image_button.place(x=300, y=0)
+
+    def create_menu_bar(self):
+        #create the menu bar
+        menu = tk.Menu(self.master)
+        self.master.config(menu=menu)
+
+        #create the file menu
+        file_menu = tk.Menu(menu, tearoff=0)
+        for option in ["Open","Save","Save As..."]:
+            self.addDummyMenuOption(option,file_menu)
+        file_menu.add_command(label="Exit", command=self.exit)
+        #attach to the menu bar
+        menu.add_cascade(label="File", menu=file_menu)
+
+        #create the import menu
+        import_menu = tk.Menu(menu, tearoff=0)
+        #import sprite
+        for option in ["Sprite from Game File","PNG"]:
+          self.addDummyMenuOption(option,import_menu)
+        import_menu.add_separator()
+        #import palette
+        for option in ["GIMP Palette","YY-CHR Palette","Graphics Gale Palette"]:
+          self.addDummyMenuOption(option,import_menu)
+        import_menu.add_separator()
+        #import raw data
+        for option in ["Raw Pixel Data","Raw Palette Data"]:
+          self.addDummyMenuOption(option,import_menu)
+
+        #create the export menu
+        export_menu = tk.Menu(menu, tearoff=0)
+        #export sprite
+        for option in ["Copy to new Game File","Inject into Game File","PNG"]:
+          self.addDummyMenuOption(option,export_menu)
+        export_menu.add_separator()
+        #export animation
+        for option in ["Animation as GIF","Animation as Collage"]:
+          self.addDummyMenuOption(option,export_menu)
+        export_menu.add_separator()
+        #export palette
+        for option in ["GIMP Palette","YY-CHR Palette","Graphics Gale Palette"]:
+          self.addDummyMenuOption(option,export_menu)
+        export_menu.add_separator()
+        #export tracker images for crossproduct's and derivatives
+        for option in ["Tracker Images"]:
+          self.addDummyMenuOption(option,export_menu)
+        export_menu.add_separator()
+        #export raw data
+        for option in ["Raw Pixel Data","Raw Palette Data"]:
+          self.addDummyMenuOption(option,export_menu)
+
+        #create the convert menu
+        convert_menu = tk.Menu(menu, tearoff=0)
+        convert_menu.add_cascade(label="Import", menu=import_menu)
+        convert_menu.add_cascade(label="Export", menu=export_menu)
+        #attach to the menu bar
+        menu.add_cascade(label="Convert", menu=convert_menu)
+
+        #create the help menu
+        help_menu = tk.Menu(menu, tearoff=0)
+        for option in ["About"]:
+          self.addDummyMenuOption(option,help_menu)
+        #attach to the menu bar
+        menu.add_cascade(label="Help", menu=help_menu)
+
+        
 
     def scale_background_image(self,factor):
         new_size = [2*x for x in self._raw_background.size]
