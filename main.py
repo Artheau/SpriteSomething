@@ -2,6 +2,8 @@
 #while suffering from delusions of grandeur
 #in April 2019
 
+import os
+import importlib
 import json
 import random
 import tkinter as tk
@@ -34,13 +36,18 @@ class SpriteSomethingMainFrame(tk.Frame):
         panes.add(self._canvas)
 
         self._sprites = {}
-        self._background_ID = self.set_initial_background(self._canvas, Image.open("resources/metroid3/backgrounds/title.png"))
-        self._sprite_ID = self.attach_sprite(self._canvas, Image.open("resources/zelda3/backgrounds/throne.png"), (100,100))
+        self._background_ID = None
+
+        #for now, just to prove that at least some of the features work
+        self.load_game("zelda3")
+
+        
+        #self._sprite_ID = self.attach_sprite(self._canvas, Image.open(os.path.join("resources","zelda3","backgrounds","throne.png"), (100,100))
+
 
         right = tk.Label(panes, text="right pane")
         panes.add(right,stretch="always")
 
-        self.scale_background_image(2)
 
         #button example
         #show_image_button = tk.Button(self, text="Show Background", command=self.show_image)
@@ -117,7 +124,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         messagebox.showinfo("Not Implemented", "This feature is not yet implemented")
 
     def create_random_title(self):
-        with open("resources/app_names.json") as name_file:
+        with open(os.path.join("resources","app_names.json")) as name_file:
             name_parts = json.load(name_file)
         app_name = []
         if random.choice([True,False]):
@@ -129,16 +136,38 @@ class SpriteSomethingMainFrame(tk.Frame):
             app_name.append(f" {suffix}")
         self.master.title("".join(app_name))
 
-    def set_initial_background(self, canvas, background_raw_image):
-        self._raw_background = background_raw_image
-        self._background_image = ImageTk.PhotoImage(background_raw_image)
-        return canvas.create_image(0,0,image=self._background_image,anchor=tk.NW)   #return the object ID of the background
+    def load_game(self,game_name):
+        game_name = game_name.lower()   #no funny business with capitalization
+        self._game_name = game_name
+
+        library_name = f"lib.{game_name}.{game_name}"                    #establishing now the convention that the file names are the folder names
+        library_module = importlib.import_module(library_name)
+        self.game = getattr(library_module, game_name.capitalize())()      #establishing now the convention that the class names are the first letter capitalized of the folder name
+
+        background_name = random.choice(list(self.game.background_images.keys()))
+        self.load_background(background_name)
+
+    def load_background(self, background_name):
+        if background_name in self.game.background_images:
+            background_filename = self.game.background_images[background_name]
+            full_path_to_background_image = os.path.join("resources",self._game_name,"backgrounds",background_filename)
+            self._set_background(Image.open(full_path_to_background_image))
+        else:
+            raise AssertionError(f"load_background() called with invalid background name {background_filename}")
+
+    def _set_background(self, background_raw_image):
+        self._raw_background = background_raw_image   #save this so it can easily be scaled later
+        self._background_image = ImageTk.PhotoImage(background_raw_image)     #have to save this for it to display
+        if self._background_ID is None:
+            self._background_ID = self._canvas.create_image(0,0,image=self._background_image,anchor=tk.NW)    #so that we can manipulate the object later
+        else:
+            self._canvas.itemconfig(self._background_ID, image=self._background_image)
 
     def scale_background_image(self,factor):
-        new_size = tuple(factor*dim for dim in self._raw_background.size)
-        self._background_image = ImageTk.PhotoImage(self._raw_background.resize(new_size))
-        self._canvas.itemconfig(self._background_ID, image = self._background_image)
-
+        if self._background_ID:   #if there is no background right now, do nothing
+            new_size = tuple(factor*dim for dim in self._raw_background.size)
+            self._set_background(self._raw_background.resize(new_size))
+        
     def attach_sprite(self,canvas,sprite_raw_image,location):
         sprite = ImageTk.PhotoImage(sprite_raw_image)
         ID = canvas.create_image(location[0], location[1],image=sprite, anchor = tk.NW)

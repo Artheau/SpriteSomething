@@ -9,9 +9,9 @@ class Metroid3(Game):
         self.background_images = {
                                     "Title Screen": "title.png"
         }
-        self.rom_data = RomHandler()
+        self.rom_data = None#RomHandler()
         self.meta_data = None
-        self.sprites = {"Samus": M3Samus(rom_data, meta_data)}
+        self.sprites = {"Samus": M3Samus(self.rom_data, self.meta_data)}
 
 
 class Metroid3Sprite(Zspr):   #Super Metroid Sprites
@@ -20,8 +20,8 @@ class Metroid3Sprite(Zspr):   #Super Metroid Sprites
 
 
 
-class M3Samus(Metroid3):    # SM Player Character Sprites
-    def __init__(self):
+class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
+    def __init__(self, rom_data, meta_data):
         super().__init__()    #do the stuff from the inherited class
 
         #TODO: Finish this class

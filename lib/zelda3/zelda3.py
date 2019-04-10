@@ -7,11 +7,12 @@ class Zelda3(Game):
         self.game_nameShort = "Zelda3"
         self.game_nameAbbr =  "Z3"
         self.background_images = {
-                                    "Title Screen": "title.png"
+                                    "On His Throne": "throne.png",
+                                    "Budget Retreat": "cell.png"
         }
-        self.rom_data = RomHandler()
+        self.rom_data = None#RomHandler()
         self.meta_data = None
-        self.sprites = {"Link": Z3Link(rom_data, meta_data)}
+        self.sprites = {"Link": Z3Link(self.rom_data, self.meta_data)}
 
 class Zelda3Sprite(Zspr):   #ALttP Sprites
     def __init__(self):
@@ -19,7 +20,7 @@ class Zelda3Sprite(Zspr):   #ALttP Sprites
 
 
 class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
-    def __init__(self):
+    def __init__(self, rom_data, meta_data):
         super().__init__()    #do the stuff from the inherited class
 
         self._SPRITE_DATA_SIZE = 0x7000
