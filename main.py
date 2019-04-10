@@ -33,7 +33,6 @@ class SpriteSomethingMainFrame(tk.Frame):
         panes.pack(fill=tk.BOTH, expand=1)
 
         self._canvas = tk.Canvas(panes)
-        panes.add(self._canvas)
 
         self._sprites = {}
         self._background_ID = None
@@ -44,25 +43,75 @@ class SpriteSomethingMainFrame(tk.Frame):
         
         #self._sprite_ID = self.attach_sprite(self._canvas, Image.open(os.path.join("resources","zelda3","backgrounds","throne.png"), (100,100))
 
-        right_pane = tk.Frame(panes)
-        panes.add(right_pane)
+        left_pane = tk.Frame(panes)
+        panes.add(left_pane, minsize=200)
+        panes.add(self._canvas)
 
+
+        left_pane.grid_rowconfigure(0, minsize=32)   #give a little space between the menu and the control panel
+        current_grid_row = 1
 
         #########   Background Dropdown   #############
-        background_label = tk.Label(right_pane, text="Background:")
-        background_label.grid(row=0,column=0)
-        self.background_selection = tk.StringVar(right_pane)
+        background_label = tk.Label(left_pane, text="Background:")
+        background_label.grid(row=current_grid_row,column=0)
+        self.background_selection = tk.StringVar(left_pane)
         self.background_selection.set(self.background_name)
-        background_dropdown = tk.OptionMenu(right_pane, self.background_selection, *self.game.background_images)
+        background_dropdown = tk.OptionMenu(left_pane, self.background_selection, *self.game.background_images)
         background_dropdown.configure(width=16)
-        background_dropdown.grid(row=0,column=1)
-        def change_dropdown(*args):
+        background_dropdown.grid(row=current_grid_row,column=1)
+        def change_background_dropdown(*args):
             self.load_background(self.background_selection.get())
-        self.background_selection.trace('w', change_dropdown)  #when the dropdown is changed, run this function
+        self.background_selection.trace('w', change_background_dropdown)  #when the dropdown is changed, run this function
+        current_grid_row += 1
+        ###############################################
+
+
+        ##########   Animation Dropdown   #############
+        animation_label = tk.Label(left_pane, text="Animation:")
+        animation_label.grid(row=current_grid_row, column=0)
+        self.animation_selection = tk.StringVar(left_pane)
+        self.animation_selection.set("Watch me Nae Nae")
+        animation_dropdown = tk.OptionMenu(left_pane, self.animation_selection, *["Watch me Nae Nae", "Watch me Whip"])
+        animation_dropdown.configure(width=16)
+        animation_dropdown.grid(row=current_grid_row, column=1)
+        def change_animation_dropdown(*args):
+            print(f"Received instruction to change animation to {self.animation_selection.get()}")
+        self.animation_selection.trace('w', change_animation_dropdown)  #when the dropdown is changed, run this function
+        current_grid_row += 1
         ###############################################
 
 
 
+        ########### Sprite Specific Stuff #############
+        for _,text in enumerate(["Sprite specific stuff", "over several", "rows"]):
+            sprite_temp_label = tk.Label(left_pane, text=text)
+            sprite_temp_label.grid(row=current_grid_row, column=0, columnspan=2)
+            current_grid_row += 1
+        for j,text in enumerate(["With", "Buttons"]):
+            temp_button = tk.Button(left_pane, text=text)
+            temp_button.grid(row=current_grid_row, column=j)
+        current_grid_row += 1
+        ###############################################
+
+
+
+        ########### GUI Specific Stuff ################
+        self._current_zoom = 1
+        temp_label = tk.Label(left_pane, text="GUI specific stuff")
+        temp_label.grid(row=current_grid_row, column=0, columnspan=2)
+        current_grid_row += 1
+        def zoom_out(*args):
+            self._current_zoom = max(0.1,self._current_zoom - 0.1)
+            self.scale_background_image(self._current_zoom)
+        def zoom_in(*args):
+            self._current_zoom = min(3.0,self._current_zoom + 0.1)
+            self.scale_background_image(self._current_zoom)
+        
+        zoom_out_button = tk.Button(left_pane, text="Zoom Out", command=zoom_out)
+        zoom_out_button.grid(row=current_grid_row, column=0)
+        zoom_in_button = tk.Button(left_pane, text="Zoom In", command=zoom_in)
+        zoom_in_button.grid(row=current_grid_row, column=1)
+        ###############################################
 
 
 
@@ -181,12 +230,12 @@ class SpriteSomethingMainFrame(tk.Frame):
         if background_name in self.game.background_images:
             background_filename = self.game.background_images[background_name]
             full_path_to_background_image = os.path.join("resources",self._game_name,"backgrounds",background_filename)
-            self._set_background(Image.open(full_path_to_background_image))
+            self._raw_background = Image.open(full_path_to_background_image)   #save this so it can easily be scaled later
+            self._set_background(self._raw_background)
         else:
             raise AssertionError(f"load_background() called with invalid background name {background_filename}")
 
     def _set_background(self, background_raw_image):
-        self._raw_background = background_raw_image   #save this so it can easily be scaled later
         self._background_image = ImageTk.PhotoImage(background_raw_image)     #have to save this for it to display
         if self._background_ID is None:
             self._background_ID = self._canvas.create_image(0,0,image=self._background_image,anchor=tk.NW)    #so that we can manipulate the object later
@@ -195,7 +244,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
     def scale_background_image(self,factor):
         if self._background_ID is not None:   #if there is no background right now, do nothing
-            new_size = tuple(factor*dim for dim in self._raw_background.size)
+            new_size = tuple(int(factor*dim) for dim in self._raw_background.size)
             self._set_background(self._raw_background.resize(new_size))
         
     def attach_sprite(self,canvas,sprite_raw_image,location):
