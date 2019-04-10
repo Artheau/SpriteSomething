@@ -1,8 +1,9 @@
 from lib.game import Game
 from lib.zspr import Zspr
+from . import rom
 
 class Zelda3(Game):
-    def __init__(self):
+    def __init__(self, rom_filename, meta_filename):
         self.game_name = "The Legend of Zelda: A Link to the Past"
         self.game_nameShort = "Zelda3"
         self.game_nameAbbr =  "Z3"
@@ -10,7 +11,7 @@ class Zelda3(Game):
                                     "On His Throne": "throne.png",
                                     "Budget Retreat": "cell.png"
         }
-        self.rom_data = None#RomHandler()
+        self.rom_data = None#rom.Zelda3RomHandler(rom_filename)
         self.meta_data = None
         self.sprites = {"Link": Z3Link(self.rom_data, self.meta_data)}
 

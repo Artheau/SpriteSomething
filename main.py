@@ -39,7 +39,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         self._background_ID = None
 
         #for now, just to prove that at least some of the features work
-        self.load_game("zelda3")
+        self.load_game(random.choice(["zelda3","metroid3"]))
 
         
         #self._sprite_ID = self.attach_sprite(self._canvas, Image.open(os.path.join("resources","zelda3","backgrounds","throne.png"), (100,100))
@@ -140,12 +140,26 @@ class SpriteSomethingMainFrame(tk.Frame):
         game_name = game_name.lower()   #no funny business with capitalization
         self._game_name = game_name
 
-        library_name = f"lib.{game_name}.{game_name}"                    #establishing now the convention that the file names are the folder names
+        #establishing now the convention that the file names are the folder names
+        library_name = f"lib.{game_name}.{game_name}"                    
         library_module = importlib.import_module(library_name)
-        self.game = getattr(library_module, game_name.capitalize())()      #establishing now the convention that the class names are the first letter capitalized of the folder name
+
+        rom_filename = self._get_sfc_filename(os.path.join("resources",game_name))
+        meta_filename = None  #TODO
+
+        #establishing now the convention that the class names are the first letter capitalized of the folder name
+        #this line is not obvious; it is calling the appropriate Game class constructor, e.g. Zelda3 class from lib/zelda3/zelda3.py
+        self.game = getattr(library_module, game_name.capitalize())(rom_filename,meta_filename)
 
         background_name = random.choice(list(self.game.background_images.keys()))
         self.load_background(background_name)
+
+    def _get_sfc_filename(self, path):
+        for file in os.listdir(path):
+            if file.endswith(".sfc") or file.endswith(".smc"):
+                return os.path.join(path, file)
+        else:
+            raise AssertionError(f"There is no sfc file in directory {path}")
 
     def load_background(self, background_name):
         if background_name in self.game.background_images:
@@ -164,7 +178,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             self._canvas.itemconfig(self._background_ID, image=self._background_image)
 
     def scale_background_image(self,factor):
-        if self._background_ID:   #if there is no background right now, do nothing
+        if self._background_ID is not None:   #if there is no background right now, do nothing
             new_size = tuple(factor*dim for dim in self._raw_background.size)
             self._set_background(self._raw_background.resize(new_size))
         

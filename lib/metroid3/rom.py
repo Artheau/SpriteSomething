@@ -43,7 +43,7 @@ class PaletteType(enum.Enum):
     OUTRO_SHIP = enum.auto()         #ship while escaping from Zebes at the end
 
 
-class SamusRomHandler(RomHandler):
+class Metroid3RomHandler(RomHandler):
     def __init__(self, filename):
         super().__init__(filename)      #do the usual stuff
 
@@ -328,7 +328,7 @@ class SamusRomHandler(RomHandler):
             elif suit_type == SuitType.GRAVITY:
                 palette_list_pointer = 0x9BB7FB
             else:
-                raise AssertionError(f"function get_palette() called for screw attack palette with unknown suit type: {suit_type}")
+                raise AssertionError(f"function get_palette() called for death suit palette with unknown suit type: {suit_type}")
 
             #There are ten pointers in total, grab them all
             palette_list = [0x9B0000 + offset for offset in self.read_from_snes_address(palette_list_pointer, "2"*10)]
