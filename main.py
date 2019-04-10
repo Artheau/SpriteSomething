@@ -96,7 +96,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
         ########### GUI Specific Stuff ################
-        self._current_zoom = 1
         temp_label = tk.Label(left_pane, text="GUI specific stuff")
         temp_label.grid(row=current_grid_row, column=0, columnspan=2)
         current_grid_row += 1
@@ -111,13 +110,10 @@ class SpriteSomethingMainFrame(tk.Frame):
         zoom_out_button.grid(row=current_grid_row, column=0)
         zoom_in_button = tk.Button(left_pane, text="Zoom In", command=zoom_in)
         zoom_in_button.grid(row=current_grid_row, column=1)
+        current_grid_row += 1
         ###############################################
 
-
-
-        #show_iself.mage_button = tk.Button(self, text="Show Background", command=self.show_image)
-        #show_image_button.place(x=300, y=0)
-
+        
 
     def create_menu_bar(self):
         #create the menu bar
@@ -216,6 +212,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         #this line is not obvious; it is calling the appropriate Game class constructor, e.g. Zelda3 class from lib/zelda3/zelda3.py
         self.game = getattr(library_module, game_name.capitalize())(rom_filename,meta_filename)
 
+        self._current_zoom = 1.0
         self.background_name = random.choice(list(self.game.background_images.keys()))
         self.load_background(self.background_name)
 
@@ -232,6 +229,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             full_path_to_background_image = os.path.join("resources",self._game_name,"backgrounds",background_filename)
             self._raw_background = Image.open(full_path_to_background_image)   #save this so it can easily be scaled later
             self._set_background(self._raw_background)
+            self.scale_background_image(self._current_zoom)
         else:
             raise AssertionError(f"load_background() called with invalid background name {background_filename}")
 
