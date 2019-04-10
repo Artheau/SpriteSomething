@@ -44,13 +44,29 @@ class SpriteSomethingMainFrame(tk.Frame):
         
         #self._sprite_ID = self.attach_sprite(self._canvas, Image.open(os.path.join("resources","zelda3","backgrounds","throne.png"), (100,100))
 
+        right_pane = tk.Frame(panes)
+        panes.add(right_pane)
 
-        right = tk.Label(panes, text="right pane")
-        panes.add(right,stretch="always")
+
+        #########   Background Dropdown   #############
+        background_label = tk.Label(right_pane, text="Background:")
+        background_label.grid(row=0,column=0)
+        self.background_selection = tk.StringVar(right_pane)
+        self.background_selection.set(self.background_name)
+        background_dropdown = tk.OptionMenu(right_pane, self.background_selection, *self.game.background_images)
+        background_dropdown.configure(width=16)
+        background_dropdown.grid(row=0,column=1)
+        def change_dropdown(*args):
+            self.load_background(self.background_selection.get())
+        self.background_selection.trace('w', change_dropdown)  #when the dropdown is changed, run this function
+        ###############################################
 
 
-        #button example
-        #show_image_button = tk.Button(self, text="Show Background", command=self.show_image)
+
+
+
+
+        #show_iself.mage_button = tk.Button(self, text="Show Background", command=self.show_image)
         #show_image_button.place(x=300, y=0)
 
 
@@ -151,8 +167,8 @@ class SpriteSomethingMainFrame(tk.Frame):
         #this line is not obvious; it is calling the appropriate Game class constructor, e.g. Zelda3 class from lib/zelda3/zelda3.py
         self.game = getattr(library_module, game_name.capitalize())(rom_filename,meta_filename)
 
-        background_name = random.choice(list(self.game.background_images.keys()))
-        self.load_background(background_name)
+        self.background_name = random.choice(list(self.game.background_images.keys()))
+        self.load_background(self.background_name)
 
     def _get_sfc_filename(self, path):
         for file in os.listdir(path):
