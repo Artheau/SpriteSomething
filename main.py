@@ -163,33 +163,33 @@ class SpriteSomethingMainFrame(tk.Frame):
         speed_up_button.grid(row=current_grid_row, column=2)
         current_grid_row += 1
 
-        img = tk.PhotoImage(file=os.path.join("resources","images","meta","play.png"))
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","play.png"))
         play_button = tk.Button(control_section, image=img, text="Play", compound=RIGHT)
         play_button.image = img
         play_button.grid(row=current_grid_row, column=0)
 
-        img = tk.PhotoImage(file=os.path.join("resources","images","meta","play-once.png"))
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","play-once.png"))
         play_one_button = tk.Button(control_section, image=img, text="Play 1", compound=RIGHT)
         play_one_button.image = img
         play_one_button.grid(row=current_grid_row, column=1)
 
-        img = tk.PhotoImage(file=os.path.join("resources","images","meta","reset.png"))
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","reset.png"))
         reset_button = tk.Button(control_section, image=img, text="Reset", compound=RIGHT)
         reset_button.image = img
         reset_button.grid(row=current_grid_row, column=2)
         current_grid_row += 1
 
-        img = tk.PhotoImage(file=os.path.join("resources","images","meta","step-back.png"))
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-back.png"))
         step_back_button = tk.Button(control_section, image=img, text="Step", compound=LEFT)
         step_back_button.image = img
         step_back_button.grid(row=current_grid_row, column=0)
 
-        img = tk.PhotoImage(file=os.path.join("resources","images","meta","pause.png"))
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","pause.png"))
         pause_button = tk.Button(control_section, image=img, text="Pause", compound=RIGHT)
         pause_button.image = img
         pause_button.grid(row=current_grid_row, column=1)
 
-        img = tk.PhotoImage(file=os.path.join("resources","images","meta","step-forward.png"))
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-forward.png"))
         step_forward_button = tk.Button(control_section, image=img, text="Step", compound=RIGHT)
         step_forward_button.image = img
         step_forward_button.grid(row=current_grid_row, column=2)
@@ -267,9 +267,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         for label,level in items.items():
             if level > 0:
-                img = tk.PhotoImage(file=os.path.join("resources","images",self._game_name,prefix+'-'+str(level)+".png"))
+                img = tk.PhotoImage(file=os.path.join("resources",self._game_name,"icons",prefix+'-'+str(level)+".png"))
             else:
-                img = tk.PhotoImage(file=os.path.join("resources","images","meta","no-thing.png"))
+                img = tk.PhotoImage(file=os.path.join("resources","meta","icons","no-thing.png"))
             button = tk.Button(container,image=img,text=label+suffix)
             button_tip = CreateToolTip(button,label+suffix)
             button.image = img
