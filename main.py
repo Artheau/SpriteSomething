@@ -7,9 +7,7 @@ import importlib
 import json
 import random
 import tkinter as tk
-from lib.crxtooltip import *
-from tkinter import *
-from tkinter import messagebox
+from lib.crxtooltip import CreateToolTip
 from PIL import Image, ImageTk
 
 def main():
@@ -164,33 +162,33 @@ class SpriteSomethingMainFrame(tk.Frame):
         current_grid_row += 1
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","play.png"))
-        play_button = tk.Button(control_section, image=img, text="Play", compound=RIGHT)
+        play_button = tk.Button(control_section, image=img, text="Play", compound=tk.RIGHT)
         play_button.image = img
         play_button.grid(row=current_grid_row, column=1, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","play-once.png"))
-        play_one_button = tk.Button(control_section, image=img, text="Play 1", compound=RIGHT)
+        play_one_button = tk.Button(control_section, image=img, text="Play 1", compound=tk.RIGHT)
         play_one_button.image = img
         play_one_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","reset.png"))
-        reset_button = tk.Button(control_section, image=img, text="Reset", compound=RIGHT)
+        reset_button = tk.Button(control_section, image=img, text="Reset", compound=tk.RIGHT)
         reset_button.image = img
         reset_button.grid(row=current_grid_row, column=3, sticky='nesw')
         current_grid_row += 1
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-back.png"))
-        step_back_button = tk.Button(control_section, image=img, text="Step", compound=LEFT)
+        step_back_button = tk.Button(control_section, image=img, text="Step", compound=tk.LEFT)
         step_back_button.image = img
         step_back_button.grid(row=current_grid_row, column=1, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","pause.png"))
-        pause_button = tk.Button(control_section, image=img, text="Pause", compound=RIGHT)
+        pause_button = tk.Button(control_section, image=img, text="Pause", compound=tk.RIGHT)
         pause_button.image = img
         pause_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-forward.png"))
-        step_forward_button = tk.Button(control_section, image=img, text="Step", compound=RIGHT)
+        step_forward_button = tk.Button(control_section, image=img, text="Step", compound=tk.RIGHT)
         step_forward_button.image = img
         step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
         ###############################################
@@ -269,11 +267,18 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
     def add_spiffy_buttons(self,container,row,col,section_label,items,prefix,suffix):
+        #ins:
+        # container: the parent widget for this button set
+        # row,col: where in the parent's grid to anchor these buttons
+        # section_label: What this row of buttons represents (e.g. Mail colors)
+        # items: 
+        # prefix: a string that begins the icon filenames corresponding to the buttons of this row
+        # suffix: a string that is used in the tooltip after the identifying string (e.g. "Mail")
         spiffy_buttons = tk.Label(container,text=section_label+':')
         spiffy_buttons.grid(row=row,column=col)
         col += 1
         if prefix == "mail":
-          col += 1
+            col += 1
 
         for label,level in items.items():
             if level > 0:
