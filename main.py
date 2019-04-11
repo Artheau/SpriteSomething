@@ -53,14 +53,13 @@ class SpriteSomethingMainFrame(tk.Frame):
         #########   Sprite Metadata       #############
         metadata_section = tk.Frame(left_pane)
         left_pane.add(metadata_section)
-        metadata_section.grid_columnconfigure(0, weight=1)    #even out the columns
+        self.right_align_grid_in_frame(metadata_section)
         row=0
-        column=0
         for label in ["Sprite Name","Author Name","Author Name Short"]:
             metadata_label = tk.Label(metadata_section, text=label)
-            metadata_label.grid(row=row,column=0)
+            metadata_label.grid(row=row,column=1)
             metadata_input = tk.Entry(metadata_section)
-            metadata_input.grid(row=row,column=1)
+            metadata_input.grid(row=row,column=2)
             row += 1
         ###############################################
 
@@ -68,14 +67,14 @@ class SpriteSomethingMainFrame(tk.Frame):
         #########   Background Dropdown   #############
         background_section = tk.Frame(left_pane)
         left_pane.add(background_section)
-        background_section.grid_columnconfigure(0, weight=1)    #even out the columns
+        self.right_align_grid_in_frame(background_section)
         background_label = tk.Label(background_section, text="Background:")
-        background_label.grid(row=0,column=0)
+        background_label.grid(row=0,column=1)
         self.background_selection = tk.StringVar(background_section)
         self.background_selection.set(self.background_name)
         background_dropdown = tk.OptionMenu(background_section, self.background_selection, *self.game.background_images)
         background_dropdown.configure(width=16)
-        background_dropdown.grid(row=0,column=1)
+        background_dropdown.grid(row=0,column=2)
         def change_background_dropdown(*args):
             self.load_background(self.background_selection.get())
         self.background_selection.trace('w', change_background_dropdown)  #when the dropdown is changed, run this function
@@ -85,14 +84,14 @@ class SpriteSomethingMainFrame(tk.Frame):
         ##########   Animation Dropdown   #############
         animation_section = tk.Frame(left_pane)
         left_pane.add(animation_section)
-        animation_section.grid_columnconfigure(0, weight=1)    #even out the columns
+        self.right_align_grid_in_frame(animation_section)
         animation_label = tk.Label(animation_section, text="Animation:")
-        animation_label.grid(row=0, column=0)
+        animation_label.grid(row=0, column=1)
         self.animation_selection = tk.StringVar(animation_section)
         self.animation_selection.set("Watch me Nae Nae")
         animation_dropdown = tk.OptionMenu(animation_section, self.animation_selection, *["Watch me Nae Nae", "Watch me Whip"])
         animation_dropdown.configure(width=16)
-        animation_dropdown.grid(row=0, column=1)
+        animation_dropdown.grid(row=0, column=2)
         def change_animation_dropdown(*args):
             print(f"Received instruction to change animation to {self.animation_selection.get()}")
         self.animation_selection.trace('w', change_animation_dropdown)  #when the dropdown is changed, run this function
@@ -103,33 +102,34 @@ class SpriteSomethingMainFrame(tk.Frame):
         ########### Sprite Specific Stuff #############
         sprite_section = tk.Frame(left_pane)
         left_pane.add(sprite_section)
-        sprite_section.grid_columnconfigure(0, weight=1)    #even out the columns
-
+        self.right_align_grid_in_frame(sprite_section)
+        
+        #TODO: Move this into the sprite specific classes so that it can be different for each sprite within a game
         if (self._game_name == "metroid3"):
             row = 0
-            col = 0
+            col = 1
 
             sprite_display = tk.Label(sprite_section,text="Display:")
-            sprite_display.grid(row=row,column=col,columnspan=6)
+            sprite_display.grid(row=row,column=col,columnspan=3)
             row += 1
 
-            self.addSpiffyButtons(sprite_section,row,0,"Suit",{"Power":1,"Varia":2,"Gravity":3},"suit"," Suit")
+            self.add_spiffy_buttons(sprite_section,row,col,"Suit",{"Power":1,"Varia":2,"Gravity":3},"suit"," Suit")
             row += 1
         elif(self._game_name == "zelda3"):
             row = 0
-            col = 0
+            col = 1
 
             sprite_display = tk.Label(sprite_section,text="Display:")
             sprite_display.grid(row=row,column=col,columnspan=6)
             row += 1
 
-            self.addSpiffyButtons(sprite_section,row,0,"Mail",{"Green":1,"Blue":2,"Red":3,"Bunny":4},"mail"," Mail")
+            self.add_spiffy_buttons(sprite_section,row,col,"Mail",{"Green":1,"Blue":2,"Red":3,"Bunny":4},"mail"," Mail")
             row += 1
-            self.addSpiffyButtons(sprite_section,row,0,"Sword",{"No":0,"Fighter's":1,"Master":2,"Tempered":3,"Gold":4},"sword"," Sword")
+            self.add_spiffy_buttons(sprite_section,row,col,"Sword",{"No":0,"Fighter's":1,"Master":2,"Tempered":3,"Gold":4},"sword"," Sword")
             row += 1
-            self.addSpiffyButtons(sprite_section,row,0,"Shield",{"No":0,"Fighter's":1,"Fire":2,"Mirror":3},"shield"," Shield")
+            self.add_spiffy_buttons(sprite_section,row,col,"Shield",{"No":0,"Fighter's":1,"Fire":2,"Mirror":3},"shield"," Shield")
             row += 1
-            self.addSpiffyButtons(sprite_section,row,0,"Gloves",{"No Gloves":0,"Power Glove":1,"Titan's Mitt":2},"gloves","")
+            self.add_spiffy_buttons(sprite_section,row,col,"Gloves",{"No Gloves":0,"Power Glove":1,"Titan's Mitt":2},"gloves","")
         ###############################################
 
 
@@ -137,10 +137,10 @@ class SpriteSomethingMainFrame(tk.Frame):
         ########### GUI Specific Stuff ################
         control_section = tk.Frame(left_pane)
         left_pane.add(control_section)
-        control_section.grid_columnconfigure(0, weight=1)    #even out the columns
+        self.right_align_grid_in_frame(control_section)
         current_grid_row = 0
         temp_label = tk.Label(control_section, text="GUI specific stuff")
-        temp_label.grid(row=current_grid_row, column=0, columnspan=3)
+        temp_label.grid(row=current_grid_row, column=1, columnspan=3)
         current_grid_row += 1
         def zoom_out(*args):
             self._current_zoom = max(0.1,self._current_zoom - 0.1)
@@ -150,49 +150,49 @@ class SpriteSomethingMainFrame(tk.Frame):
             self.scale_background_image(self._current_zoom)
 
         zoom_out_button = tk.Button(control_section, text="Zoom -", command=zoom_out)
-        zoom_out_button.grid(row=current_grid_row, column=1)
+        zoom_out_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         zoom_in_button = tk.Button(control_section, text="Zoom +", command=zoom_in)
-        zoom_in_button.grid(row=current_grid_row, column=2)
+        zoom_in_button.grid(row=current_grid_row, column=3, sticky='nesw')
         current_grid_row += 1
 
         speed_down_button = tk.Button(control_section, text="Speed -")
-        speed_down_button.grid(row=current_grid_row, column=1)
+        speed_down_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         speed_up_button = tk.Button(control_section, text="Speed +")
-        speed_up_button.grid(row=current_grid_row, column=2)
+        speed_up_button.grid(row=current_grid_row, column=3, sticky='nesw')
         current_grid_row += 1
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","play.png"))
         play_button = tk.Button(control_section, image=img, text="Play", compound=RIGHT)
         play_button.image = img
-        play_button.grid(row=current_grid_row, column=0)
+        play_button.grid(row=current_grid_row, column=1, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","play-once.png"))
         play_one_button = tk.Button(control_section, image=img, text="Play 1", compound=RIGHT)
         play_one_button.image = img
-        play_one_button.grid(row=current_grid_row, column=1)
+        play_one_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","reset.png"))
         reset_button = tk.Button(control_section, image=img, text="Reset", compound=RIGHT)
         reset_button.image = img
-        reset_button.grid(row=current_grid_row, column=2)
+        reset_button.grid(row=current_grid_row, column=3, sticky='nesw')
         current_grid_row += 1
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-back.png"))
         step_back_button = tk.Button(control_section, image=img, text="Step", compound=LEFT)
         step_back_button.image = img
-        step_back_button.grid(row=current_grid_row, column=0)
+        step_back_button.grid(row=current_grid_row, column=1, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","pause.png"))
         pause_button = tk.Button(control_section, image=img, text="Pause", compound=RIGHT)
         pause_button.image = img
-        pause_button.grid(row=current_grid_row, column=1)
+        pause_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-forward.png"))
         step_forward_button = tk.Button(control_section, image=img, text="Step", compound=RIGHT)
         step_forward_button.image = img
-        step_forward_button.grid(row=current_grid_row, column=2)
+        step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
         ###############################################
 
 
@@ -204,7 +204,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         #create the file menu
         file_menu = tk.Menu(menu, tearoff=0)
         for option in ["Open","Save","Save As..."]:
-            self.addDummyMenuOption(option,file_menu)
+            self.add_dummy_menu_option(option,file_menu)
         file_menu.add_command(label="Exit", command=self.exit)
         #attach to the menu bar
         menu.add_cascade(label="File", menu=file_menu)
@@ -213,37 +213,37 @@ class SpriteSomethingMainFrame(tk.Frame):
         import_menu = tk.Menu(menu, tearoff=0)
         #import sprite
         for option in ["Sprite from Game File","PNG"]:
-          self.addDummyMenuOption(option,import_menu)
+          self.add_dummy_menu_option(option,import_menu)
         import_menu.add_separator()
         #import palette
         for option in ["GIMP Palette","YY-CHR Palette","Graphics Gale Palette"]:
-          self.addDummyMenuOption(option,import_menu)
+          self.add_dummy_menu_option(option,import_menu)
         import_menu.add_separator()
         #import raw data
         for option in ["Raw Pixel Data","Raw Palette Data"]:
-          self.addDummyMenuOption(option,import_menu)
+          self.add_dummy_menu_option(option,import_menu)
 
         #create the export menu
         export_menu = tk.Menu(menu, tearoff=0)
         #export sprite
         for option in ["Copy to new Game File","Inject into Game File","PNG"]:
-          self.addDummyMenuOption(option,export_menu)
+          self.add_dummy_menu_option(option,export_menu)
         export_menu.add_separator()
         #export animation
         for option in ["Animation as GIF","Animation as Collage"]:
-          self.addDummyMenuOption(option,export_menu)
+          self.add_dummy_menu_option(option,export_menu)
         export_menu.add_separator()
         #export palette
         for option in ["GIMP Palette","YY-CHR Palette","Graphics Gale Palette"]:
-          self.addDummyMenuOption(option,export_menu)
+          self.add_dummy_menu_option(option,export_menu)
         export_menu.add_separator()
         #export tracker images for crossproduct's and derivatives
         for option in ["Tracker Images"]:
-          self.addDummyMenuOption(option,export_menu)
+          self.add_dummy_menu_option(option,export_menu)
         export_menu.add_separator()
         #export raw data
         for option in ["Raw Pixel Data","Raw Palette Data"]:
-          self.addDummyMenuOption(option,export_menu)
+          self.add_dummy_menu_option(option,export_menu)
 
         #create the convert menu
         convert_menu = tk.Menu(menu, tearoff=0)
@@ -258,7 +258,17 @@ class SpriteSomethingMainFrame(tk.Frame):
         #attach to the menu bar
         menu.add_cascade(label="Help", menu=help_menu)
 
-    def addSpiffyButtons(self,container,row,col,section_label,items,prefix,suffix):
+    def center_align_grid_in_frame(self, frame):
+        frame.grid_columnconfigure(0, weight=1)       #the 0th column will be the margin
+        frame.grid_columnconfigure(1000, weight=1)    #so I guess technically this just needs to be larger than the number of columns
+
+
+    def right_align_grid_in_frame(self, frame):
+        frame.grid_columnconfigure(0, weight=1)       #the 0th column will be the margin
+        frame.grid_columnconfigure(1000, weight=0)    #so I guess technically this just needs to be larger than the number of columns
+
+
+    def add_spiffy_buttons(self,container,row,col,section_label,items,prefix,suffix):
         spiffy_buttons = tk.Label(container,text=section_label+':')
         spiffy_buttons.grid(row=row,column=col)
         col += 1
@@ -276,7 +286,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             button.grid(row=row,column=col)
             col += 1
 
-    def addDummyMenuOption(self,text,menuObject):
+    def add_dummy_menu_option(self,text,menuObject):
         menuObject.add_command(label=text, command=self.popup_NYI)
 
     def popup_NYI(self):
@@ -350,7 +360,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         return ID
 
     def about(self):
-        lines = ["Based on:","Sprite Animator by Spannerisms","ZSpriteTools by Sosuke3","","Temporarily uses assets from SpriteAnimator","","Created by: Artheau & Mike Trethewey"]
+        lines = ["Created by: Artheau & Mike Trethewey", "", "Based on:","Sprite Animator by Spannerisms","ZSpriteTools by Sosuke3","","Temporarily uses assets from SpriteAnimator"]
         messagebox.showinfo("About this App","\n".join(lines))
 
     def exit(self):

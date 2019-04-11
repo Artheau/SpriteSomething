@@ -3,17 +3,32 @@
         "Editor",
         "Discombobulator",
         "Fractionating Column",
-        "Reader"
+        "Reader",
+        "Widget",
+        "Sprite",
+        "Catalog",
+        "Loader",
+        "Viewer",
+        "Container",
+        "Playground"
     ],
     "prefix enchantment": [
         "Blazing",
         "Chilling",
         "Magnificent",
-        "Brilliant"
+        "Brilliant",
+        "Unprecedented",
+        "Decaffeinated",
+        "First Annual"
     ],
     "suffix enchantment": [
         "of Vengeance",
         "of the Ages",
-        "Now with Zero Sugar"
+        "now with zero sugar",
+        "filmed in front of a live studio audience",
+        "in surround sound where available",
+        "with soothing ocean sounds",
+        "2000",
+        "ft. M. Rio and L. Gee"
     ]
 }
