@@ -2,8 +2,8 @@
 __pycache__/
 
 # no images output
-images
-animations
+/images
+/animations
 
 # no pip installer
 get-pip.py

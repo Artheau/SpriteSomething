@@ -7,6 +7,8 @@ import importlib
 import json
 import random
 import tkinter as tk
+from lib.crxtooltip import *
+from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
 
@@ -20,10 +22,10 @@ def main():
 class SpriteSomethingMainFrame(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
-        
+
         #set the title
         self.create_random_title()
-        
+
         #main frame should take up the whole window
         self.pack(fill=tk.BOTH, expand=1)
 
@@ -40,14 +42,29 @@ class SpriteSomethingMainFrame(tk.Frame):
         #for now, just to prove that at least some of the features work
         self.load_game(random.choice(["zelda3","metroid3"]))
 
-        
+
         #self._sprite_ID = self.attach_sprite(self._canvas, Image.open(os.path.join("resources","zelda3","backgrounds","throne.png"), (100,100))
-        
+
         left_pane = tk.PanedWindow(self, orient=tk.VERTICAL)
         panes.add(left_pane, minsize=200)
         panes.add(self._canvas)
 
-        
+
+        #########   Sprite Metadata       #############
+        metadata_section = tk.Frame(left_pane)
+        left_pane.add(metadata_section)
+        metadata_section.grid_columnconfigure(0, weight=1)    #even out the columns
+        row=0
+        column=0
+        for label in ["Sprite Name","Author Name","Author Name Short"]:
+            metadata_label = tk.Label(metadata_section, text=label)
+            metadata_label.grid(row=row,column=0)
+            metadata_input = tk.Entry(metadata_section)
+            metadata_input.grid(row=row,column=1)
+            row += 1
+        ###############################################
+
+
         #########   Background Dropdown   #############
         background_section = tk.Frame(left_pane)
         left_pane.add(background_section)
@@ -88,13 +105,31 @@ class SpriteSomethingMainFrame(tk.Frame):
         left_pane.add(sprite_section)
         sprite_section.grid_columnconfigure(0, weight=1)    #even out the columns
 
-        for i,text in enumerate(["Sprite specific stuff", "over several", "rows"]):
-            sprite_temp_label = tk.Label(sprite_section, text=text)
-            sprite_temp_label.grid(row=i+1, column=0, columnspan=2)
-            current_grid_row = i
-        for j,text in enumerate(["With", "Buttons"]):
-            temp_button = tk.Button(sprite_section, text=text)
-            temp_button.grid(row=current_grid_row+2, column=j)
+        if (self._game_name == "metroid3"):
+            row = 0
+            col = 0
+
+            sprite_display = tk.Label(sprite_section,text="Display:")
+            sprite_display.grid(row=row,column=col,columnspan=6)
+            row += 1
+
+            self.addSpiffyButtons(sprite_section,row,0,"Suit",{"Power":1,"Varia":2,"Gravity":3},"suit"," Suit")
+            row += 1
+        elif(self._game_name == "zelda3"):
+            row = 0
+            col = 0
+
+            sprite_display = tk.Label(sprite_section,text="Display:")
+            sprite_display.grid(row=row,column=col,columnspan=6)
+            row += 1
+
+            self.addSpiffyButtons(sprite_section,row,0,"Mail",{"Green":1,"Blue":2,"Red":3,"Bunny":4},"mail"," Mail")
+            row += 1
+            self.addSpiffyButtons(sprite_section,row,0,"Sword",{"No":0,"Fighter's":1,"Master":2,"Tempered":3,"Gold":4},"sword"," Sword")
+            row += 1
+            self.addSpiffyButtons(sprite_section,row,0,"Shield",{"No":0,"Fighter's":1,"Fire":2,"Mirror":3},"shield"," Shield")
+            row += 1
+            self.addSpiffyButtons(sprite_section,row,0,"Gloves",{"No Gloves":0,"Power Glove":1,"Titan's Mitt":2},"gloves","")
         ###############################################
 
 
@@ -105,7 +140,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         control_section.grid_columnconfigure(0, weight=1)    #even out the columns
         current_grid_row = 0
         temp_label = tk.Label(control_section, text="GUI specific stuff")
-        temp_label.grid(row=current_grid_row, column=0, columnspan=2)
+        temp_label.grid(row=current_grid_row, column=0, columnspan=3)
         current_grid_row += 1
         def zoom_out(*args):
             self._current_zoom = max(0.1,self._current_zoom - 0.1)
@@ -113,13 +148,53 @@ class SpriteSomethingMainFrame(tk.Frame):
         def zoom_in(*args):
             self._current_zoom = min(3.0,self._current_zoom + 0.1)
             self.scale_background_image(self._current_zoom)
-        
-        zoom_out_button = tk.Button(control_section, text="Zoom Out", command=zoom_out)
-        zoom_out_button.grid(row=current_grid_row, column=0)
-        zoom_in_button = tk.Button(control_section, text="Zoom In", command=zoom_in)
-        zoom_in_button.grid(row=current_grid_row, column=1)
+
+        zoom_out_button = tk.Button(control_section, text="Zoom -", command=zoom_out)
+        zoom_out_button.grid(row=current_grid_row, column=1)
+
+        zoom_in_button = tk.Button(control_section, text="Zoom +", command=zoom_in)
+        zoom_in_button.grid(row=current_grid_row, column=2)
+        current_grid_row += 1
+
+        speed_down_button = tk.Button(control_section, text="Speed -")
+        speed_down_button.grid(row=current_grid_row, column=1)
+
+        speed_up_button = tk.Button(control_section, text="Speed +")
+        speed_up_button.grid(row=current_grid_row, column=2)
+        current_grid_row += 1
+
+        img = tk.PhotoImage(file=os.path.join("resources","images","meta","play.png"))
+        play_button = tk.Button(control_section, image=img, text="Play", compound=RIGHT)
+        play_button.image = img
+        play_button.grid(row=current_grid_row, column=0)
+
+        img = tk.PhotoImage(file=os.path.join("resources","images","meta","play-once.png"))
+        play_one_button = tk.Button(control_section, image=img, text="Play 1", compound=RIGHT)
+        play_one_button.image = img
+        play_one_button.grid(row=current_grid_row, column=1)
+
+        img = tk.PhotoImage(file=os.path.join("resources","images","meta","reset.png"))
+        reset_button = tk.Button(control_section, image=img, text="Reset", compound=RIGHT)
+        reset_button.image = img
+        reset_button.grid(row=current_grid_row, column=2)
+        current_grid_row += 1
+
+        img = tk.PhotoImage(file=os.path.join("resources","images","meta","step-back.png"))
+        step_back_button = tk.Button(control_section, image=img, text="Step", compound=LEFT)
+        step_back_button.image = img
+        step_back_button.grid(row=current_grid_row, column=0)
+
+        img = tk.PhotoImage(file=os.path.join("resources","images","meta","pause.png"))
+        pause_button = tk.Button(control_section, image=img, text="Pause", compound=RIGHT)
+        pause_button.image = img
+        pause_button.grid(row=current_grid_row, column=1)
+
+        img = tk.PhotoImage(file=os.path.join("resources","images","meta","step-forward.png"))
+        step_forward_button = tk.Button(control_section, image=img, text="Step", compound=RIGHT)
+        step_forward_button.image = img
+        step_forward_button.grid(row=current_grid_row, column=2)
         ###############################################
-        
+
 
     def create_menu_bar(self):
         #create the menu bar
@@ -179,16 +254,33 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #create the help menu
         help_menu = tk.Menu(menu, tearoff=0)
-        for option in ["About"]:
-          self.addDummyMenuOption(option,help_menu)
+        help_menu.add_command(label="About", command=self.about)
         #attach to the menu bar
         menu.add_cascade(label="Help", menu=help_menu)
+
+    def addSpiffyButtons(self,container,row,col,section_label,items,prefix,suffix):
+        spiffy_buttons = tk.Label(container,text=section_label+':')
+        spiffy_buttons.grid(row=row,column=col)
+        col += 1
+        if prefix == "mail":
+          col += 1
+
+        for label,level in items.items():
+            if level > 0:
+                img = tk.PhotoImage(file=os.path.join("resources","images",self._game_name,prefix+'-'+str(level)+".png"))
+            else:
+                img = tk.PhotoImage(file=os.path.join("resources","images","meta","no-thing.png"))
+            button = tk.Button(container,image=img,text=label+suffix)
+            button_tip = CreateToolTip(button,label+suffix)
+            button.image = img
+            button.grid(row=row,column=col)
+            col += 1
 
     def addDummyMenuOption(self,text,menuObject):
         menuObject.add_command(label=text, command=self.popup_NYI)
 
     def popup_NYI(self):
-        messagebox.showinfo("Not Implemented", "This feature is not yet implemented")
+        messagebox.showinfo("Not Yet Implemented", "This DLC is not yet available")
 
     def create_random_title(self):
         with open(os.path.join("resources","app_names.json")) as name_file:
@@ -208,7 +300,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         self._game_name = game_name
 
         #establishing now the convention that the file names are the folder names
-        library_name = f"lib.{game_name}.{game_name}"                    
+        library_name = f"lib.{game_name}.{game_name}"
         library_module = importlib.import_module(library_name)
 
         rom_filename = self._get_sfc_filename(os.path.join("resources",game_name))
@@ -250,13 +342,16 @@ class SpriteSomethingMainFrame(tk.Frame):
         if self._background_ID is not None:   #if there is no background right now, do nothing
             new_size = tuple(int(factor*dim) for dim in self._raw_background.size)
             self._set_background(self._raw_background.resize(new_size))
-        
+
     def attach_sprite(self,canvas,sprite_raw_image,location):
         sprite = ImageTk.PhotoImage(sprite_raw_image)
         ID = canvas.create_image(location[0], location[1],image=sprite, anchor = tk.NW)
         self._sprites[ID] = sprite     #if you skip this part, then the auto-destructor will get rid of your picture!
         return ID
 
+    def about(self):
+        lines = ["Based on:","Sprite Animator by Spannerisms","ZSpriteTools by Sosuke3","","Temporarily uses assets from SpriteAnimator","","Created by: Artheau & Mike Trethewey"]
+        messagebox.showinfo("About this App","\n".join(lines))
 
     def exit(self):
         #TODO: confirmation box
