@@ -42,61 +42,69 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         
         #self._sprite_ID = self.attach_sprite(self._canvas, Image.open(os.path.join("resources","zelda3","backgrounds","throne.png"), (100,100))
-
-        left_pane = tk.Frame(panes)
+        
+        left_pane = tk.PanedWindow(self, orient=tk.VERTICAL)
         panes.add(left_pane, minsize=200)
         panes.add(self._canvas)
 
-
-        left_pane.grid_rowconfigure(0, minsize=32)   #give a little space between the menu and the control panel
-        current_grid_row = 1
-
+        
         #########   Background Dropdown   #############
-        background_label = tk.Label(left_pane, text="Background:")
-        background_label.grid(row=current_grid_row,column=0)
-        self.background_selection = tk.StringVar(left_pane)
+        background_section = tk.Frame(left_pane)
+        left_pane.add(background_section)
+        background_section.grid_columnconfigure(0, weight=1)    #even out the columns
+        background_label = tk.Label(background_section, text="Background:")
+        background_label.grid(row=0,column=0)
+        self.background_selection = tk.StringVar(background_section)
         self.background_selection.set(self.background_name)
-        background_dropdown = tk.OptionMenu(left_pane, self.background_selection, *self.game.background_images)
+        background_dropdown = tk.OptionMenu(background_section, self.background_selection, *self.game.background_images)
         background_dropdown.configure(width=16)
-        background_dropdown.grid(row=current_grid_row,column=1)
+        background_dropdown.grid(row=0,column=1)
         def change_background_dropdown(*args):
             self.load_background(self.background_selection.get())
         self.background_selection.trace('w', change_background_dropdown)  #when the dropdown is changed, run this function
-        current_grid_row += 1
         ###############################################
 
 
         ##########   Animation Dropdown   #############
-        animation_label = tk.Label(left_pane, text="Animation:")
-        animation_label.grid(row=current_grid_row, column=0)
-        self.animation_selection = tk.StringVar(left_pane)
+        animation_section = tk.Frame(left_pane)
+        left_pane.add(animation_section)
+        animation_section.grid_columnconfigure(0, weight=1)    #even out the columns
+        animation_label = tk.Label(animation_section, text="Animation:")
+        animation_label.grid(row=0, column=0)
+        self.animation_selection = tk.StringVar(animation_section)
         self.animation_selection.set("Watch me Nae Nae")
-        animation_dropdown = tk.OptionMenu(left_pane, self.animation_selection, *["Watch me Nae Nae", "Watch me Whip"])
+        animation_dropdown = tk.OptionMenu(animation_section, self.animation_selection, *["Watch me Nae Nae", "Watch me Whip"])
         animation_dropdown.configure(width=16)
-        animation_dropdown.grid(row=current_grid_row, column=1)
+        animation_dropdown.grid(row=0, column=1)
         def change_animation_dropdown(*args):
             print(f"Received instruction to change animation to {self.animation_selection.get()}")
         self.animation_selection.trace('w', change_animation_dropdown)  #when the dropdown is changed, run this function
-        current_grid_row += 1
         ###############################################
 
 
 
         ########### Sprite Specific Stuff #############
-        for _,text in enumerate(["Sprite specific stuff", "over several", "rows"]):
-            sprite_temp_label = tk.Label(left_pane, text=text)
-            sprite_temp_label.grid(row=current_grid_row, column=0, columnspan=2)
-            current_grid_row += 1
+        sprite_section = tk.Frame(left_pane)
+        left_pane.add(sprite_section)
+        sprite_section.grid_columnconfigure(0, weight=1)    #even out the columns
+
+        for i,text in enumerate(["Sprite specific stuff", "over several", "rows"]):
+            sprite_temp_label = tk.Label(sprite_section, text=text)
+            sprite_temp_label.grid(row=i+1, column=0, columnspan=2)
+            current_grid_row = i
         for j,text in enumerate(["With", "Buttons"]):
-            temp_button = tk.Button(left_pane, text=text)
-            temp_button.grid(row=current_grid_row, column=j)
-        current_grid_row += 1
+            temp_button = tk.Button(sprite_section, text=text)
+            temp_button.grid(row=current_grid_row+2, column=j)
         ###############################################
 
 
 
         ########### GUI Specific Stuff ################
-        temp_label = tk.Label(left_pane, text="GUI specific stuff")
+        control_section = tk.Frame(left_pane)
+        left_pane.add(control_section)
+        control_section.grid_columnconfigure(0, weight=1)    #even out the columns
+        current_grid_row = 0
+        temp_label = tk.Label(control_section, text="GUI specific stuff")
         temp_label.grid(row=current_grid_row, column=0, columnspan=2)
         current_grid_row += 1
         def zoom_out(*args):
@@ -106,13 +114,11 @@ class SpriteSomethingMainFrame(tk.Frame):
             self._current_zoom = min(3.0,self._current_zoom + 0.1)
             self.scale_background_image(self._current_zoom)
         
-        zoom_out_button = tk.Button(left_pane, text="Zoom Out", command=zoom_out)
+        zoom_out_button = tk.Button(control_section, text="Zoom Out", command=zoom_out)
         zoom_out_button.grid(row=current_grid_row, column=0)
-        zoom_in_button = tk.Button(left_pane, text="Zoom In", command=zoom_in)
+        zoom_in_button = tk.Button(control_section, text="Zoom In", command=zoom_in)
         zoom_in_button.grid(row=current_grid_row, column=1)
-        current_grid_row += 1
         ###############################################
-
         
 
     def create_menu_bar(self):

@@ -2,14 +2,18 @@
     "nouns": [
         "Editor",
         "Discombobulator",
-        "Fractionating Column"
+        "Fractionating Column",
+        "Reader"
     ],
     "prefix enchantment": [
         "Blazing",
-        "Chilling"
+        "Chilling",
+        "Magnificent",
+        "Brilliant"
     ],
     "suffix enchantment": [
         "of Vengeance",
-        "of the Ages"
+        "of the Ages",
+        "Now with Zero Sugar"
     ]
 }
