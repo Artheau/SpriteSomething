@@ -6,14 +6,20 @@ import os
 import importlib
 import json
 import random
+import re
 import tkinter as tk
+import webbrowser
+from tkinter import filedialog, messagebox, Text
 from lib.crxtooltip import CreateToolTip
+from lib.tkHyperlinkManager import HyperlinkManager
+from lib.tkSimpleStatusBar import StatusBar
 from PIL import Image, ImageTk
 
 def main():
 	root = tk.Tk()
 	#window size
 	root.geometry("600x480")
+	root.configure(bg='#f0f0f0')
 	app = SpriteSomethingMainFrame(root)
 	root.mainloop()
 
@@ -28,6 +34,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.pack(fill=tk.BOTH, expand=1)
 
         self.create_menu_bar()
+        self._status = self.create_status_bar()
 
         panes = tk.PanedWindow(self, orient=tk.HORIZONTAL)
         panes.pack(fill=tk.BOTH, expand=1)
@@ -39,7 +46,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #for now, just to prove that at least some of the features work
         self.load_game(random.choice(["zelda3","metroid3"]))
-        self.load_sprite(0x01)   #TODO: implement other sprites other than the player sprite
+        self.make_sprite(0x01)   #TODO: implement other sprites other than the player sprite
 
 
         #self._sprite_ID = self.attach_sprite(self._canvas, Image.open(os.path.join("resources","zelda3","backgrounds","throne.png"), (100,100))
@@ -103,7 +110,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         sprite_section = tk.Frame(left_pane)
         left_pane.add(sprite_section)
         self.right_align_grid_in_frame(sprite_section)
-        
+
         #TODO: Move this into the sprite specific classes so that it can be different for each sprite within a game
         if (self._game_name == "metroid3"):
             row = 0
@@ -194,6 +201,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         step_forward_button.image = img
         step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
         ###############################################
+        self._status.set(self.game.game_name)
 
 
     def create_menu_bar(self):
@@ -203,47 +211,52 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #create the file menu
         file_menu = tk.Menu(menu, tearoff=0)
-        for option in ["Open","Save","Save As..."]:
-            self.add_dummy_menu_option(option,file_menu)
+        file_menu.add_command(label="Open", command=self.load_sprite)
+        file_menu.add_command(label="Save As...", command=self.save_sprite_as)
         file_menu.add_command(label="Exit", command=self.exit)
         #attach to the menu bar
         menu.add_cascade(label="File", menu=file_menu)
 
         #create the import menu
         import_menu = tk.Menu(menu, tearoff=0)
-        #import sprite
-        for option in ["Sprite from Game File","PNG"]:
-          self.add_dummy_menu_option(option,import_menu)
-        import_menu.add_separator()
-        #import palette
-        for option in ["GIMP Palette","YY-CHR Palette","Graphics Gale Palette"]:
-          self.add_dummy_menu_option(option,import_menu)
-        import_menu.add_separator()
-        #import raw data
-        for option in ["Raw Pixel Data","Raw Palette Data"]:
-          self.add_dummy_menu_option(option,import_menu)
+        import_menu.add_command(label="Sprite from Game File", command=self.import_from_game_file)
+        import_menu.add_command(label="PNG", command=self.import_from_png)
+        self.add_dummy_menu_options([""],import_menu)
+        import_menu.add_command(label="GIMP Palette", command=lambda: self.import_palette("GIMP"))
+        import_menu.add_command(label="YY-CHR Palette", command=lambda: self.import_palette("YY-CHR"))
+        import_menu.add_command(label="Graphics Gale Palette", command=lambda: self.import_palette("Graphics Gale"))
+        self.add_dummy_menu_options([""],import_menu)
+        options = [
+            "Raw Pixel Data",
+            "Raw Palette Data"
+        ]
+        self.add_dummy_menu_options(options,import_menu)
 
         #create the export menu
         export_menu = tk.Menu(menu, tearoff=0)
-        #export sprite
-        for option in ["Copy to new Game File","Inject into Game File","PNG"]:
-          self.add_dummy_menu_option(option,export_menu)
-        export_menu.add_separator()
-        #export animation
-        for option in ["Animation as GIF","Animation as Collage"]:
-          self.add_dummy_menu_option(option,export_menu)
-        export_menu.add_separator()
-        #export palette
-        for option in ["GIMP Palette","YY-CHR Palette","Graphics Gale Palette"]:
-          self.add_dummy_menu_option(option,export_menu)
-        export_menu.add_separator()
-        #export tracker images for crossproduct's and derivatives
-        for option in ["Tracker Images"]:
-          self.add_dummy_menu_option(option,export_menu)
-        export_menu.add_separator()
-        #export raw data
-        for option in ["Raw Pixel Data","Raw Palette Data"]:
-          self.add_dummy_menu_option(option,export_menu)
+        options = [
+            "Copy to new Game File",
+            "Inject into Game File"
+        ]
+        self.add_dummy_menu_options(options,export_menu)
+
+        export_menu.add_command(label="PNG", command=self.export_png)
+        self.add_dummy_menu_options([""],export_menu)
+        export_menu.add_command(label="Animation as GIF", command=self.export_gif)
+        export_menu.add_command(label="Animation as Collage", command=self.export_collage)
+        self.add_dummy_menu_options([""],export_menu)
+        export_menu.add_command(label="GIMP Palette", command=lambda: self.export_palette("GIMP"))
+        export_menu.add_command(label="YY-CHR Palette", command=lambda: self.export_palette("YY-CHR"))
+        export_menu.add_command(label="Graphics Gale Palette", command=lambda: self.export_palette("Graphics Gale"))
+
+        options = [
+            "",
+            "Tracker Images",
+            "",
+            "Raw Pixel Data",
+            "Raw Palette Data"
+        ]
+        self.add_dummy_menu_options(options,export_menu)
 
         #create the convert menu
         convert_menu = tk.Menu(menu, tearoff=0)
@@ -252,11 +265,27 @@ class SpriteSomethingMainFrame(tk.Frame):
         #attach to the menu bar
         menu.add_cascade(label="Convert", menu=convert_menu)
 
+        #create the plugins menu
+        plugins_menu = tk.Menu(menu, tearoff=0)
+        plugins_menu.add_command(label="Sheet Trawler",command=self.popup_NYI) # Z3-specific
+
+        #create the tools menu
+        tools_menu = tk.Menu(menu, tearoff=0)
+        tools_menu.add_cascade(label="Plugins", menu=plugins_menu)
+        #attach to the menu bar
+        menu.add_cascade(label="Tools", menu=tools_menu)
+
         #create the help menu
         help_menu = tk.Menu(menu, tearoff=0)
         help_menu.add_command(label="About", command=self.about)
         #attach to the menu bar
         menu.add_cascade(label="Help", menu=help_menu)
+
+    def create_status_bar(self):
+        status = StatusBar(self)
+        status.pack(side=tk.BOTTOM, fill=tk.X)
+        status.set("Status")
+        return status
 
     def center_align_grid_in_frame(self, frame):
         frame.grid_columnconfigure(0, weight=1)       #the 0th column will be the margin
@@ -273,7 +302,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         # container: the parent widget for this button set
         # row,col: where in the parent's grid to anchor these buttons
         # section_label: What this row of buttons represents (e.g. Mail colors)
-        # items: 
+        # items:
         # prefix: a string that begins the icon filenames corresponding to the buttons of this row
         # suffix: a string that is used in the tooltip after the identifying string (e.g. "Mail")
         spiffy_buttons = tk.Label(container,text=section_label+':')
@@ -295,6 +324,27 @@ class SpriteSomethingMainFrame(tk.Frame):
 
     def add_dummy_menu_option(self,text,menuObject):
         menuObject.add_command(label=text, command=self.popup_NYI)
+
+    def add_dummy_menu_options(self,options,menuObject):
+        for option in options:
+            if option != "":
+                self.add_dummy_menu_option(option,menuObject)
+            else:
+                menuObject.add_separator()
+
+    def add_text_link_array(self,lines,textObject):
+        hyperlink = HyperlinkManager(textObject)
+        for line in lines:
+            matches = re.search('(.*)\[(.*)\]\((.*)\)(.*)',line)
+            if matches:
+                def click1(url=matches.group(3)):
+                    webbrowser.open_new(url)
+                textObject.insert(tk.INSERT, matches.group(1))
+                textObject.insert(tk.INSERT, matches.group(2), hyperlink.add(click1))
+                textObject.insert(tk.INSERT, matches.group(4))
+                textObject.insert(tk.INSERT, "\n")
+            else:
+                textObject.insert(tk.INSERT, line + "\n")
 
     def popup_NYI(self):
         messagebox.showinfo("Not Yet Implemented", "This DLC is not yet available")
@@ -330,13 +380,48 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.background_name = random.choice(list(self.game.background_images.keys()))
         self.load_background(self.background_name)
 
-    def load_sprite(self, sprite_number):
+    def make_sprite(self, sprite_number):
         display_name, class_name = self.game.sprites[sprite_number]
         #this line is not obvious; it is calling the appropriate sprite class constructor, e.g. Z3Link class from lib/zelda3/zelda3.py
         self.sprite = getattr(self.game_module,class_name)(self.game.rom_data, self.game.meta_data)
 
     def get_library_name(self, game_name):
         return f"lib.{game_name}.{game_name}"
+
+    def load_sprite(self):
+        self.sprite_filename = filedialog.askopenfile(initialdir="./",title="Select Sprite",filetypes=(("ZSPR Files","*.zspr"),))
+    def save_sprite_as(self):
+        filedialog.asksaveasfile(initialdir="./",title="Save Sprite As...",filetypes=(("ZSPR Files","*.zspr"),))
+
+    def import_from_game_file(self):
+        filedialog.askopenfile(initialdir="./",title="Import from Game File",filetypes=(("SNES ROMs","*.sfc;*.smc"),))
+    def import_from_png(self):
+        filedialog.askopenfile(initialdir="./",title="Import from PNG",filetypes=(("PNGs","*.png"),))
+    def import_palette(self,type):
+        ftypes = ("All Files","*.*")
+        if type == "GIMP":
+            ftypes = ("GIMP Palettes","*.gpl")
+        elif type == "Graphics Gale":
+            ftypes = ("Graphics Gale Palettes","*.pal")
+        elif type == "YY-CHR":
+            ftypes = ("YY-CHR Palettes","*.pal")
+        filedialog.askopenfile(initialdir="./",title="Import " + type + " Palette",filetypes=(ftypes,))
+    def export_png(self):
+        filedialog.asksaveasfile(initialdir="./",title="Export PNG",filetypes=(("PNGs","*.png"),))
+    def export_gif(self):
+        filedialog.asksaveasfile(initialdir="./",title="Export Animation as GIF",filetypes=(("GIFs","*.gif"),))
+    def export_collage(self):
+        filedialog.asksaveasfile(initialdir="./",title="Export Animation as Collage",filetypes=(("PNGs","*.png"),))
+    def export_palette(self,type):
+        ftypes = ("All Files","*.*")
+        if type == "GIMP":
+            ftypes = ("GIMP Palettes","*.gpl")
+        elif type == "Graphics Gale":
+            ftypes = ("Graphics Gale Palettes","*.pal")
+        elif type == "YY-CHR":
+            ftypes = ("YY-CHR Palettes","*.pal")
+        filedialog.askopenfile(initialdir="./",title="Export " + type + " Palette",filetypes=(ftypes,))
+
 
     def _get_sfc_filename(self, path):
         for file in os.listdir(path):
@@ -374,8 +459,27 @@ class SpriteSomethingMainFrame(tk.Frame):
         return ID
 
     def about(self):
-        lines = ["Created by: Artheau & Mike Trethewey", "", "Based on:","Sprite Animator by Spannerisms","ZSpriteTools by Sosuke3","","Temporarily uses assets from SpriteAnimator"]
-        messagebox.showinfo("About this App","\n".join(lines))
+        def txtEvent(event):
+            return "break"
+        lines = [
+                  "Created by: Artheau & Mike Trethewey",
+                  "",
+                  "Based on:",
+                  "[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
+                  "[ZSpriteTools](http://github.com/sosuke3/ZSpriteTools) by Sosuke3",
+                  "",
+                  "Temporarily uses assets from SpriteAnimator"
+        ]
+        about = tk.Tk()
+        about.title("About this App")
+        about.geometry("300x120")
+        about.resizable(tk.FALSE,tk.FALSE)
+        about.attributes("-toolwindow",1)
+        text = Text(about,bg='#f0f0f0',font='TkDefaultFont',width=60,height=12)
+        text.pack()
+        text.config(cursor="arrow")
+        self.add_text_link_array(lines,text)
+        text.bind("<Button-1>",lambda e: txtEvent(e))
 
     def exit(self):
         #TODO: confirmation box
