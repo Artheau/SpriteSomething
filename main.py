@@ -39,6 +39,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #for now, just to prove that at least some of the features work
         self.load_game(random.choice(["zelda3","metroid3"]))
+        self.load_sprite(0x01)   #TODO: implement other sprites other than the player sprite
 
 
         #self._sprite_ID = self.attach_sprite(self._canvas, Image.open(os.path.join("resources","zelda3","backgrounds","throne.png"), (100,100))
@@ -86,12 +87,13 @@ class SpriteSomethingMainFrame(tk.Frame):
         animation_label = tk.Label(animation_section, text="Animation:")
         animation_label.grid(row=0, column=1)
         self.animation_selection = tk.StringVar(animation_section)
-        self.animation_selection.set("Watch me Nae Nae")
-        animation_dropdown = tk.OptionMenu(animation_section, self.animation_selection, *["Watch me Nae Nae", "Watch me Whip"])
+        self.animation_selection.set(next(iter(self.sprite.animations)))   #start with the first animation
+        animation_dropdown = tk.OptionMenu(animation_section, self.animation_selection, *self.sprite.animations)
         animation_dropdown.configure(width=16)
         animation_dropdown.grid(row=0, column=2)
         def change_animation_dropdown(*args):
             print(f"Received instruction to change animation to {self.animation_selection.get()}")
+        change_animation_dropdown()        #set up the initial animation
         self.animation_selection.trace('w', change_animation_dropdown)  #when the dropdown is changed, run this function
         ###############################################
 
@@ -311,23 +313,30 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.master.title("".join(app_name))
 
     def load_game(self,game_name):
-        game_name = game_name.lower()   #no funny business with capitalization
-        self._game_name = game_name
+        self._game_name = game_name.lower()   #no funny business with capitalization
 
         #establishing now the convention that the file names are the folder names
-        library_name = f"lib.{game_name}.{game_name}"
-        library_module = importlib.import_module(library_name)
+        library_name = self.get_library_name(self._game_name)
+        self.game_module = importlib.import_module(library_name)
 
-        rom_filename = self._get_sfc_filename(os.path.join("resources",game_name))
+        rom_filename = self._get_sfc_filename(os.path.join("resources",self._game_name))
         meta_filename = None  #TODO
 
         #establishing now the convention that the class names are the first letter capitalized of the folder name
         #this line is not obvious; it is calling the appropriate Game class constructor, e.g. Zelda3 class from lib/zelda3/zelda3.py
-        self.game = getattr(library_module, game_name.capitalize())(rom_filename,meta_filename)
+        self.game = getattr(self.game_module, self._game_name.capitalize())(rom_filename,meta_filename)
 
         self._current_zoom = 1.0
         self.background_name = random.choice(list(self.game.background_images.keys()))
         self.load_background(self.background_name)
+
+    def load_sprite(self, sprite_number):
+        display_name, class_name = self.game.sprites[sprite_number]
+        #this line is not obvious; it is calling the appropriate sprite class constructor, e.g. Z3Link class from lib/zelda3/zelda3.py
+        self.sprite = getattr(self.game_module,class_name)(self.game.rom_data, self.game.meta_data)
+
+    def get_library_name(self, game_name):
+        return f"lib.{game_name}.{game_name}"
 
     def _get_sfc_filename(self, path):
         for file in os.listdir(path):

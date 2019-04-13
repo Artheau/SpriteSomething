@@ -13,7 +13,7 @@ class Zelda3(Game):
         }
         self.rom_data = None#rom.Zelda3RomHandler(rom_filename)
         self.meta_data = None
-        self.sprites = {"Link": Z3Link(self.rom_data, self.meta_data)}
+        self.sprites = {0x01: ("Link", "Z3Link")}   #as (display name, class name)
 
 class Zelda3Sprite(Zspr):   #ALttP Sprites
     def __init__(self):
@@ -42,6 +42,10 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
                                     "gloveless": None,
                                     "power_glove": 0,
                                     "titans_mitt": 2,
+        }
+        self.animations = {  #TODO
+                                    "Walk": 0,
+                                    "Breathe": 1,
         }
 
         self._GLOVE_PALETTE_INDEX = 13
