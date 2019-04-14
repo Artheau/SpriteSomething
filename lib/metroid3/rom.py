@@ -88,15 +88,15 @@ class Metroid3RomHandler(RomHandler):
         #similar to get_pose_duration, except that this returns a list containing the pose control code
         # and its accompanying arguments in a list
         duration_list_location = self._get_duration_list_location(animation)
-        control_code = self.read_from_snes_address(duration_list_location,1)
+        control_code = self.read_from_snes_address(duration_list_location+pose,1)
         if control_code in [0xF8,0xFD,0xFE]:
-            return self.read_from_snes_address(duration_list_location, "11")  #these codes have one byte-sized argument
+            return self.read_from_snes_address(duration_list_location+pose, "11")  #these codes have one byte-sized argument
         elif control_code == 0xF9:
-            return self.read_from_snes_address(duration_list_location, "121111")  #has one word and 4 byte arguments
+            return self.read_from_snes_address(duration_list_location+pose, "121111")  #has one word and 4 byte arguments
         elif control_code == 0xFA:
-            return self.read_from_snes_address(duration_list_location, "111")   #two byte arguments
+            return self.read_from_snes_address(duration_list_location+pose, "111")   #two byte arguments
         elif control_code == 0xFC:
-            return self.read_from_snes_address(duration_list_location, "1211")    #one word and 2 byte arguments
+            return self.read_from_snes_address(duration_list_location+pose, "1211")    #one word and 2 byte arguments
         else:
             return [control_code]
 
@@ -227,6 +227,7 @@ class Metroid3RomHandler(RomHandler):
                     base_address += 0x24         #skip over the duration dbyte, the palette, and the control code
                 full_palette_set.extend(counter*current_palette_set)   #append the whole cycle and all its repetitions
             #fifth cycle is special (not really a cycle... just a single frame addition to the end)
+            base_address += 4  #skip over the final control codes
             full_palette_set.append(self._get_timed_palette(base_address))
 
             return full_palette_set
@@ -243,7 +244,7 @@ class Metroid3RomHandler(RomHandler):
 
             full_palette_set = []
             base_address += 8                #skip over the control codes
-            return self._get_sequence_of_timed_palettes(base_addr, 16)
+            return self._get_sequence_of_timed_palettes(base_address, 16, add_transparency=True)  #heat is not coded with transparency
 
         elif base_type == PaletteType.CHARGE:
             if suit_type == SuitType.POWER:
@@ -412,21 +413,22 @@ class Metroid3RomHandler(RomHandler):
             raise AssertionError(f"function get_palette() called with unknown palette type: {base_type}")
 
 
-    def _get_static_palette(self, snes_addr):
-        return (0, self._get_raw_palette(snes_addr))
+    def _get_static_palette(self, snes_address):
+        return (0, self._get_raw_palette(snes_address))
 
-    def _get_timed_palette(self, snes_addr):
-        duration = self.read_from_snes_address(snes_addr, 2)
-        palette = self._get_raw_palette(snes_addr + 2)
+    def _get_timed_palette(self, snes_address, add_transparency=False):
+        duration = self.read_from_snes_address(snes_address, 2)
+        palette = self._get_raw_palette(snes_address + (0 if add_transparency else 2))  #some palettes don't have transparent pixels already in there
         return (duration,palette)
 
-    def _get_sequence_of_timed_palettes(self, snes_addr, num_palettes):
+    def _get_sequence_of_timed_palettes(self, snes_address, num_palettes, add_transparency=False):
         #adding 0x24 skips over the duration dbyte, previous palette, and the control code each time
-        return [self._get_timed_palette(base_address + 0x24*i) for i in range(num_palettes)]
+        skip_amount = 0x22 if add_transparency else 0x24 
+        return [self._get_timed_palette(snes_address + skip_amount*i, add_transparency=add_transparency) for i in range(num_palettes)]
         
 
-    def _get_raw_palette(self,snes_addr):
-        return self.read_from_snes_address(snes_addr, "2"*0x10)
+    def _get_raw_palette(self,snes_address):
+        return self.read_from_snes_address(snes_address, "2"*0x10)
 
 
     def _get_pose_tilemaps(self,animation,pose):
@@ -449,7 +451,7 @@ class Metroid3RomHandler(RomHandler):
         #get the pointer to the list of pose pointers (in disassembly: get P??_UT or P??_LT)
         animation_all_poses_index = self.read_from_snes_address(base_addr + 2*animation, 2)
         #now get the specific pointer to the tilemap set (in disassembly: get TM_???)
-        pose_tilemaps_pointer = 0x920000 + self.read_from_snes_address(0x92808D + 2*animation_all_poses_index, 2)
+        pose_tilemaps_pointer = 0x920000 + self.read_from_snes_address(0x92808D + 2*animation_all_poses_index + 2*pose, 2)
         #now use that pointer to find out how many tilemaps there actually are
         if pose_tilemaps_pointer == 0x920000:    #as will be the case when the pointer is zero, specifying no tiles here
             num_tilemaps = 0
@@ -487,7 +489,7 @@ class Metroid3RomHandler(RomHandler):
     def _get_pose_duration(self,animation, pose):
         #get the duration list pointer (FD_?? in disassembly)
         duration_list_location = self._get_duration_list_location(animation)
-        return self.read_from_snes_address(duration_list_location,1)
+        return self.read_from_snes_address(duration_list_location+pose,1)
     
         
     def _get_duration_list_location(self, animation):

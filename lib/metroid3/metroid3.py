@@ -40,7 +40,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
 
         self.variant_type = {
                                     "standard": 0,
-                                    "loader": 1,
+                                    #"loader": 1,
                                     "heat": 2,
                                     "charge": 3,
                                     "speed_boost": 4,
@@ -50,7 +50,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                                     "hyper_beam": 8,
                                     "death_suit": 9,
                                     "death_flesh": 10,
-                                    "crystal_flash": 11,
+                                    #"crystal_flash": 11,
                                     "sepia": 12,
                                     "sepia_hurt": 13,
                                     "sepia_alternate": 14,
@@ -313,25 +313,13 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         raise NotImplementedError()
 
     def get_sprite_frame(self, animation_ID, frame):
-        tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, frame)   #TODO: need to translate frame to pose
-        palette_timing_list = self.get_timed_sprite_palette("standard", "power")   #TODO: tie this to the GUI buttons!
+        pose = self.get_pose_number_from_frame_number(animation_ID, frame)
+        tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose)
+        palette_timing_list = self.get_timed_sprite_palette("heat", "power")   #TODO: tie this to the GUI buttons!
 
         #TODO: A lot of the following seems like it can be factored out to common code
 
-        #figure out based upon frame number which palette should be used here
-        MAX_LOOPS = 1000   #failsafe to prevent infinite loops
-        palette_timing_index = frame
-        current_palette = None
-        for _ in range(MAX_LOOPS):
-            for time,palette in palette_timing_list:
-                palette_timing_index -= time
-                if palette_timing_index <= 0 or time == 0:   #time = 0 is a special code for static palettes or "final" palettes
-                    current_palette = palette
-                    break
-            if current_palette is not None:
-                break
-        else:
-            raise AssertionError(f"During get_sprite_frame() encountered modular arithmetic error while processing frame number {frame}")
+        current_palette = self.get_current_time_palette(palette_timing_list,frame)
 
         #there is stuff in VRAM by default, so populate this and then overwrite with the DMA_writes
         constructed_VRAM_data = {}
@@ -343,16 +331,72 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         add_flattened_tiles(self.rom_data.get_default_vram_data().items())
         add_flattened_tiles(DMA_writes.items())
         
-        #TODO: implement multiple palettes
-        current_palettes = {key: current_palette for key in range(0b1000)}
+        black_palette = [0x0 for _ in range(0x10)]
+        loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", "power"),frame)
+        flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", "power"),frame)
+        current_palettes =  {
+                                0b000: None,
+                                0b001: None,
+                                0b010: current_palette,              #Samus palette
+                                0b011: black_palette,                #used for the shadow inside the crystal flash
+                                0b100: None,
+                                0b101: None,
+                                0b110: loader_palette,               #used during loading scene for Samus
+                                0b111: flash_palette                 #used for the pulsating bubble in crystal flash
+                            }
 
         constructed_image, offset = util.image_from_raw_data(tilemaps, constructed_VRAM_data, current_palettes)
         return constructed_image, offset
 
+    def get_pose_number_from_frame_number(self, animation_ID, frame):
+        pose = 0
+        MAX_ITS = 100   #failsafe in case of the unexpected
+        frames_so_far = 0
+        for _ in range(MAX_ITS):
+            control_codes = self.rom_data.get_pose_control_data(animation_ID,pose)
+            if control_codes[0] < 0xF0:   #this is a duration, not a control code
+                frames_so_far += control_codes[0]
+                if frames_so_far > frame:
+                    return pose
+                else:
+                    pose += 1
+            elif control_codes[0] == 0xFE:    #targeted loop
+                loop_length = control_codes[1]
+                frame = (frame-frames_so_far) % loop_length    #we know the loop size, so no need to keep looping a lot
+                frames_so_far = 0
+                pose -= loop_length
+            elif control_codes[0] == 0xFB:    #for the walljump branching, let's just go to spinjump for now
+                pose += 1
+            else:                             #all (essentially) return to the beginning of the loop, with some caveats
+                frame = frame % frames_so_far     #now we know the loop size, so no need to keep looping a lot
+                frames_so_far = 0
+                pose = 0                       #reset to the beginning
+
+        else:
+            raise AssertionError("In get_pose_number_from_frame_number(), exceeded MAX_ITS")
+        raise AssertionError("In get_pose_number_from_frame_number(), escaped loop with no returned pose")
+
+    def get_current_time_palette(self,palette_timing_list,frame):
+        #figure out based upon frame number which palette should be used here
+        palette_timing_index = frame
+        current_palette = None
+        time_for_one_loop = sum(x for x,_ in palette_timing_list)
+
+        if time_for_one_loop == 0:            #static palette
+            return palette_timing_list[0][1]
+        else:
+            palette_timing_index = palette_timing_index % time_for_one_loop
+            
+            for time,palette in palette_timing_list:
+                palette_timing_index -= time
+                if palette_timing_index <= 0 or time == 0:   #time = 0 is a special code for static palettes or "final" palettes
+                    return palette
+            else:
+                raise AssertionError(f"During get_sprite_frame() encountered modular arithmetic error while processing frame number {frame}")
+
 
     def get_sprite_animation(self, animation_ID):
-        #For now, I'll be happy to get a static frame working, so let's start there
-        return self.get_sprite_frame(animation_ID, 0x00)
+        raise NotImplementedError()
 
 
 

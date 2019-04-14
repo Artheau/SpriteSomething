@@ -106,17 +106,9 @@ class SpriteSomethingMainFrame(tk.Frame):
         animation_list = tk.Button(animation_section,text="As list",command=self.show_animation_list)
         animation_list.configure(width=18)
         animation_list.grid(row=1, column=2)
-        def change_animation_dropdown(*args):
-            if self._sprite_ID is not None:
-                self._canvas.delete(self._sprite_ID)
-            img, origin = self.sprite.get_sprite_animation(self.sprite.animations[self.animation_selection.get()])
-            if img:
-                self._sprite_ID = self.attach_sprite(self._canvas, img, tuple(150-x for x in origin))  #TODO: better coordinate
-            else:
-                self._sprite_ID = None
         self._sprite_ID = None             #right now there is no animation...hopefully this gets updated in the next line
-        change_animation_dropdown()        #set up the initial animation
-        self.animation_selection.trace('w', change_animation_dropdown)  #when the dropdown is changed, run this function
+        self.initialize_sprite_animation()        #set up the initial animation
+        self.animation_selection.trace('w', self.initialize_sprite_animation)  #when the dropdown is changed, run this function
         ###############################################
 
 
@@ -167,9 +159,11 @@ class SpriteSomethingMainFrame(tk.Frame):
         def zoom_out(*args):
             self._current_zoom = max(0.1,self._current_zoom - 0.1)
             self.scale_background_image(self._current_zoom)
+            self.update_sprite_animation()
         def zoom_in(*args):
             self._current_zoom = min(3.0,self._current_zoom + 0.1)
             self.scale_background_image(self._current_zoom)
+            self.update_sprite_animation()
 
         zoom_out_button = tk.Button(control_section, text="Zoom -", command=zoom_out)
         zoom_out_button.grid(row=current_grid_row, column=2, sticky='nesw')
@@ -196,13 +190,13 @@ class SpriteSomethingMainFrame(tk.Frame):
         play_one_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","reset.png"))
-        reset_button = tk.Button(control_section, image=img, text="Reset", compound=tk.RIGHT)
+        reset_button = tk.Button(control_section, image=img, text="Reset", compound=tk.RIGHT, command=self.reset_global_frame_timer)
         reset_button.image = img
         reset_button.grid(row=current_grid_row, column=3, sticky='nesw')
         current_grid_row += 1
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-back.png"))
-        step_back_button = tk.Button(control_section, image=img, text="Step", compound=tk.LEFT)
+        step_back_button = tk.Button(control_section, image=img, text="Step", compound=tk.LEFT, command=self.rewind_global_frame_timer)
         step_back_button.image = img
         step_back_button.grid(row=current_grid_row, column=1, sticky='nesw')
 
@@ -212,11 +206,19 @@ class SpriteSomethingMainFrame(tk.Frame):
         pause_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-forward.png"))
-        step_forward_button = tk.Button(control_section, image=img, text="Step", compound=tk.RIGHT)
+        step_forward_button = tk.Button(control_section, image=img, text="Step", compound=tk.RIGHT, command=self.advance_global_frame_timer)
         step_forward_button.image = img
         step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
         ###############################################
         self._status.set(self.game.game_name)
+
+        #and now, as the final act of setup, let us begin the march of the clock
+        self.time_marches_forward()
+
+    def time_marches_forward(self):
+        FRAMERATE = 60 #Hz
+        self.advance_global_frame_timer()
+        self.master.after(int(1000/FRAMERATE), self.time_marches_forward)
 
 
     def create_menu_bar(self):
@@ -357,14 +359,8 @@ class SpriteSomethingMainFrame(tk.Frame):
         def change_animation_list_button(animation_name):
             # Use the list buttons to change the animation being painted
             # Also changes the dropdown menu to reflect the change
-            if self._sprite_ID is not None:
-                self._canvas.delete(self._sprite_ID)
-            img, origin = self.sprite.get_sprite_animation(self.sprite.animations[animation_name])
-            if img:
-                self._sprite_ID = self.attach_sprite(self._canvas, img, tuple(150-x for x in origin))  #TODO: better coordinate
-            else:
-                self._sprite_ID = None
             self.animation_selection.set(animation_name)
+            self.initialize_sprite_animation()
         animation_list = tk.Tk()
         animation_list.title("Animation List")
         animation_list_canvas = tk.Canvas(animation_list)
@@ -457,6 +453,8 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.master.title(self.app_title)
 
     def load_game(self,game_name):
+        #once the identity of the game is known, call this function to do the initial class setup
+
         self._game_name = game_name.lower()   #no funny business with capitalization
 
         #establishing now the convention that the file names are the folder names
@@ -475,11 +473,14 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.load_background(self.background_name)
 
     def make_sprite(self, sprite_number):
+        #sets up the GUI and the display for a particular sprite from the current game
+        # e.g. call with sprite_number 0x01 to set up the player sprite
         display_name, class_name = self.game.sprites[sprite_number]
         #this line is not obvious; it is calling the appropriate sprite class constructor, e.g. Z3Link class from lib/zelda3/zelda3.py
         self.sprite = getattr(self.game_module,class_name)(self.game.rom_data, self.game.meta_data)
 
     def get_library_name(self, game_name):
+        #the libraries are dynamically loaded.  This function gives the directory and library name as a string (for import)
         return f"lib.{game_name}.{game_name}"
 
     def load_sprite(self):
@@ -527,6 +528,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
     def _get_sfc_filename(self, path):
+        #for portions of the app that need a rom to work, this will look in the specified path and find the first rom it sees
         for file in os.listdir(path):
             if file.endswith(".sfc") or file.endswith(".smc"):
                 return os.path.join(path, file)
@@ -534,6 +536,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             raise AssertionError(f"There is no sfc file in directory {path}")
 
     def load_background(self, background_name):
+        #intended to be called when the user chooses a background from the dropdown menu.  This loads that background.
         if background_name in self.game.background_images:
             background_filename = self.game.background_images[background_name]
             full_path_to_background_image = os.path.join("resources",self._game_name,"backgrounds",background_filename)
@@ -544,6 +547,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             raise AssertionError(f"load_background() called with invalid background name {background_filename}")
 
     def _set_background(self, background_raw_image):
+        #handles the funny business of converting the background to a PhotoImage, and makes sure there is only one background
         self._background_image = ImageTk.PhotoImage(background_raw_image)     #have to save this for it to display
         if self._background_ID is None:
             self._background_ID = self._canvas.create_image(0,0,image=self._background_image,anchor=tk.NW)    #so that we can manipulate the object later
@@ -551,11 +555,50 @@ class SpriteSomethingMainFrame(tk.Frame):
             self._canvas.itemconfig(self._background_ID, image=self._background_image)
 
     def scale_background_image(self,factor):
+        #called by the zoom +/- buttons
+        #this function is in charge of retrieving the PIL version of the background image, scaling it, and re-inserting it
         if self._background_ID is not None:   #if there is no background right now, do nothing
             new_size = tuple(int(factor*dim) for dim in self._raw_background.size)
             self._set_background(self._raw_background.resize(new_size))
 
-    def attach_sprite(self,canvas,sprite_raw_image,location):
+    def initialize_sprite_animation(self, *args):
+        #called by the animation dropdown
+        self._frame_number = 0        #start out at the first frame of the animation
+        self.update_sprite_animation()
+
+    def advance_global_frame_timer(self):
+        #called by step radio button
+        self._frame_number += 1
+        if self._frame_number > 1e8:        #just in case someone leaves this running for, say...forever
+            self._frame_number = 1e2
+        self.update_sprite_animation()
+
+    def rewind_global_frame_timer(self):
+        #called by step radio button
+        self._frame_number = max(0, self._frame_number - 1)
+        self.update_sprite_animation()
+
+    def reset_global_frame_timer(self):
+        #called by radio reset button
+        self._frame_number = 0
+        self.update_sprite_animation()
+        
+
+    def update_sprite_animation(self):
+        #calls to the sprite library to get the appropriate animation, and anchors it correctly to the zoomed canvas
+        #also makes sure that there are not multiple of the sprite at any given time
+        if self._sprite_ID is not None:
+            self._canvas.delete(self._sprite_ID)
+        img, origin = self.sprite.get_sprite_frame(self.sprite.animations[self.animation_selection.get()],self._frame_number)  #TODO: tie in pose number
+        if img:
+            new_size = tuple(int(self._current_zoom*dim) for dim in img.size)
+            scaled_img = img.resize(new_size)
+            self._sprite_ID = self._attach_sprite(self._canvas, scaled_img, tuple(self._current_zoom*(100-x) for x in origin))  #TODO: better coordinate
+        else:
+            self._sprite_ID = None
+    
+
+    def _attach_sprite(self,canvas,sprite_raw_image,location):
         sprite = ImageTk.PhotoImage(sprite_raw_image)
         ID = canvas.create_image(location[0], location[1],image=sprite, anchor = tk.NW)
         self._sprites[ID] = sprite     #if you skip this part, then the auto-destructor will get rid of your picture!
@@ -566,7 +609,10 @@ class SpriteSomethingMainFrame(tk.Frame):
         def txtEvent(event):
             return "break"
         lines = [
-                  "Created by: Artheau & Mike Trethewey",
+                  "Created by:",
+                  "",
+                  "Artheau & Mike Trethewey",
+                  "",
                   "",
                   "Based on:",
                   "[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
