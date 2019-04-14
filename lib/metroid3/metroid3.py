@@ -1,6 +1,7 @@
 from lib.game import Game
 from lib.zspr import Zspr
 from . import rom
+from lib.RomHandler import util
 
 class Metroid3(Game):
     def __init__(self, rom_filename, meta_filename):
@@ -17,14 +18,14 @@ class Metroid3(Game):
 
 
 class Metroid3Sprite(Zspr):   #Super Metroid Sprites
-    def __init__(self):
-        super().__init__()    #do the stuff from the inherited class
+    def __init__(self, *args):
+        super().__init__(*args)    #do the stuff from the inherited class
 
 
 
 class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
-    def __init__(self, rom_data, meta_data):
-        super().__init__()    #do the stuff from the inherited class
+    def __init__(self, *args):
+        super().__init__(*args)    #do the stuff from the inherited class
 
         self._SPRITE_DATA_SIZE = 500000             #I honestly don't know what this number should be until I do more napkin math
         self._sprite_data = bytearray([0 for _ in range(self._SPRITE_DATA_SIZE)])
@@ -298,20 +299,61 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                                     "DEBUG: Superjump diagonal left": 0xCE,
         }
 
-    def get_timed_sprite_palette(self, suit_type):   #for use in rendering the sprite
+    def get_timed_sprite_palette(self, variant_type, suit_type):   #for use in rendering the sprite
+        #interface between this file and the corresponding enumerations in rom.py
+        return self.rom_data.get_palette( \
+                                            getattr(rom.PaletteType,variant_type.upper()), \
+                                            getattr(rom.SuitType,suit_type.upper()) \
+                                        )
+
+    def get_sprite_palette(self, variant_type, suit_type, frame):     #for displaying the palette in the GUI, not for rendering
         raise NotImplementedError()
 
-    def get_sprite_palette(self, suit_type):     #for displaying the palette in the GUI, not for rendering
+    def set_sprite_palette(self, variant_type, suit_type, frame):
         raise NotImplementedError()
 
-    def set_sprite_palette(self, variant_type, suit_type):
-        raise NotImplementedError()
+    def get_sprite_frame(self, animation_ID, frame):
+        tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, frame)   #TODO: need to translate frame to pose
+        palette_timing_list = self.get_timed_sprite_palette("standard", "power")   #TODO: tie this to the GUI buttons!
 
-    def get_sprite_frame(animation_ID, frame):
-        raise NotImplementedError()
+        #TODO: A lot of the following seems like it can be factored out to common code
 
-    def get_sprite_animation(animation_ID):
-        raise NotImplementedError()
+        #figure out based upon frame number which palette should be used here
+        MAX_LOOPS = 1000   #failsafe to prevent infinite loops
+        palette_timing_index = frame
+        current_palette = None
+        for _ in range(MAX_LOOPS):
+            for time,palette in palette_timing_list:
+                palette_timing_index -= time
+                if palette_timing_index <= 0 or time == 0:   #time = 0 is a special code for static palettes or "final" palettes
+                    current_palette = palette
+                    break
+            if current_palette is not None:
+                break
+        else:
+            raise AssertionError(f"During get_sprite_frame() encountered modular arithmetic error while processing frame number {frame}")
+
+        #there is stuff in VRAM by default, so populate this and then overwrite with the DMA_writes
+        constructed_VRAM_data = {}
+        TILESIZE = 0x20
+        def add_flattened_tiles(current_dict):
+            for index, tile_data in current_dict:
+                for i in range(len(tile_data) //TILESIZE):   #for each tile
+                    constructed_VRAM_data[index+i] = tile_data[i*TILESIZE: (i+1)*TILESIZE]
+        add_flattened_tiles(self.rom_data.get_default_vram_data().items())
+        add_flattened_tiles(DMA_writes.items())
+        
+        #TODO: implement multiple palettes
+        current_palettes = {key: current_palette for key in range(0b1000)}
+
+        constructed_image, offset = util.image_from_raw_data(tilemaps, constructed_VRAM_data, current_palettes)
+        return constructed_image, offset
+
+
+    def get_sprite_animation(self, animation_ID):
+        #For now, I'll be happy to get a static frame working, so let's start there
+        return self.get_sprite_frame(animation_ID, 0x00)
+
 
 
 

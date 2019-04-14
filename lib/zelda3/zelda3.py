@@ -16,13 +16,13 @@ class Zelda3(Game):
         self.sprites = {0x01: ("Link", "Z3Link")}   #as (display name, class name)
 
 class Zelda3Sprite(Zspr):   #ALttP Sprites
-    def __init__(self):
-        super().__init__()    #do the stuff from the inherited class
+    def __init__(self, *args):
+        super().__init__(*args)    #do the stuff from the inherited class
 
 
 class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
-    def __init__(self, rom_data, meta_data):
-        super().__init__()    #do the stuff from the inherited class
+    def __init__(self, *args):
+        super().__init__(*args)    #do the stuff from the inherited class
 
         self._SPRITE_DATA_SIZE = 0x7000
         self._sprite_data = bytearray([0 for _ in range(self._SPRITE_DATA_SIZE)])
@@ -56,7 +56,7 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
         palette[self._GLOVE_PALETTE_INDEX:self._GLOVE_PALETTE_INDEX+2] = self.get_gloves_color(gloves)
         return [(0,palette)]   #the zero here indicates that this is a static palette, which all (implemented) Zelda palettes are
 
-    def get_sprite_palette(self, mail_color):
+    def get_sprite_palette(self, mail_color, frame):
         mail_color = lower(mail_color)     #no funny business with capital letters
         palette = bytearray([0,0])           #start with transparency color
         if mail_color in self.palette_types:
@@ -67,7 +67,7 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
 
         return palette
 
-    def set_sprite_palette(self, palette, mail_color):
+    def set_sprite_palette(self, palette, mail_color, frame):
         mail_color = lower(mail_color)     #no funny business with capital letters
 
         palette_length = len(palette)
@@ -93,8 +93,10 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
         else:
             raise AssertionError(f"in Link ZSPR module, received call to get_gloves_color() with glove color {gloves}")
 
-    def get_sprite_frame(animation_ID, frame):
+    def get_sprite_frame(self, animation_ID, frame):
         raise NotImplementedError()
 
-    def get_sprite_animation(animation_ID):
-        raise NotImplementedError()
+    def get_sprite_animation(self, animation_ID):
+        #Not raising an error so that we can test this functionality on the other libraries for now
+        print(f"Received call to activate animation number {hex(animation_ID)} for Link, but this is not implemented (yet).")
+        return None, None

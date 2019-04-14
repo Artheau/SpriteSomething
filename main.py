@@ -1,6 +1,9 @@
 #originally written by Artheau
-#while suffering from delusions of grandeur
-#in April 2019
+# while suffering from delusions of grandeur
+#at some point a lot of content was added by Mike
+# apparently he delights in delusions of grandeur
+#and so my pain and his joy mixed in a constructive way
+# back in April 2019
 
 import os
 import importlib
@@ -47,9 +50,6 @@ class SpriteSomethingMainFrame(tk.Frame):
         #for now, just to prove that at least some of the features work
         self.load_game(random.choice(["zelda3","metroid3"]))
         self.make_sprite(0x01)   #TODO: implement other sprites other than the player sprite
-
-
-        #self._sprite_ID = self.attach_sprite(self._canvas, Image.open(os.path.join("resources","zelda3","backgrounds","throne.png"), (100,100))
 
         left_pane = tk.PanedWindow(self, orient=tk.VERTICAL)
         panes.add(left_pane, minsize=200)
@@ -99,7 +99,14 @@ class SpriteSomethingMainFrame(tk.Frame):
         animation_dropdown.configure(width=16)
         animation_dropdown.grid(row=0, column=2)
         def change_animation_dropdown(*args):
-            print(f"Received instruction to change animation to {self.animation_selection.get()}")
+            if self._sprite_ID is not None:
+                self._canvas.delete(self._sprite_ID)
+            img, origin = self.sprite.get_sprite_animation(self.sprite.animations[self.animation_selection.get()])
+            if img:
+                self._sprite_ID = self.attach_sprite(self._canvas, img, tuple(150-x for x in origin))  #TODO: better coordinate
+            else:
+                self._sprite_ID = None
+        self._sprite_ID = None             #right now there is no animation...hopefully this gets updated in the next line
         change_animation_dropdown()        #set up the initial animation
         self.animation_selection.trace('w', change_animation_dropdown)  #when the dropdown is changed, run this function
         ###############################################
@@ -355,12 +362,14 @@ class SpriteSomethingMainFrame(tk.Frame):
         app_name = []
         if random.choice([True,False]):
             app_name.append(random.choice(name_parts["prefix enchantment"]))
-        app_name.append(" Sprite ")         #Need to have "Sprite" in the name
+            app_name.append(" ")
+        app_name.append("Sprite ")         #Need to have "Sprite" in the name
         app_name.append(random.choice(name_parts["nouns"]))
         if random.choice([True,False]):
             suffix = random.choice(name_parts["suffix enchantment"])
             app_name.append(f" {suffix}")
-        self.master.title("".join(app_name))
+        self.app_title = "".join(app_name)
+        self.master.title(self.app_title)
 
     def load_game(self,game_name):
         self._game_name = game_name.lower()   #no funny business with capitalization
@@ -462,6 +471,8 @@ class SpriteSomethingMainFrame(tk.Frame):
         def txtEvent(event):
             return "break"
         lines = [
+                  #f"{self.app_title}",
+                  #"",
                   "Created by: Artheau & Mike Trethewey",
                   "",
                   "Based on:",
@@ -471,7 +482,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                   "Temporarily uses assets from SpriteAnimator"
         ]
         about = tk.Tk()
-        about.title("About this App")
+        about.title(f"About {self.app_title}")
         about.geometry("300x120")
         about.resizable(tk.FALSE,tk.FALSE)
         about.attributes("-toolwindow",1)

@@ -2,12 +2,15 @@
 #this file contains classes that wrap all of the modifiable data for the sprites
 
 class Zspr():     #Base for ZSPR files
-    def __init__(self):
+    def __init__(self, rom_data, meta_data):
         self._sprite_data = bytearray()       #raw sprite imagery bytes
         self._palette_data = bytearray()      #raw palette bytes
         self._sprite_name = ""                #name of sprite
         self._sprite_author_name = ""         #name of author
         self._sprite_author_name_short = ""   #short name of author (sanitized for rom injection, possibly for use in credits)
+
+        self.rom_data = rom_data                #remember how to access the rom handler
+        self.meta_data = meta_data              #remember how to access the meta data
 
     def get_raw_sprite_data(self):            #Get raw sprite imagery bytes
         return self._sprite_data

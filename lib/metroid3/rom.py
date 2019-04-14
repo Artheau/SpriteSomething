@@ -65,7 +65,7 @@ class Metroid3RomHandler(RomHandler):
         # in which case the data here will depend upon what kind of weapon Samus has equipped
 
         #main population is from data starting at D5200-D71FF LOROM (populates from 0x00 on)
-        #Note: grapple beam (D0200 LOROM) can overwrite parts of row 2, and Mode 7 rooms (183A00 LOROM)
+        #Note: grapple beam (e.g. $D0200 LOROM) can overwrite parts of row 2, and Mode 7 rooms (e.g. $183A00 LOROM)
         # can load "sprites" into the last three rows.  Rain can also go in row 0xD0
         DMA_writes = {0x00: self.read_from_snes_address(0x9AD200,'1'*0x2000)}
 
@@ -461,18 +461,18 @@ class Metroid3RomHandler(RomHandler):
 
     def _get_dma_data(self,animation,pose):
         #get the pointer to the big list of table indices (in disassembly: get AFP_T??)
-        animation_frame_progression_table = 0x920000 + self.read_from_snes_address(0x92D94E, 2)
+        animation_frame_progression_table = 0x920000 + self.read_from_snes_address(0x92D94E + 2*animation, 2)
         #get two sets of table/entry indices for use in the DMA table
-        top_DMA_table, top_DMA_entry, bottom_DMA_table, bottom_DMA_entry = self.read_from_snes_address(animation_frame_progression_table,"1111")
+        top_DMA_table, top_DMA_entry, bottom_DMA_table, bottom_DMA_entry = self.read_from_snes_address(animation_frame_progression_table + 4*pose,"1111")
         #get the data for each part
         DMA_writes = {}
         for (base_addr, table, entry, vram_offset) in \
                                         [(0x92D938, bottom_DMA_table, bottom_DMA_entry, 0x08), #lower body VRAM
                                          (0x92D91E, top_DMA_table,    top_DMA_entry,    0x00)]: #upper body VRAM
             #reference the first index to figure out where the relevant DMA table is
-            this_DMA_table = 0x920000 + self.read_from_snes_address(base_addr,2)
+            this_DMA_table = 0x920000 + self.read_from_snes_address(base_addr + 2*table,2)
             #From this table, get the appropriate entry in the list which contains the DMA pointer and the row sizes
-            DMA_pointer, row1_size, row2_size = self.read_from_snes_address(this_DMA_table + 7 * pose, "322")
+            DMA_pointer, row1_size, row2_size = self.read_from_snes_address(this_DMA_table + 7 * entry, "322")
             #Read the DMA data
             row1 = self.read_from_snes_address(DMA_pointer, "1"*row1_size)
             row2 = self.read_from_snes_address(DMA_pointer+row1_size, "1"*row2_size)
