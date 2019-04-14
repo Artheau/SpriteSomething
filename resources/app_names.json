@@ -10,7 +10,9 @@
         "Loader",
         "Viewer",
         "Container",
-        "Playground"
+        "Playground",
+        "Emporium",
+        "Base"
     ],
     "prefix enchantment": [
         "Blazing",
@@ -19,7 +21,10 @@
         "Brilliant",
         "Unprecedented",
         "Decaffeinated",
-        "First Annual"
+        "First Annual",
+        "Sahasrahla's",
+        "All Your",
+        "It's A Dangerous"
     ],
     "suffix enchantment": [
         "of Vengeance",
@@ -29,6 +34,10 @@
         "in surround sound where available",
         "with soothing ocean sounds",
         "2000",
-        "ft. M. Rio and L. Gee"
+        "ft. M. Rio and L. Gee",
+        "of Imagery",
+        "for Great Justice",
+        "to Move Every Zig",
+        "Are Belong To Us"
     ]
 }

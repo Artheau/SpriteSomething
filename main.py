@@ -12,6 +12,7 @@ import random
 import re
 import tkinter as tk
 import webbrowser
+from functools import partial
 from tkinter import filedialog, messagebox, Text
 from lib.crxtooltip import CreateToolTip
 from lib.tkHyperlinkManager import HyperlinkManager
@@ -84,6 +85,10 @@ class SpriteSomethingMainFrame(tk.Frame):
         def change_background_dropdown(*args):
             self.load_background(self.background_selection.get())
         self.background_selection.trace('w', change_background_dropdown)  #when the dropdown is changed, run this function
+        self.background_animate = tk.IntVar()
+        background_animate_check = tk.Checkbutton(background_section,text="Animate background",variable=self.background_animate)
+        background_animate_check.select()
+        background_animate_check.grid(row=1,column=2)
         ###############################################
 
 
@@ -98,6 +103,9 @@ class SpriteSomethingMainFrame(tk.Frame):
         animation_dropdown = tk.OptionMenu(animation_section, self.animation_selection, *self.sprite.animations)
         animation_dropdown.configure(width=16)
         animation_dropdown.grid(row=0, column=2)
+        animation_list = tk.Button(animation_section,text="As list",command=self.show_animation_list)
+        animation_list.configure(width=18)
+        animation_list.grid(row=1, column=2)
         def change_animation_dropdown(*args):
             if self._sprite_ID is not None:
                 self._canvas.delete(self._sprite_ID)
@@ -323,16 +331,87 @@ class SpriteSomethingMainFrame(tk.Frame):
                 img = tk.PhotoImage(file=os.path.join("resources",self._game_name,"icons",prefix+'-'+str(level)+".png"))
             else:
                 img = tk.PhotoImage(file=os.path.join("resources","meta","icons","no-thing.png"))
-            button = tk.Button(container,image=img,text=label+suffix)
+            button = tk.Radiobutton(
+                container,
+                image=img,
+                text=label+suffix,
+                variable=prefix,
+                value=level,
+                activebackground="#78C0F8",
+                selectcolor="#C0E0C0",
+                width=20,
+                height=20,
+                indicatoron=False,
+                command=partial(self.press_spiffy_button,prefix+'-'+str(level))
+            )
+            if col == 2 or (prefix == "mail" and level == 1):
+                button.select()
             button_tip = CreateToolTip(button,label+suffix)
             button.image = img
             button.grid(row=row,column=col)
             col += 1
 
+    def show_animation_list(self):
+        def onFrameConfigure(canvas):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+        def change_animation_list_button(animation_name):
+            # Use the list buttons to change the animation being painted
+            # Also changes the dropdown menu to reflect the change
+            if self._sprite_ID is not None:
+                self._canvas.delete(self._sprite_ID)
+            img, origin = self.sprite.get_sprite_animation(self.sprite.animations[animation_name])
+            if img:
+                self._sprite_ID = self.attach_sprite(self._canvas, img, tuple(150-x for x in origin))  #TODO: better coordinate
+            else:
+                self._sprite_ID = None
+            self.animation_selection.set(animation_name)
+        animation_list = tk.Tk()
+        animation_list.title("Animation List")
+        animation_list_canvas = tk.Canvas(animation_list)
+        animation_list_frame = tk.Frame(animation_list_canvas)
+        animation_list_vscrollbar = tk.Scrollbar(animation_list,orient="vertical",command=animation_list_canvas.yview)
+        animation_list_hscrollbar = tk.Scrollbar(animation_list,orient="horizontal",command=animation_list_canvas.xview)
+        animation_list_canvas.configure(yscrollcommand=animation_list_vscrollbar.set)
+        animation_list_canvas.configure(xscrollcommand=animation_list_hscrollbar.set)
+        animation_list_vscrollbar.pack(side="right",fill="y")
+        animation_list_hscrollbar.pack(side="bottom",fill="x")
+        animation_list_canvas.pack(side="left",fill="both",expand=True)
+        animation_list_canvas.create_window((4,4),window=animation_list_frame,anchor="nw")
+        animation_list_frame.bind("<Configure>",lambda event,canvas=animation_list_canvas: onFrameConfigure(animation_list_canvas))
+        row = 0
+        column = 0
+        stem = ""
+        for animation in self.sprite.animations:
+            if stem in animation and ',' in animation:
+                col += 1
+            else:
+                if ',' in animation:
+                    k = animation.rfind(',')
+                    stem = animation[0:k]
+                else:
+                    stem = animation
+                row += 1
+                col = 0
+            button = tk.Button(animation_list_frame,text=animation,textvariable=animation,command=partial(change_animation_list_button,animation))
+            button.grid(row=row,column=col)
+
+    def press_spiffy_button(self,buttonID):
+        #ins:
+        # buttonID: This way the Sprite Class knows what we clicked
+        pass # do something in the Sprite Class
+
     def add_dummy_menu_option(self,text,menuObject):
+        # Add menu option with junk placeholder
+        #ins:
+        # text: Text label for menu option
+        # menuObject: Menu object to add menu option to
         menuObject.add_command(label=text, command=self.popup_NYI)
 
     def add_dummy_menu_options(self,options,menuObject):
+        # Add array of menu options with junk placeholders
+        #ins:
+        # options: Array of menu options to add
+        # menuObject: Menu object to add menu options to
         for option in options:
             if option != "":
                 self.add_dummy_menu_option(option,menuObject)
@@ -340,6 +419,10 @@ class SpriteSomethingMainFrame(tk.Frame):
                 menuObject.add_separator()
 
     def add_text_link_array(self,lines,textObject):
+        # Add an array of text lines, linkifying as necessary
+        #ins:
+        # lines: Lines of text to add
+        # textObject: Text object to add lines to
         hyperlink = HyperlinkManager(textObject)
         for line in lines:
             matches = re.search('(.*)\[(.*)\]\((.*)\)(.*)',line)
@@ -354,9 +437,11 @@ class SpriteSomethingMainFrame(tk.Frame):
                 textObject.insert(tk.INSERT, line + "\n")
 
     def popup_NYI(self):
+        # This is not the method you are looking for
         messagebox.showinfo("Not Yet Implemented", "This DLC is not yet available")
 
     def create_random_title(self):
+        # Generate a new epic random title for this application
         with open(os.path.join("resources","app_names.json")) as name_file:
             name_parts = json.load(name_file)
         app_name = []
@@ -398,15 +483,20 @@ class SpriteSomethingMainFrame(tk.Frame):
         return f"lib.{game_name}.{game_name}"
 
     def load_sprite(self):
+        # Load a ZSPR
         self.sprite_filename = filedialog.askopenfile(initialdir="./",title="Select Sprite",filetypes=(("ZSPR Files","*.zspr"),))
     def save_sprite_as(self):
+        # Save a ZSPR
         filedialog.asksaveasfile(initialdir="./",title="Save Sprite As...",filetypes=(("ZSPR Files","*.zspr"),))
 
     def import_from_game_file(self):
+        # Import a ZSPR from a Game File
         filedialog.askopenfile(initialdir="./",title="Import from Game File",filetypes=(("SNES ROMs","*.sfc;*.smc"),))
     def import_from_png(self):
+        # Import a ZSPR from a PNG
         filedialog.askopenfile(initialdir="./",title="Import from PNG",filetypes=(("PNGs","*.png"),))
     def import_palette(self,type):
+        # Import a Palette from another source
         ftypes = ("All Files","*.*")
         if type == "GIMP":
             ftypes = ("GIMP Palettes","*.gpl")
@@ -416,12 +506,16 @@ class SpriteSomethingMainFrame(tk.Frame):
             ftypes = ("YY-CHR Palettes","*.pal")
         filedialog.askopenfile(initialdir="./",title="Import " + type + " Palette",filetypes=(ftypes,))
     def export_png(self):
+        # Export ZSPR as a PNG
         filedialog.asksaveasfile(initialdir="./",title="Export PNG",filetypes=(("PNGs","*.png"),))
     def export_gif(self):
+        # Export current Still or Animation as a GIF
         filedialog.asksaveasfile(initialdir="./",title="Export Animation as GIF",filetypes=(("GIFs","*.gif"),))
     def export_collage(self):
+        # Export current Still or Exploded Animation as a PNG
         filedialog.asksaveasfile(initialdir="./",title="Export Animation as Collage",filetypes=(("PNGs","*.png"),))
     def export_palette(self,type):
+        # Export a Palette for import into another source
         ftypes = ("All Files","*.*")
         if type == "GIMP":
             ftypes = ("GIMP Palettes","*.gpl")
@@ -468,11 +562,10 @@ class SpriteSomethingMainFrame(tk.Frame):
         return ID
 
     def about(self):
+        # Credit where credit's due
         def txtEvent(event):
             return "break"
         lines = [
-                  #f"{self.app_title}",
-                  #"",
                   "Created by: Artheau & Mike Trethewey",
                   "",
                   "Based on:",
@@ -493,8 +586,14 @@ class SpriteSomethingMainFrame(tk.Frame):
         text.bind("<Button-1>",lambda e: txtEvent(e))
 
     def exit(self):
-        #TODO: confirmation box
-        exit()
+        exit_confirm = messagebox.askyesno(self.app_title,"Are you sure you want to exit?")
+        if exit_confirm:
+            save_before_exit = messagebox.askyesno(self.app_title,"Do you want to save before exiting?")
+            if save_before_exit:
+                self.save_sprite_as()
+            else:
+                messagebox.showwarning(self.app_title,"Death in Super Metroid loses progress since last save." + "\n" + "You have been eaten by a grue.")
+                exit()
 
 
 
