@@ -601,7 +601,7 @@ class SpriteSomethingMainFrame(tk.Frame):
     def _attach_sprite(self,canvas,sprite_raw_image,location):
         sprite = ImageTk.PhotoImage(sprite_raw_image)
         ID = canvas.create_image(location[0], location[1],image=sprite, anchor = tk.NW)
-        self._sprites[ID] = sprite     #if you skip this part, then the auto-destructor will get rid of your picture!
+        self._sprite_image = sprite     #if you skip this part, then the auto-destructor will get rid of your picture!
         return ID
 
     def about(self):
