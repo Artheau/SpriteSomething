@@ -51,10 +51,17 @@ class Metroid3RomHandler(RomHandler):
         self._apply_improvements()
 
 
-    def get_pose_data(self,animation,pose):
+    def get_pose_data(self,animation,pose,port_frame=0):
         tilemaps = self._get_pose_tilemaps(animation,pose)
         DMA_writes = self._get_dma_data(animation, pose)
         duration = self._get_pose_duration(animation, pose)
+
+        if port_frame > 0:
+            gun_tilemap, gun_tile, gun_DMA = self.get_gun_data(animation, pose)
+            if gun_tilemap:
+                tilemaps.append(gun_tilemap)       #join the tilemap at the end, as it will sit over the other tiles
+                DMA_writes[gun_tile] = gun_DMA       #join the DMA info at the end, as it overwrites the normal DMA
+
         return tilemaps, DMA_writes, duration
 
 
@@ -122,7 +129,8 @@ class Metroid3RomHandler(RomHandler):
 
         if priority in [0x00,0x02]:    #bail out now if the gun should not be drawn
             tilemap = None
-            DMA_write = None
+            gun_tile = None
+            gun_DMA = None
         elif priority != 0x01:
             raise AssertionError(f"get_gun_port() called for data that has non-one priority {priority}")
         else:
@@ -139,15 +147,16 @@ class Metroid3RomHandler(RomHandler):
 
             #need DMA info
             DMA_list = 0x900000 + self.read_from_snes_address(0x90C7A5 + 2*direction, 2)
-            level_of_opening = min(2, frame//4)
-            DMA_pointer = 0x900000 + self.read_from_snes_address(DMA_list + 2*(1 + level_of_opening), 2)
+            level_of_opening = 1 + min(2, frame//4)
+            DMA_pointer = 0x9A0000 + self.read_from_snes_address(DMA_list + 2*level_of_opening, 2)
 
             #this is where the tile is loaded into in VRAM
-            DMA_destination = (self.read_from_snes_address(0x90C786,2)-0x6000)//0x10
+            gun_tile = (self.read_from_snes_address(0x90C786,2)-0x6000)//0x10
 
-            DMA_writes = {DMA_destination: self.read_from_snes_address(DMA_pointer, "1"*0x20)}
+            #this is the actual graphics data for the tile
+            gun_DMA = self.read_from_snes_address(DMA_pointer, "1"*0x20)
 
-        return tilemap, DMA_writes
+        return tilemap, gun_tile, gun_DMA
 
 
     def get_death_data(self, pose, facing='left', suit=SuitType.POWER):

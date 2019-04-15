@@ -32,11 +32,13 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         self._PALETTE_DATA_SIZE = (135*16*2)+(17*2)     #so many palettes...that's 135 just right there, along with stray colors
         self._palette_data = bytearray([0 for _ in range(self._PALETTE_DATA_SIZE)])
 
-        self.palette_types = {                         #if called as a list, returns the possible suit types
-                                    "power": 0,
-                                    "varia": 1,
-                                    "gravity": 2,
+        self.palette_types = {
+                                    "power": 1,
+                                    "varia": 2,
+                                    "gravity": 3,
         }
+
+        self.suit_lookup = {value:key for key,value in self.palette_types.items()}   #reverse lookup
 
         self.variant_type = {
                                     "standard": 0,
@@ -312,10 +314,10 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def set_sprite_palette(self, variant_type, suit_type, frame):
         raise NotImplementedError()
 
-    def get_sprite_frame(self, animation_ID, frame):
+    def get_sprite_frame(self, animation_ID, frame, buttons):
         pose = self.get_pose_number_from_frame_number(animation_ID, frame)
-        tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose)
-        palette_timing_list = self.get_timed_sprite_palette("heat", "power")   #TODO: tie this to the GUI buttons!
+        tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, port_frame=8*buttons["port"])   #TODO: do full port opening animation
+        palette_timing_list = self.get_timed_sprite_palette("standard", self.suit_lookup[buttons["suit"]])
 
         #TODO: A lot of the following seems like it can be factored out to common code
 
@@ -332,8 +334,8 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         add_flattened_tiles(DMA_writes.items())
 
         black_palette = [0x0 for _ in range(0x10)]
-        loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", "power"),frame)
-        flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", "power"),frame)
+        loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", self.suit_lookup[buttons["suit"]]),frame)
+        flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", self.suit_lookup[buttons["suit"]]),frame)
         current_palettes =  {
                                 0b000: None,
                                 0b001: None,

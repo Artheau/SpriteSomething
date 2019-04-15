@@ -128,8 +128,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         animation_list = tk.Button(animation_section, text="As list", command=self.show_animation_list)
         animation_list.configure(width=dims["animation_list"]["width"])
         animation_list.grid(row=1, column=2, sticky='E')
-        self._sprite_ID = None             #right now there is no animation...hopefully this gets updated in the next line
-        self.initialize_sprite_animation()        #set up the initial animation
+        self._sprite_ID = None             #right now there is no animation
         self.animation_selection.trace('w', self.initialize_sprite_animation)  #when the dropdown is changed, run this function
         ###############################################
 
@@ -139,6 +138,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         sprite_section = tk.Frame(left_pane)
         left_pane.add(sprite_section)
         self.right_align_grid_in_frame(sprite_section)
+        self.sprite_menu_buttons = {}   #a place to store the values that the pressed buttons correspond to
 
         #TODO: Move this into the sprite specific classes so that it can be different for each sprite within a game
         if (self._game_name == "metroid3"):
@@ -257,6 +257,8 @@ class SpriteSomethingMainFrame(tk.Frame):
         step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
         ###############################################
         self._status.set(self.game.game_name)
+
+        self.initialize_sprite_animation()        #set up the initial animation
 
         #and now, as the final act of setup, let us begin the march of the clock
         self.time_marches_forward()
@@ -405,10 +407,11 @@ class SpriteSomethingMainFrame(tk.Frame):
                 width=dims["button"]["width"],
                 height=dims["button"]["height"],
                 indicatoron=False,
-                command=partial(self.press_spiffy_button,prefix + '-' + str(level))
+                command=partial(self.press_spiffy_button,prefix,level)
             )
             if col == 2 or (prefix == "mail" and level == 1):
                 button.select()
+                self.press_spiffy_button(prefix,level)
             CreateToolTip(button, label + suffix)
             button.image = img
             button.grid(row=row, column=col)
@@ -452,10 +455,12 @@ class SpriteSomethingMainFrame(tk.Frame):
             button = tk.Button(animation_list_frame, text=animation, textvariable=animation, command=partial(change_animation_list_button,animation))
             button.grid(row=row, column=col)
 
-    def press_spiffy_button(self,buttonID):
+    def press_spiffy_button(self,prefix,level):
         #ins:
         # buttonID: This way the Sprite Class knows what we clicked
-        pass # do something in the Sprite Class
+        self.sprite_menu_buttons[prefix] = level
+        if hasattr(self, "_frame_number"):
+            self.update_sprite_animation()
 
     def add_dummy_menu_option(self,text,menuObject):
         # Add menu option with junk placeholder
@@ -670,7 +675,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         #also makes sure that there are not multiple of the sprite at any given time
         if self._sprite_ID is not None:
             self._canvas.delete(self._sprite_ID)
-        img, origin = self.sprite.get_sprite_frame(self.sprite.animations[self.animation_selection.get()], self._frame_number)  #TODO: tie in pose number
+        img, origin = self.sprite.get_sprite_frame(self.sprite.animations[self.animation_selection.get()], self._frame_number, self.sprite_menu_buttons)
         if img:
             new_size = tuple(int(self._current_zoom*dim) for dim in img.size)
             scaled_img = img.resize(new_size)
