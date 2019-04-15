@@ -52,12 +52,12 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
         self._GLOVE_PALETTE_OFFSET = 120
 
     def get_timed_sprite_palette(self, mail_color, gloves):   #for use in rendering the sprite
-        palette = get_palette(mail_color)
+        palette = self.get_sprite_palette(mail_color)
         palette[self._GLOVE_PALETTE_INDEX:self._GLOVE_PALETTE_INDEX+2] = self.get_gloves_color(gloves)
         return [(0,palette)]   #the zero here indicates that this is a static palette, which all (implemented) Zelda palettes are
 
-    def get_sprite_palette(self, mail_color, frame):
-        mail_color = lower(mail_color)     #no funny business with capital letters
+    def get_sprite_palette(self, mail_color):
+        mail_color = mail_color.lower()     #no funny business with capital letters
         palette = bytearray([0,0])           #start with transparency color
         if mail_color in self.palette_types:
             offset = self.palette_types[mail_color]
@@ -67,8 +67,8 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
 
         return palette
 
-    def set_sprite_palette(self, palette, mail_color, frame):
-        mail_color = lower(mail_color)     #no funny business with capital letters
+    def set_sprite_palette(self, palette, mail_color):
+        mail_color = mail_color.lower()     #no funny business with capital letters
 
         palette_length = len(palette)
         if palette_length == self._INDIVIDUAL_PALETTE_SIZE:
@@ -77,7 +77,7 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
             palette = palette[1:]   #trim the transparency color
         else:
             raise AssertionError(f"in Link ZSPR module, received call to set_sprite_palette() with pallete of length {palette_length}")
-        
+
         if mail_color in self.palette_types:
             offset = self.palette_types[mail_color]
             self._palette_data[offset:offset+self._INDIVIDUAL_PALETTE_SIZE] = palette
@@ -89,7 +89,7 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
             pass
         elif gloves in self.variant_types:
             offset = self._GLOVE_PALETTE_OFFSET + self.variant_types[gloves]
-            palette[self._GLOVE_PALETTE_INDEX:self._GLOVE_PALETTE_INDEX+2] = self._palette_data[offset:offset+2]
+            return self._palette_data[offset:offset+2]
         else:
             raise AssertionError(f"in Link ZSPR module, received call to get_gloves_color() with glove color {gloves}")
 
@@ -97,6 +97,6 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
         #Not raising an error so that we can test this functionality on the other libraries for now
         #print(f"Received call to activate animation number {hex(animation_ID)} for Link, but this is not implemented (yet).")
         return None, None
-        
+
     def get_sprite_animation(self, animation_ID):
         raise NotImplementedError()

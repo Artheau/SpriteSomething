@@ -114,7 +114,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                                     "Standing from jump right, aim diag up": 0xE2,
                                     "Standing from jump right, aim forward": 0xE6,
                                     "Standing from jump right, aim diag down": 0xE4,
-                                    
+
                                     "Jump begin, left": 0x4C,
                                     "Jump begin, left, aim up": 0x56,
                                     "Jump begin, left, aim diag up": 0x58,
@@ -153,7 +153,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                                     "Morphball roll right": 0x1E,
                                     "Morphball fall right": 0x31,
                                     "Unmorphing right": 0x3D,
-                                    
+
                                     "Morphing left": 0x38,
                                     "Morphball left": 0x41,
                                     "Morphball roll left": 0x1F,
@@ -197,7 +197,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                                     "Crouch, turn left, aim diag down": 0x99,
                                     "Crouch, turn right, aim diag down": 0x9A,
                                     "Crouch, turn left, aim diag up": 0xA2,
-                                    "Crouch, turn left, aim diag up": 0xA3,
+                                    "Crouch, turn right, aim diag up": 0xA3,
                                     "Standing from crouch right, aim up": 0xF7,
                                     "Standing from crouch left, aim up": 0xF8,
                                     "Standing from crouch right, aim diag up": 0xF9,
@@ -264,7 +264,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                                     "Grabbed right, aim forward": 0xEE,
                                     "Grabbed right, aim diag down": 0xEF,
                                     "Grabbed right, struggling": 0xF0,
-                                    
+
                                     "Superjump begin right": 0xC7,
                                     "Superjump begin left": 0xC8,
                                     "Superjump right": 0xC9,
@@ -286,7 +286,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                                     "Supplication right": 0xEA,
 
                                     "Drained left": 0xE9,
-                                    "Supplication left": 0xEB,            
+                                    "Supplication left": 0xEB,
 
                                     #these are not unique poses, and once WYSIWYG is implemented, these can be removed from the menu
                                     "DEBUG: Ran into right wall": 0x89,
@@ -330,7 +330,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                     constructed_VRAM_data[index+i] = tile_data[i*TILESIZE: (i+1)*TILESIZE]
         add_flattened_tiles(self.rom_data.get_default_vram_data().items())
         add_flattened_tiles(DMA_writes.items())
-        
+
         black_palette = [0x0 for _ in range(0x10)]
         loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", "power"),frame)
         flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", "power"),frame)
@@ -386,7 +386,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
             return palette_timing_list[0][1]
         else:
             palette_timing_index = palette_timing_index % time_for_one_loop
-            
+
             for time,palette in palette_timing_list:
                 palette_timing_index -= time
                 if palette_timing_index <= 0 or time == 0:   #time = 0 is a special code for static palettes or "final" palettes
@@ -397,11 +397,3 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
 
     def get_sprite_animation(self, animation_ID):
         raise NotImplementedError()
-
-
-
-
-
-
-
-

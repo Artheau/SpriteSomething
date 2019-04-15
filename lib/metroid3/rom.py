@@ -5,7 +5,7 @@
 #includes routines that load the rom and apply bugfixes
 #inherits from SNESRomHandler
 
-    
+
 if __name__ == "__main__":
     raise AssertionError(f"Called main() on utility library {__file__}")
 
@@ -69,7 +69,7 @@ class Metroid3RomHandler(RomHandler):
         # can load "sprites" into the last three rows.  Rain can also go in row 0xD0
         DMA_writes = {0x00: self.read_from_snes_address(0x9AD200,'1'*0x2000)}
 
-        #row 0x30 is populated with 8 tiles depending upon equipped weapon (0x30-0x37) 
+        #row 0x30 is populated with 8 tiles depending upon equipped weapon (0x30-0x37)
         if equipped_weapon in ["regular","standard","charge"]:
             DMA_writes[0x30] = self.read_from_snes_address(0x9AF200,'1'*0x100)
         elif equipped_weapon in ["ice"]:
@@ -107,12 +107,12 @@ class Metroid3RomHandler(RomHandler):
 
         #get the pointer to the XY data (XY_P?? in disassembly)
         cannon_position_pointer = 0x900000 + self.read_from_snes_address(0x90C7DF + 2*animation,2)
-        
+
         #first byte tells us the direction the cannon is facing, and if it has high bit set, it only counts for first pose
         #second byte tells us the rendering priority (0 = do not render, 1 = render in front of Samus, 2 = render behind Samus)
         direction, priority = self.read_from_snes_address(cannon_position_pointer,"11")
 
-        #if first byte has high bit set and we are not in the zero pose, grab another set of values for use in the following frames 
+        #if first byte has high bit set and we are not in the zero pose, grab another set of values for use in the following frames
         if direction >= 0x80:
             cannon_position_pointer += 2
             if pose > 0:
@@ -130,7 +130,7 @@ class Metroid3RomHandler(RomHandler):
 
             #now what is left is a list of xy pairs.  we can just grab what we need.
             x_position, y_position = self.read_from_snes_address(cannon_position_pointer + 2*(pose+1), "11")
-            
+
             tile, palette = self.read_from_snes_address(0x90C791+2*direction, "11")
 
             #construct the full tilemap
@@ -196,7 +196,7 @@ class Metroid3RomHandler(RomHandler):
 
         if base_type == PaletteType.STANDARD:
             if suit_type == SuitType.POWER:
-                base_address = 0x9B9400    
+                base_address = 0x9B9400
             elif suit_type == SuitType.VARIA:
                 base_address = 0x9B9520
             elif suit_type == SuitType.GRAVITY:
@@ -314,7 +314,7 @@ class Metroid3RomHandler(RomHandler):
 
         elif base_type == PaletteType.HYPER_BEAM:
             base_address = 0x9BA240
-            
+
             #timing and order determined by manual frame advance.  Each frame goes down 1, overall from 9 to 0 then resets
             return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(9,-1,-1)]
 
@@ -337,21 +337,21 @@ class Metroid3RomHandler(RomHandler):
             #ironically, the code doesn't even use all of these palettes, because that is determined by the next parameters
             full_palette_set = []
             for i in range(9):
-                durations,palette_index = self.read_from_snes_address(0x9BB823 + 2*i,"11")
+                duration,palette_index = self.read_from_snes_address(0x9BB823 + 2*i,"11")
                 full_palette_set.append(duration,palette_list[palette_index])
 
             return full_palette_set
 
         elif base_type == PaletteType.DEATH_FLESH:
             palette_list_pointer = 0x9BB80F
-            
+
             #There are ten pointers in total, grab them all
             palette_list = [0x9B0000 + offset for offset in self.read_from_snes_address(palette_list_pointer, "2"*10)]
 
             #ironically, the code doesn't even use all of these palettes, because that is determined by the next parameters
             full_palette_set = []
             for i in range(9):
-                durations,palette_index = self.read_from_snes_address(0x9BB823 + 2*i,"11")
+                duration,palette_index = self.read_from_snes_address(0x9BB823 + 2*i,"11")
                 full_palette_set.append(duration,palette_list[palette_index])
 
             return full_palette_set
@@ -399,7 +399,7 @@ class Metroid3RomHandler(RomHandler):
                 full_palette_set.append((duration,base_palette+[glow_color]))
 
             return full_palette_set
-            
+
         elif base_type == PaletteType.INTRO_SHIP:
             #Technically the thrusters alternate white and black every frame, but this is a bit much on the eyes
             return self._get_static_palette(0x8CE68B)
@@ -423,9 +423,9 @@ class Metroid3RomHandler(RomHandler):
 
     def _get_sequence_of_timed_palettes(self, snes_address, num_palettes, add_transparency=False):
         #adding 0x24 skips over the duration dbyte, previous palette, and the control code each time
-        skip_amount = 0x22 if add_transparency else 0x24 
+        skip_amount = 0x22 if add_transparency else 0x24
         return [self._get_timed_palette(snes_address + skip_amount*i, add_transparency=add_transparency) for i in range(num_palettes)]
-        
+
 
     def _get_raw_palette(self,snes_address):
         return self.read_from_snes_address(snes_address, "2"*0x10)
@@ -442,9 +442,9 @@ class Metroid3RomHandler(RomHandler):
             stupid_tile_tilemap = [[0xF9,0x01,0xF5,0x21,0x38]]   #stupid offsets
         else:
             stupid_tile_tilemap = []
-        
+
         #the tiles are rendered in this specific order: backwards lower, backwards upper
-        return lower_tilemaps[::-1] + stupid_tile_tilemap + upper_tilemaps[::-1]   
+        return lower_tilemaps[::-1] + stupid_tile_tilemap + upper_tilemaps[::-1]
 
 
     def _get_pose_tilemaps_from_addr(self, base_addr, animation, pose):
@@ -482,7 +482,7 @@ class Metroid3RomHandler(RomHandler):
             #add the DMA write information to the dictionary
             DMA_writes[vram_offset] = row1
             DMA_writes[0x10+vram_offset] = row2
-            
+
         return DMA_writes
 
 
@@ -490,8 +490,8 @@ class Metroid3RomHandler(RomHandler):
         #get the duration list pointer (FD_?? in disassembly)
         duration_list_location = self._get_duration_list_location(animation)
         return self.read_from_snes_address(duration_list_location+pose,1)
-    
-        
+
+
     def _get_duration_list_location(self, animation):
         return 0x910000 + self.read_from_snes_address(0x91B010 + 2* animation,2)
 
@@ -515,7 +515,7 @@ class Metroid3RomHandler(RomHandler):
         FD_6E:  ;Falling facing left, aiming upleft
         FD_6F:  ;Falling facing right, aiming downright
         FD_70:  ;Falling facing left, aiming downleft
-        DB $02, $F0, $10, $FE, $01 
+        DB $02, $F0, $10, $FE, $01
         '''
         #the second byte here was probably supposed to be $10, just like the animations above it.
         #$F0 is a terminator, and this is the only time that $F0 would ever be invoked (also, there is a pose in this spot!)
@@ -528,7 +528,7 @@ class Metroid3RomHandler(RomHandler):
         ;c9db
         XY_P00:     ;00:;Facing forward, ala Elevator pose (power suit)
         XY_P9B:     ;9B:;Facing forward, ala Elevator pose (Varia and/or Gravity Suit)
-        DB $00, $02 
+        DB $00, $02
         '''
         #the second byte here is supposed to be 00, but because it is not, the missile port is rendered behind Samus's left
         # fist during elevator pose.
@@ -541,8 +541,8 @@ class Metroid3RomHandler(RomHandler):
 
         '''
         TM_193:
-        DW $0001  
-        DB $F8, $01, $F8, $00, $30 
+        DW $0001
+        DB $F8, $01, $F8, $00, $30
         '''
         #last byte should be $28, like everything else
         original_values = [0xF8,0x01,0xF8,0x00,0x30]
@@ -552,8 +552,8 @@ class Metroid3RomHandler(RomHandler):
 
         '''
         TM_181:
-        DW $0001  
-        DB $F8, $01, $F8, $00, $10 
+        DW $0001
+        DB $F8, $01, $F8, $00, $10
         '''
         #last byte should be $28, like everything else
         original_values = [0xF8,0x01,0xF8,0x00,0x10]
@@ -563,8 +563,8 @@ class Metroid3RomHandler(RomHandler):
 
         '''
         TM_0DA:
-        DW $0004  
-        DB $FD, $01, $0F, $0A, $78 
+        DW $0004
+        DB $FD, $01, $0F, $0A, $78
         '''
         #last byte should be $68, like everything else
         original_values = [0xFD,0x01,0x0F,0x0A,0x78]
@@ -574,8 +574,8 @@ class Metroid3RomHandler(RomHandler):
 
         '''
         TM_06F:
-        DW $0001  
-        DB $F8, $01, $F8, $00, $30 
+        DW $0001
+        DB $F8, $01, $F8, $00, $30
         '''
         #last byte should be $38, just like the other elevator poses
         original_values = [0xF8,0x01,0xF8,0x00,0x30]

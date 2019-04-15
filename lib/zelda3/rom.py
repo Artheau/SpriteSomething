@@ -5,7 +5,7 @@
 #includes routines that load the rom and apply bugfixes
 #inherits from SNESRomHandler
 
-    
+
 if __name__ == "__main__":
     raise AssertionError(f"Called main() on utility library {__file__}")
 
@@ -13,7 +13,7 @@ import enum
 from lib.RomHandler.rom import RomHandler
 
 
-#enumeration for the suit types
+#enumeration for the mail types
 class MailType(enum.Enum):
     GREEN = enum.auto()
     BLUE = enum.auto()

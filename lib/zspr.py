@@ -15,39 +15,37 @@ class Zspr():     #Base for ZSPR files
     def get_raw_sprite_data(self):            #Get raw sprite imagery bytes
         return self._sprite_data
 
-    def set_raw_sprite_data(data):            #Set raw sprite imagery bytes
+    def set_raw_sprite_data(self, data):            #Set raw sprite imagery bytes
         self._sprite_data = data
 
-    def get_raw_palette_data():               #Get raw palette bytes
+    def get_raw_palette_data(self):               #Get raw palette bytes
         return self._palette_data
 
-    def set_raw_palette_data(data):           #Set raw palette bytes
+    def set_raw_palette_data(self, data):           #Set raw palette bytes
         self._palette_data = data
 
-    def get_sprite_name():                 #Get name of sprite
+    def get_sprite_name(self):                 #Get name of sprite
         return self._sprite_name
 
-    def set_sprite_name(name):            #Set name of sprite
+    def set_sprite_name(self, name):            #Set name of sprite
         self._sprite_name = name
 
-    def get_author_name():                #Get name of Author
+    def get_author_name(self):                #Get name of Author
         return self._sprite_author_name
 
-    def set_author_name(name):            #Set name of Author
+    def set_author_name(self, name):            #Set name of Author
         self._sprite_author_name = name
 
-    def get_author_name_short():           #Get short name of Author
+    def get_author_name_short(self):           #Get short name of Author
         return self._sprite_author_name_short
 
-    def set_author_name_short(name):       #Set short name of Author (sanitized for rom injection, possibly for use in credits)
+    def set_author_name_short(self, name):       #Set short name of Author (sanitized for rom injection, possibly for use in credits)
         ALLOWED_CHARACTERS = ''.join(string.ascii_letters,string.digits,' ')  #for now, allow letters, numbers, and spaces
         sanitized_name = ''.join([x for x in name if x in ALLOWED_CHARACTERS])
         self._sprite_author_name_short = sanitized_name
 
-    def get_sprite_frame(animation_ID, frame):      #a static pose that is held for exactly one frame
+    def get_sprite_frame(self, animation_ID, frame):      #a static pose that is held for exactly one frame
         raise AssertionError("function get_sprite_frame() called on root ZSPR class directly")
 
-    def get_sprite_animation(animation_ID):   #get set of sprite frames that comprise a full animation sequence
+    def get_sprite_animation(self, animation_ID):   #get set of sprite frames that comprise a full animation sequence
         raise AssertionError("function get_sprite_animation() called on root ZSPR class directly")
-
-    

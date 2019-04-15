@@ -13,7 +13,7 @@ import re
 import tkinter as tk
 import webbrowser
 from functools import partial
-from tkinter import filedialog, messagebox, Text
+from tkinter import filedialog, messagebox, Text, ttk
 from lib.crxtooltip import CreateToolTip
 from lib.tkHyperlinkManager import HyperlinkManager
 from lib.tkSimpleStatusBar import StatusBar
@@ -24,12 +24,27 @@ def main():
 	#window size
 	root.geometry("600x480")
 	root.configure(bg='#f0f0f0')
-	app = SpriteSomethingMainFrame(root)
+	SpriteSomethingMainFrame(root)
 	root.mainloop()
 
 class SpriteSomethingMainFrame(tk.Frame):
     def __init__(self, master=None):
         tk.Frame.__init__(self, master)
+
+        dims = {
+            "left_pane": {
+                "minwidth": 200
+            },
+            "background_dropdown": {
+                "width": 16
+            },
+            "animation_dropdown": {
+                "width": 16
+            },
+            "animation_list": {
+                "width": 16
+            }
+        }
 
         #set the title
         self.create_random_title()
@@ -49,11 +64,12 @@ class SpriteSomethingMainFrame(tk.Frame):
         self._background_ID = None
 
         #for now, just to prove that at least some of the features work
-        self.load_game(random.choice(["zelda3","metroid3"]))
-        self.make_sprite(0x01)   #TODO: implement other sprites other than the player sprite
+        self.load_game(random.choice(["zelda3", "metroid3"]))
+        self.make_sprite(0x01)   #TODO: implement other sprites other than the player
+        self.freeze_ray = False #freeze ray, stops time, tell your friends
 
         left_pane = tk.PanedWindow(self, orient=tk.VERTICAL)
-        panes.add(left_pane, minsize=200)
+        panes.add(left_pane, minsize=dims["left_pane"]["minwidth"])
         panes.add(self._canvas)
 
 
@@ -61,7 +77,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         metadata_section = tk.Frame(left_pane)
         left_pane.add(metadata_section)
         self.right_align_grid_in_frame(metadata_section)
-        row=0
+        row = 0
         for label in ["Sprite Name","Author Name","Author Name Short"]:
             metadata_label = tk.Label(metadata_section, text=label)
             metadata_label.grid(row=row,column=1)
@@ -76,19 +92,22 @@ class SpriteSomethingMainFrame(tk.Frame):
         left_pane.add(background_section)
         self.right_align_grid_in_frame(background_section)
         background_label = tk.Label(background_section, text="Background:")
-        background_label.grid(row=0,column=1)
+        background_label.grid(row=0, column=1)
         self.background_selection = tk.StringVar(background_section)
         self.background_selection.set(self.background_name)
-        background_dropdown = tk.OptionMenu(background_section, self.background_selection, *self.game.background_images)
-        background_dropdown.configure(width=16)
-        background_dropdown.grid(row=0,column=2)
+        background_keys = []
+        for background_key in self.game.background_images:
+            background_keys.append(background_key)
+        background_dropdown = tk.ttk.Combobox(background_section, state="readonly", values=background_keys)
+        background_dropdown.configure(width=dims["background_dropdown"]["width"], exportselection=0, textvariable=self.background_selection)
+        background_dropdown.grid(row=0, column=2)
         def change_background_dropdown(*args):
             self.load_background(self.background_selection.get())
         self.background_selection.trace('w', change_background_dropdown)  #when the dropdown is changed, run this function
         self.background_animate = tk.IntVar()
-        background_animate_check = tk.Checkbutton(background_section,text="Animate background",variable=self.background_animate)
+        background_animate_check = tk.Checkbutton(background_section, text="Animate background", variable=self.background_animate)
         background_animate_check.select()
-        background_animate_check.grid(row=1,column=2)
+        background_animate_check.grid(row=1, column=1, sticky='E', columnspan=2)
         ###############################################
 
 
@@ -100,12 +119,15 @@ class SpriteSomethingMainFrame(tk.Frame):
         animation_label.grid(row=0, column=1)
         self.animation_selection = tk.StringVar(animation_section)
         self.animation_selection.set(next(iter(self.sprite.animations)))   #start with the first animation
-        animation_dropdown = tk.OptionMenu(animation_section, self.animation_selection, *self.sprite.animations)
-        animation_dropdown.configure(width=16)
-        animation_dropdown.grid(row=0, column=2)
-        animation_list = tk.Button(animation_section,text="As list",command=self.show_animation_list)
-        animation_list.configure(width=18)
-        animation_list.grid(row=1, column=2)
+        animation_keys = []
+        for animation_key in self.sprite.animations:
+            animation_keys.append(animation_key)
+        animation_dropdown = tk.ttk.Combobox(animation_section, state="readonly", values=animation_keys)
+        animation_dropdown.configure(width=dims["animation_dropdown"]["width"], exportselection=0, textvariable=self.animation_selection)
+        animation_dropdown.grid(row=0, column=2, sticky='E')
+        animation_list = tk.Button(animation_section, text="As list", command=self.show_animation_list)
+        animation_list.configure(width=dims["animation_list"]["width"])
+        animation_list.grid(row=1, column=2, sticky='E')
         self._sprite_ID = None             #right now there is no animation...hopefully this gets updated in the next line
         self.initialize_sprite_animation()        #set up the initial animation
         self.animation_selection.trace('w', self.initialize_sprite_animation)  #when the dropdown is changed, run this function
@@ -123,27 +145,28 @@ class SpriteSomethingMainFrame(tk.Frame):
             row = 0
             col = 1
 
-            sprite_display = tk.Label(sprite_section,text="Display:")
-            sprite_display.grid(row=row,column=col,columnspan=3)
+            sprite_display = tk.Label(sprite_section, text="Display:")
+            sprite_display.grid(row=row, column=col, columnspan=3)
             row += 1
 
-            self.add_spiffy_buttons(sprite_section,row,col,"Suit",{"Power":1,"Varia":2,"Gravity":3},"suit"," Suit")
+            self.add_spiffy_buttons(sprite_section, row, col, "Suit", {"Power":1,"Varia":2,"Gravity":3}, "suit", " Suit")
             row += 1
+            self.add_spiffy_buttons(sprite_section, row, col, "Missile Port", {"No":0,"Yes":1}, "port", " Port")
         elif(self._game_name == "zelda3"):
             row = 0
             col = 1
 
-            sprite_display = tk.Label(sprite_section,text="Display:")
-            sprite_display.grid(row=row,column=col,columnspan=6)
+            sprite_display = tk.Label(sprite_section, text="Display:")
+            sprite_display.grid(row=row, column=col, columnspan=6)
             row += 1
 
-            self.add_spiffy_buttons(sprite_section,row,col,"Mail",{"Green":1,"Blue":2,"Red":3,"Bunny":4},"mail"," Mail")
+            self.add_spiffy_buttons(sprite_section, row, col, "Mail", {"Green":1,"Blue":2,"Red":3,"Bunny":4}, "mail", " Mail")
             row += 1
-            self.add_spiffy_buttons(sprite_section,row,col,"Sword",{"No":0,"Fighter's":1,"Master":2,"Tempered":3,"Gold":4},"sword"," Sword")
+            self.add_spiffy_buttons(sprite_section, row, col, "Sword", {"No":0,"Fighter's":1,"Master":2,"Tempered":3,"Gold":4}, "sword", " Sword")
             row += 1
-            self.add_spiffy_buttons(sprite_section,row,col,"Shield",{"No":0,"Fighter's":1,"Fire":2,"Mirror":3},"shield"," Shield")
+            self.add_spiffy_buttons(sprite_section, row, col, "Shield", {"No":0,"Fighter's":1,"Fire":2,"Mirror":3}, "shield", " Shield")
             row += 1
-            self.add_spiffy_buttons(sprite_section,row,col,"Gloves",{"No Gloves":0,"Power Glove":1,"Titan's Mitt":2},"gloves","")
+            self.add_spiffy_buttons(sprite_section, row, col, "Gloves", {"No Gloves":0,"Power Glove":1,"Titan's Mitt":2}, "gloves", "")
         ###############################################
 
 
@@ -151,62 +174,85 @@ class SpriteSomethingMainFrame(tk.Frame):
         ########### GUI Specific Stuff ################
         control_section = tk.Frame(left_pane)
         left_pane.add(control_section)
+        button_width = 7
+        self.zoom_factor = tk.StringVar(control_section)
+        self.zoom_factor.set("x1 ")
+        self.speed_factor = tk.StringVar(control_section)
+        self.speed_factor.set("100%")
         self.right_align_grid_in_frame(control_section)
         current_grid_row = 0
         temp_label = tk.Label(control_section, text="GUI specific stuff")
         temp_label.grid(row=current_grid_row, column=1, columnspan=3)
         current_grid_row += 1
         def zoom_out(*args):
-            self._current_zoom = max(0.1,self._current_zoom - 0.1)
+            self._current_zoom = max(0.1, self._current_zoom - 0.1)
             self.scale_background_image(self._current_zoom)
             self.update_sprite_animation()
+            self.zoom_factor.set('x' + str(round(self._current_zoom, 1)) + ' ')
         def zoom_in(*args):
-            self._current_zoom = min(3.0,self._current_zoom + 0.1)
+            self._current_zoom = min(3.0, self._current_zoom + 0.1)
             self.scale_background_image(self._current_zoom)
             self.update_sprite_animation()
+            self.zoom_factor.set('x' + str(round(self._current_zoom, 1)) + ' ')
+        def speed_down(*args):
+            self._current_speed = max(0.1, self._current_speed - 0.1)
+            self.speed_factor.set(str(round(self._current_speed * 100)) + '%')
+        def speed_up(*args):
+            self._current_speed = min(3.0, self._current_speed + 0.1)
+            self.speed_factor.set(str(round(self._current_speed * 100)) + '%')
 
-        zoom_out_button = tk.Button(control_section, text="Zoom -", command=zoom_out)
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","zoom.png"))
+        zoom_factor_label = tk.Label(control_section, image=img, textvariable=self.zoom_factor, compound=tk.RIGHT)
+        zoom_factor_label.image = img
+        zoom_factor_label.grid(row=current_grid_row, column=1, sticky='e')
+
+        zoom_out_button = tk.Button(control_section, text="Zoom -", width=button_width, compound=tk.LEFT, command=zoom_out)
         zoom_out_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
-        zoom_in_button = tk.Button(control_section, text="Zoom +", command=zoom_in)
+        zoom_in_button = tk.Button(control_section, text="Zoom +", width=button_width, compound=tk.RIGHT, command=zoom_in)
         zoom_in_button.grid(row=current_grid_row, column=3, sticky='nesw')
         current_grid_row += 1
 
-        speed_down_button = tk.Button(control_section, text="Speed -")
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","speed.png"))
+        speed_factor = tk.Label(control_section, image=img, textvariable=self.speed_factor, compound=tk.RIGHT)
+        speed_factor.image = img
+        speed_factor.grid(row=current_grid_row, column=1, sticky='e')
+
+        speed_down_button = tk.Button(control_section, text="Speed -", width=button_width, state=tk.DISABLED, command=speed_down)
         speed_down_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
-        speed_up_button = tk.Button(control_section, text="Speed +")
+        speed_up_button = tk.Button(control_section, text="Speed +", width=button_width, state=tk.DISABLED, command=speed_up)
         speed_up_button.grid(row=current_grid_row, column=3, sticky='nesw')
         current_grid_row += 1
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","play.png"))
-        play_button = tk.Button(control_section, image=img, text="Play", compound=tk.RIGHT)
+        play_button = tk.Button(control_section, image=img, text="Play", width=button_width, compound=tk.RIGHT, command=self.start_global_frame_timer)
         play_button.image = img
         play_button.grid(row=current_grid_row, column=1, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","play-once.png"))
-        play_one_button = tk.Button(control_section, image=img, text="Play 1", compound=tk.RIGHT)
+        play_one_button = tk.Button(control_section, image=img, text="Play 1", width=button_width, state=tk.DISABLED, compound=tk.RIGHT, command=self.play_once)
         play_one_button.image = img
         play_one_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","reset.png"))
-        reset_button = tk.Button(control_section, image=img, text="Reset", compound=tk.RIGHT, command=self.reset_global_frame_timer)
+        reset_button = tk.Button(control_section, image=img, text="Reset", width=button_width, compound=tk.RIGHT, command=self.reset_global_frame_timer)
         reset_button.image = img
         reset_button.grid(row=current_grid_row, column=3, sticky='nesw')
         current_grid_row += 1
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-back.png"))
-        step_back_button = tk.Button(control_section, image=img, text="Step", compound=tk.LEFT, command=self.rewind_global_frame_timer)
+        step_back_button = tk.Button(control_section, image=img, text="Step", width=button_width, compound=tk.LEFT, command=self.rewind_global_frame_timer)
         step_back_button.image = img
         step_back_button.grid(row=current_grid_row, column=1, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","pause.png"))
-        pause_button = tk.Button(control_section, image=img, text="Pause", compound=tk.RIGHT)
+        pause_button = tk.Button(control_section, image=img, text="Pause", width=button_width, compound=tk.RIGHT, command=self.pause_global_frame_timer)
         pause_button.image = img
         pause_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-forward.png"))
-        step_forward_button = tk.Button(control_section, image=img, text="Step", compound=tk.RIGHT, command=self.advance_global_frame_timer)
+        step_forward_button = tk.Button(control_section, image=img, text="Step", width=button_width, compound=tk.RIGHT, command=self.step_global_frame_timer)
         step_forward_button.image = img
         step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
         ###############################################
@@ -218,7 +264,8 @@ class SpriteSomethingMainFrame(tk.Frame):
     def time_marches_forward(self):
         FRAMERATE = 60 #Hz
         self.advance_global_frame_timer()
-        self.master.after(int(1000/FRAMERATE), self.time_marches_forward)
+        if not self.freeze_ray: #stops time, tell your friends
+            self.master.after(int(1000/FRAMERATE), self.time_marches_forward)
 
 
     def create_menu_bar(self):
@@ -284,7 +331,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #create the plugins menu
         plugins_menu = tk.Menu(menu, tearoff=0)
-        plugins_menu.add_command(label="Sheet Trawler",command=self.popup_NYI) # Z3-specific
+        plugins_menu.add_command(label="Sheet Trawler", command=self.popup_NYI) # Z3-specific
 
         #create the tools menu
         tools_menu = tk.Menu(menu, tearoff=0)
@@ -322,35 +369,49 @@ class SpriteSomethingMainFrame(tk.Frame):
         # items:
         # prefix: a string that begins the icon filenames corresponding to the buttons of this row
         # suffix: a string that is used in the tooltip after the identifying string (e.g. "Mail")
-        spiffy_buttons = tk.Label(container,text=section_label+':')
-        spiffy_buttons.grid(row=row,column=col)
+
+        dims = {
+            "button": {
+                "width": 20,
+                "height": 20,
+                "color.active": "#78C0F8",
+                "color.selected": "#C0E0C0"
+            }
+        }
+
+        spiffy_buttons = tk.Label(container, text=section_label + ':')
+        spiffy_buttons.grid(row=row, column=col, sticky='E')
         col += 1
         if prefix == "mail":
             col += 1
 
         for label,level in items.items():
-            if level > 0:
-                img = tk.PhotoImage(file=os.path.join("resources",self._game_name,"icons",prefix+'-'+str(level)+".png"))
-            else:
-                img = tk.PhotoImage(file=os.path.join("resources","meta","icons","no-thing.png"))
+            imgfile = ""
+            if level > 0 and label != "Yes":
+                imgfile = os.path.join("resources",self._game_name,"icons",prefix+'-'+str(level)+".png")
+            elif label.find("No") > -1:
+                imgfile = os.path.join("resources","meta","icons","no-thing.png")
+            elif label.find("Yes") > -1:
+                imgfile = os.path.join("resources","meta","icons","yes-thing.png")
+            img = tk.PhotoImage(file=imgfile)
             button = tk.Radiobutton(
                 container,
                 image=img,
                 text=label+suffix,
                 variable=prefix,
                 value=level,
-                activebackground="#78C0F8",
-                selectcolor="#C0E0C0",
-                width=20,
-                height=20,
+                activebackground=dims["button"]["color.active"],
+                selectcolor=dims["button"]["color.selected"],
+                width=dims["button"]["width"],
+                height=dims["button"]["height"],
                 indicatoron=False,
-                command=partial(self.press_spiffy_button,prefix+'-'+str(level))
+                command=partial(self.press_spiffy_button,prefix + '-' + str(level))
             )
             if col == 2 or (prefix == "mail" and level == 1):
                 button.select()
-            button_tip = CreateToolTip(button,label+suffix)
+            CreateToolTip(button, label + suffix)
             button.image = img
-            button.grid(row=row,column=col)
+            button.grid(row=row, column=col)
             col += 1
 
     def show_animation_list(self):
@@ -365,17 +426,17 @@ class SpriteSomethingMainFrame(tk.Frame):
         animation_list.title("Animation List")
         animation_list_canvas = tk.Canvas(animation_list)
         animation_list_frame = tk.Frame(animation_list_canvas)
-        animation_list_vscrollbar = tk.Scrollbar(animation_list,orient="vertical",command=animation_list_canvas.yview)
-        animation_list_hscrollbar = tk.Scrollbar(animation_list,orient="horizontal",command=animation_list_canvas.xview)
+        animation_list_vscrollbar = tk.Scrollbar(animation_list, orient="vertical", command=animation_list_canvas.yview)
+        animation_list_hscrollbar = tk.Scrollbar(animation_list, orient="horizontal", command=animation_list_canvas.xview)
         animation_list_canvas.configure(yscrollcommand=animation_list_vscrollbar.set)
         animation_list_canvas.configure(xscrollcommand=animation_list_hscrollbar.set)
-        animation_list_vscrollbar.pack(side="right",fill="y")
-        animation_list_hscrollbar.pack(side="bottom",fill="x")
-        animation_list_canvas.pack(side="left",fill="both",expand=True)
-        animation_list_canvas.create_window((4,4),window=animation_list_frame,anchor="nw")
-        animation_list_frame.bind("<Configure>",lambda event,canvas=animation_list_canvas: onFrameConfigure(animation_list_canvas))
+        animation_list_vscrollbar.pack(side="right", fill="y")
+        animation_list_hscrollbar.pack(side="bottom", fill="x")
+        animation_list_canvas.pack(side="left", fill="both", expand=True)
+        animation_list_canvas.create_window((4,4), window=animation_list_frame, anchor="nw")
+        animation_list_frame.bind("<Configure>", lambda event,canvas=animation_list_canvas: onFrameConfigure(animation_list_canvas))
         row = 0
-        column = 0
+        col = 0
         stem = ""
         for animation in self.sprite.animations:
             if stem in animation and ',' in animation:
@@ -388,8 +449,8 @@ class SpriteSomethingMainFrame(tk.Frame):
                     stem = animation
                 row += 1
                 col = 0
-            button = tk.Button(animation_list_frame,text=animation,textvariable=animation,command=partial(change_animation_list_button,animation))
-            button.grid(row=row,column=col)
+            button = tk.Button(animation_list_frame, text=animation, textvariable=animation, command=partial(change_animation_list_button,animation))
+            button.grid(row=row, column=col)
 
     def press_spiffy_button(self,buttonID):
         #ins:
@@ -410,7 +471,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         # menuObject: Menu object to add menu options to
         for option in options:
             if option != "":
-                self.add_dummy_menu_option(option,menuObject)
+                self.add_dummy_menu_option(option, menuObject)
             else:
                 menuObject.add_separator()
 
@@ -421,7 +482,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         # textObject: Text object to add lines to
         hyperlink = HyperlinkManager(textObject)
         for line in lines:
-            matches = re.search('(.*)\[(.*)\]\((.*)\)(.*)',line)
+            matches = re.search(r'(.*)\[(.*)\]\((.*)\)(.*)',line)
             if matches:
                 def click1(url=matches.group(3)):
                     webbrowser.open_new(url)
@@ -469,13 +530,14 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.game = getattr(self.game_module, self._game_name.capitalize())(rom_filename,meta_filename)
 
         self._current_zoom = 1.0
+        self._current_speed = 1.0
         self.background_name = random.choice(list(self.game.background_images.keys()))
         self.load_background(self.background_name)
 
     def make_sprite(self, sprite_number):
         #sets up the GUI and the display for a particular sprite from the current game
         # e.g. call with sprite_number 0x01 to set up the player sprite
-        display_name, class_name = self.game.sprites[sprite_number]
+        _, class_name = self.game.sprites[sprite_number]
         #this line is not obvious; it is calling the appropriate sprite class constructor, e.g. Z3Link class from lib/zelda3/zelda3.py
         self.sprite = getattr(self.game_module,class_name)(self.game.rom_data, self.game.meta_data)
 
@@ -485,17 +547,17 @@ class SpriteSomethingMainFrame(tk.Frame):
 
     def load_sprite(self):
         # Load a ZSPR
-        self.sprite_filename = filedialog.askopenfile(initialdir="./",title="Select Sprite",filetypes=(("ZSPR Files","*.zspr"),))
+        self.sprite_filename = filedialog.askopenfile(initialdir="./", title="Select Sprite", filetypes=(("ZSPR Files","*.zspr"),))
     def save_sprite_as(self):
         # Save a ZSPR
-        filedialog.asksaveasfile(initialdir="./",title="Save Sprite As...",filetypes=(("ZSPR Files","*.zspr"),))
+        filedialog.asksaveasfile(initialdir="./", title="Save Sprite As...", filetypes=(("ZSPR Files","*.zspr"),))
 
     def import_from_game_file(self):
         # Import a ZSPR from a Game File
-        filedialog.askopenfile(initialdir="./",title="Import from Game File",filetypes=(("SNES ROMs","*.sfc;*.smc"),))
+        filedialog.askopenfile(initialdir="./", title="Import from Game File", filetypes=(("SNES ROMs","*.sfc;*.smc"),))
     def import_from_png(self):
         # Import a ZSPR from a PNG
-        filedialog.askopenfile(initialdir="./",title="Import from PNG",filetypes=(("PNGs","*.png"),))
+        filedialog.askopenfile(initialdir="./", title="Import from PNG", filetypes=(("PNGs","*.png"),))
     def import_palette(self,type):
         # Import a Palette from another source
         ftypes = ("All Files","*.*")
@@ -505,16 +567,16 @@ class SpriteSomethingMainFrame(tk.Frame):
             ftypes = ("Graphics Gale Palettes","*.pal")
         elif type == "YY-CHR":
             ftypes = ("YY-CHR Palettes","*.pal")
-        filedialog.askopenfile(initialdir="./",title="Import " + type + " Palette",filetypes=(ftypes,))
+        filedialog.askopenfile(initialdir="./", title="Import " + type + " Palette", filetypes=(ftypes,))
     def export_png(self):
         # Export ZSPR as a PNG
-        filedialog.asksaveasfile(initialdir="./",title="Export PNG",filetypes=(("PNGs","*.png"),))
+        filedialog.asksaveasfile(initialdir="./", title="Export PNG", filetypes=(("PNGs","*.png"),))
     def export_gif(self):
         # Export current Still or Animation as a GIF
-        filedialog.asksaveasfile(initialdir="./",title="Export Animation as GIF",filetypes=(("GIFs","*.gif"),))
+        filedialog.asksaveasfile(initialdir="./", title="Export Animation as GIF", filetypes=(("GIFs","*.gif"),))
     def export_collage(self):
         # Export current Still or Exploded Animation as a PNG
-        filedialog.asksaveasfile(initialdir="./",title="Export Animation as Collage",filetypes=(("PNGs","*.png"),))
+        filedialog.asksaveasfile(initialdir="./", title="Export Animation as Collage", filetypes=(("PNGs","*.png"),))
     def export_palette(self,type):
         # Export a Palette for import into another source
         ftypes = ("All Files","*.*")
@@ -524,7 +586,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             ftypes = ("Graphics Gale Palettes","*.pal")
         elif type == "YY-CHR":
             ftypes = ("YY-CHR Palettes","*.pal")
-        filedialog.askopenfile(initialdir="./",title="Export " + type + " Palette",filetypes=(ftypes,))
+        filedialog.askopenfile(initialdir="./", title="Export " + type + " Palette", filetypes=(ftypes,))
 
 
     def _get_sfc_filename(self, path):
@@ -550,7 +612,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         #handles the funny business of converting the background to a PhotoImage, and makes sure there is only one background
         self._background_image = ImageTk.PhotoImage(background_raw_image)     #have to save this for it to display
         if self._background_ID is None:
-            self._background_ID = self._canvas.create_image(0,0,image=self._background_image,anchor=tk.NW)    #so that we can manipulate the object later
+            self._background_ID = self._canvas.create_image(0, 0, image=self._background_image, anchor=tk.NW)    #so that we can manipulate the object later
         else:
             self._canvas.itemconfig(self._background_ID, image=self._background_image)
 
@@ -564,48 +626,77 @@ class SpriteSomethingMainFrame(tk.Frame):
     def initialize_sprite_animation(self, *args):
         #called by the animation dropdown
         self._frame_number = 0        #start out at the first frame of the animation
+        self.freeze_ray = False
         self.update_sprite_animation()
 
     def advance_global_frame_timer(self):
-        #called by step radio button
+        #move frame timer forward
         self._frame_number += 1
         if self._frame_number > 1e8:        #just in case someone leaves this running for, say...forever
             self._frame_number = 1e2
         self.update_sprite_animation()
 
+    def step_global_frame_timer(self):
+        #called by step radio button to pause and step forward
+        self.pause_global_frame_timer()
+        self.advance_global_frame_timer()
+
+    def play_once(self):
+        self.start_global_frame_timer()
+
+    def pause_global_frame_timer(self):
+        #called by pause button
+        self.freeze_ray = True #stop time, tell your friends
+        self.update_sprite_animation()
+
     def rewind_global_frame_timer(self):
-        #called by step radio button
+        #called by step radio button to pause and step backward
         self._frame_number = max(0, self._frame_number - 1)
+        self.pause_global_frame_timer()
+
+    def start_global_frame_timer(self):
+        #called by play button
+        self.freeze_ray = False
+        self.time_marches_forward()
         self.update_sprite_animation()
 
     def reset_global_frame_timer(self):
         #called by radio reset button
         self._frame_number = 0
         self.update_sprite_animation()
-        
 
     def update_sprite_animation(self):
         #calls to the sprite library to get the appropriate animation, and anchors it correctly to the zoomed canvas
         #also makes sure that there are not multiple of the sprite at any given time
         if self._sprite_ID is not None:
             self._canvas.delete(self._sprite_ID)
-        img, origin = self.sprite.get_sprite_frame(self.sprite.animations[self.animation_selection.get()],self._frame_number)  #TODO: tie in pose number
+        img, origin = self.sprite.get_sprite_frame(self.sprite.animations[self.animation_selection.get()], self._frame_number)  #TODO: tie in pose number
         if img:
             new_size = tuple(int(self._current_zoom*dim) for dim in img.size)
             scaled_img = img.resize(new_size)
             self._sprite_ID = self._attach_sprite(self._canvas, scaled_img, tuple(self._current_zoom*(100-x) for x in origin))  #TODO: better coordinate
         else:
             self._sprite_ID = None
-    
+
 
     def _attach_sprite(self,canvas,sprite_raw_image,location):
         sprite = ImageTk.PhotoImage(sprite_raw_image)
-        ID = canvas.create_image(location[0], location[1],image=sprite, anchor = tk.NW)
-        self._sprites[ID] = sprite     #if you skip this part, then the auto-destructor will get rid of your picture!
+        ID = canvas.create_image(location[0], location[1], image=sprite, anchor = tk.NW)
+        self._sprite_image = sprite     #if you skip this part, then the auto-destructor will get rid of your picture!
         return ID
 
     def about(self):
         # Credit where credit's due
+        dims = {
+            "window": {
+                "width": 300,
+                "height": 200
+            },
+            "textarea.characters": {
+                "width": 60,
+                "height": 100
+            }
+        }
         def txtEvent(event):
             return "break"
         lines = [
@@ -622,23 +713,23 @@ class SpriteSomethingMainFrame(tk.Frame):
         ]
         about = tk.Tk()
         about.title(f"About {self.app_title}")
-        about.geometry("300x120")
+        about.geometry(str(dims["window"]["width"]) + 'x' + str(dims["window"]["height"]))
         about.resizable(tk.FALSE,tk.FALSE)
-        about.attributes("-toolwindow",1)
-        text = Text(about,bg='#f0f0f0',font='TkDefaultFont',width=60,height=12)
+        about.attributes("-toolwindow", 1)
+        text = Text(about, bg='#f0f0f0', font='TkDefaultFont', width=dims["textarea.characters"]["width"], height=dims["textarea.characters"]["height"])
         text.pack()
         text.config(cursor="arrow")
-        self.add_text_link_array(lines,text)
-        text.bind("<Button-1>",lambda e: txtEvent(e))
+        self.add_text_link_array(lines, text)
+        text.bind("<Button-1>", lambda e: txtEvent(e))
 
     def exit(self):
-        exit_confirm = messagebox.askyesno(self.app_title,"Are you sure you want to exit?")
+        exit_confirm = messagebox.askyesno(self.app_title, "Are you sure you want to exit?")
         if exit_confirm:
-            save_before_exit = messagebox.askyesno(self.app_title,"Do you want to save before exiting?")
+            save_before_exit = messagebox.askyesno(self.app_title, "Do you want to save before exiting?")
             if save_before_exit:
                 self.save_sprite_as()
             else:
-                messagebox.showwarning(self.app_title,"Death in Super Metroid loses progress since last save." + "\n" + "You have been eaten by a grue.")
+                messagebox.showwarning(self.app_title, "Death in Super Metroid loses progress since last save." + "\n" + "You have been eaten by a grue.")
                 exit()
 
 
