@@ -39,9 +39,9 @@ def main():
 
         if image:     #let's see what these look like
             border =( \
-                         x_borders[0]-map_dimensions[0],    #left
-                        -x_borders[1]+map_dimensions[1],     #top
-                         y_borders[0]-map_dimensions[2],     #right
+                         x_borders[0]-map_dimensions[0],     #left
+                         y_borders[0]-map_dimensions[2],     #top
+                        -x_borders[1]+map_dimensions[1],     #right
                         -y_borders[1]+map_dimensions[3]      #bottom
                     )
             image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0x7F,0x7F))
@@ -57,6 +57,7 @@ def pretty_hex(x,digits=2):
 def assign_to_tilemap(x_borders,y_borders):
     TILEMAPS = { \
         "half":                    (-16, 16, -16, 16),
+        "half, tight fit":         (-17, 17, -17, 17),  #need to figure out a solution to this scenario
         "standard":                (-20, 20, -23, 25),
         "tall":                    (-16, 16, -27, 29),
         "wide":                    (-24, 24, -20, 20),
@@ -107,6 +108,8 @@ def get_all_poses(samus):
         0xC9,0xC8,0xCC,0xCA,0xD3,0xD7,0xD4,0xD8,0xD5,0xD9,0xD6,0xDA,0xE8,0xEA,0xE9,0xEB
     ]
 
+    EXCEPTION_LIST = get_exception_list()
+
     for animation in [0xB2,0xB3]:   #grapple stuff
         for pose in range(32):
             yield animation, pose
@@ -130,7 +133,7 @@ def get_all_poses(samus):
 
         for _ in range(FAILSAFE_COUNTER):
             control_code, *_ = samus.rom_data.get_pose_control_data(animation,pose)
-            if control_code in [0xF6]:   #skip
+            if control_code in [0xF6] or (animation,pose) in EXCEPTION_LIST:   #skip
                 pose += 1
             elif control_code in [0xF7,0xFB]:   #supplication sequence or walljump sequence
                 pose += 1
@@ -158,6 +161,21 @@ def get_all_poses(samus):
                 break
         else:
             raise AssertionError(f"Reached FAILSAFE_COUNTER in get_all_poses().  Animation {hex(animation)}, pose {hex(pose)}")
+
+def get_exception_list():
+    exceptions = []
+    exceptions.extend([(i, j) for i in [0x00,0x9B] for j in range(2,96)])   #launcher poses
+    for i in [0x00,0x9B]:
+        exceptions.remove((i,2))
+        exceptions.remove((i,3))  #no lightning
+        exceptions.remove((i,4))
+        exceptions.remove((i,6))
+        exceptions.remove((i,80))
+        exceptions.remove((i,82))
+        exceptions.remove((i,84))
+        exceptions.remove((i,86))
+        exceptions.remove((i,88))
+    return exceptions
 
 if __name__ == "__main__":
     main()

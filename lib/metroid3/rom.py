@@ -518,8 +518,11 @@ class Metroid3RomHandler(RomHandler):
         AFP_T32:;Midair morphball facing left without springball
         '''
         #this bug preventing left and right morphball from being different, but now we fix this
+        #have to fix tilemaps too
 
         self._apply_single_fix_to_snes_address(0x92D9B2,0xE508,0xE530,2)
+        self._apply_single_fix_to_snes_address(0x9292C7,0x0710,0x071A,2) #upper tilemap
+        self._apply_single_fix_to_snes_address(0x9294C1,0x0710,0x071A,2) #lower tilemap
 
         '''
         ;$B361
