@@ -313,14 +313,13 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def set_sprite_palette(self, variant_type, suit_type, frame):
         raise NotImplementedError()
 
-    def get_sprite_frame(self, animation_ID, frame, buttons):
-        pose = self.get_pose_number_from_frame_number(animation_ID, frame)
-        tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, port_frame=8*buttons["port"])   #TODO: do full port opening animation
-        palette_timing_list = self.get_timed_sprite_palette("standard", self.suit_lookup[buttons["suit"]])
+    def get_sprite_frame(self, animation_ID, pose):
+        tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose)   #TODO: do full port opening animation
+        palette_timing_list = self.get_timed_sprite_palette("standard", "power")
 
         #TODO: A lot of the following seems like it can be factored out to common code
 
-        current_palette = self.get_current_time_palette(palette_timing_list,frame)
+        current_palette = self.get_current_time_palette(palette_timing_list,0)
 
         #there is stuff in VRAM by default, so populate this and then overwrite with the DMA_writes
         constructed_VRAM_data = {}
@@ -333,8 +332,8 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         add_flattened_tiles(DMA_writes.items())
 
         black_palette = [0x0 for _ in range(0x10)]
-        loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", self.suit_lookup[buttons["suit"]]),frame)
-        flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", self.suit_lookup[buttons["suit"]]),frame)
+        loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", "power"),0)
+        flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", "power"),0)
         current_palettes =  {
                                 0b000: None,
                                 0b001: None,
