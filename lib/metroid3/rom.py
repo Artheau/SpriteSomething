@@ -51,8 +51,8 @@ class Metroid3RomHandler(RomHandler):
         self._apply_improvements()
 
 
-    def get_pose_data(self,animation,pose,port_frame=0):
-        tilemaps = self._get_pose_tilemaps(animation,pose)
+    def get_pose_data(self,animation,pose,port_frame=0,upper=True,lower=True):
+        tilemaps = self._get_pose_tilemaps(animation,pose,upper=upper,lower=lower)
         DMA_writes = self._get_dma_data(animation, pose)
         duration = self._get_pose_duration(animation, pose)
 
@@ -440,7 +440,7 @@ class Metroid3RomHandler(RomHandler):
         return self.read_from_snes_address(snes_address, "2"*0x10)
 
 
-    def _get_pose_tilemaps(self,animation,pose):
+    def _get_pose_tilemaps(self,animation,pose, upper=True, lower=True):
         lower_tilemaps = self._get_pose_tilemaps_from_addr(0x92945D, animation, pose)
         upper_tilemaps = self._get_pose_tilemaps_from_addr(0x929263, animation, pose)
 
@@ -456,7 +456,7 @@ class Metroid3RomHandler(RomHandler):
             stupid_tile_tilemap = []
 
         #the tiles are rendered in this specific order: backwards lower, backwards upper
-        return lower_tilemaps[::-1] + stupid_tile_tilemap + upper_tilemaps[::-1]
+        return (lower_tilemaps[::-1] if lower else []) + stupid_tile_tilemap + (upper_tilemaps[::-1] if upper else [])
 
 
     def _get_pose_tilemaps_from_addr(self, base_addr, animation, pose):

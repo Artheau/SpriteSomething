@@ -313,8 +313,8 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def set_sprite_palette(self, variant_type, suit_type, frame):
         raise NotImplementedError()
 
-    def get_sprite_frame(self, animation_ID, pose):
-        tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose)   #TODO: do full port opening animation
+    def get_sprite_frame(self, animation_ID, pose, upper=True,lower=True):
+        tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation
         palette_timing_list = self.get_timed_sprite_palette("standard", "power")
 
         #TODO: A lot of the following seems like it can be factored out to common code
