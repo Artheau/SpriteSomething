@@ -447,8 +447,11 @@ class Metroid3RomHandler(RomHandler):
         #special case here for elevator poses, they have this extra stupid tile
         #the position is hardcoded into the game at a block starting at $90:868D.
         #I did not make the code go in there and dig out the offsets because this tile is stupid.
-        if animation in [0x00, 0x9B]:  #elevator poses (power suit/upgraded suit)
-            stupid_tile_tilemap = [[0xF9,0x01,0xF5,0x21,0x38]]   #stupid offsets
+        if animation == 0x00:
+            if pose == 0:  #elevator pose (power suit only)
+                stupid_tile_tilemap = [[0xF9,0x01,0xF5,0x21,0x38]]   #stupid offsets
+            else:          #launcher pose (power suit only)
+                stupid_tile_tilemap = [[0xF9,0x01,0xF0,0x21,0x38]]   #stupider offsets
         else:
             stupid_tile_tilemap = []
 
