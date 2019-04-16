@@ -74,6 +74,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
         #########   Sprite Metadata       #############
+        # Gui.class
+        # print_sprite_metadata()
         metadata_section = tk.Frame(left_pane)
         left_pane.add(metadata_section)
         self.right_align_grid_in_frame(metadata_section)
@@ -88,6 +90,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
         #########   Background Dropdown   #############
+        # Gui.class, populated by Game.class
         background_section = tk.Frame(left_pane)
         left_pane.add(background_section)
         self.right_align_grid_in_frame(background_section)
@@ -112,6 +115,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
         ##########   Animation Dropdown   #############
+        # Gui.class, populated by Game.Sprite.class
         animation_section = tk.Frame(left_pane)
         left_pane.add(animation_section)
         self.right_align_grid_in_frame(animation_section)
@@ -135,6 +139,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
         ########### Sprite Specific Stuff #############
+        # Game.Sprite.class
+        # print_knobs_and_buttons()
         sprite_section = tk.Frame(left_pane)
         left_pane.add(sprite_section)
         self.right_align_grid_in_frame(sprite_section)
@@ -142,6 +148,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #TODO: Move this into the sprite specific classes so that it can be different for each sprite within a game
         if (self._game_name == "metroid3"):
+            # Metroid3.class, M3Samus.class
             row = 0
             col = 1
 
@@ -153,6 +160,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Missile Port", {"No":0,"Yes":1}, "port", " Port")
         elif(self._game_name == "zelda3"):
+            # Zelda3.class, Z3Link.class
             row = 0
             col = 1
 
@@ -172,6 +180,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
         ########### GUI Specific Stuff ################
+        # Gui.class
+        # print_vcr_controls()
         control_section = tk.Frame(left_pane)
         left_pane.add(control_section)
         button_width = 7
@@ -242,7 +252,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         current_grid_row += 1
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-back.png"))
-        step_back_button = tk.Button(control_section, image=img, text="Step", width=button_width, compound=tk.LEFT, command=self.rewind_global_frame_timer)
+        step_back_button = tk.Button(control_section, image=img, text="Frame", width=button_width, compound=tk.LEFT, command=self.rewind_global_frame_timer)
         step_back_button.image = img
         step_back_button.grid(row=current_grid_row, column=1, sticky='nesw')
 
@@ -252,11 +262,22 @@ class SpriteSomethingMainFrame(tk.Frame):
         pause_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-forward.png"))
-        step_forward_button = tk.Button(control_section, image=img, text="Step", width=button_width, compound=tk.RIGHT, command=self.step_global_frame_timer)
+        step_forward_button = tk.Button(control_section, image=img, text="Frame", width=button_width, compound=tk.RIGHT, command=self.step_global_frame_timer)
+        step_forward_button.image = img
+        step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
+        current_grid_row += 1
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-back.png"))
+        step_back_button = tk.Button(control_section, image=img, text="Pose", width=button_width, compound=tk.LEFT, command=self.rewind_global_pose_timer)
+        step_back_button.image = img
+        step_back_button.grid(row=current_grid_row, column=1, sticky='nesw')
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-forward.png"))
+        step_forward_button = tk.Button(control_section, image=img, text="Pose", width=button_width, compound=tk.RIGHT, command=self.step_global_pose_timer)
         step_forward_button.image = img
         step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
         ###############################################
-        self._status.set(self.game.game_name)
+        self._status.set(self.game.game_name + ': "' + self.game.sprites[0x01][0] + '"')
 
         self.initialize_sprite_animation()        #set up the initial animation
 
@@ -348,22 +369,26 @@ class SpriteSomethingMainFrame(tk.Frame):
         menu.add_cascade(label="Help", menu=help_menu)
 
     def create_status_bar(self):
+        # Gui.class
         status = StatusBar(self)
         status.pack(side=tk.BOTTOM, fill=tk.X)
         status.set("Status")
         return status
 
     def center_align_grid_in_frame(self, frame):
+        # Gui.class
         frame.grid_columnconfigure(0, weight=1)       #the 0th column will be the margin
         frame.grid_columnconfigure(1000, weight=1)    #so I guess technically this just needs to be larger than the number of columns
 
 
     def right_align_grid_in_frame(self, frame):
+        # Gui.class
         frame.grid_columnconfigure(0, weight=1)       #the 0th column will be the margin
         frame.grid_columnconfigure(1000, weight=0)    #so I guess technically this just needs to be larger than the number of columns
 
 
     def add_spiffy_buttons(self,container,row,col,section_label,items,prefix,suffix):
+        # Gui.class
         #ins:
         # container: the parent widget for this button set
         # row,col: where in the parent's grid to anchor these buttons
@@ -418,6 +443,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             col += 1
 
     def show_animation_list(self):
+        # Gui.class
         def onFrameConfigure(canvas):
             canvas.configure(scrollregion=canvas.bbox("all"))
         def change_animation_list_button(animation_name):
@@ -456,6 +482,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             button.grid(row=row, column=col)
 
     def press_spiffy_button(self,prefix,level):
+        # Gui.class
         #ins:
         # buttonID: This way the Sprite Class knows what we clicked
         self.sprite_menu_buttons[prefix] = level
@@ -463,6 +490,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             self.update_sprite_animation()
 
     def add_dummy_menu_option(self,text,menuObject):
+        # Gui.class
         # Add menu option with junk placeholder
         #ins:
         # text: Text label for menu option
@@ -470,6 +498,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         menuObject.add_command(label=text, command=self.popup_NYI)
 
     def add_dummy_menu_options(self,options,menuObject):
+        # Gui.class
         # Add array of menu options with junk placeholders
         #ins:
         # options: Array of menu options to add
@@ -481,6 +510,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                 menuObject.add_separator()
 
     def add_text_link_array(self,lines,textObject):
+        # Gui.class
         # Add an array of text lines, linkifying as necessary
         #ins:
         # lines: Lines of text to add
@@ -499,10 +529,12 @@ class SpriteSomethingMainFrame(tk.Frame):
                 textObject.insert(tk.INSERT, line + "\n")
 
     def popup_NYI(self):
+        # Gui.class
         # This is not the method you are looking for
         messagebox.showinfo("Not Yet Implemented", "This DLC is not yet available")
 
     def create_random_title(self):
+        # Gui.class
         # Generate a new epic random title for this application
         with open(os.path.join("resources","app_names.json")) as name_file:
             name_parts = json.load(name_file)
@@ -519,6 +551,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.master.title(self.app_title)
 
     def load_game(self,game_name):
+        # Game.class
         #once the identity of the game is known, call this function to do the initial class setup
 
         self._game_name = game_name.lower()   #no funny business with capitalization
@@ -540,6 +573,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.load_background(self.background_name)
 
     def make_sprite(self, sprite_number):
+        # Gui.class
         #sets up the GUI and the display for a particular sprite from the current game
         # e.g. call with sprite_number 0x01 to set up the player sprite
         _, class_name = self.game.sprites[sprite_number]
@@ -547,23 +581,29 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.sprite = getattr(self.game_module,class_name)(self.game.rom_data, self.game.meta_data)
 
     def get_library_name(self, game_name):
+        # Gui.class
         #the libraries are dynamically loaded.  This function gives the directory and library name as a string (for import)
         return f"lib.{game_name}.{game_name}"
 
     def load_sprite(self):
+        # Gui.class, refs ZSPR.class
         # Load a ZSPR
         self.sprite_filename = filedialog.askopenfile(initialdir="./", title="Select Sprite", filetypes=(("ZSPR Files","*.zspr"),))
     def save_sprite_as(self):
+        # Gui.class, refs ZSPR.class
         # Save a ZSPR
         filedialog.asksaveasfile(initialdir="./", title="Save Sprite As...", filetypes=(("ZSPR Files","*.zspr"),))
 
     def import_from_game_file(self):
+        # Gui.class, refs ZSPR.class
         # Import a ZSPR from a Game File
         filedialog.askopenfile(initialdir="./", title="Import from Game File", filetypes=(("SNES ROMs","*.sfc;*.smc"),))
     def import_from_png(self):
+        # Gui.class, refs PNG.class
         # Import a ZSPR from a PNG
         filedialog.askopenfile(initialdir="./", title="Import from PNG", filetypes=(("PNGs","*.png"),))
     def import_palette(self,type):
+        # Gui.class, refs Palette.class
         # Import a Palette from another source
         ftypes = ("All Files","*.*")
         if type == "GIMP":
@@ -574,15 +614,19 @@ class SpriteSomethingMainFrame(tk.Frame):
             ftypes = ("YY-CHR Palettes","*.pal")
         filedialog.askopenfile(initialdir="./", title="Import " + type + " Palette", filetypes=(ftypes,))
     def export_png(self):
+        # Gui.class, refs PNG.class
         # Export ZSPR as a PNG
         filedialog.asksaveasfile(initialdir="./", title="Export PNG", filetypes=(("PNGs","*.png"),))
     def export_gif(self):
+        # Gui.class, refs GIF.class
         # Export current Still or Animation as a GIF
         filedialog.asksaveasfile(initialdir="./", title="Export Animation as GIF", filetypes=(("GIFs","*.gif"),))
     def export_collage(self):
+        # Gui.class, refs PNG.class
         # Export current Still or Exploded Animation as a PNG
         filedialog.asksaveasfile(initialdir="./", title="Export Animation as Collage", filetypes=(("PNGs","*.png"),))
     def export_palette(self,type):
+        # Gui.class, refs Palette.class
         # Export a Palette for import into another source
         ftypes = ("All Files","*.*")
         if type == "GIMP":
@@ -595,6 +639,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
     def _get_sfc_filename(self, path):
+        # Game.class
         #for portions of the app that need a rom to work, this will look in the specified path and find the first rom it sees
         for file in os.listdir(path):
             if file.endswith(".sfc") or file.endswith(".smc"):
@@ -603,6 +648,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             raise AssertionError(f"There is no sfc file in directory {path}")
 
     def load_background(self, background_name):
+        # Gui.class
         #intended to be called when the user chooses a background from the dropdown menu.  This loads that background.
         if background_name in self.game.background_images:
             background_filename = self.game.background_images[background_name]
@@ -614,6 +660,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             raise AssertionError(f"load_background() called with invalid background name {background_filename}")
 
     def _set_background(self, background_raw_image):
+        # Gui.class
         #handles the funny business of converting the background to a PhotoImage, and makes sure there is only one background
         self._background_image = ImageTk.PhotoImage(background_raw_image)     #have to save this for it to display
         if self._background_ID is None:
@@ -622,6 +669,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             self._canvas.itemconfig(self._background_ID, image=self._background_image)
 
     def scale_background_image(self,factor):
+        # Gui.class
         #called by the zoom +/- buttons
         #this function is in charge of retrieving the PIL version of the background image, scaling it, and re-inserting it
         if self._background_ID is not None:   #if there is no background right now, do nothing
@@ -629,12 +677,14 @@ class SpriteSomethingMainFrame(tk.Frame):
             self._set_background(self._raw_background.resize(new_size))
 
     def initialize_sprite_animation(self, *args):
+        # Gui.class
         #called by the animation dropdown
         self._frame_number = 0        #start out at the first frame of the animation
         self.freeze_ray = False
         self.update_sprite_animation()
 
     def advance_global_frame_timer(self):
+        # Gui.class
         #move frame timer forward
         self._frame_number += 1
         if self._frame_number > 1e8:        #just in case someone leaves this running for, say...forever
@@ -642,35 +692,51 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.update_sprite_animation()
 
     def step_global_frame_timer(self):
+        # Gui.class
         #called by step radio button to pause and step forward
         self.pause_global_frame_timer()
         self.advance_global_frame_timer()
 
+    def step_global_pose_timer(self):
+        # Gui.class
+        pass
+
     def play_once(self):
+        # Gui.class
         self.start_global_frame_timer()
 
     def pause_global_frame_timer(self):
+        # Gui.class
         #called by pause button
-        self.freeze_ray = True #stop time, tell your friends
+        self.freeze_ray = True #stops time, tell your friends
         self.update_sprite_animation()
 
     def rewind_global_frame_timer(self):
+        # Gui.class
         #called by step radio button to pause and step backward
         self._frame_number = max(0, self._frame_number - 1)
         self.pause_global_frame_timer()
 
+    def rewind_global_pose_timer(self):
+        # Gui.class
+        pass
+
     def start_global_frame_timer(self):
+        # Gui.class
         #called by play button
-        self.freeze_ray = False
-        self.time_marches_forward()
-        self.update_sprite_animation()
+        if self.freeze_ray:
+            self.freeze_ray = False
+            self.time_marches_forward()
+            self.update_sprite_animation()
 
     def reset_global_frame_timer(self):
+        # Gui.class
         #called by radio reset button
         self._frame_number = 0
         self.update_sprite_animation()
 
     def update_sprite_animation(self):
+        # Gui.class, refs Game.Sprite.class
         #calls to the sprite library to get the appropriate animation, and anchors it correctly to the zoomed canvas
         #also makes sure that there are not multiple of the sprite at any given time
         if self._sprite_ID is not None:
@@ -685,12 +751,14 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
     def _attach_sprite(self,canvas,sprite_raw_image,location):
+        # Gui.class
         sprite = ImageTk.PhotoImage(sprite_raw_image)
         ID = canvas.create_image(location[0], location[1], image=sprite, anchor = tk.NW)
         self._sprite_image = sprite     #if you skip this part, then the auto-destructor will get rid of your picture!
         return ID
 
     def about(self):
+        # Gui.class
         # Credit where credit's due
         dims = {
             "window": {
