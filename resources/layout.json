@@ -2,10 +2,8 @@
 	"layout":
 	[
 		[
-			"elevator", "launcher", "launcher1", "launcher2", "launcher3",
-				"launcher4", "launcher5", "launcher6", "launcher7", "launcher8"
-		],
-		[
+			"launcher8", "launcher7", "launcher6", "launcher5", "launcher4",
+				"launcher3", "launcher2", "launcher1", "launcher", "elevator",
 			"elevator_varia", "launcher_varia", "launcher1_varia", "launcher2_varia", "launcher3_varia",
 				"launcher4_varia", "launcher5_varia", "launcher6_varia", "launcher7_varia", "launcher8_varia"
 		],
@@ -13,8 +11,29 @@
 			"stand_left_heavy3", "stand_left_heavy2", "stand_left_heavy1", "stand_left_heavy",
 				"stand_left3", "stand_left2", "stand_left1", "stand_left",
 				
+			"stand_turn_left", "stand_turn_neutral", "stand_turn_right",
+
 			"stand_right", "stand_right1", "stand_right2", "stand_right3",
 				"stand_right_heavy", "stand_right_heavy1", "stand_right_heavy2", "stand_right_heavy3"
+		],
+		[
+			"stand_left_aim_up", "stand_left_aim_diag_up",
+			"stand_turn_left_aim_up", "stand_turn_neutral_aim_up", "stand_turn_right_aim_up",
+			"stand_right_aim_diag_up", "stand_right_aim_up"
+		],
+		[
+			"stand_left_aim_diag_down",
+			"stand_turn_left_aim_down", "stand_turn_neutral_aim_down", "stand_turn_right_aim_down",
+			"stand_right_aim_diag_down"
+		],
+		[
+			"crouch_left_heavy3", "crouch_left_heavy2", "crouch_left_heavy1", "crouch_left_heavy",
+				"crouch_left3", "crouch_left2", "crouch_left1", "crouch_left",
+
+			"crouch_turn_left", "crouch_turn_neutral", "crouch_turn_right",
+				
+			"crouch_right", "crouch_right1", "crouch_right2", "crouch_right3",
+				"crouch_right_heavy", "crouch_right_heavy1", "crouch_right_heavy2", "crouch_right_heavy3"
 		],
 		[
 			"run_left9", "run_left8", "run_left7", "run_left6", "run_left5",
@@ -53,11 +72,49 @@
 			"moonwalk_right_aim_diag_down", "moonwalk_right_aim_diag_down1", "moonwalk_right_aim_diag_down2", "moonwalk_right_aim_diag_down3", "moonwalk_right_aim_diag_down4", "moonwalk_right_aim_diag_down5"
 		],
 		[
+			"xray_left4", "xray_left3", "xray_left2", "xray_left1", "xray_left", 
+			"xray_right", "xray_right1", "xray_right2", "xray_right3", "xray_right4"
+		],
+		[
+			"xray_crouch_left4", "xray_crouch_left3", "xray_crouch_left2", "xray_crouch_left1", "xray_crouch_left", 
+			"xray_crouch_right", "xray_crouch_right1", "xray_crouch_right2", "xray_crouch_right3", "xray_crouch_right4"
+		],
+		[
+			"jump_left5", "jump_left4", "jump_left3", "jump_left2", "jump_left1", "jump_left",
+			"jump_left_begin",
+			"jump_right_begin",
+			"jump_right", "jump_right1", "jump_right2", "jump_right3", "jump_right4", "jump_right5"
+		],
+		[
+			"jump_forward_left1","jump_forward_left",
+			"jump_forward_right","jump_forward_right1"
+		],
+		[
+			"jump_left_aim_up1","jump_left_aim_up",
+			"jump_right_aim_up","jump_right_aim_up1"
+		],
+		[
+			"jump_left_aim_diag_up1","jump_left_aim_diag_up",
+			"jump_right_aim_diag_up","jump_right_aim_diag_up1"
+		],
+		[
+			"jump_left_shoot1","jump_left_shoot",
+			"jump_right_shoot","jump_right_shoot1"
+		],
+		[
+			"jump_left_aim_diag_down1","jump_left_aim_diag_down",
+			"jump_right_aim_diag_down","jump_right_aim_diag_down1"
+		],
+		[
+			"jump_left_aim_down1","jump_left_aim_down",
+			"jump_right_aim_down","jump_right_aim_down1"
+		],
+		[
 			"wall_jump_left",
 			"spin_jump_left7", "spin_jump_left6", "spin_jump_left5", "spin_jump_left4",
 			"spin_jump_left3", "spin_jump_left2", "spin_jump_left1", "spin_jump_left",
-			"jump_left_launch",
-			"jump_right_launch",
+			"jump_left_start_spin_jump",
+			"jump_right_start_spin_jump",
 			"spin_jump_right", "spin_jump_right1", "spin_jump_right2", "spin_jump_right3",
 			"spin_jump_right4", "spin_jump_right5", "spin_jump_right6", "spin_jump_right7",
 			"wall_jump_right"
@@ -254,7 +311,6 @@
 		"stand_right": {
 			"description": "A neutral standing pose, used while...standing",
 			"dimensions": [-13,19,-21,27],
-			"shift": [-3,0],
 			"used by": [["0x01",0]]	
 		},
 
@@ -297,7 +353,6 @@
 		"stand_left": {
 			"description": "A neutral standing pose, used while...standing",
 			"dimensions": [-19,13,-21,27],
-			"shift": [3,0],
 			"used by": [["0x02",0]]	
 		},
 
@@ -337,10 +392,165 @@
 			"used by": [["0x02",8]]	
 		},
 
+		"stand_right_aim_up": {
+			"description": "Standing, but aiming directly upwards",
+			"dimensions": [-13,19,-29,27],
+			"used by": [["0x03",1]]
+		},
+
+		"stand_right_aim_diag_up": {
+			"description": "Standing, but aiming diagonally upwards, or lifting the cannon further upwards",
+			"dimensions": [-13,27,-21,27],
+			"used by": [["0x03",0],["0x05",0]]
+		},
+
+		"stand_left_aim_up": {
+			"description": "Standing, but aiming directly upwards",
+			"dimensions": [-19,13,-29,27],
+			"used by": [["0x04",1]]
+		},
+
+		"stand_left_aim_diag_up": {
+			"description": "Standing, but aiming diagonally upwards, or lifting the cannon further upwards",
+			"dimensions": [-27,13,-21,27],
+			"used by": [["0x04",0],["0x06",0]]
+		},
+
+		"stand_turn_left_aim_up": {
+			"description": "While standing and aiming up (or diag up), Samus is turning from right to left, or left to right, and is presently facing 'more left'",
+			"parent": "stand_turn_left",
+			"used by": [["0x8B",2],["0x9C",2],["0x8C",0],["0x9D",0]]
+		},
+
+		"stand_turn_neutral_aim_up": {
+			"description": "While standing and aiming up (or diag up), Samus is turning from right to left, or left to right, and is presently facing 'forward'",
+			"parent": "stand_turn_neutral",
+			"used by": [["0x8B",1],["0x9C",1],["0x8C",1],["0x9D",1]]
+		},
+
+		"stand_turn_right_aim_up": {
+			"description": "While standing and aiming up (or diag up), Samus is turning from right to left, or left to right, and is presently facing 'more right'",
+			"parent": "stand_turn_right",
+			"used by": [["0x8B",0],["0x9C",0],["0x8C",2],["0x9D",2]]
+		},
+
+		"stand_right_aim_diag_down": {
+			"description": "Standing, but aiming diagonally downwards",
+			"parent": "stand_right_aim_diag_up",
+			"used by": [["0x07",0]]
+		},
+
+		"stand_left_aim_diag_down": {
+			"description": "Standing, but aiming diagonally upwards, or lifting the cannon further upwards",
+			"parent": "stand_left_aim_diag_up",
+			"used by": [["0x08",0]]
+		},
+
+		"stand_turn_left_aim_down": {
+			"description": "While standing and aiming down (or diag down), Samus is turning from right to left, or left to right, and is presently facing 'more left'",
+			"parent": "stand_turn_left",
+			"used by": [["0x8D",2],["0x8E",0]]
+		},
+
+		"stand_turn_neutral_aim_down": {
+			"description": "While standing and aiming down (or diag down), Samus is turning from right to left, or left to right, and is presently facing 'forward'",
+			"parent": "stand_turn_neutral",
+			"used by": [["0x8D",1],["0x8E",1]]
+		},
+
+		"stand_turn_right_aim_down": {
+			"description": "While standing and aiming down (or diag down), Samus is turning from right to left, or left to right, and is presently facing 'more right'",
+			"parent": "stand_turn_right",
+			"used by": [["0x8D",0],["0x8E",2]]
+		},
+
+		"crouch_right": {
+			"description": "While crouching but not aiming, Samus breathes",
+			"dimensions": [-13,19,-24,16],
+			"used by": [["0x27",0]]	
+		},
+
+		"crouch_right1": {
+			"parent": "crouch_right",
+			"used by": [["0x27",1]]	
+		},
+
+		"crouch_right2": {
+			"parent": "crouch_right",
+			"used by": [["0x27",2]]	
+		},
+
+		"crouch_right3": {
+			"parent": "crouch_right",
+			"used by": [["0x27",3]]	
+		},
+		
+		"crouch_right_heavy": {
+			"description": "While crouching with low health, begins to breathe heavily",
+			"parent": "crouch_right",
+			"used by": [["0x27",5]]	
+		},
+		
+		"crouch_right_heavy1": {
+			"parent": "crouch_right_heavy",
+			"used by": [["0x27",6]]	
+		},
+		
+		"crouch_right_heavy2": {
+			"parent": "crouch_right_heavy",
+			"used by": [["0x27",7]]	
+		},
+		
+		"crouch_right_heavy3": {
+			"parent": "crouch_right_heavy",
+			"used by": [["0x27",8]]	
+		},
+
+		"crouch_left": {
+			"description": "While crouching but not aiming, Samus breathes",
+			"dimensions": [-19,13,-24,16],
+			"used by": [["0x28",0]]	
+		},
+
+		"crouch_left1": {
+			"parent": "crouch_left",
+			"used by": [["0x28",1]]	
+		},
+
+		"crouch_left2": {
+			"parent": "crouch_left",
+			"used by": [["0x28",2]]	
+		},
+
+		"crouch_left3": {
+			"parent": "crouch_left",
+			"used by": [["0x28",3]]	
+		},
+		
+		"crouch_left_heavy": {
+			"description": "While crouching with low health, begins to breathe heavily",
+			"parent": "crouch_left",
+			"used by": [["0x28",5]]	
+		},
+		
+		"crouch_left_heavy1": {
+			"parent": "crouch_left_heavy",
+			"used by": [["0x28",6]]	
+		},
+		
+		"crouch_left_heavy2": {
+			"parent": "crouch_left_heavy",
+			"used by": [["0x28",7]]	
+		},
+		
+		"crouch_left_heavy3": {
+			"parent": "crouch_left_heavy",
+			"used by": [["0x28",8]]	
+		},
+
 		"run_right": {
 			"description": "Normal running pose, used while...running",
 			"dimensions": [-18,22,-21,27],
-			"shift": [-2,0],
 			"used by": [["0x09",0]]	
 		},
 
@@ -392,7 +602,6 @@
 		"run_left": {
 			"description": "Normal running pose, used while...running",
 			"dimensions": [-22,18,-21,27],
-			"shift": [2,0],
 			"used by": [["0x0A",0]]	
 		},
 
@@ -749,7 +958,7 @@
 			"used by": [["0x12",9]]
 		},
 
-		"jump_right_launch": {
+		"jump_right_start_spin_jump": {
 			"description": "As Samus begins to do a spinjump/spacejump/screwattack, this pose shows her transitioning off the ground before spinning",
 			"dimensions": [-16,16,-18,22],
 			"used by": [["0x19",0],["0x1B",0],["0x81",0]]
@@ -800,11 +1009,10 @@
 		"wall_jump_right": {
 			"description": "Samus when she is priming to jump rightwards off of a left wall",
 			"dimensions": [-11,21,-20,20],
-			"shift": [-5,0],
 			"used by": [["0x19",11],["0x1B",11],["0x81",27]]
 		},
 
-		"jump_left_launch": {
+		"jump_left_start_spin_jump": {
 			"description": "As Samus begins to do a spinjump/spacejump/screwattack, this pose shows her transitioning off the ground before spinning",
 			"dimensions": [-16,16,-18,22],
 			"used by": [["0x1A",0],["0x1C",0],["0x82",0]]
@@ -855,7 +1063,6 @@
 		"wall_jump_left": {
 			"description": "Samus when she is priming to jump leftwards off of a right wall",
 			"dimensions": [-20,12,-20,20],
-			"shift": [4,0],
 			"used by": [["0x1A",11],["0x1C",11],["0x82",27]]
 		},
 
@@ -1192,7 +1399,6 @@
 		"moonwalk_left": {
 			"description": "Samus is facing right, but walking backwards, i.e. walking left",
 			"dimensions": [-13,19,-27,29],
-			"shift": [-3,0],
 			"used by": [["0x4A",0]]
 		},
 
@@ -1224,7 +1430,6 @@
 		"moonwalk_right": {
 			"description": "Samus is facing left, but walking backwards, i.e. walking right",
 			"dimensions": [-19,13,-27,29],
-			"shift": [3,0],
 			"used by": [["0x49",0]]
 		},
 
@@ -1375,7 +1580,353 @@
 		"moonwalk_right_aim_diag_down5": {
 			"parent": "moonwalk_right_aim_diag_down",
 			"used by": [["0x77",5]]
-		}
+		},
 
+		"xray_right": {
+			"parent": "stand_right",
+			"used by": [["0xD5",0]]
+		},
+
+		"xray_right1": {
+			"parent": "xray_right",
+			"used by": [["0xD5",1]]
+		},
+
+		"xray_right2": {
+			"parent": "xray_right",
+			"used by": [["0xD5",2]]
+		},
+
+		"xray_right3": {
+			"parent": "xray_right",
+			"used by": [["0xD5",3]]
+		},
+
+		"xray_right4": {
+			"parent": "xray_right",
+			"used by": [["0xD5",4]]
+		},
+
+		"xray_left": {
+			"parent": "stand_left",
+			"used by": [["0xD6",0]]
+		},
+
+		"xray_left1": {
+			"parent": "xray_left",
+			"used by": [["0xD6",1]]
+		},
+
+		"xray_left2": {
+			"parent": "xray_left",
+			"used by": [["0xD6",2]]
+		},
+
+		"xray_left3": {
+			"parent": "xray_left",
+			"used by": [["0xD6",3]]
+		},
+
+		"xray_left4": {
+			"parent": "xray_left",
+			"used by": [["0xD6",4]]
+		},
+
+		"xray_crouch_right": {
+			"description": "While using the xray scope, a light cone appears from Samus's visor and she looks in the correct direction",
+			"parent": "crouch_right",
+			"used by": [["0xD9",0]]
+		},
+
+		"xray_crouch_right1": {
+			"parent": "xray_crouch_right",
+			"used by": [["0xD9",1]]
+		},
+
+		"xray_crouch_right2": {
+			"parent": "xray_crouch_right",
+			"used by": [["0xD9",2]]
+		},
+
+		"xray_crouch_right3": {
+			"parent": "xray_crouch_right",
+			"used by": [["0xD9",3]]
+		},
+
+		"xray_crouch_right4": {
+			"parent": "xray_crouch_right",
+			"used by": [["0xD9",4]]
+		},
+
+		"xray_crouch_left": {
+			"description": "While using the xray scope, a light cone appears from Samus's visor and she looks in the correct direction",
+			"parent": "crouch_left",
+			"used by": [["0xDA",0]]
+		},
+
+		"xray_crouch_left1": {
+			"parent": "xray_crouch_left",
+			"used by": [["0xDA",1]]
+		},
+
+		"xray_crouch_left2": {
+			"parent": "xray_crouch_left",
+			"used by": [["0xDA",2]]
+		},
+
+		"xray_crouch_left3": {
+			"parent": "xray_crouch_left",
+			"used by": [["0xDA",3]]
+		},
+
+		"xray_crouch_left4": {
+			"parent": "xray_crouch_left",
+			"used by": [["0xDA",4]]
+		},
+
+		"stand_turn_left": {
+			"description": "While standing, Samus is turning from right to left, or left to right, and is presently facing 'more left'",
+			"parent": "stand_turn_neutral",
+			"used by": [["0x25",2],["0x26",0]]
+		},
+
+		"stand_turn_neutral": {
+			"description": "While standing, Samus is turning from right to left, or left to right, and is presently facing 'forward'",
+			"dimensions": [-16,16,-21,27],
+			"used by": [["0x25",1],["0x26",1]]
+		},
+
+		"stand_turn_right": {
+			"description": "While standing, Samus is turning from right to left, or left to right, and is presently facing 'more right'",
+			"parent": "stand_turn_neutral",
+			"used by": [["0x25",0],["0x26",2]]
+		},
+
+		"crouch_turn_left": {
+			"description": "While crouching, Samus is turning from right to left, or left to right, and is presently facing 'more left'",
+			"parent": "crouch_turn_neutral",
+			"used by": [["0x43",2],["0x44",0]]
+		},
+
+		"crouch_turn_neutral": {
+			"description": "While crouching, Samus is turning from right to left, or left to right, and is presently facing 'forward'",
+			"dimensions": [-16,16,-24,16],
+			"used by": [["0x43",1],["0x44",1]]
+		},
+
+		"crouch_turn_right": {
+			"description": "While crouching, Samus is turning from right to left, or left to right, and is presently facing 'more right'",
+			"parent": "crouch_turn_neutral",
+			"used by": [["0x43",0],["0x44",2]]
+		},
+
+		"jump_right_begin": {
+			"description": "As Samus begins to jump in a non-spin way, she bends her knees to push off of the ground",
+			"dimensions": [-13,19,-30,26],
+			"shift": [0,3],
+			"used by": [["0x4B",0]]
+		},
+
+		"jump_right": {
+			"description": "When Samus jumps up without spinning",
+			"dimensions": [-13,19,-27,29],
+			"used by": [["0x4D",0]]
+		},
+
+		"jump_right1": {
+			"parent": "jump_right",
+			"used by": [["0x4D",1]]
+		},
+
+		"jump_right2": {
+			"parent": "jump_right",
+			"used by": [["0x4D",2]]
+		},
+
+		"jump_right3": {
+			"parent": "jump_right",
+			"used by": [["0x4D",3]]
+		},
+
+		"jump_right4": {
+			"parent": "jump_right",
+			"used by": [["0x4D",4]]
+		},
+
+		"jump_right5": {
+			"parent": "jump_right",
+			"used by": [["0x4D",5]]
+		},
+
+		"jump_left_begin": {
+			"description": "As Samus begins to jump in a non-spin way, she bends her knees to push off of the ground",
+			"dimensions": [-19,13,-30,26],
+			"shift": [0,3],
+			"used by": [["0x4C",0]]
+		},
+
+		"jump_left": {
+			"description": "When Samus jumps up without spinning",
+			"dimensions": [-19,13,-27,29],
+			"used by": [["0x4E",0]]
+		},
+
+		"jump_left1": {
+			"parent": "jump_left",
+			"used by": [["0x4E",1]]
+		},
+
+		"jump_left2": {
+			"parent": "jump_left",
+			"used by": [["0x4E",2]]
+		},
+
+		"jump_left3": {
+			"parent": "jump_left",
+			"used by": [["0x4E",3]]
+		},
+
+		"jump_left4": {
+			"parent": "jump_left",
+			"used by": [["0x4E",4]]
+		},
+
+		"jump_left5": {
+			"parent": "jump_left",
+			"used by": [["0x4E",5]]
+		},
+
+		"jump_forward_right": {
+			"description": "When Samus jumps and shoots while still moving forward",
+			"parent": "jump_right",
+			"used by": [["0x51",0]]
+		},
+
+		"jump_forward_right1": {
+			"parent": "jump_forward_right",
+			"used by": [["0x51",1]]
+		},
+
+		"jump_forward_left": {
+			"description": "When Samus jumps and shoots while still moving forward",
+			"parent": "jump_left",
+			"used by": [["0x52",0]]
+		},
+
+		"jump_forward_left1": {
+			"parent": "jump_forward_left",
+			"used by": [["0x52",1]]
+		},
+
+
+		"jump_right_aim_up": {
+			"description": "When Samus jumps and shoots upwards",
+			"parent": "jump_right",
+			"used by": [["0x15",0]]
+		},
+
+		"jump_right_aim_up1": {
+			"parent": "jump_right_aim_up",
+			"used by": [["0x15",1]]
+		},
+
+		"jump_left_aim_up": {
+			"description": "When Samus jumps and shoots upwards",
+			"parent": "jump_left",
+			"used by": [["0x16",0]]
+		},
+
+		"jump_left_aim_up1": {
+			"parent": "jump_left_aim_up",
+			"used by": [["0x16",1]]
+		},
+
+		"jump_right_aim_diag_up": {
+			"description": "When Samus jumps and shoots diagonally upwards",
+			"parent": "jump_right",
+			"used by": [["0x69",0]]
+		},
+
+		"jump_right_aim_diag_up1": {
+			"parent": "jump_right_aim_diag_up",
+			"used by": [["0x69",1]]
+		},
+
+		"jump_left_aim_diag_up": {
+			"description": "When Samus jumps and shoots diagonally upwards",
+			"parent": "jump_left",
+			"used by": [["0x6A",0]]
+		},
+
+		"jump_left_aim_diag_up1": {
+			"parent": "jump_left_aim_diag_up",
+			"used by": [["0x6A",1]]
+		},
+
+		"jump_right_shoot": {
+			"description": "When Samus jumps and shoots but does not move forward",
+			"parent": "jump_right",
+			"used by": [["0x13",0]]
+		},
+
+		"jump_right_shoot1": {
+			"parent": "jump_right_shoot",
+			"used by": [["0x13",1]]
+		},
+
+		"jump_left_shoot": {
+			"description": "When Samus jumps and shoots but does not move forward",
+			"parent": "jump_left",
+			"used by": [["0x14",0]]
+		},
+
+		"jump_left_shoot1": {
+			"parent": "jump_left_shoot",
+			"used by": [["0x14",1]]
+		},
+
+		"jump_right_aim_diag_down": {
+			"description": "When Samus jumps and shoots diagonally downwards",
+			"parent": "jump_right",
+			"used by": [["0x6B",0]]
+		},
+
+		"jump_right_aim_diag_down1": {
+			"parent": "jump_right_aim_diag_down",
+			"used by": [["0x6B",1]]
+		},
+
+		"jump_left_aim_diag_down": {
+			"description": "When Samus jumps and shoots diagonally downwards",
+			"parent": "jump_left",
+			"used by": [["0x6C",0]]
+		},
+
+		"jump_left_aim_diag_down1": {
+			"parent": "jump_left_aim_diag_down",
+			"used by": [["0x6C",1]]
+		},
+
+		"jump_right_aim_down": {
+			"description": "When Samus jumps and shoots downwards",
+			"parent": "jump_right",
+			"used by": [["0x17",0]]
+		},
+
+		"jump_right_aim_down1": {
+			"parent": "jump_right_aim_down",
+			"used by": [["0x17",1]]
+		},
+
+		"jump_left_aim_down": {
+			"description": "When Samus jumps and shoots upwards",
+			"parent": "jump_left",
+			"used by": [["0x18",0]]
+		},
+
+		"jump_left_aim_down1": {
+			"parent": "jump_left_aim_down",
+			"used by": [["0x18",1]]
+		}
 	}
 }

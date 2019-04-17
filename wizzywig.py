@@ -117,28 +117,27 @@ def get_property_from_layout_data(property, animation, pose):
 
 
 def make_horizontal_collage(image_list,verbose=False):
-    x_min = min([-origin[0] for image,origin in image_list])
-    x_max = max([image.size[0]-origin[0] for image,origin in image_list])
     y_min = min([-origin[1] for image,origin in image_list])
     y_max = max([image.size[1]-origin[1] for image,origin in image_list])
 
     num_images = len(image_list)
     
-    collage_x_size = x_max-x_min
+    collage_width = sum([image.size[0] for image,_ in image_list])
     collage_y_size = y_max-y_min
 
-    collage = Image.new("RGBA",(num_images*collage_x_size,collage_y_size),0)
+    collage = Image.new("RGBA",(collage_width,collage_y_size),0)
 
-    for i, (image, origin) in enumerate(image_list):
+    current_x_position = 0
+    for image, origin in image_list:
         border =    ( \
-                        -origin[0]-x_min,     #left
+                        0,                     #left
                         -origin[1]-y_min,     #top
-                        origin[0]+x_max-image.size[0],     #right
+                        0,                     #right
                         origin[1]+y_max-image.size[1]      #bottom
                     )
         bordered_image = ImageOps.expand(image,border=border,fill=(0,0,0x7F,0xFF))
-        collage.paste(bordered_image, (i*collage_x_size,0))
-
+        collage.paste(bordered_image, (current_x_position,0))
+        current_x_position += image.size[0]
 
     return collage
 
@@ -149,7 +148,7 @@ def make_vertical_collage(image_list):
     collage = Image.new("RGBA", (width,height), 0)
     current_y = 0
     for image in image_list:
-        collage.paste(image, (0,current_y))
+        collage.paste(image, ((width-image.size[0])//2,current_y))
         current_y += image.size[1]
     return collage
 
@@ -232,11 +231,13 @@ def get_all_poses(samus):
 
     for animation, pose in [(animation, 0) for animation in STANDARD_ANIMATION_LIST]:
         FAILSAFE_COUNTER = 100
-        kicks = 0  #TODO: fix
+        kicks = 0
         if animation in [0x00,0x9B]:
             kicks += 1    #loader stuff after elevator
-        elif animation in [0x19,0x1A,0x1B,0x1C,0x29,0x2A,0x67,0x68,0x81,0x82]:
-            kicks += 1    #landing after a jump, or walljump
+        elif animation in [0x29,0x2A,0x67,0x68]:
+            kicks += 1    #falling far distances
+        elif animation in [0x19,0x1A,0x1B,0x1C,0x81,0x82]:
+            kicks += 1    #walljump cue
         elif animation in [0xD3,0xD4]:
             kicks += 2    #crystal flash
         elif animation in [0xE9]:
