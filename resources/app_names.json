@@ -12,7 +12,8 @@
         "Container",
         "Playground",
         "Emporium",
-        "Base"
+        "Base",
+        "Amphitheatre"
     ],
     "prefix enchantment": [
         "Blazing",
@@ -27,7 +28,8 @@
         "It's A Dangerous",
         "Mike's",
         "Art's",
-        "Some Dudes'"
+        "Some Dudes'",
+        "The San Dimas"
     ],
     "suffix enchantment": [
         "of Vengeance",
@@ -42,6 +44,7 @@
         "for Great Justice",
         "to Move Every Zig",
         "Are Belong To Us",
-        "made by some dudes"
+        "made by some dudes",
+        "presents Wyld Stallyns *excellent air guitar riff*"
     ]
 }

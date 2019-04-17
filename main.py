@@ -7,6 +7,7 @@
 
 import os
 import importlib
+import lib.constants as CONST
 import json
 import random
 import re
@@ -158,7 +159,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
             self.add_spiffy_buttons(sprite_section, row, col, "Suit", {"Power":1,"Varia":2,"Gravity":3}, "suit", " Suit")
             row += 1
-            self.add_spiffy_buttons(sprite_section, row, col, "Missile Port", {"No":0,"Yes":1}, "port", " Port")
+            self.add_spiffy_buttons(sprite_section, row, col, "Cannon Port", {"No":0,"Yes":1}, "port", " Port")
         elif(self._game_name == "zelda3"):
             # Zelda3.class, Z3Link.class
             row = 0
@@ -298,14 +299,26 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #create the file menu
         file_menu = tk.Menu(menu, tearoff=0)
-        file_menu.add_command(label="Open", command=self.load_sprite)
-        file_menu.add_command(label="Save As...", command=self.save_sprite_as)
-        file_menu.add_command(label="Exit", command=self.exit)
+        file_menu.images = {}
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","open.png"))
+        file_menu.images["open"] = img
+        file_menu.add_command(label="Open", image=file_menu.images["open"], compound=tk.LEFT, command=self.load_sprite)
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","save.png"))
+        file_menu.images["save"] = img
+        file_menu.add_command(label="Save As...", image=file_menu.images["save"], compound=tk.LEFT, command=self.save_sprite_as)
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","exit.png"))
+        file_menu.images["exit"] = img
+        file_menu.add_command(label="Exit", image=file_menu.images["exit"], compound=tk.LEFT, command=self.exit)
         #attach to the menu bar
         menu.add_cascade(label="File", menu=file_menu)
 
         #create the import menu
         import_menu = tk.Menu(menu, tearoff=0)
+        import_menu.images = {}
+
         import_menu.add_command(label="Sprite from Game File", command=self.import_from_game_file)
         import_menu.add_command(label="PNG", command=self.import_from_png)
         self.add_dummy_menu_options([""],import_menu)
@@ -313,14 +326,18 @@ class SpriteSomethingMainFrame(tk.Frame):
         import_menu.add_command(label="YY-CHR Palette", command=lambda: self.import_palette("YY-CHR"))
         import_menu.add_command(label="Graphics Gale Palette", command=lambda: self.import_palette("Graphics Gale"))
         self.add_dummy_menu_options([""],import_menu)
-        options = [
-            "Raw Pixel Data",
-            "Raw Palette Data"
-        ]
-        self.add_dummy_menu_options(options,import_menu)
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","import-pixels.png"))
+        import_menu.images["import-pixels"] = img
+        import_menu.add_command(label="Raw Pixel Data", image=import_menu.images["import-pixels"], compound=tk.LEFT, command=self.load_sprite)
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","import-palette.png"))
+        import_menu.images["import-palette"] = img
+        import_menu.add_command(label="Raw Palette Data", image=import_menu.images["import-palette"], compound=tk.LEFT, command=self.load_sprite)
 
         #create the export menu
         export_menu = tk.Menu(menu, tearoff=0)
+        export_menu.images = {}
         options = [
             "Copy to new Game File",
             "Inject into Game File"
@@ -340,10 +357,16 @@ class SpriteSomethingMainFrame(tk.Frame):
             "",
             "Tracker Images",
             "",
-            "Raw Pixel Data",
-            "Raw Palette Data"
         ]
         self.add_dummy_menu_options(options,export_menu)
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","export-pixels.png"))
+        export_menu.images["export-pixels"] = img
+        export_menu.add_command(label="Raw Pixel Data", image=export_menu.images["export-pixels"], compound=tk.LEFT, command=self.load_sprite)
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","export-palette.png"))
+        export_menu.images["export-palette"] = img
+        export_menu.add_command(label="Raw Palette Data", image=export_menu.images["export-palette"], compound=tk.LEFT, command=self.load_sprite)
 
         #create the convert menu
         convert_menu = tk.Menu(menu, tearoff=0)
@@ -773,6 +796,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         def txtEvent(event):
             return "break"
         lines = [
+                  "SpriteSomething v" + CONST.APP_VERSION,
                   "Created by:",
                   "",
                   "Artheau & Mike Trethewey",
@@ -782,7 +806,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                   "[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
                   "[ZSpriteTools](http://github.com/sosuke3/ZSpriteTools) by Sosuke3",
                   "",
-                  "Temporarily uses assets from SpriteAnimator"
+                  "Temporarily uses assets from SpriteAnimator & ZSpriteTools"
         ]
         about = tk.Tk()
         about.title(f"About {self.app_title}")

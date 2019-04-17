@@ -1,6 +1,12 @@
 # no pycache
 __pycache__/
 
+# no build dir
+/build
+
+# no vscode
+/.vscode
+
 # no images output
 /images
 /animations

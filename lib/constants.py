@@ -1,3 +1,5 @@
+APP_VERSION = "0.¯\\_(ツ)_/¯.α"
+
 IGNORED_ANIMATIONS = []
 
 GIF_MARGIN = 0x08      #for exporting images, a margin this large is produced
@@ -13,7 +15,7 @@ FRAME_DURATION = 20          #given GIF limitations, this seems like a good comp
 #It is because of Line 443 in GifImagePlugin.py not taking into account the disposal method
 #Please help fix this
 #https://github.com/python-pillow/Pillow/issues/3665
-import PIL
+import PIL as PIL
 if int(PIL.PILLOW_VERSION.split('.')[0]) <= 5:
     TRANSPARENCY = 255
     DISPOSAL = 0
