@@ -3,10 +3,17 @@
 #but probably, some of the code written here will become part of the end result
 
 import os
-from PIL import Image, ImageOps
+import json
+from PIL import Image, ImageOps, ImageDraw
 from lib.metroid3.metroid3 import M3Samus, Metroid3
 
+layout_data = {}
+reverse_layout_data = {}
+
 def main():
+    global layout_data
+    global reverse_layout_data
+
     if not os.path.isdir('images'):
         os.mkdir('images')
     def get_sfc_filename(path):
@@ -19,64 +26,101 @@ def main():
     game = Metroid3(get_sfc_filename(os.path.join("resources", "metroid3")),None)
     samus = M3Samus(game.rom_data, game.meta_data)
 
-    total_size_esimate = 0
-    amalgate_images = {}
+    all_collages = []
 
-    for animation, pose in get_all_poses(samus):
-        if animation in [0xD3,0xD4,0x81,0x82]:
-            image, origin = samus.get_sprite_frame(animation, pose, lower=False)
+    with open("resources/layout.json") as inFile:
+        layout_data = json.load(inFile)
+        reverse_layout_data = get_reverse_layout()
+
+    for i,row in enumerate(layout_data["layout"]):
+        this_row_images = []
+        for image_name in [x for x in row]:   #for every image referenced explicitly in the layout
+            animation, pose = layout_data["images"][image_name]["used by"][0]   #import a representative animation and pose
+            if type(animation) is str and animation[0:2] == "0x":                #convert from hex if needed
+                animation = int(animation[2:], 16)
+
+            if animation in [0xD3,0xD4,0x81,0x82]:
+                image, origin = samus.get_sprite_frame(animation, pose, lower=False)
+            else:
+                image, origin = samus.get_sprite_frame(animation, pose)
+
+            if image:
+                bordered_image, new_origin = add_borders(image, origin, animation, pose)
+
+                shift = get_property_from_layout_data("shift", animation, pose)
+                if shift is not None:
+                    new_origin = tuple(new_origin[i] - shift[i] for i in range(2))    
+                
+                this_row_images.append((bordered_image, new_origin))
+
+        collage = make_horizontal_collage(this_row_images)
+        all_collages.append(collage)
+
+    full_layout = make_vertical_collage(all_collages)
+    full_layout.save("images/layout.png")
+
+
+def add_borders(image, origin, animation, pose):
+    original_dimensions = get_property_from_layout_data("dimensions", animation, pose)
+    extra_area = get_property_from_layout_data("extra area", animation, pose)
+
+    dimensions = original_dimensions
+    if extra_area is not None:     #there's patches over the top of this pose to fill it out
+        for x0,x1,y0,y1 in extra_area:
+            dimensions = (min(dimensions[0],x0),max(dimensions[1],x1),min(dimensions[2],y0),max(dimensions[3],y1))
+
+    border = ( \
+                -origin[0]-dimensions[0],   #left
+                -origin[1]-dimensions[2],   #top,
+                dimensions[1] - (image.size[0] - origin[0]), #right,
+                dimensions[3] - (image.size[1] - origin[1])  #bottom
+            )
+    image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0x7F,0x3F))      #fill in a psuedo-transparency for now
+    origin = (origin[0] + border[0], origin[1] + border[1])
+    if extra_area is not None:   #we need to block off some areas that can't actual be used
+        mask = Image.new("RGBA", (dimensions[1]-dimensions[0],dimensions[3]-dimensions[2]), (0,0,0x7F,0xFF))
+        x0,x1,y0,y1 = original_dimensions
+        ImageDraw.Draw(mask).rectangle((x0+origin[0],y0+origin[1],x1+origin[0],y1+origin[1]), fill = 0)
+        for x0,x1,y0,y1 in extra_area:
+            ImageDraw.Draw(mask).rectangle((x0+origin[0],y0+origin[1],x1+origin[0],y1+origin[1]), fill = 0)
+
+        image_with_border.paste(mask,mask=mask)
+
+
+    image_with_border = ImageOps.expand(image_with_border,border=1,fill=(0,0,0x7F,0xFF))   #hard border around the actual draw space
+    origin = tuple(x+1 for x in origin)
+    
+
+    return image_with_border, origin
+
+
+def get_reverse_layout():
+    reverse_layout = {}
+    for image_name, image_dict in layout_data["images"].items():
+        for animation, pose in image_dict["used by"]:
+            reverse_layout[(animation.lower(), pose)] = image_name
+    return reverse_layout
+
+def get_property_from_layout_data(property, animation, pose):
+    if type(animation) is int:
+        image_name = reverse_layout_data[(pretty_hex(animation), pose)]
+    else:
+        image_name = reverse_layout_data[(animation, pose)]
+
+    while(True):
+        if property in layout_data["images"][image_name]:
+            return layout_data["images"][image_name][property]
+        elif "parent" in layout_data["images"][image_name]:
+            image_name = layout_data["images"][image_name]["parent"]
         else:
-            image, origin = samus.get_sprite_frame(animation, pose)
-
-        if image:
-            x_img, y_img = image.size
-            x_0, y_0 = origin
-            x_borders = (-x_0, -x_0 + x_img)
-            y_borders = (-y_0, -y_0 + y_img)
-
-            map_name, map_dimensions = assign_to_tilemap(x_borders,y_borders)
-            if map_name:
-                pass#print(f"Assigned animation {hex(animation)}, pose {hex(pose)} to map '{map_name}'")
-            else:
-                pass#print(f"Could not assign animation {hex(animation)}, pose {hex(pose)} with dimensions x {x_borders}, y {y_borders}")
-            size_estimate = ((map_dimensions[1]-map_dimensions[0])*(map_dimensions[3]-map_dimensions[2]))//2
-
-            total_size_esimate += size_estimate
-
-            border =( \
-                         x_borders[0]-map_dimensions[0],     #left
-                         y_borders[0]-map_dimensions[2],     #top
-                        -x_borders[1]+map_dimensions[1],     #right
-                        -y_borders[1]+map_dimensions[3]      #bottom
-                    )
-            image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0x7F,0x1F))
-            image_with_border = ImageOps.expand(image_with_border,border=1,fill=(0,0,0x7F,0xFF))
-            #image_with_border.save(f"images/a_{pretty_hex(animation)[2:]}_p_{pose}.png")
-
-            new_origin = (origin[0]+border[0]+1, origin[1]+border[1]+1)
-
-            if animation in amalgate_images:
-                amalgate_images[animation].append((image_with_border, new_origin))
-            else:
-                amalgate_images[animation] = [(image_with_border, new_origin)]
-
-    print(f"Size estimate: {total_size_esimate//1024} kB")
-    for animation,image_list in amalgate_images.items():
-        verbose_condition = (animation == 0x55)
-        collage = make_collage(image_list,verbose=verbose_condition)
-        collage.save(f"images/collage_{pretty_hex(animation)[2:]}.png")
+            return None
 
 
-def make_collage(image_list,verbose=False):
-    if verbose:
-        print([[image.size, origin] for image,origin in image_list])
+def make_horizontal_collage(image_list,verbose=False):
     x_min = min([-origin[0] for image,origin in image_list])
     x_max = max([image.size[0]-origin[0] for image,origin in image_list])
     y_min = min([-origin[1] for image,origin in image_list])
     y_max = max([image.size[1]-origin[1] for image,origin in image_list])
-    
-    if verbose:
-        print(x_min,x_max,y_min,y_max)
 
     num_images = len(image_list)
     
@@ -98,52 +142,63 @@ def make_collage(image_list,verbose=False):
 
     return collage
 
+def make_vertical_collage(image_list):
+    width = max([image.size[0] for image in image_list])
+    height = sum([image.size[1] for image in image_list])
+
+    collage = Image.new("RGBA", (width,height), 0)
+    current_y = 0
+    for image in image_list:
+        collage.paste(image, (0,current_y))
+        current_y += image.size[1]
+    return collage
+
 def pretty_hex(x,digits=2):
     return '0x' + hex(x)[2:].zfill(digits)
 
 
-def assign_to_tilemap(x_borders,y_borders):
-    TILEMAPS = { \
-        "tiny":                    (-12, 12, -12, 12),
-        "half":                    (-16, 16, -16, 16),
-        "half, tight fit":         (-19, 19, -19, 19),   #need a workaround
-        "standard":                (-20, 20, -23, 25),
-        "tall":                    (-16, 16, -27, 29),
-        "tall up":                 (-16, 16, -32, 24),
-        "tall down":               (-16, 16, -24, 32),
-        "supertall":               (-12, 12, -32, 32),
-        "wide":                    (-24, 24, -20, 20),
-        "narrow":                  (-28, 28, -16, 16),
-        "narrow right":            (-25, 31, -16, 16),
-        "narrow left":             (-31, 25, -16, 16),
-        "elevator":                (-16, 16, -24, 32),
-        "tall right":              (-11, 21, -24, 32),
-        "tall left":               (-21, 11, -24, 32),
-        "standard down 1":         (-20, 20, -22, 26),
-        "standard down 2":         (-20, 20, -21, 27),
-        "standard down 4":         (-20, 20, -19, 29),
-        "standard right 2 down 2": (-18, 22, -21, 27),
-        "standard left 2 down 2":  (-22, 18, -21, 27),
-        "tall left, tight fit":    (-21, 12, -27, 29),  #need additional tiles along right side to make this work
-        "tall right, tight fit":   (-12, 21, -27, 29),  #need additional tiles along left side to make this work
-        #need special arrangements for
-        #death
-        #crystal flash bubble
-        #spin attack (this does not exist in vanilla, but it will)
-        #grapple (grapple deserves my greatest ire)
-        #cannon ports
-        #palettes
-        #file select menu
-    }
+# def assign_to_tilemap(x_borders,y_borders):
+#     TILEMAPS = { \
+#         "tiny":                    (-12, 12, -12, 12),
+#         "half":                    (-16, 16, -16, 16),
+#         "half, tight fit":         (-19, 19, -19, 19),   #need a workaround
+#         "standard":                (-20, 20, -23, 25),
+#         "tall":                    (-16, 16, -27, 29),
+#         "tall up":                 (-16, 16, -32, 24),
+#         "tall down":               (-16, 16, -24, 32),
+#         "supertall":               (-12, 12, -32, 32),
+#         "wide":                    (-24, 24, -20, 20),
+#         "narrow":                  (-28, 28, -16, 16),
+#         "narrow right":            (-25, 31, -16, 16),
+#         "narrow left":             (-31, 25, -16, 16),
+#         "elevator":                (-16, 16, -24, 32),
+#         "tall right":              (-11, 21, -24, 32),
+#         "tall left":               (-21, 11, -24, 32),
+#         "standard down 1":         (-20, 20, -22, 26),
+#         "standard down 2":         (-20, 20, -21, 27),
+#         "standard down 4":         (-20, 20, -19, 29),
+#         "standard right 2 down 2": (-18, 22, -21, 27),
+#         "standard left 2 down 2":  (-22, 18, -21, 27),
+#         "tall left, tight fit":    (-21, 12, -27, 29),  #need additional tiles along right side to make this work
+#         "tall right, tight fit":   (-12, 21, -27, 29),  #need additional tiles along left side to make this work
+#         #need special arrangements for
+#         #death
+#         #crystal flash bubble
+#         #spin attack (this does not exist in vanilla, but it will)
+#         #grapple (grapple deserves my greatest ire)
+#         #cannon ports
+#         #palettes
+#         #file select menu
+#     }
 
-    for map_name, map_dimensions in TILEMAPS.items():
-        x_min, x_max, y_min, y_max = map_dimensions
-        if x_borders[0] >= x_min and x_borders[1] <= x_max and \
-           y_borders[0] >= y_min and y_borders[1] <= y_max:
+#     for map_name, map_dimensions in TILEMAPS.items():
+#         x_min, x_max, y_min, y_max = map_dimensions
+#         if x_borders[0] >= x_min and x_borders[1] <= x_max and \
+#            y_borders[0] >= y_min and y_borders[1] <= y_max:
 
-           return map_name, map_dimensions
-    else:
-        return None, (x_borders[0], x_borders[1], y_borders[0], y_borders[1])
+#            return map_name, map_dimensions
+#     else:
+#         return None, (x_borders[0], x_borders[1], y_borders[0], y_borders[1])
 
 
 def get_all_poses(samus):

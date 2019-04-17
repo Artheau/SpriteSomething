@@ -1,0 +1,704 @@
+{
+	"layout":
+	[
+		[
+			"elevator", "launcher", "launcher1", "launcher2", "launcher3",
+				"launcher4", "launcher5", "launcher6", "launcher7", "launcher8"
+		],
+		[
+			"elevator_varia", "launcher_varia", "launcher1_varia", "launcher2_varia", "launcher3_varia",
+				"launcher4_varia", "launcher5_varia", "launcher6_varia", "launcher7_varia", "launcher8_varia"
+		],
+		[
+			"stand_left_heavy3", "stand_left_heavy2", "stand_left_heavy1", "stand_left_heavy",
+				"stand_left3", "stand_left2", "stand_left1", "stand_left",
+				
+			"stand_right", "stand_right1", "stand_right2", "stand_right3",
+				"stand_right_heavy", "stand_right_heavy1", "stand_right_heavy2", "stand_right_heavy3"
+		],
+		[
+			"run_left9", "run_left8", "run_left7", "run_left6", "run_left5",
+				"run_left4", "run_left3", "run_left2", "run_left1", "run_left", 
+			"run_right", "run_right1", "run_right2", "run_right3", "run_right4",
+				"run_right5", "run_right6", "run_right7", "run_right8", "run_right9"
+		],
+		[
+			"run_left_shooting9", "run_left_shooting8", "run_left_shooting7", "run_left_shooting6", "run_left_shooting5",
+				"run_left_shooting4", "run_left_shooting3", "run_left_shooting2", "run_left_shooting1", "run_left_shooting", 
+			"run_right_shooting", "run_right_shooting1", "run_right_shooting2", "run_right_shooting3", "run_right_shooting4",
+				"run_right_shooting5", "run_right_shooting6", "run_right_shooting7", "run_right_shooting8", "run_right_shooting9"
+		],
+		[
+			"run_left_aim_diag_up9", "run_left_aim_diag_up8", "run_left_aim_diag_up7", "run_left_aim_diag_up6", "run_left_aim_diag_up5",
+				"run_left_aim_diag_up4", "run_left_aim_diag_up3", "run_left_aim_diag_up2", "run_left_aim_diag_up1", "run_left_aim_diag_up", 
+			"run_right_aim_diag_up", "run_right_aim_diag_up1", "run_right_aim_diag_up2", "run_right_aim_diag_up3", "run_right_aim_diag_up4",
+				"run_right_aim_diag_up5", "run_right_aim_diag_up6", "run_right_aim_diag_up7", "run_right_aim_diag_up8", "run_right_aim_diag_up9"
+		],
+		[
+			"run_left_aim_diag_down9", "run_left_aim_diag_down8", "run_left_aim_diag_down7", "run_left_aim_diag_down6", "run_left_aim_diag_down5",
+				"run_left_aim_diag_down4", "run_left_aim_diag_down3", "run_left_aim_diag_down2", "run_left_aim_diag_down1", "run_left_aim_diag_down", 
+			"run_right_aim_diag_down", "run_right_aim_diag_down1", "run_right_aim_diag_down2", "run_right_aim_diag_down3", "run_right_aim_diag_down4",
+				"run_right_aim_diag_down5", "run_right_aim_diag_down6", "run_right_aim_diag_down7", "run_right_aim_diag_down8", "run_right_aim_diag_down9"
+		]
+	],
+	"images":
+	{
+		"elevator": {
+			"description": "Used when wearing power suit and standing on an elevator",
+			"dimensions": [-17,15,-24,32],
+			"shift": [0,-8],
+			"used by":
+			[
+				["0x00",0]
+			]
+		},
+
+		"launcher": {
+			"description": "Used when wearing power suit and loading from a save point",
+			"dimensions": [-16,16,-32,24],
+			"used by":
+			[
+					        ["0x00", 3],["0x00", 5],["0x00", 7],["0x00", 9],
+				["0x00",11],["0x00",13],["0x00",15],["0x00",17],["0x00",19],
+				["0x00",21],["0x00",23],["0x00",25],["0x00",27],["0x00",29],
+				["0x00",31],["0x00",33],["0x00",35],["0x00",37],["0x00",39],
+				["0x00",41],["0x00",43],["0x00",45],["0x00",47],["0x00",49],
+				["0x00",51],["0x00",53],["0x00",55],["0x00",57],["0x00",59],
+				["0x00",61],["0x00",63],["0x00",65],["0x00",67],["0x00",69],
+				["0x00",71],["0x00",73],["0x00",75],["0x00",77],["0x00",79],
+				["0x00",81],["0x00",83],["0x00",85],["0x00",87],["0x00",89],
+				["0x00",91],["0x00",93],["0x00",95]
+			]
+		},
+
+		"launcher1": {
+			"parent": "launcher",
+			"used by":
+			[
+				["0x00", 2],["0x00", 8],["0x00",14],["0x00",20],["0x00",26],
+				["0x00",32],["0x00",38],["0x00",44],["0x00",50],["0x00",56],
+				["0x00",62],["0x00",68],["0x00",74]
+			]
+		},
+
+		"launcher2": {
+			"parent": "launcher",
+			"used by":
+			[
+				["0x00", 4],["0x00",10],["0x00",16],["0x00",22],["0x00",28],
+				["0x00",34],["0x00",40],["0x00",46],["0x00",52],["0x00",58],
+				["0x00",64],["0x00",70],["0x00",76]
+			]
+		},
+
+		"launcher3": {
+			"parent": "launcher",
+			"used by":
+			[
+				["0x00", 6],["0x00",12],["0x00",18],["0x00",24],["0x00",30],
+				["0x00",36],["0x00",42],["0x00",48],["0x00",54],["0x00",60],
+				["0x00",66],["0x00",72],["0x00",78]
+			]
+		},
+
+		"launcher4": {
+			"parent": "launcher",
+			"used by": [["0x00",80]]
+		},
+
+		"launcher5": {
+			"parent": "launcher",
+			"used by": [["0x00",82]]
+		},
+
+		"launcher6": {
+			"parent": "launcher",
+			"used by": [["0x00",84], ["0x00",90]]
+		},
+
+		"launcher7": {
+			"parent": "launcher",
+			"used by": [["0x00",86], ["0x00",92]]
+		},
+
+		"launcher8": {
+			"parent": "launcher",
+			"used by": [["0x00",88], ["0x00",94]]
+		},
+
+		"elevator_varia": {
+			"description": "Used when wearing varia or gravity suit and standing on an elevator",
+			"parent": "elevator",
+			"used by": [["0x9B",0]]
+		},
+		
+		"launcher_varia": {
+			"description": "Used when wearing varia or gravity suit and loading from a save point",
+			"parent": "launcher",
+			"used by":
+			[
+					        ["0x9B", 3],["0x9B", 5],["0x9B", 7],["0x9B", 9],
+				["0x9B",11],["0x9B",13],["0x9B",15],["0x9B",17],["0x9B",19],
+				["0x9B",21],["0x9B",23],["0x9B",25],["0x9B",27],["0x9B",29],
+				["0x9B",31],["0x9B",33],["0x9B",35],["0x9B",37],["0x9B",39],
+				["0x9B",41],["0x9B",43],["0x9B",45],["0x9B",47],["0x9B",49],
+				["0x9B",51],["0x9B",53],["0x9B",55],["0x9B",57],["0x9B",59],
+				["0x9B",61],["0x9B",63],["0x9B",65],["0x9B",67],["0x9B",69],
+				["0x9B",71],["0x9B",73],["0x9B",75],["0x9B",77],["0x9B",79],
+				["0x9B",81],["0x9B",83],["0x9B",85],["0x9B",87],["0x9B",89],
+				["0x9B",91],["0x9B",93],["0x9B",95]
+			]
+		},
+
+		"launcher1_varia": {
+			"parent": "launcher_varia",
+			"used by":
+			[
+				["0x9B", 2],["0x9B", 8],["0x9B",14],["0x9B",20],["0x9B",26],
+				["0x9B",32],["0x9B",38],["0x9B",44],["0x9B",50],["0x9B",56],
+				["0x9B",62],["0x9B",68],["0x9B",74]
+			]
+		},
+
+		"launcher2_varia": {
+			"parent": "launcher_varia",
+			"used by":
+			[
+				["0x9B", 4],["0x9B",10],["0x9B",16],["0x9B",22],["0x9B",28],
+				["0x9B",34],["0x9B",40],["0x9B",46],["0x9B",52],["0x9B",58],
+				["0x9B",64],["0x9B",70],["0x9B",76]
+			]
+		},
+
+		"launcher3_varia": {
+			"parent": "launcher_varia",
+			"used by":
+			[
+				["0x9B", 6],["0x9B",12],["0x9B",18],["0x9B",24],["0x9B",30],
+				["0x9B",36],["0x9B",42],["0x9B",48],["0x9B",54],["0x9B",60],
+				["0x9B",66],["0x9B",72],["0x9B",78]
+			]
+		},
+
+		"launcher4_varia": {
+			"parent": "launcher_varia",
+			"used by": [["0x9B",80]]
+		},
+
+		"launcher5_varia": {
+			"parent": "launcher_varia",
+			"used by": [["0x9B",82]]
+		},
+
+		"launcher6_varia": {
+			"parent": "launcher_varia",
+			"used by": [["0x9B",84], ["0x9B",90]]
+		},
+
+		"launcher7_varia": {
+			"parent": "launcher_varia",
+			"used by": [["0x9B",86], ["0x9B",92]]
+		},
+
+		"launcher8_varia": {
+			"parent": "launcher_varia",
+			"used by": [["0x9B",88], ["0x9B",94]]
+		},
+
+		"stand_right": {
+			"description": "A neutral standing pose, used while...standing",
+			"dimensions": [-16,16,-21,27],
+			"used by": [["0x01",0]]	
+		},
+
+		"stand_right1": {
+			"parent": "stand_right",
+			"used by": [["0x01",1]]	
+		},
+
+		"stand_right2": {
+			"parent": "stand_right",
+			"used by": [["0x01",2]]	
+		},
+
+		"stand_right3": {
+			"parent": "stand_right",
+			"used by": [["0x01",3]]	
+		},
+		
+		"stand_right_heavy": {
+			"description": "While standing with low health, begins to breathe heavily",
+			"parent": "stand_right",
+			"used by": [["0x01",5]]	
+		},
+		
+		"stand_right_heavy1": {
+			"parent": "stand_right_heavy",
+			"used by": [["0x01",6]]	
+		},
+		
+		"stand_right_heavy2": {
+			"parent": "stand_right_heavy",
+			"used by": [["0x01",7]]	
+		},
+		
+		"stand_right_heavy3": {
+			"parent": "stand_right_heavy",
+			"used by": [["0x01",8]]	
+		},
+
+		"stand_left": {
+			"description": "A neutral standing pose, used while...standing",
+			"dimensions": [-16,16,-21,27],
+			"used by": [["0x02",0]]	
+		},
+
+		"stand_left1": {
+			"parent": "stand_left",
+			"used by": [["0x02",1]]	
+		},
+
+		"stand_left2": {
+			"parent": "stand_left",
+			"used by": [["0x02",2]]	
+		},
+
+		"stand_left3": {
+			"parent": "stand_left",
+			"used by": [["0x02",3]]	
+		},
+		
+		"stand_left_heavy": {
+			"description": "While standing with low health, begins to breathe heavily",
+			"parent": "stand_left",
+			"used by": [["0x02",5]]	
+		},
+		
+		"stand_left_heavy1": {
+			"parent": "stand_left_heavy",
+			"used by": [["0x02",6]]	
+		},
+		
+		"stand_left_heavy2": {
+			"parent": "stand_left_heavy",
+			"used by": [["0x02",7]]	
+		},
+		
+		"stand_left_heavy3": {
+			"parent": "stand_left_heavy",
+			"used by": [["0x02",8]]	
+		},
+
+		"run_right": {
+			"description": "Normal running pose, used while...running",
+			"dimensions": [-18,22,-21,27],
+			"shift": [-2,0],
+			"used by": [["0x09",0]]	
+		},
+
+		"run_right1": {
+			"parent": "run_right",
+			"used by": [["0x09",1]]
+		},
+
+		"run_right2": {
+			"parent": "run_right",
+			"used by": [["0x09",2]]
+		},
+
+		"run_right3": {
+			"parent": "run_right",
+			"used by": [["0x09",3]]
+		},
+		
+		"run_right4": {
+			"parent": "run_right",
+			"used by": [["0x09",4]]
+		},
+
+		"run_right5": {
+			"parent": "run_right",
+			"used by": [["0x09",5]]
+		},
+
+		"run_right6": {
+			"parent": "run_right",
+			"used by": [["0x09",6]]
+		},
+
+		"run_right7": {
+			"parent": "run_right",
+			"used by": [["0x09",7]]
+		},
+
+		"run_right8": {
+			"parent": "run_right",
+			"used by": [["0x09",8]]
+		},
+
+		"run_right9": {
+			"parent": "run_right",
+			"used by": [["0x09",9]]
+		},
+
+		"run_left": {
+			"description": "Normal running pose, used while...running",
+			"dimensions": [-22,18,-21,27],
+			"shift": [2,0],
+			"used by": [["0x0A",0]]	
+		},
+
+		"run_left1": {
+			"parent": "run_left",
+			"used by": [["0x0A",1]]
+		},
+
+		"run_left2": {
+			"parent": "run_left",
+			"used by": [["0x0A",2]]
+		},
+
+		"run_left3": {
+			"parent": "run_left",
+			"used by": [["0x0A",3]]
+		},
+		
+		"run_left4": {
+			"parent": "run_left",
+			"used by": [["0x0A",4]]
+		},
+
+		"run_left5": {
+			"parent": "run_left",
+			"used by": [["0x0A",5]]
+		},
+
+		"run_left6": {
+			"parent": "run_left",
+			"used by": [["0x0A",6]]
+		},
+
+		"run_left7": {
+			"parent": "run_left",
+			"used by": [["0x0A",7]]
+		},
+
+		"run_left8": {
+			"parent": "run_left",
+			"used by": [["0x0A",8]]
+		},
+
+		"run_left9": {
+			"parent": "run_left",
+			"used by": [["0x0A",9]]
+		},
+
+		"run_right_shooting": {
+			"description": "Running while firing the arm cannon, so that the arm is extended forward",
+			"parent": "run_right",
+			"used by": [["0x0B",0]]	
+		},
+
+		"run_right_shooting1": {
+			"parent": "run_right_shooting",
+			"used by": [["0x0B",1]]
+		},
+
+		"run_right_shooting2": {
+			"parent": "run_right_shooting",
+			"used by": [["0x0B",2]]
+		},
+
+		"run_right_shooting3": {
+			"parent": "run_right_shooting",
+			"used by": [["0x0B",3]]
+		},
+		
+		"run_right_shooting4": {
+			"parent": "run_right_shooting",
+			"used by": [["0x0B",4]]
+		},
+
+		"run_right_shooting5": {
+			"parent": "run_right_shooting",
+			"used by": [["0x0B",5]]
+		},
+
+		"run_right_shooting6": {
+			"parent": "run_right_shooting",
+			"used by": [["0x0B",6]]
+		},
+
+		"run_right_shooting7": {
+			"parent": "run_right_shooting",
+			"used by": [["0x0B",7]]
+		},
+
+		"run_right_shooting8": {
+			"parent": "run_right_shooting",
+			"used by": [["0x0B",8]]
+		},
+
+		"run_right_shooting9": {
+			"parent": "run_right_shooting",
+			"used by": [["0x0B",9]]
+		},
+
+		"run_left_shooting": {
+			"description": "Running while firing the arm cannon, so that the arm is extended forward",
+			"parent": "run_left",
+			"used by": [["0x0C",0]]	
+		},
+
+		"run_left_shooting1": {
+			"parent": "run_left_shooting",
+			"used by": [["0x0C",1]]
+		},
+
+		"run_left_shooting2": {
+			"parent": "run_left_shooting",
+			"used by": [["0x0C",2]]
+		},
+
+		"run_left_shooting3": {
+			"parent": "run_left_shooting",
+			"used by": [["0x0C",3]]
+		},
+		
+		"run_left_shooting4": {
+			"parent": "run_left_shooting",
+			"used by": [["0x0C",4]]
+		},
+
+		"run_left_shooting5": {
+			"parent": "run_left_shooting",
+			"used by": [["0x0C",5]]
+		},
+
+		"run_left_shooting6": {
+			"parent": "run_left_shooting",
+			"used by": [["0x0C",6]]
+		},
+
+		"run_left_shooting7": {
+			"parent": "run_left_shooting",
+			"used by": [["0x0C",7]]
+		},
+
+		"run_left_shooting8": {
+			"parent": "run_left_shooting",
+			"used by": [["0x0C",8]]
+		},
+
+		"run_left_shooting9": {
+			"parent": "run_left_shooting",
+			"used by": [["0x0C",9]]
+		},
+
+		"run_right_aim_diag_up": {
+			"description": "Running while aiming diagonally upwards",
+			"parent": "run_right",
+			"extra area": [[6,22,-29,-21]],
+			"used by": [["0x0F",0]]	
+		},
+
+		"run_right_aim_diag_up1": {
+			"parent": "run_right_aim_diag_up",
+			"used by": [["0x0F",1]]
+		},
+
+		"run_right_aim_diag_up2": {
+			"parent": "run_right_aim_diag_up",
+			"used by": [["0x0F",2]]
+		},
+
+		"run_right_aim_diag_up3": {
+			"parent": "run_right_aim_diag_up",
+			"used by": [["0x0F",3]]
+		},
+		
+		"run_right_aim_diag_up4": {
+			"parent": "run_right_aim_diag_up",
+			"used by": [["0x0F",4]]
+		},
+
+		"run_right_aim_diag_up5": {
+			"parent": "run_right_aim_diag_up",
+			"used by": [["0x0F",5]]
+		},
+
+		"run_right_aim_diag_up6": {
+			"parent": "run_right_aim_diag_up",
+			"used by": [["0x0F",6]]
+		},
+
+		"run_right_aim_diag_up7": {
+			"parent": "run_right_aim_diag_up",
+			"used by": [["0x0F",7]]
+		},
+
+		"run_right_aim_diag_up8": {
+			"parent": "run_right_aim_diag_up",
+			"used by": [["0x0F",8]]
+		},
+
+		"run_right_aim_diag_up9": {
+			"parent": "run_right_aim_diag_up",
+			"used by": [["0x0F",9]]
+		},
+
+		"run_left_aim_diag_up": {
+			"description": "Running while aiming diagonally upwards",
+			"parent": "run_left",
+			"extra area": [[-22,-6,-29,-21]],
+			"used by": [["0x10",0]]	
+		},
+
+		"run_left_aim_diag_up1": {
+			"parent": "run_left_aim_diag_up",
+			"used by": [["0x10",1]]
+		},
+
+		"run_left_aim_diag_up2": {
+			"parent": "run_left_aim_diag_up",
+			"used by": [["0x10",2]]
+		},
+
+		"run_left_aim_diag_up3": {
+			"parent": "run_left_aim_diag_up",
+			"used by": [["0x10",3]]
+		},
+		
+		"run_left_aim_diag_up4": {
+			"parent": "run_left_aim_diag_up",
+			"used by": [["0x10",4]]
+		},
+
+		"run_left_aim_diag_up5": {
+			"parent": "run_left_aim_diag_up",
+			"used by": [["0x10",5]]
+		},
+
+		"run_left_aim_diag_up6": {
+			"parent": "run_left_aim_diag_up",
+			"used by": [["0x10",6]]
+		},
+
+		"run_left_aim_diag_up7": {
+			"parent": "run_left_aim_diag_up",
+			"used by": [["0x10",7]]
+		},
+
+		"run_left_aim_diag_up8": {
+			"parent": "run_left_aim_diag_up",
+			"used by": [["0x10",8]]
+		},
+
+		"run_left_aim_diag_up9": {
+			"parent": "run_left_aim_diag_up",
+			"used by": [["0x10",9]]
+		},
+
+		"run_right_aim_diag_down": {
+			"description": "Running while aiming diagonally downwards",
+			"parent": "run_right",
+			"used by": [["0x11",0]]	
+		},
+
+		"run_right_aim_diag_down1": {
+			"parent": "run_right_aim_diag_down",
+			"used by": [["0x11",1]]
+		},
+
+		"run_right_aim_diag_down2": {
+			"parent": "run_right_aim_diag_down",
+			"used by": [["0x11",2]]
+		},
+
+		"run_right_aim_diag_down3": {
+			"parent": "run_right_aim_diag_down",
+			"used by": [["0x11",3]]
+		},
+		
+		"run_right_aim_diag_down4": {
+			"parent": "run_right_aim_diag_down",
+			"used by": [["0x11",4]]
+		},
+
+		"run_right_aim_diag_down5": {
+			"parent": "run_right_aim_diag_down",
+			"used by": [["0x11",5]]
+		},
+
+		"run_right_aim_diag_down6": {
+			"parent": "run_right_aim_diag_down",
+			"used by": [["0x11",6]]
+		},
+
+		"run_right_aim_diag_down7": {
+			"parent": "run_right_aim_diag_down",
+			"used by": [["0x11",7]]
+		},
+
+		"run_right_aim_diag_down8": {
+			"parent": "run_right_aim_diag_down",
+			"used by": [["0x11",8]]
+		},
+
+		"run_right_aim_diag_down9": {
+			"parent": "run_right_aim_diag_down",
+			"used by": [["0x11",9]]
+		},
+
+		"run_left_aim_diag_down": {
+			"description": "Running while aiming diagonally downwards",
+			"parent": "run_left",
+			"used by": [["0x12",0]]	
+		},
+
+		"run_left_aim_diag_down1": {
+			"parent": "run_left_aim_diag_down",
+			"used by": [["0x12",1]]
+		},
+
+		"run_left_aim_diag_down2": {
+			"parent": "run_left_aim_diag_down",
+			"used by": [["0x12",2]]
+		},
+
+		"run_left_aim_diag_down3": {
+			"parent": "run_left_aim_diag_down",
+			"used by": [["0x12",3]]
+		},
+		
+		"run_left_aim_diag_down4": {
+			"parent": "run_left_aim_diag_down",
+			"used by": [["0x12",4]]
+		},
+
+		"run_left_aim_diag_down5": {
+			"parent": "run_left_aim_diag_down",
+			"used by": [["0x12",5]]
+		},
+
+		"run_left_aim_diag_down6": {
+			"parent": "run_left_aim_diag_down",
+			"used by": [["0x12",6]]
+		},
+
+		"run_left_aim_diag_down7": {
+			"parent": "run_left_aim_diag_down",
+			"used by": [["0x12",7]]
+		},
+
+		"run_left_aim_diag_down8": {
+			"parent": "run_left_aim_diag_down",
+			"used by": [["0x12",8]]
+		},
+
+		"run_left_aim_diag_down9": {
+			"parent": "run_left_aim_diag_down",
+			"used by": [["0x12",9]]
+		}
+	}
+}
