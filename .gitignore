@@ -4,6 +4,9 @@ __pycache__/
 # no build dir
 /build
 
+# no dist dir
+/dist
+
 # no vscode
 /.vscode
 

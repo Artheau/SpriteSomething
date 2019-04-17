@@ -797,10 +797,9 @@ class SpriteSomethingMainFrame(tk.Frame):
             return "break"
         lines = [
                   "SpriteSomething v" + CONST.APP_VERSION,
+                  "",
                   "Created by:",
-                  "",
                   "Artheau & Mike Trethewey",
-                  "",
                   "",
                   "Based on:",
                   "[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
