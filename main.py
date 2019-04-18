@@ -323,11 +323,23 @@ class SpriteSomethingMainFrame(tk.Frame):
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","extract.png"))
         import_menu.images["import-sfc"] = img
         import_menu.add_command(label="Sprite from Game File", image=import_menu.images["import-sfc"], compound=tk.LEFT, command=self.import_from_game_file)
+
         import_menu.add_command(label="PNG", command=self.import_from_png)
+
         self.add_dummy_menu_options([""],import_menu)
-        import_menu.add_command(label="GIMP Palette", command=lambda: self.import_palette("GIMP"))
-        import_menu.add_command(label="YY-CHR Palette", command=lambda: self.import_palette("YY-CHR"))
-        import_menu.add_command(label="Graphics Gale Palette", command=lambda: self.import_palette("Graphics Gale"))
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","gimp.png"))
+        import_menu.images["import-gimp"] = img
+        import_menu.add_command(label="GIMP Palette", image=import_menu.images["import-gimp"], compound=tk.LEFT, command=lambda: self.import_palette("GIMP"))
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","yy-chr.png"))
+        import_menu.images["import-yy-chr"] = img
+        import_menu.add_command(label="YY-CHR Palette", image=import_menu.images["import-yy-chr"], compound=tk.LEFT, command=lambda: self.import_palette("YY-CHR"))
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","gale.png"))
+        import_menu.images["import-gale"] = img
+        import_menu.add_command(label="Graphics Gale Palette", image=import_menu.images["import-gale"], compound=tk.LEFT, command=lambda: self.import_palette("Graphics Gale"))
+
         self.add_dummy_menu_options([""],import_menu)
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","import-pixels.png"))
@@ -355,9 +367,18 @@ class SpriteSomethingMainFrame(tk.Frame):
         export_menu.add_command(label="Animation as GIF", command=self.export_gif)
         export_menu.add_command(label="Animation as Collage", command=self.export_collage)
         self.add_dummy_menu_options([""],export_menu)
-        export_menu.add_command(label="GIMP Palette", command=lambda: self.export_palette("GIMP"))
-        export_menu.add_command(label="YY-CHR Palette", command=lambda: self.export_palette("YY-CHR"))
-        export_menu.add_command(label="Graphics Gale Palette", command=lambda: self.export_palette("Graphics Gale"))
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","gimp.png"))
+        export_menu.images["export-gimp"] = img
+        export_menu.add_command(label="GIMP Palette", image=export_menu.images["export-gimp"], compound=tk.LEFT, command=lambda: self.export_palette("GIMP"))
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","yy-chr.png"))
+        export_menu.images["export-yy-chr"] = img
+        export_menu.add_command(label="YY-CHR Palette", image=export_menu.images["export-yy-chr"], compound=tk.LEFT, command=lambda: self.export_palette("YY-CHR"))
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","gale.png"))
+        export_menu.images["export-gale"] = img
+        export_menu.add_command(label="Graphics Gale Palette", image=export_menu.images["export-gale"], compound=tk.LEFT, command=lambda: self.export_palette("Graphics Gale"))
 
         options = [
             "",
