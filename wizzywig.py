@@ -39,15 +39,21 @@ def main():
             if type(animation) is str and animation[0:2] == "0x":                #convert from hex if needed
                 animation = int(animation[2:], 16)
 
-            if animation in [0xD3,0xD4,0x81,0x82]:
-                image, origin = samus.get_sprite_frame(animation, pose, lower=False)
+            force = get_property_from_layout_data("force", image_name)
+            if force:
+                if force.lower() == "upper":
+                    image, origin = samus.get_sprite_frame(animation, pose, lower=False)
+                elif force.lower() == "lower":
+                    image, origin = samus.get_sprite_frame(animation, pose, upper=False)
+                else:
+                    raise AssertionError(f"received call to force something in pose {image_name}, but did not understand command '{force}'")
             else:
                 image, origin = samus.get_sprite_frame(animation, pose)
 
             if image:
-                bordered_image, new_origin = add_borders(image, origin, animation, pose)
+                bordered_image, new_origin = add_borders(image, origin, image_name)
 
-                shift = get_property_from_layout_data("shift", animation, pose)
+                shift = get_property_from_layout_data("shift", image_name)
                 if shift is not None:
                     new_origin = tuple(new_origin[i] - shift[i] for i in range(2))    
                 
@@ -60,9 +66,9 @@ def main():
     full_layout.save("images/layout.png")
 
 
-def add_borders(image, origin, animation, pose):
-    original_dimensions = get_property_from_layout_data("dimensions", animation, pose)
-    extra_area = get_property_from_layout_data("extra area", animation, pose)
+def add_borders(image, origin, image_name):
+    original_dimensions = get_property_from_layout_data("dimensions", image_name)
+    extra_area = get_property_from_layout_data("extra area", image_name)
 
     dimensions = original_dimensions
     if extra_area is not None:     #there's patches over the top of this pose to fill it out
@@ -101,12 +107,7 @@ def get_reverse_layout():
             reverse_layout[(animation.lower(), pose)] = image_name
     return reverse_layout
 
-def get_property_from_layout_data(property, animation, pose):
-    if type(animation) is int:
-        image_name = reverse_layout_data[(pretty_hex(animation), pose)]
-    else:
-        image_name = reverse_layout_data[(animation, pose)]
-
+def get_property_from_layout_data(property, image_name):
     while(True):
         if property in layout_data["images"][image_name]:
             return layout_data["images"][image_name][property]
