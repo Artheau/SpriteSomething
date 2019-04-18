@@ -53,9 +53,6 @@ class SpriteSomethingMainFrame(tk.Frame):
         #main frame should take up the whole window
         self.pack(fill=tk.BOTH, expand=1)
 
-        self.create_menu_bar()
-        self._status = self.create_status_bar()
-
         panes = tk.PanedWindow(self, orient=tk.HORIZONTAL)
         panes.pack(fill=tk.BOTH, expand=1)
 
@@ -66,6 +63,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #for now, just to prove that at least some of the features work
         self.load_game(random.choice(["zelda3", "metroid3"]))
+
+        self.create_menu_bar(self._game_name)
+        self._status = self.create_status_bar()
+
         self.make_sprite(0x01)   #TODO: implement other sprites other than the player
         self.freeze_ray = False #freeze ray, stops time, tell your friends
 
@@ -292,7 +293,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             self.master.after(int(1000/FRAMERATE), self.time_marches_forward)
 
 
-    def create_menu_bar(self):
+    def create_menu_bar(self, game_name):
         #create the menu bar
         menu = tk.Menu(self.master)
         self.master.config(menu=menu)
@@ -319,7 +320,9 @@ class SpriteSomethingMainFrame(tk.Frame):
         import_menu = tk.Menu(menu, tearoff=0)
         import_menu.images = {}
 
-        import_menu.add_command(label="Sprite from Game File", command=self.import_from_game_file)
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","extract.png"))
+        import_menu.images["import-sfc"] = img
+        import_menu.add_command(label="Sprite from Game File", image=import_menu.images["import-sfc"], compound=tk.LEFT, command=self.import_from_game_file)
         import_menu.add_command(label="PNG", command=self.import_from_png)
         self.add_dummy_menu_options([""],import_menu)
         import_menu.add_command(label="GIMP Palette", command=lambda: self.import_palette("GIMP"))
@@ -338,11 +341,14 @@ class SpriteSomethingMainFrame(tk.Frame):
         #create the export menu
         export_menu = tk.Menu(menu, tearoff=0)
         export_menu.images = {}
-        options = [
-            "Copy to new Game File",
-            "Inject into Game File"
-        ]
-        self.add_dummy_menu_options(options,export_menu)
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","inject-new.png"))
+        export_menu.images["export-sfc-new"] = img
+        export_menu.add_command(label="Copy to new Game File", image=export_menu.images["export-sfc-new"], compound=tk.LEFT, command=self.import_from_game_file)
+
+        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","inject.png"))
+        export_menu.images["export-sfc"] = img
+        export_menu.add_command(label="Inject into Game File", image=export_menu.images["export-sfc"], compound=tk.LEFT, command=self.import_from_game_file)
 
         export_menu.add_command(label="PNG", command=self.export_png)
         self.add_dummy_menu_options([""],export_menu)
@@ -377,7 +383,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #create the plugins menu
         plugins_menu = tk.Menu(menu, tearoff=0)
-        plugins_menu.add_command(label="Sheet Trawler", command=self.popup_NYI) # Z3-specific
+        if game_name == "zelda3":
+            plugins_menu.add_command(label="Sheet Trawler", command=self.popup_NYI)
+        else:
+            plugins_menu.add_command(label="None", state="disabled")
 
         #create the tools menu
         tools_menu = tk.Menu(menu, tearoff=0)
