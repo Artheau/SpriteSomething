@@ -27,23 +27,27 @@
 			"stand_right_aim_diag_down"
 		],
 		[
+			"crouch_transition_left_aim_diag_up", "crouch_transition_left_aim_up",
 			"crouch_left_aim_up", "crouch_left_aim_diag_up",
 			"crouch_turn_left_aim_up", "crouch_turn_neutral_aim_up", "crouch_turn_right_aim_up",
-			"crouch_right_aim_diag_up", "crouch_right_aim_up"
+			"crouch_right_aim_diag_up", "crouch_right_aim_up",
+			"crouch_transition_right_aim_up", "crouch_transition_right_aim_diag_up"
 		],
 		[
+			"crouch_transition_left",
 			"crouch_left_heavy3", "crouch_left_heavy2", "crouch_left_heavy1", "crouch_left_heavy",
 				"crouch_left3", "crouch_left2", "crouch_left1", "crouch_left",
-
 			"crouch_turn_left", "crouch_turn_neutral", "crouch_turn_right",
-				
 			"crouch_right", "crouch_right1", "crouch_right2", "crouch_right3",
-				"crouch_right_heavy", "crouch_right_heavy1", "crouch_right_heavy2", "crouch_right_heavy3"
+				"crouch_right_heavy", "crouch_right_heavy1", "crouch_right_heavy2", "crouch_right_heavy3",
+			"crouch_transition_right"
 		],
 		[
+			"crouch_transition_left_aim_diag_down",
 			"crouch_left_aim_diag_down",
 			"crouch_turn_left_aim_down", "crouch_turn_neutral_aim_down", "crouch_turn_right_aim_down",
-			"crouch_right_aim_diag_down"
+			"crouch_right_aim_diag_down",
+			"crouch_transition_right_aim_diag_down"
 		],
 		[
 			"run_left9", "run_left8", "run_left7", "run_left6", "run_left5",
@@ -161,6 +165,16 @@
 		[
 			"xray_crouch_left4", "xray_crouch_left3", "xray_crouch_left2", "xray_crouch_left1", "xray_crouch_left", 
 			"xray_crouch_right", "xray_crouch_right1", "xray_crouch_right2", "xray_crouch_right3", "xray_crouch_right4"
+		],
+		[
+			"grabbed_left_struggling5", "grabbed_left_struggling4", "grabbed_left_struggling3",
+			"grabbed_left_struggling2", "grabbed_left_struggling1", "grabbed_left_struggling",
+			"grabbed_left_aim_diag_down", "grabbed_left_shoot", "grabbed_left_aim_diag_up",
+			"grabbed_left",
+			"grabbed_right",
+			"grabbed_right_aim_diag_up", "grabbed_right_shoot",	"grabbed_right_aim_diag_down",
+			"grabbed_right_struggling", "grabbed_right_struggling1", "grabbed_right_struggling2",
+			"grabbed_right_struggling3", "grabbed_right_struggling4", "grabbed_right_struggling5"
 		],
 		[
 			"bonk_right1", "bonk_right", "bonk_left", "bonk_left1"
@@ -1844,34 +1858,34 @@
 		},
 
 		"jump_right": {
-			"description": "When Samus jumps up without spinning",
+			"description": "When Samus jumps up without spinning, or when she is starting a lateral superjump",
 			"dimensions": [-13,19,-27,29],
-			"used by": [["0x4D",0]]
+			"used by": [["0x4D",0],["0xC7",0]]
 		},
 
 		"jump_right1": {
 			"parent": "jump_right",
-			"used by": [["0x4D",1]]
+			"used by": [["0x4D",1],["0xC7",1]]
 		},
 
 		"jump_right2": {
 			"parent": "jump_right",
-			"used by": [["0x4D",2]]
+			"used by": [["0x4D",2],["0xC7",2]]
 		},
 
 		"jump_right3": {
 			"parent": "jump_right",
-			"used by": [["0x4D",3]]
+			"used by": [["0x4D",3],["0xC7",3]]
 		},
 
 		"jump_right4": {
 			"parent": "jump_right",
-			"used by": [["0x4D",4]]
+			"used by": [["0x4D",4],["0xC7",4]]
 		},
 
 		"jump_right5": {
 			"parent": "jump_right",
-			"used by": [["0x4D",5]]
+			"used by": [["0x4D",5],["0xC7",5]]
 		},
 
 		"jump_right_land": {
@@ -1888,34 +1902,34 @@
 		},
 
 		"jump_left": {
-			"description": "When Samus jumps up without spinning",
+			"description": "When Samus jumps up without spinning, or when she is starting a lateral superjump",
 			"dimensions": [-19,13,-27,29],
-			"used by": [["0x4E",0]]
+			"used by": [["0x4E",0],["0xC8",0]]
 		},
 
 		"jump_left1": {
 			"parent": "jump_left",
-			"used by": [["0x4E",1]]
+			"used by": [["0x4E",1],["0xC8",1]]
 		},
 
 		"jump_left2": {
 			"parent": "jump_left",
-			"used by": [["0x4E",2]]
+			"used by": [["0x4E",2],["0xC8",2]]
 		},
 
 		"jump_left3": {
 			"parent": "jump_left",
-			"used by": [["0x4E",3]]
+			"used by": [["0x4E",3],["0xC8",3]]
 		},
 
 		"jump_left4": {
 			"parent": "jump_left",
-			"used by": [["0x4E",4]]
+			"used by": [["0x4E",4],["0xC8",4]]
 		},
 
 		"jump_left5": {
 			"parent": "jump_left",
-			"used by": [["0x4E",5]]
+			"used by": [["0x4E",5],["0xC8",5]]
 		},
 
 		"jump_left_land": {
@@ -2709,6 +2723,172 @@
 			"description": "While crouching and aiming diagonally down, Samus is turning from right to left, or left to right, and is presently facing 'more right'",
 			"parent": "crouch_turn_neutral_aim_down",
 			"used by": [["0x99",0],["0x9A",2]]
+		},
+
+		"grabbed_right": {
+			"description": "Caught by Draygon",
+			"dimensions": [-13,19,-24,32],
+			"used by": [["0xEC",0]]
+		},
+
+		"grabbed_right_aim_diag_up": {
+			"description": "Caught by Draygon and aiming diagonally upwards",
+			"parent": "grabbed_right",
+			"used by": [["0xED",0]]
+		},
+
+		"grabbed_right_shoot": {
+			"description": "Caught by Draygon and firing forwards",
+			"parent": "grabbed_right",
+			"used by": [["0xEE",0]]
+		},
+
+		"grabbed_right_aim_diag_down": {
+			"description": "Caught by Draygon and aiming diagonally downwards",
+			"parent": "grabbed_right",
+			"used by": [["0xEF",0]]
+		},
+
+		"grabbed_right_struggling": {
+			"description": "Caught by Draygon and trying to get away by moving the D-pad",
+			"parent": "grabbed_right",
+			"used by": [["0xF0",0]]
+		},
+
+		"grabbed_right_struggling1": {
+			"parent": "grabbed_right_struggling",
+			"used by": [["0xF0",1]]
+		},
+
+		"grabbed_right_struggling2": {
+			"parent": "grabbed_right_struggling",
+			"used by": [["0xF0",2]]
+		},
+
+		"grabbed_right_struggling3": {
+			"parent": "grabbed_right_struggling",
+			"used by": [["0xF0",3]]
+		},
+
+		"grabbed_right_struggling4": {
+			"parent": "grabbed_right_struggling",
+			"used by": [["0xF0",4]]
+		},
+
+		"grabbed_right_struggling5": {
+			"parent": "grabbed_right_struggling",
+			"used by": [["0xF0",5]]
+		},
+
+		"grabbed_left": {
+			"description": "Caught by Draygon",
+			"dimensions": [-19,13,-24,32],
+			"used by": [["0xBA",0]]
+		},
+
+		"grabbed_left_aim_diag_up": {
+			"description": "Caught by Draygon and aiming diagonally upwards",
+			"parent": "grabbed_left",
+			"used by": [["0xBB",0]]
+		},
+
+		"grabbed_left_shoot": {
+			"description": "Caught by Draygon and firing forwards",
+			"parent": "grabbed_left",
+			"used by": [["0xBC",0]]
+		},
+
+		"grabbed_left_aim_diag_down": {
+			"description": "Caught by Draygon and aiming diagonally downwards",
+			"parent": "grabbed_left",
+			"used by": [["0xBD",0]]
+		},
+
+		"grabbed_left_struggling": {
+			"description": "Caught by Draygon and trying to get away by moving the D-pad",
+			"parent": "grabbed_left",
+			"used by": [["0xBE",0]]
+		},
+
+		"grabbed_left_struggling1": {
+			"parent": "grabbed_left_struggling",
+			"used by": [["0xBE",1]]
+		},
+
+		"grabbed_left_struggling2": {
+			"parent": "grabbed_left_struggling",
+			"used by": [["0xBE",2]]
+		},
+
+		"grabbed_left_struggling3": {
+			"parent": "grabbed_left_struggling",
+			"used by": [["0xBE",3]]
+		},
+
+		"grabbed_left_struggling4": {
+			"parent": "grabbed_left_struggling",
+			"used by": [["0xBE",4]]
+		},
+
+		"grabbed_left_struggling5": {
+			"parent": "grabbed_left_struggling",
+			"used by": [["0xBE",5]]
+		},
+
+		"crouch_transition_right": {
+			"description": "Samus is transitioning from crouching to standing, or vice versa",
+			"dimensions": [-13,19,-24,24],
+			"shift": [0,-8],
+			"used by": [["0x35", 0]]
+		},
+
+		"crouch_transition_right_aim_up": {
+			"description": "Samus is transitioning from crouching to standing, or vice versa, while aiming upwards",
+			"dimensions": [-13,19,-32,24],
+			"shift": [0,-8],
+			"used by": [["0xF1", 0],["0xF7",0]]
+		},
+
+		"crouch_transition_right_aim_diag_up": {
+			"description": "Samus is transitioning from crouching to standing, or vice versa, while aiming diagonally upwards",
+			"dimensions": [-13,27,-24,24],
+			"shift": [0,-8],
+			"used by": [["0xF3", 0],["0xF9",0]]
+		},
+
+		"crouch_transition_right_aim_diag_down": {
+			"description": "Samus is transitioning from crouching to standing, or vice versa, while aiming diagonally downwards",
+			"dimensions": [-13,27,-24,24],
+			"shift": [0,-8],
+			"used by": [["0xF5", 0],["0xFB",0]]
+		},
+
+		"crouch_transition_left": {
+			"description": "Samus is transitioning from crouching to standing, or vice versa",
+			"dimensions": [-19,13,-24,24],
+			"shift": [0,-8],
+			"used by": [["0x36", 0]]
+		},
+
+		"crouch_transition_left_aim_up": {
+			"description": "Samus is transitioning from crouching to standing, or vice versa, while aiming upwards",
+			"dimensions": [-19,13,-32,24],
+			"shift": [0,-8],
+			"used by": [["0xF2", 0],["0xF8",0]]
+		},
+
+		"crouch_transition_left_aim_diag_up": {
+			"description": "Samus is transitioning from crouching to standing, or vice versa, while aiming diagonally upwards",
+			"dimensions": [-27,13,-24,24],
+			"shift": [0,-8],
+			"used by": [["0xF4", 0],["0xFA",0]]
+		},
+
+		"crouch_transition_left_aim_diag_down": {
+			"description": "Samus is transitioning from crouching to standing, or vice versa, while aiming diagonally downwards",
+			"dimensions": [-27,13,-24,24],
+			"shift": [0,-8],
+			"used by": [["0xF6", 0],["0xFC",0]]
 		}
 
 	}
