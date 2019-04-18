@@ -1,4 +1,5 @@
 @echo off
+echo Package Build
 cd dist
 rmdir /s /q package
 cd ..
