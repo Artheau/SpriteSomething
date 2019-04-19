@@ -27,27 +27,27 @@
 			"stand_right_aim_diag_down"
 		],
 		[
+			"crouch_transition_left_aim_diag_down",
+			"crouch_transition_left",
 			"crouch_transition_left_aim_diag_up", "crouch_transition_left_aim_up",
 			"crouch_left_aim_up", "crouch_left_aim_diag_up",
 			"crouch_turn_left_aim_up", "crouch_turn_neutral_aim_up", "crouch_turn_right_aim_up",
 			"crouch_right_aim_diag_up", "crouch_right_aim_up",
-			"crouch_transition_right_aim_up", "crouch_transition_right_aim_diag_up"
+			"crouch_transition_right_aim_up", "crouch_transition_right_aim_diag_up",
+			"crouch_transition_right",
+			"crouch_transition_right_aim_diag_down"
 		],
 		[
-			"crouch_transition_left",
 			"crouch_left_heavy3", "crouch_left_heavy2", "crouch_left_heavy1", "crouch_left_heavy",
 				"crouch_left3", "crouch_left2", "crouch_left1", "crouch_left",
 			"crouch_turn_left", "crouch_turn_neutral", "crouch_turn_right",
 			"crouch_right", "crouch_right1", "crouch_right2", "crouch_right3",
-				"crouch_right_heavy", "crouch_right_heavy1", "crouch_right_heavy2", "crouch_right_heavy3",
-			"crouch_transition_right"
+				"crouch_right_heavy", "crouch_right_heavy1", "crouch_right_heavy2", "crouch_right_heavy3"
 		],
 		[
-			"crouch_transition_left_aim_diag_down",
 			"crouch_left_aim_diag_down",
 			"crouch_turn_left_aim_down", "crouch_turn_neutral_aim_down", "crouch_turn_right_aim_down",
-			"crouch_right_aim_diag_down",
-			"crouch_transition_right_aim_diag_down"
+			"crouch_right_aim_diag_down"
 		],
 		[
 			"run_left9", "run_left8", "run_left7", "run_left6", "run_left5",
@@ -198,8 +198,13 @@
 		[
 			"wall_jump_launch_left",
 			"wall_jump_left",
+			"grapple_wall_left",
+			"grapple_wall_right",
 			"wall_jump_right",
 			"wall_jump_launch_right"
+		],
+		[
+			"shine_spark_left", "shine_spark_vertical_left", "shine_spark_vertical_right", "shine_spark_right"
 		],
 		[
 			"sparks_left3", "sparks_left2", "sparks_left1", "sparks_left", 
@@ -228,6 +233,26 @@
 			"morphball_fall_left3", "morphball_fall_left2", "morphball_fall_left1", "morphball_fall_left",
 			"morphball_fall_right", "morphball_fall_right1", "morphball_fall_right2", "morphball_fall_right3",
 			"morphball_fall_right4", "morphball_fall_right5", "morphball_fall_right6", "morphball_fall_right7"
+		],
+		[
+			"crystal_bubble_left_small", "crystal_bubble_left_medium", "crystal_bubble_left_large",
+			"crystal_flash_left3", "crystal_flash_left2", "crystal_flash_left1", "crystal_flash_left",
+			"crystal_flash_right", "crystal_flash_right1", "crystal_flash_right2", "crystal_flash_right3",
+			"crystal_bubble_right_large", "crystal_bubble_right_medium", "crystal_bubble_right_small"
+		],
+		[
+			"grapple_counterclockwise", "grapple_counterclockwise1", "grapple_counterclockwise2", "grapple_counterclockwise3",
+			"grapple_counterclockwise4", "grapple_counterclockwise5", "grapple_counterclockwise6", "grapple_counterclockwise7",
+			"grapple_counterclockwise8", "grapple_counterclockwise9", "grapple_counterclockwise10", "grapple_counterclockwise11",
+			"grapple_counterclockwise12", "grapple_counterclockwise13", "grapple_counterclockwise14", "grapple_counterclockwise15",
+			"grapple_counterclockwise_pulled_in", "grapple_counterclockwise_hanging"
+		],
+		[
+			"grapple_clockwise", "grapple_clockwise1", "grapple_clockwise2", "grapple_clockwise3",
+			"grapple_clockwise4", "grapple_clockwise5", "grapple_clockwise6", "grapple_clockwise7",
+			"grapple_clockwise8", "grapple_clockwise9", "grapple_clockwise10", "grapple_clockwise11",
+			"grapple_clockwise12", "grapple_clockwise13", "grapple_clockwise14", "grapple_clockwise15",
+			"grapple_clockwise_pulled_in", "grapple_clockwise_hanging"
 		]
 	],
 	"images":
@@ -487,6 +512,7 @@
 		"stand_right_aim_diag_up": {
 			"description": "Standing, but aiming diagonally upwards, or lifting the cannon further upwards",
 			"dimensions": [-13,27,-21,27],
+			"extra area": [[11,27,-29,-21]],
 			"used by": [["0x03",0],["0x05",0]]
 		},
 
@@ -499,6 +525,7 @@
 		"stand_left_aim_diag_up": {
 			"description": "Standing, but aiming diagonally upwards, or lifting the cannon further upwards",
 			"dimensions": [-27,13,-21,27],
+			"extra area": [[-27,-11,-29,-21]],
 			"used by": [["0x04",0],["0x06",0]]
 		},
 
@@ -1107,6 +1134,12 @@
 			"used by": [["0xA6",2]]
 		},
 
+		"grapple_wall_right": {
+			"description": "Samus is grappled to a wall on the left, preparing to jump out to the right",
+			"dimensions": [-25,15,-20,20],
+			"used by": [["0xB9",0]]
+		},
+
 		"wall_jump_right": {
 			"description": "Samus when she is priming to jump rightwards off of a left wall",
 			"dimensions": [-11,21,-20,20],
@@ -1181,6 +1214,12 @@
 		"spin_jump_left_land2": {
 			"parent": "spin_jump_left_land",
 			"used by": [["0xA7",2]]
+		},
+
+		"grapple_wall_left": {
+			"description": "Samus is grappled to a wall on the right, preparing to jump out to the left",
+			"dimensions": [-16,24,-20,20],
+			"used by": [["0xB8",0]]
 		},
 
 		"wall_jump_left": {
@@ -1858,7 +1897,7 @@
 		},
 
 		"jump_right": {
-			"description": "When Samus jumps up without spinning, or when she is starting a lateral superjump",
+			"description": "When Samus jumps up without spinning, or when she is starting a lateral shinespark",
 			"dimensions": [-13,19,-27,29],
 			"used by": [["0x4D",0],["0xC7",0]]
 		},
@@ -1902,7 +1941,7 @@
 		},
 
 		"jump_left": {
-			"description": "When Samus jumps up without spinning, or when she is starting a lateral superjump",
+			"description": "When Samus jumps up without spinning, or when she is starting a lateral shinespark",
 			"dimensions": [-19,13,-27,29],
 			"used by": [["0x4E",0],["0xC8",0]]
 		},
@@ -2889,6 +2928,322 @@
 			"dimensions": [-27,13,-24,24],
 			"shift": [0,-8],
 			"used by": [["0xF6", 0],["0xFC",0]]
+		},
+
+		"shine_spark_right": {
+			"description": "Samus is shinesparking (i.e. super jumping) either laterally or diagonally",
+			"dimensions": [-24,16,-20,20],
+			"used by": [["0xC9",0]]
+		},
+
+		"shine_spark_left": {
+			"description": "Samus is shinesparking (i.e. super jumping) either laterally or diagonally",
+			"dimensions": [-16,24,-20,20],
+			"used by": [["0xCA",0]]
+		},
+
+		"shine_spark_vertical_right": {
+			"description": "Samus is shinesparking (i.e. super jumping) vertically while facing right",
+			"dimensions": [-16,16,-24,24],
+			"used by": [["0xCB",0]]
+		},
+
+		"shine_spark_vertical_left": {
+			"description": "Samus is shinesparking (i.e. super jumping) vertically while facing left",
+			"dimensions": [-16,16,-24,24],
+			"used by": [["0xCC",0]]
+		},
+
+		"crystal_flash_right": {
+			"description": "The floating silhouette inside of the crystal flash bubble",
+			"dimensions": [-16,16,-24,24],
+			"force": "upper",
+			"used by": [["0xD3",6]]
+		},
+
+		"crystal_flash_right1": {
+			"parent": "crystal_flash_right",
+			"used by": [["0xD3",7]]
+		},
+
+		"crystal_flash_right2": {
+			"parent": "crystal_flash_right",
+			"used by": [["0xD3",8]]
+		},
+
+		"crystal_flash_right3": {
+			"parent": "crystal_flash_right",
+			"used by": [["0xD3",9]]
+		},
+
+		"crystal_flash_left": {
+			"description": "The floating silhouette inside of the crystal flash bubble",
+			"dimensions": [-16,16,-24,24],
+			"force": "upper",
+			"used by": [["0xD4",6]]
+		},
+
+		"crystal_flash_left1": {
+			"parent": "crystal_flash_left",
+			"used by": [["0xD4",7]]
+		},
+
+		"crystal_flash_left2": {
+			"parent": "crystal_flash_left",
+			"used by": [["0xD4",8]]
+		},
+
+		"crystal_flash_left3": {
+			"parent": "crystal_flash_left",
+			"used by": [["0xD4",9]]
+		},
+
+		"crystal_bubble_right_small": {
+			"parent": "crystal_bubble_right_large",
+			"used by": [["0xD3",0],["0xD3",13]]
+		},
+
+		"crystal_bubble_right_medium": {
+			"parent": "crystal_bubble_right_large",
+			"used by": [["0xD3",1],["0xD3",12]]
+		},
+
+		"crystal_bubble_right_large": {
+			"description": "The pulsating bubble around crystal flash.  This is duplicated thrice to complete a full circle",
+			"dimensions": [0,32,-32,0],
+			"force": "lower",
+			"used by": [["0xD3",2],["0xD3",3],["0xD3",6],["0xD3",7],["0xD3",8],["0xD3",9]]
+		},
+
+		"crystal_bubble_left_small": {
+			"parent": "crystal_bubble_left_large",
+			"used by": [["0xD4",0],["0xD4",13]]
+		},
+
+		"crystal_bubble_left_medium": {
+			"parent": "crystal_bubble_left_large",
+			"used by": [["0xD4",1],["0xD4",12]]
+		},
+
+		"crystal_bubble_left_large": {
+			"description": "The pulsating bubble around crystal flash.  This is duplicated thrice to complete a full circle",
+			"dimensions": [-32,0,-32,0],
+			"force": "lower",
+			"used by": [["0xD4",2],["0xD4",3],["0xD4",6],["0xD4",7],["0xD4",8],["0xD4",9]]
+		},
+
+		"grapple_counterclockwise": {
+			"description": "While swinging forward/counterclockwise or backwards/clockwise (i.e. facing 'right'), the game chooses choose an appropriate angle subject to an 11.25 degree arc.  Upside-down poses are mirrored",
+			"dimensions": [-25,31,-15,17],
+			"used by": [["0xB2",24],["0xB2",40],["0xB2",56],["0xB2",8]]
+		},
+
+		"grapple_counterclockwise1": {
+			"parent": "grapple_counterclockwise",
+			"used by": [["0xB2",23],["0xB2",39],["0xB2",55],["0xB2",7]]
+		},
+
+		"grapple_counterclockwise2": {
+			"parent": "grapple_counterclockwise",
+			"dimensions": [-24,32,-11,13],
+			"extra area": [[-16,32,-19,-11],[-24,16,13,21]],
+			"used by": [["0xB2",22],["0xB2",38],["0xB2",54],["0xB2",6]]
+		},
+
+		"grapple_counterclockwise3": {
+			"parent": "grapple_counterclockwise2",
+			"used by": [["0xB2",21],["0xB2",37],["0xB2",53],["0xB2",5]]
+		},
+
+		"grapple_counterclockwise4": {
+			"parent": "grapple_counterclockwise",
+			"dimensions": [-23,25,-17,7],
+			"extra area": [[-15,25,-25,-17],[-23,17,7,15],[-23,9,15,23]],
+			"used by": [["0xB2",20],["0xB2",36],["0xB2",52],["0xB2",4]]
+		},
+
+		"grapple_counterclockwise5": {
+			"parent": "grapple_counterclockwise4",
+			"used by": [["0xB2",19],["0xB2",35],["0xB2",51],["0xB2",3]]
+		},
+
+		"grapple_counterclockwise6": {
+			"parent": "grapple_counterclockwise",
+			"dimensions": [-20,12,-22,26],
+			"extra area": [[-12,20,-30,-22],[12,20,-22,10]],
+			"used by": [["0xB2",18],["0xB2",34],["0xB2",50],["0xB2",2]]
+		},
+
+		"grapple_counterclockwise7": {
+			"parent": "grapple_counterclockwise6",
+			"used by": [["0xB2",17],["0xB2",33],["0xB2",49],["0xB2",1]]
+		},
+
+		"grapple_counterclockwise8": {
+			"parent": "grapple_counterclockwise",
+			"dimensions": [-16,16,-30,26],
+			"used by": [["0xB2",16],["0xB2",32],["0xB2",48],["0xB2",0]]
+		},
+
+		"grapple_counterclockwise9": {
+			"parent": "grapple_counterclockwise",
+			"dimensions": [-20,12,-30,18],
+			"extra area": [[-12,20,18,26],[12,20,-14,26]],
+			"used by": [["0xB2",15],["0xB2",31],["0xB2",47],["0xB2",63]]
+		},
+
+		"grapple_counterclockwise10": {
+			"parent": "grapple_counterclockwise9",
+			"used by": [["0xB2",14],["0xB2",30],["0xB2",46],["0xB2",62]]
+		},
+
+		"grapple_counterclockwise11": {
+			"parent": "grapple_counterclockwise",
+			"dimensions": [-17,15,-18,22],
+			"extra area": [[-25,7,-26,-18],[-25,-17,-18,14],[15,23,-10,22]],
+			"used by": [["0xB2",13],["0xB2",29],["0xB2",45],["0xB2",61]]
+		},
+
+		"grapple_counterclockwise12": {
+			"parent": "grapple_counterclockwise11",
+			"used by": [["0xB2",12],["0xB2",28],["0xB2",44],["0xB2",60]]
+		},
+
+		"grapple_counterclockwise13": {
+			"parent": "grapple_counterclockwise",
+			"dimensions": [-30,26,-12,12],
+			"extra area": [[-30,10,-20,-12],[-22,26,12,20]],
+			"used by": [["0xB2",11],["0xB2",27],["0xB2",43],["0xB2",59]]
+		},
+
+		"grapple_counterclockwise14": {
+			"parent": "grapple_counterclockwise13",
+			"used by": [["0xB2",10],["0xB2",26],["0xB2",42],["0xB2",58]]
+		},
+
+		"grapple_counterclockwise15": {
+			"parent": "grapple_counterclockwise",
+			"dimensions": [-31,25,-17,15],
+			"used by": [["0xB2",9],["0xB2",25],["0xB2",41],["0xB2",57]]
+		},
+
+		"grapple_counterclockwise_pulled_in": {
+			"description": "When Samus is begin pulled upward by the grapple but is not swinging",
+			"dimensions": [-16,16,-30,34],
+			"used by": [["0xB2",64]]
+		},
+
+		"grapple_counterclockwise_hanging": {
+			"description": "When Samus is hanging from the grapple and not swinging",
+			"dimensions": [-16,16,-30,34],
+			"used by": [["0xB2",65]]
+		},
+
+		"grapple_clockwise": {
+			"description": "While swinging forward/clockwise or backwards/counterclockwise (i.e. facing 'left'), the game chooses choose an appropriate angle subject to an 11.25 degree arc.  Upside-down poses are mirrored",
+			"dimensions": [-24,32,-17,15],
+			"used by": [["0xB3",23],["0xB3",39],["0xB3",55],["0xB3",7]]
+		},
+
+		"grapple_clockwise1": {
+			"parent": "grapple_clockwise",
+			"dimensions": [-27,29,-12,12],
+			"extra area": [[-11,29,-20,-12],[-27,21,12,20]],
+			"used by": [["0xB3",22],["0xB3",38],["0xB3",54],["0xB3",6]]
+		},
+
+		"grapple_clockwise2": {
+			"parent": "grapple_clockwise1",
+			"used by": [["0xB3",21],["0xB3",37],["0xB3",53],["0xB3",5]]
+		},
+
+		"grapple_clockwise3": {
+			"parent": "grapple_clockwise",
+			"dimensions": [-16,16,-20,20],
+			"extra area": [[-8,24,-28,-20],[16,24,-20,12],[-24,-16,-12,20]],
+			"used by": [["0xB3",20],["0xB3",36],["0xB3",52],["0xB3",4]]
+		},
+
+		"grapple_clockwise4": {
+			"parent": "grapple_clockwise3",
+			"used by": [["0xB3",19],["0xB3",35],["0xB3",51],["0xB3",3]]
+		},
+
+		"grapple_clockwise5": {
+			"parent": "grapple_clockwise",
+			"dimensions": [-12,20,-31,17],
+			"extra area": [[-20,12,17,25],[-20,-12,-15,25]],
+			"used by": [["0xB3",18],["0xB3",34],["0xB3",50],["0xB3",2]]
+		},
+
+		"grapple_clockwise6": {
+			"parent": "grapple_clockwise5",
+			"used by": [["0xB3",17],["0xB3",33],["0xB3",49],["0xB3",1]]
+		},
+
+		"grapple_clockwise7": {
+			"parent": "grapple_clockwise",
+			"dimensions": [-16,16,-31,25],
+			"used by": [["0xB3",16],["0xB3",32],["0xB3",48],["0xB3",0]]
+		},
+
+		"grapple_clockwise8": {
+			"parent": "grapple_clockwise",
+			"dimensions": [-12,20,-23,25],
+			"extra area": [[-20,12,-31,-23],[-20,-12,-23,9]],
+			"used by": [["0xB3",15],["0xB3",31],["0xB3",47],["0xB3",63]]
+		},
+
+		"grapple_clockwise9": {
+			"parent": "grapple_clockwise8",
+			"used by": [["0xB3",14],["0xB3",30],["0xB3",46],["0xB3",62]]
+		},
+
+		"grapple_clockwise10": {
+			"parent": "grapple_clockwise",
+			"dimensions": [-27,21,-19,5],
+			"extra area": [[-27,13,-27,-19],[-19,21,5,13],[-11,21,13,21]],
+			"used by": [["0xB3",13],["0xB3",29],["0xB3",45],["0xB3",61]]
+		},
+
+		"grapple_clockwise11": {
+			"parent": "grapple_clockwise10",
+			"used by": [["0xB3",12],["0xB3",28],["0xB3",44],["0xB3",60]]
+		},
+
+		"grapple_clockwise12": {
+			"parent": "grapple_clockwise",
+			"dimensions": [-30,22,-11,13],
+			"extra area": [[-30,18,-19,-11],[-14,26,13,21]],
+			"used by": [["0xB3",11],["0xB3",27],["0xB3",43],["0xB3",59]]
+		},
+
+		"grapple_clockwise13": {
+			"parent": "grapple_clockwise12",
+			"used by": [["0xB3",10],["0xB3",26],["0xB3",42],["0xB3",58]]
+		},
+
+		"grapple_clockwise14": {
+			"parents": "grapple_clockwise",
+			"dimensions": [-32,24,-15,17],
+			"used by": [["0xB3",9],["0xB3",25],["0xB3",41],["0xB3",57]]
+		},
+
+		"grapple_clockwise15": {
+			"parent": "grapple_clockwise14",
+			"used by": [["0xB3",8],["0xB3",24],["0xB3",40],["0xB3",56]]
+		},
+
+		"grapple_clockwise_pulled_in": {
+			"description": "When Samus is begin pulled upward by the grapple but is not swinging",
+			"dimensions": [-16,16,-31,33],
+			"used by": [["0xB3",64]]
+		},
+
+		"grapple_clockwise_hanging": {
+			"description": "When Samus is hanging from the grapple and not swinging",
+			"dimensions": [-16,16,-31,33],
+			"used by": [["0xB3",65]]
 		}
 
 	}

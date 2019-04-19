@@ -86,9 +86,9 @@ def add_borders(image, origin, image_name):
     if extra_area is not None:   #we need to block off some areas that can't actual be used
         mask = Image.new("RGBA", (dimensions[1]-dimensions[0],dimensions[3]-dimensions[2]), (0,0,0x7F,0xFF))
         x0,x1,y0,y1 = original_dimensions
-        ImageDraw.Draw(mask).rectangle((x0+origin[0],y0+origin[1],x1+origin[0],y1+origin[1]), fill = 0)
+        ImageDraw.Draw(mask).rectangle((x0+origin[0],y0+origin[1],x1+origin[0]-1,y1+origin[1]-1), fill = 0)
         for x0,x1,y0,y1 in extra_area:
-            ImageDraw.Draw(mask).rectangle((x0+origin[0],y0+origin[1],x1+origin[0],y1+origin[1]), fill = 0)
+            ImageDraw.Draw(mask).rectangle((x0+origin[0],y0+origin[1],x1+origin[0]-1,y1+origin[1]-1), fill = 0)
 
         image_with_border.paste(mask,mask=mask)
 
