@@ -326,6 +326,9 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                   tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C != 0x08]
             if not lower:   #trim out the body
                   tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C == 0x08]
+        elif animation_ID == "file_select":
+            tilemaps = self.rom_data.get_file_select_tilemaps(pose)
+            DMA_writes = self.rom_data.get_file_select_dma_data()
         else:
             tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation
         palette_timing_list = self.get_timed_sprite_palette("standard", "power")
@@ -347,9 +350,10 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         death_palette = self.get_current_time_palette(self.get_timed_sprite_palette("death_flesh", "power"),0)
         loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", "power"),0)
         flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", "power"),0)
+        file_select_palette = self.get_current_time_palette(self.get_timed_sprite_palette("file_select", "power"),0)
         current_palettes =  {
                                 0b000: None,
-                                0b001: None,
+                                0b001: file_select_palette,          #strictly speaking, this is supposed to be in 0b111 but it is convenient to place it here right now
                                 0b010: current_palette,              #Samus palette
                                 0b011: death_palette,                #during crystal flash, this palette is referenced also, but it is set to all black
                                 0b100: None,

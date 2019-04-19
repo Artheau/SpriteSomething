@@ -197,6 +197,43 @@ class Metroid3RomHandler(RomHandler):
         return {0x00: self.read_from_snes_address(0xB6C000, "1"*0x2000)}
 
 
+    def get_file_select_tilemaps(self, item):
+        #For now, I have just coded these up by hand because it does not seem worth it to extract this information dynamically
+        if item in [0,1,2]:   #the Samus heads
+            return [[0x08*i,
+                     0x00,
+                     0x08*j,
+                     0xD0+i+0x10*j+3*item,
+                     0x24]
+                      for i in range(3) for j in range(3)]
+        elif item in [3,4,5,6,7]:   #the Samus visors
+            item_col = (item-3)//3
+            item_row = (item-3)%3
+            return [[4+0x08*i,
+                     0x00,
+                     10,
+                     0xD9+i+2*item_row+0x10*item_col,
+                     0x24]
+                      for i in range(2)]
+        elif item in [8]: #cursor
+            return [[0x00,0x00,0x18,0xFE,0x24],
+                    [0x00,0x00,0x10,0xEE,0x24],
+                    [0x00,0x00,0x08,0xDF,0x24],
+                    [0x00,0x00,0x00,0xC8,0x24],
+                    [0x08,0x00,0x18,0xEF,0x24],
+                    [0x08,0x00,0x10,0xFF,0x24],
+                    [0x08,0x00,0x08,0xCC,0x24]]
+        elif item in [9]: #pipe framework
+            return [[0x00,0x00,0x00,0xF9,0x24],
+                    [0x08,0x00,0x00,0xFA,0x24],
+                    [0x10,0x00,0x00,0xFB,0x24],
+                    [0x10,0x00,0x08,0xED,0x24],
+                    [0x00,0x00,0x10,0xFC,0x24],
+                    [0x10,0x00,0x10,0xFD,0x24]]
+        else:
+            raise AssertionError(f"get_file_select_tilemaps() called for unknown item number {item}")
+
+
     def get_palette(self, base_type, suit_type):
         #returns a list.  Each element of the list is a tuple, where the first entry is the amount of time that the palette
         # should display for (here $00 is a special case for static palettes).  The second entry is the 555 palette data.
@@ -370,13 +407,13 @@ class Metroid3RomHandler(RomHandler):
             return [(2,self._get_raw_palette(0x9B96C0 + i*0x20)) for i in range(6)]
 
         elif base_type == PaletteType.SEPIA:
-            return self._get_static_palette(0x8CE569)
+            return [self._get_static_palette(0x8CE569)]
 
         elif base_type == PaletteType.SEPIA_HURT:
-            return self._get_static_palette(0x9BA380)
+            return [self._get_static_palette(0x9BA380)]
 
         elif base_type == PaletteType.SEPIA_ALTERNATE:
-            return self._get_static_palette(0x9BA3A0)
+            return [self._get_static_palette(0x9BA3A0)]
 
         elif base_type == PaletteType.DOOR:
             visor_color = self.read_from_snes_address(0x82E52B, 2)
@@ -391,7 +428,7 @@ class Metroid3RomHandler(RomHandler):
             return [(6, base_palette[:4]+[color]+base_palette[5:]) for color in visor_colors]
 
         elif base_type == PaletteType.FILE_SELECT:
-            return self._get_static_palette(0x8EE5E0)
+            return [self._get_static_palette(0x8EE5E0)]
 
         elif base_type == PaletteType.SHIP:
             base_palette_address = 0xA2A59E    #yes, way over here
@@ -411,7 +448,7 @@ class Metroid3RomHandler(RomHandler):
 
         elif base_type == PaletteType.INTRO_SHIP:
             #Technically the thrusters alternate white and black every frame, but this is a bit much on the eyes
-            return self._get_static_palette(0x8CE68B)
+            return [self._get_static_palette(0x8CE68B)]
 
         elif base_type == PaletteType.OUTRO_SHIP:
             base_address = 0x8DD6BA

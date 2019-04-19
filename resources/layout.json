@@ -2,6 +2,11 @@
 	"layout":
 	[
 		[
+			"file_select_head", "file_select_head1", "file_select_head2",
+			"file_select_visor","file_select_visor1","file_select_visor2","file_select_visor3","file_select_visor4",
+			"file_select_cursor_array", "file_select_piping"
+		],
+		[
 			"launcher8", "launcher7", "launcher6", "launcher5", "launcher4",
 				"launcher3", "launcher2", "launcher1", "launcher", "elevator",
 			"elevator_varia", "launcher_varia", "launcher1_varia", "launcher2_varia", "launcher3_varia",
@@ -3544,7 +3549,6 @@
 		},
 
 		"death_right_pieces4": {
-			"prev_dimensions": [-36,36,-45,43],
 			"dimensions": [-36,36,-45,-29],
 			"extra area": [[-36,36,27,43],[-36,-20,-29,27],[20,36,-29,27]],
 			"parent": "death_right_pieces",
@@ -3577,12 +3581,66 @@
 		},
 
 		"death_left_pieces4": {
-			"prev_dimensions": [-36,36,-45,43],
 			"dimensions": [-36,36,-45,-29],
 			"extra area": [[-36,36,27,43],[-36,-20,-29,27],[20,36,-29,27]],
 			"parent": "death_left_pieces",
 			"used by": [["death_left", 5]]
-		}
+		},
 
+		"file_select_head": {
+			"description": "Classically, these are three heads that turn to face the camera when the save file is selected",
+			"dimensions": [0,24,0,24],
+			"used by": [["file_select",0]]
+		},
+
+		"file_select_head1": {
+			"parent": "file_select_head",
+			"used by": [["file_select",1]]
+		},
+
+		"file_select_head2": {
+			"parent": "file_select_head",
+			"used by": [["file_select",2]]
+		},
+
+		"file_select_visor": {
+			"description": "Classically, there is a flash that goes across Samus's front-facing visor after the save file is selected",
+			"dimensions": [4,20,10,18],
+			"used by": [["file_select",3]]
+		},
+
+		"file_select_visor1": {
+			"parent": "file_select_visor",
+			"used by": [["file_select",4]]
+		},
+
+		"file_select_visor2": {
+			"parent": "file_select_visor",
+			"used by": [["file_select",5]]
+		},
+
+		"file_select_visor3": {
+			"parent": "file_select_visor",
+			"used by": [["file_select",6]]
+		},
+
+		"file_select_visor4": {
+			"parent": "file_select_visor",
+			"used by": [["file_select",7]]
+		},
+
+		"file_select_cursor_array": {
+			"description": "Classically, the cursor is constructed by rotating upwards through the list of missile bases, and the light on the tip moves up and down as 12321",
+			"dimensions": [0,16,8,32],
+			"extra area": [[0,8,0,8]],
+			"used by": [["file_select",8]]
+		},
+
+		"file_select_piping": {
+			"description": "This piping is used to construct the frame around SAMUS DATA in the menu",
+			"dimensions": [0,24,0,8],
+			"extra area": [[0,8,16,24],[16,24,8,24]],
+			"used by": [["file_select",9]]
+		}
 	}
 }
