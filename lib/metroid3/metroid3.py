@@ -184,6 +184,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                                     "Crouch, turn left, aim up": 0x97,
                                     "Crouch, turn left, aim diag up": 0xA2,
                                     "Crouch, turn left, aim diag down": 0x99,
+                                    "Standing from crouch right": 0x3B,
                                     "Standing from crouch right, aim up": 0xF7,
                                     "Standing from crouch right, aim diag up": 0xF9,
                                     "Standing from crouch right, aim diag down": 0xFB,
@@ -200,6 +201,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                                     "Crouch, turn right, aim up": 0x98,
                                     "Crouch, turn right, aim diag up": 0xA3,
                                     "Crouch, turn right, aim diag down": 0x9A,
+                                    "Standing from crouch left": 0x3C,
                                     "Standing from crouch left, aim up": 0xF8,
                                     "Standing from crouch left, aim diag up": 0xFA,
                                     "Standing from crouch left, aim diag down": 0xFC,
@@ -312,7 +314,20 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         raise NotImplementedError()
 
     def get_sprite_frame(self, animation_ID, pose, upper=True,lower=True):
-        tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation
+        if animation_ID == "death_left":
+            tilemaps, DMA_writes, duration = self.rom_data.get_death_data(pose, facing="left")
+            if not upper:   #trim out the suit pieces
+                  tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C != 0x08]
+            if not lower:   #trim out the body
+                  tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C == 0x08]
+        elif animation_ID == "death_right":
+            tilemaps, DMA_writes, duration = self.rom_data.get_death_data(pose, facing="right")
+            if not upper:   #trim out the suit pieces
+                  tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C != 0x08]
+            if not lower:   #trim out the body
+                  tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C == 0x08]
+        else:
+            tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation
         palette_timing_list = self.get_timed_sprite_palette("standard", "power")
 
         #TODO: A lot of the following seems like it can be factored out to common code
@@ -329,14 +344,14 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         add_flattened_tiles(self.rom_data.get_default_vram_data().items())
         add_flattened_tiles(DMA_writes.items())
 
-        black_palette = [0x0 for _ in range(0x10)]
+        death_palette = self.get_current_time_palette(self.get_timed_sprite_palette("death_flesh", "power"),0)
         loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", "power"),0)
         flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", "power"),0)
         current_palettes =  {
                                 0b000: None,
                                 0b001: None,
                                 0b010: current_palette,              #Samus palette
-                                0b011: black_palette,                #used for the shadow inside the crystal flash
+                                0b011: death_palette,                #during crystal flash, this palette is referenced also, but it is set to all black
                                 0b100: None,
                                 0b101: None,
                                 0b110: loader_palette,               #used during loading scene for Samus

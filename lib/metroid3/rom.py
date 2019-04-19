@@ -189,7 +189,7 @@ class Metroid3RomHandler(RomHandler):
         # suit_palette_addr = 0x9B0000 + self.read_from_snes_address(0x9BB7D3+2*palette_index+10*suit_number, 2)
         # suitless_palette_addr = 0x9B0000 + self.read_from_snes_address(0x9BB7D3+2*palette_index+30, 2)
 
-        return tilemaps, DMA_writes, duration
+        return tilemaps[::-1], DMA_writes, duration
 
 
 
@@ -361,7 +361,7 @@ class Metroid3RomHandler(RomHandler):
             full_palette_set = []
             for i in range(9):
                 duration,palette_index = self.read_from_snes_address(0x9BB823 + 2*i,"11")
-                full_palette_set.append(duration,palette_list[palette_index])
+                full_palette_set.append((duration,self._get_raw_palette(palette_list[palette_index])))
 
             return full_palette_set
 
