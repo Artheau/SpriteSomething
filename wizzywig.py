@@ -88,7 +88,7 @@ def add_borders(image, origin, image_name):
                 dimensions[1] - (image.size[0] - origin[0]), #right,
                 dimensions[3] - (image.size[1] - origin[1])  #bottom
             )
-    image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0x7F,0x3F))      #fill in a psuedo-transparency for now
+    image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0x7F,0))#(0,0,0x7F,0x3F))
     origin = (origin[0] + border[0], origin[1] + border[1])
     if extra_area is not None:   #we need to block off some areas that can't actual be used
         mask = Image.new("RGBA", (dimensions[1]-dimensions[0],dimensions[3]-dimensions[2]), (0,0,0x7F,0xFF))
