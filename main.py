@@ -14,7 +14,7 @@ import re
 import tkinter as tk
 import webbrowser
 from functools import partial
-from tkinter import filedialog, messagebox, Text, ttk
+from tkinter import colorchooser, filedialog, messagebox, Text, ttk
 from lib.crxtooltip import CreateToolTip
 from lib.tkHyperlinkManager import HyperlinkManager
 from lib.tkSimpleStatusBar import StatusBar
@@ -23,7 +23,7 @@ from PIL import Image, ImageTk
 def main():
 	root = tk.Tk()
 	#window size
-	root.geometry("600x480")
+	root.geometry("800x600")
 	root.configure(bg='#f0f0f0')
 	SpriteSomethingMainFrame(root)
 	root.mainloop()
@@ -177,6 +177,41 @@ class SpriteSomethingMainFrame(tk.Frame):
             self.add_spiffy_buttons(sprite_section, row, col, "Shield", {"No":0,"Fighter's":1,"Fire":2,"Mirror":3}, "shield", " Shield")
             row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Gloves", {"No Gloves":0,"Power Glove":1,"Titan's Mitt":2}, "gloves", "")
+            row += 1
+
+            self.palette_display_colors = []
+            bgcolors = [
+                "#000000",
+                "#F8F8F8",
+                "#F0D840",
+                "#B86820",
+                "#F0A068",
+                "#282828",
+                "#F87800",
+                "#C01820",
+                "#E860B0",
+                "#389068",
+                "#40D870",
+                "#509010",
+                "#78B820",
+                "#E09050",
+                "#885828",
+                "#C080F0"
+            ]
+            for i in range(16):
+                img = tk.PhotoImage(file=os.path.join("resources","meta","icons","transparent.png"))
+                bgcolor = bgcolors[i]
+                button = tk.Button(sprite_section,image=img,text=i,width=20,height=20,bg=bgcolor,command=partial(self.press_color_button,i))
+                button.image = img
+                self.palette_display_colors.append(button)
+            i = 1
+            for color in self.palette_display_colors:
+                CreateToolTip(color,"Moo")
+                color.grid(row=row,column=i+1)
+                i += 1
+                if i == 8 + 1:
+                    row += 1
+                    i = 1
         ###############################################
 
 
@@ -296,7 +331,7 @@ class SpriteSomethingMainFrame(tk.Frame):
     def create_menu_bar(self, game_name):
         #create the menu bar
         menu = tk.Menu(self.master)
-        self.master.config(menu=menu)
+        self.master.configure(menu=menu)
 
         #create the file menu
         file_menu = tk.Menu(menu, tearoff=0)
@@ -533,6 +568,10 @@ class SpriteSomethingMainFrame(tk.Frame):
                 col = 0
             button = tk.Button(animation_list_frame, text=animation, textvariable=animation, command=partial(change_animation_list_button,animation))
             button.grid(row=row, column=col)
+
+    def press_color_button(self,index):
+        color = tk.colorchooser.askcolor()
+        self.palette_display_colors[index].configure(bg=str(color)[-9:])
 
     def press_spiffy_button(self,prefix,level):
         # Gui.class
@@ -835,7 +874,8 @@ class SpriteSomethingMainFrame(tk.Frame):
                   "[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
                   "[ZSpriteTools](http://github.com/sosuke3/ZSpriteTools) by Sosuke3",
                   "",
-                  "Temporarily uses assets from SpriteAnimator & ZSpriteTools"
+                  "Temporarily uses assets from SpriteAnimator"
+                  # Assets from ZSpriteTools used with permission
         ]
         about = tk.Tk()
         about.title(f"About {self.app_title}")
@@ -844,21 +884,18 @@ class SpriteSomethingMainFrame(tk.Frame):
         about.attributes("-toolwindow", 1)
         text = Text(about, bg='#f0f0f0', font='TkDefaultFont', width=dims["textarea.characters"]["width"], height=dims["textarea.characters"]["height"])
         text.pack()
-        text.config(cursor="arrow")
+        text.configure(cursor="arrow")
         self.add_text_link_array(lines, text)
         text.bind("<Button-1>", lambda e: txtEvent(e))
 
     def exit(self):
-        exit_confirm = messagebox.askyesno(self.app_title, "Are you sure you want to exit?")
-        if exit_confirm:
-            save_before_exit = messagebox.askyesno(self.app_title, "Do you want to save before exiting?")
+        save_before_exit = messagebox.askyesnocancel(self.app_title,"Do you want to save before exiting?")
+        if save_before_exit != None:
             if save_before_exit:
                 self.save_sprite_as()
             else:
                 messagebox.showwarning(self.app_title, "Death in Super Metroid loses progress since last save." + "\n" + "You have been eaten by a grue.")
-                exit()
-
-
+            exit()
 
 if __name__ == "__main__":
 	main()
