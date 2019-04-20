@@ -1,3 +1,4 @@
+from PIL import Image
 from lib.game import Game
 from lib.zspr import Zspr
 from . import rom
@@ -313,22 +314,45 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def set_sprite_palette(self, variant_type, suit_type, frame):
         raise NotImplementedError()
 
-    def get_sprite_frame(self, animation_ID, pose, upper=True,lower=True):
-        if animation_ID == "death_left":
-            tilemaps, DMA_writes, duration = self.rom_data.get_death_data(pose, facing="left")
-            if not upper:   #trim out the suit pieces
-                  tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C != 0x08]
-            if not lower:   #trim out the body
-                  tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C == 0x08]
-        elif animation_ID == "death_right":
-            tilemaps, DMA_writes, duration = self.rom_data.get_death_data(pose, facing="right")
-            if not upper:   #trim out the suit pieces
-                  tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C != 0x08]
-            if not lower:   #trim out the body
-                  tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C == 0x08]
-        elif animation_ID == "file_select":
-            tilemaps = self.rom_data.get_file_select_tilemaps(pose)
-            DMA_writes = self.rom_data.get_file_select_dma_data()
+    def get_sprite_pose(self, animation_ID, pose, upper=True,lower=True):
+        if type(animation_ID) is str:
+            if animation_ID == "death_left":
+                  tilemaps, DMA_writes, duration = self.rom_data.get_death_data(pose, facing="left")
+                  if not upper:   #trim out the suit pieces
+                        tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C != 0x08]
+                  if not lower:   #trim out the body
+                        tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C == 0x08]
+            elif animation_ID == "death_right":
+                  tilemaps, DMA_writes, duration = self.rom_data.get_death_data(pose, facing="right")
+                  if not upper:   #trim out the suit pieces
+                        tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C != 0x08]
+                  if not lower:   #trim out the body
+                        tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C == 0x08]
+            elif animation_ID == "file_select":
+                  tilemaps = self.rom_data.get_file_select_tilemaps(pose)
+                  DMA_writes = self.rom_data.get_file_select_dma_data()
+            elif animation_ID == "gun":
+                  tile, palette, gun_tile, gun_DMA = self.rom_data.get_minimal_gun_data(pose % 10, pose // 10)  #use highest decimal digit as the level of opening, and lowest as direction
+                  tilemaps = [[0x00,0x00,0x00,tile,palette]]  #if the port is requested specifically, we normalize it to (0,0)
+                  DMA_writes = {gun_tile: gun_DMA}
+            elif animation_ID == "palette_block":
+                  #no need to make tilemaps or anything, just make the image and then early exit
+                  palette_block = util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("standard", "power"),0))[-15:]
+                  palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("standard", "varia"),0))[-15:])
+                  palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("standard", "gravity"),0))[-15:])
+                  palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("death_flesh", "power"),0))[-15:])
+                  palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("file_select", "power"),0))[-15:])
+                  palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", "power"),0))[-6:])
+                  palette_block.append((0,0,0,0))
+                  palette_block.extend(util.convert_to_rgb(self.rom_data.get_nightvisor_colors()))
+                  palette_block.append((0,0,0,0))
+                  _,full_ship_colors = self.get_timed_sprite_palette("ship", "power")[7]  #7 is when the underglow is brightest
+                  palette_block.extend(util.convert_to_rgb([full_ship_colors[1],full_ship_colors[9],full_ship_colors[15]]))
+                  image = Image.new("RGBA",(15,6),0)
+                  image.putdata(palette_block)
+                  return image, (0,0)
+            else:
+                  raise AssertionError(f"unknown command to get_sprite_pose(): {animation_ID}")
         else:
             tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation
         palette_timing_list = self.get_timed_sprite_palette("standard", "power")
@@ -409,7 +433,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 if palette_timing_index <= 0 or time == 0:   #time = 0 is a special code for static palettes or "final" palettes
                     return palette
             else:
-                raise AssertionError(f"During get_sprite_frame() encountered modular arithmetic error while processing frame number {frame}")
+                raise AssertionError(f"During get_sprite_pose() encountered modular arithmetic error while processing frame number {frame}")
 
 
     def get_sprite_animation(self, animation_ID):

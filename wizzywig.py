@@ -35,7 +35,7 @@ def main():
     for animation, pose in get_all_poses(samus):
         if (pretty_hex(animation),pose) not in reverse_layout_data:
             print(f"Logan 3, IDENTIFY: animation {pretty_hex(animation)[2:]}, pose {pose}")
-            image, _ = samus.get_sprite_frame(animation, pose)
+            image, _ = samus.get_sprite_pose(animation, pose)
             image.show()
             exit()
 
@@ -49,13 +49,13 @@ def main():
             force = get_property_from_layout_data("force", image_name)
             if force:
                 if force.lower() == "upper":
-                    image, origin = samus.get_sprite_frame(animation, pose, lower=False)
+                    image, origin = samus.get_sprite_pose(animation, pose, lower=False)
                 elif force.lower() == "lower":
-                    image, origin = samus.get_sprite_frame(animation, pose, upper=False)
+                    image, origin = samus.get_sprite_pose(animation, pose, upper=False)
                 else:
                     raise AssertionError(f"received call to force something in pose {image_name}, but did not understand command '{force}'")
             else:
-                image, origin = samus.get_sprite_frame(animation, pose)
+                image, origin = samus.get_sprite_pose(animation, pose)
 
             if image:
                 bordered_image, new_origin = add_borders(image, origin, image_name)
