@@ -46,9 +46,12 @@ def import_all_images_from_ROM(samus,layout):
         else:
             image, origin = samus.get_sprite_pose(animation, pose)
 
+        scale = layout.get_property("scale", image_name)
+        if scale:
+            image = image.resize(tuple(scale*x for x in image.size), Image.NEAREST)
+            origin = tuple(scale*x for x in origin)
+
         if image:
-            #bordered_image, new_origin = layout.add_borders(image, origin, image_name)   
-            
             all_images[image_name] = (image, origin)
         else:
             print(f"WARNING: Did not generate image for {image_name}")
@@ -63,7 +66,7 @@ def export_all_images_to_PNG(all_images, layout):
             image, origin = all_images[image_name]
 
             if image:
-                bordered_image, new_origin = layout.add_borders(image, origin, image_name)
+                bordered_image, new_origin = layout.add_borders_and_scale(image, origin, image_name)
 
                 shift = layout.get_property("shift", image_name)
                 if shift is not None:

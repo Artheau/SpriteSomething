@@ -15,11 +15,17 @@ class Layout():
     def get_rows(self):
         return self.data["layout"]
 
-    def add_borders(self, image, origin, image_name, add_border=True, border_color=(0,0,0x7F,0xFF)):
+    def add_borders_and_scale(self, image, origin, image_name, add_border=True, border_color=(0,0,0x7F,0xFF)):
         #from the layout data, get all the different pieces of the image, and then assemble them together
         #into a proper rectangular image
         original_dimensions = self.get_property("dimensions", image_name)
         extra_area = self.get_property("extra area", image_name)
+
+        scale = self.get_property("scale", image_name)
+        if scale:
+            original_dimensions = [scale*x for x in original_dimensions]
+            if extra_area is not None:
+                extra_area = [[scale*x for x in region] for region in extra_area]
 
         dimensions = original_dimensions
         if extra_area is not None:     #indicates that there's patches over the top of this pose to fill it out

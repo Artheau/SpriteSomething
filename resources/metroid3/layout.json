@@ -2083,7 +2083,8 @@
 
 		"jump_right_aim_diag_up": {
 			"description": "When Samus jumps and shoots diagonally upwards",
-			"parent": "jump_right",
+			"dimensions": [-13,19,-27,29],
+			"extra area": [[19,27,-27,5]],
 			"used by": [["0x69",0]]
 		},
 
@@ -2111,7 +2112,8 @@
 
 		"jump_left_aim_diag_up": {
 			"description": "When Samus jumps and shoots diagonally upwards",
-			"parent": "jump_left",
+			"dimensions": [-19,13,-27,29],
+			"extra area": [[-27,-19,-27,5]],
 			"used by": [["0x6A",0]]
 		},
 
@@ -2183,7 +2185,8 @@
 
 		"jump_right_aim_diag_down": {
 			"description": "When Samus jumps and shoots diagonally downwards",
-			"parent": "jump_right",
+			"dimensions": [-13,19,-27,29],
+			"extra area": [[19,27,-11,21]],
 			"used by": [["0x6B",0]]
 		},
 
@@ -2211,7 +2214,8 @@
 
 		"jump_left_aim_diag_down": {
 			"description": "When Samus jumps and shoots diagonally downwards",
-			"parent": "jump_left",
+			"dimensions": [-19,13,-27,29],
+			"extra area": [[-27,-19,-11,21]],
 			"used by": [["0x6C",0]]
 		},
 
@@ -3689,6 +3693,7 @@
 
 		"palette_block": {
 			"description": "The rows are (top to bottom): power, varia, gravity, death, file select, and then one row with flash bubble colors, visor xray colors, then ship colors",
+			"scale": 8,
 			"dimensions": [0,15,0,6],
 			"used by": [["palette_block",0]]
 		}
