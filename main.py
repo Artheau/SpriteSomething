@@ -53,10 +53,10 @@ class SpriteSomethingMainFrame(tk.Frame):
         #main frame should take up the whole window
         self.pack(fill=tk.BOTH, expand=1)
 
-        panes = tk.PanedWindow(self, orient=tk.HORIZONTAL)
+        panes = tk.PanedWindow(self, orient=tk.HORIZONTAL, name="two_columns")
         panes.pack(fill=tk.BOTH, expand=1)
 
-        self._canvas = tk.Canvas(panes)
+        self._canvas = tk.Canvas(panes, name="right_pane")
 
         self._sprites = {}
         self._background_ID = None
@@ -70,7 +70,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.make_sprite(0x01)   #TODO: implement other sprites other than the player
         self.freeze_ray = False #freeze ray, stops time, tell your friends
 
-        left_pane = tk.PanedWindow(self, orient=tk.VERTICAL)
+        left_pane = tk.PanedWindow(self, orient=tk.VERTICAL, name="left_pane")
         panes.add(left_pane, minsize=dims["left_pane"]["minwidth"])
         panes.add(self._canvas)
 
@@ -78,14 +78,14 @@ class SpriteSomethingMainFrame(tk.Frame):
         #########   Sprite Metadata       #############
         # Gui.class
         # print_sprite_metadata()
-        metadata_section = tk.Frame(left_pane)
+        metadata_section = tk.Frame(left_pane, name="metadata_section")
         left_pane.add(metadata_section)
         self.right_align_grid_in_frame(metadata_section)
         row = 0
         for label in ["Sprite Name","Author Name","Author Name Short"]:
-            metadata_label = tk.Label(metadata_section, text=label)
+            metadata_label = tk.Label(metadata_section, text=label, name=label.lower().replace(' ', '_'))
             metadata_label.grid(row=row,column=1)
-            metadata_input = tk.Entry(metadata_section)
+            metadata_input = tk.Entry(metadata_section, name=label.lower().replace(' ', '_') + "_input")
             metadata_input.grid(row=row,column=2)
             row += 1
         ###############################################
@@ -93,7 +93,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #########   Background Dropdown   #############
         # Gui.class, populated by Game.class
-        background_section = tk.Frame(left_pane)
+        background_section = tk.Frame(left_pane, name="background_section")
         left_pane.add(background_section)
         self.right_align_grid_in_frame(background_section)
         background_label = tk.Label(background_section, text="Background:")
@@ -103,14 +103,14 @@ class SpriteSomethingMainFrame(tk.Frame):
         background_keys = []
         for background_key in self.game.background_images:
             background_keys.append(background_key)
-        background_dropdown = tk.ttk.Combobox(background_section, state="readonly", values=background_keys)
+        background_dropdown = tk.ttk.Combobox(background_section, state="readonly", values=background_keys, name="background_dropdown")
         background_dropdown.configure(width=dims["background_dropdown"]["width"], exportselection=0, textvariable=self.background_selection)
         background_dropdown.grid(row=0, column=2)
         def change_background_dropdown(*args):
             self.load_background(self.background_selection.get())
         self.background_selection.trace('w', change_background_dropdown)  #when the dropdown is changed, run this function
         self.background_animate = tk.IntVar()
-        background_animate_check = tk.Checkbutton(background_section, text="Animate background", variable=self.background_animate)
+        background_animate_check = tk.Checkbutton(background_section, text="Animate background", variable=self.background_animate, name="background_animate_check")
         background_animate_check.select()
         background_animate_check.grid(row=1, column=1, sticky='E', columnspan=2)
         ###############################################
@@ -118,7 +118,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         ##########   Animation Dropdown   #############
         # Gui.class, populated by Game.Sprite.class
-        animation_section = tk.Frame(left_pane)
+        animation_section = tk.Frame(left_pane, name="animation_section")
         left_pane.add(animation_section)
         self.right_align_grid_in_frame(animation_section)
         animation_label = tk.Label(animation_section, text="Animation:")
@@ -128,10 +128,10 @@ class SpriteSomethingMainFrame(tk.Frame):
         animation_keys = []
         for animation_key in self.sprite.animations:
             animation_keys.append(animation_key)
-        animation_dropdown = tk.ttk.Combobox(animation_section, state="readonly", values=animation_keys)
+        animation_dropdown = tk.ttk.Combobox(animation_section, state="readonly", values=animation_keys, name="animation_dropdown")
         animation_dropdown.configure(width=dims["animation_dropdown"]["width"], exportselection=0, textvariable=self.animation_selection)
         animation_dropdown.grid(row=0, column=2, sticky='E')
-        animation_list = tk.Button(animation_section, text="As list", command=self.show_animation_list)
+        animation_list = tk.Button(animation_section, text="As list", command=self.show_animation_list, name="animation_list")
         animation_list.configure(width=dims["animation_list"]["width"])
         animation_list.grid(row=1, column=2, sticky='E')
         self._sprite_ID = None             #right now there is no animation
@@ -143,10 +143,17 @@ class SpriteSomethingMainFrame(tk.Frame):
         ########### Sprite Specific Stuff #############
         # Game.Sprite.class
         # print_knobs_and_buttons()
-        sprite_section = tk.Frame(left_pane)
+        sprite_section = tk.Frame(left_pane, name="sprite_section")
         left_pane.add(sprite_section)
         self.right_align_grid_in_frame(sprite_section)
-        self.sprite_menu_buttons = {}   #a place to store the values that the pressed buttons correspond to
+        self.button_values = {}   #a place to store the values that the pressed buttons correspond to
+        self.buttons = {}
+        self.buttons["palette"] = []
+        bgcolors = {}
+
+        palette_section = tk.Frame(left_pane, name="palette_section")
+        left_pane.add(palette_section)
+        self.right_align_grid_in_frame(palette_section)
 
         #TODO: Move this into the sprite specific classes so that it can be different for each sprite within a game
         if (self._game_name == "metroid3"):
@@ -161,6 +168,25 @@ class SpriteSomethingMainFrame(tk.Frame):
             self.add_spiffy_buttons(sprite_section, row, col, "Suit", {"Power":1,"Varia":2,"Gravity":3}, "suit", " Suit")
             row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Cannon Port", {"No":0,"Yes":1}, "port", " Port")
+
+            bgcolors = {
+                "Transparent": "#000000",
+                "Suit Lining (Dark)": "#404000",
+                "Body (Bright)": "#E8E800",
+                "Outline": "#280028",
+                "Visor": "#00F870",
+                "Metal (Dark)": "#406840",
+                "Glint/Sparkle/Shine": "#F8E0A8",
+                "Metal (Brightest)": "#90B090",
+                "Metal (Bright)": "#709070",
+                "Head (Brightest)": "#D82800",
+                "Body (Normal)": "#A8A800",
+                "Body (Dark)": "#585800",
+                "Suit Lining (Normal)": "#A09800",
+                "Metal (Darkest)": "#204020",
+                "Head (Bright)": "#A01800",
+                "Head (Normal)": "#680000"
+            }
         elif(self._game_name == "zelda3"):
             # Zelda3.class, Z3Link.class
             row = 0
@@ -179,39 +205,41 @@ class SpriteSomethingMainFrame(tk.Frame):
             self.add_spiffy_buttons(sprite_section, row, col, "Gloves", {"No Gloves":0,"Power Glove":1,"Titan's Mitt":2}, "gloves", "")
             row += 1
 
-            self.palette_display_colors = []
-            bgcolors = [
-                "#000000",
-                "#F8F8F8",
-                "#F0D840",
-                "#B86820",
-                "#F0A068",
-                "#282828",
-                "#F87800",
-                "#C01820",
-                "#E860B0",
-                "#389068",
-                "#40D870",
-                "#509010",
-                "#78B820",
-                "#E09050",
-                "#885828",
-                "#C080F0"
-            ]
-            for i in range(16):
-                img = tk.PhotoImage(file=os.path.join("resources","meta","icons","transparent.png"))
-                bgcolor = bgcolors[i]
-                button = tk.Button(sprite_section,image=img,text=i,width=20,height=20,bg=bgcolor,command=partial(self.press_color_button,i))
-                button.image = img
-                self.palette_display_colors.append(button)
-            i = 1
-            for color in self.palette_display_colors:
-                CreateToolTip(color,"Moo")
-                color.grid(row=row,column=i+1)
-                i += 1
-                if i == 8 + 1:
-                    row += 1
-                    i = 1
+            bgcolors = {
+                "Transparent": "#000000",
+                "Eyes": "#F8F8F8",
+                "Belt": "#F0D840",
+                "Skin (Dark)": "#B86820",
+                "Skin (Light)": "#F0A068",
+                "Outline": "#282828",
+                "Hat Trim": "#F87800",
+                "Mouth": "#C01820",
+                "Hair": "#E860B0",
+                "Tunic (Dark)": "#389068",
+                "Tunic (Light)": "#40D870",
+                "Hat (Dark)": "#509010",
+                "Hat (Light)": "#78B820",
+                "Hands": "#E09050",
+                "Sleeves": "#885828",
+                "Water Ripples": "#C080F0"
+            }
+
+        for i in range(len(bgcolors)):
+            img = tk.PhotoImage(file=os.path.join("resources","meta","icons","transparent.png"))
+            label = list(bgcolors.keys())[i]
+            bgcolor = list(bgcolors.values())[i]
+            button = tk.Button(palette_section,image=img,text=i,name="palette_section_colorpicker_"+str(i),width=20,height=20,bg=bgcolor,command=partial(self.press_color_button,i))
+            button.image = img
+            button.label = label
+            self.buttons["palette"].append(button)
+        i = 1
+        for color in self.buttons["palette"]:
+            CreateToolTip(color,color.label)
+            color.grid(row=row,column=i+1)
+            i += 1
+            if i == 8 + 1:
+                row += 1
+                i = 1
         ###############################################
 
 
@@ -219,7 +247,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         ########### GUI Specific Stuff ################
         # Gui.class
         # print_vcr_controls()
-        control_section = tk.Frame(left_pane)
+        control_section = tk.Frame(left_pane, name="vcr_controls_section")
         left_pane.add(control_section)
         button_width = 7
         self.zoom_factor = tk.StringVar(control_section)
@@ -304,16 +332,19 @@ class SpriteSomethingMainFrame(tk.Frame):
         step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
         current_grid_row += 1
 
-        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-back.png"))
-        step_back_button = tk.Button(control_section, image=img, text="Pose", width=button_width, compound=tk.LEFT, command=self.rewind_global_pose_timer)
-        step_back_button.image = img
-        step_back_button.grid(row=current_grid_row, column=1, sticky='nesw')
+        if self._game_name == "metroid3":
+            img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-back.png"))
+            step_back_button = tk.Button(control_section, image=img, text="Pose", width=button_width, compound=tk.LEFT, command=self.rewind_global_pose_timer)
+            step_back_button.image = img
+            step_back_button.grid(row=current_grid_row, column=1, sticky='nesw')
 
-        img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-forward.png"))
-        step_forward_button = tk.Button(control_section, image=img, text="Pose", width=button_width, compound=tk.RIGHT, command=self.step_global_pose_timer)
-        step_forward_button.image = img
-        step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
+            img = tk.PhotoImage(file=os.path.join("resources","meta","icons","step-forward.png"))
+            step_forward_button = tk.Button(control_section, image=img, text="Pose", width=button_width, compound=tk.RIGHT, command=self.step_global_pose_timer)
+            step_forward_button.image = img
+            step_forward_button.grid(row=current_grid_row, column=3, sticky='nesw')
+
         ###############################################
+
         self._status.set(self.game.game_name + ': "' + self.game.sprites[0x01][0] + '"')
 
         self.initialize_sprite_animation()        #set up the initial animation
@@ -330,11 +361,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 
     def create_menu_bar(self, game_name):
         #create the menu bar
-        menu = tk.Menu(self.master)
+        menu = tk.Menu(self.master, name="menu_bar")
         self.master.configure(menu=menu)
 
         #create the file menu
-        file_menu = tk.Menu(menu, tearoff=0)
+        file_menu = tk.Menu(menu, tearoff=0, name="file_menu")
         file_menu.images = {}
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","open.png"))
@@ -352,7 +383,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         menu.add_cascade(label="File", menu=file_menu)
 
         #create the import menu
-        import_menu = tk.Menu(menu, tearoff=0)
+        import_menu = tk.Menu(menu, tearoff=0, name="import_menu")
         import_menu.images = {}
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","extract.png"))
@@ -386,7 +417,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         import_menu.add_command(label="Raw Palette Data", image=import_menu.images["import-palette"], compound=tk.LEFT, command=self.load_sprite)
 
         #create the export menu
-        export_menu = tk.Menu(menu, tearoff=0)
+        export_menu = tk.Menu(menu, tearoff=0, name="export_menu")
         export_menu.images = {}
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","inject-new.png"))
@@ -431,27 +462,27 @@ class SpriteSomethingMainFrame(tk.Frame):
         export_menu.add_command(label="Raw Palette Data", image=export_menu.images["export-palette"], compound=tk.LEFT, command=self.load_sprite)
 
         #create the convert menu
-        convert_menu = tk.Menu(menu, tearoff=0)
+        convert_menu = tk.Menu(menu, tearoff=0, name="convert_menu")
         convert_menu.add_cascade(label="Import", menu=import_menu)
         convert_menu.add_cascade(label="Export", menu=export_menu)
         #attach to the menu bar
         menu.add_cascade(label="Convert", menu=convert_menu)
 
         #create the plugins menu
-        plugins_menu = tk.Menu(menu, tearoff=0)
+        plugins_menu = tk.Menu(menu, tearoff=0, name="plugins_menu")
         if game_name == "zelda3":
             plugins_menu.add_command(label="Sheet Trawler", command=self.popup_NYI)
         else:
             plugins_menu.add_command(label="None", state="disabled")
 
         #create the tools menu
-        tools_menu = tk.Menu(menu, tearoff=0)
+        tools_menu = tk.Menu(menu, tearoff=0, name="tools_menu")
         tools_menu.add_cascade(label="Plugins", menu=plugins_menu)
         #attach to the menu bar
         menu.add_cascade(label="Tools", menu=tools_menu)
 
         #create the help menu
-        help_menu = tk.Menu(menu, tearoff=0)
+        help_menu = tk.Menu(menu, tearoff=0, name="help_menu")
         help_menu.add_command(label="About", command=self.about)
         #attach to the menu bar
         menu.add_cascade(label="Help", menu=help_menu)
@@ -496,6 +527,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         spiffy_buttons = tk.Label(container, text=section_label + ':')
         spiffy_buttons.grid(row=row, column=col, sticky='E')
+        self.buttons[prefix] = {}
         col += 1
         if prefix == "mail":
             col += 1
@@ -512,6 +544,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             button = tk.Radiobutton(
                 container,
                 image=img,
+                name=prefix + str(level) + "_button",
                 text=label+suffix,
                 variable=prefix,
                 value=level,
@@ -527,6 +560,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                 self.press_spiffy_button(prefix,level)
             CreateToolTip(button, label + suffix)
             button.image = img
+            self.buttons[prefix][level] = button
             button.grid(row=row, column=col)
             col += 1
 
@@ -541,10 +575,10 @@ class SpriteSomethingMainFrame(tk.Frame):
             self.initialize_sprite_animation()
         animation_list = tk.Tk()
         animation_list.title("Animation List")
-        animation_list_canvas = tk.Canvas(animation_list)
-        animation_list_frame = tk.Frame(animation_list_canvas)
-        animation_list_vscrollbar = tk.Scrollbar(animation_list, orient="vertical", command=animation_list_canvas.yview)
-        animation_list_hscrollbar = tk.Scrollbar(animation_list, orient="horizontal", command=animation_list_canvas.xview)
+        animation_list_canvas = tk.Canvas(animation_list, name="animation_list_canvas")
+        animation_list_frame = tk.Frame(animation_list_canvas, name="animation_list_frame")
+        animation_list_vscrollbar = tk.Scrollbar(animation_list, orient="vertical", command=animation_list_canvas.yview, name="animation_list_vscroll")
+        animation_list_hscrollbar = tk.Scrollbar(animation_list, orient="horizontal", command=animation_list_canvas.xview, name="animation_list_hscroll")
         animation_list_canvas.configure(yscrollcommand=animation_list_vscrollbar.set)
         animation_list_canvas.configure(xscrollcommand=animation_list_hscrollbar.set)
         animation_list_vscrollbar.pack(side="right", fill="y")
@@ -571,13 +605,34 @@ class SpriteSomethingMainFrame(tk.Frame):
 
     def press_color_button(self,index):
         color = tk.colorchooser.askcolor()
-        self.palette_display_colors[index].configure(bg=str(color)[-9:])
+        self.buttons["palette"][index].configure(bg=str(color)[-9:])
 
     def press_spiffy_button(self,prefix,level):
         # Gui.class
         #ins:
         # buttonID: This way the Sprite Class knows what we clicked
-        self.sprite_menu_buttons[prefix] = level
+        self.button_values[prefix] = level
+        if prefix == "mail" or prefix == "suit":
+            bgcolors = []
+            if prefix == "mail":
+                bgcolors = [
+                    ["#000000","#F8F8F8","#F0D840","#B86820","#F0A068","#282828","#F87800","#C01820","#E860B0","#389068","#40D870","#509010","#78B820","#E09050","#C86020","#C080F0"],
+                    ["#000000","#F8F8F8","#F0D840","#B86820","#F0A068","#282828","#F87800","#C01820","#E860B0","#0060D0","#88A0E8","#C0A048","#F8D880","#E09050","#C86020","#C080F0"],
+                    ["#000000","#F8F8F8","#F0D840","#B86820","#F0A068","#282828","#F87800","#C01820","#E860B0","#B81020","#F05888","#9878D8","#C8A8F8","#E09050","#C86020","#C080F0"],
+                    ["#000000","#F8F8F8","#F0D840","#B86820","#F0A068","#282828","#F87800","#C01820","#E860B0","#389068","#40D870","#509010","#78B820","#F098A8","#901830","#C080F0"]
+                ]
+            elif prefix == "suit":
+                bgcolors = [
+                    ["#000000","#404000","#E8E800","#280028","#00F870","#406840","#F8E0A8","#90B090","#709070","#D82800","#A8A800","#585800","#A09800","#204020","#A01800","#680000"],
+                    ["#000000","#404000","#F8B800","#280028","#00F870","#406840","#F8E0A8","#90B090","#709070","#D82800","#F06800","#702000","#A09800","#204020","#A01800","#680000"],
+                    ["#000000","#404000","#F88080","#280028","#00F870","#406840","#F8E0A8","#90B090","#709070","#D82800","#A040B0","#502860","#A09800","#204020","#A01800","#680000"]
+                ]
+
+            colors = bgcolors[int(level)-1]
+            if "palette" in self.buttons:
+                for i in range(len(self.buttons["palette"])):
+                    color = colors[i]
+                    self.buttons["palette"][i].configure(bg=color)
         if hasattr(self, "_frame_number"):
             self.update_sprite_animation()
 
@@ -833,7 +888,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         #also makes sure that there are not multiple of the sprite at any given time
         if self._sprite_ID is not None:
             self._canvas.delete(self._sprite_ID)
-        img, origin = self.sprite.get_sprite_frame(self.sprite.animations[self.animation_selection.get()], self._frame_number, self.sprite_menu_buttons)
+        img, origin = self.sprite.get_sprite_frame(self.sprite.animations[self.animation_selection.get()], self._frame_number, self.button_values)
         if img:
             new_size = tuple(int(self._current_zoom*dim) for dim in img.size)
             scaled_img = img.resize(new_size)
