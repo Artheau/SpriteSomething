@@ -51,8 +51,8 @@ class Metroid3RomHandler(RomHandler):
         self._apply_improvements()
 
 
-    def get_pose_data(self,animation,pose,port_frame=0):
-        tilemaps = self._get_pose_tilemaps(animation,pose)
+    def get_pose_data(self,animation,pose,port_frame=0,upper=True,lower=True):
+        tilemaps = self._get_pose_tilemaps(animation,pose,upper=upper,lower=lower)
         DMA_writes = self._get_dma_data(animation, pose)
         duration = self._get_pose_duration(animation, pose)
 
@@ -139,24 +139,35 @@ class Metroid3RomHandler(RomHandler):
             #now what is left is a list of xy pairs.  we can just grab what we need.
             x_position, y_position = self.read_from_snes_address(cannon_position_pointer + 2*(pose+1), "11")
 
-            tile, palette = self.read_from_snes_address(0x90C791+2*direction, "11")
+            
+            level_of_opening = min(2, frame//4)
+
+            tile, palette, gun_tile, gun_DMA = get_minimal_gun_data(direction, level_of_opening)
 
             #construct the full tilemap
             x_high_bit = 1 if x_position >= 0x80 else 0
             tilemap = [x_position, x_high_bit, y_position, tile, palette]
 
-            #need DMA info
-            DMA_list = 0x900000 + self.read_from_snes_address(0x90C7A5 + 2*direction, 2)
-            level_of_opening = 1 + min(2, frame//4)
-            DMA_pointer = 0x9A0000 + self.read_from_snes_address(DMA_list + 2*level_of_opening, 2)
-
-            #this is where the tile is loaded into in VRAM
-            gun_tile = (self.read_from_snes_address(0x90C786,2)-0x6000)//0x10
-
-            #this is the actual graphics data for the tile
-            gun_DMA = self.read_from_snes_address(DMA_pointer, "1"*0x20)
-
         return tilemap, gun_tile, gun_DMA
+
+    def get_minimal_gun_data(self, direction, level):
+        if level not in range(3):
+            raise AssertionError(f"get_minimal_gun_data() called with invalid level value {level}")
+        if direction not in range(10):
+            raise AssertionError(f"get_minimal_gun_data() called with invalid direction value {direction}")
+        tile, palette = self.read_from_snes_address(0x90C791+2*direction, "11")
+
+        #need DMA info
+        DMA_list = 0x900000 + self.read_from_snes_address(0x90C7A5 + 2*direction, 2)
+        DMA_pointer = 0x9A0000 + self.read_from_snes_address(DMA_list + 2*(level+1), 2)
+
+        #this is where the tile is loaded into in VRAM
+        gun_tile = (self.read_from_snes_address(0x90C786,2)-0x6000)//0x10
+
+        #this is the actual graphics data for the tile
+        gun_DMA = self.read_from_snes_address(DMA_pointer, "1"*0x20)
+
+        return tile, palette, gun_tile, gun_DMA
 
 
     def get_death_data(self, pose, facing='left', suit=SuitType.POWER):
@@ -189,12 +200,49 @@ class Metroid3RomHandler(RomHandler):
         # suit_palette_addr = 0x9B0000 + self.read_from_snes_address(0x9BB7D3+2*palette_index+10*suit_number, 2)
         # suitless_palette_addr = 0x9B0000 + self.read_from_snes_address(0x9BB7D3+2*palette_index+30, 2)
 
-        return tilemaps, DMA_writes, duration
+        return tilemaps[::-1], DMA_writes, duration
 
 
 
     def get_file_select_dma_data(self):
         return {0x00: self.read_from_snes_address(0xB6C000, "1"*0x2000)}
+
+
+    def get_file_select_tilemaps(self, item):
+        #For now, I have just coded these up by hand because it does not seem worth it to extract this information dynamically
+        if item in [0,1,2]:   #the Samus heads
+            return [[0x08*i,
+                     0x00,
+                     0x08*j,
+                     0xD0+i+0x10*j+3*item,
+                     0x24]
+                      for i in range(3) for j in range(3)]
+        elif item in [3,4,5,6,7]:   #the Samus visors
+            item_col = (item-3)//3
+            item_row = (item-3)%3
+            return [[4+0x08*i,
+                     0x00,
+                     10,
+                     0xD9+i+2*item_row+0x10*item_col,
+                     0x24]
+                      for i in range(2)]
+        elif item in [8]: #cursor
+            return [[0x00,0x00,0x18,0xFE,0x24],
+                    [0x00,0x00,0x10,0xEE,0x24],
+                    [0x00,0x00,0x08,0xDF,0x24],
+                    [0x00,0x00,0x00,0xC8,0x24],
+                    [0x08,0x00,0x18,0xEF,0x24],
+                    [0x08,0x00,0x10,0xFF,0x24],
+                    [0x08,0x00,0x08,0xCC,0x24]]
+        elif item in [9]: #pipe framework
+            return [[0x00,0x00,0x00,0xF9,0x24],
+                    [0x08,0x00,0x00,0xFA,0x24],
+                    [0x10,0x00,0x00,0xFB,0x24],
+                    [0x10,0x00,0x08,0xED,0x24],
+                    [0x00,0x00,0x10,0xFC,0x24],
+                    [0x10,0x00,0x10,0xFD,0x24]]
+        else:
+            raise AssertionError(f"get_file_select_tilemaps() called for unknown item number {item}")
 
 
     def get_palette(self, base_type, suit_type):
@@ -361,7 +409,7 @@ class Metroid3RomHandler(RomHandler):
             full_palette_set = []
             for i in range(9):
                 duration,palette_index = self.read_from_snes_address(0x9BB823 + 2*i,"11")
-                full_palette_set.append(duration,palette_list[palette_index])
+                full_palette_set.append((duration,self._get_raw_palette(palette_list[palette_index])))
 
             return full_palette_set
 
@@ -370,13 +418,13 @@ class Metroid3RomHandler(RomHandler):
             return [(2,self._get_raw_palette(0x9B96C0 + i*0x20)) for i in range(6)]
 
         elif base_type == PaletteType.SEPIA:
-            return self._get_static_palette(0x8CE569)
+            return [self._get_static_palette(0x8CE569)]
 
         elif base_type == PaletteType.SEPIA_HURT:
-            return self._get_static_palette(0x9BA380)
+            return [self._get_static_palette(0x9BA380)]
 
         elif base_type == PaletteType.SEPIA_ALTERNATE:
-            return self._get_static_palette(0x9BA3A0)
+            return [self._get_static_palette(0x9BA3A0)]
 
         elif base_type == PaletteType.DOOR:
             visor_color = self.read_from_snes_address(0x82E52B, 2)
@@ -386,12 +434,12 @@ class Metroid3RomHandler(RomHandler):
 
         elif base_type == PaletteType.XRAY:
             _,base_palette = self.get_palette(PaletteType.STANDARD, suit_type)[0]    #recurse to get the regular suit palette
-            visor_colors = self.read_from_snes_address(0x9BA3C6, "222")
+            visor_colors = self.get_nightvisor_colors()
             #I did manual frame advances to learn that the duration is 6 frames for each visor color
             return [(6, base_palette[:4]+[color]+base_palette[5:]) for color in visor_colors]
 
         elif base_type == PaletteType.FILE_SELECT:
-            return self._get_static_palette(0x8EE5E0)
+            return [self._get_static_palette(0x8EE5E0)]
 
         elif base_type == PaletteType.SHIP:
             base_palette_address = 0xA2A59E    #yes, way over here
@@ -399,7 +447,7 @@ class Metroid3RomHandler(RomHandler):
 
             base_palette = self.read_from_snes_address(base_palette_address,"2"*15)  #intentionally skipping last color
 
-            ship_underglow_address += 2    #skip over the control codes
+            ship_underglow_address += 4    #skip over the control codes
             full_palette_set = []
             for i in range(14):
                 #now what you're going to get is a list of duration, color, control code (2 bytes each, 14 in total)
@@ -411,7 +459,7 @@ class Metroid3RomHandler(RomHandler):
 
         elif base_type == PaletteType.INTRO_SHIP:
             #Technically the thrusters alternate white and black every frame, but this is a bit much on the eyes
-            return self._get_static_palette(0x8CE68B)
+            return [self._get_static_palette(0x8CE68B)]
 
         elif base_type == PaletteType.OUTRO_SHIP:
             base_address = 0x8DD6BA
@@ -421,6 +469,8 @@ class Metroid3RomHandler(RomHandler):
         else:
             raise AssertionError(f"function get_palette() called with unknown palette type: {base_type}")
 
+    def get_nightvisor_colors(self):
+        return self.read_from_snes_address(0x9BA3C6, "222")
 
     def _get_static_palette(self, snes_address):
         return (0, self._get_raw_palette(snes_address))
@@ -440,7 +490,7 @@ class Metroid3RomHandler(RomHandler):
         return self.read_from_snes_address(snes_address, "2"*0x10)
 
 
-    def _get_pose_tilemaps(self,animation,pose):
+    def _get_pose_tilemaps(self,animation,pose, upper=True, lower=True):
         lower_tilemaps = self._get_pose_tilemaps_from_addr(0x92945D, animation, pose)
         upper_tilemaps = self._get_pose_tilemaps_from_addr(0x929263, animation, pose)
 
@@ -456,7 +506,7 @@ class Metroid3RomHandler(RomHandler):
             stupid_tile_tilemap = []
 
         #the tiles are rendered in this specific order: backwards lower, backwards upper
-        return lower_tilemaps[::-1] + stupid_tile_tilemap + upper_tilemaps[::-1]
+        return (lower_tilemaps[::-1] if lower else []) + stupid_tile_tilemap + (upper_tilemaps[::-1] if upper else [])
 
 
     def _get_pose_tilemaps_from_addr(self, base_addr, animation, pose):

@@ -888,7 +888,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         #also makes sure that there are not multiple of the sprite at any given time
         if self._sprite_ID is not None:
             self._canvas.delete(self._sprite_ID)
-        img, origin = self.sprite.get_sprite_frame(self.sprite.animations[self.animation_selection.get()], self._frame_number, self.button_values)
+        img, origin = self.sprite.get_sprite_pose(self.sprite.animations[self.animation_selection.get()], 0, self.button_values) #TODO: repair animations -- self._frame_number, self.button_values)
         if img:
             new_size = tuple(int(self._current_zoom*dim) for dim in img.size)
             scaled_img = img.resize(new_size)
