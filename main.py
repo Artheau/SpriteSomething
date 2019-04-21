@@ -6,6 +6,7 @@
 # back in April 2019
 
 import os
+import argparse
 import importlib
 import lib.constants as CONST
 import json
@@ -21,15 +22,28 @@ from lib.tkSimpleStatusBar import StatusBar
 from PIL import Image, ImageTk
 
 def main():
-	root = tk.Tk()
-	#window size
-	root.geometry("800x600")
-	root.configure(bg='#f0f0f0')
-	SpriteSomethingMainFrame(root)
-	root.mainloop()
+    command_line_args = process_command_line_args()
+    
+    root = tk.Tk()
+    #window size
+    root.geometry("800x600")
+    root.configure(bg='#f0f0f0')
+    SpriteSomethingMainFrame(root, command_line_args["game"])
+    root.mainloop()
+
+def process_command_line_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--game",
+                        dest="game",
+                        help="Which game to start in (e.g. 'metroid3')",
+                        metavar="<game_name>",
+                        default='zelda3')
+
+    command_line_args = vars(parser.parse_args())
+    return command_line_args
 
 class SpriteSomethingMainFrame(tk.Frame):
-    def __init__(self, master=None):
+    def __init__(self, master=None, starting_game="zelda3"):
         tk.Frame.__init__(self, master)
 
         dims = {
@@ -61,8 +75,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         self._sprites = {}
         self._background_ID = None
 
-        #for now, just to prove that at least some of the features work
-        self.load_game(random.choice(["zelda3", "metroid3"]))
+        self.load_game(starting_game)
 
         self.create_menu_bar(self._game_name)
         self._status = self.create_status_bar()
@@ -953,4 +966,4 @@ class SpriteSomethingMainFrame(tk.Frame):
             exit()
 
 if __name__ == "__main__":
-	main()
+    main()

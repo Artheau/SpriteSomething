@@ -74,19 +74,19 @@ class Metroid3RomHandler(RomHandler):
         #main population is from data starting at D5200-D71FF LOROM (populates from 0x00 on)
         #Note: grapple beam (e.g. $D0200 LOROM) can overwrite parts of row 2, and Mode 7 rooms (e.g. $183A00 LOROM)
         # can load "sprites" into the last three rows.  Rain can also go in row 0xD0
-        DMA_writes = {0x00: self.read_from_snes_address(0x9AD200,'1'*0x2000)}
+        DMA_writes = {0x00: self.bulk_read_from_snes_address(0x9AD200,0x2000)}
 
         #row 0x30 is populated with 8 tiles depending upon equipped weapon (0x30-0x37)
         if equipped_weapon in ["regular","standard","charge"]:
-            DMA_writes[0x30] = self.read_from_snes_address(0x9AF200,'1'*0x100)
+            DMA_writes[0x30] = self.bulk_read_from_snes_address(0x9AF200,0x100)
         elif equipped_weapon in ["ice"]:
-            DMA_writes[0x30] = self.read_from_snes_address(0x9AF400,'1'*0x100)
+            DMA_writes[0x30] = self.bulk_read_from_snes_address(0x9AF400,0x100)
         elif equipped_weapon in ["wave"]:
-            DMA_writes[0x30] = self.read_from_snes_address(0x9AF600,'1'*0x100)
+            DMA_writes[0x30] = self.bulk_read_from_snes_address(0x9AF600,0x100)
         elif equipped_weapon in ["plasma"]:
-            DMA_writes[0x30] =  self.read_from_snes_address(0x9AF800,'1'*0x100)
+            DMA_writes[0x30] =  self.bulk_read_from_snes_address(0x9AF800,0x100)
         elif equipped_weapon in ["spazer"]:
-            DMA_writes[0x30] = self.read_from_snes_address(0x9AFA00,'1'*0x100)
+            DMA_writes[0x30] = self.bulk_read_from_snes_address(0x9AFA00,0x100)
 
         return DMA_writes
 
