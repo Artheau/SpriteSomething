@@ -1,3 +1,5 @@
+import json
+import os
 from lib.game import Game
 from lib.zspr import Zspr
 from . import rom
@@ -7,10 +9,15 @@ class Zelda3(Game):
         self.game_name = "The Legend of Zelda: A Link to the Past"
         self.game_nameShort = "Zelda3"
         self.game_nameAbbr =  "Z3"
-        self.background_images = {
-                                    "On His Throne": "throne.png",
-                                    "Budget Retreat": "cell.png"
-        }
+        self.background_images = {}
+        with open(os.path.join("resources",self.game_nameShort.lower(),"backgrounds","backgrounds.json")) as bgimg_file:
+            bg_imgs = json.load(bgimg_file)
+        for bg_img in bg_imgs:
+            self.background_images[bg_img["filename"]] = bg_img["title"]
+        for file in os.listdir(os.path.join("resources",self.game_nameShort.lower(),"backgrounds")):
+            if not file.endswith(".json") and not file in self.background_images.keys():
+                self.background_images[file] = file.capitalize().rpartition('.')[0]
+        self.background_images = {v:k for k,v in self.background_images.items()}
         self.rom_data = None#rom.Zelda3RomHandler(rom_filename)
         self.meta_data = None
         self.sprites = {0x01: ("Link", "Z3Link")}   #as (display name, class name)
