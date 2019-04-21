@@ -13,7 +13,11 @@
         "Playground",
         "Emporium",
         "Base",
-        "Amphitheatre"
+        "Amphitheatre",
+        "Snowball",
+        "Familiar",
+        "Wizard",
+        "Factory"
     ],
     "prefix enchantment": [
         "Blazing",
@@ -30,7 +34,11 @@
         "Art's",
         "Some Dudes'",
         "Some Nerds'",
-        "The San Dimas"
+        "The San Dimas",
+        "Refreshing",
+        "Final",
+        "Updated",
+        "Underwater"
     ],
     "suffix enchantment": [
         "of Vengeance",
@@ -47,6 +55,7 @@
         "Are Belong To Us",
         "made by some dudes",
         "made by some nerds",
-        "presents Wyld Stallyns *excellent air guitar riff*"
+        "presents Wyld Stallyns *excellent air guitar riff*",
+        "with unintended features"
     ]
 }
