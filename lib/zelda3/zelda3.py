@@ -100,10 +100,14 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
         else:
             raise AssertionError(f"in Link ZSPR module, received call to get_gloves_color() with glove color {gloves}")
 
-    def get_sprite_pose(self, animation_ID, pose, buttons):
+    def get_sprite_pose(self, animation_ID, pose):
         #Not raising an error so that we can test this functionality on the other libraries for now
         #print(f"Received call to activate animation number {hex(animation_ID)} for Link, but this is not implemented (yet).")
         return None, None
 
     def get_sprite_animation(self, animation_ID):
         raise NotImplementedError()
+
+    def get_pose_number_from_frame_number(self, animation_ID, frame_number):
+        #TODO: Implement
+        return 0

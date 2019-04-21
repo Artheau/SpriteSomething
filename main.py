@@ -14,6 +14,8 @@ import random
 import re
 import tkinter as tk
 import webbrowser
+import numpy as np
+from lib.RomHandler import util
 from functools import partial
 from tkinter import colorchooser, filedialog, messagebox, Text, ttk
 from lib.crxtooltip import CreateToolTip
@@ -306,10 +308,10 @@ class SpriteSomethingMainFrame(tk.Frame):
         speed_factor.image = img
         speed_factor.grid(row=current_grid_row, column=1, sticky='e')
 
-        speed_down_button = tk.Button(control_section, text="Speed -", width=button_width, state=tk.DISABLED, command=speed_down)
+        speed_down_button = tk.Button(control_section, text="Speed -", width=button_width, command=speed_down)
         speed_down_button.grid(row=current_grid_row, column=2, sticky='nesw')
 
-        speed_up_button = tk.Button(control_section, text="Speed +", width=button_width, state=tk.DISABLED, command=speed_up)
+        speed_up_button = tk.Button(control_section, text="Speed +", width=button_width, command=speed_up)
         speed_up_button.grid(row=current_grid_row, column=3, sticky='nesw')
         current_grid_row += 1
 
@@ -363,14 +365,24 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.initialize_sprite_animation()        #set up the initial animation
 
         #and now, as the final act of setup, let us begin the march of the clock
+        self._ready_for_next_frame = True     #gating mechanism to handle display lag
+        self._stutter_frame = False           #gating mechanism to handle display lag
         self.time_marches_forward()
 
     def time_marches_forward(self):
-        FRAMERATE = 60 #Hz
-        self.advance_global_frame_timer()
-        if not self.freeze_ray: #stops time, tell your friends
-            self.master.after(int(1000/FRAMERATE), self.time_marches_forward)
-
+        FRAME_SPEED = 1000/60 #to simulate 60 Hz
+        if self._ready_for_next_frame:
+            self._ready_for_next_frame = False
+            if not self.freeze_ray: #stops time, tell your friends
+                self.master.after(int(FRAME_SPEED/self._current_speed), self.time_marches_forward)
+            self.advance_global_frame_timer()
+            self._ready_for_next_frame = True
+            if self._stutter_frame:
+                self._stutter_frame = False
+                self.master.after(int(FRAME_SPEED/self._current_speed), self.time_marches_forward)
+        else:
+            self._stutter_frame = True
+        
 
     def create_menu_bar(self, game_name):
         #create the menu bar
@@ -901,8 +913,11 @@ class SpriteSomethingMainFrame(tk.Frame):
         #also makes sure that there are not multiple of the sprite at any given time
         if self._sprite_ID is not None:
             self._canvas.delete(self._sprite_ID)
-        img, origin = self.sprite.get_sprite_pose(self.sprite.animations[self.animation_selection.get()], 0, self.button_values) #TODO: repair animations -- self._frame_number, self.button_values)
+        animation_ID = self.sprite.animations[self.animation_selection.get()]
+        img, origin = self.sprite.get_sprite_pose(animation_ID, self.sprite.get_pose_number_from_frame_number(animation_ID, self._frame_number))
         if img:
+            palette = self.sprite.get_sprite_palette_from_buttons(self.button_values, self._frame_number)
+            img = util.apply_palette(img, palette)
             new_size = tuple(int(self._current_zoom*dim) for dim in img.size)
             scaled_img = img.resize(new_size)
             self._sprite_ID = self._attach_sprite(self._canvas, scaled_img, tuple(self._current_zoom*(100-x) for x in origin))  #TODO: better coordinate

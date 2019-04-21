@@ -44,7 +44,7 @@ class Zspr():     #Base for ZSPR files
         sanitized_name = ''.join([x for x in name if x in ALLOWED_CHARACTERS])
         self._sprite_author_name_short = sanitized_name
 
-    def get_sprite_pose(self, animation_ID, pose, buttons):      #a static pose that is held for a fixed number of frames
+    def get_sprite_pose(self, animation_ID, pose):      #a static pose that is held for a fixed number of frames
         raise AssertionError("function get_sprite_frame() called on root ZSPR class directly")
 
     def get_sprite_animation(self, animation_ID):   #get set of sprite frames that comprise a full animation sequence

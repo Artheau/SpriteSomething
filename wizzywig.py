@@ -17,7 +17,7 @@ def main():
         else:
             raise AssertionError(f"There is no sfc file in directory {path}")
 
-    game = Metroid3(get_sfc_filename(os.path.join("lib", "metroid3")),None)
+    game = Metroid3(get_sfc_filename(os.path.join("resources", "metroid3")),None)
     samus = M3Samus(game.rom_data, game.meta_data)
 
     full_layout = samus.export_PNG()

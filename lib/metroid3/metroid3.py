@@ -317,13 +317,33 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                     getattr(rom.SuitType,suit_type.upper()) \
                     )
 
+    def get_sprite_palette_from_buttons(self, buttons, frame):
+        suit_type = [None,"power","varia","gravity"][buttons["suit"]]
+        return self.get_sprite_palette("standard", suit_type, frame)
+
     def get_sprite_palette(self, variant_type, suit_type, frame):     #for displaying the palette in the GUI, not for rendering
-        raise NotImplementedError()
+        current_palette = self.get_current_time_palette(self.get_timed_sprite_palette(variant_type, suit_type),frame)
+        death_palette = self.get_current_time_palette(self.get_timed_sprite_palette("death_flesh", suit_type),frame)
+        loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", suit_type),frame)
+        flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", suit_type),frame)
+        file_select_palette = self.get_current_time_palette(self.get_timed_sprite_palette("file_select", suit_type),frame)
+        zero_palette = [0 for _ in range(16)]
+        full_palette = \
+                zero_palette + \
+                file_select_palette + \
+                current_palette + \
+                death_palette + \
+                zero_palette + \
+                zero_palette + \
+                loader_palette + \
+                flash_palette + \
+                [0 for _ in range(16*8)]
+        return full_palette
 
     def set_sprite_palette(self, variant_type, suit_type, frame):
         raise NotImplementedError()
 
-    def get_sprite_pose(self, animation_ID, pose, buttons, upper=True,lower=True):
+    def get_sprite_pose(self, animation_ID, pose, upper=True,lower=True):
         if type(animation_ID) is str:
             if animation_ID == "death_left":
                 tilemaps, DMA_writes, duration = self.rom_data.get_death_data(pose, facing="left")
@@ -366,9 +386,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
             tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation
         palette_timing_list = self.get_timed_sprite_palette("standard", "power")
 
-        #TODO: A lot of the following seems like it can be factored out to common code
 
-        current_palette = self.get_current_time_palette(palette_timing_list,0)
 
         #there is stuff in VRAM by default, so populate this and then overwrite with the DMA_writes
         constructed_VRAM_data = {}
@@ -381,22 +399,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         add_flattened_tiles(self.rom_data.get_default_vram_data().items())
         add_flattened_tiles(DMA_writes.items())
 
-        death_palette = self.get_current_time_palette(self.get_timed_sprite_palette("death_flesh", "power"),0)
-        loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", "power"),0)
-        flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", "power"),0)
-        file_select_palette = self.get_current_time_palette(self.get_timed_sprite_palette("file_select", "power"),0)
-        current_palettes =  {
-                    0b000: None,
-                    0b001: file_select_palette,          #strictly speaking, this is supposed to be in 0b111 but it is convenient to place it here right now
-                    0b010: current_palette,              #Samus palette
-                    0b011: death_palette,                #during crystal flash, this palette is referenced also, but it is set to all black
-                    0b100: None,
-                    0b101: None,
-                    0b110: loader_palette,               #used during loading scene for Samus
-                    0b111: flash_palette                 #used for the pulsating bubble in crystal flash
-                }
-
-        constructed_image, offset = util.image_from_raw_data(tilemaps, constructed_VRAM_data, current_palettes)
+        constructed_image, offset = util.image_from_raw_data(tilemaps, constructed_VRAM_data)
         return constructed_image, offset
 
     def get_pose_number_from_frame_number(self, animation_ID, frame):
@@ -442,8 +445,8 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
             palette_timing_index -= time
             if palette_timing_index <= 0 or time == 0:   #time = 0 is a special code for static palettes or "final" palettes
                 return palette
-            else:
-                raise AssertionError(f"During get_sprite_pose() encountered modular arithmetic error while processing frame number {frame}")
+        else:
+            raise AssertionError(f"During get_sprite_pose() encountered modular arithmetic error while processing frame number {frame}")
 
     def get_all_poses(self):
         for animation, pose in [(animation, 0) for animation in self.animations.values()]:
@@ -496,7 +499,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def get_sprite_animation(self, animation_ID):
         raise NotImplementedError()
 
-    def import_all_images_from_ROM(self):
+    def import_rgba_images_from_ROM(self):
         all_images = {}
         for image_name in [name for row in self._layout.get_rows() for name in row]:  #for every image referenced explicitly in the layout
             animation, pose = self._layout.data["images"][image_name]["used by"][0]   #import a representative animation and pose
@@ -515,6 +518,8 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 image, origin = self.get_sprite_pose(animation, pose, None)
 
             if image:
+                if image.mode == 'P':
+                    image = util.apply_palette(image, self.get_sprite_palette("standard", "power", 0))
                 all_images[image_name] = (image, origin)
             else:
                 print(f"WARNING: Did not generate image for {image_name}")
@@ -523,6 +528,6 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
 
 
     def export_PNG(self):
-        images = self.import_all_images_from_ROM()     #TODO: Should also be able to import these from PNG or ZSPR
+        images = self.import_rgba_images_from_ROM()     #TODO: Should also be able to import these from PNG or ZSPR
         return self._layout.export_all_images_to_PNG(images)
     
