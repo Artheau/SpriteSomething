@@ -12,7 +12,11 @@
         "Container",
         "Playground",
         "Emporium",
-        "Base"
+        "Base",
+        "Snowball",
+        "Familiar",
+        "Wizard",
+        "Factory"
     ],
     "prefix enchantment": [
         "Blazing",
@@ -24,7 +28,11 @@
         "First Annual",
         "Sahasrahla's",
         "All Your",
-        "It's A Dangerous"
+        "It's A Dangerous",
+        "Refreshing",
+        "Final",
+        "Updated",
+        "Underwater"
     ],
     "suffix enchantment": [
         "of Vengeance",
@@ -34,10 +42,12 @@
         "in surround sound where available",
         "with soothing ocean sounds",
         "2000",
+        "3000",
         "ft. M. Rio and L. Gee",
         "of Imagery",
         "for Great Justice",
         "to Move Every Zig",
-        "Are Belong To Us"
+        "Are Belong To Us",
+        "with unintended features"
     ]
 }

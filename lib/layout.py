@@ -23,6 +23,8 @@ class Layout():
 
         scale = self.get_property("scale", image_name)
         if scale:
+            image = image.resize(tuple(scale*x for x in image.size), Image.NEAREST)
+            origin = tuple(scale*x for x in origin)
             original_dimensions = [scale*x for x in original_dimensions]
             if extra_area is not None:
                 extra_area = [[scale*x for x in region] for region in extra_area]
@@ -108,6 +110,30 @@ class Layout():
             collage.paste(image, ((width-image.size[0])//2,current_y))
             current_y += image.size[1]
         return collage
+
+    def export_all_images_to_PNG(self, all_images):
+        all_collages = []
+        for i,row in enumerate(self.get_rows()):
+            this_row_images = []
+            for image_name in [x for x in row]:   #for every image referenced explicitly in the layout
+                image, origin = all_images[image_name]
+
+                if image:
+                    bordered_image, new_origin = self.add_borders_and_scale(image, origin, image_name)
+
+                    shift = self.get_property("shift", image_name)
+                    if shift is not None:
+                        new_origin = tuple(new_origin[i] - shift[i] for i in range(2))    
+                    
+                    this_row_images.append((bordered_image, new_origin))
+                else:
+                    print(f"WARNING: Did not generate image for {image_name}")
+
+            collage = self.make_horizontal_collage(this_row_images)
+            all_collages.append(collage)
+
+        full_layout = self.make_vertical_collage(all_collages)
+        return full_layout
 
 if __name__ == "__main__":
     main()

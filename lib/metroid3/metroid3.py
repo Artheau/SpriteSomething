@@ -1,8 +1,10 @@
+import os
 from PIL import Image
 from lib.game import Game
 from lib.zspr import Zspr
 from . import rom
 from lib.RomHandler import util
+from lib.layout import Layout
 
 class Metroid3(Game):
     def __init__(self, rom_filename, meta_filename):
@@ -22,50 +24,7 @@ class Metroid3Sprite(Zspr):   #Super Metroid Sprites
     def __init__(self, *args):
         super().__init__(*args)    #do the stuff from the inherited class
 
-
-
-class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
-    def __init__(self, *args):
-        super().__init__(*args)    #do the stuff from the inherited class
-
-        self._SPRITE_DATA_SIZE = 500000             #I honestly don't know what this number should be until I do more napkin math
-        self._sprite_data = bytearray([0 for _ in range(self._SPRITE_DATA_SIZE)])
-        self._PALETTE_DATA_SIZE = (135*16*2)+(17*2)     #so many palettes...that's 135 just right there, along with stray colors
-        self._palette_data = bytearray([0 for _ in range(self._PALETTE_DATA_SIZE)])
-
-        self.palette_types = {
-                        "power": 1,
-                        "varia": 2,
-                        "gravity": 3,
-        }
-
-        self.suit_lookup = {value:key for key,value in self.palette_types.items()}   #reverse lookup
-
-        self.variant_type = {
-                        "standard": 0,
-                        #"loader": 1,
-                        "heat": 2,
-                        "charge": 3,
-                        "speed_boost": 4,
-                        "speed_squat": 5,
-                        "shine_spark": 6,
-                        "screw_attack": 7,
-                        "hyper_beam": 8,
-                        "death_suit": 9,
-                        "death_flesh": 10,
-                        #"crystal_flash": 11,
-                        "sepia": 12,
-                        "sepia_hurt": 13,
-                        "sepia_alternate": 14,
-                        "door": 15,
-                        "xray": 16,
-                        "file_select": 17,
-                        "ship": 18,
-                        "intro_ship": 19,
-                        "outro_ship": 20,
-        }
-
-        self.animations = {     #TODO: Organize this differently by separating out stance/facing/aim direction as different menus
+SAMUS_ANIMATION_DICT = {
                         "Elevator (Power)": 0x00,
                         "Elevator (Varia/Gravity)": 0x9B,
 
@@ -290,16 +249,58 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                         "Drained left": 0xE9,
                         "Supplication left": 0xEB,
 
-                        #these are not unique poses, and once WYSIWYG is implemented, these can be removed from the menu
-                        "DEBUG: Ran into right wall": 0x89,
-                        "DEBUG: Ran into right wall, aim diag up": 0xCF,
-                        "DEBUG: Ran into right wall, aim diag down": 0xD1,
-                        "DEBUG: Ran into left wall": 0x8A,
-                        "DEBUG: Ran into left wall, aim diag up": 0xD0,
-                        "DEBUG: Ran into left wall, aim diag down": 0xD2,
-                        "DEBUG: Superjump diagonal right": 0xCD,
-                        "DEBUG: Superjump diagonal left": 0xCE,
-      }
+                        "Ran into right wall": 0x89,
+                        "Ran into right wall, aim diag up": 0xCF,
+                        "Ran into right wall, aim diag down": 0xD1,
+                        "Ran into left wall": 0x8A,
+                        "Ran into left wall, aim diag up": 0xD0,
+                        "Ran into left wall, aim diag down": 0xD2,
+                        "Superjump diagonal right": 0xCD,
+                        "Superjump diagonal left": 0xCE,
+}
+
+
+
+class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
+    def __init__(self, *args):
+        super().__init__(*args)    #do the stuff from the inherited class
+
+        self.palette_types = {
+                        "power": 1,
+                        "varia": 2,
+                        "gravity": 3,
+        }
+
+        self.suit_lookup = {value:key for key,value in self.palette_types.items()}   #reverse lookup
+
+        self.variant_type = {
+                        "standard": 0,
+                        #"loader": 1,
+                        "heat": 2,
+                        "charge": 3,
+                        "speed_boost": 4,
+                        "speed_squat": 5,
+                        "shine_spark": 6,
+                        "screw_attack": 7,
+                        "hyper_beam": 8,
+                        "death_suit": 9,
+                        "death_flesh": 10,
+                        #"crystal_flash": 11,
+                        "sepia": 12,
+                        "sepia_hurt": 13,
+                        "sepia_alternate": 14,
+                        "door": 15,
+                        "xray": 16,
+                        "file_select": 17,
+                        "ship": 18,
+                        "intro_ship": 19,
+                        "outro_ship": 20,
+        }
+
+        self.animations = SAMUS_ANIMATION_DICT
+
+        self._layout = Layout(os.path.join("resources","metroid3","layout.json"))
+        self.images = self.import_all_images_from_ROM()     #TODO: Should also be able to import these from PNG or ZSPR
 
     def get_timed_sprite_palette(self, variant_type, suit_type):   #for use in rendering the sprite
         #interface between this file and the corresponding enumerations in rom.py
@@ -485,3 +486,33 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
 
     def get_sprite_animation(self, animation_ID):
         raise NotImplementedError()
+
+    def import_all_images_from_ROM(self):
+        all_images = {}
+        for image_name in [name for row in self._layout.get_rows() for name in row]:  #for every image referenced explicitly in the layout
+            animation, pose = self._layout.data["images"][image_name]["used by"][0]   #import a representative animation and pose
+            if type(animation) is str and animation[0:2] == "0x":                #convert from hex if needed
+                animation = int(animation[2:], 16)
+
+            force = self._layout.get_property("force", image_name)
+            if force:
+                if force.lower() == "upper":
+                    image, origin = self.get_sprite_pose(animation, pose, lower=False)
+                elif force.lower() == "lower":
+                    image, origin = self.get_sprite_pose(animation, pose, upper=False)
+                else:
+                    raise AssertionError(f"received call to force something in pose {image_name}, but did not understand command '{force}'")
+            else:
+                image, origin = self.get_sprite_pose(animation, pose)
+
+            if image:
+                all_images[image_name] = (image, origin)
+            else:
+                print(f"WARNING: Did not generate image for {image_name}")
+
+        return all_images
+
+
+    def export_PNG(self):
+        return self._layout.export_all_images_to_PNG(self.images)
+    
