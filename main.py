@@ -180,7 +180,9 @@ class SpriteSomethingMainFrame(tk.Frame):
             sprite_display.grid(row=row, column=col, columnspan=3)
             row += 1
 
-            self.add_spiffy_buttons(sprite_section, row, col, "Suit", {"Power":1,"Varia":2,"Gravity":3,"Hyper": 4}, "suit", " Suit")
+            self.add_spiffy_buttons(sprite_section, row, col, "Suit", {"Power":1,"Varia":2,"Gravity":3}, "suit", " Suit")
+            row += 1
+            self.add_spiffy_buttons(sprite_section, row, col, "Variant", self.sprite.variant_types, "variant", "")
             row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Cannon Port", {"No":0,"Yes":1}, "port", " Port")
 

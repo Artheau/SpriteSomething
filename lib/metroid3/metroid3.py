@@ -281,28 +281,28 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
 
         self.suit_lookup = {value:key for key,value in self.palette_types.items()}   #reverse lookup
 
-        self.variant_type = {
-                "standard": 0,
-                #"loader": 1,
-                "heat": 2,
-                "charge": 3,
-                "speed_boost": 4,
-                "speed_squat": 5,
-                "shine_spark": 6,
-                #"screw_attack": 7,
-                "hyper_beam": 8,
-                "death_suit": 9,
-                "death_flesh": 10,
-                #"crystal_flash": 11,
-                "sepia": 12,
-                "sepia_hurt": 13,
-                "sepia_alternate": 14,
-                "door": 15,
-                "xray": 16,
-                "file_select": 17,
-                "ship": 18,
-                "intro_ship": 19,
-                "outro_ship": 20,
+        self.variant_types = {
+                "Standard": 0,
+                "Charge": 1,
+                "Speed Boost": 2,
+                "Speed Squat": 3,
+                "Hyper Beam": 4,
+
+                #TODO: link this next block to background effects
+                #"Sepia": 5,  #in the intro storyline stuff
+                #"Door": 6,   #when Samus is going through a doorway
+                #"Heat": 7,   #for areas that require the Varia suit, and when alarms are blaring
+                #"Xray": 8,   #also for dark rooms
+
+                #"Shinespark": 9,
+                #"death_suit": 10,
+                #"sepia_hurt": 11,
+                #"sepia_alternate": 12,
+                #"death_flesh": 13,
+                #"file_select": 14,
+                #"ship": 15,
+                #"intro_ship": 16,
+                #"outro_ship": 17,
         }
 
         self.animations = SAMUS_ANIMATION_DICT
@@ -313,23 +313,22 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def get_timed_sprite_palette(self, variant_type, suit_type):   #for use in rendering the sprite
         #interface between this file and the corresponding enumerations in rom.py
         return self.rom_data.get_palette( \
-                    getattr(rom.PaletteType,variant_type.upper()), \
+                    getattr(rom.PaletteType,variant_type.upper().replace(" ", "_")), \
                     getattr(rom.SuitType,suit_type.upper()) \
                     )
 
     def get_sprite_palette_from_buttons(self, animation, frame, buttons):
         if animation in [0x81,0x82]:
-            variation = "screw_attack"
+            variant_type = "screw_attack"
+        elif animation in range(0xC7,0xCC+1):
+            variant_type = "shinespark"
         else:
-            variation = "standard"
+            variant_number = buttons["variant"]
+            variant_type = next(key for key, value in self.variant_types.items() if value == variant_number) #reverse dictionary lookup
 
-        if buttons["suit"] == 4:
-            variation = "hyper_beam"
-            suit_type = "power"
-        else:
-            suit_type = [None,"power","varia","gravity"][buttons["suit"]]
+        suit_type = [None,"power","varia","gravity"][buttons["suit"]]   #get the name of the suit instead of the number
 
-        return self.get_sprite_palette(variation, suit_type, frame)
+        return self.get_sprite_palette(variant_type, suit_type, frame)
 
     def get_sprite_palette(self, variant_type, suit_type, frame):     #for displaying the palette in the GUI, not for rendering
         current_palette = self.get_current_time_palette(self.get_timed_sprite_palette(variant_type, suit_type),frame)
@@ -445,19 +444,19 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         #figure out based upon frame number which palette should be used here
         palette_timing_index = frame
         current_palette = None
-        time_for_one_loop = sum(x for x,_ in palette_timing_list)
 
-        if time_for_one_loop == 0:            #static palette
-            return palette_timing_list[0][1]
+        if palette_timing_list[-1][0] == 0:            #static palette
+            return palette_timing_list[-1][1]
         else:
+            time_for_one_loop = sum(x for x,_ in palette_timing_list)
             palette_timing_index = palette_timing_index % time_for_one_loop
 
-        for time,palette in palette_timing_list:
-            palette_timing_index -= time
-            if palette_timing_index <= 0 or time == 0:   #time = 0 is a special code for static palettes or "final" palettes
-                return palette
-        else:
-            raise AssertionError(f"During get_sprite_pose() encountered modular arithmetic error while processing frame number {frame}")
+            for time,palette in palette_timing_list:
+                palette_timing_index -= time
+                if palette_timing_index <= 0 or time == 0:   #time = 0 is a special code for static palettes or "final" palettes
+                    return palette
+            else:
+                raise AssertionError(f"During get_sprite_pose() encountered modular arithmetic error while processing frame number {frame}")
 
     def get_all_poses(self):
         for animation, pose in [(animation, 0) for animation in self.animations.values()]:

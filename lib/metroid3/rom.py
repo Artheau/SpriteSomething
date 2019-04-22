@@ -26,7 +26,7 @@ class PaletteType(enum.Enum):
     CHARGE = enum.auto()             #holding down the fire button
     SPEED_BOOST = enum.auto()        #running fast
     SPEED_SQUAT = enum.auto()        #after running fast and then pressing down
-    SHINE_SPARK = enum.auto()        #flying through the air crazy-like
+    SHINESPARK = enum.auto()        #flying through the air crazy-like
     SCREW_ATTACK = enum.auto()       #using screw attack
     HYPER_BEAM = enum.auto()         #the rainbow suit colors
     DEATH_SUIT = enum.auto()         #colors used to render the suit pieces as they break apart
@@ -314,7 +314,7 @@ class Metroid3RomHandler(RomHandler):
                 raise AssertionError(f"function get_palette() called for charge palette with unknown suit type: {suit_type}")
 
             #The charged shot palette advances every frame (determined by manual frame advance)
-            return [(1,self._get_static_palette(base_address + i*0x20)) for i in range(8)]
+            return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(8)]
 
         elif base_type == PaletteType.SPEED_BOOST:
             if suit_type == SuitType.POWER:
@@ -343,7 +343,7 @@ class Metroid3RomHandler(RomHandler):
             #timing and order determined by manual frame advance.  One frame each, oscillates between 0 and 3
             return [(1,self._get_raw_palette(base_address + i*0x20)) for i in [0,1,2,3,2,1]]
 
-        elif base_type == PaletteType.SHINE_SPARK:
+        elif base_type == PaletteType.SHINESPARK:
             if suit_type == SuitType.POWER:
                 base_address = 0x9B9C20
             elif suit_type == SuitType.VARIA:
@@ -427,7 +427,7 @@ class Metroid3RomHandler(RomHandler):
             return [self._get_static_palette(0x9BA3A0)]
 
         elif base_type == PaletteType.DOOR:
-            visor_color = self.read_from_snes_address(0x82E52B, 2)
+            visor_color = self.read_from_snes_address(0x82E52C, 2)
             base_colors = [0 for _ in range(16)]   #use 0 as the base color...technically this fades upwards into the suit color
             base_colors[4] = visor_color
             return [(0, base_colors)]
