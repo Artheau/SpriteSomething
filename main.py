@@ -288,7 +288,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             self._current_speed = max(0.1, self._current_speed - 0.1)
             self.speed_factor.set(str(round(self._current_speed * 100)) + '%')
         def speed_up(*args):
-            self._current_speed = min(3.0, self._current_speed + 0.1)
+            self._current_speed = min(1.0, self._current_speed + 0.1)
             self.speed_factor.set(str(round(self._current_speed * 100)) + '%')
 
         img = tk.PhotoImage(file=os.path.join("resources","meta","icons","zoom.png"))
@@ -370,16 +370,16 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.time_marches_forward()
 
     def time_marches_forward(self):
-        FRAME_SPEED = 1000/60 #to simulate 60 Hz
+        FRAME_DELAY = 17  #equal to about ceiling(1000/60) in order to simulate 60 Hz (can't go faster without skipping frames due to PC monitor refresh rate)
         if self._ready_for_next_frame:
             self._ready_for_next_frame = False
             if not self.freeze_ray: #stops time, tell your friends
-                self.master.after(int(FRAME_SPEED/self._current_speed), self.time_marches_forward)
+                self.master.after(int(FRAME_DELAY/self._current_speed), self.time_marches_forward)
             self.advance_global_frame_timer()
             self._ready_for_next_frame = True
             if self._stutter_frame:
                 self._stutter_frame = False
-                self.master.after(int(FRAME_SPEED/self._current_speed), self.time_marches_forward)
+                self.master.after(int(FRAME_DELAY/self._current_speed), self.time_marches_forward)
         else:
             self._stutter_frame = True
         
