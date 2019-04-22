@@ -289,7 +289,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 "speed_boost": 4,
                 "speed_squat": 5,
                 "shine_spark": 6,
-                "screw_attack": 7,
+                #"screw_attack": 7,
                 "hyper_beam": 8,
                 "death_suit": 9,
                 "death_flesh": 10,
@@ -317,9 +317,19 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                     getattr(rom.SuitType,suit_type.upper()) \
                     )
 
-    def get_sprite_palette_from_buttons(self, buttons, frame):
-        suit_type = [None,"power","varia","gravity"][buttons["suit"]]
-        return self.get_sprite_palette("standard", suit_type, frame)
+    def get_sprite_palette_from_buttons(self, animation, frame, buttons):
+        if animation in [0x81,0x82]:
+            variation = "screw_attack"
+        else:
+            variation = "standard"
+
+        if buttons["suit"] == 4:
+            variation = "hyper_beam"
+            suit_type = "power"
+        else:
+            suit_type = [None,"power","varia","gravity"][buttons["suit"]]
+
+        return self.get_sprite_palette(variation, suit_type, frame)
 
     def get_sprite_palette(self, variant_type, suit_type, frame):     #for displaying the palette in the GUI, not for rendering
         current_palette = self.get_current_time_palette(self.get_timed_sprite_palette(variant_type, suit_type),frame)
@@ -343,7 +353,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def set_sprite_palette(self, variant_type, suit_type, frame):
         raise NotImplementedError()
 
-    def get_sprite_pose(self, animation_ID, pose, upper=True,lower=True):
+    def get_sprite_pose(self, animation_ID, pose, buttons={"port":0}, upper=True,lower=True):
         if type(animation_ID) is str:
             if animation_ID == "death_left":
                 tilemaps, DMA_writes, duration = self.rom_data.get_death_data(pose, facing="left")
@@ -383,7 +393,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
             else:
                 raise AssertionError(f"unknown command to get_sprite_pose(): {animation_ID}")
         else:
-            tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation
+            tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, port_frame=buttons["port"]*8,upper=upper, lower=lower)   #TODO: do full port opening animation
         palette_timing_list = self.get_timed_sprite_palette("standard", "power")
 
 
@@ -415,10 +425,11 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 else:
                     pose += 1
             elif control_codes[0] == 0xFE:    #targeted loop
-                loop_length = control_codes[1]
+                loop_pose_length = control_codes[1]
+                loop_length = sum([self.rom_data.get_pose_control_data(animation_ID,this_pose)[0] for this_pose in range(pose-loop_pose_length,pose)])
                 frame = (frame-frames_so_far) % loop_length    #we know the loop size, so no need to keep looping a lot
                 frames_so_far = 0
-                pose -= loop_length
+                pose -= loop_pose_length
             elif control_codes[0] == 0xFB:    #for the walljump branching, let's just go to spinjump for now
                 pose += 1
             else:                             #all (essentially) return to the beginning of the loop, with some caveats
@@ -509,13 +520,13 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
             force = self._layout.get_property("force", image_name)
             if force:
                 if force.lower() == "upper":
-                  image, origin = self.get_sprite_pose(animation, pose, None, lower=False)
+                  image, origin = self.get_sprite_pose(animation, pose, lower=False)
                 elif force.lower() == "lower":
-                  image, origin = self.get_sprite_pose(animation, pose, None, upper=False)
+                  image, origin = self.get_sprite_pose(animation, pose, upper=False)
                 else:
                   raise AssertionError(f"received call to force something in pose {image_name}, but did not understand command '{force}'")
             else:
-                image, origin = self.get_sprite_pose(animation, pose, None)
+                image, origin = self.get_sprite_pose(animation, pose)
 
             if image:
                 if image.mode == 'P':

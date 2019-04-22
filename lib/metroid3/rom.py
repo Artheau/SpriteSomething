@@ -142,7 +142,7 @@ class Metroid3RomHandler(RomHandler):
             
             level_of_opening = min(2, frame//4)
 
-            tile, palette, gun_tile, gun_DMA = get_minimal_gun_data(direction, level_of_opening)
+            tile, palette, gun_tile, gun_DMA = self.get_minimal_gun_data(direction, level_of_opening)
 
             #construct the full tilemap
             x_high_bit = 1 if x_position >= 0x80 else 0

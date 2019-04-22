@@ -180,7 +180,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             sprite_display.grid(row=row, column=col, columnspan=3)
             row += 1
 
-            self.add_spiffy_buttons(sprite_section, row, col, "Suit", {"Power":1,"Varia":2,"Gravity":3}, "suit", " Suit")
+            self.add_spiffy_buttons(sprite_section, row, col, "Suit", {"Power":1,"Varia":2,"Gravity":3,"Hyper": 4}, "suit", " Suit")
             row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Cannon Port", {"No":0,"Yes":1}, "port", " Port")
 
@@ -650,6 +650,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                 bgcolors = [
                     ["#000000","#404000","#E8E800","#280028","#00F870","#406840","#F8E0A8","#90B090","#709070","#D82800","#A8A800","#585800","#A09800","#204020","#A01800","#680000"],
                     ["#000000","#404000","#F8B800","#280028","#00F870","#406840","#F8E0A8","#90B090","#709070","#D82800","#F06800","#702000","#A09800","#204020","#A01800","#680000"],
+                    ["#000000","#404000","#F88080","#280028","#00F870","#406840","#F8E0A8","#90B090","#709070","#D82800","#A040B0","#502860","#A09800","#204020","#A01800","#680000"],
                     ["#000000","#404000","#F88080","#280028","#00F870","#406840","#F8E0A8","#90B090","#709070","#D82800","#A040B0","#502860","#A09800","#204020","#A01800","#680000"]
                 ]
 
@@ -914,9 +915,9 @@ class SpriteSomethingMainFrame(tk.Frame):
         if self._sprite_ID is not None:
             self._canvas.delete(self._sprite_ID)
         animation_ID = self.sprite.animations[self.animation_selection.get()]
-        img, origin = self.sprite.get_sprite_pose(animation_ID, self.sprite.get_pose_number_from_frame_number(animation_ID, self._frame_number))
+        img, origin = self.sprite.get_sprite_pose(animation_ID, self.sprite.get_pose_number_from_frame_number(animation_ID, self._frame_number), self.button_values)
         if img:
-            palette = self.sprite.get_sprite_palette_from_buttons(self.button_values, self._frame_number)
+            palette = self.sprite.get_sprite_palette_from_buttons(animation_ID, self._frame_number, self.button_values)
             img = util.apply_palette(img, palette)
             new_size = tuple(int(self._current_zoom*dim) for dim in img.size)
             scaled_img = img.resize(new_size)
