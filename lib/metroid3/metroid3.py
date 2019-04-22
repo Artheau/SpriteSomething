@@ -320,7 +320,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def get_sprite_palette_from_buttons(self, animation, frame, buttons):
         if animation in [0x81,0x82]:
             variant_type = "screw_attack"
-        elif animation in range(0xC7,0xCC+1):
+        elif animation in range(0xC7,0xCE+1):
             variant_type = "shinespark"
         else:
             variant_number = buttons["variant"]

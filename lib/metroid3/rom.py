@@ -372,8 +372,8 @@ class Metroid3RomHandler(RomHandler):
         elif base_type == PaletteType.HYPER_BEAM:
             base_address = 0x9BA240
 
-            #timing and order determined by manual frame advance.  Each frame goes down 1, overall from 9 to 0 then resets
-            return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(9,-1,-1)]
+            #timing and order estimated by Youtube frame advance.  Each frame goes down 1, overall from 9 to 0 then resets
+            return [(2,self._get_raw_palette(base_address + i*0x20)) for i in range(9,-1,-1)]
 
         elif base_type == PaletteType.DEATH_SUIT:
             #the colors for the exploding suit pieces can be set to different palettes.
