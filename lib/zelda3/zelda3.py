@@ -111,3 +111,6 @@ class Z3Link(Zelda3Sprite):   #ALttP Player Character Sprites
     def get_pose_number_from_frame_number(self, animation_ID, frame_number):
         #TODO: Implement
         return 0
+
+    def get_PNG_for_export(self):
+        return None

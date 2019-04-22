@@ -789,7 +789,14 @@ class SpriteSomethingMainFrame(tk.Frame):
     def export_png(self):
         # Gui.class, refs PNG.class
         # Export ZSPR as a PNG
-        filedialog.asksaveasfile(initialdir="./", title="Export PNG", filetypes=(("PNGs","*.png"),))
+        filename = filedialog.asksaveasfilename(defaultextension=".png", initialdir="./", title="Export PNG", filetypes=(("PNGs","*.png"),))
+        if filename:
+            export_image = self.sprite.get_PNG_for_export()
+            if export_image:
+                export_image.save(filename)
+                tk.messagebox.showinfo("Export success",f"Exported sprite to {filename}")
+            else:
+                tk.messagebox.showerror("Error","ERROR: Sprite library did not generate an image for export")
     def export_gif(self):
         # Gui.class, refs GIF.class
         # Export current Still or Animation as a GIF

@@ -538,7 +538,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         return all_images
 
 
-    def export_PNG(self):
+    def get_PNG_for_export(self):
         images = self.import_rgba_images_from_ROM()     #TODO: Should also be able to import these from PNG or ZSPR
         return self._layout.export_all_images_to_PNG(images)
     
