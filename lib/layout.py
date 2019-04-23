@@ -11,6 +11,13 @@ class Layout():
     def __init__(self, filename):
         with open(filename) as inFile:
             self.data = json.load(inFile)
+        self.reverse_lookup = {}
+        for image_name,image_info in self.data["images"].items():
+            for image_ref in image_info["used by"]:
+                self.reverse_lookup[tuple(image_ref)] = image_name
+
+    def get_image_name(self, animation, pose):
+        return self.reverse_lookup[(animation, pose)]
 
     def get_rows(self):
         return self.data["layout"]
@@ -68,7 +75,7 @@ class Layout():
             else:
                 return None
         else:
-            raise AssertionError(f"ncountered infinite parental loop in layout.json while investigating {image_name}")
+            raise AssertionError(f"Encountered infinite parental loop in layout.json while investigating {image_name}")
 
 
     def make_horizontal_collage(self, image_list,add_border=True,border_color=(0,0,0x7F,0xFF)):

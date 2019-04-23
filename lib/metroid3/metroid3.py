@@ -393,7 +393,6 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 raise AssertionError(f"unknown command to get_sprite_pose(): {animation_ID}")
         else:
             tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, port_frame=buttons["port"]*8,upper=upper, lower=lower)   #TODO: do full port opening animation
-        palette_timing_list = self.get_timed_sprite_palette("standard", "power")
 
 
 
@@ -410,6 +409,24 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
 
         constructed_image, offset = util.image_from_raw_data(tilemaps, constructed_VRAM_data)
         return constructed_image, offset
+
+    def get_raw_pose(self, animation, pose, **kwargs):    #TODO: this should just return the ZSPR information already in memory
+        #returns a 4bpp tiles of the requested pose
+        image, offset = self.get_sprite_pose(animation, pose, **kwargs)
+
+        image_name = self._layout.get_image_name(animation, pose)
+        dimensions = self._layout.get_property("dimensions", image_name)
+        extra_data = self._layout.get_property("extra data", image_name)
+
+        #TODO: need to iterate over each 8x8 section of the image, in accordance with its layout
+        #for now, grab the canonical 8x8, until I implement the full thing
+        #this crop might actually be larger than the image, and I am ok with this, because it is a simple way to resize
+        #Here transpose() is used because otherwise we get column-major format in getdata(), which is not helpful
+        tile = image.crop((0,0,8,8)).transpose(Image.TRANSPOSE)  #tuple in left-up-right-bottom format.
+
+        bitplanes = util.convert_indexed_tile_to_bitplanes(tile.getdata())
+
+        return bitplanes
 
     def get_pose_number_from_frame_number(self, animation_ID, frame):
         pose = 0
@@ -456,7 +473,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 if palette_timing_index <= 0 or time == 0:   #time = 0 is a special code for static palettes or "final" palettes
                     return palette
             else:
-                raise AssertionError(f"During get_sprite_pose() encountered modular arithmetic error while processing frame number {frame}")
+                raise AssertionError(f"During get_current_time_palette() encountered modular arithmetic error while processing frame number {frame}")
 
     def get_all_poses(self):
         for animation, pose in [(animation, 0) for animation in self.animations.values()]:
