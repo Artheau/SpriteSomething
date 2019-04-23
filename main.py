@@ -25,7 +25,7 @@ from PIL import Image, ImageTk
 
 def main():
     command_line_args = process_command_line_args()
-    
+
     root = tk.Tk()
     #window size
     root.geometry("800x600")
@@ -384,7 +384,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                 self.master.after(int(FRAME_DELAY/self._current_speed), self.time_marches_forward)
         else:
             self._stutter_frame = True
-        
+
 
     def create_menu_bar(self, game_name):
         #create the menu bar
@@ -600,6 +600,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             # Also changes the dropdown menu to reflect the change
             self.animation_selection.set(animation_name)
             self.initialize_sprite_animation()
+            animation_list.destroy()
         animation_list = tk.Tk()
         animation_list.title("Animation List")
         animation_list_canvas = tk.Canvas(animation_list, name="animation_list_canvas")
@@ -631,8 +632,11 @@ class SpriteSomethingMainFrame(tk.Frame):
             button.grid(row=row, column=col)
 
     def press_color_button(self,index):
-        color = tk.colorchooser.askcolor()
-        self.buttons["palette"][index].configure(bg=str(color)[-9:])
+        color = str(tk.colorchooser.askcolor())
+        matches = re.search(r'\(([^\)]*)\)([,\s\']*)([^\']*)(.*)',color)
+        if matches:
+            color = matches[3]
+        self.buttons["palette"][index].configure(bg=color)
 
     def press_spiffy_button(self,prefix,level):
         # Gui.class
