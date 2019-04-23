@@ -50,7 +50,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         dims = {
             "left_pane": {
-                "minwidth": 200
+                "minwidth": 260
             },
             "background_dropdown": {
                 "width": 16
@@ -240,6 +240,10 @@ class SpriteSomethingMainFrame(tk.Frame):
                 "Sleeves": "#885828",
                 "Water Ripples": "#C080F0"
             }
+            gloves = {
+                "Power Glove": "#B0B8A0",
+                "Titan's Mitt": "#B0D800"
+            }
 
         for i in range(len(bgcolors)):
             img = tk.PhotoImage(file=os.path.join("resources","meta","icons","transparent.png"))
@@ -251,6 +255,26 @@ class SpriteSomethingMainFrame(tk.Frame):
             self.buttons["palette"].append(button)
         i = 1
         for color in self.buttons["palette"]:
+            CreateToolTip(color,color.label)
+            color.grid(row=row,column=i+1)
+            i += 1
+            if i == 8 + 1:
+                row += 1
+                i = 1
+
+        label = tk.Label(palette_section,text="Gloves")
+        label.grid(row=row-2,column=10,columnspan=2)
+        for i in range(len(gloves)):
+            img = tk.PhotoImage(file=os.path.join("resources","meta","icons","transparent.png"))
+            label = list(gloves.keys())[i]
+            bgcolor = list(gloves.values())[i]
+            button = tk.Button(palette_section,image=img,text=i,name="palette_section_colorpicker_gloves_"+str(i),width=20,height=20,bg=bgcolor,command=partial(self.press_color_button,i+16))
+            button.image = img
+            button.label = label
+            self.buttons["palette"].append(button)
+        i = 9
+        row -= 1
+        for color in [self.buttons["palette"][16],self.buttons["palette"][17]]:
             CreateToolTip(color,color.label)
             color.grid(row=row,column=i+1)
             i += 1
@@ -563,7 +587,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             imgfile = ""
             if level > 0 and label != "Yes":
                 imgfile = os.path.join("resources",self._game_name,"icons",prefix+'-'+str(level)+".png")
-            elif label.find("No") > -1:
+            elif label.find("No") > -1 or label == "Standard":
                 imgfile = os.path.join("resources","meta","icons","no-thing.png")
             elif label.find("Yes") > -1:
                 imgfile = os.path.join("resources","meta","icons","yes-thing.png")
