@@ -10,6 +10,9 @@ __pycache__/
 # no vscode
 /.vscode
 
+# no PowerShell scripts
+*.ps*
+
 # no images output
 /images
 /animations

@@ -184,6 +184,8 @@ class SpriteSomethingMainFrame(tk.Frame):
             row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Variant", self.sprite.variant_types, "variant", "")
             row += 1
+            self.add_spiffy_buttons(sprite_section, row, col, "Effect", {"No Effect":0,"Heat":1}, "effect", "")
+            row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Cannon Port", {"No":0,"Yes":1}, "port", " Port")
 
             bgcolors = {
@@ -262,25 +264,26 @@ class SpriteSomethingMainFrame(tk.Frame):
                 row += 1
                 i = 1
 
-        label = tk.Label(palette_section,text="Gloves")
-        label.grid(row=row-2,column=10,columnspan=2)
-        for i in range(len(gloves)):
-            img = tk.PhotoImage(file=os.path.join("resources","meta","icons","transparent.png"))
-            label = list(gloves.keys())[i]
-            bgcolor = list(gloves.values())[i]
-            button = tk.Button(palette_section,image=img,text=i,name="palette_section_colorpicker_gloves_"+str(i),width=20,height=20,bg=bgcolor,command=partial(self.press_color_button,i+16))
-            button.image = img
-            button.label = label
-            self.buttons["palette"].append(button)
-        i = 9
-        row -= 1
-        for color in [self.buttons["palette"][16],self.buttons["palette"][17]]:
-            CreateToolTip(color,color.label)
-            color.grid(row=row,column=i+1)
-            i += 1
-            if i == 8 + 1:
-                row += 1
-                i = 1
+        if self._game_name == "zelda3":
+            label = tk.Label(palette_section,text="Gloves")
+            label.grid(row=row-2,column=10,columnspan=2)
+            for i in range(len(gloves)):
+                img = tk.PhotoImage(file=os.path.join("resources","meta","icons","transparent.png"))
+                label = list(gloves.keys())[i]
+                bgcolor = list(gloves.values())[i]
+                button = tk.Button(palette_section,image=img,text=i,name="palette_section_colorpicker_gloves_"+str(i),width=20,height=20,bg=bgcolor,command=partial(self.press_color_button,i+16))
+                button.image = img
+                button.label = label
+                self.buttons["palette"].append(button)
+            i = 9
+            row -= 1
+            for color in [self.buttons["palette"][16],self.buttons["palette"][17]]:
+                CreateToolTip(color,color.label)
+                color.grid(row=row,column=i+1)
+                i += 1
+                if i == 8 + 1:
+                    row += 1
+                    i = 1
         ###############################################
 
 
@@ -660,7 +663,11 @@ class SpriteSomethingMainFrame(tk.Frame):
         matches = re.search(r'\(([^\)]*)\)([,\s\']*)([^\']*)(.*)',color)
         if matches:
             color = matches[3]
-        self.buttons["palette"][index].configure(bg=color)
+            r = ("%x" % (int(int(color[1:3],16) / 8) * 8)).zfill(2)
+            g = ("%x" % (int(int(color[3:5],16) / 8) * 8)).zfill(2)
+            b = ("%x" % (int(int(color[5:7],16) / 8) * 8)).zfill(2)
+            color = '#' + r + g + b
+            self.buttons["palette"][index].configure(bg=color)
 
     def press_spiffy_button(self,prefix,level):
         # Gui.class
@@ -687,8 +694,9 @@ class SpriteSomethingMainFrame(tk.Frame):
             colors = bgcolors[int(level)-1]
             if "palette" in self.buttons:
                 for i in range(len(self.buttons["palette"])):
-                    color = colors[i]
-                    self.buttons["palette"][i].configure(bg=color)
+                    if i < len(colors):
+                        color = colors[i]
+                        self.buttons["palette"][i].configure(bg=color)
         if hasattr(self, "_frame_number"):
             self.update_sprite_animation()
 
