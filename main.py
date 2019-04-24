@@ -184,7 +184,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Variant", self.sprite.variant_types, "variant", "")
             row += 1
-            self.add_spiffy_buttons(sprite_section, row, col, "Effect", {"No Effect":0,"Heat":1}, "effect", "")
+            self.add_spiffy_buttons(sprite_section, row, col, "Effect", {"No Effect":0,"Heat":1,"Sepia":2}, "effect", "")
             row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Cannon Port", {"No":0,"Yes":1}, "port", " Port")
 
