@@ -1,3 +1,4 @@
+import itertools
 import json
 import os
 from PIL import Image
@@ -354,6 +355,8 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
 
     def get_sprite_pose(self, animation_ID, pose, buttons={"port":0}, upper=True,lower=True):
         if type(animation_ID) is str:
+            if animation_ID[:2] == "0x":   #it's a hex code
+                return self.get_sprite_pose(int(animation_ID[2:],16), pose, buttons=buttons, upper=upper,lower=lower)
             if animation_ID == "death_left":
                 tilemaps, DMA_writes, duration = self.rom_data.get_death_data(pose, facing="left")
                 if not upper:   #trim out the suit pieces
@@ -410,23 +413,72 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         constructed_image, offset = util.image_from_raw_data(tilemaps, constructed_VRAM_data)
         return constructed_image, offset
 
-    def get_raw_pose(self, animation, pose, **kwargs):    #TODO: this should just return the ZSPR information already in memory
-        #returns a 4bpp tiles of the requested pose
+    def get_raw_pose(self, image_name, **kwargs):    #TODO: this should just return the ZSPR information already in memory
+        #returns 4bpp tiles of the requested pose
+        #TODO: use the offset correctly
+        animation, pose = self._layout.data["images"][image_name]["used by"][0]   #import a representative animation and pose
         image, offset = self.get_sprite_pose(animation, pose, **kwargs)
-
-        image_name = self._layout.get_image_name(animation, pose)
+        
         dimensions = self._layout.get_property("dimensions", image_name)
-        extra_data = self._layout.get_property("extra data", image_name)
+        extra_area = self._layout.get_property("extra area", image_name)
 
-        #TODO: need to iterate over each 8x8 section of the image, in accordance with its layout
-        #for now, grab the canonical 8x8, until I implement the full thing
-        #this crop might actually be larger than the image, and I am ok with this, because it is a simple way to resize
+        top_row = []            #have to process these differently so that 16x16 tiles can be correctly reconstructed
+        bottom_row = []
+        small_tiles = []
+        for bounding_box in itertools.chain([dimensions],extra_area if extra_area else []):
+            xmin,xmax,ymin,ymax = bounding_box
+            xmin += offset[0]
+            xmax += offset[0]
+            ymin += offset[1]
+            ymax += offset[1]
+            x_chad_length = (xmax-xmin) % 16
+            y_chad_length = (ymax-ymin) % 16
+            for y in range(ymin,ymax-15,16):
+                for x in range(xmin,xmax-15,16):
+                    #make a 16x16 tile from (x,y)
+                    #tuples in left-up-right-bottom format (it's ok if this crops an area not completely in the image)
+                    top_row.extend(    self.get_single_raw_tile(image.crop((x  ,y  ,x+8 ,y+8 ))) )
+                    top_row.extend(    self.get_single_raw_tile(image.crop((x+8,y  ,x+16,y+8 ))) )
+                    bottom_row.extend( self.get_single_raw_tile(image.crop((x  ,y+8,x+8 ,y+16))) )
+                    bottom_row.extend( self.get_single_raw_tile(image.crop((x+8,y+8,x+16,y+16))) )
+                #check to see if xmax-xmin has a hanging chad
+                if x_chad_length == 0:
+                    pass #no chad
+                elif x_chad_length == 8:
+                    #make two 8x8 tiles from (chad,y), (chad,y+8)
+                    small_tiles.extend( self.get_single_raw_tile(image.crop((xmax-8,y  ,xmax,y+8 ))) )
+                    small_tiles.extend( self.get_single_raw_tile(image.crop((xmax-8,y+8,xmax,y+16))) )
+                else:
+                    raise AssertionError(f"received call to get_raw_pose() for image '{image_name}' but the dimensions for x ({xmin},{xmax}) are not divisible by 8")
+            #check to see if ymax-ymin has hanging chads
+            if y_chad_length == 0:
+                pass   #cool
+            elif y_chad_length == 8:
+                for x in range(xmin,xmax-15,16):
+                    #construct the big chads first from (x,chad), (x+8,chad)
+                    small_tiles.extend( self.get_single_raw_tile(image.crop((x  ,ymax-8,x+8 ,ymax))) )
+                    small_tiles.extend( self.get_single_raw_tile(image.crop((x+8,ymax-8,x+16,ymax))) )
+                #now check for the bottom right chad
+                y_chad_length = ymax-ymin % 16
+                if x_chad_length == 0:
+                    pass   #cool
+                elif x_chad_length == 8:
+                    #make the final chad
+                    small_tiles.extend( self.get_single_raw_tile(image.crop((xmax-8,ymax-8,xmax,ymax))) )
+                else:
+                    raise AssertionError(f"received call to get_raw_pose() for image '{image_name}' but the dimensions for x ({xmin},{xmax}) are not divisible by 8")
+            else:
+                raise AssertionError(f"received call to get_raw_pose() for image '{image_name}' but the dimensions for y ({xmin},{xmax}) are not divisible by 8")
+            
+        #even out the small tiles into the rest of the space
+        for offset in range(0,len(small_tiles),0x40):
+            top_row.extend(small_tiles[offset:offset+0x20])
+            bottom_row.extend(small_tiles[offset+0x20:offset+0x40])
+        return top_row + bottom_row
+
+    def get_single_raw_tile(self, image):
         #Here transpose() is used because otherwise we get column-major format in getdata(), which is not helpful
-        tile = image.crop((0,0,8,8)).transpose(Image.TRANSPOSE)  #tuple in left-up-right-bottom format.
-
-        bitplanes = util.convert_indexed_tile_to_bitplanes(tile.getdata())
-
-        return bitplanes
+        return util.convert_indexed_tile_to_bitplanes(image.transpose(Image.TRANSPOSE).getdata())
 
     def get_pose_number_from_frame_number(self, animation_ID, frame):
         pose = 0

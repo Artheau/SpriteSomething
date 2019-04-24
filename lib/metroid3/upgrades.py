@@ -1,6 +1,7 @@
 #This is the giant gambit for Super Metroid
 #In total, this code is intended to take a ROM and modify it for wizzywig insertion
 
+import itertools   #for iterating over multiple iterables
 import copy   #for safety right now we are going to deepcopy the ROM, in case we need to bail
 
 SIGNATURE_ADDRESS_EXHIROM = None
@@ -36,11 +37,13 @@ def upgrade_to_wizzywig(old_rom, samus):
 	#While we're in there, we should remove the mirroring effects on the tiles,
 	# since that is no longer necessary given the symmetry fix from move_gun_tiles()
 
-	print("Re-assigning gun tilemaps...", end=""); print("success" if reassign_gun_tilemaps(rom) else "FAIL")
+	print("Re-assigning gun tilemaps...", end=""); print("success" if reassign_gun_tilemaps(rom,samus) else "FAIL")
+
+	#write all the new DMA data from base images and layout information
+	print("Writing new image data...", end=""); print("success" if write_dma_data(rom,samus) else "FAIL")
 
 	#TODO: "just" the stuff in this list, in addition to the things that I haven't thought of yet
 	#
-	#write all the new DMA data from base images and layout information
 	#maximally expand/relocate the existing DMA tables
 	#update the new DMA pointers that are in the tables
 	#update the table/index references to these new tables
@@ -64,6 +67,8 @@ def upgrade_to_wizzywig(old_rom, samus):
 	#write the death animation DMA data in a space worthy of its importance in my personal gameplay
 	#move the DMA pointers accordingly, and increase the DMA load size
 	#re-write the death tilemaps from layout info
+	#
+	#at this point there are a couple animations that are intertwined with Samus, like splashing and bubbles, that will need repair
 	#
 	#don't need to modify file select -- this will be modified in-place by the ZSPR data
 	#as a separate project, need to fix all the gun placements (do this in the base rom patch)
@@ -89,7 +94,8 @@ def move_gun_tiles(rom,samus):
 	for direction in range(10):   #there are ten directions for every port
 		for level in range(3):    #and there are three levels of gun port opening
 			reference_number = direction+level*10  #this matches up reversibly with the code in samus.get_sprite_pose()
-			raw_tile = samus.get_raw_pose("gun", reference_number)   #go get the gun image from the ZSPR
+			name_of_gun_image = samus._layout.get_image_name("gun", reference_number)
+			raw_tile = samus.get_raw_pose(name_of_gun_image)   #go get the gun image from the ZSPR
 			rom.bulk_write_to_snes_address(PLACE_TO_PUT_GUN_TILES+0x20*reference_number,raw_tile,0x20)  #just line 'em up.  Nothing fancy.
 
 	#move the DMA pointers
@@ -109,7 +115,7 @@ def move_gun_tiles(rom,samus):
 
 	return True
 
-def reassign_gun_tilemaps(rom):
+def reassign_gun_tilemaps(rom,samus):
 	TILE = 0xDF   #the new location for the gun tile
 	PAL = 0x28   #unmirrored palette code
 	success_codes = []
@@ -125,6 +131,57 @@ def reassign_gun_tilemaps(rom):
 	success_codes.append(  rom._apply_single_fix_to_snes_address(0x90C791, OLD_DATA, NEW_DATA, "1"*len(OLD_DATA))  )
 	
 	return all(success_codes)
+
+#TODO: factor this out to RomHandler
+class FreeSpace():
+	def __init__(self, mem_blocks):
+		#expects mem_blocks as a list of tuples of form (mem_address, available_space)
+		self.mem_blocks = mem_blocks
+		self.current_block = 0
+		self.offset = 0
+
+	def get(self, size):
+		if self.offset + size < self.mem_blocks[self.current_block][1]:
+			free_location = self.mem_blocks[self.current_block][0] + self.offset
+			self.offset += size
+			return free_location
+		else:  #go to the next block and try again
+			self.current_block += 1
+			if self.current_block < len(self.mem_blocks):
+				self.offset = 0
+				return self.get(size)
+			else:
+				raise AssertionError("ran out of memory to allocate")
+
+def write_dma_data(rom,samus):
+	if rom._type.name == "EXHIROM":
+		#until my hand is slapped I am going to just take up all of the lower halves of banks 0x44-0x4B and 0x54-0x5B
+		freespace = FreeSpace([(bank * 0x10000,0x8000) for bank in it.chain(range(0x44,0x4C),range(0x54,0x5C))])
+	else:
+		#in this case, the only person that will slap my hand is me, and I'm not feeling it at the moment
+		#so we're just going to take up the upper halves of half of the new banks that we just added (0xE8-0xF7)
+		freespace = FreeSpace([(bank * 0x10000 + 0x8000,0x8000) for bank in range(0xE8,0xF8)])
+
+	for image_name in samus._layout.data["images"]:
+		if image_name[:6] in ["palett","file_s","gun_po"]:  #these are special cases which will go in other parts of memory
+			pass
+		else:
+			force = samus._layout.get_property("rom import", image_name)
+			if force:
+				if force.lower() == "upper":
+					DMA_data = samus.get_raw_pose(image_name, lower=False)
+				elif force.lower() == "lower":
+					DMA_data = samus.get_raw_pose(image_name, upper=False)
+				else:
+					raise AssertionError(f"received call to force a half import for pose {image_name}, but did not understand command '{force}'")
+			else:
+				DMA_data = samus.get_raw_pose(image_name)
+
+			size = len(DMA_data)
+			address_to_write = freespace.get(size)
+			rom.bulk_write_to_snes_address(address_to_write,DMA_data,size)
+
+	return True
 
 if __name__ == "__main__":
     raise AssertionError(f"Called main() on utility library {__file__}")
