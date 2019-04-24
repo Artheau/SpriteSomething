@@ -585,7 +585,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
             if type(animation) is str and animation[0:2] == "0x":                #convert from hex if needed
                 animation = int(animation[2:], 16)
 
-            force = self._layout.get_property("force", image_name)
+            force = self._layout.get_property("import", image_name)
             if force:
                 if force.lower() == "upper":
                   image, origin = self.get_sprite_pose(animation, pose, lower=False)

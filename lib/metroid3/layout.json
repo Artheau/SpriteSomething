@@ -1112,6 +1112,7 @@
 		"spin_jump_right": {
 			"description": "Samus spin jumping clockwise",
 			"dimensions": [-16,16,-16,16],
+			"force": "lower",
 			"used by": [["0x19",1],["0x83",3]]
 		},
 
@@ -1194,6 +1195,7 @@
 		"spin_jump_left": {
 			"description": "Samus spin jumping counterclockwise",
 			"dimensions": [-16,16,-16,16],
+			"force": "lower",
 			"used by": [["0x1A",1],["0x84",3]]
 		},
 
@@ -2728,7 +2730,7 @@
 			"dimensions": [-12,12,-18,-10],
 			"extra area": [[-12,12,10,18],[-18,-10,-11,13],[10,18,-11,13],[-16,-8,-15,-7],[8,16,-15,-7],[-15,-7,7,15],[7,15,7,15]],
 			"force": "upper",
-			"rom import": "upper",
+			"import": "upper",
 			"used by": [["0x81",1],["0x81",2],["0x81",3],["0x83",23],["0x83",24],["0x83",25]]
 		},
 
@@ -3055,7 +3057,7 @@
 			"description": "The floating silhouette inside of the crystal flash bubble",
 			"dimensions": [-16,16,-24,24],
 			"force": "upper",
-			"rom import": "upper",
+			"import": "upper",
 			"used by": [["0xD3",6]]
 		},
 
@@ -3078,7 +3080,7 @@
 			"description": "The floating silhouette inside of the crystal flash bubble",
 			"dimensions": [-16,16,-24,24],
 			"force": "upper",
-			"rom import": "upper",
+			"import": "upper",
 			"used by": [["0xD4",6]]
 		},
 
@@ -3111,7 +3113,7 @@
 			"description": "The pulsating bubble around crystal flash.  This is duplicated thrice to complete a full circle",
 			"dimensions": [0,32,-32,0],
 			"force": "lower",
-			"rom import": "lower",
+			"import": "lower",
 			"used by": [["0xD3",2],["0xD3",3],["0xD3",6],["0xD3",7],["0xD3",8],["0xD3",9]]
 		},
 
@@ -3129,7 +3131,7 @@
 			"description": "The pulsating bubble around crystal flash.  This is duplicated thrice to complete a full circle",
 			"dimensions": [-32,0,-32,0],
 			"force": "lower",
-			"rom import": "lower",
+			"import": "lower",
 			"used by": [["0xD4",2],["0xD4",3],["0xD4",6],["0xD4",7],["0xD4",8],["0xD4",9]]
 		},
 
@@ -3465,7 +3467,7 @@
 		"death_left1": {
 			"parent": "death_left",
 			"force": "lower",
-			"rom import": "lower",
+			"import": "lower",
 			"used by": [["death_left", 1]]
 		},
 
@@ -3508,7 +3510,7 @@
 		"death_right1": {
 			"parent": "death_right",
 			"force": "lower",
-			"rom import": "lower",
+			"import": "lower",
 			"used by": [["death_right", 1]]
 		},
 
@@ -3546,7 +3548,7 @@
 			"description": "Samus's suit pieces exploding during the death sequence",
 			"dimensions": [-15,9,-25,23],
 			"force": "upper",
-			"rom import": "upper",
+			"import": "upper",
 			"used by": [["death_right", 1]]
 		},
 
@@ -3579,7 +3581,7 @@
 			"description": "Samus's suit pieces exploding during the death sequence",
 			"dimensions": [-9,15,-25,23],
 			"force": "upper",
-			"rom import": "upper",
+			"import": "upper",
 			"used by": [["death_left", 1]]
 		},
 

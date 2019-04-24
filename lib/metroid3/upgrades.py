@@ -27,7 +27,9 @@ def upgrade_to_wizzywig(old_rom, samus):
 	#Thankfully, there's plenty of room in ROM because they were
 	# super super wasteful with the organization in this part.
 
-	print("Moving gun tiles...", end=""); print("success" if move_gun_tiles(rom,samus) else "FAIL")
+	print("Moving gun tiles...", end="")
+	success_code = move_gun_tiles(rom,samus)
+	print("success" if success_code else "FAIL")
 
 	#I can see how it was a good idea at the time to put the cannon port as tile $1F,
 	# but this is also limiting (because it limits us to 31 tiles instead of 32).
@@ -37,16 +39,28 @@ def upgrade_to_wizzywig(old_rom, samus):
 	#While we're in there, we should remove the mirroring effects on the tiles,
 	# since that is no longer necessary given the symmetry fix from move_gun_tiles()
 
-	print("Re-assigning gun tilemaps...", end=""); print("success" if reassign_gun_tilemaps(rom,samus) else "FAIL")
+	print("Re-assigning gun tilemaps...", end="")
+	success_code = reassign_gun_tilemaps(rom,samus)
+	print("success" if success_code else "FAIL")
 
-	#write all the new DMA data from base images and layout information
-	print("Writing new image data...", end=""); print("success" if write_dma_data(rom,samus) else "FAIL")
+	#write all the new graphics data from base images and layout information
+	print("Writing new image data...", end="")
+	DMA_dict, success_code = write_dma_data(rom,samus)
+	print("success" if success_code else "FAIL")
+
+	#maximally expand/relocate the existing DMA tables, and then add the new load data into them
+	print("Writing new DMA tables...", end="")
+	DMA_upper_table_indices, DMA_lower_table_indices, success_code = write_new_DMA_tables(DMA_dict,rom,samus)
+	print("success" if success_code else "FAIL")
+
+	#update the table/index references to these new DMA tables
+	print("Linking new tables to animations...", end="")
+	success_code = link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, rom,samus)
+	print("success" if success_code else "FAIL")
+
 
 	#TODO: "just" the stuff in this list, in addition to the things that I haven't thought of yet
 	#
-	#maximally expand/relocate the existing DMA tables
-	#update the new DMA pointers that are in the tables
-	#update the table/index references to these new tables
 	#write all the new tilemaps (use a pointer to nullmap instead of $0000 since $0000 lags the game because reasons) using the layout info
 	#link all the tilemaps
 	#fix the lower tilemap locked poses (also fix the stupid tile while you're in this part of the code)
@@ -135,13 +149,13 @@ def reassign_gun_tilemaps(rom,samus):
 #TODO: factor this out to RomHandler
 class FreeSpace():
 	def __init__(self, mem_blocks):
-		#expects mem_blocks as a list of tuples of form (mem_address, available_space)
+		#expects mem_blocks as a list of tuples of form (start_mem_address, end_mem_address), last address is not inclusive
 		self.mem_blocks = mem_blocks
 		self.current_block = 0
 		self.offset = 0
 
 	def get(self, size):
-		if self.offset + size < self.mem_blocks[self.current_block][1]:
+		if self.mem_blocks[self.current_block][0] + self.offset + size <= self.mem_blocks[self.current_block][1]:
 			free_location = self.mem_blocks[self.current_block][0] + self.offset
 			self.offset += size
 			return free_location
@@ -156,17 +170,19 @@ class FreeSpace():
 def write_dma_data(rom,samus):
 	if rom._type.name == "EXHIROM":
 		#until my hand is slapped I am going to just take up all of the lower halves of banks 0x44-0x4B and 0x54-0x5B
-		freespace = FreeSpace([(bank * 0x10000,0x8000) for bank in it.chain(range(0x44,0x4C),range(0x54,0x5C))])
+		freespace = FreeSpace([(bank * 0x10000,bank * 0x10000 + 0x8000) for bank in it.chain(range(0x44,0x4C),range(0x54,0x5C))])
 	else:
 		#in this case, the only person that will slap my hand is me, and I'm not feeling it at the moment
 		#so we're just going to take up the upper halves of half of the new banks that we just added (0xE8-0xF7)
-		freespace = FreeSpace([(bank * 0x10000 + 0x8000,0x8000) for bank in range(0xE8,0xF8)])
+		freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in range(0xE8,0xF8)])
+
+	DMA_dict = {}  #have to keep track of where we put all this stuff so that we can point to it afterwards
 
 	for image_name in samus._layout.data["images"]:
 		if image_name[:6] in ["palett","file_s","gun_po"]:  #these are special cases which will go in other parts of memory
 			pass
 		else:
-			force = samus._layout.get_property("rom import", image_name)
+			force = samus._layout.get_property("import", image_name)
 			if force:
 				if force.lower() == "upper":
 					DMA_data = samus.get_raw_pose(image_name, lower=False)
@@ -180,6 +196,117 @@ def write_dma_data(rom,samus):
 			size = len(DMA_data)
 			address_to_write = freespace.get(size)
 			rom.bulk_write_to_snes_address(address_to_write,DMA_data,size)
+
+			DMA_dict[image_name] = (address_to_write, size)
+
+	return DMA_dict, True
+
+def write_new_DMA_tables(DMA_dict,rom,samus):
+	#We'll need more room, since we have 637 unique images*7 bytes each = 0x116B amount of stuff (used 0x0BE5 previously)
+	#for this, we're going to eat into some area that used to be reserved for death tilemaps ($92C580-$92CBED)
+	# because we know we have to change those tilemaps later anyway
+
+	#the lookup for the tables themselves are at 92:D91E (upper)
+	#$92:D91E             dw CBEE, CCCE, CDA0, CE80, CEF7, CF6E, CFE5, D05C, D0E8, D12E, D613, D6A6, D74E
+	#and at 92:D938 (lower)
+	#$92:D938             dw D19E, D27E, D35E, D6D7, D406, D4A7, D54F, D786, D5F0, D79B, D605
+	
+	#freespace is from death tilemap region up through the usual DMA table region
+	UPPER_LOC = 0x92C580
+	LOWER_LOC = 0x92D600
+	success_code = rom._apply_single_fix_to_snes_address(0x92D91E,
+		[0xCBEE, 0xCCCE, 0xCDA0, 0xCE80, 0xCEF7, 0xCF6E, 0xCFE5, 0xD05C, 0xD0E8, 0xD12E, 0xD613, 0xD6A6, 0xD74E,  #old upper table
+		 0xD19E, 0xD27E, 0xD35E, 0xD6D7, 0xD406, 0xD4A7, 0xD54F, 0xD786, 0xD5F0, 0xD79B, 0xD605],  #old lower table
+		[UPPER_LOC % 0x10000 for _ in range(13)] + \
+		[LOWER_LOC % 0x10000 for _ in range(11)],     #new upper table is a failsafe in case of vanilla glitches, new lower table is intentionally simplified
+		  "2"*24)   #these are 24 big endian values to write
+	freespace_upper = FreeSpace([(UPPER_LOC,LOWER_LOC)])
+	freespace_lower = FreeSpace([(LOWER_LOC,0x92D7D2)])    #this is where our lower table points to already
+
+	lower_table_fill = 0
+	upper_table_fill = 0
+	upper_table_number = 0
+	DMA_upper_table_indices = {}
+	DMA_lower_table_indices = {}
+	for image_name,(image_location,size) in DMA_dict.items():
+		if samus._layout.get_property("force",image_name) == "lower":   #here we actually want to force to the lower half
+			address_to_write = freespace_lower.get(7)
+			DMA_lower_table_indices[image_name] = (0,lower_table_fill)
+			lower_table_fill += 1
+		else:                                         #by default, force this to upper
+			address_to_write = freespace_upper.get(7)
+			if upper_table_fill > 0x30:  #when they get too full, make a new table (here 0x30 is fairly arbitrary)
+				upper_table_number += 1
+				upper_table_fill = 0
+				rom.write_to_snes_address(0x92D91E+2*upper_table_number,address_to_write % 0x10000,2)  #index the new table
+			DMA_upper_table_indices[image_name] = (upper_table_number,upper_table_fill)
+			upper_table_fill += 1
+		
+		bottom_row_size = 0x20*(size//0x40)   #half of the tiles, floored (by the way we constructed the images originally)
+		top_row_size = size - bottom_row_size
+
+		rom.write_to_snes_address(address_to_write,[image_location,top_row_size,bottom_row_size],"322")
+
+	#write the null images -- these are important because very few poses will have a strictly lower section anymore
+	#lazily I am just going to let it point to the last true image location, but with a load size of 1.
+	#SUPER IMPORTANT -- do NOT set these to load zero data.  DO NOT.
+	#Because DMAing zero data actually means load 0x10000 data, and you will crash your game hard
+	address_to_write = freespace_lower.get(7)
+	rom.write_to_snes_address(address_to_write,[image_location,1,1],"322")
+	DMA_lower_table_indices["null"] = (0,lower_table_fill)
+	address_to_write = freespace_upper.get(7)
+	rom.write_to_snes_address(address_to_write,[image_location,1,1],"322")
+	DMA_upper_table_indices["null"] = (upper_table_number,upper_table_fill)
+
+	return DMA_upper_table_indices, DMA_lower_table_indices, success_code
+
+def link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, rom,samus):
+	#Here is the deal at this point -- at $92D94E there is a big table with exactly one pointer for every animation
+	#ORG $92D94E		#DW AFP_T00, AFP_T01, AFP_T02, AFP_T03, ...
+	#and then immediately following that is a big long list of 4 byte tuples, essentially
+	#that correspond to (upper_table, upper_index, lower_table, lower_index)
+	#so we need to populate this now, and might also expand the big long list
+	#but if we do, we need to work OVER some code that might have something to do with loading from save points/fanfare related
+	#and this code is at $92ED24-$EDF3
+	#but after that, we have all the free space that we could want, right up to the end of the bank
+	freespace = FreeSpace([(0x92DB48,0x92ED24),(0x92EDF4,0x930000)])
+
+	#as a failsafe against vanilla glitches, let's start by setting all the pointers to a null list
+	NULL_SIZE = 0x40
+	address_to_write = freespace.get(NULL_SIZE*4)   #going to fill the null list with the largest number of poses possible in an animation
+	null_entries = [DMA_upper_table_indices["null"][0],
+					DMA_upper_table_indices["null"][1],
+					DMA_lower_table_indices["null"][0],
+					DMA_lower_table_indices["null"][1]]
+	rom.write_to_snes_address(address_to_write,NULL_SIZE*null_entries, "1"*(4*NULL_SIZE))
+	#now assign all the pointers to the null list
+	rom.write_to_snes_address(0x92D94E,[address_to_write % 0x10000 for _ in range(0xFD)],"2"*0xFD)
+
+	animation_lookup = {}   #will contain a list of the poses each animation has
+	for animation, pose in samus.get_all_poses():
+		if animation in animation_lookup:
+			animation_lookup[animation].append(pose)
+		else:
+			animation_lookup[animation] = [pose]
+
+	for animation,pose_list in animation_lookup.items():   #the "used" animations
+		max_pose = max(pose_list)+1   #+1 because zero index is a thing
+		base_address = freespace.get(max_pose*4)   #allocate memory
+		rom.write_to_snes_address(0x92D94E+2*animation, base_address % 0x10000, 2)  #set the pointer to this new stuff
+		for pose in range(max_pose):
+			if pose in pose_list:
+				image_names = samus._layout.get_all_image_names(animation,pose)
+				image_entries = null_entries.copy()   #default to null entries, unless there is image data here
+				for image_name in image_names:
+					if image_name in DMA_upper_table_indices:
+						image_entries[0] = DMA_upper_table_indices[image_name][0]
+						image_entries[1] = DMA_upper_table_indices[image_name][1]
+					elif image_name in DMA_lower_table_indices:
+						image_entries[2] = DMA_lower_table_indices[image_name][0]
+						image_entries[3] = DMA_lower_table_indices[image_name][1]
+				rom.write_to_snes_address(base_address+4*pose, image_entries,"1111")    #assign
+			else:
+				rom.write_to_snes_address(base_address+4*pose, null_entries, "1111")  #assign null tables
 
 	return True
 
