@@ -8,20 +8,23 @@
 import os
 import argparse
 import importlib
-import lib.constants as CONST
 import json
+import numpy as np
+import platform
 import random
 import re
+import subprocess
+import sys
 import tkinter as tk
 import webbrowser
-import numpy as np
-from lib.RomHandler import util
+import lib.constants as CONST
 from functools import partial
+from PIL import Image, ImageTk
 from tkinter import colorchooser, filedialog, messagebox, Text, ttk
 from lib.crxtooltip import CreateToolTip
+from lib.RomHandler import util
 from lib.tkHyperlinkManager import HyperlinkManager
 from lib.tkSimpleStatusBar import StatusBar
-from PIL import Image, ImageTk
 
 def main():
     command_line_args = process_command_line_args()
@@ -184,7 +187,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Variant", self.sprite.variant_types, "variant", "")
             row += 1
-            self.add_spiffy_buttons(sprite_section, row, col, "Effect", {"No Effect":0,"Heat":1,"Sepia":2}, "effect", "")
+            self.add_spiffy_buttons(sprite_section, row, col, "Effect", {"No Effect":0,"Sepia":1,"Door":2,"Heat":3,"XRay":4}, "effect", "")
             row += 1
             self.add_spiffy_buttons(sprite_section, row, col, "Cannon Port", {"No":0,"Yes":1}, "port", " Port")
 
@@ -537,6 +540,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         #create the help menu
         help_menu = tk.Menu(menu, tearoff=0, name="help_menu")
+        help_menu.add_command(label="Diagnostics", command=self.diagnostics)
         help_menu.add_command(label="About", command=self.about)
         #attach to the menu bar
         menu.add_cascade(label="Help", menu=help_menu)
@@ -977,6 +981,46 @@ class SpriteSomethingMainFrame(tk.Frame):
         ID = canvas.create_image(location[0], location[1], image=sprite, anchor = tk.NW)
         self._sprite_image = sprite     #if you skip this part, then the auto-destructor will get rid of your picture!
         return ID
+
+    def diagnostics(self):
+        # Gui.class
+        # Debugging purposes
+        dims = {
+            "window": {
+                "width": 800,
+                "height": 500
+            },
+            "textarea.characters": {
+                "width": 120,
+                "height": 40
+            }
+        }
+        lines = [
+            "Python Version" + "\t"*3 + platform.python_version()
+        ]
+        lines.append("OS Version" + "\t"*3 + "%s %s" % (platform.system(), platform.release()))
+        if hasattr(sys, "executable"):
+            lines.append("Executable" + "\t"*3 + sys.executable)
+        lines.append("Build Date" + "\t"*3 + platform.python_build()[1])
+        lines.append("Compiler" + "\t"*3 + platform.python_compiler())
+        if hasattr(sys, "api_version"):
+            lines.append("Python API" + "\t"*3 + str(sys.api_version))
+        if hasattr(os, "pathsep"):
+            lines.append("Path Separator" + "\t"*3 + os.pathsep)
+        lines.append("")
+        lines.append("Packages")
+        lines.append("--------")
+        reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
+        installed_packages = [r.decode() for r in reqs.split()]
+        for pkg in installed_packages:
+            lines.append(pkg.replace("==","\t"*3))
+
+        diag = tk.Tk()
+        diag.title("Diagnostics")
+        diag.geometry(str(dims["window"]["width"]) + 'x' + str(dims["window"]["height"]))
+        text = Text(diag, width=dims["textarea.characters"]["width"], height=dims["textarea.characters"]["height"])
+        text.pack()
+        self.add_text_link_array(lines, text)
 
     def about(self):
         # Gui.class
