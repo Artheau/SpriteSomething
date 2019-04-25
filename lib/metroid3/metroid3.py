@@ -382,14 +382,14 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("standard", "varia"),0))[-15:])
                 palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("standard", "gravity"),0))[-15:])
                 palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("death_flesh", "power"),0))[-15:])
+                palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", "power"),0))[-15:])
                 palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("file_select", "power"),0))[-15:])
-                palette_block.extend(util.convert_to_rgb(self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", "power"),0))[-6:])
                 palette_block.append((0,0,0,0))
                 palette_block.extend(util.convert_to_rgb(self.rom_data.get_nightvisor_colors()))
-                palette_block.append((0,0,0,0))
+                palette_block.extend([(0,0,0,0) for _ in range(7)])
                 _,full_ship_colors = self.get_timed_sprite_palette("ship", "power")[7]  #7 is when the underglow is brightest
                 palette_block.extend(util.convert_to_rgb([full_ship_colors[1],full_ship_colors[9],full_ship_colors[15]]))
-                image = Image.new("RGBA",(15,6),0)
+                image = Image.new("RGBA",(15,7),0)
                 image.putdata(palette_block)
                 return image, (0,0)
             else:

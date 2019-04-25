@@ -1,8 +1,8 @@
 #This is the giant gambit for Super Metroid
 #In total, this code is intended to take a ROM and modify it for wizzywig insertion
 
-import itertools   #for iterating over multiple iterables
-import copy   #for safety right now we are going to deepcopy the ROM, in case we need to bail
+import itertools
+import copy
 
 SIGNATURE_ADDRESS_EXHIROM = None
 SIGNATURE_ADDRESS_LOROM = None
@@ -70,14 +70,25 @@ def upgrade_to_wizzywig(old_rom, samus):
     print("Assigning new tilemaps...", end="")
     success_code = assign_new_tilemaps(rom,samus)
     print("done" if success_code else "FAIL")
+
+    #get rid of the stupid tile
+    print("Stupid tile...", end="")
+    success_code = no_more_stupid(rom,samus)
+    print("stupid" if success_code else "FAIL")
     
+    #because a DMA of zero bytes is essentially a guaranteed game crash, the designers had to make separate subroutines
+    # that made the upper tilemap not display in certain cases.  These subroutines are no longer necessary, because we
+    # fixed the issue in the DMA swap order code, and so now we need to get rid of the subroutines because they break
+    # a few animations in the form that they now exist
+
+    print("Disabling upper half bypass routine...", end="")
+    success_code = disable_upper_bypass(rom,samus)
+    print("done" if success_code else "FAIL")
+
     #TODO
     #
-    #fix the upper/lower tilemap ignore code (also fix the stupid tile while you're in this part of the code)
-    #
-    #I anticipate the following animations having things that are stupid that will need fixing:
-    # crystal flash (morph/unmorph needs to be upper, bubble lower, etc., also the bubble needs a special tilemap)
-    # grapple (need to mirror the tilemaps for the upper semicircle, and then copy the first 32 poses to the next 32)
+    #crystal flash (the bubble needs a special tilemap)
+    #grapple (need to mirror the tilemaps for the upper semicircle, and then copy the first 32 poses to the next 32)
     #
     #screw attack without space jump -- a lot of things need to happen here
     # make a new control code to check for space jump only
@@ -139,7 +150,8 @@ def move_gun_tiles(rom,samus):
     # they point to DMA locations in bank $9A, e.g. DW $0000, $9A00, $9C00, $9E00
     #I need a place with room, preferably in bank $90, for a few more pointers to accomodate all ten directions,
     # so that I can have ten pointers to ten different DMA sets of this type
-    PLACE_TO_PUT_GUN_DMA_POINTERS = 0x90F640   #as good a place as any, I guess, since bank $90 is pretty compact, and the end is all junk fill
+    #It just so happens that I'm going to free up $908688-$9087BC with some other changes that I'm making, so hooray!
+    PLACE_TO_PUT_GUN_DMA_POINTERS = 0x908688      #otherwise, if this is a problem, can default to the end of the bank: 0x90F640
     for direction in range(10):
         gfx_pointer = PLACE_TO_PUT_GUN_DMA_POINTERS+8*direction
         rom.write_to_snes_address(0x90C7A5+2*direction, gfx_pointer % 0x10000, 2)
@@ -397,6 +409,9 @@ def assign_new_tilemaps(rom,samus):
                     extra_area = samus._layout.get_property("extra area", image_name)
                     palette = samus._layout.get_property("palette", image_name)
                     tilemap = get_tilemap_from_dimensions(dimensions, extra_area, palette, 0x08 if force=="lower" else 0x00)
+                    if image_name[:14] == "crystal_bubble":
+                        tilemap = get_quadrated_tilemap(tilemap)
+
                     if tuple(tilemap) in master_tilemap_location_dict:
                         tilemap_location = master_tilemap_location_dict[tuple(tilemap)]
                     else:
@@ -458,6 +473,43 @@ def get_tilemap_from_dimensions(dimensions, extra_area, palette, start_index=0x0
             current_index -= 0x0F   #subtract 0x10 and add 0x01
 
     return tilemap
+
+def get_quadrated_tilemap(tilemap):
+    #takes the tilemap and quads it out by mirroring in all four possible manners
+    #right now, this is implemented in a way that is specific to the crystal flash bubble only
+    quad_tilemap = []
+    for h_flip, v_flip in itertools.product([True,False],repeat=2):
+        for i in range(0,len(tilemap),5):
+            x,size,y,tile,palette = tilemap[i:i+5]
+            if h_flip:
+                x = 0xF0 - x
+                size ^= 0x01     #flip the x sign bit
+                palette |= 0x40
+            if v_flip:
+                y = 0xF0 - y
+                palette |= 0x80
+            quad_tilemap.extend([x,size,y,tile,palette])
+    return quad_tilemap
+
+def no_more_stupid(rom,samus):
+    #in theory, I could just break the code that loads the stupid tile, but I won't rest at night until this tile is gone
+    rom.bulk_write_to_snes_address(0x9AD620, [0 for _ in range(0x20)], 0x20)
+    #somehow I have the feeling that it's going to come back for me,
+    # chasing me down while giving an endless monologue on the health benefits of kombucha
+    return True
+
+def disable_upper_bypass(rom,samus):
+    #so if you DMA zero bytes, you actually DMA an entire bank.  And trying to DMA an entire bank into the middle of VRAM
+    # is super bad news.  But this also means that there's not a simple way to avoid DMA -- you have to write a bypass
+    # routine.  This bypass routine served its purpose in the original game but now we've made improvements to the engine
+    # and this routine is actually getting in our way.
+    OLD_SUBROUTINES = [0x868D, 0x8686, 0x8686, 0x86C6, 0x8688, 0x8686, 0x8686, 0x8688,
+                       0x8688, 0x8688, 0x86EE, 0x8686, 0x8686, 0x874C, 0x8686, 0x870C,
+                       0x8686, 0x8688, 0x8688, 0x8688, 0x8768, 0x8686, 0x8686, 0x8686,
+                       0x8686, 0x877C, 0x8686, 0x8790]
+    NEW_SUBROUTINES = [0x8686 for _ in range(28)]   #these are just null routines
+    success_code = rom._apply_single_fix_to_snes_address(0x90864E, OLD_SUBROUTINES, NEW_SUBROUTINES, "2"*28)
+    return success_code
 
 if __name__ == "__main__":
     raise AssertionError(f"Called main() on utility library {__file__}")
