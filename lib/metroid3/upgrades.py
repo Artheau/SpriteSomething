@@ -71,13 +71,12 @@ def upgrade_to_wizzywig(old_rom, samus):
     success_code = assign_new_tilemaps(rom,samus)
     print("done" if success_code else "FAIL")
     
-    #TODO: "just" the stuff in this list, in addition to the things that I haven't thought of yet
+    #TODO
     #
-    #fix the lower tilemap locked poses (also fix the stupid tile while you're in this part of the code)
+    #fix the upper/lower tilemap ignore code (also fix the stupid tile while you're in this part of the code)
     #
     #I anticipate the following animations having things that are stupid that will need fixing:
     # crystal flash (morph/unmorph needs to be upper, bubble lower, etc., also the bubble needs a special tilemap)
-    # screw attack (space jump needs to be lower, sparks upper, etc.)
     # grapple (need to mirror the tilemaps for the upper semicircle, and then copy the first 32 poses to the next 32)
     #
     #screw attack without space jump -- a lot of things need to happen here
@@ -92,9 +91,6 @@ def upgrade_to_wizzywig(old_rom, samus):
     #move the DMA pointers accordingly, and increase the DMA load size
     #re-write the death tilemaps from layout info
     #
-    #at this point there are a couple animations that are intertwined with Samus, like splashing and bubbles, that will need repair
-    #
-    #don't need to modify file select -- this will be modified in-place by the ZSPR data
     #as a separate project, need to fix all the gun placements (do this in the base rom patch)
 
 
@@ -195,7 +191,7 @@ class FreeSpace():
 def write_dma_data(rom,samus):
     if rom._type.name == "EXHIROM":
         #until my hand is slapped I am going to just take up all of the lower halves of banks 0x44-0x4B and 0x54-0x5B
-        freespace = FreeSpace([(bank * 0x10000,bank * 0x10000 + 0x8000) for bank in it.chain(range(0x44,0x4C),range(0x54,0x5C))])
+        freespace = FreeSpace([(bank * 0x10000,bank * 0x10000 + 0x8000) for bank in itertools.chain(range(0x44,0x4C),range(0x54,0x5C))])
     else:
         #in this case, the only person that will slap my hand is me, and I'm not feeling it at the moment
         #so we're just going to take up the upper halves of half of the new banks that we just added (0xE8-0xF7)
@@ -344,12 +340,17 @@ def assign_new_tilemaps(rom,samus):
     # These are the pointers that we need to change, so that they point at our new tilemaps
     #lower offsets are the same except start at $92945D
 
+    #this was the old table full of TM pointers.  We navigate around the delicate areas and rearrange the remaining tilemap pointers
+    lookup_table_freespace = FreeSpace([(0x928091,0x928390),(0x9283C1,0x9283E4),(0x9283e7,0x928a04),(0x928a0d,0x9290c4)])
     #leaving TM_006 alone because its auxiliary uses in-game are not clear, but the rest can go
-    freespace = FreeSpace([(0x929663,0x92C580)])   #this used to contain all the tilemaps, and again it will!
+    tilemap_freespace = FreeSpace([(0x929663,0x92C580)])   #this used to contain all the tilemaps, and again it will!
 
     #need a null map to prevent terrible lag parties from happening when vanilla glitches rear their head
-    null_map_location = freespace.get(2)
-    rom.write_to_snes_address(null_map_location, 0, 2)   #write 0x0000 to state that there are zero tiles mapped here
+    null_map_location = tilemap_freespace.get(2)
+    rom.write_to_snes_address(null_map_location, 0, 2)   #write zero to state that there are zero tiles mapped here
+
+    #need a dumping ground for null maps if lower is not forced
+    null_list_address = lookup_table_freespace.get(2*96)  #96 is the most poses of any animation
 
     animation_lookup = {}   #will contain a list of the poses each animation has
     for animation, pose in samus.get_all_poses():
@@ -362,9 +363,28 @@ def assign_new_tilemaps(rom,samus):
 
     for animation,pose_list in animation_lookup.items():
         max_pose = max(pose_list)+1   #+1 because zero index is a thing
+
+        #comb through first and see if we need a unique lower tilemap set
+        need_lower_tilemaps = False
         for pose in range(max_pose):
-            upper_list_address = 0x92808D + 2*rom.read_from_snes_address(0x929263+2*animation,2)
-            lower_list_address = 0x92808D + 2*rom.read_from_snes_address(0x92945D+2*animation,2)
+            if pose in pose_list:
+                for image_name in samus._layout.get_all_image_names(animation,pose):
+                    if samus._layout.get_property("force", image_name) == "lower":
+                        need_lower_tilemaps = True
+
+
+
+        #need to make up lookup table pointers
+        upper_list_address = lookup_table_freespace.get(2*max_pose)
+        rom.write_to_snes_address(0x929263+2*animation,(upper_list_address-0x92808D)//2 ,2)
+        if need_lower_tilemaps:
+            lower_list_address = lookup_table_freespace.get(2*max_pose)
+            rom.write_to_snes_address(0x92945D+2*animation,(lower_list_address-0x92808D)//2 ,2)
+        else:
+            lower_list_address = null_list_address
+            rom.write_to_snes_address(0x92945D+2*animation,(null_list_address-0x92808D)//2 ,2)
+
+        for pose in range(max_pose):
             if pose in pose_list:
                 #default to null map
                 rom.write_to_snes_address(upper_list_address+2*pose, null_map_location % 0x10000, 2)
@@ -372,19 +392,19 @@ def assign_new_tilemaps(rom,samus):
 
                 image_names = samus._layout.get_all_image_names(animation,pose)
                 for image_name in image_names:
+                    force = samus._layout.get_property("force", image_name)
                     dimensions = samus._layout.get_property("dimensions", image_name)
                     extra_area = samus._layout.get_property("extra area", image_name)
                     palette = samus._layout.get_property("palette", image_name)
-                    tilemap = get_tilemap_from_dimensions(dimensions, extra_area, palette)
+                    tilemap = get_tilemap_from_dimensions(dimensions, extra_area, palette, 0x08 if force=="lower" else 0x00)
                     if tuple(tilemap) in master_tilemap_location_dict:
                         tilemap_location = master_tilemap_location_dict[tuple(tilemap)]
                     else:
-                        tilemap_location = freespace.get(len(tilemap)+2)
+                        tilemap_location = tilemap_freespace.get(len(tilemap)+2)
                         rom.write_to_snes_address(tilemap_location, len(tilemap)//5, 2)  #write how many tiles are mapped
                         rom.bulk_write_to_snes_address(tilemap_location+2, tilemap, len(tilemap))  #and then the maps
                         master_tilemap_location_dict[tuple(tilemap)] = tilemap_location
                     #see if this has to go in the lower tilemap, and if so, do that
-                    force = samus._layout.get_property("force", image_name)
                     if force == "lower":
                         rom.write_to_snes_address(lower_list_address+2*pose, tilemap_location % 0x10000, 2)
                     else:
@@ -395,7 +415,7 @@ def assign_new_tilemaps(rom,samus):
 
     return True
 
-def get_tilemap_from_dimensions(dimensions, extra_area, palette):
+def get_tilemap_from_dimensions(dimensions, extra_area, palette, start_index=0x00):
     if palette is None:
         palette = 0x28   #default to normal Samus palette
     elif type(palette) is str and palette[:2] == "0x":
@@ -420,7 +440,7 @@ def get_tilemap_from_dimensions(dimensions, extra_area, palette):
                 small_tiles.append((x,ymax-8))
 
     tilemap = []
-    current_index = 0x00
+    current_index = start_index
     for x,y in big_tiles:
         if x < 0:
             tilemap.extend([x % 0x100,0xC3, y % 0x100,current_index, palette])

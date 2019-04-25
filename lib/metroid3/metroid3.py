@@ -398,7 +398,6 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
             tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, port_frame=buttons["port"]*8,upper=upper, lower=lower)   #TODO: do full port opening animation
 
 
-
         #there is stuff in VRAM by default, so populate this and then overwrite with the DMA_writes
         constructed_VRAM_data = {}
         TILESIZE = 0x20
