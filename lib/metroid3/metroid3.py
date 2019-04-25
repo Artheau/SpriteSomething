@@ -274,9 +274,9 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         super().__init__(*args)    #do the stuff from the inherited class
 
         self.palette_types = {
-                "power": 1,
-                "varia": 2,
-                "gravity": 3,
+                "Power": 1,
+                "Varia": 2,
+                "Gravity": 3,
         }
 
         self.suit_lookup = {value:key for key,value in self.palette_types.items()}   #reverse lookup
@@ -287,23 +287,26 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 "Speed Boost": 2,
                 "Speed Squat": 3,
                 "Hyper Beam": 4,
-
-                #TODO: link this next block to background effects
-                #"Sepia": 5,  #in the intro storyline stuff
-                #"Door": 6,   #when Samus is going through a doorway
-                #"Heat": 7,   #for areas that require the Varia suit, and when alarms are blaring
-                #"Xray": 8,   #also for dark rooms
-
-                #"Shinespark": 9,
-                #"death_suit": 10,
-                #"sepia_hurt": 11,
-                #"sepia_alternate": 12,
-                #"death_flesh": 13,
-                #"file_select": 14,
-                #"ship": 15,
-                #"intro_ship": 16,
-                #"outro_ship": 17,
         }
+
+        self.effect_types = {
+                "No Effect": 0,
+                "Heat": 1,
+                "XRay": 2,
+                "Sepia": 3,
+                "Door": 4,
+        }
+
+        #NYI -- these need to be tied to specific animations
+        #"death_suit": 10,
+        #"sepia_hurt": 11,
+        #"sepia_alternate": 12,
+        #"death_flesh": 13,
+        #"file_select": 14,
+        #"ship": 15,
+        #"intro_ship": 16,
+        #"outro_ship": 17,
+
 
         self.animations = SAMUS_ANIMATION_DICT
 
@@ -325,6 +328,9 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         else:
             variant_number = buttons["variant"]
             variant_type = next(key for key, value in self.variant_types.items() if value == variant_number) #reverse dictionary lookup
+            effect_number = buttons["effect"]
+            if effect_number != 0 and variant_number == 0:
+                variant_type = next(key for key, value in self.effect_types.items() if value == effect_number) #reverse lookup
 
         suit_type = [None,"power","varia","gravity"][buttons["suit"]]   #get the name of the suit instead of the number
 
