@@ -396,6 +396,10 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 raise AssertionError(f"unknown command to get_sprite_pose(): {animation_ID}")
         else:
             tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, port_frame=buttons["port"]*8,upper=upper, lower=lower)   #TODO: do full port opening animation
+            if animation_ID in [0xD3,0xD4]:
+                #need to correct the vanilla tilemaps here because of palette weirdness and imported palettes
+                for tilemap in tilemaps:
+                    tilemap[4] |= 0x10
 
 
         #there is stuff in VRAM by default, so populate this and then overwrite with the DMA_writes
