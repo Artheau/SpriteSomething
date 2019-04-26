@@ -85,22 +85,32 @@ def upgrade_to_wizzywig(old_rom, samus):
     success_code = disable_upper_bypass(rom,samus)
     print("done" if success_code else "FAIL")
 
+    #now we're going to get set up for screw attack without space jump
+    #first off, we need a new control code that checks for space jump, so that we can gate the animation appropriately
+
+    print("Creating new control code...", end="")
+    success_code = create_new_control_code(rom,samus)
+    print("done" if success_code else "FAIL")
+
+    #now we need to insert this control code into the animation sequence for screw attack, and its counterpart in walljump
+
+    print("Implementing spin attack...", end="")
+    success_code = implement_spin_attack(rom,samus)
+    print("done" if success_code else "FAIL")
+
+
     #TODO
     #
-    #crystal flash (the bubble needs a special tilemap)
-    #grapple (need to mirror the tilemaps for the upper semicircle, and then copy the first 32 poses to the next 32)
-    #
-    #screw attack without space jump -- a lot of things need to happen here
-    # make a new control code to check for space jump only
-    # feed it into the frame delay lists for screw attack animations, so that the new animation is first (shorter), and the old animation is next (longer)
-    # might need to fix the positioning of wall jump pose
-    # might need to fix the palette assignments so that everything glows green that is supposed to glow green, and also the reverse
-    # expand the above code for DMA and tilemap stuff for animations 0x81 and 0x82 and the walljump versions
-    #  so that we have the new poses included correctly
+    #fix the jump-to point when turning during spin attack
+    #fix walljump
     #
     #write the death animation DMA data in a space worthy of its importance in my personal gameplay
     #move the DMA pointers accordingly, and increase the DMA load size
     #re-write the death tilemaps from layout info
+    #
+    #check to see how the organization of bank $92 is coming along at this point,
+    # and try to keep things confined to their original spaces if possible,
+    # so that this patch is more robust to other types of rom hacks
     #
     #as a separate project, need to fix all the gun placements (do this in the base rom patch)
 
@@ -150,8 +160,8 @@ def move_gun_tiles(rom,samus):
     # they point to DMA locations in bank $9A, e.g. DW $0000, $9A00, $9C00, $9E00
     #I need a place with room, preferably in bank $90, for a few more pointers to accomodate all ten directions,
     # so that I can have ten pointers to ten different DMA sets of this type
-    #It just so happens that I'm going to free up $908688-$9087BC with some other changes that I'm making, so hooray!
-    PLACE_TO_PUT_GUN_DMA_POINTERS = 0x908688      #otherwise, if this is a problem, can default to the end of the bank: 0x90F640
+    #It just so happens that I'm going to free up $9086A3-$9087BC with some other changes that I'm making, so hooray!
+    PLACE_TO_PUT_GUN_DMA_POINTERS = 0x9086A3      #otherwise, if this is a problem, can default to the end of the bank: 0x90F640
     for direction in range(10):
         gfx_pointer = PLACE_TO_PUT_GUN_DMA_POINTERS+8*direction
         rom.write_to_snes_address(0x90C7A5+2*direction, gfx_pointer % 0x10000, 2)
@@ -316,7 +326,7 @@ def link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, 
     rom.write_to_snes_address(0x92D94E,[address_to_write % 0x10000 for _ in range(0xFD)],"2"*0xFD)
 
     animation_lookup = {}   #will contain a list of the poses each animation has
-    for animation, pose in samus.get_all_poses():
+    for animation, pose in get_poses_old_and_new(rom,samus):
         if animation in animation_lookup:
             animation_lookup[animation].append(pose)
         else:
@@ -365,7 +375,7 @@ def assign_new_tilemaps(rom,samus):
     null_list_address = lookup_table_freespace.get(2*96)  #96 is the most poses of any animation
 
     animation_lookup = {}   #will contain a list of the poses each animation has
-    for animation, pose in samus.get_all_poses():
+    for animation, pose in get_poses_old_and_new(rom,samus):
         if animation in animation_lookup:
             animation_lookup[animation].append(pose)
         else:
@@ -410,7 +420,14 @@ def assign_new_tilemaps(rom,samus):
                     palette = samus._layout.get_property("palette", image_name)
                     tilemap = get_tilemap_from_dimensions(dimensions, extra_area, palette, 0x08 if force=="lower" else 0x00)
                     if image_name[:14] == "crystal_bubble":
+                        #have to make the huge bubble out of just a quarter bubble
                         tilemap = get_quadrated_tilemap(tilemap)
+                    elif animation == 0xB2 and pose in itertools.chain(range(0,9),range(25,41),range(57,64)):  #0-8,25-40,57-63
+                        #need to 180 rotate these grapple poses so that they appears as they did in classic for upside-down poses
+                        tilemap = rotate_tilemap(tilemap)
+                    elif animation == 0xB3 and pose in itertools.chain(range(0,8),range(24,40),range(56,64)):  #0-7,24-39,56-63
+                        #need to 180 rotate these grapple poses so that they appears as they did in classic for upside-down poses
+                        tilemap = rotate_tilemap(tilemap)
 
                     if tuple(tilemap) in master_tilemap_location_dict:
                         tilemap_location = master_tilemap_location_dict[tuple(tilemap)]
@@ -484,12 +501,37 @@ def get_quadrated_tilemap(tilemap):
             if h_flip:
                 x = 0xF0 - x
                 size ^= 0x01     #flip the x sign bit
-                palette |= 0x40
+                palette ^= 0x40
             if v_flip:
                 y = 0xF0 - y
-                palette |= 0x80
+                palette ^= 0x80
+            if x < 0:
+                x += 0x100
+                size ^= 0x01
+            if y < 0:
+                y += 0x100
             quad_tilemap.extend([x,size,y,tile,palette])
     return quad_tilemap
+
+def rotate_tilemap(tilemap):
+    rotated_tilemap = []
+    for i in range(0,len(tilemap),5):
+        x,size,y,tile,palette = tilemap[i:i+5]
+        if size & 0xC2 == 0:   #small tile
+            flip_anchor = 0xF8  #math
+        else:
+            flip_anchor = 0xF0  #more math.  Learn algebra, kids; you'll need it at 4pm on a Thursday in April.
+        x = flip_anchor - x
+        y = flip_anchor - y
+        size ^= 0x01
+        palette ^= 0xC0
+        if x < 0:
+            x += 0x100     #hex stuff, happens when x is negative but close to zero
+            size ^= 0x01   #more hex stuff.  Learn hexadecimal, kids; you'll need it at 4:15pm on a Thursday in April.
+        if y < 0:
+            y += 0x100
+        rotated_tilemap.extend([x,size,y,tile,palette])
+    return rotated_tilemap
 
 def no_more_stupid(rom,samus):
     #in theory, I could just break the code that loads the stupid tile, but I won't rest at night until this tile is gone
@@ -510,6 +552,173 @@ def disable_upper_bypass(rom,samus):
     NEW_SUBROUTINES = [0x8686 for _ in range(28)]   #these are just null routines
     success_code = rom._apply_single_fix_to_snes_address(0x90864E, OLD_SUBROUTINES, NEW_SUBROUTINES, "2"*28)
     return success_code
+
+def create_new_control_code(rom,samus):
+    #new control code: place at $908688-$9086A2 (0x1B bytes)
+    SUBROUTINE_LOCATION = 0x908688
+    '''
+    ;I wrot this coed mysef
+    AD A2 09   ;LDA $09A2       ;get item equipped info
+    89 00 02   ;BIT #$0200      ;check for space jump equipped
+    D0 09      ;BNE space_jump  ;if space jump, branch to space jump stuff
+    AD 96 0A   ;LDA $0A96       ;get the pose number
+    18         ;CLC             ;prepare to do math
+    69 1B 00   ;ADC #$001B      ;skip past the old screw attack to the new stuff
+    80 04      ;BRA get_out     ;then GET OUT after doing some important things after branching
+    ;:space_jump
+    AD 96 0A   ;LDA $0A96       ;get the pose number
+    1A         ;INC A           ;just go to the next pose
+    ;:get_out
+    8D 96 0A   ;STA $0A96       ;store the new pose in the correct spot
+    A8         ;TAY             ;transfer to Y because reasons
+    38         ;SEC             ;flag the carry bit because reasons
+    60         ;RTS             ;now GET OUT
+    '''
+    NEW_SUBROUTINE = [  0xAD, 0xA2, 0x09,
+                        0x89, 0x00, 0x02,
+                        0xD0, 0x09,
+                        0xAD, 0x96, 0x0A,
+                        0x18,
+                        0x69, 0x1B, 0x00,
+                        0x80, 0x04,
+                        0xAD, 0x96, 0x0A,
+                        0x1A,
+                        0x8D, 0x96, 0x0A,
+                        0xA8,
+                        0x38,
+                        0x60]
+
+    rom.bulk_write_to_snes_address(SUBROUTINE_LOCATION, NEW_SUBROUTINE, 0x1B)
+
+    #need to link up this subroutine to control code $F5
+    success_code = rom._apply_single_fix_to_snes_address(0x90832E, 0x8344, SUBROUTINE_LOCATION % 0x10000, 2)
+
+    return success_code
+
+def implement_spin_attack(rom,samus):
+    #here we adjust the timing sequence for screw attack, adding in the new control code
+    # so that we have a new battery of poses which are used to implement spin attack
+
+    #we're going to need some space in bank $91.  Bank $91 is super tight.
+    
+    #need to free up some space in $91812D-$91816E in order to relocate the screw attack sequence there.
+    #don't actually need any new code for this, because so much code is duplicated -- just need to move some JSR pointers
+    OLD_TABLE = [0x804D,0x8066,0x806E,0x8076,0x807E,0x8087,0x80B6,0x8086,
+                 0x810A,0x8112,0x8113,0x812D,0x8132,0x813A,0x8142,0x8146,
+                 0x8147,0x814F,0x8157,0x815F,0x8167,0x816F,0x8181,0x8189,
+                 0x818D,0x8191,0x8199,0x81A1]
+    NEW_TABLE = [0x804D,0x8066,0x806E,0x8076,0x807E,0x8087,0x80B6,0x8086,
+                 0x810a,0x8112,0x8113,0x8066,0x8066,0x8066,0x8189,0x8086,
+                 0x8066,0x8066,0x8066,0x8066,0x8066,0x816F,0x8181,0x8189,
+                 0x818D,0x8191,0x8199,0x81A1]
+    success_code = rom._apply_single_fix_to_snes_address(0x918014,OLD_TABLE,NEW_TABLE, "2"*28)
+    #and here is our new timing/control sequence for screw attack, that includes our new $F5 control code
+    NEW_SCREW_ATTACK = [0x04, 0xF5,    #F5 forces the decision about which sequence to draw
+                        0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, #old screw attack
+                        0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+                        0xFE, 0x18,
+                        0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, #new spin attack
+                        0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+                        0xFE, 0x18,
+                        0x08, 0xFF]    #this gives the wall jump prompt in case Samus is close to a wall
+    rom.bulk_write_to_snes_address(0x91812D,NEW_SCREW_ATTACK,56)   #should have ten bytes left to spare
+
+    #the subroutine at 0x9180BE-0x918109 is unreachable.  We're going to relocate the walljump sequence there.
+    NEW_WALLJUMP_SEQUENCE = [0x05, 0x05,    #lead up into a jump
+                             0xFB,          #this chooses the type of jump (old code)
+                             0x03, 0x02, 0x03, 0x02, 0x03, 0x02, 0x03, 0x02,   #spin jump
+                             0xFE, 0x08,
+                             0x02, 0x01, 0x02, 0x01, 0x02, 0x01, 0x02, 0x01,   #space jump
+                             0xFE, 0x08,
+                             0xF5,
+                             0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,  #old screw attack
+                             0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+                             0xFE, 0x18,
+                             0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,  #new spin attack
+                             0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
+                             0xFE, 0x18]
+    rom.bulk_write_to_snes_address(0x9180BE,NEW_WALLJUMP_SEQUENCE,76)  #literally zero bytes to spare -- just barely fits
+
+    #now need to point to these new sequences
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x91B010+2*0x81,
+                                                                    [0xB39E,0xB39E,0xB491,0xB491],
+                                                                    [0x812D,0x812D,0x80BE,0x80BE],
+                                                                    "2222")
+
+    #but because of this code here, Samus will not glow green during spin attack, so we fix this:
+    #old code   $91:DA04 C9 1B 00    CMP #$001B    ;compare to 27 (near old location of the wall jump prompt)
+    #new code   $91:DA04 C9 36 00    CMP #$0036    ;compare to 54 (near new location of the wall jump prompt)
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x91DA04,[0xC9,0x1B,0x00],[0xC9,0x36,0x00],"111")
+
+    #we also need to relocate the walljump prompt correctly
+    #old code   $90:9DD4 A9 1A 00    LDA #$001A    ;go to 26 (old location of the wall jump prompt)
+    #old code   $90:9DD4 A9 35 00    LDA #$0035    ;go to 53 (new location of the wall jump prompt)
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x909DD4,[0xA9,0x1A,0x00],[0xA9,0x35,0x00],"111")
+
+    #now we need to start on pose 2 instead of pose 1 when Samus turns around
+    #old code   $91:F634 A9 01 00    LDA #$0001    ;got to pose 1 when turning during a spin jump
+    #new code   $91:F634 A9 02 00    LDA #$0002    ;got to pose 2 when turning during a spin jump
+    #success_code = success_code and rom._apply_single_fix_to_snes_address(0x91F634,[0xA9,0x01,0x00],[0xA9,0x1C,0x00],"111")
+
+    #this breaks when Samus turns mid-air
+    #here is the issue
+    #$91:F634 A9 01 00    LDA #$0001
+    #I need this to conditionally jump based upon 0x81,0x82.
+    #  If it's neither, LDA 1.  Otherwise LDA 2 or 1C based upon space jump equipped
+    #So I need to loop in some new code, about 33 bytes long
+    #And bank $91 is super tight still...
+    # but I DID free up the spot where the timing sequence for wall jump used to be, so in a weird twist of fate,
+    # we're going to loop some code from there
+    '''
+    :new code
+    AD 1C 0A        ;LDA $0A1C       ;load up animation number
+    C9 81 00        ;CMP #$0081      ;right screw attack?
+    F0 09           ;BEQ screw_attack
+    C9 82 00        ;CMP 82          ;left screw attack?
+    F0 04           ;BEQ screw attack
+    A9 01 00        ;LDA #0001       ;default to first pose, as in classic
+    60              ;RTS             ;GET OUT
+    :screw_attack
+    AD A2 09        ;LDA $09A2       ;get equipped items
+    89 00 02        ;BIT #$0200      ;check for space jump
+    D0 04           ;BNE space_jump
+    A9 1C 00        ;LDA #$001C        ;no space jump, so set the pose to be the spin attack
+    60              ;RTS
+    :space_jump
+    A9 02 00        ;LDA #$0002        ;yes space jump, so set the pose to be screw attack
+    60              ;RTS
+    '''
+    NEW_CODE = [0xAD, 0x1C, 0x0A,
+                0xC9, 0x81, 0x00,
+                0xF0, 0x09,
+                0xC9, 0x82, 0x00,
+                0xF0, 0x04,
+                0xA9, 0x01, 0x00,
+                0x60,
+                0xAD, 0xA2, 0x09,
+                0x89, 0x00, 0x02,
+                0xD0, 0x04,
+                0xA9, 0x1C, 0x00,
+                0x60,
+                0xA9, 0x02, 0x00,
+                0x60]
+    #put the new code in the space previously occupied by wall jump timing sequence
+    rom.bulk_write_to_snes_address(0x91B491,NEW_CODE,33)
+    #loop in the new code
+    #previously: $91:F634 A9 01 00    LDA #$0001
+    #now: 20 91 B4    JSR $B491
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x91F634,[0xA9,0x01,0x00],[0x20,0x91,0xB4],"111")
+
+    #TODO: When spin attacking, Samus doesn't do the wall jump prompt (screw attack works ok)
+    #TODO: Walljump is still very broken
+
+    return success_code
+
+def get_poses_old_and_new(rom,samus):
+    for animation_string, pose in samus._layout.reverse_lookup:
+        if animation_string[:2] == "0x":
+            animation_int = int(animation_string[2:],16)
+            yield animation_int, pose
 
 if __name__ == "__main__":
     raise AssertionError(f"Called main() on utility library {__file__}")
