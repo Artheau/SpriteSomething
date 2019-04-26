@@ -161,7 +161,7 @@ def move_gun_tiles(rom,samus):
     #I need a place with room, preferably in bank $90, for a few more pointers to accomodate all ten directions,
     # so that I can have ten pointers to ten different DMA sets of this type
     #It just so happens that I'm going to free up $9086A3-$9087BC with some other changes that I'm making, so hooray!
-    PLACE_TO_PUT_GUN_DMA_POINTERS = 0x9086A3      #otherwise, if this is a problem, can default to the end of the bank: 0x90F640
+    PLACE_TO_PUT_GUN_DMA_POINTERS = 0x9086A3      #otherwise, if this is a problem, can default to the end of the bank
     for direction in range(10):
         gfx_pointer = PLACE_TO_PUT_GUN_DMA_POINTERS+8*direction
         rom.write_to_snes_address(0x90C7A5+2*direction, gfx_pointer % 0x10000, 2)
@@ -593,6 +593,31 @@ def create_new_control_code(rom,samus):
     #need to link up this subroutine to control code $F5
     success_code = rom._apply_single_fix_to_snes_address(0x90832E, 0x8344, SUBROUTINE_LOCATION % 0x10000, 2)
 
+    #we're going to tie in the $F5 code to run right after the normal code in $FB.
+    #"Waste not want not", as people imitating my mom used to say
+    #In particular, here:
+    '''
+    OLD CODE
+    $90:8482 69 15 00    ADC #$0015
+    $90:8485 8D 96 0A    STA $0A96
+    $90:8488 A8          TAY
+    $90:8489 38          SEC
+    $90:848A 60          RTS
+    '''
+    #the F5 control code adds 1 if space jump is equipeed, else adds 27.  Technically we want to add 0 or 26, so we do this:
+    '''
+    NEW CODE
+    $90:8482 69 14 00    ADC #$0014
+    $90:8485 8D 96 0A    STA $0A96
+    $90:8488 4C ?? ??    JMP SUBROUTINE_LOCATION
+    '''
+    #because we're jumping straight-up instead of JSR, we end up returning correctly, with the correct final result
+
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x908482,
+        [0x69, 0x15, 0x00, 0x8D, 0x96, 0x0A, 0xA8, 0x6038],   #made the last two bytes a word for convenience in the next line
+        [0x69, 0x14, 0x00, 0x8D, 0x96, 0x0A, 0x4C, SUBROUTINE_LOCATION % 0x10000],
+         "11111112")
+    
     return success_code
 
 def implement_spin_attack(rom,samus):
@@ -625,19 +650,18 @@ def implement_spin_attack(rom,samus):
 
     #the subroutine at 0x9180BE-0x918109 is unreachable.  We're going to relocate the walljump sequence there.
     NEW_WALLJUMP_SEQUENCE = [0x05, 0x05,    #lead up into a jump
-                             0xFB,          #this chooses the type of jump (old code)
+                             0xFB,          #this chooses the type of jump -- we have augmented this subroutine
                              0x03, 0x02, 0x03, 0x02, 0x03, 0x02, 0x03, 0x02,   #spin jump
                              0xFE, 0x08,
                              0x02, 0x01, 0x02, 0x01, 0x02, 0x01, 0x02, 0x01,   #space jump
                              0xFE, 0x08,
-                             0xF5,
                              0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,  #old screw attack
                              0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
                              0xFE, 0x18,
                              0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,  #new spin attack
                              0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
                              0xFE, 0x18]
-    rom.bulk_write_to_snes_address(0x9180BE,NEW_WALLJUMP_SEQUENCE,76)  #literally zero bytes to spare -- just barely fits
+    rom.bulk_write_to_snes_address(0x9180BE,NEW_WALLJUMP_SEQUENCE,75)  #only one byte to spare
 
     #now need to point to these new sequences
     success_code = success_code and rom._apply_single_fix_to_snes_address(0x91B010+2*0x81,
@@ -649,68 +673,108 @@ def implement_spin_attack(rom,samus):
     #old code   $91:DA04 C9 1B 00    CMP #$001B    ;compare to 27 (near old location of the wall jump prompt)
     #new code   $91:DA04 C9 36 00    CMP #$0036    ;compare to 54 (near new location of the wall jump prompt)
     success_code = success_code and rom._apply_single_fix_to_snes_address(0x91DA04,[0xC9,0x1B,0x00],[0xC9,0x36,0x00],"111")
-
+    #also need to fix the walljump check similarly
+    #old code   $90:9D63 C9 1B 00    CMP #$001B    ;compare to 27 (near old location of the wall jump prompt)
+    #new code   $90:9D63 C9 36 00    CMP #$0036    ;compare to 54 (near new location of the wall jump prompt)
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x909D63,[0xC9,0x1B,0x00],[0xC9,0x36,0x00],"111")
+    
     #we also need to relocate the walljump prompt correctly
     #old code   $90:9DD4 A9 1A 00    LDA #$001A    ;go to 26 (old location of the wall jump prompt)
     #old code   $90:9DD4 A9 35 00    LDA #$0035    ;go to 53 (new location of the wall jump prompt)
     success_code = success_code and rom._apply_single_fix_to_snes_address(0x909DD4,[0xA9,0x1A,0x00],[0xA9,0x35,0x00],"111")
 
-    #now we need to start on pose 2 instead of pose 1 when Samus turns around
-    #old code   $91:F634 A9 01 00    LDA #$0001    ;got to pose 1 when turning during a spin jump
-    #new code   $91:F634 A9 02 00    LDA #$0002    ;got to pose 2 when turning during a spin jump
-    #success_code = success_code and rom._apply_single_fix_to_snes_address(0x91F634,[0xA9,0x01,0x00],[0xA9,0x1C,0x00],"111")
-
     #this breaks when Samus turns mid-air
     #here is the issue
     #$91:F634 A9 01 00    LDA #$0001
-    #I need this to conditionally jump based upon 0x81,0x82.
-    #  If it's neither, LDA 1.  Otherwise LDA 2 or 1C based upon space jump equipped
-    #So I need to loop in some new code, about 33 bytes long
-    #And bank $91 is super tight still...
-    # but I DID free up the spot where the timing sequence for wall jump used to be, so in a weird twist of fate,
-    # we're going to loop some code from there
+    #$91:F637 8D 9A 0A    STA $0A9A  [$7E:0A9A]
+    #I need this to conditionally load this value based upon water mechanics, screw attack, and space jump
+    #So I need to loop in some new code
+    #And bank $91 is super tight still...I am going to have to JSL.  How about over to the death tiles,
+    # which I'm going to relocate anyway?
+    NEW_SUBROUTINE_LOCATION = 0x9B8000
+    
     '''
-    :new code
-    AD 1C 0A        ;LDA $0A1C       ;load up animation number
-    C9 81 00        ;CMP #$0081      ;right screw attack?
-    F0 09           ;BEQ screw_attack
-    C9 82 00        ;CMP 82          ;left screw attack?
-    F0 04           ;BEQ screw attack
-    A9 01 00        ;LDA #0001       ;default to first pose, as in classic
-    60              ;RTS             ;GET OUT
-    :screw_attack
-    AD A2 09        ;LDA $09A2       ;get equipped items
-    89 00 02        ;BIT #$0200      ;check for space jump
-    D0 04           ;BNE space_jump
-    A9 1C 00        ;LDA #$001C        ;no space jump, so set the pose to be the spin attack
-    60              ;RTS
-    :space_jump
-    A9 02 00        ;LDA #$0002        ;yes space jump, so set the pose to be screw attack
-    60              ;RTS
-    '''
-    NEW_CODE = [0xAD, 0x1C, 0x0A,
-                0xC9, 0x81, 0x00,
-                0xF0, 0x09,
-                0xC9, 0x82, 0x00,
-                0xF0, 0x04,
-                0xA9, 0x01, 0x00,
-                0x60,
-                0xAD, 0xA2, 0x09,
-                0x89, 0x00, 0x02,
-                0xD0, 0x04,
-                0xA9, 0x1C, 0x00,
-                0x60,
-                0xA9, 0x02, 0x00,
-                0x60]
-    #put the new code in the space previously occupied by wall jump timing sequence
-    rom.bulk_write_to_snes_address(0x91B491,NEW_CODE,33)
-    #loop in the new code
-    #previously: $91:F634 A9 01 00    LDA #$0001
-    #now: 20 91 B4    JSR $B491
-    success_code = success_code and rom._apply_single_fix_to_snes_address(0x91F634,[0xA9,0x01,0x00],[0x20,0x91,0xB4],"111")
+    By and large this new subroutine borrows heavily from control code $FB, which has to do similar checks
+    AD A2 09    LDA $09A2         ; get equipped items
+    89 20 00    BIT #$0020        ; check for gravity suit
+    D0 20       BNE equip_check   ; if gravity suit, underwater status is not important
+    22 58 EC 90 JSL $90EC58       ; $12 / $14 = Samus' bottom / top boundary position
+    AD 5E 19    LDA $195E         ; get [FX Y position]
+    30 0E       BMI acid_check    ; If [FX Y position] < 0:, need to check for acid
+    C5 14       CMP $14           ; Check FX Y position against Samus's position
+    10 13       BPL equip_check   ; above water, so underwater status is not important
+    AD 7E 19    LDA $197E         ; get physics flag
+    89 04 00    BIT #$0004        ; If liquid physics are disabled, underwater status is not important
+    D0 0B       BNE equip_check
+    80 1D       BRA just_one_plz  ; ok, you're probably underwater at this point
 
-    #TODO: When spin attacking, Samus doesn't do the wall jump prompt (screw attack works ok)
-    #TODO: Walljump is still very broken
+    :;acid_check
+    AD 62 19    LDA $1962
+    30 04       BMI equip_check   ; If [lava/acid Y position] < 0, then there is no acid, so underwater status is not important
+    C5 14       CMP $14           ;
+    30 14       BMI just_one_plz  ; If [lava/acid Y position] < Samus' top boundary position, then you are underwater
+
+    ;:equip_check
+    AD A2 09        ;LDA $09A2        ;get equipped items
+    89 08 00        ;BIT #$0008       ;check for screw attack equipped
+    F0 0C           ;BEQ just_one_plz ;if screw attack not equipped, branch out
+    89 00 02        ;BIT #$0200       ;check for space jump
+    F0 0E           ;BEQ spin_attack  ;if space jump not equipped, branch out
+    ;:screw_attack
+    A9 02 00        ;LDA #0002        ;default to (new) second pose
+    8D 9A 0A        ;STA $0A9A
+    6B              ;RTL              ;GET OUT
+    ;:just_one_plz
+    A9 01 00        ;LDA #0001        ;default to first pose, as in classic
+    8D 9A 0A        ;STA $0A9A
+    6B              ;RTL              ;GET OUT
+    ;:spin_attack
+    A9 1C 00        ;LDA #001C        ;skip over to our new spin attack section
+    8D 9A 0A        ;STA $0A9A
+    6B              ;RTL              ;GET OUT
+    '''
+    NEW_CODE = [0xAD, 0xA2, 0x09, 
+                0x89, 0x20, 0x00, 
+                0xD0, 0x20, 
+                0x22, 0x58, 0xEC, 0x90, 
+                0xAD, 0x5E, 0x19, 
+                0x30, 0x0E, 
+                0xC5, 0x14, 
+                0x10, 0x13, 
+                0xAD, 0x7E, 0x19, 
+                0x89, 0x04, 0x00, 
+                0xD0, 0x0B, 
+                0x80, 0x1D, 
+                0xAD, 0x62, 0x19, 
+                0x30, 0x04, 
+                0xC5, 0x14, 
+                0x30, 0x14, 
+                0xAD, 0xA2, 0x09, 
+                0x89, 0x08, 0x00, 
+                0xF0, 0x0C, 
+                0x89, 0x00, 0x02, 
+                0xF0, 0x0E, 
+                0xA9, 0x02, 0x00, 
+                0x8D, 0x9A, 0x0A, 
+                0x6B, 
+                0xA9, 0x01, 0x00, 
+                0x8D, 0x9A, 0x0A, 
+                0x6B, 
+                0xA9, 0x1C, 0x00, 
+                0x8D, 0x9A, 0x0A, 
+                0x6B]
+    
+    #put the new code in the ROM
+    rom.bulk_write_to_snes_address(NEW_SUBROUTINE_LOCATION,NEW_CODE,74)
+
+    #loop in the new code
+    #previously: $91:F634 A9 01 00     LDA #$0001
+    #            $91:F637 8D 9A 0A     STA $0A9A  [$7E:0A9A]
+    #now:        $91:F634 22 ?? ?? ??  JSL NEW_SUBROUTINE_LOCATION
+    #            $91:F638 EA EA        NOP NOP
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x91F634,
+                                                        [0xA9, 0x8D0001, 0x9A, 0x0A],
+                                                        [0x22, NEW_SUBROUTINE_LOCATION, 0xEA, 0xEA],"1311")
 
     return success_code
 
