@@ -751,7 +751,12 @@ class SpriteSomethingMainFrame(tk.Frame):
         # Generate a new epic random title for this application
         with open(os.path.join("resources","app_names.json")) as name_file:
             name_parts = json.load(name_file)
+        with open(os.path.join("user_overrides","app_names.json")) as name_file:
+            name_parts_user = json.load(name_file)
         app_name = []
+        for k,v in name_parts_user.items():
+            for n in v:
+                name_parts[k].append(n)
         if random.choice([True,False]):
             app_name.append(random.choice(name_parts["prefix enchantment"]))
             app_name.append(" ")
@@ -872,7 +877,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         #intended to be called when the user chooses a background from the dropdown menu.  This loads that background.
         if background_name in self.game.background_images:
             background_filename = self.game.background_images[background_name]
-            full_path_to_background_image = os.path.join("resources",self._game_name,"backgrounds",background_filename)
+            full_path_to_background_image = background_filename
             self._raw_background = Image.open(full_path_to_background_image)   #save this so it can easily be scaled later
             self._set_background(self._raw_background)
             self.scale_background_image(self._current_zoom)

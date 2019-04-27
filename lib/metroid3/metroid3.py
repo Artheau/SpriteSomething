@@ -14,13 +14,15 @@ class Metroid3(Game):
         self.game_nameAbbr =  "M3"
 
         self.background_images = {}
-        with open(os.path.join("resources",self.game_nameShort.lower(),"backgrounds","backgrounds.json")) as bgimg_file:
-            bg_imgs = json.load(bgimg_file)
-        for bg_img in bg_imgs:
-            self.background_images[bg_img["filename"]] = bg_img["title"]
-        for file in os.listdir(os.path.join("resources",self.game_nameShort.lower(),"backgrounds")):
-            if not file.endswith(".json") and not file in self.background_images.keys():
-                self.background_images[file] = file.capitalize().rpartition('.')[0]
+        for root in ["resources","user_overrides"]:
+            dir = os.path.join(root,self.game_nameShort.lower(),"backgrounds")
+            with open(os.path.join(dir,"backgrounds.json")) as bgimg_file:
+                bg_imgs = json.load(bgimg_file)
+            for bg_img in bg_imgs:
+                self.background_images[os.path.join(dir,bg_img["filename"])] = bg_img["title"]
+            for file in os.listdir(dir):
+                if not file.endswith(".json") and not os.path.join(dir,file) in self.background_images.keys():
+                    self.background_images[file] = file.capitalize().rpartition('.')[0]
         self.background_images = {v:k for k,v in self.background_images.items()}
 
         self.rom_data = rom.Metroid3RomHandler(rom_filename)
@@ -184,7 +186,7 @@ SAMUS_ANIMATION_DICT = {
                 "Fall, turn left, aim up": 0x93,
                 "Fall, turn left, aim diag up": 0xA0,
                 "Fall, turn left, aim diag down": 0x95,   #technically aim down too
-                
+
                 "Fall left": 0x2A,
                 "Fall left, aim up": 0x2C,
                 "Fall left, aim diag up": 0x6E,
@@ -195,7 +197,7 @@ SAMUS_ANIMATION_DICT = {
                 "Fall, turn right, aim up": 0x94,
                 "Fall, turn right, aim diag up": 0xA1,
                 "Fall, turn right, aim diag down": 0x96,   #technically aim down too
-                
+
                 "Moonwalk away from right": 0x4A,
                 "Moonwalk away from right, aim diag up": 0x76,
                 "Moonwalk away from right, aim diag down": 0x78,
@@ -236,7 +238,7 @@ SAMUS_ANIMATION_DICT = {
                 "Superjump begin right": 0xC7,
                 "Superjump vertical right": 0xCB,
                 "Superjump right": 0xC9,
-                
+
                 "Superjump begin left": 0xC8,
                 "Superjump vertical left": 0xCC,
                 "Superjump left": 0xCA,
@@ -506,7 +508,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 else:
                   yield animation, pose
                   pose += 1
-                
+
                 if kicks < 0:    #end of the line
                   break
             else:
@@ -546,4 +548,3 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def get_PNG_for_export(self):
         images = self.import_rgba_images_from_ROM()     #TODO: Should also be able to import these from PNG or ZSPR
         return self._layout.export_all_images_to_PNG(images)
-    
