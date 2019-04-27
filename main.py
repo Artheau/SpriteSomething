@@ -10,14 +10,12 @@ import argparse
 import importlib
 import json
 import numpy as np
-import platform
 import random
 import re
-import subprocess
-import sys
 import tkinter as tk
 import webbrowser
 import lib.constants as CONST
+import lib.ssDiagnostics as diags
 from functools import partial
 from PIL import Image, ImageTk
 from tkinter import colorchooser, filedialog, messagebox, Text, ttk
@@ -992,35 +990,15 @@ class SpriteSomethingMainFrame(tk.Frame):
             },
             "textarea.characters": {
                 "width": 120,
-                "height": 40
+                "height": 50
             }
         }
-        lines = [
-            "Python Version" + "\t"*3 + platform.python_version()
-        ]
-        lines.append("OS Version" + "\t"*3 + "%s %s" % (platform.system(), platform.release()))
-        if hasattr(sys, "executable"):
-            lines.append("Executable" + "\t"*3 + sys.executable)
-        lines.append("Build Date" + "\t"*3 + platform.python_build()[1])
-        lines.append("Compiler" + "\t"*3 + platform.python_compiler())
-        if hasattr(sys, "api_version"):
-            lines.append("Python API" + "\t"*3 + str(sys.api_version))
-        if hasattr(os, "pathsep"):
-            lines.append("Path Separator" + "\t"*3 + os.pathsep)
-        lines.append("")
-        lines.append("Packages")
-        lines.append("--------")
-        reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
-        installed_packages = [r.decode() for r in reqs.split()]
-        for pkg in installed_packages:
-            lines.append(pkg.replace("==","\t"*3))
-
         diag = tk.Tk()
-        diag.title("Diagnostics")
+        diag.title("SpriteSomething Diagnostics")
         diag.geometry(str(dims["window"]["width"]) + 'x' + str(dims["window"]["height"]))
         text = Text(diag, width=dims["textarea.characters"]["width"], height=dims["textarea.characters"]["height"])
         text.pack()
-        self.add_text_link_array(lines, text)
+        self.add_text_link_array(diags.output(), text)
 
     def about(self):
         # Gui.class
