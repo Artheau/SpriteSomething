@@ -71,6 +71,11 @@ def upgrade_to_wizzywig(old_rom, samus):
     success_code = assign_new_tilemaps(rom,samus)
     print("done" if success_code else "FAIL")
 
+    #connect the death animation correctly
+    print("Re-connecting death sequence...", end="")
+    success_code = connect_death_sequence(DMA_dict,rom,samus)
+    print("done" if success_code else "FAIL")
+
     #get rid of the stupid tile
     print("Stupid tile...", end="")
     success_code = no_more_stupid(rom,samus)
@@ -100,9 +105,6 @@ def upgrade_to_wizzywig(old_rom, samus):
 
 
     #TODO
-    #
-    #fix the jump-to point when turning during spin attack
-    #fix walljump
     #
     #write the death animation DMA data in a space worthy of its importance in my personal gameplay
     #move the DMA pointers accordingly, and increase the DMA load size
@@ -213,11 +215,15 @@ class FreeSpace():
 def write_dma_data(rom,samus):
     if rom._type.name == "EXHIROM":
         #until my hand is slapped I am going to just take up all of the lower halves of banks 0x44-0x4B and 0x54-0x5B
-        freespace = FreeSpace([(bank * 0x10000,bank * 0x10000 + 0x8000) for bank in itertools.chain(range(0x44,0x4C),range(0x54,0x5C))])
+        freespace = FreeSpace([(bank * 0x10000,bank * 0x10000 + 0x8000) for bank in itertools.chain(range(0x44,0x4C),range(0x54,0x5B))])
+        #the death DMA data needs to all be in the same bank
+        death_freespace = FreeSpace([(0x5B0000,0x5B8000)])
     else:
         #in this case, the only person that will slap my hand is me, and I'm not feeling it at the moment
         #so we're just going to take up the upper halves of half of the new banks that we just added (0xE8-0xF7)
-        freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in range(0xE8,0xF8)])
+        freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in range(0xE8,0xF7)])
+        #the death DMA data needs to all be in the same bank
+        death_freespace = FreeSpace([(0xF78000, 0xF80000)])
 
     DMA_dict = {}  #have to keep track of where we put all this stuff so that we can point to it afterwards
 
@@ -237,10 +243,16 @@ def write_dma_data(rom,samus):
                 DMA_data = samus.get_raw_pose(image_name)
 
             size = len(DMA_data)
-            address_to_write = freespace.get(size)
+            if image_name[:5] in ["death"]:
+                address_to_write = death_freespace.get(size)
+            else:
+                address_to_write = freespace.get(size)
+
             rom.bulk_write_to_snes_address(address_to_write,DMA_data,size)
 
             DMA_dict[image_name] = (address_to_write, size)
+
+    print(hex(death_freespace.get(0)))
 
     return DMA_dict, True
 
@@ -326,7 +338,7 @@ def link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, 
     rom.write_to_snes_address(0x92D94E,[address_to_write % 0x10000 for _ in range(0xFD)],"2"*0xFD)
 
     animation_lookup = {}   #will contain a list of the poses each animation has
-    for animation, pose in get_poses_old_and_new(rom,samus):
+    for animation, pose in get_numbered_poses_old_and_new(rom,samus):
         if animation in animation_lookup:
             animation_lookup[animation].append(pose)
         else:
@@ -365,7 +377,8 @@ def assign_new_tilemaps(rom,samus):
     #this was the old table full of TM pointers.  We navigate around the delicate areas and rearrange the remaining tilemap pointers
     lookup_table_freespace = FreeSpace([(0x928091,0x928390),(0x9283C1,0x9283E4),(0x9283e7,0x928a04),(0x928a0d,0x9290c4)])
     #leaving TM_006 alone because its auxiliary uses in-game are not clear, but the rest can go
-    tilemap_freespace = FreeSpace([(0x929663,0x92C580)])   #this used to contain all the tilemaps, and again it will!
+    tilemap_freespace = FreeSpace([(0x929663,0x92BE00)])   #this used to contain all the tilemaps, and again it will!
+    #reserving the space after $92BE00 for death tilemaps
 
     #need a null map to prevent terrible lag parties from happening when vanilla glitches rear their head
     null_map_location = tilemap_freespace.get(2)
@@ -375,7 +388,7 @@ def assign_new_tilemaps(rom,samus):
     null_list_address = lookup_table_freespace.get(2*96)  #96 is the most poses of any animation
 
     animation_lookup = {}   #will contain a list of the poses each animation has
-    for animation, pose in get_poses_old_and_new(rom,samus):
+    for animation, pose in get_numbered_poses_old_and_new(rom,samus):
         if animation in animation_lookup:
             animation_lookup[animation].append(pose)
         else:
@@ -393,8 +406,6 @@ def assign_new_tilemaps(rom,samus):
                 for image_name in samus._layout.get_all_image_names(animation,pose):
                     if samus._layout.get_property("force", image_name) == "lower":
                         need_lower_tilemaps = True
-
-
 
         #need to make up lookup table pointers
         upper_list_address = lookup_table_freespace.get(2*max_pose)
@@ -446,6 +457,140 @@ def assign_new_tilemaps(rom,samus):
                 rom.write_to_snes_address(lower_list_address+2*pose, null_map_location % 0x10000, 2)
 
     return True
+
+def connect_death_sequence(DMA_dict, rom,samus):
+    #the death tilemaps are referenced by these offsets
+    #$92:EDCF A9 1C 08    LDA #$081C                  ;this is an offset into the lower tilemap table for right facing death tilemaps
+    #$92:EDDA A9 25 08    LDA #$0825                  ;this is an offset into the lower tilemap table for left facing death tilemaps
+    #to dereference them, go to $92808D+2*offset
+    #there you will find a list of the tilemaps for the death pose (9 in total for each side)
+    #in this code we change those offsets
+
+    freespace = FreeSpace([(0x92BE01,0x92C580)])   #starts where the other tilemaps end.
+    #Needs to start on an odd number in order to index correctly from 0x92808D
+
+    for direction,base_address in [("left",0x92EDD0),("right",0x92EDDB)]:
+        death_list_location = freespace.get(18)
+        rom.write_to_snes_address(base_address,(death_list_location-0x92808D)//2 ,2)
+        for i in range(9):
+            tilemap = []
+            for image_name in samus._layout.reverse_lookup[f"death_{direction}",i]:
+                force = samus._layout.get_property("force", image_name)
+                dimensions = samus._layout.get_property("dimensions", image_name)
+                extra_area = samus._layout.get_property("extra area", image_name)
+                palette = samus._layout.get_property("palette", image_name)
+                if force == "lower":
+                    #prepend, so that the lower tilemaps are at the beginning of the list (and thus, get drawn first)
+                    tilemap.extend(get_tilemap_from_dimensions(dimensions, extra_area, palette, 0x08))
+                else:
+                    #extend, so that the upper tilemaps are at the end of the list (and thus, get drawn last)
+                    tilemap = get_tilemap_from_dimensions(dimensions, extra_area, palette, 0x00) + tilemap
+
+            tilemap_location = freespace.get(len(tilemap)+2)
+            rom.write_to_snes_address(tilemap_location, len(tilemap)//5, 2)  #write how many tiles are mapped
+            rom.bulk_write_to_snes_address(tilemap_location+2, tilemap, len(tilemap))  #and then the maps
+
+            #tie it into the list now
+            rom.write_to_snes_address(death_list_location+2*i, tilemap_location % 0x10000, 2)
+
+    #the old death DMA routine is wildly insufficient; we need to bypass it (replace with NOP commands)
+    #$9B:B451 20 D8 B6    JSR $B6D8
+    #$9B:B5B1 20 D8 B6    JSR $B6D8
+    for addr in [0x9BB451,0x9BB5B1]:
+        rom._apply_single_fix_to_snes_address(addr,[0x20,0xD8,0xB6], [0xEA,0xEA,0xEA],"111")
+
+
+    #and because we bypassed it, we need a new subroutine!  Eek!  So let's give it a good college try
+    '''
+    ; hook this in as a JSR from $92:EDC4
+    18           CLC
+    AD E4 0D     LDA $0DE4    ;get the pose number
+    0A           ASL A
+    0A           ASL A
+    0A           ASL A
+    AD 1E 0A     ADC $0A1E    ;add the direction that Samus is facing
+    29 FF 00     AND #$00FF   ;just the lower nybble of direction
+    0A           ASL A
+    A8           TAY          ;Y = 16*pose # + [8 (left) or 16 (right)]
+    :loop
+    88           DEY
+    88           DEY
+    AE 30 03     LDX $0330     ;get VRAM stack pointer
+    A9 00 04     LDA #$0400   ;all DMA transfers will be 20 tiles each
+    95 D0        STA $D0, x
+    E8           INX
+    E8           INX
+    B9 ?? ??     LDA source_list, y    ;get the next DMA source address
+    95 D0        STA $D0, x
+    E8           INX
+    E8           INX
+    A9 ?? 00     LDA #bank   ;bank #
+    95 D0        STA $D0, x
+    E8           INX          ;intentionally shifting by only one here
+    B9 ?? ??     LDA dest_list, y ;get the dest address
+    95 D0        STA $D0, x
+    E8           INX
+    E8           INX
+    8E 30 03     STX $330     ;replace stack pointer
+    98           TYA
+    89 07 00     BIT #$0007      ;see if we finished the pose
+    D0 D8        BNE loop
+    AD 1E 0A     LDA $0A1E       ;get the direction samus is facing
+    29 FF 00     AND #$00FF
+    60           RTS
+
+
+    :source_list
+    dw ??...??  ;9*[LEFT RIGHT] where each of LEFT/RIGHT is 4 pointers to DMA sources for that pose
+    :dest_list
+    dw ??...??  ;18*[6000, 6200, 6400, 6600]
+    '''
+
+    base_address = 0x92F600     #I'm not sure why I liked this particular address.  Maybe because probably no one else would use it?
+    SUB_LEN = 63  #subroutine length
+    source_list_addr = base_address + SUB_LEN
+    dest_list_addr = source_list_addr + 144
+    DMA_bank = DMA_dict["death_right"][0] // 0x10000
+
+    NEW_SUBROUTINE = [0x18,0xAD,0xE4,0x0D,
+                      0x0A,0x0A,0x0A,0xAD,0x1E,0x0A,0x29,0xFF,
+                      0x00,0x0A,0xA8,0x88,0x88,0xAE,0x30,0x03,0xA9,0x00,
+                      0x04,0x95,0xD0,0xE8,0xE8,0xB9,source_list_addr & 0xFF,(source_list_addr & 0xFF00)//0x100,
+                      0x95,0xD0,0xE8,0xE8,0xA9,DMA_bank,0x00,0x95,
+                      0xD0,0xE8,0xB9,dest_list_addr & 0xFF,(dest_list_addr & 0xFF00)//0x100,0x95,0xD0,0xE8,
+                      0xE8,0x8E,0x30,0x03,0x98,0x89,0x07,0x00,
+                      0xD0,0xD8,0xAD,0x1E,0x0A,0x29,0xFF,0x00,
+                      0x60]
+
+    success_code = rom._apply_single_fix_to_snes_address(base_address, SUB_LEN*[0xFF], NEW_SUBROUTINE,"1"*SUB_LEN)
+
+    DMA_locations = []
+    for i in range(9):
+        for direction in ["left", "right"]:
+            image_names = samus._layout.reverse_lookup[(f"death_{direction}",i)]
+            body_names = [name for name in image_names if samus._layout.get_property("force",name) == "lower"]
+            piece_names = [name for name in image_names if samus._layout.get_property("force",name) == "upper"]
+            if body_names:
+                body_loc = DMA_dict[body_names[0]][0]  % 0x10000
+            else:
+                key = next(iter(DMA_dict.keys()))
+                body_loc = DMA_dict[key][0] % 0x10000  #not all death poses have "bodies", so we need a default memory address (to anywhere valid)
+            if piece_names:
+                pieces_loc = DMA_dict[piece_names[0]][0]  % 0x10000
+            else:
+                key = next(iter(DMA_dict.keys()))
+                pieces_loc = DMA_dict[key][0] % 0x10000     #not all death poses have "pieces", so we need a default memory address (to anywhere valid)
+                
+            DMA_locations.extend([body_loc,pieces_loc,pieces_loc+0x0400,pieces_loc+0x0800])
+
+    success_code = success_code and rom._apply_single_fix_to_snes_address(source_list_addr, 72*[0xFFFF], DMA_locations,"2"*72)
+    success_code = success_code and rom._apply_single_fix_to_snes_address(dest_list_addr, 72*[0xFFFF], 18*[0x6000,0x6200,0x6400,0x6600],"2"*72)
+
+    #hook it in
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x92EDC4,[0xAD,0x0A1E,0x29,0xFF,0x00],
+                                                                                   [0x20, base_address % 0x10000,0xEA,0xEA,0xEA],"12111")
+
+    return success_code
 
 def get_tilemap_from_dimensions(dimensions, extra_area, palette, start_index=0x00):
     if palette is None:
@@ -778,7 +923,7 @@ def implement_spin_attack(rom,samus):
 
     return success_code
 
-def get_poses_old_and_new(rom,samus):
+def get_numbered_poses_old_and_new(rom,samus):
     for animation_string, pose in samus._layout.reverse_lookup:
         if animation_string[:2] == "0x":
             animation_int = int(animation_string[2:],16)

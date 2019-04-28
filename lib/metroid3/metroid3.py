@@ -418,7 +418,6 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
 
     def get_raw_pose(self, image_name, **kwargs):    #TODO: this should just return the ZSPR information already in memory
         #returns 4bpp tiles of the requested pose
-        #TODO: use the offset correctly
         animation, pose = self._layout.data["images"][image_name]["used by"][0]   #import a representative animation and pose
         image, offset = self.get_sprite_pose(animation, pose, **kwargs)
         
