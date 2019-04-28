@@ -252,8 +252,6 @@ def write_dma_data(rom,samus):
 
             DMA_dict[image_name] = (address_to_write, size)
 
-    print(hex(death_freespace.get(0)))
-
     return DMA_dict, True
 
 def write_new_DMA_tables(DMA_dict,rom,samus):
@@ -479,12 +477,13 @@ def connect_death_sequence(DMA_dict, rom,samus):
                 dimensions = samus._layout.get_property("dimensions", image_name)
                 extra_area = samus._layout.get_property("extra area", image_name)
                 palette = samus._layout.get_property("palette", image_name)
+                index_offset = 0x00
                 if force == "lower":
                     #prepend, so that the lower tilemaps are at the beginning of the list (and thus, get drawn first)
-                    tilemap.extend(get_tilemap_from_dimensions(dimensions, extra_area, palette, 0x08))
+                    tilemap.extend(get_tilemap_from_dimensions(dimensions, extra_area, palette, index_offset))
                 else:
                     #extend, so that the upper tilemaps are at the end of the list (and thus, get drawn last)
-                    tilemap = get_tilemap_from_dimensions(dimensions, extra_area, palette, 0x00) + tilemap
+                    tilemap = get_tilemap_from_dimensions(dimensions, extra_area, palette, index_offset) + tilemap
 
             tilemap_location = freespace.get(len(tilemap)+2)
             rom.write_to_snes_address(tilemap_location, len(tilemap)//5, 2)  #write how many tiles are mapped
@@ -493,102 +492,68 @@ def connect_death_sequence(DMA_dict, rom,samus):
             #tie it into the list now
             rom.write_to_snes_address(death_list_location+2*i, tilemap_location % 0x10000, 2)
 
-    #the old death DMA routine is wildly insufficient; we need to bypass it (replace with NOP commands)
-    #$9B:B451 20 D8 B6    JSR $B6D8
-    #$9B:B5B1 20 D8 B6    JSR $B6D8
-    for addr in [0x9BB451,0x9BB5B1]:
-        rom._apply_single_fix_to_snes_address(addr,[0x20,0xD8,0xB6], [0xEA,0xEA,0xEA],"111")
+    #during the death sequence, Samus prefetches data while she is pausing for dramatic effect
+    #$9B:B44A C9 04 00    CMP #$0004
+    #so we just prefetch more
+    success_code = rom._apply_single_fix_to_snes_address(0x9BB44A,[0xC9,0x0004],[0xC9,0x0010],"12")
 
-
-    #and because we bypassed it, we need a new subroutine!  Eek!  So let's give it a good college try
+    #new code to load different data based upon left or right facing
     '''
-    ; hook this in as a JSR from $92:EDC4
-    18           CLC
-    AD E4 0D     LDA $0DE4    ;get the pose number
-    0A           ASL A
-    0A           ASL A
-    0A           ASL A
-    AD 1E 0A     ADC $0A1E    ;add the direction that Samus is facing
-    29 FF 00     AND #$00FF   ;just the lower nybble of direction
-    0A           ASL A
-    A8           TAY          ;Y = 16*pose # + [8 (left) or 16 (right)]
-    :loop
-    88           DEY
-    88           DEY
-    AE 30 03     LDX $0330     ;get VRAM stack pointer
-    A9 00 04     LDA #$0400   ;all DMA transfers will be 20 tiles each
-    95 D0        STA $D0, x
-    E8           INX
-    E8           INX
-    B9 ?? ??     LDA source_list, y    ;get the next DMA source address
-    95 D0        STA $D0, x
-    E8           INX
-    E8           INX
-    A9 ?? 00     LDA #bank   ;bank #
-    95 D0        STA $D0, x
-    E8           INX          ;intentionally shifting by only one here
-    B9 ?? ??     LDA dest_list, y ;get the dest address
-    95 D0        STA $D0, x
-    E8           INX
-    E8           INX
-    8E 30 03     STX $330     ;replace stack pointer
-    98           TYA
-    89 07 00     BIT #$0007      ;see if we finished the pose
-    D0 D8        BNE loop
-    AD 1E 0A     LDA $0A1E       ;get the direction samus is facing
-    29 FF 00     AND #$00FF
-    60           RTS
-
-
-    :source_list
-    dw ??...??  ;9*[LEFT RIGHT] where each of LEFT/RIGHT is 4 pointers to DMA sources for that pose
-    :dest_list
-    dw ??...??  ;18*[6000, 6200, 6400, 6600]
+    AD 1E 0A  LDA $0A1E        ;load the direction that Samus is facing
+    89 08 00  BIT #$0008       ;right facing?
+    D0 04     BNE right_face
+    B9 ?? ??  LDA $????,y      ;get the DMA relative pointers
+    60        RTS
+    :right_face
+    B9 ?? ??  LDA $????,y    ;get the DMA relative pointers
+    60        RTS
     '''
 
-    base_address = 0x92F600     #I'm not sure why I liked this particular address.  Maybe because probably no one else would use it?
-    SUB_LEN = 63  #subroutine length
-    source_list_addr = base_address + SUB_LEN
-    dest_list_addr = source_list_addr + 144
-    DMA_bank = DMA_dict["death_right"][0] // 0x10000
+    DMA_LEFT_POINTER_LOC = 0x9BFDA0
+    DMA_RIGHT_POINTER_LOC = DMA_LEFT_POINTER_LOC + 32
+    DEST_POINTER_LOC = DMA_RIGHT_POINTER_LOC + 32
+    NEW_CODE_LOC = DEST_POINTER_LOC + 32
+    NEW_CODE = [0xAD,0x1E,0x0A,0x89,0x08,0x00,0xD0,0x04,0xB9,
+                DMA_LEFT_POINTER_LOC & 0xFF,(DMA_LEFT_POINTER_LOC//0x100) & 0xFF,
+                0x60,0xB9,
+                DMA_RIGHT_POINTER_LOC & 0xFF,(DMA_RIGHT_POINTER_LOC//0x100) & 0xFF,
+                0x60]
 
-    NEW_SUBROUTINE = [0x18,0xAD,0xE4,0x0D,
-                      0x0A,0x0A,0x0A,0xAD,0x1E,0x0A,0x29,0xFF,
-                      0x00,0x0A,0xA8,0x88,0x88,0xAE,0x30,0x03,0xA9,0x00,
-                      0x04,0x95,0xD0,0xE8,0xE8,0xB9,source_list_addr & 0xFF,(source_list_addr & 0xFF00)//0x100,
-                      0x95,0xD0,0xE8,0xE8,0xA9,DMA_bank,0x00,0x95,
-                      0xD0,0xE8,0xB9,dest_list_addr & 0xFF,(dest_list_addr & 0xFF00)//0x100,0x95,0xD0,0xE8,
-                      0xE8,0x8E,0x30,0x03,0x98,0x89,0x07,0x00,
-                      0xD0,0xD8,0xAD,0x1E,0x0A,0x29,0xFF,0x00,
-                      0x60]
+    left_facing_tiles = DMA_dict["death_left"][0]
+    right_facing_tiles = DMA_dict["death_right"][0]
 
-    success_code = rom._apply_single_fix_to_snes_address(base_address, SUB_LEN*[0xFF], NEW_SUBROUTINE,"1"*SUB_LEN)
+    #place the new code
+    success_code = success_code and rom._apply_single_fix_to_snes_address(NEW_CODE_LOC, [0xFF]*16, NEW_CODE,"1"*16)
 
-    DMA_locations = []
-    for i in range(9):
-        for direction in ["left", "right"]:
-            image_names = samus._layout.reverse_lookup[(f"death_{direction}",i)]
-            body_names = [name for name in image_names if samus._layout.get_property("force",name) == "lower"]
-            piece_names = [name for name in image_names if samus._layout.get_property("force",name) == "upper"]
-            if body_names:
-                body_loc = DMA_dict[body_names[0]][0]  % 0x10000
-            else:
-                key = next(iter(DMA_dict.keys()))
-                body_loc = DMA_dict[key][0] % 0x10000  #not all death poses have "bodies", so we need a default memory address (to anywhere valid)
-            if piece_names:
-                pieces_loc = DMA_dict[piece_names[0]][0]  % 0x10000
-            else:
-                key = next(iter(DMA_dict.keys()))
-                pieces_loc = DMA_dict[key][0] % 0x10000     #not all death poses have "pieces", so we need a default memory address (to anywhere valid)
-                
-            DMA_locations.extend([body_loc,pieces_loc,pieces_loc+0x0400,pieces_loc+0x0800])
+    #use the correct bank
+    #$9B:B6EE A9 9B       LDA #$9B                 ;old code: use bank 9B
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x9BB6EE,[0xA9,0x9B],[0xA9,left_facing_tiles//0x10000],"11")  #get correct bank
 
-    success_code = success_code and rom._apply_single_fix_to_snes_address(source_list_addr, 72*[0xFFFF], DMA_locations,"2"*72)
-    success_code = success_code and rom._apply_single_fix_to_snes_address(dest_list_addr, 72*[0xFFFF], 18*[0x6000,0x6200,0x6400,0x6600],"2"*72)
+    #place the new pointers in the table I just made
+    success_code = success_code and rom._apply_single_fix_to_snes_address(DMA_LEFT_POINTER_LOC,
+                                                   [0xFFFF]*16,
+                                                   [(left_facing_tiles % 0x10000)+0x400*i for i in range(1,16)]+[left_facing_tiles % 0x10000],
+                                                   "2"*16)
+    success_code = success_code and rom._apply_single_fix_to_snes_address(DMA_RIGHT_POINTER_LOC,
+                                                   [0xFFFF]*16,
+                                                   [(right_facing_tiles % 0x10000)+0x400*i for i in range(1,16)]+[right_facing_tiles % 0x10000],
+                                                   "2"*16)
+    success_code = success_code and rom._apply_single_fix_to_snes_address(DEST_POINTER_LOC,
+                                                   [0xFFFF]*16,
+                                                   [0x6000+0x200*i for i in range(1,16)]+[0x6000],
+                                                   "2"*16)
 
-    #hook it in
-    success_code = success_code and rom._apply_single_fix_to_snes_address(0x92EDC4,[0xAD,0x0A1E,0x29,0xFF,0x00],
-                                                                                   [0x20, base_address % 0x10000,0xEA,0xEA,0xEA],"12111")
+    #hook the new pointers
+    #old code: $9B:B6F5 B9 C9 B7    LDA $B7C9,y    ;destination of DMA data transfer during the death sequence
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x9BB6F5,[0xB9,0xB7C9],[0xB9,DEST_POINTER_LOC % 0x10000],"12")
+
+    #hook the new subroutine
+    #old code: $9B:B6E5 B9 BF B7    LDA $B7BF,y    ;get the DMA relative pointers
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x9BB6E5,[0xB9,0xB7BF],[0x20,NEW_CODE_LOC % 0x10000],"12")
+
+    #the final fetch is special because it overwrites the Samus bonk pose, so it is indexed at the last moment
+    #old code: $9B:B5AE A0 08 00    LDY #$0008
+    success_code = success_code and rom._apply_single_fix_to_snes_address(0x9BB5Ae,[0xA0,0x0008],[0xA0,0x001E],"12")
 
     return success_code
 

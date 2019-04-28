@@ -3518,6 +3518,40 @@
 			"used by": [["death_left", 8]]
 		},
 
+		"death_left_pieces": {
+			"description": "Samus's suit pieces exploding during the death sequence",
+			"dimensions": [-9,15,-25,23],
+			"force": "upper",
+			"import": "upper",
+			"table": false,
+			"used by": [["death_left", 1]]
+		},
+
+		"death_left_pieces1": {
+			"parent": "death_left_pieces",
+			"dimensions": [-12,20,-25,23],
+			"used by": [["death_left", 2]]
+		},
+
+		"death_left_pieces2": {
+			"dimensions": [-18,22,-35,29],
+			"parent": "death_left_pieces",
+			"used by": [["death_left", 3]]
+		},
+
+		"death_left_pieces3": {
+			"dimensions": [-26,30,-42,38],
+			"parent": "death_left_pieces",
+			"used by": [["death_left", 4]]
+		},
+
+		"death_left_pieces4": {
+			"dimensions": [-36,36,-45,-29],
+			"extra area": [[-36,36,27,43],[-36,-20,-29,27],[20,36,-29,27]],
+			"parent": "death_left_pieces",
+			"used by": [["death_left", 5]]
+		},
+
 		"death_right": {
 			"description": "Samus's body emerging from the broken suit during the death sequence",
 			"dimensions": [-20,12,-32,32],
@@ -3595,40 +3629,6 @@
 			"extra area": [[-36,36,27,43],[-36,-20,-29,27],[20,36,-29,27]],
 			"parent": "death_right_pieces",
 			"used by": [["death_right", 5]]
-		},
-
-		"death_left_pieces": {
-			"description": "Samus's suit pieces exploding during the death sequence",
-			"dimensions": [-9,15,-25,23],
-			"force": "upper",
-			"import": "upper",
-			"table": false,
-			"used by": [["death_left", 1]]
-		},
-
-		"death_left_pieces1": {
-			"parent": "death_left_pieces",
-			"dimensions": [-12,20,-25,23],
-			"used by": [["death_left", 2]]
-		},
-
-		"death_left_pieces2": {
-			"dimensions": [-18,22,-35,29],
-			"parent": "death_left_pieces",
-			"used by": [["death_left", 3]]
-		},
-
-		"death_left_pieces3": {
-			"dimensions": [-26,30,-42,38],
-			"parent": "death_left_pieces",
-			"used by": [["death_left", 4]]
-		},
-
-		"death_left_pieces4": {
-			"dimensions": [-36,36,-45,-29],
-			"extra area": [[-36,36,27,43],[-36,-20,-29,27],[20,36,-29,27]],
-			"parent": "death_left_pieces",
-			"used by": [["death_left", 5]]
 		},
 
 		"file_select_head": {
