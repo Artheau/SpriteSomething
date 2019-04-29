@@ -3476,7 +3476,7 @@
 		"death_left": {
 			"description": "Samus's body emerging from the broken suit during the death sequence",
 			"dimensions": [-12,20,-32,32],
-			"palette": "0x2C",
+			"palette": "0x2E",
 			"table": false,
 			"used by": [["death_left", 0]]
 		},
@@ -3554,7 +3554,7 @@
 		"death_right": {
 			"description": "Samus's body emerging from the broken suit during the death sequence",
 			"dimensions": [-20,12,-32,32],
-			"palette": "0x2C",
+			"palette": "0x2E",
 			"table": false,
 			"used by": [["death_right", 0]]
 		},

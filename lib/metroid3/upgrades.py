@@ -264,12 +264,14 @@ def write_dma_data(rom,samus):
 def compile_death_image(direction,rom,samus):
     #the death DMA are special because they have to all be loaded at once as one image
     death_image = Image.new("P",(128,256),0)
+    #bodies
     for i in range(8):
         this_image,offset = samus.get_sprite_pose(f"death_{direction}", i + (1 if i == 8 else 0), upper = (i == 0))
         xmin,xmax,ymin,ymax = samus._layout.get_property("dimensions",f"death_{direction}{(i if i > 0 else '')}")
         cropped_image = this_image.crop((offset[0]+xmin,offset[1]+ymin,offset[0]+xmax,offset[1]+ymax))
         death_image.paste(cropped_image,(32*(i%4),64*(i//4)))   #paste the body images over two rows
 
+    #pieces
     death_vram_locations = [(0,128),(24,128),(56,128),(0,176)]
     for i in range(4):
         this_image,offset = samus.get_sprite_pose(f"death_{direction}", i+1, lower = False)
@@ -278,7 +280,7 @@ def compile_death_image(direction,rom,samus):
         death_image.paste(cropped_image,death_vram_locations[i])
 
     #have to really cram this last one in here, shoehorn style, but it will be worth it...right?  I tell myself this.
-    this_image,offset = samus.get_sprite_pose(f"death_{direction}",4,lower=False)
+    this_image,offset = samus.get_sprite_pose(f"death_{direction}",5,lower=False)
     xmin,xmax,ymin,ymax = samus._layout.get_property("dimensions",f"death_{direction}_pieces4")
     cropped_image = this_image.crop((offset[0]+xmin,offset[1]+ymin,offset[0]+xmax,offset[1]+ymax))
     top_left_corner_image = cropped_image.crop((0,0,32,24))
@@ -507,24 +509,14 @@ def connect_death_sequence(DMA_dict,death_DMA_loc,rom,samus):
     freespace = FreeSpace([(0x92BE01,0x92C580)])   #starts where the other tilemaps end.
     #Needs to start on an odd number in order to index correctly from 0x92808D
 
-    for direction,base_address in [("left",0x92EDD0),("right",0x92EDDB)]:
+    for direction,base_address in [("left",0x92EDDB),("right",0x92EDD0)]:
         death_list_location = freespace.get(18)
+        if death_list_location % 2 == 0:   #have to start on an odd number
+            death_list_location += 1
+            freespace.get(1)
         rom.write_to_snes_address(base_address,(death_list_location-0x92808D)//2 ,2)
         for i in range(9):
-            tilemap = []
-            for image_name in samus._layout.reverse_lookup[f"death_{direction}",i]:
-                force = samus._layout.get_property("force", image_name)
-                dimensions = samus._layout.get_property("dimensions", image_name)
-                extra_area = samus._layout.get_property("extra area", image_name)
-                palette = samus._layout.get_property("palette", image_name)
-                index_offset = 0x00
-                if force == "lower":
-                    #prepend, so that the lower tilemaps are at the beginning of the list (and thus, get drawn first)
-                    tilemap.extend(get_tilemap_from_dimensions(dimensions, extra_area, palette, index_offset))
-                else:
-                    #extend, so that the upper tilemaps are at the end of the list (and thus, get drawn last)
-                    tilemap = get_tilemap_from_dimensions(dimensions, extra_area, palette, index_offset) + tilemap
-
+            tilemap = get_death_tilemap(direction, i)
             tilemap_location = freespace.get(len(tilemap)+2)
             rom.write_to_snes_address(tilemap_location, len(tilemap)//5, 2)  #write how many tiles are mapped
             rom.bulk_write_to_snes_address(tilemap_location+2, tilemap, len(tilemap))  #and then the maps
@@ -534,8 +526,8 @@ def connect_death_sequence(DMA_dict,death_DMA_loc,rom,samus):
 
     #during the death sequence, Samus prefetches data while she is pausing for dramatic effect
     #$9B:B44A C9 04 00    CMP #$0004
-    #so we just prefetch more
-    success_code = rom._apply_single_fix_to_snes_address(0x9BB44A,[0xC9,0x0004],[0xC9,0x0010],"12")
+    #so we just prefetch more.  Don't prefetch the very last one because that one is special
+    success_code = rom._apply_single_fix_to_snes_address(0x9BB44A,[0xC9,0x0004],[0xC9,0x000F],"12")
 
     #new code to load different data based upon left or right facing
     '''
@@ -596,6 +588,144 @@ def connect_death_sequence(DMA_dict,death_DMA_loc,rom,samus):
     success_code = success_code and rom._apply_single_fix_to_snes_address(0x9BB5Ae,[0xA0,0x0008],[0xA0,0x001E],"12")
 
     return success_code
+
+def get_death_tilemap(direction, pose):
+    #hardcoded this for now, since this is hard to get working at all
+    tilemap = []
+
+    #start with the exploding pieces
+    pieces_palette = 0x29  #normally 0x28, but the last bit here goes to the next VRAM page to grab tiles
+    if pose == 1:  #[-9,15,-25,23]
+        x_min = -9 if direction == "left" else -15
+        y_min = -25
+        for x,y,size,index in [(x_min   ,y_min   ,0xC2,0x00),
+                               (x_min   ,y_min+16,0xC2,0x20),
+                               (x_min   ,y_min+32,0xC2,0x40),
+                               (x_min+8 ,y_min   ,0xC2,0x01),  #yes I know they overlap
+                               (x_min+8 ,y_min+16,0xC2,0x21),
+                               (x_min+8 ,y_min+32,0xC2,0x41),
+                               ]:
+            tilemap.extend([x%0x100, size+(1 if x<0 else 0), y%0x100, index, pieces_palette])
+    elif pose == 2:  #[-12,20,-25,23]
+        x_min = -12 if direction == "left" else -20
+        y_min = -25
+        for x,y,size,index in [(x_min   ,y_min   ,0xC2,0x03),
+                               (x_min   ,y_min+16,0xC2,0x23),
+                               (x_min   ,y_min+32,0xC2,0x43),
+                               (x_min+16,y_min   ,0xC2,0x05),
+                               (x_min+16,y_min+16,0xC2,0x25),
+                               (x_min+16,y_min+32,0xC2,0x45),
+                               ]:
+            tilemap.extend([x%0x100, size+(1 if x<0 else 0), y%0x100, index, pieces_palette])
+    elif pose == 3:  #[-18,22,-35,29]
+        x_min = -18 if direction == "left" else -22
+        y_min = -35
+        for x,y,size,index in [(x_min   ,y_min   ,0xC2,0x07),
+                               (x_min   ,y_min+16,0xC2,0x27),
+                               (x_min   ,y_min+32,0xC2,0x47),
+                               (x_min   ,y_min+48,0xC2,0x67),
+                               (x_min+16,y_min   ,0xC2,0x09),
+                               (x_min+16,y_min+16,0xC2,0x29),
+                               (x_min+16,y_min+32,0xC2,0x49),
+                               (x_min+16,y_min+48,0xC2,0x69),
+                               (x_min+24,y_min   ,0xC2,0x0A),
+                               (x_min+24,y_min+16,0xC2,0x2A),
+                               (x_min+24,y_min+32,0xC2,0x4A),
+                               (x_min+24,y_min+48,0xC2,0x6A),
+                               ]:
+            tilemap.extend([x%0x100, size+(1 if x<0 else 0), y%0x100, index, pieces_palette])
+    elif pose == 4:   #[-26,30,-42,38]
+        x_min = -26 if direction == "left" else -30
+        y_min = -42
+        for x,y,size,index in [(x_min   ,y_min   ,0xC2,0x60),
+                               (x_min   ,y_min+16,0xC2,0x80),
+                               (x_min   ,y_min+32,0xC2,0xA0),
+                               (x_min   ,y_min+48,0xC2,0xC0),
+                               (x_min   ,y_min+64,0xC2,0xE0),
+                               (x_min+16,y_min   ,0xC2,0x62),
+                               (x_min+16,y_min+16,0xC2,0x82),
+                               (x_min+16,y_min+32,0xC2,0xA2),
+                               (x_min+16,y_min+48,0xC2,0xC2),
+                               (x_min+16,y_min+64,0xC2,0xE2),
+                               (x_min+32,y_min   ,0xC2,0x64),
+                               (x_min+32,y_min+16,0xC2,0x84),
+                               (x_min+32,y_min+32,0xC2,0xA4),
+                               (x_min+32,y_min+48,0xC2,0xC4),
+                               (x_min+32,y_min+64,0xC2,0xE4),
+                               (x_min+40,y_min   ,0xC2,0x65),
+                               (x_min+40,y_min+16,0xC2,0x85),
+                               (x_min+40,y_min+32,0xC2,0xA5),
+                               (x_min+40,y_min+48,0xC2,0xC5),
+                               (x_min+40,y_min+64,0xC2,0xE5),
+                               ]:
+            tilemap.extend([x%0x100, size+(1 if x<0 else 0), y%0x100, index, pieces_palette])
+    elif pose == 5:   #[-36,36,-45,43]
+        x_min = -36 if direction == "left" else -36
+        y_min = -45
+        for x,y,size,index in [(x_min   ,y_min   ,0xC2,0x0C),
+                               (x_min   ,y_min+8 ,0xC2,0x1C),
+                               (x_min+16,y_min   ,0xC2,0x0E),
+                               (x_min+16,y_min+8 ,0xC2,0x1E),   #top left corner
+
+                               (x_min+32,y_min   ,0x00,0x3C),
+                               (x_min+32,y_min+8 ,0x00,0x4C),   #big wedge
+
+                               (x_min+32,y_min+16,0x00,0x3D),   #small wedge
+
+                               (x_min+40,y_min   ,0xC2,0x5C),
+                               (x_min+40,y_min+8 ,0xC2,0x6C),
+                               (x_min+56,y_min   ,0xC2,0x5E),
+                               (x_min+56,y_min+8 ,0xC2,0x6E),   #top right corner
+
+                               (x_min   ,y_min+24,0xC2,0x87),
+                               (x_min   ,y_min+40,0xC2,0xA7),
+                               (x_min   ,y_min+56,0xC2,0xC7),
+                               (x_min   ,y_min+72,0xC2,0xE7),
+                               (x_min+16,y_min+24,0xC2,0x89),
+                               (x_min+16,y_min+40,0xC2,0xA9),
+                               (x_min+16,y_min+56,0xC2,0xC9),
+                               (x_min+16,y_min+72,0xC2,0xE9),
+                               (x_min+32,y_min+24,0xC2,0x8B),
+                               (x_min+32,y_min+40,0xC2,0xAB),
+                               (x_min+32,y_min+56,0xC2,0xCB),
+                               (x_min+32,y_min+72,0xC2,0xEB),
+                               (x_min+48,y_min+24,0xC2,0x8D),
+                               (x_min+48,y_min+40,0xC2,0xAD),
+                               (x_min+48,y_min+56,0xC2,0xCD),
+                               (x_min+48,y_min+72,0xC2,0xED),
+                               (x_min+56,y_min+24,0xC2,0x8E),
+                               (x_min+56,y_min+40,0xC2,0xAE),
+                               (x_min+56,y_min+56,0xC2,0xCE),
+                               (x_min+56,y_min+72,0xC2,0xEE),   #rest of image
+                              ]:
+            tilemap.extend([x%0x100, size+(1 if x<0 else 0), y%0x100, index, pieces_palette])
+
+    #now add the body
+    if direction == "left":
+        x_min = -12
+    elif direction == "right":
+        x_min = -20
+    else:
+        raise AssertionError(f"Unknown direction {direction} in get_death_tilemap()")
+    y_min = -32
+    body_palette = 0x2E if pose > 0 else 0x28
+        
+    for i in range(2):
+        for j in range(4):
+            x = x_min + 16*i
+            y = y_min + 16*j
+            if x < 0:
+                tilemap.extend([0x100+x,0xC3])
+            else:
+                tilemap.extend([x,0xC2])
+            if y < 0:
+                tilemap.append(0x100+y)
+            else:
+                tilemap.append(y)
+            index_base = pose - (1 if pose >= 7 else 0)
+            tilemap.append(4*(index_base%4) + 0x80*(index_base//4) + 2*i + 0x20*j)  #index
+            tilemap.append(body_palette)
+    return tilemap
 
 def get_tilemap_from_dimensions(dimensions, extra_area, palette, start_index=0x00):
     if palette is None:
