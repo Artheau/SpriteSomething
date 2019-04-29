@@ -416,14 +416,15 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         constructed_image, offset = util.image_from_raw_data(tilemaps, constructed_VRAM_data)
         return constructed_image, offset
 
-    def get_raw_pose(self, image_name, **kwargs):    #TODO: this should just return the ZSPR information already in memory
+    def get_raw_pose(self, image_name, **kwargs):
         #returns 4bpp tiles of the requested pose
         animation, pose = self._layout.data["images"][image_name]["used by"][0]   #import a representative animation and pose
         image, offset = self.get_sprite_pose(animation, pose, **kwargs)
-        
         dimensions = self._layout.get_property("dimensions", image_name)
         extra_area = self._layout.get_property("extra area", image_name)
+        return self.convert_to_4bpp(image,offset,dimensions,extra_area)
 
+    def convert_to_4bpp(self, image, offset, dimensions, extra_area):
         top_row = []            #have to process these differently so that 16x16 tiles can be correctly reconstructed
         bottom_row = []
         small_tiles = []

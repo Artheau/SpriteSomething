@@ -3546,8 +3546,7 @@
 		},
 
 		"death_left_pieces4": {
-			"dimensions": [-36,36,-45,-29],
-			"extra area": [[-36,36,27,43],[-36,-20,-29,27],[20,36,-29,27]],
+			"dimensions": [-36,36,-45,43],
 			"parent": "death_left_pieces",
 			"used by": [["death_left", 5]]
 		},
@@ -3625,8 +3624,7 @@
 		},
 
 		"death_right_pieces4": {
-			"dimensions": [-36,36,-45,-29],
-			"extra area": [[-36,36,27,43],[-36,-20,-29,27],[20,36,-29,27]],
+			"dimensions": [-36,36,-45,43],
 			"parent": "death_right_pieces",
 			"used by": [["death_right", 5]]
 		},

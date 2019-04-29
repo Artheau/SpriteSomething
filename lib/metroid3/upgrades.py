@@ -3,6 +3,7 @@
 
 import itertools
 import copy
+from PIL import Image
 
 SIGNATURE_ADDRESS_EXHIROM = None
 SIGNATURE_ADDRESS_LOROM = None
@@ -53,7 +54,7 @@ def upgrade_to_wizzywig(old_rom, samus):
 
     #write all the new graphics data from base images and layout information
     print("Writing new image data...", end="")
-    DMA_dict, success_code = write_dma_data(rom,samus)
+    DMA_dict, death_DMA_loc, success_code = write_dma_data(rom,samus)
     print("done" if success_code else "FAIL")
 
     #maximally expand/relocate the existing DMA tables, and then add the new load data into them
@@ -73,7 +74,7 @@ def upgrade_to_wizzywig(old_rom, samus):
 
     #connect the death animation correctly
     print("Re-connecting death sequence...", end="")
-    success_code = connect_death_sequence(DMA_dict,rom,samus)
+    success_code = connect_death_sequence(DMA_dict,death_DMA_loc,rom,samus)
     print("done" if success_code else "FAIL")
 
     #get rid of the stupid tile
@@ -105,10 +106,6 @@ def upgrade_to_wizzywig(old_rom, samus):
 
 
     #TODO
-    #
-    #write the death animation DMA data in a space worthy of its importance in my personal gameplay
-    #move the DMA pointers accordingly, and increase the DMA load size
-    #re-write the death tilemaps from layout info
     #
     #check to see how the organization of bank $92 is coming along at this point,
     # and try to keep things confined to their original spaces if possible,
@@ -228,7 +225,7 @@ def write_dma_data(rom,samus):
     DMA_dict = {}  #have to keep track of where we put all this stuff so that we can point to it afterwards
 
     for image_name in samus._layout.data["images"]:
-        if image_name[:6] in ["palett","file_s","gun_po"]:  #these are special cases which will go in other parts of memory
+        if image_name[:6] in ["palett","file_s","gun_po","death_"]:  #these are special cases which will go in other parts of memory
             pass
         else:
             force = samus._layout.get_property("import", image_name)
@@ -243,16 +240,59 @@ def write_dma_data(rom,samus):
                 DMA_data = samus.get_raw_pose(image_name)
 
             size = len(DMA_data)
-            if image_name[:5] in ["death"]:
-                address_to_write = death_freespace.get(size)
-            else:
-                address_to_write = freespace.get(size)
+            
+            address_to_write = freespace.get(size)
 
             rom.bulk_write_to_snes_address(address_to_write,DMA_data,size)
 
             DMA_dict[image_name] = (address_to_write, size)
 
-    return DMA_dict, True
+    death_image_left = compile_death_image("left",rom,samus)
+    death_image_right = compile_death_image("right",rom,samus)
+
+    death_DMA_loc = death_freespace.get(0)
+    left_dest = death_freespace.get(0x4000)
+    right_dest = death_freespace.get(0x4000)
+    #wiring in the DMA this way so that it does not have to adhere to the top row/bottom row stuff
+    left_DMA = list(itertools.chain.from_iterable(samus.convert_to_4bpp(death_image_left, (0,0), (0,128,16*i,16*(i+1)),None) for i in range(16)))
+    right_DMA = list(itertools.chain.from_iterable(samus.convert_to_4bpp(death_image_right, (0,0), (0,128,16*i,16*(i+1)),None) for i in range(16)))
+    rom.bulk_write_to_snes_address(left_dest, left_DMA, 0x4000)
+    rom.bulk_write_to_snes_address(right_dest, right_DMA, 0x4000)
+
+    return DMA_dict, death_DMA_loc, True
+
+def compile_death_image(direction,rom,samus):
+    #the death DMA are special because they have to all be loaded at once as one image
+    death_image = Image.new("P",(128,256),0)
+    for i in range(8):
+        this_image,offset = samus.get_sprite_pose(f"death_{direction}", i + (1 if i == 8 else 0), upper = (i == 0))
+        xmin,xmax,ymin,ymax = samus._layout.get_property("dimensions",f"death_{direction}{(i if i > 0 else '')}")
+        cropped_image = this_image.crop((offset[0]+xmin,offset[1]+ymin,offset[0]+xmax,offset[1]+ymax))
+        death_image.paste(cropped_image,(32*(i%4),64*(i//4)))   #paste the body images over two rows
+
+    death_vram_locations = [(0,128),(24,128),(56,128),(0,176)]
+    for i in range(4):
+        this_image,offset = samus.get_sprite_pose(f"death_{direction}", i+1, lower = False)
+        xmin,xmax,ymin,ymax = samus._layout.get_property("dimensions",f"death_{direction}_pieces{(i if i > 0 else '')}")
+        cropped_image = this_image.crop((offset[0]+xmin,offset[1]+ymin,offset[0]+xmax,offset[1]+ymax))
+        death_image.paste(cropped_image,death_vram_locations[i])
+
+    #have to really cram this last one in here, shoehorn style, but it will be worth it...right?  I tell myself this.
+    this_image,offset = samus.get_sprite_pose(f"death_{direction}",4,lower=False)
+    xmin,xmax,ymin,ymax = samus._layout.get_property("dimensions",f"death_{direction}_pieces4")
+    cropped_image = this_image.crop((offset[0]+xmin,offset[1]+ymin,offset[0]+xmax,offset[1]+ymax))
+    top_left_corner_image = cropped_image.crop((0,0,32,24))
+    big_wedge = cropped_image.crop((32,0,40,16))
+    small_wedge = cropped_image.crop((32,16,40,24))
+    top_right_corner_image = cropped_image.crop((40,0,72,24))
+    rest_of_image = cropped_image.crop((0,24,128,88))
+    death_image.paste(top_left_corner_image,(96,128))
+    death_image.paste(big_wedge,(96,152))
+    death_image.paste(small_wedge,(104,152))
+    death_image.paste(top_right_corner_image,(96,168))
+    death_image.paste(rest_of_image,(56,192))
+
+    return death_image
 
 def write_new_DMA_tables(DMA_dict,rom,samus):
     #We'll need more room, since we have 637 unique images*7 bytes each = 0x116B amount of stuff (used 0x0BE5 previously)
@@ -456,7 +496,7 @@ def assign_new_tilemaps(rom,samus):
 
     return True
 
-def connect_death_sequence(DMA_dict, rom,samus):
+def connect_death_sequence(DMA_dict,death_DMA_loc,rom,samus):
     #the death tilemaps are referenced by these offsets
     #$92:EDCF A9 1C 08    LDA #$081C                  ;this is an offset into the lower tilemap table for right facing death tilemaps
     #$92:EDDA A9 25 08    LDA #$0825                  ;this is an offset into the lower tilemap table for left facing death tilemaps
@@ -519,8 +559,8 @@ def connect_death_sequence(DMA_dict, rom,samus):
                 DMA_RIGHT_POINTER_LOC & 0xFF,(DMA_RIGHT_POINTER_LOC//0x100) & 0xFF,
                 0x60]
 
-    left_facing_tiles = DMA_dict["death_left"][0]
-    right_facing_tiles = DMA_dict["death_right"][0]
+    left_facing_tiles = death_DMA_loc
+    right_facing_tiles = death_DMA_loc + 0x4000
 
     #place the new code
     success_code = success_code and rom._apply_single_fix_to_snes_address(NEW_CODE_LOC, [0xFF]*16, NEW_CODE,"1"*16)
