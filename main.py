@@ -810,7 +810,7 @@ class SpriteSomethingMainFrame(tk.Frame):
     def save_sprite_as(self):
         # Gui.class, refs ZSPR.class
         # Save a ZSPR
-        filedialog.asksaveasfile(initialdir="./", title="Save Sprite As...", filetypes=(("ZSPR Files","*.zspr"),))
+        return filedialog.asksaveasfile(initialdir="./", title="Save Sprite As...", filetypes=(("ZSPR Files","*.zspr"),))
 
     def import_from_game_file(self):
         # Gui.class, refs ZSPR.class
@@ -1048,10 +1048,12 @@ class SpriteSomethingMainFrame(tk.Frame):
         save_before_exit = messagebox.askyesnocancel(self.app_title,"Do you want to save before exiting?")
         if save_before_exit != None:
             if save_before_exit:
-                self.save_sprite_as()
+                saved = self.save_sprite_as()
+                if saved:
+                    exit()
             else:
                 messagebox.showwarning(self.app_title, "Death in Super Metroid loses progress since last save." + "\n" + "You have been eaten by a grue.")
-            exit()
+                exit()
 
 if __name__ == "__main__":
     main()
