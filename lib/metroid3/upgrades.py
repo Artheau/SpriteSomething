@@ -5,7 +5,7 @@ import itertools
 import copy
 from PIL import Image
 
-def export_player_sprite_to_ROM(samus, old_rom):
+def export_player_sprite_to_ROM(player_sprite, old_rom):
     rom = copy.deepcopy(old_rom)  #for safety right now we are going to deepcopy the ROM, in case we need to bail
 
     #in case these were disabled in rom.py, we definitely need to do these before we convert to wizzywig
@@ -22,7 +22,7 @@ def export_player_sprite_to_ROM(samus, old_rom):
     # old engine requires that we sometimes use larger DMA writes that overwrite (and obviate the need for) DMAs
 
     print("Swapping DMA load order...", end="")
-    success_code = swap_DMA_order(samus,rom)
+    success_code = swap_DMA_order(player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #to break symmetry, we will need to rearrange where the gun port tile data is,
@@ -31,7 +31,7 @@ def export_player_sprite_to_ROM(samus, old_rom):
     # super super wasteful with the organization in this part.
 
     print("Moving gun tiles...", end="")
-    success_code = move_gun_tiles(samus,rom)
+    success_code = move_gun_tiles(player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #I can see how it was a good idea at the time to put the cannon port as tile $1F,
@@ -43,37 +43,37 @@ def export_player_sprite_to_ROM(samus, old_rom):
     # since that is no longer necessary given the symmetry fix from move_gun_tiles()
 
     print("Re-assigning gun tilemaps...", end="")
-    success_code = reassign_gun_tilemaps(samus,rom)
+    success_code = reassign_gun_tilemaps(player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #write all the new graphics data from base images and layout information
     print("Writing new image data...", end="")
-    DMA_dict, death_DMA_loc, success_code = write_dma_data(samus,rom)
+    DMA_dict, death_DMA_loc, success_code = write_dma_data(player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #maximally expand/relocate the existing DMA tables, and then add the new load data into them
     print("Writing new DMA tables...", end="")
-    DMA_upper_table_indices, DMA_lower_table_indices, success_code = write_new_DMA_tables(DMA_dict,samus,rom)
+    DMA_upper_table_indices, DMA_lower_table_indices, success_code = write_new_DMA_tables(DMA_dict,player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #update the table/index references to these new DMA tables
     print("Linking new tables to animations...", end="")
-    success_code = link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, samus,rom)
+    success_code = link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #write and link all the new tilemaps (use a pointer to nullmap instead of $0000 since $0000 lags the game because reasons) using the layout info
     print("Assigning new tilemaps...", end="")
-    success_code = assign_new_tilemaps(samus,rom)
+    success_code = assign_new_tilemaps(player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #connect the death animation correctly
     print("Re-connecting death sequence...", end="")
-    success_code = connect_death_sequence(DMA_dict,death_DMA_loc,samus,rom)
+    success_code = connect_death_sequence(DMA_dict,death_DMA_loc,player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #get rid of the stupid tile
     print("Stupid tile...", end="")
-    success_code = no_more_stupid(samus,rom)
+    success_code = no_more_stupid(player_sprite,rom)
     print("stupid" if success_code else "FAIL")
     
     #because a DMA of zero bytes is essentially a guaranteed game crash, the designers had to make separate subroutines
@@ -82,27 +82,31 @@ def export_player_sprite_to_ROM(samus, old_rom):
     # a few animations in the form that they now exist
 
     print("Disabling upper half bypass routine...", end="")
-    success_code = disable_upper_bypass(samus,rom)
+    success_code = disable_upper_bypass(player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #now we're going to get set up for screw attack without space jump
     #first off, we need a new control code that checks for space jump, so that we can gate the animation appropriately
 
     print("Creating new control code...", end="")
-    success_code = create_new_control_code(samus,rom)
+    success_code = create_new_control_code(player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #now we need to insert this control code into the animation sequence for screw attack, and its counterpart in walljump
 
     print("Implementing spin attack...", end="")
-    success_code = implement_spin_attack(samus,rom)
+    success_code = implement_spin_attack(player_sprite,rom)
     print("done" if success_code else "FAIL")
 
     #insert file select graphics
     print("Injecting file select graphics...", end="")
-    success_code = insert_file_select_graphics(samus,rom)
+    success_code = insert_file_select_graphics(player_sprite,rom)
     print("done" if success_code else "FAIL")
 
+    #assign all the palettes
+    print("Assigning palettes...", end="")
+    success_code = assign_palettes(player_sprite,rom)
+    print("done" if success_code else "FAIL")
 
     #pee on the tree
     SIGNATURE_ADDRESS = 0x92C500
@@ -1081,6 +1085,98 @@ def insert_file_select_graphics(samus,rom):
     file_select_DMA.extend(samus.convert_to_4bpp(file_select_graphics_block, (0,0), (0,128,16,32),None)[:0x200])
 
     rom.bulk_write_to_snes_address(0xB6DA00,file_select_DMA,0x600)
+
+    return True
+
+
+def assign_palettes(samus,rom):
+    _,door_palette = samus.get_timed_sprite_palette("door", "power")[0]
+    rom.write_to_snes_address(0x82E52C,door_palette[4],2) #visor inside doors
+
+    for suit, loader_base_addr in [("power", 0x8DDB62),("varia",0x8DDCC8),("gravity",0x8DDE2E)]:
+        loader_palettes = [pal for _,pal in samus.get_timed_sprite_palette("loader",suit)]
+        rom.write_to_snes_address(loader_base_addr+0x009,loader_palettes[0x00],"2"*0x10)
+        rom.write_to_snes_address(loader_base_addr+0x02D,loader_palettes[0x01],"2"*0x10)
+        rom.write_to_snes_address(loader_base_addr+0x058,loader_palettes[0x48],"2"*0x10)
+        rom.write_to_snes_address(loader_base_addr+0x07C,loader_palettes[0x49],"2"*0x10)
+        rom.write_to_snes_address(loader_base_addr+0x0A7,loader_palettes[0x4E],"2"*0x10)
+        rom.write_to_snes_address(loader_base_addr+0x0CB,loader_palettes[0x4F],"2"*0x10)
+        rom.write_to_snes_address(loader_base_addr+0x0F6,loader_palettes[0x54],"2"*0x10)
+        rom.write_to_snes_address(loader_base_addr+0x11A,loader_palettes[0x55],"2"*0x10)
+        rom.write_to_snes_address(loader_base_addr+0x142,loader_palettes[0x58],"2"*0x10)
+
+    for suit, heat_base_addr in [("power",0x8DE45E),("varia",0x8DE68A),("gravity",0x8DE8B6)]:
+        #these are stored as just fifteen colors, not sixteen.  The timer is in the spot normally taken by color 0
+        heat_palettes = [pal for _,pal in samus.get_timed_sprite_palette("heat",suit)]
+        for i in range(16):
+            rom.write_to_snes_address(heat_base_addr+0x0A+0x22*i,heat_palettes[i][-0x0F:],"2"*0x0F)
+    
+    _,sepia_palette = samus.get_timed_sprite_palette("sepia", "power")[0]
+    rom.write_to_snes_address(0x8CE569,sepia_palette,"2"*0x10)
+    _,sepia_hurt_palette = samus.get_timed_sprite_palette("sepia hurt", "power")[0]
+    rom.write_to_snes_address(0x9BA380,sepia_hurt_palette,"2"*0x10)
+    _,sepia_alternate_palette = samus.get_timed_sprite_palette("sepia alternate", "power")[0]
+    rom.write_to_snes_address(0x9BA3A0,sepia_alternate_palette,"2"*0x10)
+
+    for suit, base_addr in [("power",0x9B9400),("varia",0x9B9520),("gravity",0x9B9800)]:
+        _,power_palette = samus.get_timed_sprite_palette("standard", suit)[0]
+        rom.write_to_snes_address(base_addr,power_palette,"2"*0x10)
+
+    death_flesh_palettes = [pal for _,pal in samus.get_timed_sprite_palette("death flesh","power")]
+    for i in range(9):
+        rom.write_to_snes_address(0x9BA120+0x20*i,death_flesh_palettes[i],"2"*0x10)
+    
+    crystal_flash_palettes = [pal for _,pal in samus.get_timed_sprite_palette("crystal flash","power")]
+    for i in range(6):
+        rom.write_to_snes_address(0x9B96C0+0x20*i,crystal_flash_palettes[i],"2"*0x10)
+
+    for suit, charge_base_addr in [("power",0x9B9820),("varia",0x9B9920),("gravity",0x9B9A20)]:
+        charge_palettes = [pal for _,pal in samus.get_timed_sprite_palette("charge",suit)]
+        for i in range(8):
+            rom.write_to_snes_address(charge_base_addr+0x20*i,charge_palettes[i],"2"*0x10)
+
+    for suit, speed_boost_base_addr in [("power",0x9B9B20),("varia",0x9B9D20),("gravity",0x9B9F20)]:
+        speed_boost_palettes = [pal for _,pal in samus.get_timed_sprite_palette("speed boost",suit)]
+        for i in range(4):
+            rom.write_to_snes_address(speed_boost_base_addr+0x20*i,speed_boost_palettes[i],"2"*0x10)
+
+    for suit, speed_squat_base_addr in [("power",0x9B9BA0),("varia",0x9B9DA0),("gravity",0x9B9FA0)]:
+        speed_squat_palettes = [pal for _,pal in samus.get_timed_sprite_palette("speed squat",suit)]
+        for i in range(4):
+            rom.write_to_snes_address(speed_squat_base_addr+0x20*i,speed_squat_palettes[i],"2"*0x10)
+
+    for suit, shinespark_base_addr in [("power",0x9B9C20),("varia",0x9B9E20),("gravity",0x9BA020)]:
+        shinespark_palettes = [pal for _,pal in samus.get_timed_sprite_palette("shinespark",suit)]
+        for i in range(4):
+            rom.write_to_snes_address(shinespark_base_addr+0x20*i,shinespark_palettes[i],"2"*0x10)
+
+    for suit, screw_attack_base_addr in [("power",0x9B9CA0),("varia",0x9B9EA0),("gravity",0x9BA0A0)]:
+        screw_attack_palettes = [pal for _,pal in samus.get_timed_sprite_palette("screw attack",suit)]
+        for i in range(4):
+            rom.write_to_snes_address(screw_attack_base_addr+0x20*i,screw_attack_palettes[i],"2"*0x10)
+
+    xray_colors = [pal[4] for _,pal in samus.get_timed_sprite_palette("xray","power")]
+    rom.write_to_snes_address(0x9BA3C6,xray_colors,"222")
+
+    hyper_beam_palettes = [pal for _,pal in samus.get_timed_sprite_palette("hyper beam","power")][::-1]
+    for i in range(10):
+        rom.write_to_snes_address(0x9BA240+0x20*i,hyper_beam_palettes[i],"2"*0x10)
+
+
+    ship_palettes = [pal for _,pal in samus.get_timed_sprite_palette("ship","power")]
+    rom.write_to_snes_address(0xA2A59E, ship_palettes[0][:15],"2"*0x0F)   #only the first 15 colors should be written (last is reserved for underglow)
+    for i in range(0x0E):   #underglow
+        rom.write_to_snes_address(0x8DCA4E+6+4*i,ship_palettes[i][-1],2)  #just the last color
+
+    _,intro_ship_palette = samus.get_timed_sprite_palette("intro ship", "power")[0]
+    rom.write_to_snes_address(0x8CE689, intro_ship_palette, "2"*0x10)
+
+    outro_ship_palettes = [pal for _,pal in samus.get_timed_sprite_palette("outro ship", "power")]
+    for i in range(0x10):
+        rom.write_to_snes_address(0x8DD6BA+6+0x24*i, outro_ship_palettes[i], "2"*0x10)
+
+    _,file_select_palette = samus.get_timed_sprite_palette("file select", "power")[0]
+    rom.write_to_snes_address(0x8EE5E0, file_select_palette, "2"*0x10)
 
     return True
 
