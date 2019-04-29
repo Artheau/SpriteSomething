@@ -5,18 +5,12 @@ import itertools
 import copy
 from PIL import Image
 
-SIGNATURE_ADDRESS_EXHIROM = None
-SIGNATURE_ADDRESS_LOROM = None
-SIGNATURE_MESSAGE = "ART WAS HERE 0000"
-
-def upgrade_to_wizzywig(old_rom, samus):
+def export_player_sprite_to_ROM(samus, old_rom):
     rom = copy.deepcopy(old_rom)  #for safety right now we are going to deepcopy the ROM, in case we need to bail
 
-    #check to see if this rom has already been modified, in which case, we don't do anything.
-    #TODO
-    #SIGNATURE_ADDRESS_EXHIROM
-    #SIGNATURE_ADDRESS_LOROM
-    #SIGNATURE_MESSAGE
+    #in case these were disabled in rom.py, we definitely need to do these before we convert to wizzywig
+    rom._apply_bugfixes()
+    rom._apply_improvements()
 
     if rom._type.name == "EXHIROM":
         pass    #if this is a SMaLttPR combo rom, then we're fine, because there's plenty of space in the low banks
@@ -28,7 +22,7 @@ def upgrade_to_wizzywig(old_rom, samus):
     # old engine requires that we sometimes use larger DMA writes that overwrite (and obviate the need for) DMAs
 
     print("Swapping DMA load order...", end="")
-    success_code = swap_DMA_order(rom,samus)
+    success_code = swap_DMA_order(samus,rom)
     print("done" if success_code else "FAIL")
 
     #to break symmetry, we will need to rearrange where the gun port tile data is,
@@ -37,7 +31,7 @@ def upgrade_to_wizzywig(old_rom, samus):
     # super super wasteful with the organization in this part.
 
     print("Moving gun tiles...", end="")
-    success_code = move_gun_tiles(rom,samus)
+    success_code = move_gun_tiles(samus,rom)
     print("done" if success_code else "FAIL")
 
     #I can see how it was a good idea at the time to put the cannon port as tile $1F,
@@ -49,37 +43,37 @@ def upgrade_to_wizzywig(old_rom, samus):
     # since that is no longer necessary given the symmetry fix from move_gun_tiles()
 
     print("Re-assigning gun tilemaps...", end="")
-    success_code = reassign_gun_tilemaps(rom,samus)
+    success_code = reassign_gun_tilemaps(samus,rom)
     print("done" if success_code else "FAIL")
 
     #write all the new graphics data from base images and layout information
     print("Writing new image data...", end="")
-    DMA_dict, death_DMA_loc, success_code = write_dma_data(rom,samus)
+    DMA_dict, death_DMA_loc, success_code = write_dma_data(samus,rom)
     print("done" if success_code else "FAIL")
 
     #maximally expand/relocate the existing DMA tables, and then add the new load data into them
     print("Writing new DMA tables...", end="")
-    DMA_upper_table_indices, DMA_lower_table_indices, success_code = write_new_DMA_tables(DMA_dict,rom,samus)
+    DMA_upper_table_indices, DMA_lower_table_indices, success_code = write_new_DMA_tables(DMA_dict,samus,rom)
     print("done" if success_code else "FAIL")
 
     #update the table/index references to these new DMA tables
     print("Linking new tables to animations...", end="")
-    success_code = link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, rom,samus)
+    success_code = link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, samus,rom)
     print("done" if success_code else "FAIL")
 
     #write and link all the new tilemaps (use a pointer to nullmap instead of $0000 since $0000 lags the game because reasons) using the layout info
     print("Assigning new tilemaps...", end="")
-    success_code = assign_new_tilemaps(rom,samus)
+    success_code = assign_new_tilemaps(samus,rom)
     print("done" if success_code else "FAIL")
 
     #connect the death animation correctly
     print("Re-connecting death sequence...", end="")
-    success_code = connect_death_sequence(DMA_dict,death_DMA_loc,rom,samus)
+    success_code = connect_death_sequence(DMA_dict,death_DMA_loc,samus,rom)
     print("done" if success_code else "FAIL")
 
     #get rid of the stupid tile
     print("Stupid tile...", end="")
-    success_code = no_more_stupid(rom,samus)
+    success_code = no_more_stupid(samus,rom)
     print("stupid" if success_code else "FAIL")
     
     #because a DMA of zero bytes is essentially a guaranteed game crash, the designers had to make separate subroutines
@@ -88,45 +82,37 @@ def upgrade_to_wizzywig(old_rom, samus):
     # a few animations in the form that they now exist
 
     print("Disabling upper half bypass routine...", end="")
-    success_code = disable_upper_bypass(rom,samus)
+    success_code = disable_upper_bypass(samus,rom)
     print("done" if success_code else "FAIL")
 
     #now we're going to get set up for screw attack without space jump
     #first off, we need a new control code that checks for space jump, so that we can gate the animation appropriately
 
     print("Creating new control code...", end="")
-    success_code = create_new_control_code(rom,samus)
+    success_code = create_new_control_code(samus,rom)
     print("done" if success_code else "FAIL")
 
     #now we need to insert this control code into the animation sequence for screw attack, and its counterpart in walljump
 
     print("Implementing spin attack...", end="")
-    success_code = implement_spin_attack(rom,samus)
+    success_code = implement_spin_attack(samus,rom)
+    print("done" if success_code else "FAIL")
+
+    #insert file select graphics
+    print("Injecting file select graphics...", end="")
+    success_code = insert_file_select_graphics(samus,rom)
     print("done" if success_code else "FAIL")
 
 
-    #TODO
-    #
-    #check to see how the organization of bank $92 is coming along at this point,
-    # and try to keep things confined to their original spaces if possible,
-    # so that this patch is more robust to other types of rom hacks
-    #
-    #as a separate project, need to fix all the gun placements (do this in the base rom patch)
-
-
-
     #pee on the tree
-    #TODO
-    #SIGNATURE_ADDRESS_EXHIROM
-    #SIGNATURE_ADDRESS_LOROM
-    #SIGNATURE_MESSAGE
+    SIGNATURE_ADDRESS = 0x92C500
+    SIGNATURE_MESSAGE = [ord(x) for x in "ART WAS HERE 000"]
+    rom.write_to_snes_address(SIGNATURE_ADDRESS,SIGNATURE_MESSAGE,"1"*len(SIGNATURE_MESSAGE))
 
     #now GET OUT
     return rom
 
-
-
-def swap_DMA_order(rom,samus):
+def swap_DMA_order(samus,rom):
     success_code = True
     #The sum total of this function is to effectively swap the commands in the range $809382-$8093CA with the commands
     # in the range $8093CB-$809413.  Mostly, these commands are identical, except for the following changes:
@@ -141,7 +127,7 @@ def swap_DMA_order(rom,samus):
 
     return success_code
 
-def move_gun_tiles(rom,samus):
+def move_gun_tiles(samus,rom):
     #move the actual tile data
     # Probably the easiest place to locate this is somewhere in $9A9A00-$9AB200, since that's where they lived before
     PLACE_TO_PUT_GUN_TILES = 0x9A9A00
@@ -171,7 +157,7 @@ def move_gun_tiles(rom,samus):
 
     return True
 
-def reassign_gun_tilemaps(rom,samus):
+def reassign_gun_tilemaps(samus,rom):
     TILE = 0xDF   #the new location for the gun tile
     PAL = 0x28   #unmirrored palette code
     success_codes = []
@@ -209,7 +195,7 @@ class FreeSpace():
             else:
                 raise AssertionError("ran out of memory to allocate")
 
-def write_dma_data(rom,samus):
+def write_dma_data(samus,rom):
     if rom._type.name == "EXHIROM":
         #until my hand is slapped I am going to just take up all of the lower halves of banks 0x44-0x4B and 0x54-0x5B
         freespace = FreeSpace([(bank * 0x10000,bank * 0x10000 + 0x8000) for bank in itertools.chain(range(0x44,0x4C),range(0x54,0x5B))])
@@ -247,8 +233,8 @@ def write_dma_data(rom,samus):
 
             DMA_dict[image_name] = (address_to_write, size)
 
-    death_image_left = compile_death_image("left",rom,samus)
-    death_image_right = compile_death_image("right",rom,samus)
+    death_image_left = compile_death_image("left",samus,rom)
+    death_image_right = compile_death_image("right",samus,rom)
 
     death_DMA_loc = death_freespace.get(0)
     left_dest = death_freespace.get(0x4000)
@@ -261,7 +247,7 @@ def write_dma_data(rom,samus):
 
     return DMA_dict, death_DMA_loc, True
 
-def compile_death_image(direction,rom,samus):
+def compile_death_image(direction,samus,rom):
     #the death DMA are special because they have to all be loaded at once as one image
     death_image = Image.new("P",(128,256),0)
     #bodies
@@ -296,7 +282,7 @@ def compile_death_image(direction,rom,samus):
 
     return death_image
 
-def write_new_DMA_tables(DMA_dict,rom,samus):
+def write_new_DMA_tables(DMA_dict,samus,rom):
     #We'll need more room, since we have 637 unique images*7 bytes each = 0x116B amount of stuff (used 0x0BE5 previously)
     #for this, we're going to eat into some area that used to be reserved for death tilemaps ($92C580-$92CBED)
     # because we know we have to change those tilemaps later anyway
@@ -355,7 +341,7 @@ def write_new_DMA_tables(DMA_dict,rom,samus):
 
     return DMA_upper_table_indices, DMA_lower_table_indices, success_code
 
-def link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, rom,samus):
+def link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, samus,rom):
     #Here is the deal at this point -- at $92D94E there is a big table with exactly one pointer for every animation
     #ORG $92D94E        #DW AFP_T00, AFP_T01, AFP_T02, AFP_T03, ...
     #and then immediately following that is a big long list of 4 byte tuples, essentially
@@ -364,7 +350,8 @@ def link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, 
     #but if we do, we need to work OVER some code that might have something to do with loading from save points/fanfare related
     #and this code is at $92ED24-$EDF3
     #but after that, we have all the free space that we could want, right up to the end of the bank, if we so desired.
-    freespace = FreeSpace([(0x92DB48,0x92ED24),(0x92EDF4,0x930000)])
+    #also we have this space that we freed up by homogenizing the tilemaps
+    freespace = FreeSpace([(0x92DB48,0x92ED24),(0x92B800,0x92C500)])#,(0x92EDF4,0x930000)])
 
     #as a failsafe against vanilla glitches, let's start by setting all the pointers to a null list
     NULL_SIZE = 0x40
@@ -378,7 +365,7 @@ def link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, 
     rom.write_to_snes_address(0x92D94E,[address_to_write % 0x10000 for _ in range(0xFD)],"2"*0xFD)
 
     animation_lookup = {}   #will contain a list of the poses each animation has
-    for animation, pose in get_numbered_poses_old_and_new(rom,samus):
+    for animation, pose in get_numbered_poses_old_and_new(samus,rom):
         if animation in animation_lookup:
             animation_lookup[animation].append(pose)
         else:
@@ -405,7 +392,7 @@ def link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, 
 
     return True
 
-def assign_new_tilemaps(rom,samus):
+def assign_new_tilemaps(samus,rom):
     #my note to myself from early on in this process:
     #  The game stalls badly if there is a tilemap missing.  Don't use $0000 for missing tilemaps like in vanilla.
     #
@@ -417,8 +404,8 @@ def assign_new_tilemaps(rom,samus):
     #this was the old table full of TM pointers.  We navigate around the delicate areas and rearrange the remaining tilemap pointers
     lookup_table_freespace = FreeSpace([(0x928091,0x928390),(0x9283C1,0x9283E4),(0x9283e7,0x928a04),(0x928a0d,0x9290c4)])
     #leaving TM_006 alone because its auxiliary uses in-game are not clear, but the rest can go
-    tilemap_freespace = FreeSpace([(0x929663,0x92BE00)])   #this used to contain all the tilemaps, and again it will!
-    #reserving the space after $92BE00 for death tilemaps
+    tilemap_freespace = FreeSpace([(0x929663,0x92B000)])   #this used to contain all the tilemaps, and again it will!
+    #reserving the space after $92B000 for death tilemaps
 
     #need a null map to prevent terrible lag parties from happening when vanilla glitches rear their head
     null_map_location = tilemap_freespace.get(2)
@@ -428,7 +415,7 @@ def assign_new_tilemaps(rom,samus):
     null_list_address = lookup_table_freespace.get(2*96)  #96 is the most poses of any animation
 
     animation_lookup = {}   #will contain a list of the poses each animation has
-    for animation, pose in get_numbered_poses_old_and_new(rom,samus):
+    for animation, pose in get_numbered_poses_old_and_new(samus,rom):
         if animation in animation_lookup:
             animation_lookup[animation].append(pose)
         else:
@@ -498,7 +485,7 @@ def assign_new_tilemaps(rom,samus):
 
     return True
 
-def connect_death_sequence(DMA_dict,death_DMA_loc,rom,samus):
+def connect_death_sequence(DMA_dict,death_DMA_loc,samus,rom):
     #the death tilemaps are referenced by these offsets
     #$92:EDCF A9 1C 08    LDA #$081C                  ;this is an offset into the lower tilemap table for right facing death tilemaps
     #$92:EDDA A9 25 08    LDA #$0825                  ;this is an offset into the lower tilemap table for left facing death tilemaps
@@ -506,7 +493,7 @@ def connect_death_sequence(DMA_dict,death_DMA_loc,rom,samus):
     #there you will find a list of the tilemaps for the death pose (9 in total for each side)
     #in this code we change those offsets
 
-    freespace = FreeSpace([(0x92BE01,0x92C580)])   #starts where the other tilemaps end.
+    freespace = FreeSpace([(0x92B001,0x92B800)])   #starts where the other tilemaps end.
     #Needs to start on an odd number in order to index correctly from 0x92808D
 
     for direction,base_address in [("left",0x92EDDB),("right",0x92EDD0)]:
@@ -813,14 +800,14 @@ def rotate_tilemap(tilemap):
         rotated_tilemap.extend([x,size,y,tile,palette])
     return rotated_tilemap
 
-def no_more_stupid(rom,samus):
+def no_more_stupid(samus,rom):
     #in theory, I could just break the code that loads the stupid tile, but I won't rest at night until this tile is gone
     rom.bulk_write_to_snes_address(0x9AD620, [0 for _ in range(0x20)], 0x20)
     #somehow I have the feeling that it's going to come back for me,
     # chasing me down while giving an endless monologue on the health benefits of kombucha
     return True
 
-def disable_upper_bypass(rom,samus):
+def disable_upper_bypass(samus,rom):
     #so if you DMA zero bytes, you actually DMA an entire bank.  And trying to DMA an entire bank into the middle of VRAM
     # is super bad news.  But this also means that there's not a simple way to avoid DMA -- you have to write a bypass
     # routine.  This bypass routine served its purpose in the original game but now we've made improvements to the engine
@@ -833,7 +820,7 @@ def disable_upper_bypass(rom,samus):
     success_code = rom._apply_single_fix_to_snes_address(0x90864E, OLD_SUBROUTINES, NEW_SUBROUTINES, "2"*28)
     return success_code
 
-def create_new_control_code(rom,samus):
+def create_new_control_code(samus,rom):
     #new control code: place at $908688-$9086A2 (0x1B bytes)
     SUBROUTINE_LOCATION = 0x908688
     '''
@@ -900,7 +887,7 @@ def create_new_control_code(rom,samus):
     
     return success_code
 
-def implement_spin_attack(rom,samus):
+def implement_spin_attack(samus,rom):
     #here we adjust the timing sequence for screw attack, adding in the new control code
     # so that we have a new battery of poses which are used to implement spin attack
 
@@ -1058,7 +1045,46 @@ def implement_spin_attack(rom,samus):
 
     return success_code
 
-def get_numbered_poses_old_and_new(rom,samus):
+def insert_file_select_graphics(samus,rom):
+    #hard coded for now
+    file_select_graphics_block = Image.new("P",(128,24),0)
+    left_head,_ = samus.get_sprite_pose("file_select",0)
+    file_select_graphics_block.paste(left_head.crop((0,0,24,24)),(0,0))
+    middle_head,_ = samus.get_sprite_pose("file_select",1)
+    file_select_graphics_block.paste(middle_head.crop((0,0,24,24)),(24,0))
+    center_head,_ = samus.get_sprite_pose("file_select",2)
+    file_select_graphics_block.paste(center_head.crop((0,0,24,24)),(48,0))
+    visor0,offset = samus.get_sprite_pose("file_select",3)
+    file_select_graphics_block.paste(visor0.crop((4,10,20,18)),(72,0))
+    visor1,_ = samus.get_sprite_pose("file_select",4)
+    file_select_graphics_block.paste(visor1.crop((4,10,20,18)),(88,0))
+    visor2,_ = samus.get_sprite_pose("file_select",5)
+    file_select_graphics_block.paste(visor2.crop((4,10,20,18)),(104,0))
+    visor3,_ = samus.get_sprite_pose("file_select",6)
+    file_select_graphics_block.paste(visor3.crop((4,10,20,18)),(72,8))
+    visor4,_ = samus.get_sprite_pose("file_select",7)
+    file_select_graphics_block.paste(visor4.crop((4,10,20,18)),(88,8))
+    cursor_array,_ = samus.get_sprite_pose("file_select",8)
+    file_select_graphics_block.paste(cursor_array.crop((0,24,8,32)),(112,16))
+    file_select_graphics_block.paste(cursor_array.crop((0,16,8,24)),(112,8))
+    file_select_graphics_block.paste(cursor_array.crop((0,8,8,16)),(120,0))
+    stray_missile_image = cursor_array.crop((0,0,8,8))
+    file_select_graphics_block.paste(cursor_array.crop((8,24,16,32)),(120,8))
+    file_select_graphics_block.paste(cursor_array.crop((8,16,16,24)),(120,16))
+    stray_missilehead_image = cursor_array.crop((8,8,16,16))
+    file_select_piping,_ = samus.get_sprite_pose("file_select",9)
+    file_select_graphics_block.paste(file_select_piping.crop((0,0,24,8)),(72,16))  #top
+    file_select_graphics_block.paste(file_select_piping.crop((16,8,24,24)),(104,8))  #side
+    file_select_graphics_block.paste(file_select_piping.crop((0,16,8,24)),(96,16))  #corner
+
+    file_select_DMA = samus.convert_to_4bpp(file_select_graphics_block, (0,0), (0,128,0,16),None)
+    file_select_DMA.extend(samus.convert_to_4bpp(file_select_graphics_block, (0,0), (0,128,16,32),None)[:0x200])
+
+    rom.bulk_write_to_snes_address(0xB6DA00,file_select_DMA,0x600)
+
+    return True
+
+def get_numbered_poses_old_and_new(samus,rom):
     for animation_string, pose in samus._layout.reverse_lookup:
         if animation_string[:2] == "0x":
             animation_int = int(animation_string[2:],16)
