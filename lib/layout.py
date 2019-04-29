@@ -6,11 +6,35 @@
 
 import json
 from PIL import Image, ImageOps, ImageDraw
+from lib.RomHandler import util
 
 class Layout():
     def __init__(self, filename):
         with open(filename) as inFile:
             self.data = json.load(inFile)
+        self.reverse_lookup = {}
+        for image_name,image_info in self.data["images"].items():
+            for image_ref in image_info["used by"]:
+                if tuple(image_ref) in self.reverse_lookup:
+                    self.reverse_lookup[tuple(image_ref)].append(image_name)
+                else:
+                    self.reverse_lookup[tuple(image_ref)] = [image_name]
+
+    def get_image_name(self, animation, pose):
+        #get any old image name from reverse lookup
+        if type(animation) is int:
+            animation = util.pretty_hex(animation)
+
+        if (animation,pose) in self.reverse_lookup:
+            return self.reverse_lookup[(animation, pose)][0]
+        else:
+            return "null"
+
+    def get_all_image_names(self,animation, pose):
+        if type(animation) is int:
+            animation = util.pretty_hex(animation)
+        #get the full list
+        return self.reverse_lookup[(animation, pose)]
 
     def get_rows(self):
         return self.data["layout"]
@@ -68,7 +92,7 @@ class Layout():
             else:
                 return None
         else:
-            raise AssertionError(f"ncountered infinite parental loop in layout.json while investigating {image_name}")
+            raise AssertionError(f"Encountered infinite parental loop in layout.json while investigating {image_name}")
 
 
     def make_horizontal_collage(self, image_list,add_border=True,border_color=(0,0,0x7F,0xFF)):

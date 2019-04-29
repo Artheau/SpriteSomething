@@ -1,4 +1,11 @@
 {
+	"comment":
+	[
+		"This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",
+		"will also be the pose that is used to import the image.  For this reason, some poses will be out of order",
+		"and this is intentional because a pose might be mirrored in its first occurance (grapple), or perhaps",
+		"the way that it will be present in the ROM is different before and after modification (e.g. screw attack)"
+	],
 	"layout":
 	[
 		[
@@ -302,6 +309,7 @@
 		"launcher": {
 			"description": "Used when wearing power suit and loading from a save point",
 			"dimensions": [-16,16,-32,24],
+			"palettte": "0x38",
 			"used by":
 			[
 					        ["0x00", 3],["0x00", 5],["0x00", 7],["0x00", 9],
@@ -381,6 +389,7 @@
 		"launcher_varia": {
 			"description": "Used when wearing varia or gravity suit and loading from a save point",
 			"parent": "launcher",
+			"palettte": "0x38",
 			"used by":
 			[
 					        ["0x9B", 3],["0x9B", 5],["0x9B", 7],["0x9B", 9],
@@ -1112,42 +1121,43 @@
 		"spin_jump_right": {
 			"description": "Samus spin jumping clockwise",
 			"dimensions": [-16,16,-16,16],
-			"used by": [["0x19",1],["0x83",3]]
+			"force": "lower",
+			"used by": [["0x19",1],["0x83",3],["0x81",28],["0x81",29],["0x81",30],["0x83",49],["0x83",50],["0x83",51]]
 		},
 
 		"spin_jump_right1": {
 			"parent": "spin_jump_right",
-			"used by": [["0x19",2],["0x83",4]]
+			"used by": [["0x19",2],["0x83",4],["0x81",31],["0x81",32],["0x81",33],["0x83",52],["0x83",53],["0x83",54]]
 		},
 
 		"spin_jump_right2": {
 			"parent": "spin_jump_right",
-			"used by": [["0x19",3],["0x83",5]]
+			"used by": [["0x19",3],["0x83",5],["0x81",34],["0x81",35],["0x81",36],["0x83",55],["0x83",56],["0x83",57]]
 		},
 
 		"spin_jump_right3": {
 			"parent": "spin_jump_right",
-			"used by": [["0x19",4],["0x83",6]]
+			"used by": [["0x19",4],["0x83",6],["0x81",37],["0x81",38],["0x81",39],["0x83",58],["0x83",59],["0x83",60]]
 		},
 
 		"spin_jump_right4": {
 			"parent": "spin_jump_right",
-			"used by": [["0x19",5],["0x83",7]]
+			"used by": [["0x19",5],["0x83",7],["0x81",40],["0x81",41],["0x81",42],["0x83",61],["0x83",62],["0x83",63]]
 		},
 
 		"spin_jump_right5": {
 			"parent": "spin_jump_right",
-			"used by": [["0x19",6],["0x83",8]]
+			"used by": [["0x19",6],["0x83",8],["0x81",43],["0x81",44],["0x81",45],["0x83",64],["0x83",65],["0x83",66]]
 		},
 
 		"spin_jump_right6": {
 			"parent": "spin_jump_right",
-			"used by": [["0x19",7],["0x83",9]]
+			"used by": [["0x19",7],["0x83",9],["0x81",46],["0x81",47],["0x81",48],["0x83",67],["0x83",68],["0x83",69]]
 		},
 
 		"spin_jump_right7": {
 			"parent": "spin_jump_right",
-			"used by": [["0x19",8],["0x83",10]]
+			"used by": [["0x19",8],["0x83",10],["0x81",49],["0x81",50],["0x81",51],["0x83",70],["0x83",71],["0x83",72]]
 		},
 
 		"spin_jump_right_land": {
@@ -1175,7 +1185,7 @@
 		"wall_jump_right": {
 			"description": "Samus when she is priming to jump rightwards off of a left wall",
 			"dimensions": [-11,21,-20,20],
-			"used by": [["0x19",11],["0x1B",11],["0x81",27],["0x84",1]]
+			"used by": [["0x19",11],["0x1B",11],["0x81",27],["0x81",54]]
 		},
 
 		"wall_jump_launch_right": {
@@ -1188,48 +1198,49 @@
 		"jump_left_start_spin_jump": {
 			"description": "As Samus begins to do a spinjump/spacejump/screwattack, this pose shows her transitioning off the ground before spinning",
 			"dimensions": [-16,16,-21,27],
-			"used by": [["0x1A",0],["0x1C",0],["0x82",0]]
+			"used by": [["0x1A",0],["0x1C",0],["0x82",0],["0x84",1]]
 		},
 
 		"spin_jump_left": {
 			"description": "Samus spin jumping counterclockwise",
 			"dimensions": [-16,16,-16,16],
-			"used by": [["0x1A",1],["0x84",3]]
+			"force": "lower",
+			"used by": [["0x1A",1],["0x84",3],["0x82",28],["0x82",29],["0x82",30],["0x84",49],["0x84",50],["0x84",51]]
 		},
 
 		"spin_jump_left1": {
 			"parent": "spin_jump_left",
-			"used by": [["0x1A",2],["0x84",4]]
+			"used by": [["0x1A",2],["0x84",4],["0x82",31],["0x82",32],["0x82",33],["0x84",52],["0x84",53],["0x84",54]]
 		},
 
 		"spin_jump_left2": {
 			"parent": "spin_jump_left",
-			"used by": [["0x1A",3],["0x84",5]]
+			"used by": [["0x1A",3],["0x84",5],["0x82",34],["0x82",35],["0x82",36],["0x84",55],["0x84",56],["0x84",57]]
 		},
 
 		"spin_jump_left3": {
 			"parent": "spin_jump_left",
-			"used by": [["0x1A",4],["0x84",6]]
+			"used by": [["0x1A",4],["0x84",6],["0x82",37],["0x82",38],["0x82",39],["0x84",58],["0x84",59],["0x84",60]]
 		},
 
 		"spin_jump_left4": {
 			"parent": "spin_jump_left",
-			"used by": [["0x1A",5],["0x84",7]]
+			"used by": [["0x1A",5],["0x84",7],["0x82",40],["0x82",41],["0x82",42],["0x84",61],["0x84",62],["0x84",63]]
 		},
 
 		"spin_jump_left5": {
 			"parent": "spin_jump_left",
-			"used by": [["0x1A",6],["0x84",8]]
+			"used by": [["0x1A",6],["0x84",8],["0x82",43],["0x82",44],["0x82",45],["0x84",64],["0x84",65],["0x84",66]]
 		},
 
 		"spin_jump_left6": {
 			"parent": "spin_jump_left",
-			"used by": [["0x1A",7],["0x84",9]]
+			"used by": [["0x1A",7],["0x84",9],["0x82",46],["0x82",47],["0x82",48],["0x84",67],["0x84",68],["0x84",69]]
 		},
 
 		"spin_jump_left7": {
 			"parent": "spin_jump_left",
-			"used by": [["0x1A",8],["0x84",10]]
+			"used by": [["0x1A",8],["0x84",10],["0x82",49],["0x82",50],["0x82",51],["0x84",70],["0x84",71],["0x84",72]]
 		},
 
 		"spin_jump_left_land": {
@@ -1257,7 +1268,7 @@
 		"wall_jump_left": {
 			"description": "Samus when she is priming to jump leftwards off of a right wall",
 			"dimensions": [-20,12,-20,20],
-			"used by": [["0x1A",11],["0x1C",11],["0x82",27]]
+			"used by": [["0x1A",11],["0x1C",11],["0x82",27],["0x82",54]]
 		},
 
 		"wall_jump_launch_left": {
@@ -1271,7 +1282,7 @@
 			"description": "Samus space jumping clockwise, or combined with sparks for screw attack",
 			"dimensions": [-16,16,-16,16],
 			"force": "lower",
-			"used by": [["0x1B",1],["0x81",1],["0x81",9],["0x81",17],["0x83",13],["0x83",23],["0x83",31],["0x83",39]]
+			"used by": [["0x1B",1],["0x81",1],["0x81",9],["0x81",17],["0x83",13],["0x83",23],["0x83",31],["0x83",39],["0x81",25]]
 		},
 
 		"space_jump_right1": {
@@ -1313,7 +1324,7 @@
 			"description": "Samus space jumping counterclockwise, or combined with sparks for screw attack",
 			"dimensions": [-16,16,-16,16],
 			"force": "lower",
-			"used by": [["0x1C",1],["0x82",1],["0x82",9],["0x82",17],["0x84",13],["0x84",23],["0x84",31],["0x84",39]]
+			"used by": [["0x1C",1],["0x82",1],["0x82",9],["0x82",17],["0x84",13],["0x84",23],["0x84",31],["0x84",39],["0x82",25]]
 		},
 
 		"space_jump_left1": {
@@ -2639,28 +2650,30 @@
 			"description": "When Samus is transitioning to or from the morphball, and when she converts between morphball and crystal flash",
 			"dimensions": [-16,16,-19,13],
 			"shift": [0,-4],
-			"used by": [["0x37",0],["0x3D",1],["0xD7",2],["0xE8",2]]
+			"used by": [["0x37",0],["0x3D",1],["0xD7",2],["0xE8",2],["0xD3",1],["0xD3",3],["0xD3",12],["0xD3",13]]
 		},
 
 		"morph_right1": {
 			"description": "When Samus is transitioning to or from the morphball, and when she converts between morphball and crystal flash",
 			"dimensions": [-16,16,-13,11],
 			"shift": [0,-2],
-			"used by": [["0x37",1],["0x3D",0],["0xD7",1],["0xE8",1]]
+			"used by": [["0x37",1],["0x3D",0],["0xD7",1],["0xE8",1],["0xD3",0]]
 		},
 
 		"morph_left": {
 			"description": "When Samus is transitioning to or from the morphball, and when she converts between morphball and crystal flash",
 			"dimensions": [-16,16,-19,13],
+			"force": "upper",
 			"shift": [0,-4],
-			"used by": [["0x38",0],["0x3E",1],["0xD8",2],["0xE9",1]]
+			"used by": [["0x38",0],["0x3E",1],["0xD8",2],["0xE9",1],["0xD4",1],["0xD4",3],["0xD4",12],["0xD4",13]]
 		},
 
 		"morph_left1": {
 			"description": "When Samus is transitioning to or from the morphball, and when she converts between morphball and crystal flash",
 			"dimensions": [-16,16,-13,11],
+			"force": "upper",
 			"shift": [0,-2],
-			"used by": [["0x38",1],["0x3E",0],["0xD8",1],["0xE9",0]]
+			"used by": [["0x38",1],["0x3E",0],["0xD8",1],["0xE9",0],["0xD4",0]]
 		},
 
 		"bonk_right": {
@@ -2728,43 +2741,44 @@
 			"dimensions": [-12,12,-18,-10],
 			"extra area": [[-12,12,10,18],[-18,-10,-11,13],[10,18,-11,13],[-16,-8,-15,-7],[8,16,-15,-7],[-15,-7,7,15],[7,15,7,15]],
 			"force": "upper",
-			"used by": [["0x81",1],["0x81",2],["0x81",3],["0x83",23],["0x83",24],["0x83",25]]
+			"import": "upper",
+			"used by": [["0x81",2],["0x81",3],["0x83",23],["0x83",24],["0x83",25],["0x81",1],["0x81",25],["0x81",29],["0x81",30],["0x81",31],["0x83",50],["0x83",51],["0x83",52]]
 		},
 
 		"sparks_right1": {
 			"parent": "sparks_right",
-			"used by": [["0x81",7],["0x81",8],["0x81",9],["0x83",29],["0x83",30],["0x83",31]]
+			"used by": [["0x81",7],["0x81",8],["0x81",9],["0x83",29],["0x83",30],["0x83",31],["0x81",35],["0x81",36],["0x81",37],["0x83",56],["0x83",57],["0x83",58]]
 		},
 
 		"sparks_right2": {
 			"parent": "sparks_right",
-			"used by": [["0x81",13],["0x81",14],["0x81",15],["0x83",35],["0x83",36],["0x83",37]]
+			"used by": [["0x81",13],["0x81",14],["0x81",15],["0x83",35],["0x83",36],["0x83",37],["0x81",41],["0x81",42],["0x81",43],["0x83",62],["0x83",63],["0x83",64]]
 		},
 
 		"sparks_right3": {
 			"parent": "sparks_right",
-			"used by": [["0x81",19],["0x81",20],["0x81",21],["0x83",41],["0x83",42],["0x83",43]]
+			"used by": [["0x81",19],["0x81",20],["0x81",21],["0x83",41],["0x83",42],["0x83",43],["0x81",47],["0x81",48],["0x81",49],["0x83",68],["0x83",69],["0x83",70]]
 		},
 
 		"sparks_left": {
 			"description": "When using screw attack, a halo of sparks surrounds Samus, and pulses every few frames",
 			"parent": "sparks_right",
-			"used by": [["0x82",1],["0x82",2],["0x82",3],["0x84",23],["0x84",24],["0x84",25]]
+			"used by": [["0x82",2],["0x82",3],["0x84",23],["0x84",24],["0x84",25],["0x82",1],["0x82",24],["0x82",29],["0x82",30],["0x82",31],["0x84",50],["0x84",51],["0x84",52]]
 		},
 
 		"sparks_left1": {
 			"parent": "sparks_left",
-			"used by": [["0x82",7],["0x82",8],["0x82",9],["0x84",29],["0x84",30],["0x84",31]]
+			"used by": [["0x82",7],["0x82",8],["0x82",9],["0x84",29],["0x84",30],["0x84",31],["0x82",35],["0x82",36],["0x82",37],["0x84",56],["0x84",57],["0x84",58]]
 		},
 
 		"sparks_left2": {
 			"parent": "sparks_left",
-			"used by": [["0x82",13],["0x82",14],["0x82",15],["0x84",35],["0x84",36],["0x84",37]]
+			"used by": [["0x82",13],["0x82",14],["0x82",15],["0x84",35],["0x84",36],["0x84",37],["0x82",41],["0x82",42],["0x82",43],["0x84",62],["0x84",63],["0x84",64]]
 		},
 
 		"sparks_left3": {
 			"parent": "sparks_left",
-			"used by": [["0x82",19],["0x82",20],["0x82",21],["0x84",41],["0x84",42],["0x84",43]]
+			"used by": [["0x82",19],["0x82",20],["0x82",21],["0x84",41],["0x84",42],["0x84",43],["0x82",47],["0x82",48],["0x82",49],["0x84",68],["0x84",69],["0x84",70]]
 		},
 
 		"fall_turn_left":
@@ -3052,9 +3066,11 @@
 
 		"crystal_flash_right": {
 			"description": "The floating silhouette inside of the crystal flash bubble",
-			"dimensions": [-16,16,-24,24],
+			"dimensions": [-12,12,-21,19],
+			"palette": "0x3C",
 			"force": "upper",
-			"used by": [["0xD3",6]]
+			"import": "upper",
+			"used by": [["0xD3",6],["0xD3",2]]
 		},
 
 		"crystal_flash_right1": {
@@ -3074,9 +3090,11 @@
 
 		"crystal_flash_left": {
 			"description": "The floating silhouette inside of the crystal flash bubble",
-			"dimensions": [-16,16,-24,24],
+			"dimensions": [-12,12,-21,19],
+			"palette": "0x3C",
 			"force": "upper",
-			"used by": [["0xD4",6]]
+			"import": "upper",
+			"used by": [["0xD4",6],["0xD4",2]]
 		},
 
 		"crystal_flash_left1": {
@@ -3107,7 +3125,9 @@
 		"crystal_bubble_right_large": {
 			"description": "The pulsating bubble around crystal flash.  This is duplicated thrice to complete a full circle",
 			"dimensions": [0,32,-32,0],
+			"palette": "0x3C",
 			"force": "lower",
+			"import": "lower",
 			"used by": [["0xD3",2],["0xD3",3],["0xD3",6],["0xD3",7],["0xD3",8],["0xD3",9]]
 		},
 
@@ -3124,7 +3144,9 @@
 		"crystal_bubble_left_large": {
 			"description": "The pulsating bubble around crystal flash.  This is duplicated thrice to complete a full circle",
 			"dimensions": [-32,0,-32,0],
+			"palette": "0x3C",
 			"force": "lower",
+			"import": "lower",
 			"used by": [["0xD4",2],["0xD4",3],["0xD4",6],["0xD4",7],["0xD4",8],["0xD4",9]]
 		},
 
@@ -3309,7 +3331,7 @@
 
 		"grapple_clockwise12": {
 			"parent": "grapple_clockwise",
-			"dimensions": [-30,22,-11,13],
+			"dimensions": [-30,26,-11,13],
 			"extra area": [[-30,18,-19,-11],[-14,26,13,21]],
 			"used by": [["0xB3",11],["0xB3",27],["0xB3",43],["0xB3",59]]
 		},
@@ -3454,12 +3476,15 @@
 		"death_left": {
 			"description": "Samus's body emerging from the broken suit during the death sequence",
 			"dimensions": [-12,20,-32,32],
+			"palette": "0x2E",
+			"table": false,
 			"used by": [["death_left", 0]]
 		},
 
 		"death_left1": {
 			"parent": "death_left",
 			"force": "lower",
+			"import": "lower",
 			"used by": [["death_left", 1]]
 		},
 
@@ -3493,15 +3518,51 @@
 			"used by": [["death_left", 8]]
 		},
 
+		"death_left_pieces": {
+			"description": "Samus's suit pieces exploding during the death sequence",
+			"dimensions": [-9,15,-25,23],
+			"force": "upper",
+			"import": "upper",
+			"table": false,
+			"used by": [["death_left", 1]]
+		},
+
+		"death_left_pieces1": {
+			"parent": "death_left_pieces",
+			"dimensions": [-12,20,-25,23],
+			"used by": [["death_left", 2]]
+		},
+
+		"death_left_pieces2": {
+			"dimensions": [-18,22,-35,29],
+			"parent": "death_left_pieces",
+			"used by": [["death_left", 3]]
+		},
+
+		"death_left_pieces3": {
+			"dimensions": [-26,30,-42,38],
+			"parent": "death_left_pieces",
+			"used by": [["death_left", 4]]
+		},
+
+		"death_left_pieces4": {
+			"dimensions": [-36,36,-45,43],
+			"parent": "death_left_pieces",
+			"used by": [["death_left", 5]]
+		},
+
 		"death_right": {
 			"description": "Samus's body emerging from the broken suit during the death sequence",
 			"dimensions": [-20,12,-32,32],
+			"palette": "0x2E",
+			"table": false,
 			"used by": [["death_right", 0]]
 		},
 
 		"death_right1": {
 			"parent": "death_right",
 			"force": "lower",
+			"import": "lower",
 			"used by": [["death_right", 1]]
 		},
 
@@ -3539,6 +3600,8 @@
 			"description": "Samus's suit pieces exploding during the death sequence",
 			"dimensions": [-15,9,-25,23],
 			"force": "upper",
+			"import": "upper",
+			"table": false,
 			"used by": [["death_right", 1]]
 		},
 
@@ -3561,42 +3624,9 @@
 		},
 
 		"death_right_pieces4": {
-			"dimensions": [-36,36,-45,-29],
-			"extra area": [[-36,36,27,43],[-36,-20,-29,27],[20,36,-29,27]],
+			"dimensions": [-36,36,-45,43],
 			"parent": "death_right_pieces",
 			"used by": [["death_right", 5]]
-		},
-
-		"death_left_pieces": {
-			"description": "Samus's suit pieces exploding during the death sequence",
-			"dimensions": [-9,15,-25,23],
-			"force": "upper",
-			"used by": [["death_left", 1]]
-		},
-
-		"death_left_pieces1": {
-			"parent": "death_left_pieces",
-			"dimensions": [-12,20,-25,23],
-			"used by": [["death_left", 2]]
-		},
-
-		"death_left_pieces2": {
-			"dimensions": [-18,22,-35,29],
-			"parent": "death_left_pieces",
-			"used by": [["death_left", 3]]
-		},
-
-		"death_left_pieces3": {
-			"dimensions": [-26,30,-42,38],
-			"parent": "death_left_pieces",
-			"used by": [["death_left", 4]]
-		},
-
-		"death_left_pieces4": {
-			"dimensions": [-36,36,-45,-29],
-			"extra area": [[-36,36,27,43],[-36,-20,-29,27],[20,36,-29,27]],
-			"parent": "death_left_pieces",
-			"used by": [["death_left", 5]]
 		},
 
 		"file_select_head": {
@@ -3694,7 +3724,7 @@
 		"palette_block": {
 			"description": "The rows are (top to bottom): power, varia, gravity, death, file select, and then one row with flash bubble colors, visor xray colors, then ship colors",
 			"scale": 8,
-			"dimensions": [0,15,0,6],
+			"dimensions": [0,15,0,7],
 			"used by": [["palette_block",0]]
 		}
 	}
