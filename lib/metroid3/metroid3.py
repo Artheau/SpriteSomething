@@ -626,5 +626,17 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
 
 
     def get_PNG_for_export(self):
+        '''
+        #saved from an ad hoc algorithm to draw boxes instead of cannon ports to produce a layered image
+        for bank in [0x9C,0x9D,0x9E,0x9F]:
+            self.rom_data.bulk_write_to_snes_address(bank*0x10000+0x8000, 0x8000*[0xFF],0x8000)  #erase old tile data
+        self.rom_data.bulk_write_to_snes_address(0x9B8000,0x1400*[0xFF],0x1400)                  #erase old tile data
+        self.rom_data.bulk_write_to_snes_address(0x9BE000,0x2000*[0xFF],0x2000)                  #erase old tile data
+        self.rom_data.bulk_write_to_snes_address(0x9AD620, [0]*0x20, 0x20)                       #undo stupid
+        self.rom_data.bulk_write_to_snes_address(0x9A9A00, [0xFF,0x00]*0xC00,0x1800) #erase gun ports
+        images = self.import_rgba_images_from_ROM(buttons={"port":1})
+        return self._layout.export_all_images_to_PNG(images)
+        '''
+
         images = self.import_rgba_images_from_ROM()     #TODO: Should also be able to import these from PNG or ZSPR
         return self._layout.export_all_images_to_PNG(images)
