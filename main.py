@@ -75,7 +75,13 @@ class SpriteSomethingMainFrame(tk.Frame):
 		panes.pack(fill=tk.BOTH, expand=1)
 
 		self._canvas = tk.Canvas(panes, name="right_pane")
+		def move_sprite(event):
+			self.sprite_coord = [event.x/self._current_zoom, event.y/self._current_zoom]
+			self.update_sprite_animation()
+		self._canvas.bind("<Button-1>", move_sprite)   #hook this function to call when the canvas is left-clicked
+		self.sprite_coord = [100,100] #default
 
+		
 		self._sprites = {}
 		self._background_ID = None
 
@@ -1004,7 +1010,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			img = util.apply_palette(img, palette)
 			new_size = tuple(int(self._current_zoom*dim) for dim in img.size)
 			scaled_img = img.resize(new_size)
-			self._sprite_ID = self._attach_sprite(self._canvas, scaled_img, tuple(self._current_zoom*(100-x) for x in origin))  #TODO: better coordinate
+			self._sprite_ID = self._attach_sprite(self._canvas, scaled_img, tuple(int(self._current_zoom*(pos-x)) for pos,x in zip(self.sprite_coord,origin)))  #TODO: better coordinate
 		else:
 			self._sprite_ID = None
 
