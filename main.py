@@ -58,7 +58,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				"width": 16
 			},
 			"animation_dropdown": {
-				"width": 16
+				"width": 24
 			},
 			"animation_list": {
 				"width": 16
@@ -303,7 +303,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		left_pane.add(control_section)
 		button_width = 7
 		self.zoom_factor = tk.StringVar(control_section)
-		self.zoom_factor.set("x1 ")
+		self.zoom_factor.set('x' + str(round(self._current_zoom, 1)) + ' ')
 		self.speed_factor = tk.StringVar(control_section)
 		self.speed_factor.set("100%")
 		self.right_align_grid_in_frame(control_section)
@@ -787,7 +787,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#this line is not obvious; it is calling the appropriate Game class constructor, e.g. Zelda3 class from lib/zelda3/zelda3.py
 		self.game = getattr(self.game_module, self._game_name.capitalize())(rom_filename,meta_filename)
 
-		self._current_zoom = 1.0
+		self._current_zoom = 2.0
 		self._current_speed = 1.0
 		self.background_name = random.choice(list(self.game.background_images.keys()))
 		self.load_background(self.background_name)

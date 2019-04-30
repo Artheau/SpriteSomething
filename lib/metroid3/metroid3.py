@@ -37,9 +37,6 @@ class Metroid3Sprite(Zspr):   #Super Metroid Sprites
         super().__init__(*args)    #do the stuff from the inherited class
 
 SAMUS_ANIMATION_DICT = {
-                "Elevator (Power)": 0x00,
-                "Elevator (Varia/Gravity)": 0x9B,
-
                 "Stand right": 0x01,
                 "Stand right, aim up": 0x03,
                 "Stand right, aim diag up": 0x05,
@@ -144,7 +141,7 @@ SAMUS_ANIMATION_DICT = {
                 "Springball fall left": 0x7E,
                 "Springball jump left": 0x80,
 
-                "Crouching from stand, right": 0x36,
+                "Crouching from stand, right": 0x35,
                 "Crouching from stand right, aim up": 0xF1,
                 "Crouching from stand right, aim diag up": 0xF3,
                 "Crouching from stand right, aim diag down": 0xF5,
@@ -161,7 +158,7 @@ SAMUS_ANIMATION_DICT = {
                 "Standing from crouch right, aim diag up": 0xF9,
                 "Standing from crouch right, aim diag down": 0xFB,
 
-                "Crouching from stand, left": 0x35,
+                "Crouching from stand, left": 0x36,
                 "Crouching from stand left, aim up": 0xF2,
                 "Crouching from stand left, aim diag up": 0xF4,
                 "Crouching from stand left, aim diag down": 0xF6,
@@ -269,6 +266,9 @@ SAMUS_ANIMATION_DICT = {
                 "Ran into left wall, aim diag down": 0xD2,
                 "Superjump diagonal right": 0xCD,
                 "Superjump diagonal left": 0xCE,
+
+                "Elevator (Power)": 0x00,
+                "Elevator (Varia/Gravity)": 0x9B,
 }
 
 
@@ -597,7 +597,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def get_sprite_animation(self, animation_ID):
         raise NotImplementedError()
 
-    def import_rgba_images_from_ROM(self):
+    def import_rgba_images_from_ROM(self, buttons={"port":0}):
         all_images = {}
         for image_name in [name for row in self._layout.get_rows() for name in row]:  #for every image referenced explicitly in the layout
             animation, pose = self._layout.data["images"][image_name]["used by"][0]   #import a representative animation and pose
@@ -607,13 +607,13 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
             force = self._layout.get_property("import", image_name)
             if force:
                 if force.lower() == "upper":
-                  image, origin = self.get_sprite_pose(animation, pose, lower=False)
+                  image, origin = self.get_sprite_pose(animation, pose, buttons=buttons, lower=False)
                 elif force.lower() == "lower":
-                  image, origin = self.get_sprite_pose(animation, pose, upper=False)
+                  image, origin = self.get_sprite_pose(animation, pose, buttons=buttons, upper=False)
                 else:
                   raise AssertionError(f"received call to force something in pose {image_name}, but did not understand command '{force}'")
             else:
-                image, origin = self.get_sprite_pose(animation, pose)
+                image, origin = self.get_sprite_pose(animation, pose, buttons=buttons)
 
             if image:
                 if image.mode == 'P':

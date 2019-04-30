@@ -590,7 +590,21 @@ class Metroid3RomHandler(RomHandler):
         '''
         #the second byte here is supposed to be 00, but because it is not, the missile port is rendered behind Samus's left
         # fist during elevator pose.
-        self._apply_single_fix_to_snes_address(0x90c9db,[0x00,0x02],[0x00,0x00],"11")
+        self._apply_single_fix_to_snes_address(0x90C9DB,[0x00,0x02],[0x00,0x00],"11")
+
+        #it is my intention to be as hands-off as possible with the positioning of the cannon port onto the sprite,
+        # but the directly downwards aiming ones are super broken.
+        #start by redirects to new XY lists
+        #self._apply_single_fix_to_snes_address(0x90C80D,0xCAC5,0xCAC5,2)
+        self._apply_single_fix_to_snes_address(0x90C80F,0xCACB,0xCB31,2)
+        self._apply_single_fix_to_snes_address(0x90C839,0xCB31,0xCAC5,2)
+        self._apply_single_fix_to_snes_address(0x90C83B,0xCB37,0xCB31,2)
+        #new XY lists
+        self._apply_single_fix_to_snes_address(0x90CAC5,[0x04,0x01,0x00,0x0D,0x00,0x0D,0x05,0x01],
+                                                        [0x83,0x01,0x84,0x01,0x0B,0x01,0x00,0x0D], "11111111")
+        self._apply_single_fix_to_snes_address(0x90CB31,[0x04,0x01,0x00,0x09,0x00,0x09,0x05,0x01],
+                                                        [0x86,0x01,0x85,0x01,0xED,0x01,0xF7,0x0D], "11111111")
+
 
 
     def _apply_bugfixes(self):
