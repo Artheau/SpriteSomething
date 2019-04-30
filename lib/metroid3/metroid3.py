@@ -5,6 +5,7 @@ from PIL import Image
 from lib.game import Game
 from lib.zspr import Zspr
 from . import rom
+from . import inject
 from lib.RomHandler import util
 from lib.layout import Layout
 
@@ -315,6 +316,8 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
 
         self._layout = Layout(os.path.join("lib","metroid3","layout.json"))
 
+    def export_to_ROM(self, rom_filename):
+        return inject.export_player_sprite_to_ROM(self, rom.Metroid3RomHandler(rom_filename))
 
     def get_timed_sprite_palette(self, variant_type, suit_type):   #for use in rendering the sprite
         #interface between this file and the corresponding enumerations in rom.py
@@ -342,19 +345,18 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def get_sprite_palette(self, variant_type, suit_type, frame):     #for displaying the palette in the GUI, not for rendering
         current_palette = self.get_current_time_palette(self.get_timed_sprite_palette(variant_type, suit_type),frame)
         death_palette = self.get_current_time_palette(self.get_timed_sprite_palette("death_flesh", suit_type),frame)
-        loader_palette = self.get_current_time_palette(self.get_timed_sprite_palette("loader", suit_type),frame)
         flash_palette = self.get_current_time_palette(self.get_timed_sprite_palette("crystal_flash", suit_type),frame)
         file_select_palette = self.get_current_time_palette(self.get_timed_sprite_palette("file_select", suit_type),frame)
         zero_palette = [0 for _ in range(16)]
         full_palette = \
                 zero_palette + \
                 file_select_palette + \
+                zero_palette + \
+                zero_palette + \
                 current_palette + \
-                death_palette + \
                 zero_palette + \
-                zero_palette + \
-                loader_palette + \
                 flash_palette + \
+                death_palette + \
                 [0 for _ in range(16*8)]
         return full_palette
 
@@ -365,7 +367,7 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         if type(animation_ID) is str:
             if animation_ID[:2] == "0x":   #it's a hex code
                 return self.get_sprite_pose(int(animation_ID[2:],16), pose, buttons=buttons, upper=upper,lower=lower)
-            if animation_ID == "death_left":
+            elif animation_ID == "death_left":
                 tilemaps, DMA_writes, duration = self.rom_data.get_death_data(pose, facing="left")
                 if not upper:   #trim out the suit pieces
                     tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C != 0x08]
@@ -404,11 +406,6 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
                 raise AssertionError(f"unknown command to get_sprite_pose(): {animation_ID}")
         else:
             tilemaps, DMA_writes, duration = self.rom_data.get_pose_data(animation_ID, pose, port_frame=buttons["port"]*8,upper=upper, lower=lower)   #TODO: do full port opening animation
-            if animation_ID in [0xD3,0xD4]:
-                #need to correct the vanilla tilemaps here because of palette weirdness and imported palettes
-                for tilemap in tilemaps:
-                    tilemap[4] |= 0x10
-
 
         #there is stuff in VRAM by default, so populate this and then overwrite with the DMA_writes
         constructed_VRAM_data = {}

@@ -190,16 +190,6 @@ class Metroid3RomHandler(RomHandler):
         #how long to hold this pose, and an index to which palette to use
         duration, palette_index = self.read_from_snes_address(0x9BB823 + 2*pose, "11")
 
-        #commented this out because now going to do palettes in a self-contained manner
-        # if suit == SuitType.POWER:
-        #     suit_number == 0
-        # if suit == SuitType.VARIA:
-        #     suit_number == 1
-        # if suit == SuitType.GRAVITY:
-        #     suit_number == 2
-        # suit_palette_addr = 0x9B0000 + self.read_from_snes_address(0x9BB7D3+2*palette_index+10*suit_number, 2)
-        # suitless_palette_addr = 0x9B0000 + self.read_from_snes_address(0x9BB7D3+2*palette_index+30, 2)
-
         return tilemaps[::-1], DMA_writes, duration
 
 
@@ -210,12 +200,13 @@ class Metroid3RomHandler(RomHandler):
 
     def get_file_select_tilemaps(self, item):
         #For now, I have just coded these up by hand because it does not seem worth it to extract this information dynamically
+        palette = 0x22                              #this is more for convenience -- they are not actually on this palette
         if item in [0,1,2]:   #the Samus heads
             return [[0x08*i,
                      0x00,
                      0x08*j,
                      0xD0+i+0x10*j+3*item,
-                     0x24]
+                     palette]
                       for i in range(3) for j in range(3)]
         elif item in [3,4,5,6,7]:   #the Samus visors
             item_col = (item-3)//3
@@ -224,23 +215,23 @@ class Metroid3RomHandler(RomHandler):
                      0x00,
                      10,
                      0xD9+i+2*item_row+0x10*item_col,
-                     0x24]
+                     palette]
                       for i in range(2)]
         elif item in [8]: #cursor
-            return [[0x00,0x00,0x18,0xFE,0x24],
-                    [0x00,0x00,0x10,0xEE,0x24],
-                    [0x00,0x00,0x08,0xDF,0x24],
-                    [0x00,0x00,0x00,0xC8,0x24],
-                    [0x08,0x00,0x18,0xEF,0x24],
-                    [0x08,0x00,0x10,0xFF,0x24],
-                    [0x08,0x00,0x08,0xCC,0x24]]
+            return [[0x00,0x00,0x18,0xFE,palette],
+                    [0x00,0x00,0x10,0xEE,palette],
+                    [0x00,0x00,0x08,0xDF,palette],
+                    [0x00,0x00,0x00,0xC8,palette],
+                    [0x08,0x00,0x18,0xEF,palette],
+                    [0x08,0x00,0x10,0xFF,palette],
+                    [0x08,0x00,0x08,0xCC,palette]]
         elif item in [9]: #pipe framework
-            return [[0x00,0x00,0x00,0xF9,0x24],
-                    [0x08,0x00,0x00,0xFA,0x24],
-                    [0x10,0x00,0x00,0xFB,0x24],
-                    [0x10,0x00,0x08,0xED,0x24],
-                    [0x00,0x00,0x10,0xFC,0x24],
-                    [0x10,0x00,0x10,0xFD,0x24]]
+            return [[0x00,0x00,0x00,0xF9,palette],
+                    [0x08,0x00,0x00,0xFA,palette],
+                    [0x10,0x00,0x00,0xFB,palette],
+                    [0x10,0x00,0x08,0xED,palette],
+                    [0x00,0x00,0x10,0xFC,palette],
+                    [0x10,0x00,0x10,0xFD,palette]]
         else:
             raise AssertionError(f"get_file_select_tilemaps() called for unknown item number {item}")
 

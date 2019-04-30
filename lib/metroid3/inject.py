@@ -5,7 +5,7 @@ import itertools
 import copy
 from PIL import Image
 
-def export_player_sprite_to_ROM(player_sprite, old_rom):
+def export_player_sprite_to_ROM(player_sprite, old_rom,verbose=False):
     rom = copy.deepcopy(old_rom)  #for safety right now we are going to deepcopy the ROM, in case we need to bail
 
     #in case these were disabled in rom.py, we definitely need to do these before we convert to wizzywig
@@ -21,18 +21,18 @@ def export_player_sprite_to_ROM(player_sprite, old_rom):
     # the upper tiles.  This would not otherwise have caused problems, but the extent to which we are pushing this
     # old engine requires that we sometimes use larger DMA writes that overwrite (and obviate the need for) DMAs
 
-    print("Swapping DMA load order...", end="")
+    if verbose: print("Swapping DMA load order...", end="")
     success_code = swap_DMA_order(player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #to break symmetry, we will need to rearrange where the gun port tile data is,
     # and correspondingly make sure that it is loaded correctly during DMA
     #Thankfully, there's plenty of room in ROM because they were
     # super super wasteful with the organization in this part.
 
-    print("Moving gun tiles...", end="")
+    if verbose: print("Moving gun tiles...", end="")
     success_code = move_gun_tiles(player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #I can see how it was a good idea at the time to put the cannon port as tile $1F,
     # but this is also limiting (because it limits us to 31 tiles instead of 32).
@@ -42,71 +42,71 @@ def export_player_sprite_to_ROM(player_sprite, old_rom):
     #While we're in there, we should remove the mirroring effects on the tiles,
     # since that is no longer necessary given the symmetry fix from move_gun_tiles()
 
-    print("Re-assigning gun tilemaps...", end="")
+    if verbose: print("Re-assigning gun tilemaps...", end="")
     success_code = reassign_gun_tilemaps(player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #write all the new graphics data from base images and layout information
-    print("Writing new image data...", end="")
+    if verbose: print("Writing new image data...", end="")
     DMA_dict, death_DMA_loc, success_code = write_dma_data(player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #maximally expand/relocate the existing DMA tables, and then add the new load data into them
-    print("Writing new DMA tables...", end="")
+    if verbose: print("Writing new DMA tables...", end="")
     DMA_upper_table_indices, DMA_lower_table_indices, success_code = write_new_DMA_tables(DMA_dict,player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #update the table/index references to these new DMA tables
-    print("Linking new tables to animations...", end="")
+    if verbose: print("Linking new tables to animations...", end="")
     success_code = link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #write and link all the new tilemaps (use a pointer to nullmap instead of $0000 since $0000 lags the game because reasons) using the layout info
-    print("Assigning new tilemaps...", end="")
+    if verbose: print("Assigning new tilemaps...", end="")
     success_code = assign_new_tilemaps(player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #connect the death animation correctly
-    print("Re-connecting death sequence...", end="")
+    if verbose: print("Re-connecting death sequence...", end="")
     success_code = connect_death_sequence(DMA_dict,death_DMA_loc,player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #get rid of the stupid tile
-    print("Stupid tile...", end="")
+    if verbose: print("Stupid tile...", end="")
     success_code = no_more_stupid(player_sprite,rom)
-    print("stupid" if success_code else "FAIL")
+    if verbose: print("stupid" if success_code else "FAIL")
     
     #because a DMA of zero bytes is essentially a guaranteed game crash, the designers had to make separate subroutines
     # that made the upper tilemap not display in certain cases.  These subroutines are no longer necessary, because we
     # fixed the issue in the DMA swap order code, and so now we need to get rid of the subroutines because they break
     # a few animations in the form that they now exist
 
-    print("Disabling upper half bypass routine...", end="")
+    if verbose: print("Disabling upper half bypass routine...", end="")
     success_code = disable_upper_bypass(player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #now we're going to get set up for screw attack without space jump
     #first off, we need a new control code that checks for space jump, so that we can gate the animation appropriately
 
-    print("Creating new control code...", end="")
+    if verbose: print("Creating new control code...", end="")
     success_code = create_new_control_code(player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #now we need to insert this control code into the animation sequence for screw attack, and its counterpart in walljump
 
-    print("Implementing spin attack...", end="")
+    if verbose: print("Implementing spin attack...", end="")
     success_code = implement_spin_attack(player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #insert file select graphics
-    print("Injecting file select graphics...", end="")
+    if verbose: print("Injecting file select graphics...", end="")
     success_code = insert_file_select_graphics(player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #assign all the palettes
-    print("Assigning palettes...", end="")
+    if verbose: print("Assigning palettes...", end="")
     success_code = assign_palettes(player_sprite,rom)
-    print("done" if success_code else "FAIL")
+    if verbose: print("done" if success_code else "FAIL")
 
     #pee on the tree
     SIGNATURE_ADDRESS = 0x92C500
