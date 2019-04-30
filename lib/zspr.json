@@ -17,13 +17,13 @@
               "value": 1
             },
             "checksum": {
-              "desc": "Checksum of game file",
+              "desc": "Checksum of game file (2 bytes), and its 0xFFFF complement (2 bytes)",
               "length": 4,
               "example": [
                 "0xF1BB",
                 "0x0E44"
               ],
-              "value": "0xFFFF"
+              "value": ["0xF1BB","0x0E44"]
             },
             "pixel_data_offset": {
               "desc": "Byte address of beginning of pixel data",
@@ -39,16 +39,42 @@
                 "0x7000"
               ]
             },
+            "palette_data_offset": {
+              "desc": "Byte address of beginning of pixel data",
+              "length": 4,
+              "example": [ "0x50", "0x70", "0x00", "0x00" ],
+              "value": "0x7050"
+            },
+            "palette_data_length": {
+              "desc": "Length of pixel data",
+              "length": 2,
+              "example": [ "0x7C", "0x00" ],
+              "value": [
+                "0x007C"
+              ]
+            },
             "sprite_type": {
               "desc": "Sprite Type ID",
               "length": 2,
-              "example": [ "0x01" ],
+              "example": [ "0x01", "0x00" ],
               "value": 1
+            },
+            "extended_header_version": {
+              "desc": "Specifies the version of the extended header (zero indicates no extended header is present)",
+              "length": 1,
+              "example": [ "0x01"],
+              "value": 1
+            },
+            "extended_header_offset": {
+              "desc": "Byte address of extended header, if present",
+              "length": 4,
+              "example": [ "0x00", "0x71", "0x00", "0x00" ],
+              "value": "0x7100"
             },
             "reserved": {
               "desc": "Reserved for future use",
-              "length": 6,
-              "example": [ "0x00", "0x00", "0x00", "0x00", "0x00", "0x00" ],
+              "length": 1,
+              "example": [ "0x00"],
               "value": 0
             },
             "sprite_name": {
@@ -68,6 +94,53 @@
               "length": "variable",
               "example": [ "0x48", "0x6F", "0x77", "0x20", "0x61", "0x72", "0x65", "0x20", "0x79", "0x6F", "0x75", "0x3F", "0x00" ],
               "value": "Did this work?"
+            },
+            "game name": {
+              "comment": "THIS SECTION BEGINS THE EXTENDED HEADER",
+              "desc": "The 21-character internal header name of the game that this sprite is intended for, e.g. taken from 0x7FC0 of a lorom",
+              "length": 21,
+              "example": ["0x5A","0x45","0x4C","0x44","0x41","0x4E","0x4F","0x44","0x45","0x4E","0x53","0x45","0x54","0x53","0x55","0x20","0x20","0x20","0x20","0x20","0x20"],
+              "value": "ZELDANODENSETSU      "
+            },
+            "game name alternate": {
+              "desc": "The name of the game, as reported by this JSON document, null terminated, used for correct loading",
+              "length": "variable",
+              "value": "zelda3"
+            },
+            "gender": {
+              "desc": "For categorizing the sprite, one of (male/female/nonbinary/unspecified), null terminated",
+              "length": "variable",
+              "value": "male"
+            },
+            "type": {
+              "desc": "For categorizing the sprite, one of (humanoid/creature/object/unspecified), null terminated",
+              "length": "variable",
+              "value": "humanoid"
+            },
+            "media": {
+              "desc": "For categorizing, the type of media that this character originates from, usually one of (game/animation/personality (e.g. a streamer)/variety (e.g. cursor), null terminated",
+              "length": "variable",
+              "value": "game"
+            },
+            "universe": {
+              "desc": "For categorizing, the name of the universe from which this character originates, null terminated",
+              "length": "variable",
+              "value": "The Legend of Zelda"
+            },
+            "character": {
+              "desc": "For categorizing, in case this should be a headswap/colorswap, the name of the original character, null terminated",
+              "length": "variable",
+              "value": "Link"
+            },
+            "variation": {
+              "desc": "For categorizing, Standard/Costume(e.g. different canonical outfit)/Timeline (e.g. Zelda1vZelda3)/PaletteSwap (e.g. Dark)/HeadSwap (e.g. Cat Link)/Unspecified, null terminated",
+              "length": "variable",
+              "value": "standard",
+            },
+            "alignment": {
+              "desc": "For categorizing, one of (hero/villain/unspecified), null terminated",
+              "length": "variable",
+              "value": "hero"
             },
             "pixel_data": {
               "desc": "Pixel Data for sprite; indexed; 4bpp",
