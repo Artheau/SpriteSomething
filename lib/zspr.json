@@ -133,7 +133,7 @@
               "value": "Link"
             },
             "variation": {
-              "desc": "For categorizing, Standard/Costume(e.g. different canonical outfit)/Timeline (e.g. Zelda1vZelda3)/PaletteSwap (e.g. Dark)/HeadSwap (e.g. Cat Link)/Unspecified, null terminated",
+              "desc": "For categorizing, (standard/costume(e.g. different canonical outfit)/timeline (e.g. Zelda1vZelda3)/paletteswap (e.g. Dark)/headswap (e.g. Cat Link)/unspecified), null terminated",
               "length": "variable",
               "value": "standard",
             },

@@ -278,6 +278,8 @@ class Metroid3RomHandler(RomHandler):
             base_address += 4  #skip over the final control codes
             full_palette_set.append(self._get_timed_palette(base_address))
 
+            full_palette_set.append((0,full_palette_set[0][1]))   #don't keep flashing forever (for the animator)
+
             return full_palette_set
 
         elif base_type == PaletteType.HEAT:

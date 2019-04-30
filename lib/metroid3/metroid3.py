@@ -329,6 +329,8 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
     def get_sprite_palette_from_buttons(self, animation, frame, buttons):
         if animation in [0x81,0x82]:
             variant_type = "screw_attack"
+        elif animation in [0x00,0x9B]:
+            variant_type = "loader"
         elif animation in range(0xC7,0xCE+1):
             variant_type = "shinespark"
         else:
@@ -489,7 +491,16 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         return util.convert_indexed_tile_to_bitplanes(image.transpose(Image.TRANSPOSE).getdata())
 
     def get_pose_number_from_frame_number(self, animation_ID, frame):
-        pose = 0
+        if animation_ID in [0x00,0x9B]:
+            pose = 2    #loader stuff is after elevator. 10 frame display lag is arbitrary
+        elif animation_ID in [0x29,0x2A,0x67,0x68] and frame >= 100:
+            frame -= 100
+            pose = 5    #after falling long distances. 40 frame display lag is arbitrary
+        elif animation_ID in [0xD3,0xD4] and frame >= 7:
+            frame -= 7
+            pose = 6    #Samus needs a cue to actually go into the crystal flash bubble
+        else:           #TODO: Need to meaningfully tie in a reasonable mother brain sequence
+            pose = 0    #start at the beginning
         MAX_ITS = 100   #failsafe in case of the unexpected
         frames_so_far = 0
         for _ in range(MAX_ITS):
@@ -522,10 +533,10 @@ class M3Samus(Metroid3Sprite):    # SM Player Character Sprites
         palette_timing_index = frame
         current_palette = None
 
-        if palette_timing_list[-1][0] == 0:            #static palette
+        time_for_one_loop = sum(x for x,_ in palette_timing_list)
+        if palette_timing_list[-1][0] == 0 and frame >= time_for_one_loop:            #static palette
             return palette_timing_list[-1][1]
         else:
-            time_for_one_loop = sum(x for x,_ in palette_timing_list)
             palette_timing_index = palette_timing_index % time_for_one_loop
 
             for time,palette in palette_timing_list:
