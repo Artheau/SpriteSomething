@@ -5,8 +5,10 @@ import json
 import re
 import traceback
 import os, sys
-import source.ssDiagnostics as diagnostics
-from source import game
+import time
+from source import widgetlib
+from source import ssDiagnostics as diagnostics
+from source import gamelib
 from source import constants as CONST
 from source.tkHyperlinkManager import HyperlinkManager
 from source.tkSimpleStatusBar import StatusBar
@@ -130,18 +132,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 											])
 
 	def load_sprite(self, sprite_filename):
-		#TODO: auto detect game name...somehow.  Otherwise there has to be a dialogue box
-		game_name = "metroid3"
-		#TODO: auto detect sprite identity...somehow.  Otherwise there has to be a dialogue box
-		self.sprite = M3Samus(sprite_filename)
-
-		self.attach_both_panels()
+		self.game, self.sprite = gamelib.autodetect(sprite_filename)
+		self.attach_both_panels()            #remake the GUI panels
+		self.initialize_sprite_animation()
 		
 	def attach_both_panels(self):
 		#this same function can also be used to re-create the panels
-		self.create_status_bar()
 		self.attach_left_panel()
 		self.attach_right_panel()
+		self.create_status_bar()
 
 	def attach_left_panel(self):
 		#this same function can also be used to re-create the panel
@@ -152,32 +151,198 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.left_panel.add(tk.Label(self.left_panel, text="Animation Choices (outsourced to Entity child class, with default in Entity parent"))
 		self.left_panel.add(tk.Label(self.left_panel, text="Sprite-relevant buttons and bars (outsourced to Entity child class)"))
 		self.left_panel.add(tk.Label(self.left_panel, text="Colors?  Outsource to Entity child?"))
-		self.left_panel.add(tk.Label(self.left_panel, text="GUI buttons: play et al"))
+		self.left_panel.add(self.get_vcr_controls())
 		self.panes.add(self.left_panel)
 
 	def attach_right_panel(self):
 		#this same function can also be used to re-create the panel
 		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
-		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
-		page2 = ttk.Frame(self.right_panel)
-		self.right_panel.add(self.canvas, text='Animations')
-		self.right_panel.add(page2, text='Overview')
+		self.attach_canvas()
+		self.attach_overview()
 		self.panes.add(self.right_panel)
 
 	def create_status_bar(self):
-		# Gui.class
 		self.status_bar = StatusBar(self)
 		self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
-		self.status_bar.set("Status")
+		self.status_bar.set(self.game.name + ': "' + self.sprite.classic_name + '"')
+
+	def attach_canvas(self):
+		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
+		def move_sprite(event):
+			self.sprite_coord = [event.x/self.current_zoom, event.y/self.current_zoom]
+			self.update_sprite_animation()
+		self.canvas.bind("<Button-1>", move_sprite)   #hook this function to call when the canvas is left-clicked
+		self.right_panel.add(self.canvas, text='Animations')
+
+	def attach_overview(self):
+		self.overview = ttk.Frame(self.right_panel, name="overview_canvas")
+		self.right_panel.add(self.overview, text='Overview')
+
+
+	############################ ANIMATION FUNCTIONS HERE ################################
+
+	def initialize_sprite_animation(self):
+		self.frames_left_before_freeze = CONST.MAX_FRAMES
+		self.frame_number = 0
+		self.sprite_coord = (100,100)    #an arbitrary default
+		self.update_sprite_animation()
+		self.time_marches_forward()
+
+	def update_sprite_animation(self):
+		pass
+
+	def start_global_frame_timer(self):
+		#called by play button
+		if self.frames_left_before_freeze <= 0:
+			self.frames_left_before_freeze = CONST.MAX_FRAMES
+			self.time_marches_forward()
+			self.update_sprite_animation()
+
+	def advance_global_frame_timer(self):
+		#move frame timer forward
+		self.frame_number += 1
+		self.frames_left_before_freeze = max(0, self.frames_left_before_freeze - 1)
+		if self.frame_number >= CONST.MAX_FRAMES:   #just in case someone leaves this running for, say...forever
+			self.reset_global_frame_timer()
+		self.update_sprite_animation()
+
+	def play_once(self):
+		self.frames_left_before_freeze = self.sprite.frames_left_in_this_animation(self.frame_number)
+		self.start_global_frame_timer()
+
+	def reset_global_frame_timer(self):
+		#called by radio reset button
+		self.frame_number = 0
+		self.pause_global_frame_timer()
+
+	def pause_global_frame_timer(self):
+		#called by pause button
+		self.frames_left_before_freeze = 0
+		self.update_sprite_animation()
+
+	def rewind_global_frame_timer(self):
+		#called by step radio button to pause and step backward
+		self._frame_number = max(0, self.frame_number - 1)
+		self.pause_global_frame_timer()
+
+	def step_global_frame_timer(self):
+		#called by step radio button to pause and step forward
+		self.pause_global_frame_timer()
+		self.advance_global_frame_timer()
+
+	def go_to_previous_pose(self):
+		self.frame_number = max(0, self.frame_number - self.sprite.frames_to_previous_pose(self.frame_number))
+		self.pause_global_frame_timer()
+
+	def go_to_next_pose(self):
+		self.frame_number = self.frame_number + self.sprite.frame_left_in_this_pose(self.frame_number)
+		self.pause_global_frame_timer()
+
+	def time_marches_forward(self):
+		start_time = time.perf_counter()
+		MIN_WAIT = 5      #have to give the rest of the program time to work, and tkInter is not thread-safe
+		FRAME_DELAY = 17  #equal to about ceiling(1000/60) in order to simulate 60 Hz (can't go faster without skipping frames due to PC monitor refresh rate)
+		if self.frames_left_before_freeze > 0:
+			self.advance_global_frame_timer()
+			end_time = time.perf_counter()
+			lag = (end_time-start_time)*1000
+			wait_time = int(FRAME_DELAY/self.current_speed - lag)
+			self.master.after(max(wait_time,5), self.time_marches_forward)     #schedule next tick of the clock
+		else:
+			self.pause_global_frame_timer()
+		
+
+	########################### VCR CONTROLS HERE ######################################
+
+	def get_vcr_controls(self):
+		control_section = tk.Frame(self.left_panel, name="vcr_controls_section")
+		widgetlib.right_align_grid_in_frame(control_section)
+
+		def zoom_out(*args):
+			self.current_zoom = max(0.1, self.current_zoom - 0.1)
+			set_zoom_text()
+			self.scale_background_image(self.current_zoom)
+			self.update_sprite_animation()
+		def zoom_in(*args):
+			self.current_zoom = min(3.0, self.current_zoom + 0.1)
+			set_zoom_text()
+			self.scale_background_image(self.current_zoom)
+			self.update_sprite_animation()
+		def set_zoom_text():
+			self.zoom_factor.set('x' + str(round(self.current_zoom, 1)) + ' ')
+			
+		def speed_down(*args):
+			self.current_speed = max(0.1, self.current_speed - 0.1)
+			set_speed_text()
+		def speed_up(*args):
+			self.current_speed = min(1.0, self.current_speed + 0.1)
+			set_speed_text()
+		def set_speed_text():
+			self.speed_factor.set(str(round(self.current_speed * 100)) + '%')
+
+		if not hasattr(self,"current_zoom"):
+			self.current_zoom = 2              #starting zoom, if app is just started
+		if not hasattr(self,"current_speed"):
+			self.current_speed = 1             #starting speed, if app is just started
+		self.zoom_factor = tk.StringVar(control_section)
+		self.speed_factor = tk.StringVar(control_section)
+		self.frame_number = tk.StringVar(control_section)
+
+		set_zoom_text()
+		set_speed_text()
+
+		BUTTON_WIDTH = 10
+		self.current_grid_cell = 0
+
+		def make_vcr_label(textvariable, icon_name):
+			icon_path = common.get_resource(icon_name,os.path.join("meta","icons"))
+			image = tk.PhotoImage(file=image_path) if icon_path else None
+			vcr_label = tk.Label(control_section, image=image, textvariable=textvariable)
+			vcr_label.grid(row = self.current_grid_cell//3,
+						column = 1 + (self.current_grid_cell % 3),
+						sticky=['nes','nesw','nsw'][self.current_grid_cell % 3])
+			self.current_grid_cell += 1
+			return vcr_label
+
+		def make_vcr_button(text, icon_name, command):
+			icon_path = common.get_resource(icon_name,os.path.join("meta","icons"))
+			image = tk.PhotoImage(file=image_path) if icon_path else None
+			vcr_button = tk.Button(control_section, image=image, text=text, width=BUTTON_WIDTH, command=command)
+			vcr_button.grid(row = self.current_grid_cell//3,
+						column = 1 + (self.current_grid_cell % 3),
+						sticky=['nes','nesw','nsw'][self.current_grid_cell % 3])
+			self.current_grid_cell += 1
+			return vcr_button
+		
+		zoom_factor_label = make_vcr_label(self.zoom_factor, None)
+		zoom_out_button = make_vcr_button("Zoom -",None,zoom_out)
+		zoom_in_button = make_vcr_button("Zoom +",None,zoom_in)
+		
+		speed_factor_label = make_vcr_label(self.speed_factor,None)
+		speed_down_button = make_vcr_button("Speed -",None,speed_down)
+		speed_up_button = make_vcr_button("Speed +",None,speed_up)
+		
+		play_button = make_vcr_button("Play", None, self.start_global_frame_timer)
+		play_one_button = make_vcr_button("Play 1", None, self.play_once)
+		reset_button = make_vcr_button("Reset", None, self.reset_global_frame_timer)
+
+		frame_back_button = make_vcr_button("<< Frame", None, self.rewind_global_frame_timer)
+		pause_button = make_vcr_button("Pause", None, self.pause_global_frame_timer)
+		frame_forward_button = make_vcr_button("Frame >>", None, self.step_global_frame_timer)
+
+		step_back_button = make_vcr_button("<< Pose", None, self.go_to_previous_pose)
+		null_label = make_vcr_label("", None)
+		step_forward_button = make_vcr_button("Pose >>", None, self.go_to_next_pose)
+
+		return control_section
 
 
 
 	############################ MENU BAR FUNCTIONS HERE ################################
 
 
-
-
 	def open_file(self):
+		#TODO: Give the user a chance to regret not saving their work
 		filename = filedialog.askopenfile(initialdir="./", title="Select Sprite", filetypes=(("Supported Types","*.zspr *.png *.sfc *.smc"),))
 		if filename:
 			load_sprite(self, sprite_filename)
@@ -300,3 +465,4 @@ class SpriteSomethingMainFrame(tk.Frame):
 				textObject.insert(tk.INSERT, "\n")
 			else:
 				textObject.insert(tk.INSERT, line + "\n")
+

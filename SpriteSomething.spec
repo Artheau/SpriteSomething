@@ -2,12 +2,27 @@
 
 block_cipher = None
 
+def recurse_for_py_files(names_so_far):
+  returnvalue = []
+  for name in os.listdir(os.path.join(*names_so_far)):
+    if name != "__pycache__":
+      subdir_name = os.path.join(*names_so_far, name)
+      if os.path.isdir(subdir_name):
+        new_name_list = names_so_far + [name]
+        for filename in os.listdir(os.path.join(*new_name_list)):
+          base_file,file_extension = os.path.splitext(filename)
+          if file_extension == ".py":
+            returnvalue.append(".".join(new_name_list + [base_file]))
+        returnvalue.extend(recurse_for_py_files(new_name_list))
+  return returnvalue
+
+hiddenimports = recurse_for_py_files(["source"])
 
 a = Analysis(['SpriteSomething.py'],
-             pathex=['.'],
+             pathex=[],
              binaries=[],
              datas=[],
-             hiddenimports=[],
+             hiddenimports=hiddenimports,
              hookspath=[],
              runtime_hooks=[],
              excludes=[],
@@ -15,7 +30,7 @@ a = Analysis(['SpriteSomething.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
-a.datas += Tree("source", excludes=['*.pyc'])
+      
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,
@@ -30,4 +45,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=True )   #   <--- change this to False to not open a command prompt when the app runs
+          console=False )   #   <--- change this to True to enable command prompt when the app runs
