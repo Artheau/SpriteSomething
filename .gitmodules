@@ -1,3 +1,0 @@
-[submodule "lib/RomHandler"]
-	path = lib/RomHandler
-	url = git@github.com:Artheau/SNESRomHandler.git

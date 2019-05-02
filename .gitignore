@@ -3,9 +3,10 @@ __pycache__/
 
 # no build dir
 /build
-
-# no dist dir
 /dist
+
+# no executables (for now)
+*.exe
 
 # no vscode
 /.vscode
@@ -15,7 +16,6 @@ __pycache__/
 
 # no images output
 /images
-/animations
 
 # no pip installer
 get-pip.py
@@ -28,3 +28,4 @@ _test_macro.py
 
 # no super famicom files
 *.sfc
+

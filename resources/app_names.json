@@ -1,5 +1,5 @@
 {
-    "nouns": [
+    "noun": [
         "Editor",
         "Discombobulator",
         "Fractionating Column",
@@ -19,7 +19,7 @@
         "Wizard",
         "Factory"
     ],
-    "prefix enchantment": [
+    "pre": [
         "Blazing",
         "Chilling",
         "Magnificent",
@@ -40,7 +40,7 @@
         "Updated",
         "Underwater"
     ],
-    "suffix enchantment": [
+    "post": [
         "of Vengeance",
         "of the Ages",
         "now with zero sugar",
