@@ -140,7 +140,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def attach_both_panels(self):
 		#this same function can also be used to re-create the panels
 		#have to make the canvas before the buttons so that the left panel buttons can manipulate it
-		self.left_panel = tk.PanedWindow(self, orient=tk.VERTICAL, name="left_panel",width=300,handlesize=0,sashwidth=0)
+		self.left_panel = tk.PanedWindow(self, orient=tk.VERTICAL, name="left_panel",width=250,handlesize=0,sashwidth=0)
 		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
 		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
 		self.attach_left_panel()

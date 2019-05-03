@@ -5,8 +5,11 @@
 
 import tkinter as tk
 import random
+import os
 from PIL import Image, ImageTk
 from source import widgetlib
+from source import layout
+from source import common
 
 #TODO: this file needs to contain all the metadata for the sprites
 
@@ -16,14 +19,17 @@ class SpriteParent():
 		self.classic_name = manifest_dict["name"]    #e.g. "Samus" or "Link"
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.filename = filename
+		self.layout = layout.Layout(common.get_resource("layout.json",subdir=self.resource_subpath))
 		self.import_from_filename()
 
 	#to make a new sprite class, you must write code for all of the functions in this section below.
 	############################# BEGIN ABSTRACT CODE ##############################
 
-	def import_from_filename(self):
-		pass #for now while debugging
-		#raise AssertionError(f"Import from filename called on base Sprite class")
+	def import_from_ZSPR():
+		raise AssertionError("called import_from_ZSPR() on Sprite base class")
+
+	def import_from_ROM():
+		raise AssertionError("called import_from_ROM() on Sprite base class")
 	
 	def get_all_animation_names(self):
 		return ["stand","don't stand"]   #TODO
@@ -34,6 +40,18 @@ class SpriteParent():
 	############################# END ABSTRACT CODE ##############################
 
 	#the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
+
+	def import_from_filename(self):
+		_,file_extension = os.path.splitext(self.filename)
+		if file_extension.lower() == '.png':
+			self.import_from_PNG()
+		elif file_extension.lower() == '.zspr':
+			self.import_from_ZSPR()
+		elif file_extension.lower() in ['.sfc','.smc']:
+			self.import_from_ROM()
+
+	def import_from_PNG(self):
+		self.images, self.master_palette = self.layout.extract_all_images_from_master(Image.open(self.filename))
 
 	def attach_metadata_panel(self,parent):
 		parent.add(tk.Label(parent, text="Sprite Metadata\nGoes\nHere"))
