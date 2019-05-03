@@ -28,7 +28,7 @@ def process_command_line_args():
 						dest="sprite",
 						help="A sprite file to load upon opening",
 						metavar="<sprite_filename>",
-						default=os.path.join("resources","metroid3","samus.png"))
+						default=os.path.join("resources","metroid3","samus","samus.png"))
 
 	command_line_args = vars(parser.parse_args())
 	return command_line_args

@@ -1,15 +1,16 @@
 #common functions to all games
 #handling backgrounds, etc.
-#contains a manifest of all the sprites
 #handles import of new sprites
 
 import os
 import importlib
 import json
-from PIL import Image
+import tkinter as tk
+import random
+from PIL import Image, ImageTk
+from source import widgetlib
 from source import romhandler
-#from .metroid3 import game,rom
-#from .zelda3 import game,rom
+from source import common
 
 def autodetect(sprite_filename):
 	#need to autodetect which game, and which sprite
@@ -23,14 +24,14 @@ def autodetect(sprite_filename):
 	elif file_extension.lower() == ".png":
 		#I'm not sure what to do here yet.  For right now I am going to assume that if it is a big file, it is Samus, else Link
 		loaded_image = Image.open(sprite_filename) 
-		if loaded_image.size == (128,488):      #This is the size of Z3Link's sheet
+		if loaded_image.size == (128,448):      #This is the size of Z3Link's sheet
 			game = get_game_class_of_type("zelda3")
 			sprite = game.make_player_sprite(sprite_filename)
 		elif loaded_image.size[0] > 800 and loaded_image.size[1] > 2000:
 			game = get_game_class_of_type("metroid3")
 			sprite = game.make_player_sprite(sprite_filename)
 		else:
-			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size")
+			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
 	elif file_extension.lower() == ".zspr":
 		game = get_game_class_of_type(get_game_type_from_zspr(sprite_filename))
 		sprite = game.make_sprite_by_number(get_sprite_number_from_zspr(sprite_filename),sprite_filename)
@@ -47,31 +48,79 @@ def get_game_class_of_type(game_name):
 
 class GameParent():
 	#parent class for games to inherit
+	
+	#to make a new game class, you must write code for all of the functions in this section below.
+	############################# BEGIN ABSTRACT CODE ##############################
+
 	def __init__(self):
 		self.name = "Game Parent Class"    #to be replaced by a name like "Super Metroid"
 		self.internal_name = "meta"        #to be replaced by the specific folder name that this app uses, e.g. "metroid3"
 
-	#to make a new game class, you must write code for all of the functions in this section below.
-	############################# BEGIN ABSTRACT CODE ##############################
-
-
-
 	############################# END ABSTRACT CODE ##############################
 
-	#the functions below here are special to the parent class and do not need to be duplicated
+	#the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
+
+	def attach_background_panel(self, parent, canvas, zoom_getter, frame_getter):
+		#for now, accepting frame_getter as an argument because maybe the child class has animated backgrounds or something
+		BACKGROUND_DROPDOWN_WIDTH = 25
+		PANEL_HEIGHT = 25
+		self.canvas = canvas
+		self.zoom_getter = zoom_getter
+		self.frame_getter = frame_getter
+		self.current_background_filename = None
+		self.last_known_zoom = None
+
+		background_panel = tk.Frame(parent, name="background_panel")
+		widgetlib.right_align_grid_in_frame(background_panel)
+		background_label = tk.Label(background_panel, text="Background:")
+		background_label.grid(row=0, column=1)
+		self.background_selection = tk.StringVar(background_panel)
+
+		background_filenames = common.gather_all_from_resource_subdirectory(os.path.join(self.internal_name,"backgrounds"))
+		self.background_selection.set(random.choice(background_filenames))
+		
+		background_dropdown = tk.ttk.Combobox(background_panel, state="readonly", values=background_filenames, name="background_dropdown")
+		background_dropdown.configure(width=BACKGROUND_DROPDOWN_WIDTH, exportselection=0, textvariable=self.background_selection)
+		background_dropdown.grid(row=0, column=2)
+		def change_background_dropdown(*args):
+			self.set_background(self.background_selection.get())
+		self.background_selection.trace('w', change_background_dropdown)  #when the dropdown is changed, run this function
+		change_background_dropdown()      #trigger this now to load the first background
+		parent.add(background_panel,minsize=PANEL_HEIGHT)
+		return background_panel
+
+	def set_background(self, image_filename):
+		if self.current_background_filename == image_filename:
+			if self.last_known_zoom == self.zoom_getter():
+				return   #there is nothing to do here, because nothing has changed
+		else:     #image name is different, so need to load a new image
+			self.raw_background = Image.open(common.get_resource(image_filename,subdir=os.path.join(self.internal_name,"backgrounds")))
+		
+		#now re-zoom the image
+		new_size = tuple(int(dim*self.zoom_getter()) for dim in self.raw_background.size)
+		self.background_image = ImageTk.PhotoImage(self.raw_background.resize(new_size,resample=Image.BICUBIC))
+		if self.current_background_filename is None:
+			self.background_ID = self.canvas.create_image(0, 0, image=self.background_image, anchor=tk.NW)    #so that we can manipulate the object later
+		else:
+			self.canvas.itemconfig(self.background_ID, image=self.background_image)
+		self.last_known_zoom = self.zoom_getter()
+		self.current_background_filename = image_filename
+
+	def update_background_image(self):
+		self.set_background(self.current_background_filename)
 
 	def make_player_sprite(self, sprite_filename):
 		return self.make_sprite_by_number(0x01, sprite_filename)
 
 	def make_sprite_by_number(self, sprite_number, sprite_filename):
 		#go into the manifest and get the actual name of the sprite
-		with open(os.path.join("source",self.internal_name,"manifest.json")) as file:
+		with open(common.get_resource("manifest.json",self.internal_name)) as file:
 			manifest = json.load(file)
 		if str(sprite_number) in manifest:
 			folder_name = manifest[str(sprite_number)]["folder name"]
 			#dynamic import
 			sprite_module = importlib.import_module(f"source.{self.internal_name}.{folder_name}.sprite")
-			return sprite_module.Sprite(manifest[str(sprite_number)],os.path.join(self.internal_name,folder_name))
+			return sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],os.path.join(self.internal_name,folder_name))
 		else:
 			raise AssertionError(f"make_sprite_by_number() called for non-implemented sprite_number {sprite_number}")
 

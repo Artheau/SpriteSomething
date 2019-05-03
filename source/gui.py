@@ -133,44 +133,47 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def load_sprite(self, sprite_filename):
 		self.game, self.sprite = gamelib.autodetect(sprite_filename)
+		self.sprite_coord = (100,100)        #an arbitrary default
 		self.attach_both_panels()            #remake the GUI panels
 		self.initialize_sprite_animation()
 		
 	def attach_both_panels(self):
 		#this same function can also be used to re-create the panels
+		#have to make the canvas before the buttons so that the left panel buttons can manipulate it
+		self.left_panel = tk.PanedWindow(self, orient=tk.VERTICAL, name="left_panel",width=300,handlesize=0,sashwidth=0)
+		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
+		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
 		self.attach_left_panel()
 		self.attach_right_panel()
 		self.create_status_bar()
 
 	def attach_left_panel(self):
 		#this same function can also be used to re-create the panel
-		self.left_panel = tk.PanedWindow(self, orient=tk.VERTICAL, name="left_panel",width=300)
-		self.left_panel.add(tk.Label(self.left_panel, text="Reload Button"))
-		self.left_panel.add(tk.Label(self.left_panel, text="Sprite Metadata (outsourced to Entity parent class"))
-		self.left_panel.add(tk.Label(self.left_panel, text="Choose Background (outsourced to Game child class)"))
-		self.left_panel.add(tk.Label(self.left_panel, text="Animation Choices (outsourced to Entity child class, with default in Entity parent"))
-		self.left_panel.add(tk.Label(self.left_panel, text="Sprite-relevant buttons and bars (outsourced to Entity child class)"))
-		self.left_panel.add(tk.Label(self.left_panel, text="Colors?  Outsource to Entity child?"))
-		self.left_panel.add(self.get_vcr_controls())
+		MINSIZE = 25
+		vcr_controls = self.get_vcr_controls()  #have to do this early so that their values are available for other buttons
+		self.left_panel.add(self.get_reload_button(),minsize=MINSIZE)
+		self.sprite.attach_metadata_panel(self.left_panel)
+		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter)
+		self.sprite.attach_animation_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.coord_getter)
+		self.left_panel.add(vcr_controls,minsize=MINSIZE)
 		self.panes.add(self.left_panel)
 
 	def attach_right_panel(self):
 		#this same function can also be used to re-create the panel
-		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
 		self.attach_canvas()
 		self.attach_overview()
 		self.panes.add(self.right_panel)
 
 	def create_status_bar(self):
-		self.status_bar = StatusBar(self)
-		self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
+		if not hasattr(self, "status_bar"):
+			self.status_bar = StatusBar(self)
+			self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 		self.status_bar.set(self.game.name + ': "' + self.sprite.classic_name + '"')
 
 	def attach_canvas(self):
-		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
 		def move_sprite(event):
 			self.sprite_coord = [event.x/self.current_zoom, event.y/self.current_zoom]
-			self.update_sprite_animation()
+			self.sprite.update_animation()
 		self.canvas.bind("<Button-1>", move_sprite)   #hook this function to call when the canvas is left-clicked
 		self.right_panel.add(self.canvas, text='Animations')
 
@@ -185,18 +188,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.frames_left_before_freeze = CONST.MAX_FRAMES
 		self.frame_number = 0
 		self.sprite_coord = (100,100)    #an arbitrary default
-		self.update_sprite_animation()
+		self.sprite.update_animation()
 		self.time_marches_forward()
-
-	def update_sprite_animation(self):
-		pass
 
 	def start_global_frame_timer(self):
 		#called by play button
 		if self.frames_left_before_freeze <= 0:
 			self.frames_left_before_freeze = CONST.MAX_FRAMES
 			self.time_marches_forward()
-			self.update_sprite_animation()
+			self.sprite.update_animation()
 
 	def advance_global_frame_timer(self):
 		#move frame timer forward
@@ -204,10 +204,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.frames_left_before_freeze = max(0, self.frames_left_before_freeze - 1)
 		if self.frame_number >= CONST.MAX_FRAMES:   #just in case someone leaves this running for, say...forever
 			self.reset_global_frame_timer()
-		self.update_sprite_animation()
+		self.sprite.update_animation()
 
 	def play_once(self):
-		self.frames_left_before_freeze = self.sprite.frames_left_in_this_animation(self.frame_number)
+		self.frames_left_before_freeze = self.sprite.frames_left_in_this_animation()
 		self.start_global_frame_timer()
 
 	def reset_global_frame_timer(self):
@@ -218,7 +218,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def pause_global_frame_timer(self):
 		#called by pause button
 		self.frames_left_before_freeze = 0
-		self.update_sprite_animation()
+		self.sprite.update_animation()
 
 	def rewind_global_frame_timer(self):
 		#called by step radio button to pause and step backward
@@ -250,6 +250,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.master.after(max(wait_time,5), self.time_marches_forward)     #schedule next tick of the clock
 		else:
 			self.pause_global_frame_timer()
+
+	def zoom_getter(self):
+		return self.current_zoom
+
+	def frame_getter(self):
+		return self.frame_number
+
+	def coord_getter(self):
+		return self.sprite_coord
 		
 
 	########################### VCR CONTROLS HERE ######################################
@@ -259,15 +268,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 		widgetlib.right_align_grid_in_frame(control_section)
 
 		def zoom_out(*args):
-			self.current_zoom = max(0.1, self.current_zoom - 0.1)
+			self.current_zoom = max(0.5, self.current_zoom - 0.1)
 			set_zoom_text()
-			self.scale_background_image(self.current_zoom)
-			self.update_sprite_animation()
+			self.game.update_background_image()
+			self.sprite.update_animation()
 		def zoom_in(*args):
-			self.current_zoom = min(3.0, self.current_zoom + 0.1)
+			self.current_zoom = min(4.0, self.current_zoom + 0.1)
 			set_zoom_text()
-			self.scale_background_image(self.current_zoom)
-			self.update_sprite_animation()
+			self.game.update_background_image()
+			self.sprite.update_animation()
 		def set_zoom_text():
 			self.zoom_factor.set('x' + str(round(self.current_zoom, 1)) + ' ')
 			
@@ -337,15 +346,23 @@ class SpriteSomethingMainFrame(tk.Frame):
 		return control_section
 
 
+	def get_reload_button(self):
+		reload_section = tk.Frame(self.left_panel, name="reload_section")
+		widgetlib.center_align_grid_in_frame(reload_section)
+		reload_button = tk.Button(reload_section, text="Reload", padx=20, command=self.sprite.reload)
+		reload_button.grid(row=0,column=1)
+		return reload_section
+
+
 
 	############################ MENU BAR FUNCTIONS HERE ################################
 
 
 	def open_file(self):
 		#TODO: Give the user a chance to regret not saving their work
-		filename = filedialog.askopenfile(initialdir="./", title="Select Sprite", filetypes=(("Supported Types","*.zspr *.png *.sfc *.smc"),))
+		filename = filedialog.askopenfilename(initialdir="./", title="Select Sprite", filetypes=(("Supported Types","*.zspr *.png *.sfc *.smc"),))
 		if filename:
-			load_sprite(self, sprite_filename)
+			self.load_sprite(filename)
 
 	def save_file_as(self):
 		# Save a ZSPR or PNG.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
