@@ -9,6 +9,7 @@ import os
 import json
 import itertools
 import importlib
+import weakref
 from PIL import Image, ImageTk
 from source import widgetlib
 from source import layoutlib
@@ -97,10 +98,16 @@ class SpriteParent():
 		animation_dropdown = tk.ttk.Combobox(animation_panel, state="readonly", values=list(self.animations.keys()), name="animation_dropdown")
 		animation_dropdown.configure(width=ANIMATION_DROPDOWN_WIDTH, exportselection=0, textvariable=self.animation_selection)
 		animation_dropdown.grid(row=0, column=2)
-		def change_animation_dropdown(*args):
-			self.set_animation(self.animation_selection.get())
-		self.animation_selection.trace('w', change_animation_dropdown)  #when the dropdown is changed, run this function
-		change_animation_dropdown()      #trigger this now to load the first animation
+		self.set_animation(self.animation_selection.get())
+		
+		def dropdown_wrapper(this_object):
+			def change_animation_dropdown(*args):
+				#This tomfoolery is necessary to avoid a memory leak
+				this_object().set_animation(this_object().animation_selection.get())
+			return change_animation_dropdown
+		self.animation_selection.trace('w', dropdown_wrapper(weakref.ref(self)))  #when the dropdown is changed, run this function
+		dropdown_wrapper(weakref.ref(self))()      #trigger this now to load the first animation
+
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
 
 		self.update_overview_panel()

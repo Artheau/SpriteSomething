@@ -7,6 +7,7 @@ import importlib
 import json
 import tkinter as tk
 import random
+import weakref    #because memory leaks are stupid
 from PIL import Image, ImageTk
 from source import widgetlib
 from source import romhandler
@@ -94,10 +95,14 @@ class GameParent():
 		background_dropdown = tk.ttk.Combobox(background_panel, state="readonly", values=background_filenames, name="background_dropdown")
 		background_dropdown.configure(width=BACKGROUND_DROPDOWN_WIDTH, exportselection=0, textvariable=self.background_selection)
 		background_dropdown.grid(row=0, column=2)
-		def change_background_dropdown(*args):
-			self.set_background(self.background_selection.get())
-		self.background_selection.trace('w', change_background_dropdown)  #when the dropdown is changed, run this function
-		change_background_dropdown()      #trigger this now to load the first background
+
+		def dropdown_wrapper(this_object):
+			def change_background_dropdown(*args):
+				this_object().set_background(this_object().background_selection.get())
+			return change_background_dropdown
+		self.background_selection.trace('w', dropdown_wrapper(weakref.ref(self)))  #when the dropdown is changed, run this function
+		dropdown_wrapper(weakref.ref(self))()      #trigger this now to load the first background
+
 		parent.add(background_panel,minsize=PANEL_HEIGHT)
 		return background_panel
 

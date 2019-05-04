@@ -141,10 +141,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def attach_both_panels(self):
 		#this same function can also be used to re-create the panels
 		#have to make the canvas before the buttons so that the left panel buttons can manipulate it
-		self.left_panel = tk.PanedWindow(self, orient=tk.VERTICAL, name="left_panel",width=250,handlesize=0,sashwidth=0)
+		self.freeze_ray = True    #do not update the sprite while doing this
+		self.left_panel = tk.PanedWindow(self.panes, orient=tk.VERTICAL, name="left_panel",width=250,handlesize=0,sashwidth=0)
 		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
 		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
-		self.overview_frame = tk.Frame(self.right_panel)
+		self.overview_frame = tk.Frame(self.right_panel, name="overview_frame")
 		self.overview_canvas = tk.Canvas(self.overview_frame, name="overview_canvas")
 		self.attach_left_panel()
 		self.attach_right_panel()
@@ -176,7 +177,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def attach_canvas(self):
 		def move_sprite(event):
 			self.sprite_coord = [event.x/self.current_zoom, event.y/self.current_zoom]
-			self.sprite.update_animation()
+			self.update_sprite_animation()
 		self.canvas.bind("<Button-1>", move_sprite)   #hook this function to call when the canvas is left-clicked
 		self.right_panel.add(self.canvas, text='Animations')
 
@@ -203,17 +204,22 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def initialize_sprite_animation(self):
 		self.frames_left_before_freeze = CONST.MAX_FRAMES
+		self.freeze_ray = False
 		self.frame_number = 0
 		self.sprite_coord = (100,100)    #an arbitrary default
-		self.sprite.update_animation()
+		self.update_sprite_animation()
 		self.time_marches_forward()
+
+	def update_sprite_animation(self):
+		if not self.freeze_ray:
+			self.sprite.update_animation()
 
 	def start_global_frame_timer(self):
 		#called by play button
 		if self.frames_left_before_freeze <= 0:
 			self.frames_left_before_freeze = CONST.MAX_FRAMES
 		self.time_marches_forward()
-		self.sprite.update_animation()
+		self.update_sprite_animation()
 
 	def advance_global_frame_timer(self):
 		#move frame timer forward
@@ -221,7 +227,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.frames_left_before_freeze = max(0, self.frames_left_before_freeze - 1)
 		if self.frame_number >= CONST.MAX_FRAMES:   #just in case someone leaves this running for, say...forever
 			self.reset_global_frame_timer()
-		self.sprite.update_animation()
+		self.update_sprite_animation()
 
 	def play_once(self):
 		self.frames_left_before_freeze = self.sprite.frames_in_this_animation()
@@ -235,7 +241,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def pause_global_frame_timer(self):
 		#called by pause button
 		self.frames_left_before_freeze = 0
-		self.sprite.update_animation()
+		self.update_sprite_animation()
 
 	def rewind_global_frame_timer(self):
 		#called by step radio button to pause and step backward
@@ -259,7 +265,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		start_time = time.perf_counter()
 		MIN_WAIT = 5      #have to give the rest of the program time to work, and tkInter is not thread-safe
 		FRAME_DELAY = 17  #equal to about ceiling(1000/60) in order to simulate 60 Hz (can't go faster without skipping frames due to PC monitor refresh rate)
-		if self.frames_left_before_freeze > 0:
+		if self.frames_left_before_freeze > 0 and not self.freeze_ray:
 			self.advance_global_frame_timer()
 			end_time = time.perf_counter()
 			lag = (end_time-start_time)*1000
@@ -288,12 +294,12 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.current_zoom = max(0.5, self.current_zoom - 0.1)
 			set_zoom_text()
 			self.game.update_background_image()
-			self.sprite.update_animation()
+			self.update_sprite_animation()
 		def zoom_in(*args):
 			self.current_zoom = min(4.0, self.current_zoom + 0.1)
 			set_zoom_text()
 			self.game.update_background_image()
-			self.sprite.update_animation()
+			self.update_sprite_animation()
 		def set_zoom_text():
 			self.zoom_factor.set('x' + str(round(self.current_zoom, 1)) + ' ')
 			
