@@ -25,7 +25,8 @@ def make_GUI(command_line_args):
 
 	def show_error(self, exception, message, callstack):
 		if exception.__name__.upper() == "NOTIMPLEMENTEDERROR":
-			messagebox.showerror(   "Not Yet Implemented", "This function is not yet implemented")
+			messagebox.showerror(   "Not Yet Implemented",
+									"This function is not yet implemented\n\n" + str(message)  )
 		else:
 			messagebox.showerror(   "FATAL ERROR",
 									f"While running, encountered fatal error:\n\n" +
@@ -384,15 +385,26 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def save_file_as(self):
 		# Save a ZSPR or PNG.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
 		filetypes = (("PNG Files","*.png"),("ZSPR Files","*.zspr"))
-		filename = filedialog.asksaveasfile(defaultextension=(".png",".zspr"), initialdir="./", title="Save Sprite As...", filetypes=filetypes)
+		filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr"), initialdir="./", title="Save Sprite As...", filetypes=filetypes)
 		if filename:
-			raise NotImplementedError()
-			return True
+			returnvalue = self.sprite.save_as(filename)
+			if returnvalue:
+				messagebox.showinfo("Save Complete", f"Saved as {filename}")
+			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
 	
 	def inject_into_ROM(self):
-		raise NotImplementedError()
+		source_filename = filedialog.askopenfilename(initialdir="./", title="Select Source ROM", filetypes=(("Game Files","*.sfc *.smc"),))
+		_,file_extension = os.path.splitext(source_filename)
+		if file_extension.lower() in ['.sfc','.smc']:
+			default_extension = file_extension.lower()
+		else:
+			default_extension = ".sfc"
+		rom = self.game.get_rom_from_filename(source_filename)
+		dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialdir="./", title="Save Modified ROM As...", filetypes=(("Game Files","*.sfc *.smc"),))
+		self.sprite.inject_into_ROM(rom)
+		rom.save(dest_filename, overwrite=True)
 
 	def export_animation_as_gif(self):
 		raise NotImplementedError()

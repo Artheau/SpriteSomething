@@ -98,11 +98,11 @@ class Layout():
 		return image_with_border, origin
 
 
-	def get_property(self, property, image_name):
+	def get_property(self, this_property, image_name):
 		FAILSAFE = 100
 		for _ in range(FAILSAFE):
-			if property in self.data["images"][image_name]:
-				return self.data["images"][image_name][property]
+			if this_property in self.data["images"][image_name]:
+				return self.data["images"][image_name][this_property]
 			elif "parent" in self.data["images"][image_name]:
 				image_name = self.data["images"][image_name]["parent"]
 			else:
@@ -155,20 +155,19 @@ class Layout():
 
 			this_row_images = []
 			for image_name in row:   #for every image referenced explicitly in the layout
-				image, origin = all_images[image_name]
+				image = all_images[image_name]
 				
+				xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
 				if not image:    #there was no image there to grab, so make a blank image
-					xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
 					image = Image.new("RGBA", (xmax-xmin,ymax-ymin), 0)
-					offset = (-xmin,-ymin)
 
 				palette = self.get_property("import palette interval", image_name)
 				palette = master_palette[palette[0]:palette[1]] if palette else []
 
 				image = common.apply_palette(image, palette)
-				bordered_image, new_origin = self.add_borders_and_scale(image, origin, image_name)
+				bordered_image, origin = self.add_borders_and_scale(image, (-xmin,-ymin), image_name)
 				
-				this_row_images.append((bordered_image, new_origin))
+				this_row_images.append((bordered_image, origin))
 
 			collage = self.make_horizontal_collage(this_row_images)
 			all_collages.append(collage)
@@ -214,11 +213,11 @@ class Layout():
 					this_image = this_image.resize(  ((xmax-xmin)//scale,  (ymax-ymin)//scale)  )
 				master_width += xmax-xmin+2*self.data["border_size"]
 
-				all_images[image_name] = (this_image, (-xmin,-ymin))  #image and origin point
+				all_images[image_name] = this_image
 
-		master_palettes = list(all_images["palette_block"][0].convert("RGB").getdata())
+		master_palettes = list(all_images["palette_block"].convert("RGB").getdata())
 
-		for image_name,(this_image,origin) in all_images.items():
+		for image_name, this_image in all_images.items():
 			if image_name != "palette_block":
 				import_palette = self.get_property("import palette interval", image_name)
 				palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]   #flatten the RGB values
@@ -234,17 +233,13 @@ class Layout():
 				shifted_palette = [0,0,0] + palette[:-3]
 				paletted_image.putpalette(shifted_palette)
 
-				all_images[image_name] = (paletted_image,origin)
+				all_images[image_name] = paletted_image
 
 		return all_images, master_palettes
 
 			
 	def get_bounding_box(self, image_name):
-		xmin,ymin,xmax,ymax = self.get_property("dimensions", image_name)
-		extra_area = self.get_property("extra area", image_name)
-		if extra_area:
-			for x0,y0,x1,y1 in extra_area:
-				xmin,ymin,xmax,ymax = min(xmin,x0), min(ymin,y0), max(xmax,x1), max(ymax,y1)
+		xmin,ymin,xmax,ymax = self.get_raw_bounding_box(image_name)
 		scale = self.get_property("scale", image_name)
 		if scale:
 			xmin,ymin,xmax,ymax = xmin*scale,ymin*scale,xmax*scale,ymax*scale
@@ -253,6 +248,15 @@ class Layout():
 			xmin, ymin, xmax, ymax = xmin+shift[0], ymin+shift[1], xmax+shift[0], ymax+shift[1]
 				
 		return xmin,ymin,xmax,ymax
+
+	def get_raw_bounding_box(self,image_name):
+		xmin,ymin,xmax,ymax = self.get_property("dimensions", image_name)
+		extra_area = self.get_property("extra area", image_name)
+		if extra_area:
+			for x0,y0,x1,y1 in extra_area:
+				xmin,ymin,xmax,ymax = min(xmin,x0), min(ymin,y0), max(xmax,x1), max(ymax,y1)
+		return xmin,ymin,xmax,ymax
+
 
 if __name__ == "__main__":
 	main()

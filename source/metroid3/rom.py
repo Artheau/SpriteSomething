@@ -10,7 +10,7 @@ if __name__ == "__main__":
     raise AssertionError(f"Called main() on utility library {__file__}")
 
 import enum
-from source.romhandler import RomHandler as GenericRomHandler
+from source.romhandler import RomHandlerParent
 
 
 #enumeration for the suit types
@@ -43,7 +43,7 @@ class PaletteType(enum.Enum):
     OUTRO_SHIP = enum.auto()         #ship while escaping from Zebes at the end
 
 
-class RomHandler(GenericRomHandler):
+class RomHandler(RomHandlerParent):
     def __init__(self, filename):
         super().__init__(filename)      #do the usual stuff
 
@@ -235,8 +235,14 @@ class RomHandler(GenericRomHandler):
         else:
             raise AssertionError(f"get_file_select_tilemaps() called for unknown item number {item}")
 
-
     def get_palette(self, base_type, suit_type):
+        #interface to provide a string-based function to external callers
+        base_type = base_type.upper().replace(" ", "_") if type(base_type) is str else "STANDARD"
+        suit_type = suit_type.upper().replace(" ", "_") if type(suit_type) is str else "POWER"
+
+        return self.get_palette_from_enum(getattr(PaletteType,base_type), getattr(SuitType,suit_type))
+
+    def get_palette_from_enum(self, base_type, suit_type):
         #returns a list.  Each element of the list is a tuple, where the first entry is the amount of time that the palette
         # should display for (here $00 is a special case for static palettes).  The second entry is the 555 palette data.
 
@@ -250,7 +256,7 @@ class RomHandler(GenericRomHandler):
             elif suit_type == SuitType.GRAVITY:
                 base_address = 0x9B9800
             else:
-                raise AssertionError(f"function get_palette() called for standard palette with unknown suit type: {suit_type}")
+                raise AssertionError(f"function get_palette_from_enum() called for standard palette with unknown suit type: {suit_type}")
             return [self._get_static_palette(base_address)]
 
         elif base_type == PaletteType.LOADER:
@@ -261,7 +267,7 @@ class RomHandler(GenericRomHandler):
             elif suit_type == SuitType.GRAVITY:
                 base_address = 0x8DDE2E
             else:
-                raise AssertionError(f"function get_palette() called for loader palette with unknown suit type: {suit_type}")
+                raise AssertionError(f"function get_palette_from_enum() called for loader palette with unknown suit type: {suit_type}")
 
             #this is a set of rotating palettes implemented in microcode (loader is the most complex case of these, thankfully)
             full_palette_set = []
@@ -290,7 +296,7 @@ class RomHandler(GenericRomHandler):
             elif suit_type == SuitType.GRAVITY:
                 base_address = 0x8DE8B6
             else:
-                raise AssertionError(f"function get_palette() called for heat palette with unknown suit type: {suit_type}")
+                raise AssertionError(f"function get_palette_from_enum() called for heat palette with unknown suit type: {suit_type}")
 
             full_palette_set = []
             base_address += 8                #skip over the control codes
@@ -304,7 +310,7 @@ class RomHandler(GenericRomHandler):
             elif suit_type == SuitType.GRAVITY:
                 base_address = 0x9B9A20
             else:
-                raise AssertionError(f"function get_palette() called for charge palette with unknown suit type: {suit_type}")
+                raise AssertionError(f"function get_palette_from_enum() called for charge palette with unknown suit type: {suit_type}")
 
             #The charged shot palette advances every frame (determined by manual frame advance)
             return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(8)]
@@ -317,7 +323,7 @@ class RomHandler(GenericRomHandler):
             elif suit_type == SuitType.GRAVITY:
                 base_address = 0x9B9F20
             else:
-                raise AssertionError(f"function get_palette() called for speed boost palette with unknown suit type: {suit_type}")
+                raise AssertionError(f"function get_palette_from_enum() called for speed boost palette with unknown suit type: {suit_type}")
 
             #4 frames each during the warm up, then stay at last palette forever (determined by manual frame advance)
             return [(4,self._get_raw_palette(base_address + i*0x20)) for i in range(3)] + \
@@ -331,7 +337,7 @@ class RomHandler(GenericRomHandler):
             elif suit_type == SuitType.GRAVITY:
                 base_address = 0x9B9FA0
             else:
-                raise AssertionError(f"function get_palette() called for speed squat palette with unknown suit type: {suit_type}")
+                raise AssertionError(f"function get_palette_from_enum() called for speed squat palette with unknown suit type: {suit_type}")
 
             #timing and order determined by manual frame advance.  One frame each, oscillates between 0 and 3
             return [(1,self._get_raw_palette(base_address + i*0x20)) for i in [0,1,2,3,2,1]]
@@ -344,7 +350,7 @@ class RomHandler(GenericRomHandler):
             elif suit_type == SuitType.GRAVITY:
                 base_address = 0x9BA020
             else:
-                raise AssertionError(f"function get_palette() called for shine spark palette with unknown suit type: {suit_type}")
+                raise AssertionError(f"function get_palette_from_enum() called for shine spark palette with unknown suit type: {suit_type}")
 
             #timing and order determined by manual frame advance.  1 frame each, goes 0 to 3 then resets
             return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
@@ -357,7 +363,7 @@ class RomHandler(GenericRomHandler):
             elif suit_type == SuitType.GRAVITY:
                 base_address = 0x9BA0A0
             else:
-                raise AssertionError(f"function get_palette() called for screw attack palette with unknown suit type: {suit_type}")
+                raise AssertionError(f"function get_palette_from_enum() called for screw attack palette with unknown suit type: {suit_type}")
 
             #timing and order determined by manual frame advance.  One frame each, oscillates between 0 and 3
             return [(1,self._get_raw_palette(base_address + i*0x20)) for i in [0,1,2,3,2,1]]
@@ -379,7 +385,7 @@ class RomHandler(GenericRomHandler):
             elif suit_type == SuitType.GRAVITY:
                 palette_list_pointer = 0x9BB7FB
             else:
-                raise AssertionError(f"function get_palette() called for death suit palette with unknown suit type: {suit_type}")
+                raise AssertionError(f"function get_palette_from_enum() called for death suit palette with unknown suit type: {suit_type}")
 
             #There are ten pointers in total, grab them all
             palette_list = [0x9B0000 + offset for offset in self.read_from_snes_address(palette_list_pointer, "2"*10)]
@@ -426,7 +432,7 @@ class RomHandler(GenericRomHandler):
             return [(0, base_colors)]
 
         elif base_type == PaletteType.XRAY:
-            _,base_palette = self.get_palette(PaletteType.STANDARD, suit_type)[0]    #recurse to get the regular suit palette
+            _,base_palette = self.get_palette_from_enum(PaletteType.STANDARD, suit_type)[0]    #recurse to get the regular suit palette
             visor_colors = self.get_nightvisor_colors()
             #I did manual frame advances to learn that the duration is 6 frames for each visor color
             return [(6, base_palette[:4]+[color]+base_palette[5:]) for color in visor_colors]
@@ -460,7 +466,7 @@ class RomHandler(GenericRomHandler):
             return self._get_sequence_of_timed_palettes(base_address, 16)
 
         else:
-            raise AssertionError(f"function get_palette() called with unknown palette type: {base_type}")
+            raise AssertionError(f"function get_palette_from_enum() called with unknown palette type: {base_type}")
 
     def get_nightvisor_colors(self):
         return self.read_from_snes_address(0x9BA3C6, "222")

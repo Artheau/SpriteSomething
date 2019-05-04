@@ -8,6 +8,7 @@ import random
 import os
 import json
 import itertools
+import importlib
 from PIL import Image, ImageTk
 from source import widgetlib
 from source import layoutlib
@@ -32,10 +33,21 @@ class SpriteParent():
 	############################# BEGIN ABSTRACT CODE ##############################
 
 	def import_from_ZSPR(self):
+		#use self.filename as the filename
+		#self.images, self.master_palette = ?, ?
 		raise AssertionError("called import_from_ZSPR() on Sprite base class")
 
-	def import_from_ROM(self):
+	def import_from_ROM(self, rom):
+		#self.images, self.master_palette = ?, ?
 		raise AssertionError("called import_from_ROM() on Sprite base class")
+
+	def save_as_ZSPR(self, filename):
+		#return True if the save was a success
+		raise AssertionError("called save_as_ZSPR() on Sprite base class")
+
+	def inject_into_ROM(self, rom):
+		#return True if the export was a success
+		raise AssertionError("called export_to_ROM() on Sprite base class")
 
 	############################# END ABSTRACT CODE ##############################
 
@@ -48,7 +60,11 @@ class SpriteParent():
 		elif file_extension.lower() == '.zspr':
 			self.import_from_ZSPR()
 		elif file_extension.lower() in ['.sfc','.smc']:
-			self.import_from_ROM()
+			#dynamic import
+			rom_path,_ = os.path.split(self.resource_subpath)
+			_,rom_dir = os.path.split(rom_path)
+			rom_module = importlib.import_module(f"source.{rom_dir}.rom")
+			self.import_from_ROM(rom_module.RomHandler(self.filename))
 
 	def import_from_PNG(self):
 		self.images, self.master_palette = self.layout.extract_all_images_from_master(Image.open(self.filename))
@@ -57,7 +73,6 @@ class SpriteParent():
 		parent.add(tk.Label(parent, text="Sprite Metadata\nGoes\nHere"))
 
 	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter):
-		#for now, accepting frame_getter as an argument because maybe the child class has animated backgrounds or something
 		ANIMATION_DROPDOWN_WIDTH = 25
 		PANEL_HEIGHT = 25
 		self.canvas = canvas
@@ -127,7 +142,7 @@ class SpriteParent():
 		pose_list = self.get_current_pose_list()
 		full_tile_list = []
 		for tile_info in pose_list[self.pose_number]["tiles"][::-1]:
-			base_image,_ = self.images[tile_info["image"]]
+			base_image = self.images[tile_info["image"]]
 			if "crop" in tile_info:
 				base_image = base_image.crop(tuple(tile_info["crop"]))
 			if "flip" in tile_info:
@@ -141,6 +156,7 @@ class SpriteParent():
 					base_image = base_image.transpose(Image.FLIP_TOP_BOTTOM)
 
 			palette_lookup = self.layout.get_property("import palette interval", tile_info["image"])        #TODO: get correct palette based upon buttons
+
 			base_image = common.apply_palette(base_image, self.master_palette[palette_lookup[0]:palette_lookup[1]])
 			
 			full_tile_list.append((base_image,tile_info["pos"]))
@@ -195,8 +211,23 @@ class SpriteParent():
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_tile, anchor = tk.NW))
 			self.active_tiles.append(scaled_tile)     #if you skip this part, then the auto-destructor will get rid of your picture!
 		self.last_known_coord = self.coord_getter()
-		self.last_known_zoom = self.zoom_getter()		
-				
+		self.last_known_zoom = self.zoom_getter()	
+
+	def save_as(self, filename):
+		_,file_extension = os.path.splitext(filename)
+		if file_extension.lower() == ".png":
+			return self.save_as_PNG(filename)
+		elif file_extension.lower() == ".zspr":
+			return self.save_as_ZSPR(filename)
+		else:
+			messagebox.showerror("ERROR", f"Did not recognize file type \"{file_extension}\"")
+			return False
+
+	def save_as_PNG(self, filename):
+		master_image = self.get_master_PNG_image()
+		master_image.save(filename)
+		return True
+
 	def get_master_PNG_image(self):
 		return self.layout.export_all_images_to_PNG(self.images,self.master_palette)
 

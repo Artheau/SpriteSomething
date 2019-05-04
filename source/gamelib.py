@@ -18,7 +18,7 @@ def autodetect(sprite_filename):
 	_,file_extension = os.path.splitext(sprite_filename)
 	if file_extension.lower() in [".sfc","smc"]:
 		#If the file is a rom, then we can go into the internal header and get the name of the game
-		game = get_game_class_of_type(get_game_type_from_rom(sprite_filename))
+		game = get_game_class_of_type(autodetect_game_type_from_rom_filename(sprite_filename))
 		#And by default, we will grab the player sprite from this game
 		sprite = game.make_player_sprite(sprite_filename)
 	elif file_extension.lower() == ".png":
@@ -39,12 +39,24 @@ def autodetect(sprite_filename):
 		raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its filename")
 	return game, sprite
 
+def autodetect_game_type_from_rom_filename(filename):
+	return autodetect_game_type_from_rom(romhandler.RomHandlerParent(filename))
+
+def autodetect_game_type_from_rom(rom):
+	rom_name = rom.get_name()
+	with open(common.get_resource("game_header_info.json",subdir="meta")) as file:
+		game_header_info = json.load(file)
+	for game_name, header_name_list in game_header_info.items():
+		for header_name in header_name_list:
+			if rom_name[:len(header_name)] == header_name:
+				return game_name
+	else:
+		raise AssertionError(f"Could not identify the type of ROM {filename} from its header name: {rom_name}")
+
 def get_game_class_of_type(game_name):
 	#dynamic import
 	game_module = importlib.import_module(f"source.{game_name}.game")
 	return game_module.Game()
-
-
 
 class GameParent():
 	#parent class for games to inherit
@@ -124,3 +136,7 @@ class GameParent():
 		else:
 			raise AssertionError(f"make_sprite_by_number() called for non-implemented sprite_number {sprite_number}")
 
+	def get_rom_from_filename(self, filename):
+		#dynamic import
+		rom_module = importlib.import_module(f"source.{self.internal_name}.rom")
+		return rom_module.RomHandler(filename)
