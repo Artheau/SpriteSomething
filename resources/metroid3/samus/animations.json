@@ -1,0 +1,21 @@
+{
+	"Stand": {
+		"right": [
+			{	"frames": 10,	"tiles": [	{"image": "stand_right",  "pos": [-13,-21]}	]	},
+			{	"frames": 10,	"tiles": [	{"image": "stand_right1", "pos": [-13,-21]}	]	},
+			{	"frames": 10,	"tiles": [	{"image": "stand_right2", "pos": [-13,-21]}	]	},
+			{	"frames": 10,	"tiles": [	{"image": "stand_right3", "pos": [-13,-21]}	]	}
+		],
+		"left": [
+			{	"frames": 10,	"tiles": [	{"image": "stand_left",  "pos": [-19,-21]}	]	},
+			{	"frames": 10,	"tiles": [	{"image": "stand_left1", "pos": [-19,-21]}	]	},
+			{	"frames": 10,	"tiles": [	{"image": "stand_left2", "pos": [-19,-21]}	]	},
+			{	"frames": 10,	"tiles": [	{"image": "stand_left3", "pos": [-19,-21]}	]	}
+		]
+	},
+	"Elevator": {
+		"middle": [
+			{	"frames": 1, 	"tiles": [	{"image": "elevator", "pos": [-17,-24]}	]	}
+		]
+	}
+}

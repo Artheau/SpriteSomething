@@ -98,7 +98,7 @@ class GameParent():
 		
 		#now re-zoom the image
 		new_size = tuple(int(dim*self.zoom_getter()) for dim in self.raw_background.size)
-		self.background_image = ImageTk.PhotoImage(self.raw_background.resize(new_size,resample=Image.BICUBIC))
+		self.background_image = common.get_tk_image(self.raw_background.resize(new_size,resample=Image.NEAREST))
 		if self.current_background_filename is None:
 			self.background_ID = self.canvas.create_image(0, 0, image=self.background_image, anchor=tk.NW)    #so that we can manipulate the object later
 		else:

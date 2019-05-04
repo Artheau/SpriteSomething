@@ -143,6 +143,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.left_panel = tk.PanedWindow(self, orient=tk.VERTICAL, name="left_panel",width=250,handlesize=0,sashwidth=0)
 		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
 		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
+		self.overview_frame = tk.Frame(self.right_panel)
+		self.overview_canvas = tk.Canvas(self.overview_frame, name="overview_canvas")
 		self.attach_left_panel()
 		self.attach_right_panel()
 		self.create_status_bar()
@@ -154,7 +156,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.left_panel.add(self.get_reload_button(),minsize=MINSIZE)
 		self.sprite.attach_metadata_panel(self.left_panel)
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter)
-		self.sprite.attach_animation_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.coord_getter)
+		self.sprite.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter)
 		self.left_panel.add(vcr_controls,minsize=MINSIZE)
 		self.panes.add(self.left_panel)
 
@@ -178,8 +180,22 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.right_panel.add(self.canvas, text='Animations')
 
 	def attach_overview(self):
-		self.overview = ttk.Frame(self.right_panel, name="overview_canvas")
-		self.right_panel.add(self.overview, text='Overview')
+		self.overview_frame.grid_rowconfigure(0, weight=1)
+		self.overview_frame.grid_columnconfigure(0, weight=1)
+
+		xscrollbar = tk.Scrollbar(self.overview_frame, orient=tk.HORIZONTAL)
+		xscrollbar.grid(row=1, column=0, sticky=tk.EW)
+
+		yscrollbar = tk.Scrollbar(self.overview_frame)
+		yscrollbar.grid(row=0, column=1, sticky=tk.NS)
+
+		self.overview_canvas.configure(scrollregion=self.overview_canvas.bbox(tk.ALL),xscrollcommand=xscrollbar.set, yscrollcommand=yscrollbar.set)
+		self.overview_canvas.grid(row=0, column=0, sticky=tk.NSEW)
+
+		xscrollbar.config(command=self.overview_canvas.xview)
+		yscrollbar.config(command=self.overview_canvas.yview)
+
+		self.right_panel.add(self.overview_frame, text='Overview')
 
 
 	############################ ANIMATION FUNCTIONS HERE ################################
@@ -195,8 +211,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#called by play button
 		if self.frames_left_before_freeze <= 0:
 			self.frames_left_before_freeze = CONST.MAX_FRAMES
-			self.time_marches_forward()
-			self.sprite.update_animation()
+		self.time_marches_forward()
+		self.sprite.update_animation()
 
 	def advance_global_frame_timer(self):
 		#move frame timer forward
@@ -207,7 +223,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.sprite.update_animation()
 
 	def play_once(self):
-		self.frames_left_before_freeze = self.sprite.frames_left_in_this_animation()
+		self.frames_left_before_freeze = self.sprite.frames_in_this_animation()
 		self.start_global_frame_timer()
 
 	def reset_global_frame_timer(self):
@@ -222,7 +238,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def rewind_global_frame_timer(self):
 		#called by step radio button to pause and step backward
-		self._frame_number = max(0, self.frame_number - 1)
+		self.frame_number = self.frame_number - 1
 		self.pause_global_frame_timer()
 
 	def step_global_frame_timer(self):
@@ -231,11 +247,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.advance_global_frame_timer()
 
 	def go_to_previous_pose(self):
-		self.frame_number = max(0, self.frame_number - self.sprite.frames_to_previous_pose(self.frame_number))
+		self.frame_number = self.frame_number - self.sprite.frames_to_previous_pose()
 		self.pause_global_frame_timer()
 
 	def go_to_next_pose(self):
-		self.frame_number = self.frame_number + self.sprite.frame_left_in_this_pose(self.frame_number)
+		self.frame_number = self.frame_number + self.sprite.frames_left_in_this_pose()
 		self.pause_global_frame_timer()
 
 	def time_marches_forward(self):
@@ -284,7 +300,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.current_speed = max(0.1, self.current_speed - 0.1)
 			set_speed_text()
 		def speed_up(*args):
-			self.current_speed = min(1.0, self.current_speed + 0.1)
+			self.current_speed = min(2.0, self.current_speed + 0.1)
 			set_speed_text()
 		def set_speed_text():
 			self.speed_factor.set(str(round(self.current_speed * 100)) + '%')
@@ -293,9 +309,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.current_zoom = 2              #starting zoom, if app is just started
 		if not hasattr(self,"current_speed"):
 			self.current_speed = 1             #starting speed, if app is just started
+		if not hasattr(self,"frame_number"):
+			self.frame_number = 0              #starting frame, if app is just started
 		self.zoom_factor = tk.StringVar(control_section)
 		self.speed_factor = tk.StringVar(control_section)
-		self.frame_number = tk.StringVar(control_section)
 
 		set_zoom_text()
 		set_speed_text()

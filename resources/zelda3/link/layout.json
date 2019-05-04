@@ -5,6 +5,7 @@
 		"will also be the pose that is used to import the image.  For this reason, some poses will be out of order",
 		"and this is intentional because a pose might be mirrored in its first occurance"
 	],
+	"border_color": [0,0,0,0],
 	"border_size": 0,
 	"layout":
 	[
@@ -40,9 +41,9 @@
 	"images":
 	{
 		"A0": {
-			"dimensions": [0,16,0,16],
+			"dimensions": [0,0,16,16],
 			"palette": "0x2E",
-			"import palette": [1,16],
+			"import palette interval": [1,16],
 			"used by": [["TODO",0]]
 		},
 
@@ -271,7 +272,7 @@
 
 		"null_block": {
 			"comment": "Simulates a buffer between tile AB6 and the palette block",
-			"dimensions": [0,8,0,16],
+			"dimensions": [0,0,8,16],
 			"parent": "A0",
 			"used by": [["null",0]]
 		},
@@ -279,7 +280,7 @@
 		"palette_block": {
 			"comment": "So technically the underlying tile here can be used, but by convention we just started putting the palette block here",
 			"description": "First three sets of two rows are green, blue, and red mail, respectively, and then bunny is the last two.  Also glove colors in here at position 14, and transparency colors.",
-			"dimensions": [0,8,0,8],
+			"dimensions": [0,0,8,8],
 			"shift": [0,8],
 			"used by": [["palette_block",0]]
 		}

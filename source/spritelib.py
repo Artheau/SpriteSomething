@@ -6,9 +6,11 @@
 import tkinter as tk
 import random
 import os
+import json
+import itertools
 from PIL import Image, ImageTk
 from source import widgetlib
-from source import layout
+from source import layoutlib
 from source import common
 
 #TODO: this file needs to contain all the metadata for the sprites
@@ -19,23 +21,21 @@ class SpriteParent():
 		self.classic_name = manifest_dict["name"]    #e.g. "Samus" or "Link"
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.filename = filename
-		self.layout = layout.Layout(common.get_resource("layout.json",subdir=self.resource_subpath))
+		self.layout = layoutlib.Layout(common.get_resource("layout.json",subdir=self.resource_subpath))
+		with open(common.get_resource("animations.json",subdir=self.resource_subpath)) as file:
+			self.animations = json.load(file)
 		self.import_from_filename()
+
+		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
 
 	#to make a new sprite class, you must write code for all of the functions in this section below.
 	############################# BEGIN ABSTRACT CODE ##############################
 
-	def import_from_ZSPR():
+	def import_from_ZSPR(self):
 		raise AssertionError("called import_from_ZSPR() on Sprite base class")
 
-	def import_from_ROM():
+	def import_from_ROM(self):
 		raise AssertionError("called import_from_ROM() on Sprite base class")
-	
-	def get_all_animation_names(self):
-		return ["stand","don't stand"]   #TODO
-
-	def get_tiles_for_current_pose(self):  #TODO
-		return [(Image.new("RGB",(100,100),0x70),(0,0)),(Image.new("RGB",(100,100),0x30),(50,50))]
 
 	############################# END ABSTRACT CODE ##############################
 
@@ -56,20 +56,20 @@ class SpriteParent():
 	def attach_metadata_panel(self,parent):
 		parent.add(tk.Label(parent, text="Sprite Metadata\nGoes\nHere"))
 
-	def attach_animation_panel(self, parent, canvas, zoom_getter, frame_getter, coord_getter):
+	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter):
 		#for now, accepting frame_getter as an argument because maybe the child class has animated backgrounds or something
 		ANIMATION_DROPDOWN_WIDTH = 25
 		PANEL_HEIGHT = 25
 		self.canvas = canvas
+		self.overview_canvas = overview_canvas
 		self.zoom_getter = zoom_getter
 		self.frame_getter = frame_getter
 		self.coord_getter = coord_getter
 		self.last_known_zoom = None
-		self.last_known_frame = None
 		self.last_known_coord = None
 		self.current_animation = None
-		self.time_left_in_this_pose = 0
-		self.time_left_in_this_palette = 0
+		self.pose_number = None
+		self.palette_number = None
 
 		animation_panel = tk.Frame(parent, name="animation_panel")
 		widgetlib.right_align_grid_in_frame(animation_panel)
@@ -77,10 +77,9 @@ class SpriteParent():
 		animation_label.grid(row=0, column=1)
 		self.animation_selection = tk.StringVar(animation_panel)
 
-		animation_names = self.get_all_animation_names()
-		self.animation_selection.set(random.choice(animation_names))
+		self.animation_selection.set(random.choice(list(self.animations.keys())))
 		
-		animation_dropdown = tk.ttk.Combobox(animation_panel, state="readonly", values=animation_names, name="animation_dropdown")
+		animation_dropdown = tk.ttk.Combobox(animation_panel, state="readonly", values=list(self.animations.keys()), name="animation_dropdown")
 		animation_dropdown.configure(width=ANIMATION_DROPDOWN_WIDTH, exportselection=0, textvariable=self.animation_selection)
 		animation_dropdown.grid(row=0, column=2)
 		def change_animation_dropdown(*args):
@@ -88,48 +87,130 @@ class SpriteParent():
 		self.animation_selection.trace('w', change_animation_dropdown)  #when the dropdown is changed, run this function
 		change_animation_dropdown()      #trigger this now to load the first animation
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
+
+		self.update_overview_panel()
+
 		return animation_panel
 
 	def reload(self):
 		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
 		self.import_from_filename()
-		self.last_known_frame = None
+		self.update_overview_panel()
+		self.last_known_zoom = None    #this will force a reload from update_animation()
+		self.last_known_coord = None
 		self.update_animation()
 
 	def set_animation(self, animation_name):
-		#see if anything needs to be done first
-		if self.current_animation == animation_name and self.last_known_zoom == self.zoom_getter():
-			if self.last_known_frame is not None and \
-						self.frame_getter()-self.last_known_frame <= min(self.time_left_in_this_pose,self.time_left_in_this_palette):   #or it doesn't matter
-				#update the coordinates
-				delta = tuple(new-prev for new,prev in zip(self.coord_getter(),self.last_known_coord))
-				if delta != (0,0):
-					for ID in self.sprite_IDs:
-						self.canvas.move(ID, *delta)
-				frame_delta = self.frame_getter()-self.last_known_frame
-				self.time_left_in_this_pose -= frame_delta
-				self.time_left_in_this_palette -= frame_delta
-				self.last_known_coord = self.coord_getter()
-				#we're done here
-				return
+		self.current_animation = animation_name
+		self.last_known_zoom = None
+		self.last_known_coord = None
+		self.update_animation()
+
+	def update_pose_and_palette_numbers(self):
+		#also returns true if the pose or the palette was updated
+
+		if not hasattr(self, "frame_progression_table"):    #the table hasn't been set up, so signal for a change
+			return True
 		
-		#at this point, something needs to be done
+		old_pose_number, old_palette_number = self.pose_number, self.palette_number
+
+		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
+		self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x > mod_frames]))
+
+		palette_mod_frames = self.frame_getter() % self.palette_progression_table[-1]
+		self.palette_number = self.palette_progression_table.index(min([x for x in self.palette_progression_table if x > palette_mod_frames]))
+		
+		return (old_pose_number != self.pose_number) or (old_palette_number != self.palette_number)
+		
+	def get_tiles_for_current_pose(self):
+		self.update_pose_and_palette_numbers()
+		pose_list = self.get_current_pose_list()
+		full_tile_list = []
+		for tile_info in pose_list[self.pose_number]["tiles"][::-1]:
+			base_image,_ = self.images[tile_info["image"]]
+			if "crop" in tile_info:
+				base_image = base_image.crop(tuple(tile_info["crop"]))
+			if "flip" in tile_info:
+				hflip = "h" in tile_info["flip"].lower()
+				vflip = "v" in tile_info["flip"].lower()
+				if hflip and vflip:
+					base_image = base_image.transpose(Image.ROTATE_180)
+				elif hflip:
+					base_image = base_image.transpose(Image.FLIP_LEFT_RIGHT)
+				elif vflip:
+					base_image = base_image.transpose(Image.FLIP_TOP_BOTTOM)
+
+			palette_lookup = self.layout.get_property("import palette interval", tile_info["image"])        #TODO: get correct palette based upon buttons
+			base_image = common.apply_palette(base_image, self.master_palette[palette_lookup[0]:palette_lookup[1]])
+			
+			full_tile_list.append((base_image,tile_info["pos"]))
+		
+		return full_tile_list
+
+	def get_current_pose_list(self):
+		return next(iter(self.animations[self.current_animation].values()))   #TODO: base upon direction widgets
+
+	def frames_in_this_animation(self):
+		return self.frame_progression_table[-1]
+
+	def frames_left_in_this_pose(self):
+		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
+		next_pose_at = min(x for x in self.frame_progression_table if x > mod_frames)
+		return next_pose_at - mod_frames
+		
+	def frames_to_previous_pose(self):
+		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
+		prev_pose_at = max((x for x in self.frame_progression_table if x <= mod_frames), default=0)
+		return mod_frames - prev_pose_at + 1
+
+	def update_animation(self):
+		#see if there's anything to do
+		if not self.update_pose_and_palette_numbers():   #the pose and palette numbers didn't change
+			if self.last_known_zoom == self.zoom_getter():
+				if self.last_known_coord == self.coord_getter():
+					return #there's nothing you can do here. go home, you're drunk
+
+		#ok, there's something to do here, so sober up
+		pose_list = self.get_current_pose_list()
+		if "frames" not in pose_list[0]:      #might not be a frame entry for static poses
+			self.frame_progression_table = [1]
+		else:
+			self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
+
+		self.palette_progression_table = [1]   #TODO
+
 		if hasattr(self,"sprite_IDs"):
 			for ID in self.sprite_IDs:
 				self.canvas.delete(ID)       #remove the old tiles
+		if hasattr(self,"active_tiles"):
+			for tile in self.active_tiles:
+				del tile                     #why this is not auto-destroyed is beyond me (memory leak otherwise)
 		self.sprite_IDs = []
 		self.active_tiles = []
-		#TODO: get the right palettes
-		for tile,origin in self.get_tiles_for_current_pose():
+		
+		for tile,offset in self.get_tiles_for_current_pose():
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in tile.size)
-			scaled_tile = ImageTk.PhotoImage(tile.resize(new_size,resample=Image.BICUBIC))
-			coord_on_canvas = tuple(int(self.zoom_getter()*(pos-x)) for pos,x in zip(self.coord_getter(),origin))
+			scaled_tile = ImageTk.PhotoImage(tile.resize(new_size,resample=Image.NEAREST))
+			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_tile, anchor = tk.NW))
 			self.active_tiles.append(scaled_tile)     #if you skip this part, then the auto-destructor will get rid of your picture!
-			
-	def update_animation(self):
-		self.set_animation(self.current_animation)			
-
-	def frames_left_in_this_animation():
-		return self.time_left_in_this_pose
+		self.last_known_coord = self.coord_getter()
+		self.last_known_zoom = self.zoom_getter()		
 				
+	def get_master_PNG_image(self):
+		return self.layout.export_all_images_to_PNG(self.images,self.master_palette)
+
+	def update_overview_panel(self):
+		image = self.get_master_PNG_image()
+		scaled_image = image.resize(tuple(int(x*self.overview_scale_factor) for x in image.size))
+
+		if hasattr(self,"overview_ID") and self.overview_ID is not None:
+			del self.overview_image
+			self.overview_image = common.get_tk_image(scaled_image)
+			self.overview_canvas.itemconfig(self.overview_ID, image=self.overview_image)
+		else:
+			import time
+			scaled_image = scaled_image.copy()
+			self.overview_image = common.get_tk_image(scaled_image)
+			self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)
+	

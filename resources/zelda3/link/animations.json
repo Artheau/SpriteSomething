@@ -1,0 +1,38 @@
+{
+	"Stand": {
+		"right": [
+			{
+				"tiles": [
+					{"image": "A0", "pos": [-9,-8]},
+					{"image": "B0", "pos": [-8, 0]}
+				]
+			}
+		],
+		"left": [
+			{
+				"tiles": [
+					{"image": "A0", "pos": [-7,-8], "flip": "h"},
+					{"image": "B0", "pos": [-8, 0], "flip": "h"}
+				]
+			}
+		]
+	},
+	"Wobble": {
+		"middle": [
+			{
+				"frames": 20,
+				"tiles": [
+					{"image": "A0", "pos": [-9,-8]},
+					{"image": "B0", "pos": [-8,0]}
+				]
+			},
+			{
+				"frames": 20,
+				"tiles": [
+					{"image": "A0", "pos": [-7,-8], "flip": "h"},
+					{"image": "B0", "pos": [-8,0], "flip": "h"}
+				]
+			}
+		]
+	}
+}
