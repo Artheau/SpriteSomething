@@ -16,6 +16,6 @@ class Sprite(SpriteParent):
 
 	def inject_into_ROM(self, rom):
 		#The history of the Samus export code is a story I will tell to my grandchildren
-		rom_export.rom_export(self, rom)
+		return rom_export.rom_export(self, rom)
 
 		

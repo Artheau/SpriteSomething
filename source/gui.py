@@ -142,6 +142,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#this same function can also be used to re-create the panels
 		#have to make the canvas before the buttons so that the left panel buttons can manipulate it
 		self.freeze_ray = True    #do not update the sprite while doing this
+		if hasattr(self, "timer_callback"):
+			self.master.after_cancel(self.timer_callback)
 		self.left_panel = tk.PanedWindow(self.panes, orient=tk.VERTICAL, name="left_panel",width=250,handlesize=0,sashwidth=0)
 		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
 		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
@@ -270,7 +272,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			end_time = time.perf_counter()
 			lag = (end_time-start_time)*1000
 			wait_time = int(FRAME_DELAY/self.current_speed - lag)
-			self.master.after(max(wait_time,5), self.time_marches_forward)     #schedule next tick of the clock
+			self.timer_callback = self.master.after(max(wait_time,5), self.time_marches_forward)     #schedule next tick of the clock
 		else:
 			self.pause_global_frame_timer()
 
@@ -402,15 +404,18 @@ class SpriteSomethingMainFrame(tk.Frame):
 	
 	def inject_into_ROM(self):
 		source_filename = filedialog.askopenfilename(initialdir="./", title="Select Source ROM", filetypes=(("Game Files","*.sfc *.smc"),))
-		_,file_extension = os.path.splitext(source_filename)
-		if file_extension.lower() in ['.sfc','.smc']:
-			default_extension = file_extension.lower()
-		else:
-			default_extension = ".sfc"
-		rom = self.game.get_rom_from_filename(source_filename)
-		dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialdir="./", title="Save Modified ROM As...", filetypes=(("Game Files","*.sfc *.smc"),))
-		self.sprite.inject_into_ROM(rom)
-		rom.save(dest_filename, overwrite=True)
+		if source_filename:
+			_,file_extension = os.path.splitext(source_filename)
+			if file_extension.lower() in ['.sfc','.smc']:
+				default_extension = file_extension.lower()
+			else:
+				default_extension = ".sfc"
+			rom = self.game.get_rom_from_filename(source_filename)
+			dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialdir="./", title="Save Modified ROM As...", filetypes=(("Game Files","*.sfc *.smc"),))
+			if dest_filename:
+				modified_rom = self.sprite.inject_into_ROM(rom)
+				modified_rom.save(dest_filename, overwrite=True)
+				messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 
 	def export_animation_as_gif(self):
 		raise NotImplementedError()

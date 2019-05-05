@@ -1,6 +1,7 @@
-import tkinter as tk
 import os
+import itertools
 import numpy as np
+import tkinter as tk
 from PIL import Image
 import base64
 from io import BytesIO    #for shenanigans
@@ -71,7 +72,7 @@ def convert_555_to_rgb(color, recurse=True):
 
 def image_from_raw_data(tilemaps, DMA_writes, bounding_box):
 	#expects:
-	#  a list of tilemaps in the 5 byte format: essentially [X position, size+Xmsb, Y, index, palette]
+	#  a list of tilemaps in the 5 byte format: essentially [X position, size+Xmsb, Y, index, palette+indexmsb]
 	#  a dictionary consisting of writes to the DMA and what should be there
 
 	canvas = {}
@@ -87,7 +88,8 @@ def image_from_raw_data(tilemaps, DMA_writes, bounding_box):
 		y_offset = (tilemap[2] & 0x7F) - (0x80 if (tilemap[2] & 0x80) else 0)
 
 		#tilemap[3] contains the index of which tile to grab (or tiles in the case of a 16x16)
-		index = tilemap[3]
+		#tilemap[4] also contains one bit of the same index, used to reference deep in OAM
+		index = tilemap[3] + (0x100 if tilemap[4] & 0x01 else 0)
 
 		#tilemap[4] contains palette info, priority info, and flip info
 		v_flip = tilemap[4] & 0x80
@@ -165,3 +167,96 @@ def convert_tile_from_bitplanes(raw_tile):
 	returnvalue = np.fliplr(returnvalue)
 	return returnvalue
 
+def convert_to_4bpp(image, offset, dimensions, extra_area):
+	top_row = []            #have to process these differently so that 16x16 tiles can be correctly reconstructed
+	bottom_row = []
+	small_tiles = []
+	for bounding_box in itertools.chain([dimensions],extra_area if extra_area else []):
+		xmin,ymin,xmax,ymax = bounding_box
+		xmin += offset[0]
+		ymin += offset[1]
+		xmax += offset[0]
+		ymax += offset[1]
+		x_chad_length = (xmax-xmin) % 16
+		y_chad_length = (ymax-ymin) % 16
+		for y in range(ymin,ymax-15,16):
+			for x in range(xmin,xmax-15,16):
+				#make a 16x16 tile from (x,y)
+				#tuples in left-up-right-bottom format (it's ok if this crops an area not completely in the image)
+				top_row.extend(    get_single_raw_tile(image.crop((x  ,y  ,x+8 ,y+8 ))) )
+				top_row.extend(    get_single_raw_tile(image.crop((x+8,y  ,x+16,y+8 ))) )
+				bottom_row.extend( get_single_raw_tile(image.crop((x  ,y+8,x+8 ,y+16))) )
+				bottom_row.extend( get_single_raw_tile(image.crop((x+8,y+8,x+16,y+16))) )
+			#check to see if xmax-xmin has a hanging chad
+			if x_chad_length == 0:
+				pass #no chad
+			elif x_chad_length == 8:
+				#make two 8x8 tiles from (chad,y), (chad,y+8)
+				small_tiles.extend( get_single_raw_tile(image.crop((xmax-8,y  ,xmax,y+8 ))) )
+				small_tiles.extend( get_single_raw_tile(image.crop((xmax-8,y+8,xmax,y+16))) )
+			else:
+				raise AssertionError(f"received call to get_raw_pose() for image '{image_name}' but the dimensions for x ({xmin},{xmax}) are not divisible by 8")
+		#check to see if ymax-ymin has hanging chads
+		if y_chad_length == 0:
+			pass   #cool
+		elif y_chad_length == 8:
+			for x in range(xmin,xmax-15,16):
+				#construct the big chads first from (x,chad), (x+8,chad)
+				small_tiles.extend( get_single_raw_tile(image.crop((x  ,ymax-8,x+8 ,ymax))) )
+				small_tiles.extend( get_single_raw_tile(image.crop((x+8,ymax-8,x+16,ymax))) )
+			#now check for the bottom right chad
+			y_chad_length = ymax-ymin % 16
+			if x_chad_length == 0:
+				pass   #cool
+			elif x_chad_length == 8:
+				#make the final chad
+				small_tiles.extend( get_single_raw_tile(image.crop((xmax-8,ymax-8,xmax,ymax))) )
+			else:
+				raise AssertionError(f"received call to get_raw_pose() for image '{image_name}' but the dimensions for x ({xmin},{xmax}) are not divisible by 8")
+		else:
+			raise AssertionError(f"received call to get_raw_pose() for image '{image_name}' but the dimensions for y ({xmin},{xmax}) are not divisible by 8")
+	  
+	#even out the small tiles into the rest of the space
+	for offset in range(0,len(small_tiles),0x40):
+		top_row.extend(small_tiles[offset:offset+0x20])
+		bottom_row.extend(small_tiles[offset+0x20:offset+0x40])
+
+	return top_row + bottom_row
+
+def get_single_raw_tile(image):
+	#Here transpose() is used because otherwise we get column-major format in getdata(), which is not helpful
+	return convert_indexed_tile_to_bitplanes(image.transpose(Image.TRANSPOSE).getdata())
+
+def convert_tile_from_bitplanes(raw_tile):
+	#an attempt to make this ugly process mildly efficient
+	tile = np.zeros((8,8), dtype=np.uint8)
+
+	tile[:,4] = raw_tile[31:15:-2]
+	tile[:,5] = raw_tile[30:14:-2]
+	tile[:,6] = raw_tile[15::-2]
+	tile[:,7] = raw_tile[14::-2]
+
+	shaped_tile = tile.reshape(8,8,1)
+
+	tile_bits = np.unpackbits(shaped_tile, axis=2)
+	fixed_bits = np.packbits(tile_bits, axis=1)
+	returnvalue = fixed_bits.reshape(8,8)
+	returnvalue = returnvalue.swapaxes(0,1)
+	returnvalue = np.fliplr(returnvalue)
+	return returnvalue
+
+def convert_indexed_tile_to_bitplanes(indexed_tile):
+	#this should literally just be the inverse of convert_tile_from_bitplanes(), and so it was written in this way
+	indexed_tile = np.array(indexed_tile,dtype=np.uint8).reshape(8,8)
+	indexed_tile = np.fliplr(indexed_tile)
+	indexed_tile = indexed_tile.swapaxes(0,1)
+	fixed_bits = indexed_tile.reshape(8,1,8)  #in the opposite direction, this had axis=1 collapsed
+	tile_bits = np.unpackbits(fixed_bits,axis=1)
+	shaped_tile = np.packbits(tile_bits,axis=2)
+	tile = shaped_tile.reshape(8,8)
+	low_bitplanes = np.ravel(tile[:,6:8])[::-1]
+	high_bitplanes = np.ravel(tile[:,4:6])[::-1]
+	return np.append(low_bitplanes, high_bitplanes)
+
+def pretty_hex(x,digits=2):                 #displays a hex number with a specified number of digits
+    return '0x' + hex(x)[2:].upper().zfill(digits)

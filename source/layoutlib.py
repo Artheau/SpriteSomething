@@ -23,9 +23,10 @@ class Layout():
 
 	def get_image_name(self, animation, pose, force=None):
 		if type(animation) is int:
-			animation = util.pretty_hex(animation)
+			animation = common.pretty_hex(animation)
 
-		for (animation,pose),image_name_list in self.reverse_lookup.items():
+		image_name_list = self.get_all_image_names(animation,pose)
+		if image_name_list:
 			if force:
 				for image_name in image_name_list:
 					if self.get_property("force",image_name) == force.lower():
@@ -40,7 +41,7 @@ class Layout():
 
 	def get_all_image_names(self,animation, pose):
 		if type(animation) is int:
-			animation = util.pretty_hex(animation)
+			animation = common.pretty_hex(animation)
 		#get the full list
 		return self.reverse_lookup[(animation, pose)]
 
