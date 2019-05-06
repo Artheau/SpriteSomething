@@ -191,9 +191,7 @@ class RomHandler(RomHandlerParent):
 			search_loc = 0x9B0000 + self.read_from_snes_address(0x9BB6E6,2)
 			search_size = min(0x100, 0x9C0000 - search_loc)
 			search_array = self.bulk_read_from_snes_address(search_loc, search_size)
-			#print([hex(x) for x in search_array])
 			DMA_cue = search_array.index(0xB9)
-			#print(DMA_cue)
 			if facing == 'right':   #go to the second ref
 				DMA_cue = DMA_cue+1 + search_array[DMA_cue+1:].index(0xB9)
 			DMA_loc_list = 0x9B0000 + search_array[DMA_cue+1] + search_array[DMA_cue+2]*0x100
@@ -205,8 +203,6 @@ class RomHandler(RomHandlerParent):
 			dest_tile = (self.read_from_snes_address(dest_tile_sequence_loc+2*i,2) - 0x6000)//0x10
 			source_data = (bank * 0x10000) + self.read_from_snes_address(DMA_loc_list+2*i,2)
 			DMA_writes[dest_tile] = self.read_from_snes_address(source_data, "1"*write_size)
-
-		print([hex(index) for index in DMA_writes])
 
 		#how long to hold this pose, and an index to which palette to use
 		duration, palette_index = self.read_from_snes_address(0x9BB823 + 2*pose, "11")

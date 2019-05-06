@@ -50,6 +50,20 @@ class SpriteParent():
 		#return True if the export was a success
 		raise AssertionError("called export_to_ROM() on Sprite base class")
 
+	def get_timed_palette(self, overall_type="base", variant_type="standard"):
+		#return the requested palette
+		#with no arguments, this returns the base type (e.g. green mail/power suit)
+		#you can specify overall_type to be other suits (e.g. blue mail/varia suit)
+		# and variant_type refers to changes on that palette, usually flashy things (e.g. zap/shinespark)
+		#or you can also specify overall_type to be other palettes related to the character (e.g. gold sword)
+		# in which case variant_type refers to variants of that type (e.g. tempered vs. gold)
+		#IMPORTANT: This function returns a list of tuples, not just the palette
+		# and so the output format should be [(num_frames, [rgb_color ...]) ...]
+		# where num_frames is the number of frames to hold these colors (0 means to hold permanently)
+		# thus for static palettes (i.e. most palettes), this will be of the form [(0, [(r,g,b) ...])]
+		#Do not include the transparency color
+		raise AssertionError("called get_timed_palette() on Sprite base class")
+
 	############################# END ABSTRACT CODE ##############################
 
 	#the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason

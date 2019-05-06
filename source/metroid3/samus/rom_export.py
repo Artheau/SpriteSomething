@@ -106,9 +106,9 @@ def rom_export(player_sprite, old_rom, verbose=False):
 	if verbose: print("done" if success_code else "FAIL")
 
 	#assign all the palettes
-	# if verbose: print("Assigning palettes...", end="")
-	# success_code = assign_palettes(player_sprite,rom)
-	# if verbose: print("done" if success_code else "FAIL")
+	if verbose: print("Assigning palettes...", end="")
+	success_code = assign_palettes(player_sprite,rom)
+	if verbose: print("done" if success_code else "FAIL")
 
 	#pee on the tree
 	SIGNATURE_ADDRESS = 0x92C500
@@ -1079,100 +1079,122 @@ def insert_file_select_graphics(samus,rom):
 
 	rom.bulk_write_to_snes_address(0xB6DA00,file_select_DMA,0x600)
 
+	stray_missile_DMA = common.convert_to_4bpp(stray_missile_image, (0,0), (0,0,8,8), None)
+	rom.bulk_write_to_snes_address(0xB6D900,stray_missile_DMA,0x20)
+	stray_missilehead_DMA = common.convert_to_4bpp(stray_missilehead_image, (0,0), (0,0,8,8), None)
+	rom.bulk_write_to_snes_address(0xB6D980,stray_missilehead_DMA,0x20)
+
 	return True
 
-"""
-def assign_palettes(samus,rom):
-	_,door_palette = samus.get_timed_sprite_palette("door", "power")[0]
-	rom.write_to_snes_address(0x82E52C,door_palette[4],2) #visor inside doors
 
-	for suit, loader_base_addr in [("power", 0x8DDB62),("varia",0x8DDCC8),("gravity",0x8DDE2E)]:
-		loader_palettes = [pal for _,pal in samus.get_timed_sprite_palette("loader",suit)]
-		rom.write_to_snes_address(loader_base_addr+0x009,loader_palettes[0x00],"2"*0x10)
-		rom.write_to_snes_address(loader_base_addr+0x02D,loader_palettes[0x01],"2"*0x10)
-		rom.write_to_snes_address(loader_base_addr+0x058,loader_palettes[0x48],"2"*0x10)
-		rom.write_to_snes_address(loader_base_addr+0x07C,loader_palettes[0x49],"2"*0x10)
-		rom.write_to_snes_address(loader_base_addr+0x0A7,loader_palettes[0x4E],"2"*0x10)
-		rom.write_to_snes_address(loader_base_addr+0x0CB,loader_palettes[0x4F],"2"*0x10)
-		rom.write_to_snes_address(loader_base_addr+0x0F6,loader_palettes[0x54],"2"*0x10)
-		rom.write_to_snes_address(loader_base_addr+0x11A,loader_palettes[0x55],"2"*0x10)
-		rom.write_to_snes_address(loader_base_addr+0x142,loader_palettes[0x58],"2"*0x10)
+def assign_palettes(samus,rom):
+	_,door_palette = samus.get_timed_palette("power","door")[0]
+	door_555 = common.convert_to_555(door_palette)
+	rom.write_to_snes_address(0x82E52C,door_555[3],2) #visor inside doors
+
+	for suit, loader_base_addr in [("power", 0x8DDB62+2),("varia",0x8DDCC8+2),("gravity",0x8DDE2E+2)]:
+		loader_palettes = [pal for _,pal in samus.get_timed_palette(suit,"loader")]
+		loader_555 = [common.convert_to_555(pal) for pal in loader_palettes]
+		rom.write_to_snes_address(loader_base_addr+0x009,loader_555[0x00],"2"*0x0F)
+		rom.write_to_snes_address(loader_base_addr+0x02D,loader_555[0x01],"2"*0x0F)
+		rom.write_to_snes_address(loader_base_addr+0x058,loader_555[0x48],"2"*0x0F)
+		rom.write_to_snes_address(loader_base_addr+0x07C,loader_555[0x49],"2"*0x0F)
+		rom.write_to_snes_address(loader_base_addr+0x0A7,loader_555[0x4E],"2"*0x0F)
+		rom.write_to_snes_address(loader_base_addr+0x0CB,loader_555[0x4F],"2"*0x0F)
+		rom.write_to_snes_address(loader_base_addr+0x0F6,loader_555[0x54],"2"*0x0F)
+		rom.write_to_snes_address(loader_base_addr+0x11A,loader_555[0x55],"2"*0x0F)
+		rom.write_to_snes_address(loader_base_addr+0x142,loader_555[0x58],"2"*0x0F)
 
 	for suit, heat_base_addr in [("power",0x8DE45E),("varia",0x8DE68A),("gravity",0x8DE8B6)]:
 		#these are stored as just fifteen colors, not sixteen.  The timer is in the spot normally taken by color 0
-		heat_palettes = [pal for _,pal in samus.get_timed_sprite_palette("heat",suit)]
+		heat_palettes = [pal for _,pal in samus.get_timed_palette(suit,"heat")]
+		heat_555 = [common.convert_to_555(pal) for pal in heat_palettes]
 		for i in range(16):
-			rom.write_to_snes_address(heat_base_addr+0x0A+0x22*i,heat_palettes[i][-0x0F:],"2"*0x0F)
+			rom.write_to_snes_address(heat_base_addr+0x0A+0x22*i,heat_555[i][-0x0F:],"2"*0x0F)
 	
-	_,sepia_palette = samus.get_timed_sprite_palette("sepia", "power")[0]
-	rom.write_to_snes_address(0x8CE569,sepia_palette,"2"*0x10)
-	_,sepia_hurt_palette = samus.get_timed_sprite_palette("sepia hurt", "power")[0]
-	rom.write_to_snes_address(0x9BA380,sepia_hurt_palette,"2"*0x10)
-	_,sepia_alternate_palette = samus.get_timed_sprite_palette("sepia alternate", "power")[0]
-	rom.write_to_snes_address(0x9BA3A0,sepia_alternate_palette,"2"*0x10)
+	_,sepia_palette = samus.get_timed_palette("power","sepia")[0]
+	sepia_555 = common.convert_to_555(sepia_palette)
+	rom.write_to_snes_address(0x8CE569+2,sepia_555,"2"*0x0F)
+	_,sepia_hurt_palette = samus.get_timed_palette("power","sepia hurt")[0]
+	sepia_hurt_555 = common.convert_to_555(sepia_hurt_palette)
+	rom.write_to_snes_address(0x9BA380+2,sepia_hurt_555,"2"*0x0F)
+	rom.write_to_snes_address(0x9BA3A0+2,sepia_555,"2"*0x0F)                 #same as sepia regular
 
 	for suit, base_addr in [("power",0x9B9400),("varia",0x9B9520),("gravity",0x9B9800)]:
-		_,power_palette = samus.get_timed_sprite_palette("standard", suit)[0]
-		rom.write_to_snes_address(base_addr,power_palette,"2"*0x10)
+		_,standard_palette = samus.get_timed_palette(suit,"standard")[0]
+		standard_555 = common.convert_to_555(standard_palette)
+		rom.write_to_snes_address(base_addr+2,standard_555,"2"*0x0F)
 
-	death_flesh_palettes = [pal for _,pal in samus.get_timed_sprite_palette("death flesh","power")]
+	death_flesh_palettes = [pal for _,pal in samus.get_timed_palette("power","death")]
+	death_flesh_555 = [common.convert_to_555(pal) for pal in death_flesh_palettes]
 	for i in range(9):
-		rom.write_to_snes_address(0x9BA120+0x20*i,death_flesh_palettes[i],"2"*0x10)
+		rom.write_to_snes_address(0x9BA120+2+0x20*i,death_flesh_555[i],"2"*0x0F)
 	
-	crystal_flash_palettes = [pal for _,pal in samus.get_timed_sprite_palette("crystal flash","power")]
+	crystal_flash_palettes = [pal for _,pal in samus.get_timed_palette("power","flash")]
+	crystal_flash_555 = [common.convert_to_555(pal) for pal in crystal_flash_palettes]
 	for i in range(6):
-		rom.write_to_snes_address(0x9B96C0+0x20*i,crystal_flash_palettes[i],"2"*0x10)
+		rom.write_to_snes_address(0x9B96C0+2+0x20*i,crystal_flash_555[i],"2"*0x0F)
 
 	for suit, charge_base_addr in [("power",0x9B9820),("varia",0x9B9920),("gravity",0x9B9A20)]:
-		charge_palettes = [pal for _,pal in samus.get_timed_sprite_palette("charge",suit)]
+		charge_palettes = [pal for _,pal in samus.get_timed_palette(suit,"charge")]
+		charge_555 = [common.convert_to_555(pal) for pal in charge_palettes]
 		for i in range(8):
-			rom.write_to_snes_address(charge_base_addr+0x20*i,charge_palettes[i],"2"*0x10)
+			rom.write_to_snes_address(charge_base_addr+2+0x20*i,charge_555[i],"2"*0x0F)
 
 	for suit, speed_boost_base_addr in [("power",0x9B9B20),("varia",0x9B9D20),("gravity",0x9B9F20)]:
-		speed_boost_palettes = [pal for _,pal in samus.get_timed_sprite_palette("speed boost",suit)]
+		speed_boost_palettes = [pal for _,pal in samus.get_timed_palette(suit,"speed boost")]
+		speed_boost_555 = [common.convert_to_555(pal) for pal in speed_boost_palettes]
 		for i in range(4):
-			rom.write_to_snes_address(speed_boost_base_addr+0x20*i,speed_boost_palettes[i],"2"*0x10)
+			rom.write_to_snes_address(speed_boost_base_addr+2+0x20*i,speed_boost_555[i],"2"*0x0F)
 
 	for suit, speed_squat_base_addr in [("power",0x9B9BA0),("varia",0x9B9DA0),("gravity",0x9B9FA0)]:
-		speed_squat_palettes = [pal for _,pal in samus.get_timed_sprite_palette("speed squat",suit)]
+		speed_squat_palettes = [pal for _,pal in samus.get_timed_palette(suit,"speed squat")]
+		speed_squat_555 = [common.convert_to_555(pal) for pal in speed_squat_palettes]
 		for i in range(4):
-			rom.write_to_snes_address(speed_squat_base_addr+0x20*i,speed_squat_palettes[i],"2"*0x10)
+			rom.write_to_snes_address(speed_squat_base_addr+2+0x20*i,speed_squat_555[i],"2"*0x0F)
 
 	for suit, shinespark_base_addr in [("power",0x9B9C20),("varia",0x9B9E20),("gravity",0x9BA020)]:
-		shinespark_palettes = [pal for _,pal in samus.get_timed_sprite_palette("shinespark",suit)]
+		shinespark_palettes = [pal for _,pal in samus.get_timed_palette(suit,"shinespark")]
+		shinespark_555 = [common.convert_to_555(pal) for pal in shinespark_palettes]
 		for i in range(4):
-			rom.write_to_snes_address(shinespark_base_addr+0x20*i,shinespark_palettes[i],"2"*0x10)
+			rom.write_to_snes_address(shinespark_base_addr+2+0x20*i,shinespark_555[i],"2"*0x0F)
 
 	for suit, screw_attack_base_addr in [("power",0x9B9CA0),("varia",0x9B9EA0),("gravity",0x9BA0A0)]:
-		screw_attack_palettes = [pal for _,pal in samus.get_timed_sprite_palette("screw attack",suit)]
+		screw_attack_palettes = [pal for _,pal in samus.get_timed_palette(suit,"screw attack")]
+		screw_attack_555 = [common.convert_to_555(pal) for pal in screw_attack_palettes]
 		for i in range(4):
-			rom.write_to_snes_address(screw_attack_base_addr+0x20*i,screw_attack_palettes[i],"2"*0x10)
+			rom.write_to_snes_address(screw_attack_base_addr+2+0x20*i,screw_attack_555[i],"2"*0x0F)
 
-	xray_colors = [pal[4] for _,pal in samus.get_timed_sprite_palette("xray","power")]
-	rom.write_to_snes_address(0x9BA3C6,xray_colors,"222")
+	xray_colors = [pal[3] for _,pal in samus.get_timed_palette("power","xray")]
+	xray_555 = common.convert_to_555(xray_colors)
+	rom.write_to_snes_address(0x9BA3C6,xray_555,"222")
 
-	hyper_beam_palettes = [pal for _,pal in samus.get_timed_sprite_palette("hyper beam","power")][::-1]
+	hyper_beam_palettes = [pal for _,pal in samus.get_timed_palette("power","hyper beam")][::-1]
+	hyper_beam_555 = [common.convert_to_555(pal) for pal in hyper_beam_palettes]
 	for i in range(10):
-		rom.write_to_snes_address(0x9BA240+0x20*i,hyper_beam_palettes[i],"2"*0x10)
+		rom.write_to_snes_address(0x9BA240+2+0x20*i,hyper_beam_555[i],"2"*0x0F)
 
-
-	ship_palettes = [pal for _,pal in samus.get_timed_sprite_palette("ship","power")]
-	rom.write_to_snes_address(0xA2A59E, ship_palettes[0][:15],"2"*0x0F)   #only the first 15 colors should be written (last is reserved for underglow)
+	ship_palettes = [pal for _,pal in samus.get_timed_palette("ship","standard")]
+	ship_555 = [common.convert_to_555(pal) for pal in ship_palettes]
+	rom.write_to_snes_address(0xA2A59E+2, ship_555[0][:14],"2"*0x0E)   #only the first 14 colors should be written (last is reserved for underglow)
 	for i in range(0x0E):   #underglow
-		rom.write_to_snes_address(0x8DCA4E+6+4*i,ship_palettes[i][-1],2)  #just the last color
+		rom.write_to_snes_address(0x8DCA4E+6+4*i,ship_555[i][-1],2)  #just the last color
 
-	_,intro_ship_palette = samus.get_timed_sprite_palette("intro ship", "power")[0]
-	rom.write_to_snes_address(0x8CE689, intro_ship_palette, "2"*0x10)
+	_,intro_ship_palette = samus.get_timed_palette("ship","intro")[0]
+	intro_ship_555 = common.convert_to_555(intro_ship_palette)
+	rom.write_to_snes_address(0x8CE689+2, intro_ship_555, "2"*0x0F)
 
-	outro_ship_palettes = [pal for _,pal in samus.get_timed_sprite_palette("outro ship", "power")]
+	outro_ship_palettes = [pal for _,pal in samus.get_timed_palette("ship","outro")]
+	outro_ship_555 = [common.convert_to_555(pal) for pal in outro_ship_palettes]
 	for i in range(0x10):
-		rom.write_to_snes_address(0x8DD6BA+6+0x24*i, outro_ship_palettes[i], "2"*0x10)
+		rom.write_to_snes_address(0x8DD6BA+2+6+0x24*i, outro_ship_555[i], "2"*0x0F)
 
-	_,file_select_palette = samus.get_timed_sprite_palette("file select", "power")[0]
-	rom.write_to_snes_address(0x8EE5E0, file_select_palette, "2"*0x10)
+	_,file_select_palette = samus.get_timed_palette( "power","file select")[0]
+	file_select_555 = common.convert_to_555(file_select_palette)
+	rom.write_to_snes_address(0x8EE5E0+2, file_select_555, "2"*0x0F)
 
 	return True
-"""
+
 
 def get_numbered_poses_old_and_new(samus,rom):
 	for animation_string, pose in samus.layout.reverse_lookup:

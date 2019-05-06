@@ -70,6 +70,15 @@ def convert_555_to_rgb(color, recurse=True):
 	else:
 		raise AssertionError("convert_555_to_rgb() called with doubly-iterable argument")
 
+def convert_to_555(palette):   #expects (r,g,b) tuples in a list, returns big endian 2-byte colors in a list
+	return [single_convert_to_555(color) for color in palette]
+
+def single_convert_to_555(color):  #expects an (r,g,b) tuple, returns a big endian 2-byte value
+    red,green,blue = [max(0,min(31,int(x)//8)) for x in color]
+    return (     blue  * 1024) + \
+            (    green * 32  ) + \
+            (    red         )
+
 def image_from_raw_data(tilemaps, DMA_writes, bounding_box):
 	#expects:
 	#  a list of tilemaps in the 5 byte format: essentially [X position, size+Xmsb, Y, index, palette+indexmsb]
@@ -260,3 +269,23 @@ def convert_indexed_tile_to_bitplanes(indexed_tile):
 
 def pretty_hex(x,digits=2):                 #displays a hex number with a specified number of digits
     return '0x' + hex(x)[2:].upper().zfill(digits)
+
+def palette_pull_towards_color(palette, pull_color, bias):
+	return [tuple(x*(1-bias)+(y*bias) for x,y in zip(color,pull_color)) for color in palette]
+
+def palette_shift(palette, shift_delta):
+	return [tuple(x+y for x,y in zip(color,shift_delta)) for color in palette]
+
+def grayscale(palette):
+    gray_palette = []
+    for (r,g,b) in palette:
+        #x = 0.21*r + 0.72*g + 0.07*b   #luminosity formula attempt
+        x = 0.31*r + 0.52*g + 0.17*b    #modified luminosity
+        #x = (r+g+b)//3                 #rote averaging
+        gray_palette.append((x,x,x))
+    max_visor = max(palette[3])
+    gray_palette[3] = (max_visor,max_visor,max_visor)  #visor should be essentially white (as bright as the brightest color)
+    return gray_palette
+
+def sepia(palette):
+    return [(r,g,b*14.0/16.0) for (r,g,b) in grayscale(palette)]
