@@ -1178,7 +1178,7 @@ def assign_palettes(samus,rom):
 	ship_555 = [common.convert_to_555(pal) for pal in ship_palettes]
 	rom.write_to_snes_address(0xA2A59E+2, ship_555[0][:14],"2"*0x0E)   #only the first 14 colors should be written (last is reserved for underglow)
 	for i in range(0x0E):   #underglow
-		rom.write_to_snes_address(0x8DCA4E+6+4*i,ship_555[i][-1],2)  #just the last color
+		rom.write_to_snes_address(0x8DCA4E+6+6*i,ship_555[i][-1],2)  #just the last color
 
 	_,intro_ship_palette = samus.get_timed_palette("ship","intro")[0]
 	intro_ship_555 = common.convert_to_555(intro_ship_palette)

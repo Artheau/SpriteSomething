@@ -130,7 +130,7 @@ class Sprite(SpriteParent):
 			timed_palette.append((4,common.palette_shift(base_palette,(0,0,0))))
 			timed_palette.append((4,common.palette_shift(base_palette,(0,0,80))))
 			timed_palette.append((4,common.palette_shift(base_palette,(0,40,160))))
-			timed_palette.append((0,common.palette_shift(base_palette,(0,120,160))))  #hold last color indefinitely
+			timed_palette.append((0,common.palette_shift(base_palette,(20,100,240))))  #(0,120,160)
 
 		elif variant_type.lower().replace("_"," ") == "speed squat":
 			#i = 0 1 2 3 2 1 0 2 3 2 1 0 1 2...

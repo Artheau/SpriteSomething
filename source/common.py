@@ -288,4 +288,4 @@ def grayscale(palette):
     return gray_palette
 
 def sepia(palette):
-    return [(r,g,b*14.0/16.0) for (r,g,b) in grayscale(palette)]
+    return [(r,g,b*13.0/16.0) for (r,g,b) in grayscale(palette)]
