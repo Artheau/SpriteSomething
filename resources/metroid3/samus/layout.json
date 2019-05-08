@@ -640,7 +640,7 @@
 			"dimensions": [-13,-24,19,16],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x27",0]]	
+			"used by": [["0x27",0],["0xB4",0]]	
 		},
 
 		"crouch_right1": {
@@ -684,7 +684,7 @@
 			"dimensions": [-19,-24,13,16],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x28",0]]	
+			"used by": [["0x28",0],["0xB5",0]]	
 		},
 
 		"crouch_left1": {
@@ -2824,7 +2824,7 @@
 			"dimensions": [-13,-24,27,16],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x73",0]]
+			"used by": [["0x73",0],["0xB6",0]]
 		},
 
 		"crouch_left_aim_up": {
@@ -2848,7 +2848,7 @@
 			"dimensions": [-27,-24,13,16],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x74",0]]
+			"used by": [["0x74",0],["0xB7",0]]
 		},
 
 		"sparks_right": {
@@ -3357,7 +3357,7 @@
 		"grapple_counterclockwise9": {
 			"parent": "grapple_counterclockwise",
 			"dimensions": [-20,-30,12,18],
-			"extra area": [[-12,18,20,26],[12,-14,20,26]],
+			"extra area": [[-12,18,20,26],[12,-14,20,18]],
 			"used by": [["0xB2",15],["0xB2",31],["0xB2",47],["0xB2",63]]
 		},
 
@@ -3447,7 +3447,7 @@
 		"grapple_clockwise5": {
 			"parent": "grapple_clockwise",
 			"dimensions": [-12,-31,20,17],
-			"extra area": [[-20,17,12,25],[-20,-15,-12,25]],
+			"extra area": [[-20,17,12,25],[-20,-15,-12,17]],
 			"used by": [["0xB3",18],["0xB3",34],["0xB3",50],["0xB3",2]]
 		},
 
