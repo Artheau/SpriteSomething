@@ -68,7 +68,7 @@ class Sprite(SpriteParent):
 				if variant_type.lower() == "intro":
 					timed_palette = [(0, ship_palette)]
 				else:   #outro
-					timed_palette = [(0x18, common.palette_pull_towards_color(ship_palette,(0xFF,0xFF,0xFF),(15.0-float(i)/15.0))) for i in range(15)]
+					timed_palette = [(0x18, common.palette_pull_towards_color(ship_palette,(0xFF,0xFF,0xFF),(float(15-i)/15.0))) for i in range(15)]
 					timed_palette.append((0, ship_palette))
 
 			else:     #standard ship colors with underglow
@@ -88,7 +88,7 @@ class Sprite(SpriteParent):
 				#and then 3 colors that are part of the underrigging which aren't coded to customize
 				ship_palette.extend([(48,48,72),(16,16,40),(0,0,0)])
 				#then 1 more color for the underglow
-				timed_palette = [(5, ship_palette + common.palette_pull_towards_color([ship_glow_color], (0,0,0), abs((7-i)/7.0))) for i in range(14)]
+				timed_palette = [(5, ship_palette + common.palette_pull_towards_color([ship_glow_color], (0,0,0), abs(float(7-i)/7.0))) for i in range(14)]
 
 		elif variant_type.lower() == "standard":
 			timed_palette = [(0, self.get_colors_from_master(overall_type))]
