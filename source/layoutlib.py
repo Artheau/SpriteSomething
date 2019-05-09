@@ -225,7 +225,10 @@ class Layout():
 				palette = palette + palette[:3]*(256-(len(palette)//3))
 				palette_seed = Image.new("P", (1,1))
 				palette_seed.putpalette(palette)
-				paletted_image = this_image.convert("RGB").quantize(palette=palette_seed)
+
+				#this is a workaround to quantize without dithering
+				paletted_image = this_image._new(this_image.im.convert("P",0,palette_seed.im))
+				  
 				#have to shift the palette over now to include the transparent pixels correctly
 				#did it this way so that color pixels would not accidentally be matched to transparency
 				original_image_L = [0 if alpha < 255 else 1 for _,_,_,alpha in this_image.getdata()]
