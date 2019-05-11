@@ -90,7 +90,14 @@ class Layout():
 
 			image_with_border.paste(mask,mask=mask)
 
-		image_with_border = ImageOps.expand(image_with_border,border=self.data["border_size"],fill=border_color)   #hard border around the actual draw space
+		spacer = self.data["images"][image_name]["spacer"] if "spacer" in self.data["images"][image_name] else 0
+		border_with_spacer = (
+								self.data["border_size"]-min(spacer,0),
+								self.data["border_size"],
+								self.data["border_size"]+max(spacer,0),
+								self.data["border_size"])
+
+		image_with_border = ImageOps.expand(image_with_border,border=border_with_spacer,fill=border_color)   #hard border around the actual draw space
 		origin = tuple(x+self.data["border_size"] for x in origin)
 
 		if shift is not None:
@@ -183,8 +190,9 @@ class Layout():
 			row_width = 0
 			row_y_min,row_y_max = float('Inf'),-float('Inf')
 			for image_name in row:   #for every image referenced explicitly in the layout
+				spacer = self.data["images"][image_name]["spacer"] if "spacer" in self.data["images"][image_name] else 0
 				xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
-				row_width += (xmax-xmin)+2*self.data["border_size"]
+				row_width += (xmax-xmin)+2*self.data["border_size"]+abs(spacer)
 				row_y_min,row_y_max = min(row_y_min,ymin),max(row_y_max,ymax)
 			row_height = row_y_max-row_y_min+2*self.data["border_size"]
 			row_margin = (master_image.size[0] - row_width)//2
@@ -201,6 +209,9 @@ class Layout():
 				xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
 				this_image = Image.new("RGBA",(xmax-xmin,ymax-ymin),0)
 				extra_area = self.get_property("extra area", image_name)
+				spacer = self.data["images"][image_name]["spacer"] if "spacer" in self.data["images"][image_name] else 0
+				master_width -= min(spacer,0)
+
 				for x0,y0,x1,y1 in itertools.chain([self.get_property("dimensions", image_name)], \
 													extra_area if extra_area else []):
 					if scale:
@@ -212,7 +223,7 @@ class Layout():
 					this_image.paste(cropped_image,(x0-xmin,y0-ymin+vert_shift))
 				if scale:
 					this_image = this_image.resize(  ((xmax-xmin)//scale,  (ymax-ymin)//scale)  )
-				master_width += xmax-xmin+2*self.data["border_size"]
+				master_width += xmax-xmin+2*self.data["border_size"] + max(spacer,0)
 
 				all_images[image_name] = this_image
 

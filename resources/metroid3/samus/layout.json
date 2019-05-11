@@ -269,7 +269,7 @@
 			"supplication_look_up_right", "supplication_look_up_right1", "supplication_look_up_right2", "supplication_look_up_right3"
 		],
 		[
-			"supplication_left_airborne", "supplication_left_collapse","supplication_left_stand_attempt", "supplication_left_stand_attempt1"
+			"supplication_left_collapse", "supplication_left_stand_attempt", "supplication_left_stand_attempt1", "supplication_left_stand_attempt2"
 		],
 		[
 			"grapple_counterclockwise", "grapple_counterclockwise1", "grapple_counterclockwise2", "grapple_counterclockwise3",
@@ -301,7 +301,7 @@
 		"elevator": {
 			"description": "Used when wearing power suit and standing on an elevator",
 			"dimensions": [-17,-24,15,32],
-			"shift": [0,-8],
+			"shift": [0,-7],
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by":
@@ -312,7 +312,7 @@
 
 		"launcher": {
 			"description": "Used when wearing power suit and loading from a save point",
-			"dimensions": [-16,-32,16,24],
+			"dimensions": [-16,-31,16,25],
 			"palette": "0x38",
 			"import palette interval": [0,15],
 			"used by":
@@ -1995,8 +1995,8 @@
 
 		"jump_right_begin": {
 			"description": "As Samus begins to jump in a non-spin way, she bends her knees to push off of the ground",
-			"dimensions": [-13,-30,19,26],
-			"shift": [0,3],
+			"dimensions": [-13,-27,19,29],
+			"spacer": -51,
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x4B",0]]
@@ -2005,6 +2005,7 @@
 		"jump_right": {
 			"description": "When Samus jumps up without spinning, or when she is starting a lateral shinespark",
 			"dimensions": [-13,-27,19,29],
+			"spacer": -8,
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x4D",0],["0xC7",0]]
@@ -2012,44 +2013,53 @@
 
 		"jump_right1": {
 			"parent": "jump_right",
+			"spacer": -8,
 			"used by": [["0x4D",1],["0xC7",1]]
 		},
 
 		"jump_right2": {
 			"parent": "jump_right",
+			"spacer": -8,
 			"used by": [["0x4D",2],["0xC7",2]]
 		},
 
 		"jump_right3": {
 			"parent": "jump_right",
+			"spacer": -8,
 			"used by": [["0x4D",3],["0xC7",3]]
 		},
 
 		"jump_right4": {
 			"parent": "jump_right",
+			"spacer": -8,
 			"used by": [["0x4D",4],["0xC7",4]]
 		},
 
 		"jump_right5": {
 			"parent": "jump_right",
+			"spacer": -8,
 			"used by": [["0x4D",5],["0xC7",5]]
 		},
 
 		"jump_right_land": {
 			"description": "while facing right, Samus makes contact with the ground after a regular jump or a fall",
+			"dimensions": [-13,-27,19,29],
+			"spacer": -8,
 			"parent": "jump_right",
 			"used by": [["0xA4",0]]
 		},
 
 		"jump_right_land1": {
+			"dimensions": [-13,-27,19,29],
+			"spacer": -8,
 			"parent": "jump_right_land",
 			"used by": [["0xA4",1]]
 		},
 
 		"jump_left_begin": {
 			"description": "As Samus begins to jump in a non-spin way, she bends her knees to push off of the ground",
-			"dimensions": [-19,-30,13,26],
-			"shift": [0,3],
+			"dimensions": [-19,-27,13,29],
+			"spacer": 51,
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x4C",0]]
@@ -2058,6 +2068,7 @@
 		"jump_left": {
 			"description": "When Samus jumps up without spinning, or when she is starting a lateral shinespark",
 			"dimensions": [-19,-27,13,29],
+			"spacer": 8,
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x4E",0],["0xC8",0]]
@@ -2065,97 +2076,121 @@
 
 		"jump_left1": {
 			"parent": "jump_left",
+			"spacer": 8,
 			"used by": [["0x4E",1],["0xC8",1]]
 		},
 
 		"jump_left2": {
 			"parent": "jump_left",
+			"spacer": 8,
 			"used by": [["0x4E",2],["0xC8",2]]
 		},
 
 		"jump_left3": {
 			"parent": "jump_left",
+			"spacer": 8,
 			"used by": [["0x4E",3],["0xC8",3]]
 		},
 
 		"jump_left4": {
 			"parent": "jump_left",
+			"spacer": 8,
 			"used by": [["0x4E",4],["0xC8",4]]
 		},
 
 		"jump_left5": {
 			"parent": "jump_left",
+			"spacer": 8,
 			"used by": [["0x4E",5],["0xC8",5]]
 		},
 
 		"jump_left_land": {
 			"description": "while facing left, Samus makes contact with the ground after a regular jump or a fall",
+			"dimensions": [-19,-27,13,29],
+			"spacer": 8,
 			"parent": "jump_left",
 			"used by": [["0xA5",0]]
 		},
 
 		"jump_left_land1": {
 			"parent": "jump_left_land",
+			"dimensions": [-19,-27,13,29],
+			"spacer": 8,
 			"used by": [["0xA5",1]]
 		},
 
 		"jump_right_aim_up_begin": {
 			"description": "As Samus begins to jump while aiming upwards, she bends her knees to push off of the ground",
-			"parent": "jump_right_aim_up",
+			"dimensions": [-13,-27,19,29],
+			"palette": "0x28",
+			"import palette interval": [0,15],
+			"spacer": -51,
 			"used by": [["0x55",0]]
 		},
 
 		"jump_right_aim_up": {
 			"description": "When Samus jumps and shoots upwards",
-			"dimensions": [-11,-27,21,29],
+			"dimensions": [-13,-27,19,29],
+			"extra area": [[19,-27,27,5]],
+			"spacer": -176,
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x15",0]]
 		},
 
+		"jump_right_aim_up1": {
+			"dimensions": [-13,-27,19,29],
+			"parent": "jump_right_aim_up_begin",
+			"used by": [["0x15",1]]
+		},
+
 		"jump_right_aim_up_land": {
 			"description": "while facing right and aiming up, Samus makes contact with the ground after a jump or a fall",
-			"parent": "jump_right_aim_up",
+			"parent": "jump_right_aim_up_begin",
+			"spacer": -8,
 			"used by": [["0xE0",0]]
 		},
 
 		"jump_right_aim_up_land1": {
 			"parent": "jump_right_aim_up_land",
+			"spacer": -8,
 			"used by": [["0xE0",1]]
-		},
-
-		"jump_right_aim_up1": {
-			"parent": "jump_right_aim_up",
-			"used by": [["0x15",1]]
 		},
 
 		"jump_left_aim_up_begin": {
 			"description": "As Samus begins to jump while aiming upwards, she bends her knees to push off of the ground",
-			"parent": "jump_left_aim_up",
+			"dimensions": [-19,-27,13,29],
+			"palette": "0x28",
+			"import palette interval": [0,15],
+			"spacer": 51,
 			"used by": [["0x56",0]]
 		},
 
 		"jump_left_aim_up": {
 			"description": "When Samus jumps and shoots upwards",
-			"dimensions": [-21,-27,11,29],
+			"dimensions": [-19,-27,13,29],
+			"extra area": [[-27,-27,-19,5]],
+			"spacer": 176,
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x16",0]]
 		},
 
 		"jump_left_aim_up1": {
-			"parent": "jump_left_aim_up",
+			"parent": "jump_left_aim_up_begin",
 			"used by": [["0x16",1]]
 		},
 
 		"jump_left_aim_up_land": {
 			"description": "while facing left and aiming up, Samus makes contact with the ground after a jump or a fall",
-			"parent": "jump_left_aim_up",
+			"parent": "jump_left_aim_up_begin",
+			"spacer": 8,
 			"used by": [["0xE1",0]]
 		},
 
 		"jump_left_aim_up_land1": {
 			"parent": "jump_left_aim_up_land",
+			"spacer": 8,
 			"used by": [["0xE1",1]]
 		},
 
@@ -2169,6 +2204,7 @@
 			"description": "When Samus jumps and shoots diagonally upwards",
 			"dimensions": [-13,-27,19,29],
 			"extra area": [[19,-27,27,5]],
+			"spacer": -168,
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x69",0]]
@@ -2200,6 +2236,7 @@
 			"description": "When Samus jumps and shoots diagonally upwards",
 			"dimensions": [-19,-27,13,29],
 			"extra area": [[-27,-27,-19,5]],
+			"spacer": 168,
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x6A",0]]
@@ -2224,44 +2261,52 @@
 		"jump_right_shoot": {
 			"description": "When Samus jumps and shoots",
 			"parent": "jump_right",
+			"spacer": -210,
 			"used by": [["0x13",0],["0x51",0]]
 		},
 
 		"jump_right_shoot1": {
 			"parent": "jump_right_shoot",
+			"spacer": -8,
 			"used by": [["0x13",1],["0x51",1]]
 		},
 
 		"jump_right_shoot_land": {
 			"description": "while facing right and shooting, Samus makes contact with the ground after a jump or a fall.  Also used for falling out of crystal flash.",
 			"parent": "jump_right_shoot",
+			"spacer": -8,
 			"used by": [["0xE6",0],["0xD3",14],["0xD7",3]]
 		},
 
 		"jump_right_shoot_land1": {
 			"parent": "jump_right_shoot_land",
+			"spacer": -8,
 			"used by": [["0xE6",1]]
 		},
 
 		"jump_left_shoot": {
 			"description": "When Samus jumps and shoots",
 			"parent": "jump_left",
+			"spacer": 210,
 			"used by": [["0x14",0],["0x52",0]]
 		},
 
 		"jump_left_shoot1": {
 			"parent": "jump_left_shoot",
+			"spacer": 8,
 			"used by": [["0x14",1],["0x52",1]]
 		},
 
 		"jump_left_shoot_land": {
 			"description": "while facing left and shooting, Samus makes contact with the ground after a jump or a fall.  Also used for falling out of crystal flash.",
 			"parent": "jump_left_shoot",
+			"spacer": 8,
 			"used by": [["0xE7",0],["0xD4",14],["0xD8",3]]
 		},
 
 		"jump_left_shoot_land1": {
 			"parent": "jump_left_shoot_land",
+			"spacer": 8,
 			"used by": [["0xE7",1]]
 		},
 
@@ -2275,6 +2320,7 @@
 			"description": "When Samus jumps and shoots diagonally downwards",
 			"dimensions": [-13,-27,19,29],
 			"extra area": [[19,-11,27,21]],
+			"spacer": -168,
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x6B",0]]
@@ -2306,6 +2352,7 @@
 			"description": "When Samus jumps and shoots diagonally downwards",
 			"dimensions": [-19,-27,13,29],
 			"extra area": [[-27,-11,-19,21]],
+			"spacer": 168,
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x6C",0]]
@@ -2330,22 +2377,26 @@
 		"jump_right_aim_down": {
 			"description": "When Samus jumps and shoots downwards",
 			"parent": "jump_right",
+			"spacer": -261,
 			"used by": [["0x17",0]]
 		},
 
 		"jump_right_aim_down1": {
 			"parent": "jump_right_aim_down",
+			"spacer": -8,
 			"used by": [["0x17",1]]
 		},
 
 		"jump_left_aim_down": {
 			"description": "When Samus jumps and shoots downwards",
 			"parent": "jump_left",
+			"spacer": 261,
 			"used by": [["0x18",0]]
 		},
 
 		"jump_left_aim_down1": {
 			"parent": "jump_left_aim_down",
+			"spacer": 8,
 			"used by": [["0x18",1]]
 		},
 
@@ -2407,12 +2458,16 @@
 
 		"fall_right": {
 			"description": "When Samus walks off of a ledge, or if she unmorphs in midair, or if she is falling after being hurt.  At first goes through poses 0-2 but after a long fall transitions to the remaining poses",
-			"parent": "jump_right",
-			"used by": [["0x29",0]]
+			"dimensions": [-13,-27,19,29],
+			"palette": "0x28",
+			"import palette interval": [0,15],
+			"used by": [["0x29",0]],
+			"spacer": -51
 		},
 
 		"fall_right1": {
 			"parent": "fall_right",
+			"spacer": -8,
 			"used by": [["0x29",1]]
 		},
 
@@ -2433,12 +2488,16 @@
 
 		"fall_left": {
 			"description": "When Samus walks off of a ledge, or if she unmorphs in midair, or if she is falling after being hurt.  At first goes through poses 0-2 but after a long fall transitions to the remaining poses",
-			"parent": "jump_left",
-			"used by": [["0x2A",0]]
+			"dimensions": [-19,-27,13,29],
+			"palette": "0x28",
+			"import palette interval": [0,15],
+			"used by": [["0x2A",0]],
+			"spacer": 51
 		},
 
 		"fall_left1": {
 			"parent": "fall_left",
+			"spacer": 8,
 			"used by": [["0x2A",1]]
 		},
 
@@ -2459,34 +2518,48 @@
 
 		"fall_right_aim_up": {
 			"description": "When Samus falls and shoots upwards",
-			"parent": "jump_right_aim_up",
-			"used by": [["0x2B",0]]
+			"dimensions": [-13,-27,19,29],
+			"extra area": [[19,-27,27,5]],
+			"palette": "0x28",
+			"import palette interval": [0,15],
+			"used by": [["0x2B",0]],
+			"spacer": -51
 		},
 
 		"fall_right_aim_up1": {
-			"parent": "fall_right_aim_up",
+			"dimensions": [-13,-27,19,29],
+			"palette": "0x28",
+			"import palette interval": [0,15],
 			"used by": [["0x2B",1]]
 		},
 
 		"fall_right_aim_up2": {
-			"parent": "fall_right_aim_up",
-			"used by": [["0x2B",2]]
+			"parent": "fall_right_aim_up1",
+			"used by": [["0x2B",2]],
+			"spacer": -68
 		},
 
 		"fall_left_aim_up": {
 			"description": "When Samus falls and shoots upwards",
-			"parent": "jump_left_aim_up",
-			"used by": [["0x2C",0]]
+			"dimensions": [-19,-27,13,29],
+			"extra area": [[-27,-27,-19,5]],
+			"palette": "0x28",
+			"import palette interval": [0,15],
+			"used by": [["0x2C",0]],
+			"spacer": 51
 		},
 
 		"fall_left_aim_up1": {
-			"parent": "fall_left_aim_up",
+			"dimensions": [-19,-27,13,29],
+			"palette": "0x28",
+			"import palette interval": [0,15],
 			"used by": [["0x2C",1]]
 		},
 
 		"fall_left_aim_up2": {
-			"parent": "fall_left_aim_up",
-			"used by": [["0x2C",2]]
+			"parent": "fall_left_aim_up1",
+			"used by": [["0x2C",2]],
+			"spacer": 68
 		},
 
 		"fall_right_aim_diag_up": {
@@ -2497,12 +2570,14 @@
 
 		"fall_right_aim_diag_up1": {
 			"parent": "fall_right_aim_diag_up",
+			"spacer": -8,
 			"used by": [["0x6D",1]]
 		},
 
 		"fall_right_aim_diag_up2": {
 			"parent": "fall_right_aim_diag_up",
-			"used by": [["0x6D",2]]
+			"used by": [["0x6D",2]],
+			"spacer": -68
 		},
 
 		"fall_left_aim_diag_up": {
@@ -2513,22 +2588,25 @@
 
 		"fall_left_aim_diag_up1": {
 			"parent": "fall_left_aim_diag_up",
+			"spacer": 8,
 			"used by": [["0x6E",1]]
 		},
 
 		"fall_left_aim_diag_up2": {
 			"parent": "fall_left_aim_diag_up",
-			"used by": [["0x6E",2]]
+			"used by": [["0x6E",2]],
+			"spacer": 68
 		},
 
 		"fall_right_shoot": {
 			"description": "When Samus walks off of a ledge, or if she unmorphs in midair, or if she is falling after being hurt AND is shooting.  At first goes through poses 0-2 but after a long fall transitions to the remaining poses",
-			"parent": "jump_right_shoot",
+			"parent": "fall_right",
 			"used by": [["0x67",0]]
 		},
 
 		"fall_right_shoot1": {
 			"parent": "fall_right_shoot",
+			"spacer": -8,
 			"used by": [["0x67",1]]
 		},
 
@@ -2549,12 +2627,13 @@
 
 		"fall_left_shoot": {
 			"description": "When Samus walks off of a ledge, or if she unmorphs in midair, or if she is falling after being hurt AND is shooting.  At first goes through poses 0-2 but after a long fall transitions to the remaining poses",
-			"parent": "jump_left_shoot",
+			"parent": "fall_left",
 			"used by": [["0x68",0]]
 		},
 
 		"fall_left_shoot1": {
 			"parent": "fall_left_shoot",
+			"spacer": 8,
 			"used by": [["0x68",1]]
 		},
 
@@ -2581,12 +2660,14 @@
 
 		"fall_right_aim_diag_down1": {
 			"parent": "fall_right_aim_diag_down",
+			"spacer": -8,
 			"used by": [["0x6F",1]]
 		},
 
 		"fall_right_aim_diag_down2": {
 			"parent": "fall_right_aim_diag_down",
-			"used by": [["0x6F",2]]
+			"used by": [["0x6F",2]],
+			"spacer": -68
 		},
 
 		"fall_left_aim_diag_down": {
@@ -2597,39 +2678,45 @@
 
 		"fall_left_aim_diag_down1": {
 			"parent": "fall_left_aim_diag_down",
+			"spacer": 8,
 			"used by": [["0x70",1]]
 		},
 
 		"fall_left_aim_diag_down2": {
 			"parent": "fall_left_aim_diag_down",
-			"used by": [["0x70",2]]
+			"used by": [["0x70",2]],
+			"spacer": 68
 		},
 
 		"fall_right_aim_down": {
 			"description": "When Samus falls and shoots downwards",
 			"parent": "fall_right",
-			"used by": [["0x2D",0]]
+			"used by": [["0x2D",0]],
+			"spacer": -51
 		},
 
 		"fall_right_aim_down1": {
 			"parent": "fall_right_aim_down",
+			"spacer": -8,
 			"used by": [["0x2D",1]]
 		},
 
 		"fall_left_aim_down": {
 			"description": "When Samus falls and shoots downwards",
 			"parent": "fall_left",
-			"used by": [["0x2E",0]]
+			"used by": [["0x2E",0]],
+			"spacer": 51
 		},
 
 		"fall_left_aim_down1": {
 			"parent": "fall_left_aim_down",
+			"spacer": 8,
 			"used by": [["0x2E",1]]
 		},
 
 		"roll_out_right": {
 			"description": "Samus is damage boosting.  She faces left but because of damage she jumps to the right and rolls out.",
-			"dimensions": [-21,-25,19,23],
+			"dimensions": [-21,-24,19,24],
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x4F",0]]
@@ -2684,7 +2771,7 @@
 
 		"roll_out_left": {
 			"description": "Samus is damage boosting.  She faces right but because of damage she jumps to the left and rolls out.",
-			"dimensions": [-19,-25,21,23],
+			"dimensions": [-19,-24,21,24],
 			"palette": "0x28",
 			"import palette interval": [0,15],
 			"used by": [["0x50",0]]
@@ -2908,7 +2995,9 @@
 		"fall_turn_neutral":
 		{
 			"description": "While jumping, Samus is turning from right to left, or left to right, and is presently facing 'forward'",
-			"parent": "jump_turn_neutral",
+			"dimensions": [-16,-27,16,29],
+			"palette": "0x28",
+			"import palette interval": [0,15],
 			"used by": [["0x87",1],["0x88",1]]
 		},
 
@@ -2927,7 +3016,7 @@
 
 		"fall_turn_neutral_aim_up": {
 			"description": "While falling and aiming up (or diag up), Samus is turning from right to left, or left to right, and is presently facing 'forward'",
-			"parent": "jump_turn_neutral",
+			"parent": "fall_turn_neutral",
 			"used by": [["0x93",1],["0x94",1],["0xA0",1],["0xA1",1]]
 		},
 
@@ -2945,7 +3034,7 @@
 
 		"fall_turn_neutral_aim_down": {
 			"description": "While falling and aiming up (or diag up), Samus is turning from right to left, or left to right, and is presently facing 'forward'",
-			"parent": "jump_turn_neutral",
+			"parent": "fall_turn_neutral",
 			"used by": [["0x95",1],["0x96",1]]
 		},
 
@@ -3611,26 +3700,32 @@
 
 		"supplication_left_collapse": {
 			"description": "After taking a rainbow beam to the face, this pose is used when Samus makes contact with the ground, before collapsing",
+			"dimensions": [-19,-19,13,29],
 			"parent": "crouch_transition_left",
-			"shift": [0,3],
+			"shift": [0,0],
 			"used by": [["0xE9",7]]
-		},
-
-		"supplication_left_airborne": {
-			"description": "In theory, if Samus became airborne while she was paralyzed and being pounded on during the Mother Brain fight, this frame would display.  I'm not actually sure how this would happen in practice.",
-			"parent": "stand_left",
-			"used by": [["0xE9",14],["0xE9",19],["0xE9",23]]			
+			
 		},
 
 		"supplication_left_stand_attempt": {
 			"description": "During the Mother Brain fight, while paralyzed, Samus makes several attempts to stand up",
-			"parent": "crouch_transition_left",
-			"shift": [0,3],
-			"used by": [["0xE9", 15],["0xE9",20],["0xE9",22]]
+			"dimensions": [-19,-28,13,20],
+			"parent": "stand_left",
+			"shift": [0,9],
+			"used by": [["0xE9",14],["0xE9",19],["0xE9",23]]			
 		},
 
 		"supplication_left_stand_attempt1": {
-			"parent": "stand_left",
+			"dimensions": [-19,-21,13,27],
+			"parent": "supplication_left_stand_attempt",
+			"shift": [0,2],
+			"used by": [["0xE9", 15],["0xE9",20],["0xE9",22]]
+		},
+
+		"supplication_left_stand_attempt2": {
+			"dimensions": [-19,-19,13,29],
+			"parent": "supplication_left_stand_attempt",
+			"shift": [0,0],
 			"used by": [["0xE9", 16],["0xE9",21]]
 		},
 
