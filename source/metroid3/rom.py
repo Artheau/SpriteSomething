@@ -467,7 +467,7 @@ class RomHandler(RomHandlerParent):
 			full_palette_set = []
 			for i in range(14):
 				#now what you're going to get is a list of duration, color, control code (2 bytes each, 14 in total)
-				duration, glow_color = self.read_from_snes_address(ship_underglow_address + 4*i, "22")
+				duration, glow_color = self.read_from_snes_address(ship_underglow_address + 6*i, "22")
 				#the glow color appends at the final index (index 15)
 				full_palette_set.append((duration,base_palette+[glow_color]))
 
