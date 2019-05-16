@@ -482,7 +482,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		text.bind("<Button-1>", lambda e: txtEvent(e))
 
 	def exit(self):
-		save_before_exit = messagebox.askyesnocancel(self.app_title,"Do you want to save before exiting?")
+		#Until some kind of useful change/edit feature is implemented, no need to ask if they want to save their changes
+		save_before_exit = False #messagebox.askyesnocancel(self.app_title,"Do you want to save before exiting?")
 		if save_before_exit != None:
 			if save_before_exit:
 				saved = self.save_file_as()

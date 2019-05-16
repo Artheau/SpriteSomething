@@ -176,6 +176,10 @@ def convert_tile_from_bitplanes(raw_tile):
 	returnvalue = np.fliplr(returnvalue)
 	return returnvalue
 
+def image_from_bitplanes(raw_tile):
+	#fromarray expects column major format, so have to switch the axes
+ 	return Image.fromarray(convert_tile_from_bitplanes(raw_tile).swapaxes(0,1),'P')
+
 def convert_to_4bpp(image, offset, dimensions, extra_area):
 	top_row = []            #have to process these differently so that 16x16 tiles can be correctly reconstructed
 	bottom_row = []

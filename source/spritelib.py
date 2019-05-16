@@ -33,21 +33,21 @@ class SpriteParent():
 	#to make a new sprite class, you must write code for all of the functions in this section below.
 	############################# BEGIN ABSTRACT CODE ##############################
 
-	def import_from_ZSPR(self):
-		#use self.filename as the filename
-		#self.images, self.master_palette = ?, ?
-		raise AssertionError("called import_from_ZSPR() on Sprite base class")
-
+	
 	def import_from_ROM(self, rom):
 		#self.images, self.master_palette = ?, ?
 		raise AssertionError("called import_from_ROM() on Sprite base class")
+
+	def import_from_binary_data(self,pixel_data,palette_data):
+		#self.images, self.master_palette = ?, ?
+		raise AssertionError("called import_from_binary_data() on Sprite base class")
 
 	def save_as_ZSPR(self, filename):
 		#return True if the save was a success
 		raise AssertionError("called save_as_ZSPR() on Sprite base class")
 
 	def inject_into_ROM(self, rom):
-		#return True if the export was a success
+		#return the injected ROM
 		raise AssertionError("called export_to_ROM() on Sprite base class")
 
 	def get_timed_palette(self, overall_type="base", variant_type="standard"):
@@ -83,6 +83,24 @@ class SpriteParent():
 
 	def import_from_PNG(self):
 		self.images, self.master_palette = self.layout.extract_all_images_from_master(Image.open(self.filename))
+
+	def import_from_ZSPR(self):
+		with open(self.filename,"rb") as file:
+			data = bytearray(file.read())
+
+		if data[0:4] != bytes(ord(x) for x in 'ZSPR'):
+			raise AssertionError("This file does not have a valid ZSPR header")
+		if data[4] == 1:
+			pixel_data_offset = int.from_bytes(data[9:13], byteorder='little', signed=False)
+			pixel_data_length = int.from_bytes(data[13:15], byteorder='little', signed=False)
+			palette_data_offset = int.from_bytes(data[15:19], byteorder='little', signed=False)
+			palette_data_length = int.from_bytes(data[19:21], byteorder='little', signed=False)
+			pixel_data = data[pixel_data_offset:pixel_data_offset+pixel_data_length]
+			palette_data = data[palette_data_offset:palette_data_offset+palette_data_length]
+			self.import_from_binary_data(pixel_data,palette_data)
+		else:
+			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
+		
 
 	def attach_metadata_panel(self,parent):
 		parent.add(tk.Label(parent, text="Sprite Metadata\nGoes\nHere"))

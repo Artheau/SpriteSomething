@@ -23,19 +23,21 @@ def autodetect(sprite_filename):
 		#And by default, we will grab the player sprite from this game
 		sprite = game.make_player_sprite(sprite_filename)
 	elif file_extension.lower() == ".png":
-		#I'm not sure what to do here yet.  For right now I am going to assume that if it is a big file, it is Samus, else Link
+		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
 		loaded_image = Image.open(sprite_filename) 
 		if loaded_image.size == (128,448):      #This is the size of Z3Link's sheet
 			game = get_game_class_of_type("zelda3")
 			sprite = game.make_player_sprite(sprite_filename)
-		elif loaded_image.size[0] > 800 and loaded_image.size[1] > 2000:
+		elif loaded_image.size == (876,2543):   #This is the size of M3Samus's sheet
 			game = get_game_class_of_type("metroid3")
 			sprite = game.make_player_sprite(sprite_filename)
 		else:
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
 	elif file_extension.lower() == ".zspr":
-		game = get_game_class_of_type(get_game_type_from_zspr(sprite_filename))
-		sprite = game.make_sprite_by_number(get_sprite_number_from_zspr(sprite_filename),sprite_filename)
+		with open(sprite_filename,"rb") as file:
+			zspr_data = bytearray(file.read())
+		game = get_game_class_of_type(get_game_type_from_zspr_data(zspr_data))
+		sprite = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
 	else:
 		raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its filename")
 	return game, sprite
@@ -53,6 +55,13 @@ def autodetect_game_type_from_rom(rom):
 				return game_name
 	else:
 		raise AssertionError(f"Could not identify the type of ROM {filename} from its header name: {rom_name}")
+
+def get_game_type_from_zspr_data(zspr_data):
+	#for now, until other types of ZSPR files exist, we will just assume that all ZSPR files are Zelda3 Link files
+	return "zelda3"
+
+def get_sprite_number_from_zspr_data(zspr_data):
+	return int.from_bytes(zspr_data[21:23], byteorder='little')
 
 def get_game_class_of_type(game_name):
 	#dynamic import

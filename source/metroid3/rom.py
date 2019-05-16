@@ -627,6 +627,13 @@ class RomHandler(RomHandlerParent):
 														[0x83,0x01,0x84,0x01,0x0B,0x01,0x00,0x0D], "11111111")
 		self._apply_single_fix_to_snes_address(0x90CB31,[0x04,0x01,0x00,0x09,0x00,0x09,0x05,0x01],
 														[0x86,0x01,0x85,0x01,0xED,0x01,0xF7,0x0D], "11111111")
+
+		#the application of the right-facing jump begin/jump land missile port placements is inconsistent
+		# across the animations and in many animations is omitted.  These lines make this consistent by always omitting it
+		self._apply_single_fix_to_snes_address(0x90CAD1, [0x03,0x01], [0x00,0x00], "11")
+		self._apply_single_fix_to_snes_address(0x90CBF9, [0x03,0x01], [0x00,0x00], "11")
+		self._apply_single_fix_to_snes_address(0x90CC05, [0x03,0x01], [0x00,0x00], "11")
+
 		'''
 		;CBA5
 		XY_P49:     ;49:;Moonwalk, facing left
