@@ -108,7 +108,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#create the import menu
 		import_menu = create_cascade("Export","export_menu",
 											[
-													("Inject into ROM","inject",self.inject_into_ROM),
+													("Inject into Game File","inject",self.inject_into_ROM),
+													("Copy to new Game File",None,self.copy_into_ROM),
 													(None,None,None),
 													("Animation as GIF",None,self.export_animation_as_gif),
 													("Animation as Collage",None,self.export_animation_as_collage),
@@ -402,20 +403,27 @@ class SpriteSomethingMainFrame(tk.Frame):
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
 	
-	def inject_into_ROM(self):
-		source_filename = filedialog.askopenfilename(initialdir="./", title="Select Source ROM", filetypes=(("Game Files","*.sfc *.smc"),))
-		if source_filename:
-			_,file_extension = os.path.splitext(source_filename)
-			if file_extension.lower() in ['.sfc','.smc']:
-				default_extension = file_extension.lower()
-			else:
-				default_extension = ".sfc"
+	def copy_into_ROM(self, inject=False):
+		if inject:
+			dest_filename = filedialog.asksaveasfilename(defaultextension=".sfc", initialdir="./", title="Select ROM to Modify...", filetypes=(("Game Files","*.sfc *.smc"),))
+			source_filename = dest_filename
+		else:
+			source_filename = filedialog.askopenfilename(initialdir="./", title="Select Source ROM", filetypes=(("Game Files","*.sfc *.smc"),))
+			if source_filename:
+				_,file_extension = os.path.splitext(source_filename)
+				if file_extension.lower() in ['.sfc','.smc']:
+					default_extension = file_extension.lower()
+				else:
+					default_extension = ".sfc"
+				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialdir="./", title="Save Modified ROM As...", filetypes=(("Game Files","*.sfc *.smc"),))
+		if dest_filename:
 			rom = self.game.get_rom_from_filename(source_filename)
-			dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialdir="./", title="Save Modified ROM As...", filetypes=(("Game Files","*.sfc *.smc"),))
-			if dest_filename:
-				modified_rom = self.sprite.inject_into_ROM(rom)
-				modified_rom.save(dest_filename, overwrite=True)
-				messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
+			modified_rom = self.sprite.inject_into_ROM(rom)
+			modified_rom.save(dest_filename, overwrite=True)
+			messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
+
+	def inject_into_ROM(self):
+		self.copy_into_ROM(inject=True)
 
 	def export_animation_as_gif(self):
 		raise NotImplementedError()

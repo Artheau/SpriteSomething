@@ -103,7 +103,7 @@ class SpriteParent():
 		
 
 	def attach_metadata_panel(self,parent):
-		parent.add(tk.Label(parent, text="Sprite Metadata\nGoes\nHere"))
+		parent.add(tk.Label(parent, text="\n"))  #TODO: text="Sprite Metadata\nGoes\nHere"))
 
 	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter):
 		ANIMATION_DROPDOWN_WIDTH = 25
