@@ -1,4 +1,5 @@
 import tkinter as tk
+from functools import partial
 from tkinter import ttk, messagebox, filedialog
 import random
 import json
@@ -6,14 +7,20 @@ import re
 import traceback
 import os, sys
 import time
-from source import widgetlib
-from source import ssDiagnostics as diagnostics
-from source import gamelib
 from source import constants as CONST
+from source import crxtooltip as crx
+from source import gamelib
+from source import ssDiagnostics as diagnostics
+from source import widgetlib
 from source.tkHyperlinkManager import HyperlinkManager
 from source.tkSimpleStatusBar import StatusBar
 from source import common
 
+dims = {
+	"button": {
+		"width": 7
+	}
+}
 
 def make_GUI(command_line_args):
 	root = tk.Tk()
@@ -38,7 +45,7 @@ def make_GUI(command_line_args):
 
 	root.mainloop()
 
-		
+
 class SpriteSomethingMainFrame(tk.Frame):
 	def __init__(self, master, command_line_args):
 		super().__init__(master)   #make the frame itself
@@ -98,7 +105,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			menu.add_cascade(label=name, menu=cascade)
 
 		#create the file menu
-		file_menu = create_cascade("File", "file_menu",	
+		file_menu = create_cascade("File", "file_menu",
 											[
 													("Open","open",self.open_file),
 													("Save As...","save",self.save_file_as),
@@ -138,7 +145,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.sprite_coord = (100,100)        #an arbitrary default
 		self.attach_both_panels()            #remake the GUI panels
 		self.initialize_sprite_animation()
-		
+
 	def attach_both_panels(self):
 		#this same function can also be used to re-create the panels
 		#have to make the canvas before the buttons so that the left panel buttons can manipulate it
@@ -158,10 +165,12 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#this same function can also be used to re-create the panel
 		MINSIZE = 25
 		vcr_controls = self.get_vcr_controls()  #have to do this early so that their values are available for other buttons
+		spiffy_buttons = self.get_spiffy_buttons()
 		self.left_panel.add(self.get_reload_button(),minsize=MINSIZE)
 		self.sprite.attach_metadata_panel(self.left_panel)
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter)
 		self.sprite.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter)
+		self.left_panel.add(spiffy_buttons)
 		self.left_panel.add(vcr_controls,minsize=MINSIZE)
 		self.panes.add(self.left_panel)
 
@@ -285,7 +294,64 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def coord_getter(self):
 		return self.sprite_coord
-		
+
+
+  ########################### SPIFFY BUTTONS HERE ####################################
+	def get_spiffy_buttons(self):
+		dims = {
+			"button": {
+				"width": 20,
+				"height": 20,
+				"color.active": "#78C0F8",
+				"color.selected": "#C0E0C0"
+			}
+		}
+		spiffy_buttons_section = tk.Frame(self.left_panel, name="spiffy_buttons")
+		widgetlib.right_align_grid_in_frame(spiffy_buttons_section)
+		row = 0
+		for i in range(len(self.sprite.spiffy_buttons)):
+			col = 0
+			label = self.sprite.spiffy_buttons[i][0]
+			levels = self.sprite.spiffy_buttons[i][1]
+			prefix = self.sprite.spiffy_buttons[i][2]
+			suffix = self.sprite.spiffy_buttons[i][3]
+			section_label = tk.Label(spiffy_buttons_section, text=label + ':')
+			section_label.grid(row=row, column=col, sticky='E')
+			col += 1
+			if prefix == "mail" or prefix == "suit":
+				col += 1
+			for tip,level in levels.items():
+				icon_path = ""
+				if level > 0 and tip != "Yes":
+					icon_path = common.get_resource(prefix+'-'+str(level)+".png",os.path.join(self.game.internal_name,"icons"))
+				elif tip.find("No") > -1 or tip == "Standard":
+					icon_path = common.get_resource("no-thing.png",os.path.join("meta","icons"))
+				elif tip.find("Yes") > -1:
+					icon_path = common.get_resource("yes-thing.png",os.path.join("meta","icons"))
+				img = tk.PhotoImage(file=icon_path)
+				button = tk.Radiobutton(
+					spiffy_buttons_section,
+					image=img,
+					name=prefix + str(level) + "_button",
+					text=tip+suffix,
+					variable=prefix,
+					value=level,
+					activebackground=dims["button"]["color.active"],
+					selectcolor=dims["button"]["color.selected"],
+					width=dims["button"]["width"],
+					height=dims["button"]["height"],
+					indicatoron=False,
+					command=partial(self.sprite.press_spiffy_button,prefix,level)
+				)
+				if col == 1 or (prefix in ["mail","suit"] and level == 1):
+					button.select()
+					self.sprite.press_spiffy_button(prefix, level)
+				crx.CreateToolTip(button,tip + suffix)
+				button.image = img
+				button.grid(row=row,column=col)
+				col += 1
+			row += 1
+		return spiffy_buttons_section
 
 	########################### VCR CONTROLS HERE ######################################
 
@@ -305,7 +371,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.update_sprite_animation()
 		def set_zoom_text():
 			self.zoom_factor.set('x' + str(round(self.current_zoom, 1)) + ' ')
-			
+
 		def speed_down(*args):
 			self.current_speed = max(0.1, self.current_speed - 0.1)
 			set_speed_text()
@@ -332,43 +398,51 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		def make_vcr_label(textvariable, icon_name):
 			icon_path = common.get_resource(icon_name,os.path.join("meta","icons"))
-			image = tk.PhotoImage(file=image_path) if icon_path else None
-			vcr_label = tk.Label(control_section, image=image, textvariable=textvariable)
+			image = tk.PhotoImage(file=icon_path) if icon_path else None
+			vcr_label = tk.Label(control_section, image=image, anchor='e', width=dims["button"]["width"], textvariable=textvariable)
 			vcr_label.grid(row = self.current_grid_cell//3,
 						column = 1 + (self.current_grid_cell % 3),
-						sticky=['nes','nesw','nsw'][self.current_grid_cell % 3])
+						sticky='nes')
 			self.current_grid_cell += 1
 			return vcr_label
 
-		def make_vcr_button(text, icon_name, command):
+		def make_vcr_button(text, icon_name, command, side="right"):
 			icon_path = common.get_resource(icon_name,os.path.join("meta","icons"))
-			image = tk.PhotoImage(file=image_path) if icon_path else None
-			vcr_button = tk.Button(control_section, image=image, text=text, width=BUTTON_WIDTH, command=command)
+			image = tk.PhotoImage(file=icon_path) if icon_path else None
+			if side == "right":
+				side = tk.RIGHT
+			elif side == "left":
+				side = tk.LEFT
+			else:
+				side = tk.NONE
+			print(icon_path)
+			vcr_button = tk.Button(control_section, image=image, text=text, compound=side, width=dims["button"]["width"], command=command)
+			vcr_button.image = image
 			vcr_button.grid(row = self.current_grid_cell//3,
 						column = 1 + (self.current_grid_cell % 3),
-						sticky=['nes','nesw','nsw'][self.current_grid_cell % 3])
+						sticky=['nesw','nesw','nesw'][self.current_grid_cell % 3])
 			self.current_grid_cell += 1
 			return vcr_button
-		
+
 		zoom_factor_label = make_vcr_label(self.zoom_factor, None)
 		zoom_out_button = make_vcr_button("Zoom -",None,zoom_out)
 		zoom_in_button = make_vcr_button("Zoom +",None,zoom_in)
-		
+
 		speed_factor_label = make_vcr_label(self.speed_factor,None)
 		speed_down_button = make_vcr_button("Speed -",None,speed_down)
 		speed_up_button = make_vcr_button("Speed +",None,speed_up)
-		
-		play_button = make_vcr_button("Play", None, self.start_global_frame_timer)
-		play_one_button = make_vcr_button("Play 1", None, self.play_once)
+
+		play_button = make_vcr_button("Play", "play.png", self.start_global_frame_timer)
+		play_one_button = make_vcr_button("Play 1", "play-one.png", self.play_once)
 		reset_button = make_vcr_button("Reset", None, self.reset_global_frame_timer)
 
-		frame_back_button = make_vcr_button("<< Frame", None, self.rewind_global_frame_timer)
-		pause_button = make_vcr_button("Pause", None, self.pause_global_frame_timer)
-		frame_forward_button = make_vcr_button("Frame >>", None, self.step_global_frame_timer)
+		frame_back_button = make_vcr_button("Frame", "frame-backward.png", self.rewind_global_frame_timer, "left")
+		pause_button = make_vcr_button("Pause", "pause.png", self.pause_global_frame_timer)
+		frame_forward_button = make_vcr_button("Frame", "frame-forward.png", self.step_global_frame_timer)
 
-		step_back_button = make_vcr_button("<< Pose", None, self.go_to_previous_pose)
+		step_back_button = make_vcr_button("Pose", "step-backward.png", self.go_to_previous_pose, "left")
 		null_label = make_vcr_label("", None)
-		step_forward_button = make_vcr_button("Pose >>", None, self.go_to_next_pose)
+		step_forward_button = make_vcr_button("Pose", "step-forward.png", self.go_to_next_pose)
 
 		return control_section
 
@@ -402,7 +476,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
-	
+
 	def copy_into_ROM(self, inject=False):
 		if inject:
 			dest_filename = filedialog.asksaveasfilename(defaultextension=".sfc", initialdir="./", title="Select ROM to Modify...", filetypes=(("Game Files","*.sfc *.smc"),))
@@ -531,4 +605,3 @@ class SpriteSomethingMainFrame(tk.Frame):
 				textObject.insert(tk.INSERT, "\n")
 			else:
 				textObject.insert(tk.INSERT, line + "\n")
-

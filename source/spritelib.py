@@ -33,7 +33,7 @@ class SpriteParent():
 	#to make a new sprite class, you must write code for all of the functions in this section below.
 	############################# BEGIN ABSTRACT CODE ##############################
 
-	
+
 	def import_from_ROM(self, rom):
 		#self.images, self.master_palette = ?, ?
 		raise AssertionError("called import_from_ROM() on Sprite base class")
@@ -63,6 +63,10 @@ class SpriteParent():
 		# thus for static palettes (i.e. most palettes), this will be of the form [(0, [(r,g,b) ...])]
 		#Do not include the transparency color
 		raise AssertionError("called get_timed_palette() on Sprite base class")
+
+	def press_spiffy_button(self,prefix,level):
+		#what to do when a spiffy button is pressed
+		raise AssertionError("called press_spiffy_button() on Sprite base class")
 
 	############################# END ABSTRACT CODE ##############################
 
@@ -100,10 +104,18 @@ class SpriteParent():
 			self.import_from_binary_data(pixel_data,palette_data)
 		else:
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
-		
+
 
 	def attach_metadata_panel(self,parent):
-		parent.add(tk.Label(parent, text="\n"))  #TODO: text="Sprite Metadata\nGoes\nHere"))
+		metadata_section = tk.Frame(parent, name="metadata_section")
+		row = 0
+		for label in ["Sprite Name","Author Name","Author Name Short"]:
+			metadata_label = tk.Label(metadata_section, text=label, name=label.lower().replace(' ', '_'))
+			metadata_label.grid(row=row,column=1)
+			metadata_input = tk.Entry(metadata_section, name=label.lower().replace(' ', '_') + "_input")
+			metadata_input.grid(row=row,column=2)
+			row += 1
+		parent.add(metadata_section)
 
 	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter):
 		ANIMATION_DROPDOWN_WIDTH = 25
@@ -126,12 +138,12 @@ class SpriteParent():
 		self.animation_selection = tk.StringVar(animation_panel)
 
 		self.animation_selection.set(random.choice(list(self.animations.keys())))
-		
+
 		animation_dropdown = tk.ttk.Combobox(animation_panel, state="readonly", values=list(self.animations.keys()), name="animation_dropdown")
 		animation_dropdown.configure(width=ANIMATION_DROPDOWN_WIDTH, exportselection=0, textvariable=self.animation_selection)
 		animation_dropdown.grid(row=0, column=2)
 		self.set_animation(self.animation_selection.get())
-		
+
 		def dropdown_wrapper(this_object):
 			def change_animation_dropdown(*args):
 				#This tomfoolery is necessary to avoid a memory leak
@@ -165,7 +177,7 @@ class SpriteParent():
 
 		if not hasattr(self, "frame_progression_table"):    #the table hasn't been set up, so signal for a change
 			return True
-		
+
 		old_pose_number, old_palette_number = self.pose_number, self.palette_number
 
 		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
@@ -173,9 +185,9 @@ class SpriteParent():
 
 		palette_mod_frames = self.frame_getter() % self.palette_progression_table[-1]
 		self.palette_number = self.palette_progression_table.index(min([x for x in self.palette_progression_table if x > palette_mod_frames]))
-		
+
 		return (old_pose_number != self.pose_number) or (old_palette_number != self.palette_number)
-		
+
 	def get_tiles_for_current_pose(self):
 		self.update_pose_and_palette_numbers()
 		pose_list = self.get_current_pose_list()
@@ -197,9 +209,9 @@ class SpriteParent():
 			palette_lookup = self.layout.get_property("import palette interval", tile_info["image"])        #TODO: get correct palette based upon buttons
 
 			base_image = common.apply_palette(base_image, self.master_palette[palette_lookup[0]:palette_lookup[1]])
-			
+
 			full_tile_list.append((base_image,tile_info["pos"]))
-		
+
 		return full_tile_list
 
 	def get_current_pose_list(self):
@@ -212,7 +224,7 @@ class SpriteParent():
 		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
 		next_pose_at = min(x for x in self.frame_progression_table if x > mod_frames)
 		return next_pose_at - mod_frames
-		
+
 	def frames_to_previous_pose(self):
 		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
 		prev_pose_at = max((x for x in self.frame_progression_table if x <= mod_frames), default=0)
@@ -242,7 +254,7 @@ class SpriteParent():
 				del tile                     #why this is not auto-destroyed is beyond me (memory leak otherwise)
 		self.sprite_IDs = []
 		self.active_tiles = []
-		
+
 		for tile,offset in self.get_tiles_for_current_pose():
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in tile.size)
 			scaled_tile = ImageTk.PhotoImage(tile.resize(new_size,resample=Image.NEAREST))
@@ -250,7 +262,7 @@ class SpriteParent():
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_tile, anchor = tk.NW))
 			self.active_tiles.append(scaled_tile)     #if you skip this part, then the auto-destructor will get rid of your picture!
 		self.last_known_coord = self.coord_getter()
-		self.last_known_zoom = self.zoom_getter()	
+		self.last_known_zoom = self.zoom_getter()
 
 	def save_as(self, filename):
 		_,file_extension = os.path.splitext(filename)
@@ -283,4 +295,3 @@ class SpriteParent():
 			scaled_image = scaled_image.copy()
 			self.overview_image = common.get_tk_image(scaled_image)
 			self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)
-	
