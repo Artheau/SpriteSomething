@@ -14,7 +14,10 @@ class Sprite(SpriteParent):
 			["Effect", {"None":0,"Heat":1,"XRay":2,"Sepia":3,"Door":4}, "effect", ""],
 			["Cannon Port", {"No":0,"Yes":1}, "port", " Port"]
 		]
-
+		self.plugins = [
+			("File Select Preview",None),
+			("Ship Preview",None)
+		]
 
 	def import_from_ROM(self, rom):
 		#The history of the Samus import code is a story I will tell to my children

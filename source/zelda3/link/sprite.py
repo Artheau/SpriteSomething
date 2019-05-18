@@ -14,6 +14,9 @@ class Sprite(SpriteParent):
 			["Shield", {"No":0,"Fighter's":1,"Fire":2,"Mirror":3}, "shield", " Shield"],
 			["Gloves", {"No Gloves":0,"Power Glove":1,"Titan's Mitt":2}, "gloves", ""]
 		]
+		self.plugins = [
+			("Sheet Trawler",None)
+		]
 
 	def import_from_ROM(self, rom):
 		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)    #the big Link sheet

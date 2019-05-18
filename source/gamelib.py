@@ -24,7 +24,7 @@ def autodetect(sprite_filename):
 		sprite = game.make_player_sprite(sprite_filename)
 	elif file_extension.lower() == ".png":
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
-		loaded_image = Image.open(sprite_filename) 
+		loaded_image = Image.open(sprite_filename)
 		if loaded_image.size == (128,448):      #This is the size of Z3Link's sheet
 			game = get_game_class_of_type("zelda3")
 			sprite = game.make_player_sprite(sprite_filename)
@@ -70,13 +70,14 @@ def get_game_class_of_type(game_name):
 
 class GameParent():
 	#parent class for games to inherit
-	
+
 	#to make a new game class, you must write code for all of the functions in this section below.
 	############################# BEGIN ABSTRACT CODE ##############################
 
 	def __init__(self):
 		self.name = "Game Parent Class"    #to be replaced by a name like "Super Metroid"
 		self.internal_name = "meta"        #to be replaced by the specific folder name that this app uses, e.g. "metroid3"
+		self.plugins = []
 
 	############################# END ABSTRACT CODE ##############################
 
@@ -100,7 +101,7 @@ class GameParent():
 
 		background_filenames = common.gather_all_from_resource_subdirectory(os.path.join(self.internal_name,"backgrounds"))
 		self.background_selection.set(random.choice(background_filenames))
-		
+
 		background_dropdown = tk.ttk.Combobox(background_panel, state="readonly", values=background_filenames, name="background_dropdown")
 		background_dropdown.configure(width=BACKGROUND_DROPDOWN_WIDTH, exportselection=0, textvariable=self.background_selection)
 		background_dropdown.grid(row=0, column=2)
@@ -121,7 +122,7 @@ class GameParent():
 				return   #there is nothing to do here, because nothing has changed
 		else:     #image name is different, so need to load a new image
 			self.raw_background = Image.open(common.get_resource(image_filename,subdir=os.path.join(self.internal_name,"backgrounds")))
-		
+
 		#now re-zoom the image
 		new_size = tuple(int(dim*self.zoom_getter()) for dim in self.raw_background.size)
 		self.background_image = common.get_tk_image(self.raw_background.resize(new_size,resample=Image.NEAREST))

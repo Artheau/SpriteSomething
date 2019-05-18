@@ -54,7 +54,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		self.pack(fill=tk.BOTH, expand=1)    #main frame should take up the whole window
 
-		self.create_menu_bar()
+		self.menu = self.create_menu_bar()
 
 		self.panes = tk.PanedWindow(self, orient=tk.HORIZONTAL, name="two_columns")
 		self.panes.pack(fill=tk.BOTH, expand=1)
@@ -124,26 +124,34 @@ class SpriteSomethingMainFrame(tk.Frame):
 													("Tracker Images for this Pose",None,self.export_tracker_images_for_this_pose),
 											])
 
-		'''
 		#for future implementation
-		tools_menu = create_cascade("Tools","tools_menu",
-											[
-													#this part can match up with the game class, or maybe the sprite class?
-													#have to update this cascade when the game/sprite changes though
-													#waiting on this decision until we have plugins to add here
-											])
-		'''
+		plugins_menu = tk.Menu(menu, tearoff=0, name="plugins_menu")
+		tools_menu = tk.Menu(menu, tearoff=0, name="tools_menu")
+		tools_menu.add_cascade(label="Plugins", menu=plugins_menu)
+		menu.add_cascade(label="Tools", menu=tools_menu)
 
 		help_menu = create_cascade("Help","help_menu",
 											[
 													("Diagnostics",None,self.diagnostics),
 													("About",None,self.about),
 											])
+		return menu
+
+	def load_plugins(self):
+		game_plugins_menu = tk.Menu(self.menu, tearoff=0, name="game_plugins_menu")
+		for label, command in self.game.plugins:
+			game_plugins_menu.add_command(label=label,command=command)
+		sprite_plugins_menu = tk.Menu(self.menu, tearoff=0, name="sprite_plugins_menu")
+		for label, command in self.sprite.plugins:
+			sprite_plugins_menu.add_command(label=label,command=command)
+		self.menu.children["plugins_menu"].add_cascade(label="Game",menu=game_plugins_menu)
+		self.menu.children["plugins_menu"].add_cascade(label="Sprite",menu=sprite_plugins_menu)
 
 	def load_sprite(self, sprite_filename):
 		self.game, self.sprite = gamelib.autodetect(sprite_filename)
 		self.sprite_coord = (100,100)        #an arbitrary default
 		self.attach_both_panels()            #remake the GUI panels
+		self.load_plugins()
 		self.initialize_sprite_animation()
 
 	def attach_both_panels(self):
