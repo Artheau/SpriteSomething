@@ -17,7 +17,7 @@ def autodetect(sprite_filename):
 	#need to autodetect which game, and which sprite
 	#then return an instance of THAT game's class, and an instance of THAT sprite
 	_,file_extension = os.path.splitext(sprite_filename)
-	if file_extension.lower() in [".sfc","smc"]:
+	if file_extension.lower() in [".sfc",".smc"]:
 		#If the file is a rom, then we can go into the internal header and get the name of the game
 		game = get_game_class_of_type(autodetect_game_type_from_rom_filename(sprite_filename))
 		#And by default, we will grab the player sprite from this game
