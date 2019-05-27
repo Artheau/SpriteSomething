@@ -8,7 +8,7 @@ import json
 import tkinter as tk
 import random
 import weakref    #because memory leaks are stupid
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageFile
 from source import widgetlib
 from source import romhandler
 from source import common
@@ -23,6 +23,8 @@ def autodetect(sprite_filename):
 		#And by default, we will grab the player sprite from this game
 		sprite = game.make_player_sprite(sprite_filename)
 	elif file_extension.lower() == ".png":
+		#the following line prevents a "cannot identify image" error from PIL
+		ImageFile.LOAD_TRUNCATED_IMAGES = True
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
 		loaded_image = Image.open(sprite_filename) 
 		if loaded_image.size == (128,448):      #This is the size of Z3Link's sheet
