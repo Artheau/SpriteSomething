@@ -200,9 +200,9 @@ class RomHandlerParent():
         elif self._type == RomType.EXLOROM:
             bank = addr // 0x8000
             offset = addr % 0x8000
-            if bank < 0x40:
+            if bank < 0x80:
                 snes_address = (bank+0x80)*0x10000 + (offset+0x8000)
-            elif bank < 0x7F:
+            elif bank < 0xFE:
                 snes_address = (bank-0x80)*0x10000 + (offset+0x8000)
             else:
                 raise AssertionError(f"Function convert_to_snes_address() called on address {hex(addr)}, but this part of ROM is not mapped in ExLoRom.")
