@@ -56,7 +56,7 @@ def autodetect_game_type_from_rom(rom):
 			if rom_name[:len(header_name)] == header_name:
 				return game_name
 	else:
-		raise AssertionError(f"Could not identify the type of ROM {filename} from its header name: {rom_name}")
+		raise AssertionError(f"Could not identify the type of ROM from its header name: {rom_name}")
 
 def get_game_type_from_zspr_data(zspr_data):
 	#for now, until other types of ZSPR files exist, we will just assume that all ZSPR files are Zelda3 Link files

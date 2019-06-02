@@ -82,7 +82,7 @@ class RomHandlerParent():
             pass    #hirom confirmed 
         elif (self._type == RomType.LOROM or self._type == RomType.HIROM) and makeup_byte == 0x23:
             pass    #Maybe SA-1 will work with this library.  MAYBE.
-        elif self._type == RomType.EXLOROM and makeup_byte == 0x32:
+        elif self._type == RomType.EXLOROM and makeup_byte in [0x32,0x30]:  #technically 0x32 is the correct value, but not all hackers respect this
             pass    #exlorom confirmed
         elif self._type == RomType.EXHIROM and makeup_byte == 0x35:
             pass    #exhirom confirmed
@@ -109,6 +109,10 @@ class RomHandlerParent():
             if self._rom_is_headered and not strip_header:
                 file.write(self._header)
             file.write(self._contents)
+
+
+    def get_size_in_MB(self):
+        return self._rom_size/(8*self._MEGABIT)
 
 
     def read(self,addr,encoding):
