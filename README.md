@@ -50,7 +50,7 @@ You can change these colors to whatever you like, and then inject the new sprite
 ### Is this program compatible with randomizers, the combo randomizer, or with [Name of Hack]?
 This program is designed to be fully compatible with standard randomizers, the SMaLttPR combo randomizer, and the original Super Metroid.
 
-It will probably also work with any other Super Metroid variant that does not heavily edit banks `$92` and `$9B`.
+It will probably also work with any other Super Metroid variant that does not heavily edit banks `$92` and `$9B`.  If used to inject a sprite into a LoRom, SpriteSomething will place tile data into banks `$F5` through `$FF`.  If injecting into an ExLoRom, SpriteSomething will use `$35`-`3F` (6 MB), or `$73`-`$7D` (8 MB).
 
 ### Can I extract the custom Samus graphics from [Name of Hack]?
 Usually yes.  You could, for instance, extract Auximines's Justin Bailey sprite from his famous hack.
@@ -62,6 +62,7 @@ However, if you're primarily interested in playing as the Bailey sprite, I encou
 ### How can I replace Link in A Link to the Past with a new character?
 - File/Open.  Choose any valid Link sprite sheet, e.g. `alice.zspr`.
 You can also import PNG files in this manner if they are formatted to have a palette block in the lower right corner.
+- Export/Inject into Game File.
 
 ### The friendly thief in Lost Woods is a bit more of a pastel color than before.  Why is this?
 The injection tool also includes with it a patch that fixes some issues that occur when custom sprites have modified palettes.

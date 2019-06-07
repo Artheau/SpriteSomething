@@ -8,16 +8,19 @@ class Sprite(SpriteParent):
 		super().__init__(filename, manifest_dict, my_subpath)
 
 		self.overview_scale_factor = 1    #Samus's sheet is BIG, so don't zoom in on the overview
+
 		self.spiffy_buttons = [
 			["Suit", {"Power":1,"Varia":2,"Gravity":3}, "suit", " Suit"],
 			["Variant", {"Standard":0,"Charge":1,"Speed Boost":2,"Speed Squat":3,"Hyper Beam":4}, "variant", ""],
 			["Effect", {"None":0,"Heat":1,"XRay":2,"Sepia":3,"Door":4}, "effect", ""],
 			["Cannon Port", {"No":0,"Yes":1}, "port", " Port"]
 		]
-		self.plugins = [
-			("File Select Preview",None),
-			("Ship Preview",None)
-		]
+
+		# self.plugins = [
+		# 	("File Select Preview",None),
+		# 	("Ship Preview",None)
+		# ]
+
 
 	def import_from_ROM(self, rom):
 		#The history of the Samus import code is a story I will tell to my children
@@ -27,9 +30,6 @@ class Sprite(SpriteParent):
 	def inject_into_ROM(self, rom):
 		#The history of the Samus export code is a story I will tell to my grandchildren
 		return rom_export.rom_export(self, rom)
-
-	def press_spiffy_button(self, prefix, level):
-		print(prefix,level)
 
 	def get_colors_from_master(self, color_set):
 		#for internal class use.  For general use, call get_timed_palette()

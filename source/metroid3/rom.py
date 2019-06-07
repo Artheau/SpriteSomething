@@ -212,7 +212,9 @@ class RomHandler(RomHandlerParent):
 
 
 	def get_file_select_dma_data(self):
-		return {0x00: self.read_from_snes_address(0xB6C000, "1"*0x2000)}
+		#classically, the file select DMA data is located at $B6:C000.  However, many hacks relocate this to make more room for pause menu graphics.
+		file_select_data_location = self.read_from_snes_address(0x818E34, 3)
+		return {0x00: self.read_from_snes_address(file_select_data_location, "1"*0x2000)}
 
 
 	def get_file_select_tilemaps(self, item):

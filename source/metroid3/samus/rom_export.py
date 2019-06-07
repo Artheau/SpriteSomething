@@ -208,17 +208,28 @@ class FreeSpace():
 				raise AssertionError("ran out of memory to allocate")
 
 def write_dma_data(samus,rom):
-	if rom._type.name == "EXHIROM":
+	if rom._type.name == "EXHIROM":     #combo rom
 		#until my hand is slapped I am going to just take up all of the lower halves of banks 0x44-0x4B and 0x54-0x5B
 		freespace = FreeSpace([(bank * 0x10000,bank * 0x10000 + 0x8000) for bank in itertools.chain(range(0x44,0x4C),range(0x54,0x5B))])
 		#the death DMA data needs to all be in the same bank
 		death_freespace = FreeSpace([(0x5B0000,0x5B8000)])
-	else:
-		#in this case, the only person that will slap my hand is me, and I'm not feeling it at the moment
-		#so we're just going to take up the upper halves of half of the new banks that we just added (0xE8-0xF7)
-		freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in range(0xE8,0xF7)])
-		#the death DMA data needs to all be in the same bank
-		death_freespace = FreeSpace([(0xF78000, 0xF80000)])
+	elif rom._type.name == "EXLOROM":
+		#this is untested.  In theory works for oversized ROMs.  If not, please submit a bug report so that it can be fixed
+		if rom.get_size_in_MB() >= 8.0:   #use banks $73-$7D
+			freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in itertools.chain(range(0x9C,0xA0),range(0x73,0x7D))] + [(0x9B8200,0x9B9400)])
+			death_freespace = FreeSpace([(0x7D8000, 0x7E0000)])
+		elif rom.get_size_in_MB() >= 6.0:   #use banks $35-$3F
+			freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in itertools.chain(range(0x9C,0xA0),range(0x35,0x3F))] + [(0x9B8200,0x9B9400)])
+			death_freespace = FreeSpace([(0x3F8000, 0x400000)])
+		else:
+			raise AssertionError(f"Could not recognize size of ExLoRom: {rom.get_size_in_MB()}")
+	else:     #lorom: use banks $F5-$FF
+		#we would like this to be as compatible with ROM hacks as possible, so that hackers can use this program to add new graphics to their hacks
+		#so we will first use the original graphic space, and then work backwards from the end of the rom, and then use the death space from $9B
+		freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in itertools.chain(range(0x9C,0xA0),range(0xF5,0xFF))] + [(0x9B8200,0x9B9400)])
+		#the death DMA data needs to all be in the same bank (here placed in $FF)
+		death_freespace = FreeSpace([(0xFF8000, 0x1000000)])
+
 
 	DMA_dict = {}  #have to keep track of where we put all this stuff so that we can point to it afterwards
 
@@ -1043,7 +1054,10 @@ def implement_spin_attack(samus,rom):
 	return success_code
 
 def insert_file_select_graphics(samus,rom):
-	#hard coded for now
+	#classically, the file select DMA data is located at $B6:C000.  However, many hacks relocate this to make more room for pause menu graphics.
+	file_select_data_location = rom.read_from_snes_address(0x818E34, 3)
+
+	#hard coded the image locations for now
 	file_select_graphics_block = Image.new("P",(128,24),0)
 	left_head = samus.images["file_select_head"]
 	file_select_graphics_block.paste(left_head,(0,0))
@@ -1077,12 +1091,12 @@ def insert_file_select_graphics(samus,rom):
 	file_select_DMA = common.convert_to_4bpp(file_select_graphics_block, (0,0), (0,0,128,16),None)
 	file_select_DMA.extend(common.convert_to_4bpp(file_select_graphics_block, (0,0), (0,16,128,32),None)[:0x200])
 
-	rom.bulk_write_to_snes_address(0xB6DA00,file_select_DMA,0x600)
+	rom.bulk_write_to_snes_address(file_select_data_location + 0x1A00,file_select_DMA,0x600)
 
 	stray_missile_DMA = common.convert_to_4bpp(stray_missile_image, (0,0), (0,0,8,8), None)
-	rom.bulk_write_to_snes_address(0xB6D900,stray_missile_DMA,0x20)
+	rom.bulk_write_to_snes_address(file_select_data_location + 0x1900,stray_missile_DMA,0x20)
 	stray_missilehead_DMA = common.convert_to_4bpp(stray_missilehead_image, (0,0), (0,0,8,8), None)
-	rom.bulk_write_to_snes_address(0xB6D980,stray_missilehead_DMA,0x20)
+	rom.bulk_write_to_snes_address(file_select_data_location + 0x1980,stray_missilehead_DMA,0x20)
 
 	return True
 

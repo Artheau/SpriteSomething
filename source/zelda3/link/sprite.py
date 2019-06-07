@@ -8,22 +8,25 @@ from source.spritelib import SpriteParent
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
+
 		self.spiffy_buttons = [
 			["Mail", {"Green":1,"Blue":2,"Red":3,"Bunny":4}, "mail", " Mail"],
 			["Sword", {"No":0,"Fighter's":1,"Master":2,"Tempered":3,"Gold":4}, "sword", " Sword"],
 			["Shield", {"No":0,"Fighter's":1,"Fire":2,"Mirror":3}, "shield", " Shield"],
 			["Gloves", {"No Gloves":0,"Power Glove":1,"Titan's Mitt":2}, "gloves", ""]
 		]
-		self.plugins = [
-			("Sheet Trawler",None)
-		]
+
+		# self.plugins = [
+		# 	("Sheet Trawler",None)
+		#	("Tracker Images",None)
+		# ]
 
 	def import_from_ROM(self, rom):
 		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)    #the big Link sheet
 		palette_data = rom.bulk_read_from_snes_address(0x1BD308,120)     #the palettes
 		palette_data.extend(rom.bulk_read_from_snes_address(0x1BEDF5,4)) #the glove colors
 		self.import_from_binary_data(pixel_data,palette_data)
-
+	
 	def import_from_binary_data(self,pixel_data,palette_data):
 		self.master_palette = [(0,0,0) for _ in range(0x40)]   #initialize the palette
 		#main palettes
