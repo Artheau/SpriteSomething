@@ -240,24 +240,6 @@ def get_single_raw_tile(image):
 	#Here transpose() is used because otherwise we get column-major format in getdata(), which is not helpful
 	return convert_indexed_tile_to_bitplanes(image.transpose(Image.TRANSPOSE).getdata())
 
-def convert_tile_from_bitplanes(raw_tile):
-	#an attempt to make this ugly process mildly efficient
-	tile = np.zeros((8,8), dtype=np.uint8)
-
-	tile[:,4] = raw_tile[31:15:-2]
-	tile[:,5] = raw_tile[30:14:-2]
-	tile[:,6] = raw_tile[15::-2]
-	tile[:,7] = raw_tile[14::-2]
-
-	shaped_tile = tile.reshape(8,8,1)
-
-	tile_bits = np.unpackbits(shaped_tile, axis=2)
-	fixed_bits = np.packbits(tile_bits, axis=1)
-	returnvalue = fixed_bits.reshape(8,8)
-	returnvalue = returnvalue.swapaxes(0,1)
-	returnvalue = np.fliplr(returnvalue)
-	return returnvalue
-
 def convert_indexed_tile_to_bitplanes(indexed_tile):
 	#this should literally just be the inverse of convert_tile_from_bitplanes(), and so it was written in this way
 	indexed_tile = np.array(indexed_tile,dtype=np.uint8).reshape(8,8)
