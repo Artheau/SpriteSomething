@@ -1,6 +1,7 @@
 import importlib
 from source.spritelib import SpriteParent
 from source import common
+from source import widgetlib
 from . import rom_import, rom_export
 
 class Sprite(SpriteParent):
@@ -8,13 +9,6 @@ class Sprite(SpriteParent):
 		super().__init__(filename, manifest_dict, my_subpath)
 
 		self.overview_scale_factor = 1    #Samus's sheet is BIG, so don't zoom in on the overview
-
-		self.spiffy_buttons = [
-			["Suit", {"Power":1,"Varia":2,"Gravity":3}, "suit", " Suit"],
-			["Variant", {"Standard":0,"Charge":1,"Speed Boost":2,"Speed Squat":3,"Hyper Beam":4}, "variant", ""],
-			["Effect", {"None":0,"Heat":1,"XRay":2,"Sepia":3,"Door":4}, "effect", ""],
-			["Cannon Port", {"No":0,"Yes":1}, "port", " Port"]
-		]
 
 		# self.plugins = [
 		# 	("File Select Preview",None),
@@ -245,3 +239,32 @@ class Sprite(SpriteParent):
 			raise AssertionError(f"unrecognized palette request: {overall_type}, {variant_type}")
 
 		return timed_palette
+
+	def get_spiffy_buttons(self, parent):
+		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
+
+		suit_group = spiffy_buttons.make_new_group("Suit")
+		suit_group.add_blank_space()
+		suit_group.add("power", "Power Suit", "suit-1.png")
+		suit_group.add("varia", "Varia Suit", "suit-2.png")
+		suit_group.add("gravity", "Gravity Suit", "suit-3.png")
+
+		variant_group = spiffy_buttons.make_new_group("Variant")
+		variant_group.add("standard", "Standard", "no-thing.png")
+		variant_group.add("charge", "Charge", "variant-1.png")
+		variant_group.add("speed_boost", "Speed Boost", "variant-2.png")
+		variant_group.add("speed_squat", "Speed Squat", "variant-3.png")
+		variant_group.add("hyper", "Hyper Beam", "variant-4.png")
+
+		effect_group = spiffy_buttons.make_new_group("Effect")
+		effect_group.add("none", "None", "no-thing.png")
+		effect_group.add("heat", "Heat", "effect-1.png")
+		effect_group.add("xray", "X-Ray", "effect-2.png")
+		effect_group.add("sepia", "Sepia", "effect-3.png")
+		effect_group.add("door", "Door", "effect-4.png")
+
+		cannon_group = spiffy_buttons.make_new_group("Cannon Port")
+		cannon_group.add("no", "Closed", "no-thing.png")
+		cannon_group.add("yes", "Open", "yes-thing.png")
+
+		return spiffy_buttons

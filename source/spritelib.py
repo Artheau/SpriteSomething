@@ -27,7 +27,6 @@ class SpriteParent():
 		self.import_from_filename()
 
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
-		self.spiffy_buttons = None                   #The radio buttons need to be sprite specific
 
 	# def __del__(self):
 	# 	tk.messagebox.showinfo("Notification", "I am destroyed")
@@ -146,9 +145,8 @@ class SpriteParent():
 
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
 
-		if self.spiffy_buttons is not None:
-			spiffy_panel, height = self.get_spiffy_buttons(parent)
-			parent.add(spiffy_panel,minsize=height)
+		spiffy_panel, height = self.get_spiffy_buttons(parent).get_panel()
+		parent.add(spiffy_panel,minsize=height)
 
 		self.update_overview_panel()
 
@@ -293,74 +291,6 @@ class SpriteParent():
 			self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)
 	
 	#Mike likes spiffy buttons
-	def get_spiffy_buttons(self, parent_frame):
-		dims = {
-			"button": {
-				"width": 20,
-				"height": 20,
-				"color.active": "#78C0F8",
-				"color.selected": "#C0E0C0"
-			},
-			"panel": {
-				"height_per_button": 30
-			}
-		}
-		spiffy_buttons_section = tk.Frame(parent_frame, name="spiffy_buttons")
-		widgetlib.right_align_grid_in_frame(spiffy_buttons_section)
-		row = 0
-		for i in range(len(self.spiffy_buttons)):
-			col = 0
-			label = self.spiffy_buttons[i][0]
-			levels = self.spiffy_buttons[i][1]
-			prefix = self.spiffy_buttons[i][2]
-			suffix = self.spiffy_buttons[i][3]
-			section_label = tk.Label(spiffy_buttons_section, text=label + ':')
-			section_label.grid(row=row, column=col, sticky='E')
-			col += 1
-			if prefix == "mail" or prefix == "suit":
-				col += 1
-			for tip,level in levels.items():
-				
-				icon_path = None
-				if level > 0 and tip != "Yes":
-					icon_path = common.get_resource(f"{prefix}-{level}.png",os.path.join(self.resource_subpath,"icons"))
-				elif tip.find("No") > -1 or tip == "Standard":
-					icon_path = common.get_resource("no-thing.png",os.path.join("meta","icons"))
-				elif tip.find("Yes") > -1:
-					icon_path = common.get_resource("yes-thing.png",os.path.join("meta","icons"))
-				else:
-					raise AssertionError(f"No image resource found for tip,level = {tip},{level}")
-
-				if not icon_path:   #failsafe in case image is not found
-					icon_path = common.get_resource("blank.png",os.path.join("meta","icons"))
-					
-				img = tk.PhotoImage(file=icon_path)
-
-				button = tk.Radiobutton(
-					spiffy_buttons_section,
-					image=img,
-					name=prefix + str(level) + "_button",
-					text=tip+suffix,
-					variable=prefix,
-					value=level,
-					activebackground=dims["button"]["color.active"],
-					selectcolor=dims["button"]["color.selected"],
-					width=dims["button"]["width"],
-					height=dims["button"]["height"],
-					indicatoron=False,
-					command=partial(self.press_spiffy_button,prefix,level)
-				)
-				if col == 1 or (prefix in ["mail","suit"] and level == 1):
-					button.select()
-					self.press_spiffy_button(prefix, level)
-				widgetlib.ToolTip(button,tip + suffix)
-				button.image = img
-				button.grid(row=row,column=col)
-				col += 1
-			row += 1
-
-		section_height = row*dims["panel"]["height_per_button"]
-		return spiffy_buttons_section, section_height
-
-	def press_spiffy_button(self, prefix, level):
-		pass
+	def get_spiffy_buttons(self, parent):
+		#if this is not overriden by the child (sprite-specific) class, then there will be no spiffy buttons
+		return widgetlib.SpiffyButtons(self, parent)

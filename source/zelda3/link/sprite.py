@@ -2,19 +2,13 @@ import importlib
 import itertools
 from PIL import Image
 from source import common
+from source import widgetlib
 from string import ascii_uppercase
 from source.spritelib import SpriteParent
 
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
-
-		self.spiffy_buttons = [
-			["Mail", {"Green":1,"Blue":2,"Red":3,"Bunny":4}, "mail", " Mail"],
-			["Sword", {"No":0,"Fighter's":1,"Master":2,"Tempered":3,"Gold":4}, "sword", " Sword"],
-			["Shield", {"No":0,"Fighter's":1,"Fire":2,"Mirror":3}, "shield", " Shield"],
-			["Gloves", {"No Gloves":0,"Power Glove":1,"Titan's Mitt":2}, "gloves", ""]
-		]
 
 		# self.plugins = [
 		# 	("Sheet Trawler",None)
@@ -86,3 +80,33 @@ class Sprite(SpriteParent):
 
 
 		return rom
+
+	def get_spiffy_buttons(self, parent):
+		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
+
+		mail_group = spiffy_buttons.make_new_group("Mail")
+		mail_group.add_blank_space()
+		mail_group.add("green", "Green Mail", "mail-1.png")
+		mail_group.add("blue", "Blue Mail", "mail-2.png")
+		mail_group.add("red", "Red Mail", "mail-3.png")
+		mail_group.add("bunny", "Bunny Palette", "mail-4.png")
+
+		sword_group = spiffy_buttons.make_new_group("Sword")
+		sword_group.add("none", "No Sword", "no-thing.png")
+		sword_group.add("fighter", "Fighter's Sword", "sword-1.png")
+		sword_group.add("master", "Master Sword", "sword-2.png")
+		sword_group.add("tempered", "Tempered Sword", "sword-3.png")
+		sword_group.add("gold", "Gold Sword", "sword-4.png")
+
+		shield_group = spiffy_buttons.make_new_group("Shield")
+		shield_group.add("none", "No Sword", "no-thing.png")
+		shield_group.add("fighter", "Fighter's Shield", "shield-1.png")
+		shield_group.add("fire", "Fire Shield", "shield-2.png")
+		shield_group.add("mirror", "Mirror Shield", "shield-3.png")
+
+		gloves_group = spiffy_buttons.make_new_group("Gloves")
+		gloves_group.add("none", "No Sword", "no-thing.png")
+		gloves_group.add("power", "Power Glove", "gloves-1.png")
+		gloves_group.add("titan", "Titan's Mitt", "gloves-2.png")
+
+		return spiffy_buttons

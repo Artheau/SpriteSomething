@@ -82,3 +82,89 @@ class ToolTip(object):
 		self.tw= None
 		if tw:
 			tw.destroy()
+
+class SpiffyButtons():
+	#They are like buttons, except spiffy
+	def __init__(self, sprite_object, parent_frame):
+		self.DIMENSIONS = {
+			"button": {
+				"width": 20,
+				"height": 20,
+				"color.active": "#78C0F8",
+				"color.selected": "#C0E0C0"
+			},
+			"panel": {
+				"height_per_button": 30
+			}
+		}
+		self.sprite_object = sprite_object
+		self.spiffy_buttons_section = tk.Frame(parent_frame, name="spiffy_buttons")
+		right_align_grid_in_frame(self.spiffy_buttons_section)
+		self.max_row = 0
+
+	def make_new_group(self, label):
+		#TODO: Make new variable (perhaps StringVar?), and hook it in to the sprite object using code placed here or in the next line
+		new_group = SpiffyGroup(self, self.max_row, label)
+		self.max_row += 1
+		return new_group
+
+	def get_panel(self):
+		section_height = self.max_row*self.DIMENSIONS["panel"]["height_per_button"]
+		return self.spiffy_buttons_section, section_height
+
+class SpiffyGroup():
+	#not meant to be used on its own, instead use class SpiffyButtons()
+	def __init__(self, parent, row, label):
+		self.label = label
+		self.default_exists = False
+		self.parent = parent
+		self.col = 0
+		self.row = row
+
+		section_label = tk.Label(self.parent.spiffy_buttons_section, text=label + ':')
+		section_label.grid(row=self.row, column=self.col, sticky='E')
+
+		self.col += 1
+		
+
+	def add(self, internal_value_name, display_text, image_filename="blank.png"):
+		icon_path = common.get_resource(image_filename, os.path.join(self.parent.sprite_object.resource_subpath,"icons"))
+		if icon_path is None:
+			icon_path = common.get_resource(image_filename, os.path.join("meta","icons"))
+		if icon_path is None:
+			raise AssertionError(f"No image resource found with name {image_filename}")
+
+		img = tk.PhotoImage(file=icon_path)
+		
+		button = tk.Radiobutton(
+				self.parent.spiffy_buttons_section,
+				image=img,
+				name="_".join([self.label.lower(), internal_value_name, "button"]),
+				text=display_text,
+				variable="_".join([self.label.lower(), "var"]),
+				value=internal_value_name,
+				activebackground=self.parent.DIMENSIONS["button"]["color.active"],
+				selectcolor=self.parent.DIMENSIONS["button"]["color.selected"],
+				width=self.parent.DIMENSIONS["button"]["width"],
+				height=self.parent.DIMENSIONS["button"]["height"],
+				indicatoron=False,
+				command=self.press_spiffy_button()
+		)
+
+		ToolTip(button, display_text)
+		button.image = img
+		button.grid(row=self.row, column=self.col)
+
+		if not self.default_exists:
+			button.select()
+			self.press_spiffy_button()
+			self.default_exists = True
+
+		self.col += 1
+
+	def add_blank_space(self, amount_of_space=1):
+		self.col += amount_of_space
+
+	def press_spiffy_button(self):
+		self.parent.sprite_object.update_animation()
+
