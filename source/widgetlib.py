@@ -2,6 +2,7 @@
 
 import weakref    #because memory leaks are stupid
 import tkinter as tk
+import json
 import os
 from source import common
 
@@ -47,7 +48,7 @@ class ToolTip(object):
 
 	def enter(self, event=None):
 		self.schedule()
-		
+
 	def leave(self, event=None):
 		self.unschedule()
 		self.hidetip()
@@ -125,9 +126,13 @@ class SpiffyGroup():
 		section_label.grid(row=self.row, column=self.col, sticky='E')
 
 		self.col += 1
-		
 
-	def add(self, internal_value_name, display_text, image_filename="blank.png"):
+
+	def add(self, internal_value_name, image_filename="blank.png"):
+		langs = common.get_resource("en.json",os.path.join(self.parent.sprite_object.resource_subpath,"lang"))
+		with open(langs) as f:
+			langs = json.load(f)
+
 		icon_path = common.get_resource(image_filename, os.path.join(self.parent.sprite_object.resource_subpath,"icons"))
 		if icon_path is None:
 			icon_path = common.get_resource(image_filename, os.path.join("meta","icons"))
@@ -135,7 +140,15 @@ class SpiffyGroup():
 			raise AssertionError(f"No image resource found with name {image_filename}")
 
 		img = tk.PhotoImage(file=icon_path)
-		
+
+		key = self.label + '.' + internal_value_name
+		display_text = internal_value_name.title() + ' ' + self.label
+		subkey = key.split('.')[1]
+		key = key.split('.')[0]
+		if key in langs.keys():
+			if subkey in langs[key].keys():
+				display_text = langs[key][subkey]
+
 		button = tk.Radiobutton(
 				self.parent.spiffy_buttons_section,
 				image=img,
@@ -167,4 +180,3 @@ class SpiffyGroup():
 
 	def press_spiffy_button(self):
 		self.parent.sprite_object.update_animation()
-

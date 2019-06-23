@@ -1,0 +1,25 @@
+{
+  "Suit": {
+    "power": "Power Suit",
+    "varia": "Varia Suit",
+    "gravity": "Gravity Suit"
+  },
+  "Variant": {
+    "standard": "Standard",
+    "charge": "Charge",
+    "speed_boost": "Speed Boost",
+    "speed_squat": "Speed Squat",
+    "hyper": "Hyper Beam"
+  },
+  "Effect": {
+    "none": "None",
+    "heat": "Heat",
+    "xray": "X-Ray",
+    "sepia": "Sepia",
+    "door": "Door"
+  },
+  "Cannon Port": {
+    "no": "Closed",
+    "yes": "Open"
+  }
+}

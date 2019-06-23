@@ -20,7 +20,7 @@ class Sprite(SpriteParent):
 		palette_data = rom.bulk_read_from_snes_address(0x1BD308,120)     #the palettes
 		palette_data.extend(rom.bulk_read_from_snes_address(0x1BEDF5,4)) #the glove colors
 		self.import_from_binary_data(pixel_data,palette_data)
-	
+
 	def import_from_binary_data(self,pixel_data,palette_data):
 		self.master_palette = [(0,0,0) for _ in range(0x40)]   #initialize the palette
 		#main palettes
@@ -86,27 +86,27 @@ class Sprite(SpriteParent):
 
 		mail_group = spiffy_buttons.make_new_group("Mail")
 		mail_group.add_blank_space()
-		mail_group.add("green", "Green Mail", "mail-1.png")
-		mail_group.add("blue", "Blue Mail", "mail-2.png")
-		mail_group.add("red", "Red Mail", "mail-3.png")
-		mail_group.add("bunny", "Bunny Palette", "mail-4.png")
+		mail_group.add("green", "mail-1.png")
+		mail_group.add("blue", "mail-2.png")
+		mail_group.add("red", "mail-3.png")
+		mail_group.add("bunny", "mail-4.png")
 
 		sword_group = spiffy_buttons.make_new_group("Sword")
-		sword_group.add("none", "No Sword", "no-thing.png")
-		sword_group.add("fighter", "Fighter's Sword", "sword-1.png")
-		sword_group.add("master", "Master Sword", "sword-2.png")
-		sword_group.add("tempered", "Tempered Sword", "sword-3.png")
-		sword_group.add("gold", "Gold Sword", "sword-4.png")
+		sword_group.add("none", "no-thing.png")
+		sword_group.add("fighter", "sword-1.png")
+		sword_group.add("master", "sword-2.png")
+		sword_group.add("tempered", "sword-3.png")
+		sword_group.add("gold", "sword-4.png")
 
 		shield_group = spiffy_buttons.make_new_group("Shield")
-		shield_group.add("none", "No Sword", "no-thing.png")
-		shield_group.add("fighter", "Fighter's Shield", "shield-1.png")
-		shield_group.add("fire", "Fire Shield", "shield-2.png")
-		shield_group.add("mirror", "Mirror Shield", "shield-3.png")
+		shield_group.add("none", "no-thing.png")
+		shield_group.add("fighter", "shield-1.png")
+		shield_group.add("fire", "shield-2.png")
+		shield_group.add("mirror", "shield-3.png")
 
 		gloves_group = spiffy_buttons.make_new_group("Gloves")
-		gloves_group.add("none", "No Sword", "no-thing.png")
-		gloves_group.add("power", "Power Glove", "gloves-1.png")
-		gloves_group.add("titan", "Titan's Mitt", "gloves-2.png")
+		gloves_group.add("none", "no-thing.png")
+		gloves_group.add("power", "gloves-1.png")
+		gloves_group.add("titan", "gloves-2.png")
 
 		return spiffy_buttons
