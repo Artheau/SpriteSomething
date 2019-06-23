@@ -129,8 +129,13 @@ class SpiffyGroup():
 
 
 	def add(self, internal_value_name, image_filename="blank.png"):
-		langs = common.get_resource("en.json",os.path.join(self.parent.sprite_object.resource_subpath,"lang"))
-		with open(langs) as f:
+		lang = "en"
+		langs = common.get_resource(lang + ".json",os.path.join(self.parent.sprite_object.resource_subpath,"lang"))
+
+		if langs == None:
+			langs = common.get_resource("en.json",os.path.join(self.parent.sprite_object.resource_subpath,"lang"))
+
+		with open(langs,encoding="utf-8") as f:
 			langs = json.load(f)
 
 		icon_path = common.get_resource(image_filename, os.path.join(self.parent.sprite_object.resource_subpath,"icons"))

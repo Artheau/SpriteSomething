@@ -1,0 +1,26 @@
+{
+  "Mail": {
+    "green": "Malla Verde",
+    "blue": "Malla Azul",
+    "red": "Malla Roja",
+    "bunny": "Paleta de Conejito"
+  },
+  "Sword": {
+    "none": "Sin Espada",
+    "fighter": "Espada Normal",
+    "master": "Espada Maestra",
+    "tempered": "Espada Templada",
+    "gold": "Espada Dorada"
+  },
+  "Shield": {
+    "none": "Sin Escudo",
+    "fighter": "Escudo Pequeño",
+    "fire": "Escudo Fuego",
+    "mirror": "Escudo Espejo"
+  },
+  "Gloves": {
+    "none": "Sin Gloves",
+    "power": "Guante de Poder",
+    "titan": "Guante Titán"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "Suit": {
+    "power": "Traje Poder",
+    "varia": "Traje Barrera",
+    "gravity": "Traje Gravedad"
+  },
+  "Variant": {
+    "standard": "Estándar",
+    "charge": "Cargar",
+    "speed_boost": "Velocidad Aumento",
+    "speed_squat": "Velocidad Sentadilla",
+    "hyper": "Haz Hiperactivo"
+  },
+  "Effect": {
+    "none": "Ninguna",
+    "heat": "Calor",
+    "xray": "Radiografía",
+    "sepia": "Sepia",
+    "door": "Puerta"
+  },
+  "Cannon Port": {
+    "no": "Cerrado",
+    "yes": "Abierto"
+  }
+}
