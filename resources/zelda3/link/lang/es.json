@@ -1,8 +1,9 @@
 {
+  "comment" : "Cuando sea posible, se utilizan las traducciones de A Link Between Worlds en la versión de America Latina",
   "Mail": {
-    "green": "Malla Verde",
-    "blue": "Malla Azul",
-    "red": "Malla Roja",
+    "green": "Sayo Verde",
+    "blue": "Sayo Azul",
+    "red": "Sayo Rojo",
     "bunny": "Paleta de Conejito"
   },
   "Sword": {
@@ -15,12 +16,12 @@
   "Shield": {
     "none": "Sin Escudo",
     "fighter": "Escudo Pequeño",
-    "fire": "Escudo Fuego",
+    "fire": "Escudo de Fuego",
     "mirror": "Escudo Espejo"
   },
   "Gloves": {
-    "none": "Sin Gloves",
-    "power": "Guante de Poder",
-    "titan": "Guante Titán"
+    "none": "Sin Gauntes",
+    "power": "Guante de Fuerza",
+    "titan": "Guante del Titán"
   }
 }

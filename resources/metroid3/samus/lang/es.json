@@ -1,18 +1,18 @@
 {
   "Suit": {
-    "power": "Traje Poder",
-    "varia": "Traje Barrera",
-    "gravity": "Traje Gravedad"
+    "power": "Traje Chozo",
+    "varia": "Traje Climático",
+    "gravity": "Traje Gravitatorio"
   },
   "Variant": {
     "standard": "Estándar",
-    "charge": "Cargar",
-    "speed_boost": "Velocidad Aumento",
-    "speed_squat": "Velocidad Sentadilla",
-    "hyper": "Haz Hiperactivo"
+    "charge": "Rayo Recargar",
+    "speed_boost": "Aceleración",
+    "speed_squat": "Sentadilla con Energía",
+    "hyper": "Hiperrayo"
   },
   "Effect": {
-    "none": "Ninguna",
+    "none": "Ninguno",
     "heat": "Calor",
     "xray": "Radiografía",
     "sepia": "Sepia",

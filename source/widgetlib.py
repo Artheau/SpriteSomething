@@ -4,6 +4,7 @@ import weakref    #because memory leaks are stupid
 import tkinter as tk
 import json
 import os
+import locale
 from source import common
 
 def center_align_grid_in_frame(frame):
@@ -129,14 +130,18 @@ class SpiffyGroup():
 
 
 	def add(self, internal_value_name, image_filename="blank.png"):
-		lang = "en"
-		langs = common.get_resource(lang + ".json",os.path.join(self.parent.sprite_object.resource_subpath,"lang"))
+		localization_string = locale.getdefaultlocale()[0]           #e.g. "en_US"
+		language_code = localization_string[:2]   #grab just the two letters that give the language
+		langs_filename = common.get_resource(language_code + ".json",os.path.join(self.parent.sprite_object.resource_subpath,"lang"))
+		default_langs_filename = common.get_resource("en.json",os.path.join(self.parent.sprite_object.resource_subpath,"lang"))
 
-		if langs == None:
-			langs = common.get_resource("en.json",os.path.join(self.parent.sprite_object.resource_subpath,"lang"))
+		if langs_filename == None:
+			langs_filename = default_langs_filename
 
-		with open(langs,encoding="utf-8") as f:
+		with open(langs_filename,encoding="utf-8") as f:
 			langs = json.load(f)
+		with open(default_langs_filename,encoding="utf-8") as f:
+			default_langs = json.load(f)
 
 		icon_path = common.get_resource(image_filename, os.path.join(self.parent.sprite_object.resource_subpath,"icons"))
 		if icon_path is None:
@@ -146,13 +151,14 @@ class SpiffyGroup():
 
 		img = tk.PhotoImage(file=icon_path)
 
-		key = self.label + '.' + internal_value_name
-		display_text = internal_value_name.title() + ' ' + self.label
-		subkey = key.split('.')[1]
-		key = key.split('.')[0]
-		if key in langs.keys():
-			if subkey in langs[key].keys():
-				display_text = langs[key][subkey]
+		key = self.label
+		subkey = internal_value_name
+		if key in langs and subkey in langs[key]:
+			display_text = langs[key][subkey]
+		elif key in default_langs and subkey in default_langs[key]:
+			display_text = default_langs[key][subkey]
+		else:
+			display_text = internal_value_name.title() + ' ' + self.label
 
 		button = tk.Radiobutton(
 				self.parent.spiffy_buttons_section,
