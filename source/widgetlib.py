@@ -6,6 +6,7 @@ import json
 import os
 import locale
 from source import common
+from source import ssTranslate as fish
 
 def center_align_grid_in_frame(frame):
 	frame.grid_columnconfigure(0, weight=1)       #the 0th column will be the margin
@@ -117,6 +118,7 @@ class SpiffyButtons():
 class SpiffyGroup():
 	#not meant to be used on its own, instead use class SpiffyButtons()
 	def __init__(self, parent, row, label):
+		label = fish.translate("section",label,os.path.join(parent.sprite_object.resource_subpath))
 		self.label = label
 		self.default_exists = False
 		self.parent = parent
@@ -130,19 +132,6 @@ class SpiffyGroup():
 
 
 	def add(self, internal_value_name, image_filename="blank.png"):
-		localization_string = locale.getdefaultlocale()[0]           #e.g. "en_US"
-		language_code = localization_string[:2]   #grab just the two letters that give the language
-		langs_filename = common.get_resource(language_code + ".json",os.path.join(self.parent.sprite_object.resource_subpath,"lang"))
-		default_langs_filename = common.get_resource("en.json",os.path.join(self.parent.sprite_object.resource_subpath,"lang"))
-
-		if langs_filename == None:
-			langs_filename = default_langs_filename
-
-		with open(langs_filename,encoding="utf-8") as f:
-			langs = json.load(f)
-		with open(default_langs_filename,encoding="utf-8") as f:
-			default_langs = json.load(f)
-
 		icon_path = common.get_resource(image_filename, os.path.join(self.parent.sprite_object.resource_subpath,"icons"))
 		if icon_path is None:
 			icon_path = common.get_resource(image_filename, os.path.join("meta","icons"))
@@ -151,14 +140,7 @@ class SpiffyGroup():
 
 		img = tk.PhotoImage(file=icon_path)
 
-		key = self.label
-		subkey = internal_value_name
-		if key in langs and subkey in langs[key]:
-			display_text = langs[key][subkey]
-		elif key in default_langs and subkey in default_langs[key]:
-			display_text = default_langs[key][subkey]
-		else:
-			display_text = internal_value_name.title() + ' ' + self.label
+		display_text = fish.translate(self.label, internal_value_name, self.parent.sprite_object.resource_subpath)
 
 		button = tk.Radiobutton(
 				self.parent.spiffy_buttons_section,

@@ -243,27 +243,27 @@ class Sprite(SpriteParent):
 	def get_spiffy_buttons(self, parent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
-		suit_group = spiffy_buttons.make_new_group("Suit")
+		suit_group = spiffy_buttons.make_new_group("suit")
 		suit_group.add_blank_space()
 		suit_group.add("power", "suit-1.png")
 		suit_group.add("varia", "suit-2.png")
 		suit_group.add("gravity", "suit-3.png")
 
-		variant_group = spiffy_buttons.make_new_group("Variant")
+		variant_group = spiffy_buttons.make_new_group("variant")
 		variant_group.add("standard", "no-thing.png")
 		variant_group.add("charge", "variant-1.png")
 		variant_group.add("speed_boost", "variant-2.png")
 		variant_group.add("speed_squat", "variant-3.png")
 		variant_group.add("hyper", "variant-4.png")
 
-		effect_group = spiffy_buttons.make_new_group("Effect")
+		effect_group = spiffy_buttons.make_new_group("effect")
 		effect_group.add("none", "no-thing.png")
 		effect_group.add("heat", "effect-1.png")
 		effect_group.add("xray", "effect-2.png")
 		effect_group.add("sepia", "effect-3.png")
 		effect_group.add("door", "effect-4.png")
 
-		cannon_group = spiffy_buttons.make_new_group("Cannon Port")
+		cannon_group = spiffy_buttons.make_new_group("cannon-port")
 		cannon_group.add("no", "no-thing.png")
 		cannon_group.add("yes", "yes-thing.png")
 

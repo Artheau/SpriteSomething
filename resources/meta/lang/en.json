@@ -1,0 +1,46 @@
+{
+  "menu": {
+    "file": "File",
+    "file.open": "Open",
+    "file.save": "Save As...",
+    "file.exit": "Exit",
+    "export": "Export",
+    "export.inject": "Inject into Game File",
+    "export.inject-new": "Copy to new Game File",
+    "export.animation-as-gif": "Animation as GIF",
+    "export.animation-as-collage": "Animation as Collage",
+    "plugins": "Plugins",
+    "plugins.game": "Game",
+    "plugins.sprite": "Sprite",
+    "tools": "Tools",
+    "help": "Help",
+    "help.diagnostics": "Diagnostics",
+    "help.about": "About"
+  },
+  "meta": {
+    "reload": "Reload",
+    "sprite.name": "Sprite Name",
+    "author.name": "Author Name",
+    "author.name-short": "Author Name Short",
+    "background": "Background",
+    "animations": "Animations"
+  },
+  "tab": {
+    "animations": "Animations",
+    "overview": "Overview"
+  },
+  "vcr-controls": {
+    "zoom-minus": "Zoom -",
+    "zoom-plus": "Zoom +",
+    "speed-minus": "Speed -",
+    "speed-plus": "Speed +",
+    "play": "Play",
+    "play-one": "Play 1",
+    "reset": "Reset",
+    "frame-backward": "Frame",
+    "pause": "Pause",
+    "frame-forward": "Frame",
+    "pose-backward": "Pose",
+    "pose-forward": "Pose"
+  }
+}

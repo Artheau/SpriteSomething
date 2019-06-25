@@ -1,4 +1,10 @@
 {
+  "section": {
+    "mail": "Mail",
+    "sword": "Sword",
+    "shield": "Shield",
+    "gloves": "Gloves"
+  },
   "Mail": {
     "green": "Green Mail",
     "blue": "Blue Mail",

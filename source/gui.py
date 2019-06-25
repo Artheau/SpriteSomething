@@ -8,6 +8,7 @@ import os, sys
 import time
 from source import widgetlib
 from source import ssDiagnostics as diagnostics
+from source import ssTranslate as fish
 from source import gamelib
 from source import constants as CONST
 from source.tkHyperlinkManager import HyperlinkManager
@@ -42,7 +43,7 @@ def make_GUI(command_line_args):
 
 	root.mainloop()
 
-		
+
 class SpriteSomethingMainFrame(tk.Frame):
 	def __init__(self, master, command_line_args):
 		super().__init__(master)   #make the frame itself
@@ -102,33 +103,33 @@ class SpriteSomethingMainFrame(tk.Frame):
 			menu.add_cascade(label=name, menu=cascade)
 
 		#create the file menu
-		file_menu = create_cascade("File", "file_menu",	
+		file_menu = create_cascade(fish.translate("menu","file",os.path.join("meta")), "file_menu",
 											[
-													("Open","open",self.open_file),
-													("Save As...","save",self.save_file_as),
-													("Exit","exit",self.exit),
+													(fish.translate("menu","file.open",os.path.join("meta")),"open",self.open_file),
+													(fish.translate("menu","file.save",os.path.join("meta")),"save",self.save_file_as),
+													(fish.translate("menu","file.exit",os.path.join("meta")),"exit",self.exit),
 											])
 
 		#create the import menu
-		import_menu = create_cascade("Export","export_menu",
+		import_menu = create_cascade(fish.translate("menu","export",os.path.join("meta")),"export_menu",
 											[
-													("Inject into Game File","inject",self.inject_into_ROM),
-													("Copy to new Game File",None,self.copy_into_ROM),
+													(fish.translate("menu","export.inject",os.path.join("meta")),"inject",self.inject_into_ROM),
+													(fish.translate("menu","export.inject-new",os.path.join("meta")),None,self.copy_into_ROM),
 													#(None,None,None),
-													#("Animation as GIF",None,self.export_animation_as_gif),
-													#("Animation as Collage",None,self.export_animation_as_collage),
+													#(fish.translate("menu","export.animation-as-gif",os.path.join("meta")),None,self.export_animation_as_gif),
+													#(fish.translate("menu","export.animation-as-collage",os.path.join("meta")),None,self.export_animation_as_collage),
 											])
 
 		#for future implementation
 		# plugins_menu = tk.Menu(menu, tearoff=0, name="plugins_menu")
 		# tools_menu = tk.Menu(menu, tearoff=0, name="tools_menu")
-		# tools_menu.add_cascade(label="Plugins", menu=plugins_menu)
-		# menu.add_cascade(label="Tools", menu=tools_menu)
+		# tools_menu.add_cascade(label=fish.translate("menu","plugins",os.path.join("meta")), menu=plugins_menu)
+		# menu.add_cascade(label=fish.translate("menu","tools",os.path.join("meta")), menu=tools_menu)
 
-		help_menu = create_cascade("Help","help_menu",
+		help_menu = create_cascade(fish.translate("menu","help",os.path.join("meta")),"help_menu",
 											[
-													("Diagnostics",None,self.diagnostics),
-													("About",None,self.about),
+													(fish.translate("menu","help.diagnostics",os.path.join("meta")),None,self.diagnostics),
+													(fish.translate("menu","help.about",os.path.join("meta")),None,self.about),
 											])
 
 		return menu
@@ -142,8 +143,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 	# 	sprite_plugins_menu = tk.Menu(self.menu, tearoff=0, name="sprite_plugins_menu")
 	# 	for label, command in self.sprite.plugins:
 	# 		sprite_plugins_menu.add_command(label=label,command=command)
-	# 	self.menu.children["plugins_menu"].add_cascade(label="Game",menu=game_plugins_menu)
-	# 	self.menu.children["plugins_menu"].add_cascade(label="Sprite",menu=sprite_plugins_menu)
+	# 	self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.game",os.path.join("meta")),menu=game_plugins_menu)
+	# 	self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.sprite",os.path.join("meta")),menu=sprite_plugins_menu)
 
 	def load_sprite(self, sprite_filename):
 		self.game, self.sprite = gamelib.autodetect(sprite_filename)
@@ -151,7 +152,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.attach_both_panels()            #remake the GUI panels
 		self.load_plugins()
 		self.initialize_sprite_animation()
-		
+
 	def attach_both_panels(self):
 		#this same function can also be used to re-create the panels
 		#have to make the canvas before the buttons so that the left panel buttons can manipulate it
@@ -195,7 +196,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.sprite_coord = [event.x/self.current_zoom, event.y/self.current_zoom]
 			self.update_sprite_animation()
 		self.canvas.bind("<Button-1>", move_sprite)   #hook this function to call when the canvas is left-clicked
-		self.right_panel.add(self.canvas, text='Animations')
+		self.right_panel.add(self.canvas, text=fish.translate("tab","animations",os.path.join("meta")))
 
 	def attach_overview(self):
 		self.overview_frame.grid_rowconfigure(0, weight=1)
@@ -213,7 +214,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		xscrollbar.config(command=self.overview_canvas.xview)
 		yscrollbar.config(command=self.overview_canvas.yview)
 
-		self.right_panel.add(self.overview_frame, text='Overview')
+		self.right_panel.add(self.overview_frame, text=fish.translate("tab","overview",os.path.join("meta")))
 
 
 	############################ ANIMATION FUNCTIONS HERE ################################
@@ -298,7 +299,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def coord_getter(self):
 		return self.sprite_coord
-		
+
 
 	########################### VCR CONTROLS HERE ######################################
 
@@ -318,7 +319,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.update_sprite_animation()
 		def set_zoom_text():
 			self.zoom_factor.set('x' + str(round(self.current_zoom, 1)) + ' ')
-			
+
 		def speed_down(*args):
 			self.current_speed = max(0.1, self.current_speed - 0.1)
 			set_speed_text()
@@ -369,26 +370,26 @@ class SpriteSomethingMainFrame(tk.Frame):
 						sticky=['nesw','nesw','nesw'][self.current_grid_cell % 3])
 			self.current_grid_cell += 1
 			return vcr_button
-		
+
 		zoom_factor_label = make_vcr_label(self.zoom_factor, None)
-		zoom_out_button = make_vcr_button("Zoom -",None,zoom_out)
-		zoom_in_button = make_vcr_button("Zoom +",None,zoom_in)
-		
+		zoom_out_button = make_vcr_button(fish.translate("vcr-controls","zoom-minus",os.path.join("meta")),None,zoom_out)
+		zoom_in_button = make_vcr_button(fish.translate("vcr-controls","zoom-plus",os.path.join("meta")),None,zoom_in)
+
 		speed_factor_label = make_vcr_label(self.speed_factor,None)
-		speed_down_button = make_vcr_button("Speed -",None,speed_down)
-		speed_up_button = make_vcr_button("Speed +",None,speed_up)
-		
-		play_button = make_vcr_button("Play", "play.png", self.start_global_frame_timer)
-		play_one_button = make_vcr_button("Play 1", "play-one.png", self.play_once)
-		reset_button = make_vcr_button("Reset", None, self.reset_global_frame_timer)
+		speed_down_button = make_vcr_button(fish.translate("vcr-controls","speed-minus",os.path.join("meta")),None,speed_down)
+		speed_up_button = make_vcr_button(fish.translate("vcr-controls","speed-plus",os.path.join("meta")),None,speed_up)
 
-		frame_back_button = make_vcr_button("Frame", "frame-backward.png", self.rewind_global_frame_timer,"left")
-		pause_button = make_vcr_button("Pause", "pause.png", self.pause_global_frame_timer)
-		frame_forward_button = make_vcr_button("Frame", "frame-forward.png", self.step_global_frame_timer)
+		play_button = make_vcr_button(fish.translate("vcr-controls","play",os.path.join("meta")), "play.png", self.start_global_frame_timer)
+		play_one_button = make_vcr_button(fish.translate("vcr-controls","play-one",os.path.join("meta")), "play-one.png", self.play_once)
+		reset_button = make_vcr_button(fish.translate("vcr-controls","reset",os.path.join("meta")), None, self.reset_global_frame_timer)
 
-		step_back_button = make_vcr_button("Pose", "step-backward.png", self.go_to_previous_pose, "left")
+		frame_back_button = make_vcr_button(fish.translate("vcr-controls","frame-backward",os.path.join("meta")), "frame-backward.png", self.rewind_global_frame_timer,"left")
+		pause_button = make_vcr_button(fish.translate("vcr-controls","pause",os.path.join("meta")), "pause.png", self.pause_global_frame_timer)
+		frame_forward_button = make_vcr_button(fish.translate("vcr-controls","frame-forward",os.path.join("meta")), "frame-forward.png", self.step_global_frame_timer)
+
+		step_back_button = make_vcr_button(fish.translate("vcr-controls","pose-backward",os.path.join("meta")), "step-backward.png", self.go_to_previous_pose, "left")
 		null_label = make_vcr_label("", None)
-		step_forward_button = make_vcr_button("Pose", "step-forward.png", self.go_to_next_pose)
+		step_forward_button = make_vcr_button(fish.translate("vcr-controls","pose-forward",os.path.join("meta")), "step-forward.png", self.go_to_next_pose)
 
 		return control_section
 
@@ -396,7 +397,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def get_reload_button(self):
 		reload_section = tk.Frame(self.left_panel, name="reload_section")
 		widgetlib.center_align_grid_in_frame(reload_section)
-		reload_button = tk.Button(reload_section, text="Reload", padx=20, command=self.sprite.reload)
+		reload_button = tk.Button(reload_section, text=fish.translate("meta","reload",os.path.join("meta")), padx=20, command=self.sprite.reload)
 		reload_button.grid(row=0,column=1)
 		return reload_section
 
@@ -422,7 +423,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
-	
+
 	def copy_into_ROM(self, inject=False):
 		dest_filename = None
 		if inject:
@@ -549,4 +550,3 @@ class SpriteSomethingMainFrame(tk.Frame):
 				textObject.insert(tk.INSERT, "\n")
 			else:
 				textObject.insert(tk.INSERT, line + "\n")
-

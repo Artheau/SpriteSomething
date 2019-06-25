@@ -84,27 +84,27 @@ class Sprite(SpriteParent):
 	def get_spiffy_buttons(self, parent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
-		mail_group = spiffy_buttons.make_new_group("Mail")
+		mail_group = spiffy_buttons.make_new_group("mail")
 		mail_group.add_blank_space()
 		mail_group.add("green", "mail-1.png")
 		mail_group.add("blue", "mail-2.png")
 		mail_group.add("red", "mail-3.png")
 		mail_group.add("bunny", "mail-4.png")
 
-		sword_group = spiffy_buttons.make_new_group("Sword")
+		sword_group = spiffy_buttons.make_new_group("sword")
 		sword_group.add("none", "no-thing.png")
 		sword_group.add("fighter", "sword-1.png")
 		sword_group.add("master", "sword-2.png")
 		sword_group.add("tempered", "sword-3.png")
 		sword_group.add("gold", "sword-4.png")
 
-		shield_group = spiffy_buttons.make_new_group("Shield")
+		shield_group = spiffy_buttons.make_new_group("shield")
 		shield_group.add("none", "no-thing.png")
 		shield_group.add("fighter", "shield-1.png")
 		shield_group.add("fire", "shield-2.png")
 		shield_group.add("mirror", "shield-3.png")
 
-		gloves_group = spiffy_buttons.make_new_group("Gloves")
+		gloves_group = spiffy_buttons.make_new_group("gloves")
 		gloves_group.add("none", "no-thing.png")
 		gloves_group.add("power", "gloves-1.png")
 		gloves_group.add("titan", "gloves-2.png")

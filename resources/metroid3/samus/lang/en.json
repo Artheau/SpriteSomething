@@ -1,4 +1,10 @@
 {
+  "section": {
+    "suit": "Suit",
+    "variant": "Variant",
+    "effect": "Effect",
+    "cannon-port": "Cannon Port"
+  },
   "Suit": {
     "power": "Power Suit",
     "varia": "Varia Suit",
