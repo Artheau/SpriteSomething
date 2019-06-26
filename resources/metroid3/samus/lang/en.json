@@ -1,9 +1,16 @@
 {
   "section": {
+    "arrows": "Arrows",
     "suit": "Suit",
     "variant": "Variant",
     "effect": "Effect",
     "cannon-port": "Cannon Port"
+  },
+  "Arrows": {
+    "up": "Up",
+    "left": "Left",
+    "down": "Down",
+    "right": "Right"
   },
   "Suit": {
     "power": "Power Suit",

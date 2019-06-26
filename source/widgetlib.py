@@ -171,5 +171,10 @@ class SpiffyGroup():
 	def add_blank_space(self, amount_of_space=1):
 		self.col += amount_of_space
 
+	def add_newline(self, amount_of_space=1):
+		self.col = 1
+		self.row += amount_of_space
+		return amount_of_space
+
 	def press_spiffy_button(self):
 		self.parent.sprite_object.update_animation()

@@ -243,6 +243,15 @@ class Sprite(SpriteParent):
 	def get_spiffy_buttons(self, parent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
+		arrows_group = spiffy_buttons.make_new_group("arrows")
+		arrows_group.add_blank_space()
+		arrows_group.add("up", "arrow-up.png")
+		arrows_group.add_blank_space()
+		spiffy_buttons.max_row += arrows_group.add_newline()
+		arrows_group.add("left", "arrow-left.png")
+		arrows_group.add("down", "arrow-down.png")
+		arrows_group.add("right", "arrow-right.png")
+
 		suit_group = spiffy_buttons.make_new_group("suit")
 		suit_group.add_blank_space()
 		suit_group.add("power", "suit-power.png")

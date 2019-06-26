@@ -1,9 +1,16 @@
 {
   "section": {
+    "arrows": "Arrows",
     "mail": "Mail",
     "sword": "Sword",
     "shield": "Shield",
     "gloves": "Gloves"
+  },
+  "Arrows": {
+    "up": "Up",
+    "left": "Left",
+    "down": "Down",
+    "right": "Right"
   },
   "Mail": {
     "green": "Green Mail",
