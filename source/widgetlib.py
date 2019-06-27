@@ -131,7 +131,7 @@ class SpiffyGroup():
 		self.col += 1
 
 
-	def add(self, internal_value_name, image_filename="blank.png"):
+	def add(self, internal_value_name, image_filename="blank.png", default = False):
 		icon_path = common.get_resource(image_filename, os.path.join(self.parent.sprite_object.resource_subpath,"icons"))
 		if icon_path is None:
 			icon_path = common.get_resource(image_filename, os.path.join("meta","icons"))
@@ -161,7 +161,7 @@ class SpiffyGroup():
 		button.image = img
 		button.grid(row=self.row, column=self.col)
 
-		if not self.default_exists:
+		if not self.default_exists or default:
 			button.select()
 			self.press_spiffy_button()
 			self.default_exists = True

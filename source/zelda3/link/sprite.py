@@ -91,7 +91,7 @@ class Sprite(SpriteParent):
 		spiffy_buttons.max_row += arrows_group.add_newline()
 		arrows_group.add("left", "arrow-left.png")
 		arrows_group.add("down", "arrow-down.png")
-		arrows_group.add("right", "arrow-right.png")
+		arrows_group.add("right", "arrow-right.png", True)
 
 		mail_group = spiffy_buttons.make_new_group("mail")
 		mail_group.add_blank_space()
