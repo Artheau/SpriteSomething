@@ -48,6 +48,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def __init__(self, master, command_line_args):
 		super().__init__(master)   #make the frame itself
 
+		self.working_dirs = {
+			"file.open": "./",
+			"file.save": "./",
+			"export.dest": "./",
+			"export.source": "./",
+			"export.animation-as-gif": "./",
+			"export.animation-as-collage": "./"
+		}
+
 		self.create_random_title()
 
 		self.pack(fill=tk.BOTH, expand=1)    #main frame should take up the whole window
@@ -408,17 +417,19 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def open_file(self):
 		#TODO: Give the user a chance to regret not saving their work
-		filename = filedialog.askopenfilename(initialdir="./", title="Select Sprite", filetypes=(("Supported Types","*.zspr *.png *.sfc *.smc"),))
+		filename = filedialog.askopenfilename(initialdir=self.working_dirs["file.open"], title="Select Sprite", filetypes=(("Supported Types","*.zspr *.png *.sfc *.smc"),))
 		if filename:
+			self.working_dirs["file.open"] = filename[:filename.rfind('/')]
 			self.load_sprite(filename)
 
 	def save_file_as(self):
 		# Save a ZSPR or PNG.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
 		filetypes = (("PNG Files","*.png"),("ZSPR Files","*.zspr"))
-		filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr"), initialdir="./", title="Save Sprite As...", filetypes=filetypes)
+		filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr"), initialdir=self.working_dirs["file.save"], title="Save Sprite As...", filetypes=filetypes)
 		if filename:
 			returnvalue = self.sprite.save_as(filename)
 			if returnvalue:
+				self.working_dirs["file.save"] = filename[:filename.rfind('/')]
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -427,21 +438,23 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def copy_into_ROM(self, inject=False):
 		dest_filename = None
 		if inject:
-			dest_filename = filedialog.asksaveasfilename(defaultextension=".sfc", initialdir="./", title="Select ROM to Modify...", filetypes=(("Game Files","*.sfc *.smc"),))
+			dest_filename = filedialog.asksaveasfilename(defaultextension=".sfc", initialdir=self.working_dirs["export.dest"], title="Select ROM to Modify...", filetypes=(("Game Files","*.sfc *.smc"),))
 			source_filename = dest_filename
 		else:
-			source_filename = filedialog.askopenfilename(initialdir="./", title="Select Source ROM", filetypes=(("Game Files","*.sfc *.smc"),))
+			source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title="Select Source ROM", filetypes=(("Game Files","*.sfc *.smc"),))
 			if source_filename:
 				_,file_extension = os.path.splitext(source_filename)
 				if file_extension.lower() in ['.sfc','.smc']:
 					default_extension = file_extension.lower()
 				else:
 					default_extension = ".sfc"
-				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialdir="./", title="Save Modified ROM As...", filetypes=(("Game Files","*.sfc *.smc"),))
+				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialdir=self.working_dirs["export.dest"], title="Save Modified ROM As...", filetypes=(("Game Files","*.sfc *.smc"),))
 		if dest_filename:
 			rom = self.game.get_rom_from_filename(source_filename)
 			modified_rom = self.sprite.inject_into_ROM(rom)
 			modified_rom.save(dest_filename, overwrite=True)
+			self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
+			self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
 			messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 
 	def inject_into_ROM(self):
