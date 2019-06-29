@@ -79,6 +79,7 @@ class GameParent():
 	def __init__(self):
 		self.name = "Game Parent Class"    #to be replaced by a name like "Super Metroid"
 		self.internal_name = "meta"        #to be replaced by the specific folder name that this app uses, e.g. "metroid3"
+		self.plugins = []
 
 	############################# END ABSTRACT CODE ##############################
 

@@ -130,10 +130,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 											])
 
 		#for future implementation
-		# plugins_menu = tk.Menu(menu, tearoff=0, name="plugins_menu")
-		# tools_menu = tk.Menu(menu, tearoff=0, name="tools_menu")
-		# tools_menu.add_cascade(label=fish.translate("menu","plugins",os.path.join("meta")), menu=plugins_menu)
-		# menu.add_cascade(label=fish.translate("menu","tools",os.path.join("meta")), menu=tools_menu)
+		plugins_menu = tk.Menu(menu, tearoff=0, name="plugins_menu")
+		tools_menu = tk.Menu(menu, tearoff=0, name="tools_menu")
+		tools_menu.add_cascade(label=fish.translate("menu","plugins",os.path.join("meta")), menu=plugins_menu)
+		menu.add_cascade(label=fish.translate("menu","tools",os.path.join("meta")), menu=tools_menu)
 
 		help_menu = create_cascade(fish.translate("menu","help",os.path.join("meta")),"help_menu",
 											[
@@ -145,15 +145,22 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 
 	def load_plugins(self):
-		pass
-	# 	game_plugins_menu = tk.Menu(self.menu, tearoff=0, name="game_plugins_menu")
-	# 	for label, command in self.game.plugins:
-	# 		game_plugins_menu.add_command(label=label,command=command)
-	# 	sprite_plugins_menu = tk.Menu(self.menu, tearoff=0, name="sprite_plugins_menu")
-	# 	for label, command in self.sprite.plugins:
-	# 		sprite_plugins_menu.add_command(label=label,command=command)
-	# 	self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.game",os.path.join("meta")),menu=game_plugins_menu)
-	# 	self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.sprite",os.path.join("meta")),menu=sprite_plugins_menu)
+		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
+
+		if self.game.plugins or self.sprite.plugins:
+			if self.game.plugins:
+				game_plugins_menu = tk.Menu(self.menu, tearoff=0, name="game_plugins_menu")
+				for label, command in self.game.plugins:
+					game_plugins_menu.add_command(label=label,command=command)
+				self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.game",os.path.join("meta")),menu=game_plugins_menu)
+
+			if self.sprite.plugins:
+				sprite_plugins_menu = tk.Menu(self.menu, tearoff=0, name="sprite_plugins_menu")
+				for label, command in self.sprite.plugins:
+					sprite_plugins_menu.add_command(label=label,command=command)
+				self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.sprite",os.path.join("meta")),menu=sprite_plugins_menu)
+		else:
+			self.menu.children["plugins_menu"].add_command(label=fish.translate("meta","none",os.path.join("meta")),state="disabled")
 
 	def load_sprite(self, sprite_filename):
 		self.game, self.sprite = gamelib.autodetect(sprite_filename)

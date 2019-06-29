@@ -18,6 +18,7 @@
     "help.about": "About"
   },
   "meta": {
+    "none": "None",
     "reload": "Reload",
     "sprite.name": "Sprite Name",
     "author.name": "Author Name",

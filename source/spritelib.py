@@ -28,6 +28,7 @@ class SpriteParent():
 		self.import_from_filename()
 
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
+		self.plugins = []
 
 	# def __del__(self):
 	# 	tk.messagebox.showinfo("Notification", "I am destroyed")
