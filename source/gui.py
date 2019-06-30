@@ -65,6 +65,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		self.create_random_title()
 
+		self.create_toolbar()
+
 		self.pack(fill=tk.BOTH, expand=1)    #main frame should take up the whole window
 
 		self.menu = self.create_menu_bar()
@@ -93,6 +95,23 @@ class SpriteSomethingMainFrame(tk.Frame):
 			app_name.append(random.choice(name_dict["post"]))
 		self.app_title = " ".join(app_name)
 		self.master.title(self.app_title)
+
+	def create_toolbar(self):
+		toolbar = tk.Frame(self.master, bd=1, relief=tk.RAISED)
+		def create_toolbar_button(fish_key, fish_subkey, image_filename="blank.png",command=None):
+			icon_path = common.get_resource(image_filename,os.path.join("meta","icons"))
+			img = tk.PhotoImage(file=icon_path)
+			display_text = fish.translate(fish_key,fish_subkey,os.path.join("meta"))
+			button = tk.Button(toolbar,image=img,relief=tk.FLAT,command=command)
+			button.img = img
+			widgetlib.ToolTip(button,display_text)
+			button.pack(side=tk.LEFT,padx=2,pady=2)
+			return button
+		toolbar.pack(side=tk.TOP,fill=tk.X)
+		open_button = create_toolbar_button("menu","file.open","open.png",self.open_file)
+		save_button = create_toolbar_button("menu","file.save","save.png",self.save_file_as)
+		inject_button = create_toolbar_button("menu","export.inject","inject.png",self.inject_into_ROM)
+		inject_new_button = create_toolbar_button("menu","export.inject-new","inject-new.png",self.copy_into_ROM)
 
 	def create_menu_bar(self):
 		#create the menu bar
@@ -130,7 +149,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		import_menu = create_cascade(fish.translate("menu","export",os.path.join("meta")),"export_menu",
 											[
 													(fish.translate("menu","export.inject",os.path.join("meta")),"inject",self.inject_into_ROM),
-													(fish.translate("menu","export.inject-new",os.path.join("meta")),None,self.copy_into_ROM),
+													(fish.translate("menu","export.inject-new",os.path.join("meta")),"inject-new",self.copy_into_ROM),
 													#(None,None,None),
 													#(fish.translate("menu","export.animation-as-gif",os.path.join("meta")),None,self.export_animation_as_gif),
 													#(fish.translate("menu","export.animation-as-collage",os.path.join("meta")),None,self.export_animation_as_collage),
