@@ -177,13 +177,13 @@ class SpriteSomethingMainFrame(tk.Frame):
 			if self.game.plugins:
 				game_plugins_menu = tk.Menu(self.menu, tearoff=0, name="game_plugins_menu")
 				for label, command in self.game.plugins:
-					game_plugins_menu.add_command(label=label,command=command)
+					game_plugins_menu.add_command(label=label,command=command,state="disabled" if command == None else "")
 				self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.game",os.path.join("meta")),menu=game_plugins_menu)
 
 			if self.sprite.plugins:
 				sprite_plugins_menu = tk.Menu(self.menu, tearoff=0, name="sprite_plugins_menu")
 				for label, command in self.sprite.plugins:
-					sprite_plugins_menu.add_command(label=label,command=command)
+					sprite_plugins_menu.add_command(label=label,command=command,state="disabled" if command == None else "")
 				self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.sprite",os.path.join("meta")),menu=sprite_plugins_menu)
 		else:
 			self.menu.children["plugins_menu"].add_command(label=fish.translate("meta","none",os.path.join("meta")),state="disabled")
