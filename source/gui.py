@@ -6,6 +6,7 @@ import re
 import traceback
 import os, sys
 import time
+import webbrowser
 from source import widgetlib
 from source import ssDiagnostics as diagnostics
 from source import ssTranslate as fish
@@ -56,6 +57,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 			"export.animation-as-gif": "./",
 			"export.animation-as-collage": "./"
 		}
+		f = open("./resources/meta/working_dirs.json")
+		if(f):
+			with f as json_file:
+				data = json.load(json_file)
+				self.working_dirs = data
 
 		self.create_random_title()
 
@@ -110,6 +116,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 						cascade.images[image_name] = None
 					cascade.add_command(label=display_name, image=cascade.images[image_name], compound=tk.LEFT, command=function_to_call)
 			menu.add_cascade(label=name, menu=cascade)
+			return cascade
 
 		#create the file menu
 		file_menu = create_cascade(fish.translate("menu","file",os.path.join("meta")), "file_menu",
@@ -528,6 +535,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.add_text_link_array(lines, text)
 		text.bind("<Button-1>", lambda e: txtEvent(e))
 
+	def save_working_dirs(self):
+		f = open("./resources/meta/working_dirs.json","w+")
+		f.write(json.dumps(self.working_dirs,indent=2))
+
 	def exit(self):
 		#Until some kind of useful change/edit feature is implemented, no need to ask if they want to save their changes
 		save_before_exit = False #messagebox.askyesnocancel(self.app_title,"Do you want to save before exiting?")
@@ -535,9 +546,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 			if save_before_exit:
 				saved = self.save_file_as()
 				if saved:
+					self.save_working_dirs()
 					sys.exit(0)
 			else:
 				#messagebox.showwarning(self.app_title, "Death in Super Metroid loses progress since last save." + "\n" + "You have been eaten by a grue.")
+				self.save_working_dirs()
 				sys.exit(0)
 
 
