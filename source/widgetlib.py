@@ -115,8 +115,6 @@ class SpiffyButtons():
 
 	def get_panel(self):
 		section_height = self.max_row*self.DIMENSIONS["panel"]["height_per_button"]
-		#graffiti the sprite class so we know there are spiffy buttons in existence
-		self.sprite_object.spiffy_buttons_exist = True
 		return self.spiffy_buttons_section, section_height
 
 class SpiffyGroup():

@@ -26,7 +26,7 @@ class SpriteParent():
 		with open(common.get_resource("animations.json",subdir=self.resource_subpath)) as file:
 			self.animations = json.load(file)
 		self.import_from_filename()
-		self.spiffy_buttons_exist = False            #only Spiffy Buttons can declare that they exist, and they will overwrite this
+		self.spiffy_buttons_exist = False
 
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
 		self.plugins = []
@@ -142,6 +142,7 @@ class SpriteParent():
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
 
 		spiffy_panel, height = self.get_spiffy_buttons(parent).get_panel()
+		self.spiffy_buttons_exist = True
 		parent.add(spiffy_panel,minsize=height)
 
 		self.update_overview_panel()
