@@ -1183,7 +1183,7 @@ def assign_palettes(samus,rom):
 	xray_555 = common.convert_to_555(xray_colors)
 	rom.write_to_snes_address(0x9BA3C6,xray_555,"222")
 
-	hyper_beam_palettes = [pal for _,pal in samus.get_timed_palette("power","hyper beam")][::-1]
+	hyper_beam_palettes = [pal for _,pal in samus.get_timed_palette("power","hyper")][::-1]
 	hyper_beam_555 = [common.convert_to_555(pal) for pal in hyper_beam_palettes]
 	for i in range(10):
 		rom.write_to_snes_address(0x9BA240+2+0x20*i,hyper_beam_555[i],"2"*0x0F)

@@ -104,24 +104,29 @@ class SpiffyButtons():
 		self.spiffy_buttons_section = tk.Frame(parent_frame, name="spiffy_buttons")
 		right_align_grid_in_frame(self.spiffy_buttons_section)
 		self.max_row = 0
-
+		
 	def make_new_group(self, label):
-		#TODO: Make new variable (perhaps StringVar?), and hook it in to the sprite object using code placed here or in the next line
-		new_group = SpiffyGroup(self, self.max_row, label)
+		#make a new variable in the sprite object called "<label>_var"
+		var_name = "_".join([label.lower(), "var"])
+		setattr(self.sprite_object, var_name, tk.StringVar())
+		new_group = SpiffyGroup(self, self.max_row, label, getattr(self.sprite_object, var_name))
 		self.max_row += 1
 		return new_group
 
 	def get_panel(self):
 		section_height = self.max_row*self.DIMENSIONS["panel"]["height_per_button"]
+		#graffiti the sprite class so we know there are spiffy buttons in existence
+		self.sprite_object.spiffy_buttons_exist = True
 		return self.spiffy_buttons_section, section_height
 
 class SpiffyGroup():
 	#not meant to be used on its own, instead use class SpiffyButtons()
-	def __init__(self, parent, row, label):
+	def __init__(self, parent, row, label, var):
 		label = fish.translate("section",label,os.path.join(parent.sprite_object.resource_subpath))
 		self.label = label
 		self.default_exists = False
 		self.parent = parent
+		self.var = var
 		self.col = 0
 		self.row = row
 
@@ -147,14 +152,14 @@ class SpiffyGroup():
 				image=img,
 				name="_".join([self.label.lower(), internal_value_name, "button"]),
 				text=display_text,
-				variable="_".join([self.label.lower(), "var"]),
+				variable=self.var,
 				value=internal_value_name,
 				activebackground=self.parent.DIMENSIONS["button"]["color.active"],
 				selectcolor=self.parent.DIMENSIONS["button"]["color.selected"],
 				width=self.parent.DIMENSIONS["button"]["width"],
 				height=self.parent.DIMENSIONS["button"]["height"],
 				indicatoron=False,
-				command=self.press_spiffy_button()
+				command=self.press_spiffy_button
 		)
 
 		ToolTip(button, display_text)
@@ -174,6 +179,7 @@ class SpiffyGroup():
 	def add_newline(self, amount_of_space=1):
 		self.col = 1
 		self.row += amount_of_space
+		self.parent.max_row += amount_of_space
 		return amount_of_space
 
 	def press_spiffy_button(self):

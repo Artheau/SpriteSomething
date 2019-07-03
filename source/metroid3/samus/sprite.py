@@ -48,7 +48,7 @@ class Sprite(SpriteParent):
 		else:
 			raise AssertionError(f"Unrecognized color set request: {color_set}")
 
-	def get_timed_palette(self, overall_type="base", variant_type="standard"):
+	def get_timed_palette(self, overall_type="power", variant_type="standard"):
 		timed_palette = []
 		base_palette = self.get_colors_from_master(overall_type)
 
@@ -157,7 +157,7 @@ class Sprite(SpriteParent):
 			timed_palette.append((1,common.palette_shift(base_palette,(0,128,0))))
 			timed_palette.append((1,common.palette_shift(base_palette,(0,64,0))))
 
-		elif variant_type.lower().replace("_"," ") == "hyper beam":
+		elif variant_type.lower().replace("_"," ") == "hyper":
 			grayscale_palette = common.grayscale(self.get_colors_from_master("gravity"))
 			faded_palette = common.palette_pull_towards_color(grayscale_palette,(0,0,0),2.0/3.0)
 			timed_palette.append((2,common.palette_shift(faded_palette,(0xE0,0x20,0x20))))
@@ -238,7 +238,8 @@ class Sprite(SpriteParent):
 		else:
 			raise AssertionError(f"unrecognized palette request: {overall_type}, {variant_type}")
 
-		return timed_palette
+		#now scrub the palette to get rid of floats and numbers that are too large/small
+		return [(time,[(max(0,min(255,int(color_plane))) for color_plane in color) for color in palette]) for (time,palette) in timed_palette]
 
 	def get_spiffy_buttons(self, parent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
@@ -264,16 +265,38 @@ class Sprite(SpriteParent):
 		variant_group.add("speed_boost", "variant-speed_boost.png")
 		variant_group.add("speed_squat", "variant-speed_squat.png")
 		variant_group.add("hyper", "variant-hyper.png")
-
-		effect_group = spiffy_buttons.make_new_group("effect")
-		effect_group.add("none", "no-thing.png")
-		effect_group.add("heat", "effect-heat.png")
-		effect_group.add("xray", "effect-xray.png")
-		effect_group.add("sepia", "effect-sepia.png")
-		effect_group.add("door", "effect-door.png")
+		variant_group.add_newline()
+		variant_group.add_blank_space()
+		variant_group.add("heat", "effect-heat.png")
+		variant_group.add("xray", "effect-xray.png")
+		variant_group.add("sepia", "effect-sepia.png")
+		variant_group.add("door", "effect-door.png")
 
 		cannon_group = spiffy_buttons.make_new_group("cannon-port")
 		cannon_group.add("no", "no-thing.png")
 		cannon_group.add("yes", "yes-thing.png")
 
 		return spiffy_buttons
+
+
+	def get_current_palette(self, palette_index_range, palette_number):
+		#Ins:
+		# palette_index_range = a 2-tuple or 2-list specifying the Python-style range of indices to pull.  E.g. [1,16] means to use colors [1:16] from the master palette block
+		# palette_number = 0 for static palettes (which are most palettes), but for dynamic palettes this will be the index into the set of palettes
+		
+		#TODO: populate the animations.json with names of these palettes or something, so that we don't need to reverse-engineer the index
+		if tuple(palette_index_range) == (0,15):   #suit colors
+			request_type = "base_suit"
+		else:
+			raise NotImplementedError(f"Samus palette not implemented for range {tuple(palette_index_range)}")
+
+		if self.spiffy_buttons_exist:
+			if request_type == "base_suit":
+				suit_type = self.suit_var.get()
+				variant_type = self.variant_var.get()
+
+				_,palette = self.get_timed_palette(overall_type=suit_type, variant_type=variant_type)[palette_number]
+		else:
+			_,palette = self.get_timed_palette()[0]
+				
+		return palette

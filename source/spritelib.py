@@ -26,6 +26,7 @@ class SpriteParent():
 		with open(common.get_resource("animations.json",subdir=self.resource_subpath)) as file:
 			self.animations = json.load(file)
 		self.import_from_filename()
+		self.spiffy_buttons_exist = False            #only Spiffy Buttons can declare that they exist, and they will overwrite this
 
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
 		self.plugins = []
@@ -53,19 +54,14 @@ class SpriteParent():
 		#return the injected ROM
 		raise AssertionError("called export_to_ROM() on Sprite base class")
 
-	def get_timed_palette(self, overall_type="base", variant_type="standard"):
-		#return the requested palette
-		#with no arguments, this returns the base type (e.g. green mail/power suit)
-		#you can specify overall_type to be other suits (e.g. blue mail/varia suit)
-		# and variant_type refers to changes on that palette, usually flashy things (e.g. zap/shinespark)
-		#or you can also specify overall_type to be other palettes related to the character (e.g. gold sword)
-		# in which case variant_type refers to variants of that type (e.g. tempered vs. gold)
-		#IMPORTANT: This function returns a list of tuples, not just the palette
-		# and so the output format should be [(num_frames, [rgb_color ...]) ...]
-		# where num_frames is the number of frames to hold these colors (0 means to hold permanently)
-		# thus for static palettes (i.e. most palettes), this will be of the form [(0, [(r,g,b) ...])]
-		#Do not include the transparency color
-		raise AssertionError("called get_timed_palette() on Sprite base class")
+	def get_current_palette(self, palette_index_range, palette_number):
+		#Ins:
+		# palette_index_range = a 2-tuple or 2-list specifying the Python-style range of indices to pull.  E.g. [1,16] means to use colors [1:16] from the master palette block
+		# palette_number = 0 for static palettes (which are most palettes), but for dynamic palettes this will be the index into the set of palettes
+		#
+		#in most cases the child class will override this in order to provide functionality to things like spiffy buttons
+		# and to implement dynamic palettes
+		return self.master_palette[palette_index_range[0]:palette_index_range[1]]
 
 	############################# END ABSTRACT CODE ##############################
 
@@ -124,8 +120,6 @@ class SpriteParent():
 		self.zoom_getter = zoom_getter
 		self.frame_getter = frame_getter
 		self.coord_getter = coord_getter
-		self.last_known_zoom = None
-		self.last_known_coord = None
 		self.current_animation = None
 		self.pose_number = None
 		self.palette_number = None
@@ -158,14 +152,10 @@ class SpriteParent():
 		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
 		self.import_from_filename()
 		self.update_overview_panel()
-		self.last_known_zoom = None    #this will force a reload from update_animation()
-		self.last_known_coord = None
 		self.update_animation()
 
 	def set_animation(self, animation_name):
 		self.current_animation = animation_name
-		self.last_known_zoom = None
-		self.last_known_coord = None
 		self.update_animation()
 
 	def update_pose_and_palette_numbers(self):
@@ -202,9 +192,10 @@ class SpriteParent():
 				elif vflip:
 					base_image = base_image.transpose(Image.FLIP_TOP_BOTTOM)
 
-			palette_lookup = self.layout.get_property("import palette interval", tile_info["image"])        #TODO: get correct palette based upon buttons
+			palette_index_range = self.layout.get_property("import palette interval", tile_info["image"])
+			palette = self.get_current_palette(palette_index_range, self.palette_number)
 
-			base_image = common.apply_palette(base_image, self.master_palette[palette_lookup[0]:palette_lookup[1]])
+			base_image = common.apply_palette(base_image, palette)
 
 			full_tile_list.append((base_image,tile_info["pos"]))
 
@@ -227,20 +218,13 @@ class SpriteParent():
 		return mod_frames - prev_pose_at + 1
 
 	def update_animation(self):
-		#see if there's anything to do
-		if not self.update_pose_and_palette_numbers():   #the pose and palette numbers didn't change
-			if self.last_known_zoom == self.zoom_getter():
-				if self.last_known_coord == self.coord_getter():
-					return #there's nothing you can do here. go home, you're drunk
-
-		#ok, there's something to do here, so sober up
 		pose_list = self.get_current_pose_list()
 		if "frames" not in pose_list[0]:      #might not be a frame entry for static poses
 			self.frame_progression_table = [1]
 		else:
 			self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
 
-		self.palette_progression_table = [1]   #TODO
+		self.palette_progression_table = [1]   #TODO -- this should allow for dynamic palettes like Screw Attack (Metroid3) or Zap (Zelda3)
 
 		if hasattr(self,"sprite_IDs"):
 			for ID in self.sprite_IDs:
@@ -257,8 +241,6 @@ class SpriteParent():
 			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_tile, anchor = tk.NW))
 			self.active_tiles.append(scaled_tile)     #if you skip this part, then the auto-destructor will get rid of your picture!
-		self.last_known_coord = self.coord_getter()
-		self.last_known_zoom = self.zoom_getter()
 
 	def save_as(self, filename):
 		_,file_extension = os.path.splitext(filename)

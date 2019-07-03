@@ -57,9 +57,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 			"export.animation-as-gif": "./",
 			"export.animation-as-collage": "./"
 		}
-		f = open("./resources/meta/working_dirs.json")
-		if(f):
-			with f as json_file:
+		working_dir_path = os.path.join("resources","meta","working_dirs.json")
+		if os.path.exists(working_dir_path):
+			with open(working_dir_path) as json_file:
 				data = json.load(json_file)
 				self.working_dirs = data
 
