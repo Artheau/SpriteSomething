@@ -13195,7 +13195,8 @@
                             7
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             }
         ],
         "up": [
@@ -13216,7 +13217,8 @@
                             8
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             }
         ],
         "down": [
@@ -13237,14 +13239,15 @@
                             8
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             }
         ]
     },
     "Bunny walk": {
         "right": [
             {
-                "frames": 3,
+                "frames": 6,
                 "tiles": [
                     {
                         "image": "AA4",
@@ -13260,10 +13263,11 @@
                             7
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             },
             {
-                "frames": 2,
+                "frames": 4,
                 "tiles": [
                     {
                         "image": "AA4",
@@ -13279,10 +13283,11 @@
                             7
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             },
             {
-                "frames": 3,
+                "frames": 6,
                 "tiles": [
                     {
                         "image": "AA4",
@@ -13298,10 +13303,11 @@
                             7
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             },
             {
-                "frames": 2,
+                "frames": 4,
                 "tiles": [
                     {
                         "image": "AA4",
@@ -13317,7 +13323,88 @@
                             7
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
+            },
+            {
+                "frames": 4,
+                "tiles": [
+                    {
+                        "image": "AA4",
+                        "pos": [
+                            -2,
+                            -1
+                        ]
+                    },
+                    {
+                        "image": "AA5",
+                        "pos": [
+                            -1,
+                            7
+                        ]
+                    }
+                ],
+                "palette": "bunny"
+            },
+            {
+                "frames": 4,
+                "tiles": [
+                    {
+                        "image": "AA4",
+                        "pos": [
+                            -2,
+                            0
+                        ]
+                    },
+                    {
+                        "image": "AA6",
+                        "pos": [
+                            -1,
+                            7
+                        ]
+                    }
+                ],
+                "palette": "bunny"
+            },
+            {
+                "frames": 6,
+                "tiles": [
+                    {
+                        "image": "AA4",
+                        "pos": [
+                            -2,
+                            -1
+                        ]
+                    },
+                    {
+                        "image": "AA5",
+                        "pos": [
+                            -1,
+                            7
+                        ]
+                    }
+                ],
+                "palette": "bunny"
+            },
+            {
+                "frames": 4,
+                "tiles": [
+                    {
+                        "image": "AA4",
+                        "pos": [
+                            -2,
+                            0
+                        ]
+                    },
+                    {
+                        "image": "AA6",
+                        "pos": [
+                            -1,
+                            7
+                        ]
+                    }
+                ],
+                "palette": "bunny"
             },
             {
                 "frames": 2,
@@ -13336,10 +13423,11 @@
                             7
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             },
             {
-                "frames": 2,
+                "frames": 4,
                 "tiles": [
                     {
                         "image": "AA4",
@@ -13355,88 +13443,13 @@
                             7
                         ]
                     }
-                ]
-            },
-            {
-                "frames": 3,
-                "tiles": [
-                    {
-                        "image": "AA4",
-                        "pos": [
-                            -2,
-                            -1
-                        ]
-                    },
-                    {
-                        "image": "AA5",
-                        "pos": [
-                            -1,
-                            7
-                        ]
-                    }
-                ]
-            },
-            {
-                "frames": 2,
-                "tiles": [
-                    {
-                        "image": "AA4",
-                        "pos": [
-                            -2,
-                            0
-                        ]
-                    },
-                    {
-                        "image": "AA6",
-                        "pos": [
-                            -1,
-                            7
-                        ]
-                    }
-                ]
-            },
-            {
-                "frames": 1,
-                "tiles": [
-                    {
-                        "image": "AA4",
-                        "pos": [
-                            -2,
-                            -1
-                        ]
-                    },
-                    {
-                        "image": "AA5",
-                        "pos": [
-                            -1,
-                            7
-                        ]
-                    }
-                ]
-            },
-            {
-                "frames": 2,
-                "tiles": [
-                    {
-                        "image": "AA4",
-                        "pos": [
-                            -2,
-                            0
-                        ]
-                    },
-                    {
-                        "image": "AA6",
-                        "pos": [
-                            -1,
-                            7
-                        ]
-                    }
-                ]
+                ],
+                "palette": "bunny"
             }
         ],
         "up": [
             {
-                "frames": 3,
+                "frames": 6,
                 "tiles": [
                     {
                         "image": "AA1",
@@ -13452,10 +13465,11 @@
                             8
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             },
             {
-                "frames": 2,
+                "frames": 4,
                 "tiles": [
                     {
                         "image": "AA1",
@@ -13471,10 +13485,11 @@
                             8
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             },
             {
-                "frames": 3,
+                "frames": 6,
                 "tiles": [
                     {
                         "image": "AA1",
@@ -13490,10 +13505,11 @@
                             8
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             },
             {
-                "frames": 2,
+                "frames": 4,
                 "tiles": [
                     {
                         "image": "AA1",
@@ -13510,12 +13526,13 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+                "palette": "bunny"
             }
         ],
         "down": [
             {
-                "frames": 3,
+                "frames": 6,
                 "tiles": [
                     {
                         "image": "Z5",
@@ -13531,10 +13548,11 @@
                             8
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             },
             {
-                "frames": 2,
+                "frames": 4,
                 "tiles": [
                     {
                         "image": "Z5",
@@ -13550,10 +13568,11 @@
                             8
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             },
             {
-                "frames": 3,
+                "frames": 6,
                 "tiles": [
                     {
                         "image": "Z5",
@@ -13569,10 +13588,11 @@
                             8
                         ]
                     }
-                ]
+                ],
+                "palette": "bunny"
             },
             {
-                "frames": 2,
+                "frames": 4,
                 "tiles": [
                     {
                         "image": "Z5",
@@ -13589,7 +13609,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+                "palette": "bunny"
             }
         ]
     },

@@ -279,7 +279,7 @@ class Sprite(SpriteParent):
 		return spiffy_buttons
 
 
-	def get_current_palette(self, palette_index_range, palette_number):
+	def get_current_palette(self, palette_index_range, palette_type, palette_number):
 		#Ins:
 		# palette_index_range = a 2-tuple or 2-list specifying the Python-style range of indices to pull.  E.g. [1,16] means to use colors [1:16] from the master palette block
 		# palette_number = 0 for static palettes (which are most palettes), but for dynamic palettes this will be the index into the set of palettes

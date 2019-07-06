@@ -99,7 +99,6 @@ class Sprite(SpriteParent):
 		mail_group.add("green", "mail-green.png")
 		mail_group.add("blue", "mail-blue.png")
 		mail_group.add("red", "mail-red.png")
-		mail_group.add("bunny", "mail-bunny.png")
 
 		sword_group = spiffy_buttons.make_new_group("sword")
 		sword_group.add("none", "no-thing.png")
@@ -121,7 +120,7 @@ class Sprite(SpriteParent):
 
 		return spiffy_buttons
 
-	def get_current_palette(self, palette_index_range, palette_number):
+	def get_current_palette(self, palette_index_range, palette_type, palette_number):
 		#Ins:
 		# palette_index_range = a 2-tuple or 2-list specifying the Python-style range of indices to pull.  E.g. [1,16] means to use colors [1:16] from the master palette block
 		# palette_number = 0 for static palettes (which are most palettes), but for dynamic palettes this will be the index into the set of palettes
@@ -129,26 +128,27 @@ class Sprite(SpriteParent):
 		palette_indices = list(range(palette_index_range[0],palette_index_range[1]))
 
 		if self.spiffy_buttons_exist:
-			mail_type = self.mail_var.get()
-			gloves_type = self.gloves_var.get()
-			for i in range(0,len(palette_indices)):
+			if palette_type == "bunny":
+				palette_indices = list(range(0x31,0x40))   #use the bunny colors, skipping the transparency color
+			else:
+				mail_type = self.mail_var.get()
+				gloves_type = self.gloves_var.get()
+				for i in range(0,len(palette_indices)):
 
-				if gloves_type != "none" and palette_indices[i] == 0x0D:
-					if gloves_type == "power":
-						palette_indices[i] = 0x10
-					elif gloves_type == "titan":
-						palette_indices[i] = 0x20
-					else:
-						raise AssertionError(f"unknown gloves type given by spiffy buttons: '{gloves_type}'")
+					if gloves_type != "none" and palette_indices[i] == 0x0D:
+						if gloves_type == "power":
+							palette_indices[i] = 0x10
+						elif gloves_type == "titan":
+							palette_indices[i] = 0x20
+						else:
+							raise AssertionError(f"unknown gloves type given by spiffy buttons: '{gloves_type}'")
 
-				elif mail_type != "green" and palette_indices[i] in range(0,16):
-					if mail_type == "blue":
-						palette_indices[i] += 16
-					elif mail_type == "red":
-						palette_indices[i] += 32
-					elif mail_type == "bunny":               #TODO: Bunny shouldn't be a spiffy button.  It should just happen when bunny animations are chosen.
-						palette_indices[i] += 48
-					else:
-						raise AssertionError(f"unknown mail type given by spiffy buttons: '{mail_type}'")
+					elif mail_type != "green" and palette_indices[i] in range(0,16):
+						if mail_type == "blue":
+							palette_indices[i] += 16
+						elif mail_type == "red":
+							palette_indices[i] += 32
+						else:
+							raise AssertionError(f"unknown mail type given by spiffy buttons: '{mail_type}'")
 
 		return [self.master_palette[i] for i in palette_indices]

@@ -54,7 +54,7 @@ class SpriteParent():
 		#return the injected ROM
 		raise AssertionError("called export_to_ROM() on Sprite base class")
 
-	def get_current_palette(self, palette_index_range, palette_number):
+	def get_current_palette(self, palette_index_range, palette_type, palette_number):
 		#Ins:
 		# palette_index_range = a 2-tuple or 2-list specifying the Python-style range of indices to pull.  E.g. [1,16] means to use colors [1:16] from the master palette block
 		# palette_number = 0 for static palettes (which are most palettes), but for dynamic palettes this will be the index into the set of palettes
@@ -194,9 +194,11 @@ class SpriteParent():
 					base_image = base_image.transpose(Image.FLIP_TOP_BOTTOM)
 
 			palette_index_range = self.layout.get_property("import palette interval", tile_info["image"])
-			palette = self.get_current_palette(palette_index_range, self.palette_number)
+			palette_type = pose_list[self.pose_number]["palette"] if "palette" in pose_list[self.pose_number] else None
 
-			base_image = common.apply_palette(base_image, palette)
+			this_palette = self.get_current_palette(palette_index_range, palette_type, self.palette_number)
+
+			base_image = common.apply_palette(base_image, this_palette)
 
 			full_tile_list.append((base_image,tile_info["pos"]))
 
