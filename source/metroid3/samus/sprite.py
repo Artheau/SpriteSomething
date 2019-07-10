@@ -1,4 +1,5 @@
 import importlib
+import itertools
 from source.spritelib import SpriteParent
 from source import common
 from source import widgetlib
@@ -279,24 +280,31 @@ class Sprite(SpriteParent):
 		return spiffy_buttons
 
 
-	def get_current_palette(self, palette_index_range, palette_type, palette_number):
-		#Ins:
-		# palette_index_range = a 2-tuple or 2-list specifying the Python-style range of indices to pull.  E.g. [1,16] means to use colors [1:16] from the master palette block
-		# palette_number = 0 for static palettes (which are most palettes), but for dynamic palettes this will be the index into the set of palettes
-		
-		#TODO: populate the animations.json with names of these palettes or something, so that we don't need to reverse-engineer the index
-		if tuple(palette_index_range) == (0,15):   #suit colors
-			request_type = "base_suit"
-		else:
-			raise NotImplementedError(f"Samus palette not implemented for range {tuple(palette_index_range)}")
-
+	def get_current_palette(self, palette_type, default_range):
 		if self.spiffy_buttons_exist:
-			if request_type == "base_suit":
+			if palette_type is not None:
+				raise NotImplementedError(f"Not implemented to use palette type {palette_type} for Samus")
+			else:
 				suit_type = self.suit_var.get()
 				variant_type = self.variant_var.get()
 
-				_,palette = self.get_timed_palette(overall_type=suit_type, variant_type=variant_type)[palette_number]
+			#get the actual list of associated palettes
+			palette_timing_list = self.get_timed_palette(overall_type=suit_type, variant_type=variant_type)
+			#figure out the timing
+			palette_timing_progression = list(itertools.accumulate([duration for (duration,_) in palette_timing_list]))
+
+			#if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
+			if palette_timing_list[-1][0] == 0 and self.frame_getter() >= palette_timing_progression[-1]:
+				palette_number = -1    #use the last palette
+			else:
+				mod_frames = self.frame_getter() % palette_timing_progression[-1]
+				palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
+
+			#now actually get that specific palette
+			_,palette = palette_timing_list[palette_number]
+
 		else:
-			_,palette = self.get_timed_palette()[0]
+			#do whatever the parent would do as a default
+			return super().get_current_palette(palette_type, default_range)
 				
 		return palette

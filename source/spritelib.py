@@ -54,14 +54,12 @@ class SpriteParent():
 		#return the injected ROM
 		raise AssertionError("called export_to_ROM() on Sprite base class")
 
-	def get_current_palette(self, palette_index_range, palette_type, palette_number):
-		#Ins:
-		# palette_index_range = a 2-tuple or 2-list specifying the Python-style range of indices to pull.  E.g. [1,16] means to use colors [1:16] from the master palette block
-		# palette_number = 0 for static palettes (which are most palettes), but for dynamic palettes this will be the index into the set of palettes
-		#
+	def get_current_palette(self, palette_type, default_range):
 		#in most cases the child class will override this in order to provide functionality to things like spiffy buttons
-		# and to implement dynamic palettes
-		return self.master_palette[palette_index_range[0]:palette_index_range[1]]
+		# and to implement dynamic palettes by leveraging self.frame_getter() to find the frame number
+
+		#if the child class didn't tell us what to do, just go back to whatever palette it was on when it was imported
+		return self.master_palette[default_range[0]:default_range[1]]
 
 	############################# END ABSTRACT CODE ##############################
 
@@ -159,24 +157,13 @@ class SpriteParent():
 		self.current_animation = animation_name
 		self.update_animation()
 
-	def update_pose_and_palette_numbers(self):
-		#also returns true if the pose or the palette was updated
-
-		if not hasattr(self, "frame_progression_table"):    #the table hasn't been set up, so signal for a change
-			return True
-
-		old_pose_number, old_palette_number = self.pose_number, self.palette_number
-
-		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
-		self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x > mod_frames]))
-
-		palette_mod_frames = self.frame_getter() % self.palette_progression_table[-1]
-		self.palette_number = self.palette_progression_table.index(min([x for x in self.palette_progression_table if x > palette_mod_frames]))
-
-		return (old_pose_number != self.pose_number) or (old_palette_number != self.palette_number)
+	def update_pose_number(self):
+		if hasattr(self, "frame_progression_table"):
+			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
+			self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x >= mod_frames]))
 
 	def get_tiles_for_current_pose(self):
-		self.update_pose_and_palette_numbers()
+		self.update_pose_number()
 		pose_list = self.get_current_pose_list()
 		full_tile_list = []
 		for tile_info in pose_list[self.pose_number]["tiles"][::-1]:
@@ -193,10 +180,10 @@ class SpriteParent():
 				elif vflip:
 					base_image = base_image.transpose(Image.FLIP_TOP_BOTTOM)
 
-			palette_index_range = self.layout.get_property("import palette interval", tile_info["image"])
 			palette_type = pose_list[self.pose_number]["palette"] if "palette" in pose_list[self.pose_number] else None
 
-			this_palette = self.get_current_palette(palette_index_range, palette_type, self.palette_number)
+			default_range = self.layout.get_property("import palette interval", tile_info["image"])
+			this_palette = self.get_current_palette(palette_type, default_range)
 
 			base_image = common.apply_palette(base_image, this_palette)
 
@@ -226,8 +213,6 @@ class SpriteParent():
 			self.frame_progression_table = [1]
 		else:
 			self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
-
-		self.palette_progression_table = [1]   #TODO -- this should allow for dynamic palettes like Screw Attack (Metroid3) or Zap (Zelda3)
 
 		if hasattr(self,"sprite_IDs"):
 			for ID in self.sprite_IDs:

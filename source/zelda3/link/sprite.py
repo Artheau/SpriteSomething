@@ -120,17 +120,12 @@ class Sprite(SpriteParent):
 
 		return spiffy_buttons
 
-	def get_current_palette(self, palette_index_range, palette_type, palette_number):
-		#Ins:
-		# palette_index_range = a 2-tuple or 2-list specifying the Python-style range of indices to pull.  E.g. [1,16] means to use colors [1:16] from the master palette block
-		# palette_number = 0 for static palettes (which are most palettes), but for dynamic palettes this will be the index into the set of palettes
-		
-		palette_indices = list(range(palette_index_range[0],palette_index_range[1]))
-
+	def get_current_palette(self, palette_type, default_range):
 		if self.spiffy_buttons_exist:
 			if palette_type == "bunny":
-				palette_indices = list(range(0x31,0x40))   #use the bunny colors, skipping the transparency color
+				palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
 			else:
+				palette_indices = list(range(1,16))   #start with green mail and modify it as needed
 				mail_type = self.mail_var.get()
 				gloves_type = self.gloves_var.get()
 				for i in range(0,len(palette_indices)):
@@ -150,5 +145,8 @@ class Sprite(SpriteParent):
 							palette_indices[i] += 32
 						else:
 							raise AssertionError(f"unknown mail type given by spiffy buttons: '{mail_type}'")
+		else:
+			#do whatever the parent would do as a default
+			return super().get_current_palette(palette_type, default_range)
 
 		return [self.master_palette[i] for i in palette_indices]
