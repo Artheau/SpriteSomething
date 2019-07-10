@@ -27,6 +27,7 @@ class SpriteParent():
 			self.animations = json.load(file)
 		self.import_from_filename()
 		self.spiffy_buttons_exist = False
+		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
 
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
 		self.plugins = []
@@ -139,6 +140,9 @@ class SpriteParent():
 
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
 
+		direction_panel, height = self.get_direction_buttons(parent).get_panel()
+		parent.add(direction_panel, minsize=height)
+
 		spiffy_panel, height = self.get_spiffy_buttons(parent).get_panel()
 		self.spiffy_buttons_exist = True
 		parent.add(spiffy_panel,minsize=height)
@@ -192,7 +196,14 @@ class SpriteParent():
 		return full_tile_list
 
 	def get_current_pose_list(self):
-		return next(iter(self.animations[self.current_animation].values()))   #TODO: base upon direction widgets
+		direction_dict = self.animations[self.current_animation]
+		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
+			direction = self.arrows_var.get().lower()   #grabbed from the direction buttons, which are named "arrows"
+			if direction in direction_dict:
+				return direction_dict[direction]
+		
+		#otherwise just grab the first listed direction
+		return next(iter(direction_dict.values()))
 
 	def frames_in_this_animation(self):
 		return self.frame_progression_table[-1]
@@ -266,3 +277,21 @@ class SpriteParent():
 	def get_spiffy_buttons(self, parent):
 		#if this is not overriden by the child (sprite-specific) class, then there will be no spiffy buttons
 		return widgetlib.SpiffyButtons(self, parent)
+
+	#Art likes direction buttons
+	def get_direction_buttons(self, parent):
+		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
+		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
+
+		arrows_group = direction_buttons.make_new_group("arrows")
+		if self.overhead:
+			arrows_group.add_blank_space()
+			arrows_group.add("up", "arrow-up.png")
+			arrows_group.add_blank_space()
+			arrows_group.add_newline()
+		arrows_group.add("left", "arrow-left.png")
+		if self.overhead:
+			arrows_group.add("down", "arrow-down.png")
+		arrows_group.add("right", "arrow-right.png", default=True)
+
+		return direction_buttons

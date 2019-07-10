@@ -11,6 +11,8 @@ class Sprite(SpriteParent):
 
 		self.overview_scale_factor = 1    #Samus's sheet is BIG, so don't zoom in on the overview
 
+		self.overhead = False   #Samus is sideview, so only left/right direction buttons should show
+
 		# self.plugins = [
 		# 	("File Select Preview",None),
 		# 	("Ship Preview",None)
@@ -245,15 +247,6 @@ class Sprite(SpriteParent):
 	def get_spiffy_buttons(self, parent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
-		arrows_group = spiffy_buttons.make_new_group("arrows")
-		arrows_group.add("downright", "arrow-downright.png")
-		arrows_group.add("up", "arrow-up.png")
-		arrows_group.add("upright", "arrow-upright.png")
-		spiffy_buttons.max_row += arrows_group.add_newline()
-		arrows_group.add("left", "arrow-left.png")
-		arrows_group.add("down", "arrow-down.png")
-		arrows_group.add("right", "arrow-right.png", True)
-
 		suit_group = spiffy_buttons.make_new_group("suit")
 		suit_group.add_blank_space()
 		suit_group.add("power", "suit-power.png")
@@ -278,6 +271,30 @@ class Sprite(SpriteParent):
 		cannon_group.add("yes", "yes-thing.png")
 
 		return spiffy_buttons
+
+	#commented this out because it was a bit overwhelming for the user
+	#
+	# def get_direction_buttons(self, parent):
+	# 	#overrides the parent WASD format
+	# 	direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
+
+	# 	arrows_group = direction_buttons.make_new_group("arrows")
+	# 	arrows_group.add("upleft", "arrow-upleft.png")
+	# 	arrows_group.add("trueupleft", "arrow-up.png")
+	# 	arrows_group.add("trueupright", "arrow-up.png")
+	# 	arrows_group.add("upright", "arrow-upright.png")
+	# 	arrows_group.add_newline()
+	# 	arrows_group.add("left", "arrow-left.png")
+	# 	arrows_group.add_blank_space()
+	# 	arrows_group.add_blank_space()
+	# 	arrows_group.add("right", "arrow-right.png", default=True)
+	# 	arrows_group.add_newline()
+	# 	arrows_group.add("downleft", "arrow-downleft.png")
+	# 	arrows_group.add("truedownleft", "arrow-down.png")
+	# 	arrows_group.add("truedownright", "arrow-down.png")
+	# 	arrows_group.add("downright", "arrow-downright.png")
+
+	# 	return direction_buttons
 
 
 	def get_current_palette(self, palette_type, default_range):

@@ -88,7 +88,7 @@ class ToolTip(object):
 
 class SpiffyButtons():
 	#They are like buttons, except spiffy
-	def __init__(self, sprite_object, parent_frame):
+	def __init__(self, sprite_object, parent_frame, frame_name="spiffy_buttons", align="right"):
 		self.DIMENSIONS = {
 			"button": {
 				"width": 20,
@@ -101,8 +101,13 @@ class SpiffyButtons():
 			}
 		}
 		self.sprite_object = sprite_object
-		self.spiffy_buttons_section = tk.Frame(parent_frame, name="spiffy_buttons")
-		right_align_grid_in_frame(self.spiffy_buttons_section)
+		self.spiffy_buttons_section = tk.Frame(parent_frame, name=frame_name)
+		if align[0].lower() == 'r':   #align right
+			right_align_grid_in_frame(self.spiffy_buttons_section)
+		elif align[0].lower() == 'l':  #align left
+			left_align_grid_in_frame(self.spiffy_buttons_section)
+		else:
+			center_align_grid_in_frame(self.spiffy_buttons_section)
 		self.max_row = 0
 		
 	def make_new_group(self, label):
