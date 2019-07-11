@@ -1,15 +1,22 @@
 {
   "section": {
-    "arrows": "Arrows",
+    "aiming": "Aiming",
+    "facing": "Facing",
     "suit": "Suit",
     "variant": "Variant",
     "effect": "Effect",
     "cannon-port": "Cannon Port"
   },
-  "Arrows": {
-    "up": "Up",
+  "Aiming": {
+    "up": "Straight Up",
+    "diag_up": "Diagonal Up",
+    "neutral": "Neutral",
+    "shoot": "Shoot",
+    "diag_down": "Diagonal Down",
+    "down": "Straight Down"
+  },
+  "Facing": {
     "left": "Left",
-    "down": "Down",
     "right": "Right"
   },
   "Suit": {

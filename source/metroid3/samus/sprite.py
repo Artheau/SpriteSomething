@@ -274,9 +274,23 @@ class Sprite(SpriteParent):
 
 	#commented this out because it was a bit overwhelming for the user
 	#
-	# def get_direction_buttons(self, parent):
-	# 	#overrides the parent WASD format
-	# 	direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
+	def get_direction_buttons(self, parent):
+		#overrides the parent WASD format
+		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
+
+		facing_group = direction_buttons.make_new_group("facing")
+		facing_group.add("left", "arrow-left.png")
+		facing_group.add("right", "arrow-right.png", default=True)
+
+		aiming_group = direction_buttons.make_new_group("aiming")
+		aiming_group.add("up", "arrow-up.png")
+		aiming_group.add("diag_up", "arrow-upright.png")
+		aiming_group.add_newline()
+		aiming_group.add("neutral", "no-thing.png", default=True)
+		aiming_group.add("shoot", "arrow-right.png")
+		aiming_group.add_newline()
+		aiming_group.add("down", "arrow-down.png")
+		aiming_group.add("diag_down", "arrow-downright.png")
 
 	# 	arrows_group = direction_buttons.make_new_group("arrows")
 	# 	arrows_group.add("upleft", "arrow-upleft.png")
@@ -294,7 +308,7 @@ class Sprite(SpriteParent):
 	# 	arrows_group.add("truedownright", "arrow-down.png")
 	# 	arrows_group.add("downright", "arrow-downright.png")
 
-	# 	return direction_buttons
+		return direction_buttons
 
 
 	def get_current_palette(self, palette_type, default_range):
@@ -323,5 +337,5 @@ class Sprite(SpriteParent):
 		else:
 			#do whatever the parent would do as a default
 			return super().get_current_palette(palette_type, default_range)
-				
+
 		return palette

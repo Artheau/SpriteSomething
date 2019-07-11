@@ -1,12 +1,12 @@
 {
   "section": {
-    "arrows": "Arrows",
+    "facing": "Facing",
     "mail": "Mail",
     "sword": "Sword",
     "shield": "Shield",
     "gloves": "Gloves"
   },
-  "Arrows": {
+  "Facing": {
     "up": "Up",
     "left": "Left",
     "down": "Down",

@@ -198,10 +198,17 @@ class SpriteParent():
 	def get_current_pose_list(self):
 		direction_dict = self.animations[self.current_animation]
 		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
-			direction = self.arrows_var.get().lower()   #grabbed from the direction buttons, which are named "arrows"
-			if direction in direction_dict:
-				return direction_dict[direction]
-		
+			direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
+			aiming = self.aiming_var.get().lower() if hasattr(self,'aiming_var') else ""	#grabbed from the aiming buttons, which are named "aiming"
+			pos_key = direction
+			if aiming != "" and aiming != "neutral":
+				pos_key += '_aim_' + aiming
+			if pos_key not in direction_dict:
+				pos_key = direction
+			if pos_key not in direction_dict:
+				pos_key = "right"
+			return direction_dict[pos_key]
+
 		#otherwise just grab the first listed direction
 		return next(iter(direction_dict.values()))
 
@@ -283,15 +290,15 @@ class SpriteParent():
 		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
 		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
 
-		arrows_group = direction_buttons.make_new_group("arrows")
+		facing_group = direction_buttons.make_new_group("facing")
 		if self.overhead:
-			arrows_group.add_blank_space()
-			arrows_group.add("up", "arrow-up.png")
-			arrows_group.add_blank_space()
-			arrows_group.add_newline()
-		arrows_group.add("left", "arrow-left.png")
+			facing_group.add_blank_space()
+			facing_group.add("up", "arrow-up.png")
+			facing_group.add_blank_space()
+			facing_group.add_newline()
+		facing_group.add("left", "arrow-left.png")
 		if self.overhead:
-			arrows_group.add("down", "arrow-down.png")
-		arrows_group.add("right", "arrow-right.png", default=True)
+			facing_group.add("down", "arrow-down.png")
+		facing_group.add("right", "arrow-right.png", default=True)
 
 		return direction_buttons
