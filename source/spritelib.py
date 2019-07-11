@@ -164,7 +164,7 @@ class SpriteParent():
 	def update_pose_number(self):
 		if hasattr(self, "frame_progression_table"):
 			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
-			self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x >= mod_frames]))
+			self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x > mod_frames]))
 
 	def get_tiles_for_current_pose(self):
 		self.update_pose_number()

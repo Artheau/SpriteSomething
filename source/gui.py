@@ -263,22 +263,20 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def initialize_sprite_animation(self):
 		self.frames_left_before_freeze = CONST.MAX_FRAMES
-		self.freeze_ray = False
+		self.freeze_ray = True
 		self.frame_number = 0
 		self.sprite_coord = (100,100)    #an arbitrary default
-		self.update_sprite_animation()
-		self.time_marches_forward()
+		self.start_global_frame_timer()
 
 	def update_sprite_animation(self):
-		if not self.freeze_ray:
-			self.sprite.update_animation()
+		self.sprite.update_animation()
 
 	def start_global_frame_timer(self):
 		#called by play button
-		if self.frames_left_before_freeze <= 0:
+		if self.freeze_ray:     #if we were frozen before
 			self.frames_left_before_freeze = CONST.MAX_FRAMES
-		self.time_marches_forward()
-		self.update_sprite_animation()
+			self.freeze_ray = False
+			self.time_marches_forward()
 
 	def advance_global_frame_timer(self):
 		#move frame timer forward
@@ -290,7 +288,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def play_once(self):
 		self.frames_left_before_freeze = self.sprite.frames_in_this_animation()
-		self.start_global_frame_timer()
+		if self.freeze_ray:   #if we were frozen before
+			self.freeze_ray = False
+			self.time_marches_forward()
 
 	def reset_global_frame_timer(self):
 		#called by radio reset button
@@ -300,6 +300,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def pause_global_frame_timer(self):
 		#called by pause button
 		self.frames_left_before_freeze = 0
+		self.freeze_ray = True
 		self.update_sprite_animation()
 
 	def rewind_global_frame_timer(self):
