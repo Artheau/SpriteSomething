@@ -199,15 +199,8 @@ class SpriteParent():
 		direction_dict = self.animations[self.current_animation]
 		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
 			direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
-			aiming = self.aiming_var.get().lower() if hasattr(self,'aiming_var') else ""	#grabbed from the aiming buttons, which are named "aiming"
-			pos_key = direction
-			if aiming != "" and aiming != "neutral":
-				pos_key += '_aim_' + aiming
-			if pos_key not in direction_dict:
-				pos_key = direction
-			if pos_key not in direction_dict:
-				pos_key = "right"
-			return direction_dict[pos_key]
+			if direction in direction_dict:
+				return direction_dict[direction]
 
 		#otherwise just grab the first listed direction
 		return next(iter(direction_dict.values()))

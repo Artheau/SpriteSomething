@@ -272,8 +272,6 @@ class Sprite(SpriteParent):
 
 		return spiffy_buttons
 
-	#commented this out because it was a bit overwhelming for the user
-	#
 	def get_direction_buttons(self, parent):
 		#overrides the parent WASD format
 		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
@@ -310,6 +308,34 @@ class Sprite(SpriteParent):
 
 		return direction_buttons
 
+	def get_current_pose_list(self):
+		direction_dict = self.animations[self.current_animation]
+		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
+			facing = self.facing_var.get().lower()	#grabbed from the direction buttons, which are named "facing"
+			aiming = self.aiming_var.get().lower()	#grabbed from the aiming buttons, which are named "aiming"
+
+			#now start searching for this facing and aiming in the JSON dict
+			#start going down the list of alternative aiming if a pose does not have the original
+			ALTERNATIVES = {
+				"up": "diag_up",
+				"diag_up": "shoot",
+				"shoot": "neutral",
+				"down": "diag_down",
+				"diag_down": "shoot"
+			}
+			while(self.concatenate_facing_and_aiming(facing,aiming) not in direction_dict):
+				if aiming in ALTERNATIVES:
+					aiming = ALTERNATIVES[aiming]
+				else:
+					return super().get_current_pose_list()  #don't worry about aiming
+				
+			return direction_dict[self.concatenate_facing_and_aiming(facing,aiming)]
+
+		#do whatever the parent would do
+		return super().get_current_pose_list()
+
+	def concatenate_facing_and_aiming(self, facing, aiming):
+		return "_aim_".join([facing,aiming])
 
 	def get_current_palette(self, palette_type, default_range):
 		if self.spiffy_buttons_exist:

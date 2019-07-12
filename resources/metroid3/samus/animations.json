@@ -1,10 +1,11 @@
 {
 	"Stand": {
 		"right_aim_up": [
-			{ "frames": 10,	"tiles": [	{ "image": "stand_right_aim_up",	"pos": [-13,-21] } ] }
+			{ "frames": 2,	"tiles": [	{ "image": "stand_right_aim_diag_up",	"pos": [-13,-29] } ] },
+			{ "frames": 1000,	"tiles": [	{ "image": "stand_right_aim_up",	"pos": [-13,-29] } ] }
 		],
 		"right_aim_diag_up": [
-			{ "frames": 10,	"tiles": [	{ "image": "stand_right_aim_diag_up",	"pos": [-13,-21] } ] }
+			{ "frames": 1,	"tiles": [	{ "image": "stand_right_aim_diag_up",	"pos": [-13,-29] } ] }
 		],
 		"right": [
 			{	"frames": 10,	"tiles": [	{"image": "stand_right",  "pos": [-13,-21]}	]	},
@@ -13,13 +14,14 @@
 			{	"frames": 10,	"tiles": [	{"image": "stand_right3", "pos": [-13,-21]}	]	}
 		],
 		"right_aim_diag_down": [
-			{ "frames": 10,	"tiles": [	{ "image": "stand_right_aim_diag_down",	"pos": [-13,-21] } ] }
+			{ "frames": 1,	"tiles": [	{ "image": "stand_right_aim_diag_down",	"pos": [-13,-29] } ] }
 		],
 		"left_aim_up": [
-			{ "frames": 10,	"tiles": [	{ "image": "stand_left_aim_up",	"pos": [-19,-21] } ] }
+			{ "frames": 2,	"tiles": [	{ "image": "stand_left_aim_diag_up",	"pos": [-27,-29] } ] },
+			{ "frames": 1000,	"tiles": [	{ "image": "stand_left_aim_up",	"pos": [-19,-29] } ] }
 		],
 		"left_aim_diag_up": [
-			{ "frames": 10,	"tiles": [	{ "image": "stand_left_aim_diag_up",	"pos": [-19,-21] } ] }
+			{ "frames": 1,	"tiles": [	{ "image": "stand_left_aim_diag_up",	"pos": [-27,-29] } ] }
 		],
 		"left": [
 			{	"frames": 10,	"tiles": [	{"image": "stand_left",  "pos": [-19,-21]}	]	},
@@ -28,41 +30,355 @@
 			{	"frames": 10,	"tiles": [	{"image": "stand_left3", "pos": [-19,-21]}	]	}
 		],
 		"left_aim_diag_down": [
-			{ "frames": 10,	"tiles": [	{ "image": "stand_left_aim_diag_down",	"pos": [-19,-21] } ] }
+			{ "frames": 1,	"tiles": [	{ "image": "stand_left_aim_diag_down",	"pos": [-27,-29] } ] }
+		]
+	},
+	"Low Health Stand": {
+		"right": [
+			{	"frames": 8,	"tiles": [	{"image": "stand_right_heavy",  "pos": [-13,-21]}	]	},
+			{	"frames": 8,	"tiles": [	{"image": "stand_right_heavy1", "pos": [-13,-21]}	]	},
+			{	"frames": 8,	"tiles": [	{"image": "stand_right_heavy2", "pos": [-13,-21]}	]	},
+			{	"frames": 8,	"tiles": [	{"image": "stand_right_heavy3", "pos": [-13,-21]}	]	}
+		],
+		"left": [
+			{	"frames": 8,	"tiles": [	{"image": "stand_left_heavy",  "pos": [-19,-21]}	]	},
+			{	"frames": 8,	"tiles": [	{"image": "stand_left_heavy1", "pos": [-19,-21]}	]	},
+			{	"frames": 8,	"tiles": [	{"image": "stand_left_heavy2", "pos": [-19,-21]}	]	},
+			{	"frames": 8,	"tiles": [	{"image": "stand_left_heavy3", "pos": [-19,-21]}	]	}
 		]
 	},
 	"Run": {
 		"right": [
-			{	"frames": 2,		"tiles": [	{"image": "run_right",	"pos": [-22,-21]}	]	},
-			{	"frames": 3,		"tiles": [	{"image": "run_right1",	"pos": [-22,-21]}	]	},
-			{	"frames": 2,		"tiles": [	{"image": "run_right2",	"pos": [-22,-21]}	]	},
-			{	"frames": 3,		"tiles": [	{"image": "run_right3",	"pos": [-22,-21]}	]	},
-			{	"frames": 2,		"tiles": [	{"image": "run_right4",	"pos": [-22,-21]}	]	},
-			{	"frames": 3,		"tiles": [	{"image": "run_right5",	"pos": [-22,-21]}	]	},
-			{	"frames": 2,		"tiles": [	{"image": "run_right6",	"pos": [-22,-21]}	]	},
-			{	"frames": 3,		"tiles": [	{"image": "run_right7",	"pos": [-22,-21]}	]	},
-			{	"frames": 2,		"tiles": [	{"image": "run_right8",	"pos": [-22,-21]}	]	},
-			{	"frames": 3,		"tiles": [	{"image": "run_right9",	"pos": [-22,-21]}	]	}
+			{	"frames": 2,		"tiles": [	{"image": "run_right",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right1",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right2",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right3",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right4",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right5",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right6",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right7",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right8",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right9",	"pos": [-18,-21]}	]	}
+		],
+		"right_aim_diag_up": [
+			{	"frames": 2,		"tiles": [	{"image": "run_right_aim_diag_up",	"pos": [-18,-29]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_aim_diag_up1",	"pos": [-18,-29]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_aim_diag_up2",	"pos": [-18,-29]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_aim_diag_up3",	"pos": [-18,-29]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_aim_diag_up4",	"pos": [-18,-29]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_aim_diag_up5",	"pos": [-18,-29]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_aim_diag_up6",	"pos": [-18,-29]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_aim_diag_up7",	"pos": [-18,-29]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_aim_diag_up8",	"pos": [-18,-29]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_aim_diag_up9",	"pos": [-18,-29]}	]	}
+		],
+		"right_aim_shoot": [
+			{	"frames": 2,		"tiles": [	{"image": "run_right_shooting",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_shooting1",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_shooting2",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_shooting3",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_shooting4",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_shooting5",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_shooting6",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_shooting7",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_shooting8",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_shooting9",	"pos": [-18,-21]}	]	}
+		],
+		"right_aim_diag_down": [
+			{	"frames": 2,		"tiles": [	{"image": "run_right_aim_diag_down",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_aim_diag_down1",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_aim_diag_down2",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_aim_diag_down3",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_aim_diag_down4",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_aim_diag_down5",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_aim_diag_down6",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_aim_diag_down7",	"pos": [-18,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_right_aim_diag_down8",	"pos": [-18,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_right_aim_diag_down9",	"pos": [-18,-21]}	]	}
 		],
 		"left": [
-			{	"frames": 2,		"tiles": [	{"image": "run_left",	"pos": [-18,-21]}	]	},
-			{	"frames": 3,		"tiles": [	{"image": "run_left1",	"pos": [-18,-21]}	]	},
-			{	"frames": 2,		"tiles": [	{"image": "run_left2",	"pos": [-18,-21]}	]	},
-			{	"frames": 3,		"tiles": [	{"image": "run_left3",	"pos": [-18,-21]}	]	},
-			{	"frames": 2,		"tiles": [	{"image": "run_left4",	"pos": [-18,-21]}	]	},
-			{	"frames": 3,		"tiles": [	{"image": "run_left5",	"pos": [-18,-21]}	]	},
-			{	"frames": 2,		"tiles": [	{"image": "run_left6",	"pos": [-18,-21]}	]	},
-			{	"frames": 3,		"tiles": [	{"image": "run_left7",	"pos": [-18,-21]}	]	},
-			{	"frames": 2,		"tiles": [	{"image": "run_left8",	"pos": [-18,-21]}	]	},
-			{	"frames": 3,		"tiles": [	{"image": "run_left9",	"pos": [-18,-21]}	]	}
+			{	"frames": 2,		"tiles": [	{"image": "run_left",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left1",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left2",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left3",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left4",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left5",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left6",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left7",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left8",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left9",	"pos": [-22,-21]}	]	}
+		],
+		"left_aim_diag_up": [
+			{	"frames": 2,		"tiles": [	{"image": "run_left_aim_diag_up",	"pos": [-22,-29]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_aim_diag_up1",	"pos": [-22,-29]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_aim_diag_up2",	"pos": [-22,-29]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_aim_diag_up3",	"pos": [-22,-29]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_aim_diag_up4",	"pos": [-22,-29]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_aim_diag_up5",	"pos": [-22,-29]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_aim_diag_up6",	"pos": [-22,-29]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_aim_diag_up7",	"pos": [-22,-29]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_aim_diag_up8",	"pos": [-22,-29]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_aim_diag_up9",	"pos": [-22,-29]}	]	}
+		],
+		"left_aim_shoot": [
+			{	"frames": 2,		"tiles": [	{"image": "run_left_shooting",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_shooting1",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_shooting2",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_shooting3",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_shooting4",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_shooting5",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_shooting6",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_shooting7",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_shooting8",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_shooting9",	"pos": [-22,-21]}	]	}
+		],
+		"left_aim_diag_down": [
+			{	"frames": 2,		"tiles": [	{"image": "run_left_aim_diag_down",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_aim_diag_down1",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_aim_diag_down2",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_aim_diag_down3",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_aim_diag_down4",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_aim_diag_down5",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_aim_diag_down6",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_aim_diag_down7",	"pos": [-22,-21]}	]	},
+			{	"frames": 2,		"tiles": [	{"image": "run_left_aim_diag_down8",	"pos": [-22,-21]}	]	},
+			{	"frames": 3,		"tiles": [	{"image": "run_left_aim_diag_down9",	"pos": [-22,-21]}	]	}
 		]
 	},
 	"Elevator": {
-		"middle": [
+		"neutral": [
 			{	"frames": 1, 	"tiles": [	{"image": "elevator", "pos": [-17,-24]}	]	}
 		]
 	},
-	"Fall": {
+	"Loading": {
+		"neutral": [
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher1", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher2", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher3", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+
+			{	"frames": 3,	"tiles": [	{"image": "launcher4", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher5", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher6", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher7", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher8", "pos": [-16,-31]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+
+			{	"frames": 3,	"tiles": [	{"image": "launcher6", "pos": [-16,-31]}	]	},
+			{	"frames": 51,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "launcher7", "pos": [-16,-31]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "launcher8", "pos": [-16,-31]}	]	},
+			{	"frames": 48,	"tiles": [	{"image": "launcher", "pos": [-16,-31]}	]	}
+		]
+	},
+	"Turning": {
+		"right": [
+			{	"frames": 10,	"tiles": [	{"image": "stand_right", "pos": [-13,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_right", "pos": [-16,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_neutral", "pos": [-16,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_left", "pos": [-16,-21]}	]	},
+			{	"frames": 20,	"tiles": [	{"image": "stand_left", "pos": [-19,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_left", "pos": [-16,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_neutral", "pos": [-16,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_right", "pos": [-16,-21]}	]	},
+			{	"frames": 10,	"tiles": [	{"image": "stand_right", "pos": [-13,-21]}	]	}
+		],
+		"left": [
+			{	"frames": 10,	"tiles": [	{"image": "stand_left", "pos": [-19,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_left", "pos": [-16,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_neutral", "pos": [-16,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_right", "pos": [-16,-21]}	]	},
+			{	"frames": 20,	"tiles": [	{"image": "stand_right", "pos": [-13,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_right", "pos": [-16,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_neutral", "pos": [-16,-21]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "stand_turn_left", "pos": [-16,-21]}	]	},
+			{	"frames": 10,	"tiles": [	{"image": "stand_left", "pos": [-19,-21]}	]	}
+		]
+	},
+	"Jump": {
+		"right_aim_up": [
+			{	"frames": 2,	"tiles": [	{"image": "jump_right_aim_up", "pos": [-13,-27]}	]	},
+			{	"frames": 1000,	"tiles": [	{"image": "jump_right_aim_up1", "pos": [-13,-27]}	]	}
+		],
+		"right_aim_shoot": [
+			{	"frames": 2,	"tiles": [	{"image": "jump_right_shoot", "pos": [-13,-27]}	]	},
+			{	"frames": 1000,	"tiles": [	{"image": "jump_right_shoot1", "pos": [-13,-27]}	]	}
+		],
+		"right_aim_down": [
+			{	"frames": 2,	"tiles": [	{"image": "jump_right_aim_down", "pos": [-13,-27]}	]	},
+			{	"frames": 1000,	"tiles": [	{"image": "jump_right_aim_down1", "pos": [-13,-27]}	]	}
+		],
+		"left_aim_up": [
+			{	"frames": 2,	"tiles": [	{"image": "jump_left_aim_up", "pos": [-27,-27]}	]	},
+			{	"frames": 1000,	"tiles": [	{"image": "jump_left_aim_up1", "pos": [-27,-27]}	]	}
+		],
+		"left_aim_shoot": [
+			{	"frames": 2,	"tiles": [	{"image": "jump_left_shoot", "pos": [-19,-27]}	]	},
+			{	"frames": 1000,	"tiles": [	{"image": "jump_left_shoot1", "pos": [-19,-27]}	]	}
+		],
+		"left_aim_down": [
+			{	"frames": 2,	"tiles": [	{"image": "jump_left_aim_down", "pos": [-19,-27]}	]	},
+			{	"frames": 1000,	"tiles": [	{"image": "jump_left_aim_down1", "pos": [-19,-27]}	]	}
+		]
+	},
+	"Spin Jump Launch":
+	{
+		"right": [
+			{	"frames": 4,	"tiles": [	{"image": "jump_right_start_spin_jump", "pos": [-16,-21]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_right", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_right1", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_right2", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_right3", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_right4", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_right5", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_right6", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_right7", "pos": [-16,-16]}	]	}
+		],
+		"left": [
+			{	"frames": 4,	"tiles": [	{"image": "jump_left_start_spin_jump", "pos": [-16,-21]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_left", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_left1", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_left2", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_left3", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_left4", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_left5", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_left6", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_left7", "pos": [-16,-16]}	]	}
+		]
+	},
+	"Spin Jump":
+	{
+		"right": [
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_right", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_right1", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_right2", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_right3", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_right4", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_right5", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_right6", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_right7", "pos": [-16,-16]}	]	}
+		],
+		"left": [
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_left", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_left1", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_left2", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_left3", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_left4", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_left5", "pos": [-16,-16]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "spin_jump_left6", "pos": [-16,-16]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "spin_jump_left7", "pos": [-16,-16]}	]	}
+		]
+	},
+	"Space Jump":
+	{
+		"right": [
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_right", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_right1", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_right2", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_right3", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_right4", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_right5", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_right6", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_right7", "pos": [-16,-16]}	]	}
+		],
+		"left": [
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_left", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_left1", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_left2", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_left3", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_left4", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_left5", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_left6", "pos": [-16,-16]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "space_jump_left7", "pos": [-16,-16]}	]	}
+		]
+	},
+	"Fall (todo: fix timing)": {
 		"right_aim_up": [
 			{ "frames": 10,	"tiles": [	{"image": "fall_right_aim_up", "pos": [0,0]} ] },
 			{ "frames": 10,	"tiles": [	{"image": "fall_right_aim_up1", "pos": [0,0]} ] },
@@ -128,6 +444,50 @@
 		"left_aim_down": [
 			{ "frames": 10,	"tiles": [	{"image": "fall_left_aim_down", "pos": [0,0]} ] },
 			{ "frames": 10,	"tiles": [	{"image": "fall_left_aim_down1", "pos": [0,0]} ] }
+		]
+	},
+	"Morphball Stationary": {
+		"right": [
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_right", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_right1", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_right2", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_right3", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_right4", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_right5", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_right6", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_right7", "pos": [-16,-15]}	]	}
+		],
+		"left": [
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left1", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left2", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left3", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left4", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left5", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left6", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left7", "pos": [-16,-15]}	]	}
+		]
+	},
+	"Morphball Moving": {
+		"right": [
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_right", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_right1", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_right2", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_right3", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_right4", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_right5", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_right6", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_right7", "pos": [-16,-15]}	]	}
+		],
+		"left": [
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_left", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_left1", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_left2", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_left3", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_left4", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_left5", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_left6", "pos": [-16,-15]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "morphball_roll_left7", "pos": [-16,-15]}	]	}
 		]
 	}
 }
