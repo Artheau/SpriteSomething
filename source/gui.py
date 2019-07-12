@@ -16,7 +16,6 @@ from source.tkHyperlinkManager import HyperlinkManager
 from source.tkSimpleStatusBar import StatusBar
 from source import common
 
-
 def make_GUI(command_line_args):
 	root = tk.Tk()
 	#the .ico file will not work in Linux or Mac, so this bypasses the icon for those OSes
@@ -43,7 +42,6 @@ def make_GUI(command_line_args):
 	tk.Tk.report_callback_exception = show_error     #tie this in so we see errors when they happen
 
 	root.mainloop()
-
 
 class SpriteSomethingMainFrame(tk.Frame):
 	def __init__(self, master, command_line_args):
@@ -108,10 +106,19 @@ class SpriteSomethingMainFrame(tk.Frame):
 			button.pack(side=tk.LEFT,padx=2,pady=2)
 			return button
 		toolbar.pack(side=tk.TOP,fill=tk.X)
+		toolbar_buttons = []
+
 		open_button = create_toolbar_button("menu","file.open","open.png",self.open_file)
+		toolbar_buttons.append(open_button)
+
 		save_button = create_toolbar_button("menu","file.save","save.png",self.save_file_as)
+		toolbar_buttons.append(save_button)
+
 		inject_button = create_toolbar_button("menu","export.inject","inject.png",self.inject_into_ROM)
+		toolbar_buttons.append(inject_button)
+
 		inject_new_button = create_toolbar_button("menu","export.inject-new","inject-new.png",self.copy_into_ROM)
+		toolbar_buttons.append(inject_new_button)
 
 	def create_menu_bar(self):
 		#create the menu bar
@@ -137,6 +144,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 			menu.add_cascade(label=name, menu=cascade)
 			return cascade
 
+		menu_options = []
+
 		#create the file menu
 		file_menu = create_cascade(fish.translate("menu","file",os.path.join("meta")), "file_menu",
 											[
@@ -144,6 +153,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 													(fish.translate("menu","file.save",os.path.join("meta")),"save",self.save_file_as),
 													(fish.translate("menu","file.exit",os.path.join("meta")),"exit",self.exit),
 											])
+		menu_options.append(file_menu)
 
 		#create the import menu
 		import_menu = create_cascade(fish.translate("menu","export",os.path.join("meta")),"export_menu",
@@ -154,6 +164,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 													#(fish.translate("menu","export.animation-as-gif",os.path.join("meta")),None,self.export_animation_as_gif),
 													#(fish.translate("menu","export.animation-as-collage",os.path.join("meta")),None,self.export_animation_as_collage),
 											])
+		menu_options.append(import_menu)
 
 		#for future implementation
 		plugins_menu = tk.Menu(menu, tearoff=0, name="plugins_menu")
@@ -166,9 +177,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 													(fish.translate("menu","help.diagnostics",os.path.join("meta")),None,self.diagnostics),
 													(fish.translate("menu","help.about",os.path.join("meta")),None,self.about),
 											])
+		menu_options.append(help_menu)
 
 		return menu
-
 
 	def load_plugins(self):
 		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
@@ -276,7 +287,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		self.right_panel.add(self.overview_frame, text=fish.translate("tab","overview",os.path.join("meta")))
 
-
 	############################ ANIMATION FUNCTIONS HERE ################################
 
 	def initialize_sprite_animation(self):
@@ -361,7 +371,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def coord_getter(self):
 		return self.sprite_coord
 
-
 	########################### VCR CONTROLS HERE ######################################
 
 	def get_vcr_controls(self):
@@ -432,28 +441,33 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.current_grid_cell += 1
 			return vcr_button
 
+		vcr_buttons = []
 		zoom_factor_label = make_vcr_label(self.zoom_factor, None)
 		zoom_out_button = make_vcr_button(fish.translate("vcr-controls","zoom-minus",os.path.join("meta")),None,zoom_out)
 		zoom_in_button = make_vcr_button(fish.translate("vcr-controls","zoom-plus",os.path.join("meta")),None,zoom_in)
+		vcr_buttons.append((zoom_factor_label,zoom_out_button,zoom_in_button,))
 
 		speed_factor_label = make_vcr_label(self.speed_factor,None)
 		speed_down_button = make_vcr_button(fish.translate("vcr-controls","speed-minus",os.path.join("meta")),None,speed_down)
 		speed_up_button = make_vcr_button(fish.translate("vcr-controls","speed-plus",os.path.join("meta")),None,speed_up)
+		vcr_buttons.append((speed_factor_label,speed_down_button,speed_up_button,))
 
 		play_button = make_vcr_button(fish.translate("vcr-controls","play",os.path.join("meta")), "play.png", self.start_global_frame_timer)
 		play_one_button = make_vcr_button(fish.translate("vcr-controls","play-one",os.path.join("meta")), "play-one.png", self.play_once)
 		reset_button = make_vcr_button(fish.translate("vcr-controls","reset",os.path.join("meta")), None, self.reset_global_frame_timer)
+		vcr_buttons.append((play_button,play_one_button,reset_button,))
 
 		frame_back_button = make_vcr_button(fish.translate("vcr-controls","frame-backward",os.path.join("meta")), "frame-backward.png", self.rewind_global_frame_timer,"left")
 		pause_button = make_vcr_button(fish.translate("vcr-controls","pause",os.path.join("meta")), "pause.png", self.pause_global_frame_timer)
 		frame_forward_button = make_vcr_button(fish.translate("vcr-controls","frame-forward",os.path.join("meta")), "frame-forward.png", self.step_global_frame_timer)
+		vcr_buttons.append((frame_back_button,pause_button,frame_forward_button,))
 
 		step_back_button = make_vcr_button(fish.translate("vcr-controls","pose-backward",os.path.join("meta")), "step-backward.png", self.go_to_previous_pose, "left")
 		null_label = make_vcr_label("", None)
 		step_forward_button = make_vcr_button(fish.translate("vcr-controls","pose-forward",os.path.join("meta")), "step-forward.png", self.go_to_next_pose)
+		vcr_buttons.append((step_back_button,null_label,step_forward_button,))
 
 		return control_section
-
 
 	def get_reload_button(self):
 		reload_section = tk.Frame(self.left_panel, name="reload_section")
@@ -462,10 +476,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		reload_button.grid(row=0,column=1)
 		return reload_section
 
-
-
 	############################ MENU BAR FUNCTIONS HERE ################################
-
 
 	def open_file(self):
 		#TODO: Give the user a chance to regret not saving their work
@@ -590,16 +601,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 				#messagebox.showwarning(self.app_title, "Death in Super Metroid loses progress since last save." + "\n" + "You have been eaten by a grue.")
 				self.save_working_dirs()
 				sys.exit(0)
-
-
-
-
-
-
-
-
-
-
 
 	######################### HELPER FUNCTIONS ARE BELOW HERE ###############################
 

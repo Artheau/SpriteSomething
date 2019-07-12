@@ -13,11 +13,12 @@ def center_align_grid_in_frame(frame):
 	frame.grid_columnconfigure(0, weight=1)       #the 0th column will be the margin
 	frame.grid_columnconfigure(1000, weight=1)    #so I guess technically this just needs to be larger than the number of columns
 
-
 def right_align_grid_in_frame(frame):
 	frame.grid_columnconfigure(0, weight=1)       #the 0th column will be the margin
 	frame.grid_columnconfigure(1000, weight=0)    #so I guess technically this just needs to be larger than the number of columns
 
+def left_align_grid_in_frame(frame):
+	raise AssertionError("Alinging left in frame is not yet implemented")
 
 def leakless_dropdown_trace(object, var_to_trace, fun_to_call):
 	#this function will add a "trace" to a particular variable, that is, to allow that variable when changed to call a particular function
@@ -68,7 +69,7 @@ class ToolTip(object):
 
 	def showtip(self, event=None):
 		x = y = 0
-		x, y, cx, cy = self.widget.bbox("insert")
+		x, y, cx, cy = self.widget.bbox("insert") #FIXME: cx,cy unused variables
 		x += self.widget.winfo_rootx() + 25
 		y += self.widget.winfo_rooty() + 20
 		# creates a toplevel window
@@ -138,7 +139,6 @@ class SpiffyGroup():
 		section_label.grid(row=self.row, column=self.col, sticky='E')
 
 		self.col += 1
-
 
 	def add(self, internal_value_name, image_filename="blank.png", default = False):
 		icon_path = common.get_resource(image_filename, os.path.join(self.parent.sprite_object.resource_subpath,"icons"))

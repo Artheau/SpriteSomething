@@ -38,7 +38,6 @@ class SpriteParent():
 	#to make a new sprite class, you must write code for all of the functions in this section below.
 	############################# BEGIN ABSTRACT CODE ##############################
 
-
 	def import_from_ROM(self, rom):
 		#self.images, self.master_palette = ?, ?
 		raise AssertionError("called import_from_ROM() on Sprite base class")
@@ -198,9 +197,10 @@ class SpriteParent():
 	def get_current_pose_list(self):
 		direction_dict = self.animations[self.current_animation]
 		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
-			direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
-			if direction in direction_dict:
-				return direction_dict[direction]
+			if hasattr(self,"facing_var"):
+				direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
+				if direction in direction_dict:
+					return direction_dict[direction]
 		#otherwise just grab the first listed direction
 		return next(iter(direction_dict.values()))
 
@@ -247,7 +247,7 @@ class SpriteParent():
 		elif file_extension.lower() == ".zspr":
 			return self.save_as_ZSPR(filename)
 		else:
-			messagebox.showerror("ERROR", f"Did not recognize file type \"{file_extension}\"")
+			tk.messagebox.showerror("ERROR", f"Did not recognize file type \"{file_extension}\"")
 			return False
 
 	def save_as_PNG(self, filename):

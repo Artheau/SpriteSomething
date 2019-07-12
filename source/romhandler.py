@@ -39,7 +39,7 @@ class RomHandlerParent():
             if self._rom_is_headered:
                 self._header = bytearray(file.read(self._HEADER_SIZE))
             self._contents = bytearray(file.read())
-            
+
         #Determine the type of ROM (e.g. LoRom or HiRom)
         #by comparing against checksum complement
         LOWER_ASCII = 0x20
@@ -52,7 +52,7 @@ class RomHandlerParent():
                 self._type = RomType.EXLOROM
             elif self.read(EXHIROM_CHECKSUM_OFFSET, 2) + self.read(EXHIROM_CHECKSUM_OFFSET-2, 2) == 0xFFFF:
                 self._type = RomType.EXHIROM
-            else:   #the checksum is bad, so try to infer from the internal header being valid characters or not 
+            else:   #the checksum is bad, so try to infer from the internal header being valid characters or not
                 lorom_char_count = sum(x >= LOWER_ASCII and x <= UPPER_ASCII for x in self.read(0x407FC0, "1"*ROM_TITLE_SIZE))
                 hirom_char_count = sum(x >= LOWER_ASCII and x <= UPPER_ASCII for x in self.read(0x40FFC0, "1"*ROM_TITLE_SIZE))
                 if lorom_char_count >= hirom_char_count:
@@ -66,7 +66,7 @@ class RomHandlerParent():
                 self._type = RomType.LOROM
             elif self.read(HIROM_CHECKSUM_OFFSET, 2) + self.read(HIROM_CHECKSUM_OFFSET-2, 2) == 0xFFFF:
                 self._type = RomType.HIROM
-            else:   #the checksum is bad, so try to infer from the internal header being valid characters or not 
+            else:   #the checksum is bad, so try to infer from the internal header being valid characters or not
                 lorom_char_count = sum(x >= LOWER_ASCII and x <= UPPER_ASCII for x in self.read(0x7FC0, "1"*ROM_TITLE_SIZE))
                 hirom_char_count = sum(x >= LOWER_ASCII and x <= UPPER_ASCII for x in self.read(0xFFC0, "1"*ROM_TITLE_SIZE))
                 if lorom_char_count >= hirom_char_count:
@@ -79,7 +79,7 @@ class RomHandlerParent():
         if self._type == RomType.LOROM and makeup_byte in [0x20,0x30]:
             pass    #lorom confirmed
         elif self._type == RomType.HIROM and makeup_byte in [0x21, 0x31]:
-            pass    #hirom confirmed 
+            pass    #hirom confirmed
         elif (self._type == RomType.LOROM or self._type == RomType.HIROM) and makeup_byte == 0x23:
             pass    #Maybe SA-1 will work with this library.  MAYBE.
         elif self._type == RomType.EXLOROM and makeup_byte in [0x32,0x30]:  #technically 0x32 is the correct value, but not all hackers respect this
@@ -91,10 +91,9 @@ class RomHandlerParent():
 
         #information about onboard RAM/SRAM and enhancement chips lives here
         #rom_type_byte = self._read_from_internal_header(0x16, 1)
-        
+
         #can also retrieve SRAM size if desired
         #self._SRAM_size = 0x400 << self._read_from_internal_header(0x18,1)
-
 
     def save(self, filename, overwrite=False,fix_checksum=True,strip_header=False):
         #check to see if a file by this name already exists
@@ -110,10 +109,8 @@ class RomHandlerParent():
                 file.write(self._header)
             file.write(self._contents)
 
-
     def get_size_in_MB(self):
         return self._rom_size/(8*self._MEGABIT)
-
 
     def read(self,addr,encoding):
         #expects a ROM address and an encoding
@@ -186,13 +183,13 @@ class RomHandlerParent():
         return self.write(self.convert_to_pc_address(addr),values,encoding)
 
     def bulk_write_to_snes_address(self,addr,values,num_bytes):
-        return self.bulk_write(self.convert_to_pc_address(addr),values,num_bytes)      
+        return self.bulk_write(self.convert_to_pc_address(addr),values,num_bytes)
 
     def convert_to_snes_address(self, addr):
         #takes as input a PC ROM address and converts it into the address space of the SNES
         if addr > self._rom_size or addr < 0:
             raise AssertionError(f"Function convert_to_snes_address() called on {hex(addr)}, but this is outside the ROM file.")
-        
+
         if self._type == RomType.LOROM:
             bank = addr // 0x8000
             offset = addr % 0x8000
@@ -210,7 +207,7 @@ class RomHandlerParent():
                 snes_address = (bank-0x80)*0x10000 + (offset+0x8000)
             else:
                 raise AssertionError(f"Function convert_to_snes_address() called on address {hex(addr)}, but this part of ROM is not mapped in ExLoRom.")
-                
+
         elif self._type == RomType.EXHIROM:
             if addr < 0x400000:
                 snes_address = addr + 0xC00000
@@ -225,13 +222,12 @@ class RomHandlerParent():
             raise NotImplementedError(f"Function convert_to_snes_address() called with not implemented type {self._type}")
 
         return snes_address
-    
-        
+
     def convert_to_pc_address(self, addr):
         #takes as input an address in the SNES address space and maps it to the correct address in the PC ROM.
         if addr > 0xFFFFFF or addr < 0:
             raise AssertionError(f"Function convert_to_pc_address() called on {hex(addr)}, but this is outside SNES address space.")
-        
+
         bank = addr // 0x10000
         offset = addr % 0x10000
 
@@ -244,7 +240,7 @@ class RomHandlerParent():
                 raise AssertionError(f"Function convert_to_pc_address() called on {hex(addr)}, but this does not map to ROM.")
             else:
                 pc_address = (bank % 0x80)*0x8000 + (offset - 0x8000)
-                    
+
         elif self._type == RomType.HIROM:
             if bank in [0x7E, 0x7F] or (bank < 0xC0 and offset < 0x8000):
                 raise AssertionError(f"Function convert_to_pc_address() called on {hex(addr)}, but this does not map to ROM.")
@@ -262,7 +258,7 @@ class RomHandlerParent():
                 pc_address = (bank+0x80)*0x8000 + (offset-0x8000)
             else:
                 raise AssertionError(f"Function convert_to_pc_address() called on address {hex(addr)}, but this does not map to ROM.")
-        
+
         elif self._type == RomType.EXHIROM:
             if bank >= 0xC0:              #the fastrom block
                 pc_address = (bank - 0xC0)*0x10000 + offset
@@ -280,7 +276,7 @@ class RomHandlerParent():
             raise NotImplementedError(f"Function convert_to_pc_address() called with not implemented type {self._type}")
 
         if pc_address > self._rom_size:
-            #the rom is not large enough to actually contain the indexed address, so we need to consider mirrored addresses 
+            #the rom is not large enough to actually contain the indexed address, so we need to consider mirrored addresses
             if self._type == RomType.LOROM or self._type == RomType.EXLOROM:
                 masked_addr = addr & 0x7FFFFF
             else:
@@ -289,14 +285,12 @@ class RomHandlerParent():
             most_significant_bit = masked_addr.bit_length() - 1
             new_addr = addr - (1 << most_significant_bit)
             pc_address = self.convert_to_pc_address(new_addr)    #recurse to get the corrected address
-        
-        return pc_address
 
+        return pc_address
 
     def equivalent_addresses(self, addr1, addr2):
         #see if two addresses map to the same point in PC ROM
         return self.convert_to_pc_address(addr1) == self.convert_to_pc_address(addr2)
-
 
     def expand(self,size):
         #expands the ROM upwards in size to the specified number of MBits.
@@ -316,7 +310,6 @@ class RomHandlerParent():
 
         self._rom_size = size*self._MEGABIT
 
-
     def type(self):
     	#to see if the rom is lorom, hirom, etc.
     	return self._type.name
@@ -332,10 +325,8 @@ class RomHandlerParent():
     	self._rom_is_headered = True
     	self._header = bytearray([0]*self._HEADER_SIZE)
 
-
     def remove_header(self):
     	self._rom_is_headered = False
-
 
     def _read_single(self, addr, size):
         if addr+size > self._rom_size:
@@ -355,7 +346,6 @@ class RomHandlerParent():
             raise NotImplementedError(f"_read_single() called to read size {size}, but this is not implemented.")
 
         return struct.unpack('<'+unpack_code,extracted_bytes)[0]           #the '<' forces it to read as little-endian
-
 
     def _write_single(self, value, addr, size):
         if addr+size > self._rom_size:
@@ -387,14 +377,11 @@ class RomHandlerParent():
         else:
             return False
 
-
     def _read_from_internal_header(self, offset, size):
         return self.read_from_snes_address(offset + 0xFFC0, size)
 
-
     def _write_to_internal_header(self, offset, value, size):
         return self.write_to_snes_address(offset+0xFFC0, value, size)
-
 
     def _fix_checksum(self):
         #first write zero to the old checksum (for convenience, in case it was broken before)
@@ -422,11 +409,8 @@ class RomHandlerParent():
 
         return checksum % 0x10000
 
-
-        
 def main():
     print(f"Called main() on utility library {__file__}")
-
 
 if __name__ == "__main__":
     main()
