@@ -201,6 +201,24 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.freeze_ray = True    #do not update the sprite while doing this
 		if hasattr(self, "timer_callback"):
 			self.master.after_cancel(self.timer_callback)
+		if hasattr(self, "left_panel"):
+			for widget in self.left_panel.winfo_children():
+				if "direction_buttons" in widget.winfo_name():
+					bindings = None
+					bindings_filename = common.get_resource("bindings.json","meta")
+					with open(bindings_filename,encoding="utf-8") as f:
+						bindings = json.load(f)
+					for subwidget in widget.winfo_children():
+						if "_button" in subwidget.winfo_name():
+							button_name = subwidget.winfo_name().replace("_button","")
+							button_section = button_name[:button_name.find("_")]
+							button_name = button_name[button_name.find("_")+1:]
+							keypresses = None
+							keypresses_switcher = bindings[button_section] if button_section in bindings else {}
+							keypresses = keypresses_switcher.get(button_name.lower(),None)
+							for keypress in keypresses:
+								subwidget.unbind_all(keypress)
+							subwidget.destroy()
 		self.left_panel = tk.PanedWindow(self.panes, orient=tk.VERTICAL, name="left_panel",width=250,handlesize=0,sashwidth=0,sashpad=2)
 		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
 		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")

@@ -5,6 +5,7 @@ import tkinter as tk
 import json
 import os
 import locale
+from functools import partial
 from source import common
 from source import ssTranslate as fish
 
@@ -109,7 +110,7 @@ class SpiffyButtons():
 		else:
 			center_align_grid_in_frame(self.spiffy_buttons_section)
 		self.max_row = 0
-		
+
 	def make_new_group(self, label):
 		#make a new variable in the sprite object called "<label>_var"
 		var_name = "_".join([label.lower(), "var"])
@@ -164,6 +165,16 @@ class SpiffyGroup():
 				indicatoron=False,
 				command=self.press_spiffy_button
 		)
+		bindings = None
+		keypresses = None
+		bindings_filename = common.get_resource("bindings.json","meta")
+		with open(bindings_filename,encoding="utf-8") as f:
+			bindings = json.load(f)
+		keypresses_switcher = bindings[self.label.lower()] if self.label.lower() in bindings else {}
+		keypresses = keypresses_switcher.get(internal_value_name.lower(),None)
+		if keypresses:
+			for keypress in keypresses:
+				button.bind_all(keypress,partial(self.invoke_spiffy_button,button))
 
 		ToolTip(button, display_text)
 		button.image = img
@@ -187,3 +198,7 @@ class SpiffyGroup():
 
 	def press_spiffy_button(self):
 		self.parent.sprite_object.update_animation()
+
+	def invoke_spiffy_button(self, button, event=None):
+		button.config(relief = tk.SUNKEN)
+		button.invoke()

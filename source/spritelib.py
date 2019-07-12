@@ -201,7 +201,6 @@ class SpriteParent():
 			direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
 			if direction in direction_dict:
 				return direction_dict[direction]
-
 		#otherwise just grab the first listed direction
 		return next(iter(direction_dict.values()))
 
