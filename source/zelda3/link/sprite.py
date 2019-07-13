@@ -1,6 +1,5 @@
 import importlib
 import itertools
-import copy
 from PIL import Image
 from source import common
 from source import widgetlib
@@ -55,7 +54,6 @@ class Sprite(SpriteParent):
 					this_image.paste(pastable_tile,position)
 				self.images[image_name] = this_image
 
-
 	def inject_into_ROM(self, rom):
 		#should work for the combo rom, VT rando, and the (J) rom.  Not sure about the (U) rom...maybe?
 
@@ -78,7 +76,6 @@ class Sprite(SpriteParent):
 		#the glove colors are placed into $1BEDF5-$1BEDF8
 		for i in range(2):
 			rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
-
 
 		return rom
 
@@ -117,8 +114,8 @@ class Sprite(SpriteParent):
 				palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
 			else:
 				palette_indices = list(range(1,16))   #start with green mail and modify it as needed
-				mail_type = self.mail_var.get()
-				gloves_type = self.gloves_var.get()
+				mail_type = self.mail_var.get() if hasattr(self,"mail_var") else ""
+				gloves_type = self.gloves_var.get() if hasattr(self,"gloves_var") else ""
 				for i in range(0,len(palette_indices)):
 
 					if gloves_type != "none" and palette_indices[i] == 0x0D:

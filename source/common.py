@@ -6,7 +6,6 @@ from PIL import Image
 import base64
 from io import BytesIO    #for shenanigans
 
-
 def get_all_resources(desired_filename, subdir=None):
 	#gets the file from overrides AND resources (returns a list of filenames)
 	file_list = []
@@ -104,7 +103,7 @@ def image_from_raw_data(tilemaps, DMA_writes, bounding_box):
 		v_flip = tilemap[4] & 0x80
 		h_flip = tilemap[4] & 0x40
 		#priority = (tilemap[4] //0x10) % 0b100                   #TODO: implement a priority system
-		palette = (tilemap[4] //2) % 0b1000
+		palette = (tilemap[4] //2) % 0b1000												#FIXME: unused variable
 
 		def draw_tile_to_canvas(new_x_offset, new_y_offset, new_index):
 			tile_to_write = convert_tile_from_bitplanes(DMA_writes[new_index])
@@ -208,7 +207,7 @@ def convert_to_4bpp(image, offset, dimensions, extra_area):
 				small_tiles.extend( get_single_raw_tile(image.crop((xmax-8,y  ,xmax,y+8 ))) )
 				small_tiles.extend( get_single_raw_tile(image.crop((xmax-8,y+8,xmax,y+16))) )
 			else:
-				raise AssertionError(f"received call to get_raw_pose() for image '{image_name}' but the dimensions for x ({xmin},{xmax}) are not divisible by 8")
+				raise AssertionError(f"received call to get_raw_pose() for image '{image.name}' but the dimensions for x ({xmin},{xmax}) are not divisible by 8")
 		#check to see if ymax-ymin has hanging chads
 		if y_chad_length == 0:
 			pass   #cool
@@ -225,10 +224,10 @@ def convert_to_4bpp(image, offset, dimensions, extra_area):
 				#make the final chad
 				small_tiles.extend( get_single_raw_tile(image.crop((xmax-8,ymax-8,xmax,ymax))) )
 			else:
-				raise AssertionError(f"received call to get_raw_pose() for image '{image_name}' but the dimensions for x ({xmin},{xmax}) are not divisible by 8")
+				raise AssertionError(f"received call to get_raw_pose() for image '{image.name}' but the dimensions for x ({xmin},{xmax}) are not divisible by 8")
 		else:
-			raise AssertionError(f"received call to get_raw_pose() for image '{image_name}' but the dimensions for y ({xmin},{xmax}) are not divisible by 8")
-	  
+			raise AssertionError(f"received call to get_raw_pose() for image '{image.name}' but the dimensions for y ({xmin},{xmax}) are not divisible by 8")
+
 	#even out the small tiles into the rest of the space
 	for offset in range(0,len(small_tiles),0x40):
 		top_row.extend(small_tiles[offset:offset+0x20])

@@ -21,7 +21,6 @@ def run_GUI(command_line_args):
 								f"{traceback.format_exc()}"
 								)
 
-
 def process_command_line_args():
 	parser = ArgumentParser()
 	parser.add_argument("--sprite",

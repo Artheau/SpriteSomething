@@ -55,7 +55,7 @@ class Layout():
 		extra_area = self.get_property("extra area", image_name)
 		shift = self.get_property("shift", image_name)
 		border_color = tuple(self.data["border_color"])
-		
+
 		scale = self.get_property("scale", image_name)
 		if scale:
 			image = image.resize(tuple(scale*x for x in image.size), Image.NEAREST)
@@ -65,7 +65,7 @@ class Layout():
 				extra_area = [[scale*x for x in region] for region in extra_area]
 
 		if shift is not None:
-			origin = tuple(origin[i] + shift[i] for i in range(2))   
+			origin = tuple(origin[i] + shift[i] for i in range(2))
 
 		dimensions = original_dimensions
 		if extra_area is not None:     #indicates that there's patches over the top of this pose to fill it out
@@ -101,10 +101,9 @@ class Layout():
 		origin = tuple(x+self.data["border_size"] for x in origin)
 
 		if shift is not None:
-			origin = tuple(origin[i] - shift[i] for i in range(2))   
-		
-		return image_with_border, origin
+			origin = tuple(origin[i] - shift[i] for i in range(2))
 
+		return image_with_border, origin
 
 	def get_property(self, this_property, image_name):
 		FAILSAFE = 100
@@ -118,14 +117,13 @@ class Layout():
 		else:
 			raise AssertionError(f"Encountered infinite parental loop in layout.json while investigating {image_name}")
 
-
 	def make_horizontal_collage(self, image_list):
 		#assembles images horizontally and encapsulates them in a border.
 		y_min = min([-origin[1] for image,origin in image_list])
 		y_max = max([image.size[1]-origin[1] for image,origin in image_list])
 
-		num_images = len(image_list)
-		
+		num_images = len(image_list) #FIXME: unused variable
+
 		collage_width = sum([image.size[0] for image,_ in image_list])
 		collage_y_size = y_max-y_min
 
@@ -159,12 +157,12 @@ class Layout():
 
 	def export_all_images_to_PNG(self, all_images, master_palette):
 		all_collages = []
-		for i,row in enumerate(self.get_rows()):
+		for i,row in enumerate(self.get_rows()): #FIXME: i unused variable
 
 			this_row_images = []
 			for image_name in row:   #for every image referenced explicitly in the layout
 				image = all_images[image_name]
-				
+
 				xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
 				if not image:    #there was no image there to grab, so make a blank image
 					image = Image.new("RGBA", (xmax-xmin,ymax-ymin), 0)
@@ -174,7 +172,7 @@ class Layout():
 
 				image = common.apply_palette(image, palette)
 				bordered_image, origin = self.add_borders_and_scale(image, (-xmin,-ymin), image_name)
-				
+
 				this_row_images.append((bordered_image, origin))
 
 			collage = self.make_horizontal_collage(this_row_images)
@@ -186,7 +184,7 @@ class Layout():
 	def extract_all_images_from_master(self, master_image):
 		all_images = {}
 		master_height = 0
-		for i,row in enumerate(self.get_rows()):
+		for i,row in enumerate(self.get_rows()): #FIXME: i unused variable
 			row_width = 0
 			row_y_min,row_y_max = float('Inf'),-float('Inf')
 			for image_name in row:   #for every image referenced explicitly in the layout
@@ -239,7 +237,7 @@ class Layout():
 
 				#this is a workaround to quantize without dithering
 				paletted_image = this_image._new(this_image.im.convert("P",0,palette_seed.im))
-				  
+
 				#have to shift the palette over now to include the transparent pixels correctly
 				#did it this way so that color pixels would not accidentally be matched to transparency
 				original_image_L = [0 if alpha < 255 else 1 for _,_,_,alpha in this_image.getdata()]
@@ -252,7 +250,6 @@ class Layout():
 
 		return all_images, master_palettes
 
-			
 	def get_bounding_box(self, image_name):
 		xmin,ymin,xmax,ymax = self.get_raw_bounding_box(image_name)
 		scale = self.get_property("scale", image_name)
@@ -261,7 +258,7 @@ class Layout():
 		shift = self.get_property("shift", image_name)
 		if shift:
 			xmin, ymin, xmax, ymax = xmin+shift[0], ymin+shift[1], xmax+shift[0], ymax+shift[1]
-				
+
 		return xmin,ymin,xmax,ymax
 
 	def get_raw_bounding_box(self,image_name):
@@ -272,6 +269,8 @@ class Layout():
 				xmin,ymin,xmax,ymax = min(xmin,x0), min(ymin,y0), max(xmax,x1), max(ymax,y1)
 		return xmin,ymin,xmax,ymax
 
+def main():
+    print(f"Called main() on utility library {__file__}")
 
 if __name__ == "__main__":
-	main()
+    main()

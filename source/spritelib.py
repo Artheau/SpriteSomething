@@ -38,7 +38,6 @@ class SpriteParent():
 	#to make a new sprite class, you must write code for all of the functions in this section below.
 	############################# BEGIN ABSTRACT CODE ##############################
 
-
 	def import_from_ROM(self, rom):
 		#self.images, self.master_palette = ?, ?
 		raise AssertionError("called import_from_ROM() on Sprite base class")
@@ -198,9 +197,10 @@ class SpriteParent():
 	def get_current_pose_list(self):
 		direction_dict = self.animations[self.current_animation]
 		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
-			direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
-			if direction in direction_dict:
-				return direction_dict[direction]
+			if hasattr(self,"facing_var"):
+				direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
+				if direction in direction_dict:
+					return direction_dict[direction]
 		#otherwise just grab the first listed direction
 		return next(iter(direction_dict.values()))
 
@@ -247,13 +247,23 @@ class SpriteParent():
 		elif file_extension.lower() == ".zspr":
 			return self.save_as_ZSPR(filename)
 		else:
-			messagebox.showerror("ERROR", f"Did not recognize file type \"{file_extension}\"")
+			tk.messagebox.showerror("ERROR", f"Did not recognize file type \"{file_extension}\"")
 			return False
 
 	def save_as_PNG(self, filename):
 		master_image = self.get_master_PNG_image()
 		master_image.save(filename)
 		return True
+
+	def export_frame_as_PNG(self, filename):
+		#i = 0
+		for tile,_ in self.get_tiles_for_current_pose():
+			new_size = tuple(int(dim*self.zoom_getter()) for dim in tile.size)
+			img_to_save = Image.new("RGBA", new_size, 0)
+			img_to_save = tile.resize(new_size,resample=Image.NEAREST)
+			#filename = filename[:filename.rfind('.')] + str(i) + filename[filename.rfind('.'):]
+			img_to_save.save(filename)
+			#i += 1
 
 	def get_master_PNG_image(self):
 		return self.layout.export_all_images_to_PNG(self.images,self.master_palette)

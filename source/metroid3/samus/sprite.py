@@ -18,7 +18,6 @@ class Sprite(SpriteParent):
 		# 	("Ship Preview",None)
 		# ]
 
-
 	def import_from_ROM(self, rom):
 		#The history of the Samus import code is a story I will tell to my children
 		self.images = rom_import.rom_import(self, rom)
@@ -328,7 +327,7 @@ class Sprite(SpriteParent):
 					aiming = ALTERNATIVES[aiming]
 				else:
 					return super().get_current_pose_list()  #don't worry about aiming
-				
+
 			return direction_dict[self.concatenate_facing_and_aiming(facing,aiming)]
 
 		#do whatever the parent would do
