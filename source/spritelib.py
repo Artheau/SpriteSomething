@@ -255,6 +255,16 @@ class SpriteParent():
 		master_image.save(filename)
 		return True
 
+	def export_frame_as_PNG(self, filename):
+		#i = 0
+		for tile,_ in self.get_tiles_for_current_pose():
+			new_size = tuple(int(dim*self.zoom_getter()) for dim in tile.size)
+			img_to_save = Image.new("RGBA", new_size, 0)
+			img_to_save = tile.resize(new_size,resample=Image.NEAREST)
+			#filename = filename[:filename.rfind('.')] + str(i) + filename[filename.rfind('.'):]
+			img_to_save.save(filename)
+			#i += 1
+
 	def get_master_PNG_image(self):
 		return self.layout.export_all_images_to_PNG(self.images,self.master_palette)
 

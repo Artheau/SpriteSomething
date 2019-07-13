@@ -52,6 +52,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			"file.save": "./",
 			"export.dest": "./",
 			"export.source": "./",
+			"export.frame-as-png": "./",
 			"export.animation-as-gif": "./",
 			"export.animation-as-collage": "./"
 		}
@@ -59,7 +60,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if os.path.exists(working_dir_path):
 			with open(working_dir_path) as json_file:
 				data = json.load(json_file)
-				self.working_dirs = data
+				for k,v in data.items():
+					self.working_dirs[k] = v
 
 		self.create_random_title()
 
@@ -160,7 +162,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 											[
 													(fish.translate("menu","export.inject",os.path.join("meta")),"inject",self.inject_into_ROM),
 													(fish.translate("menu","export.inject-new",os.path.join("meta")),"inject-new",self.copy_into_ROM),
-													#(None,None,None),
+													(None,None,None),
+													(fish.translate("menu","export.frame-as-png",os.path.join("meta")),None,self.export_frame_as_png),
 													#(fish.translate("menu","export.animation-as-gif",os.path.join("meta")),None,self.export_animation_as_gif),
 													#(fish.translate("menu","export.animation-as-collage",os.path.join("meta")),None,self.export_animation_as_collage),
 											])
@@ -522,6 +525,19 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def inject_into_ROM(self):
 		self.copy_into_ROM(inject=True)
+
+	def export_frame_as_png(self):
+		# Save a ZSPR or PNG.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
+		filetypes = (("PNG Files","*.png"),)
+		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.frame-as-png"], title="Save Frame As...", filetypes=filetypes)
+		if filename:
+			returnvalue = self.sprite.export_frame_as_PNG(filename)
+			if returnvalue:
+				self.working_dirs["export.frame-as-png"] = filename[:filename.rfind('/')]
+				messagebox.showinfo("Save Complete", f"Saved as {filename}")
+			return returnvalue
+		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+			return False
 
 	def export_animation_as_gif(self):
 		raise NotImplementedError()
