@@ -2003,7 +2003,7 @@
 		},
 
 		"jump_right": {
-			"description": "When Samus jumps up without spinning, or when she is starting a lateral shinespark",
+			"description": "When Samus jumps up without spinning, or when she is starting a vertical shinespark",
 			"dimensions": [-13,-27,19,29],
 			"spacer": -8,
 			"palette": "0x28",
@@ -2873,7 +2873,7 @@
 		"bonk_right1": {
 			"description": "Samus is facing right and takes damage but does not boost.  This pose is also held for a long time leading up to the death animation.",
 			"parent": "bonk_right",
-			"used by": [["0x53",1],["0xD7",5],["0xE9",2],["0xE9",4]]
+			"used by": [["0x53",1],["0xD7",5]]
 		},
 
 		"bonk_left": {
@@ -2881,7 +2881,7 @@
 			"dimensions": [-19,-24,13,32],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x54",0],["0xD8",4]]
+			"used by": [["0x54",0],["0xD8",4],["0xE9",2],["0xE9",4]]
 		},
 
 		"bonk_left1": {

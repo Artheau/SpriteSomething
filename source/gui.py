@@ -323,7 +323,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def rewind_global_frame_timer(self):
 		#called by step radio button to pause and step backward
-		self.frame_number = self.frame_number - 1
+		self.frame_number = max(0,self.frame_number - 1)
 		self.pause_global_frame_timer()
 
 	def step_global_frame_timer(self):
@@ -332,7 +332,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.advance_global_frame_timer()
 
 	def go_to_previous_pose(self):
-		self.frame_number = self.frame_number - self.sprite.frames_to_previous_pose()
+		self.frame_number = max(0,self.frame_number - self.sprite.frames_to_previous_pose())
 		self.pause_global_frame_timer()
 
 	def go_to_next_pose(self):
