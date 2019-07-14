@@ -7,6 +7,7 @@ import traceback
 import os, sys
 import time
 import webbrowser
+from functools import partial
 from source import widgetlib
 from source import ssDiagnostics as diagnostics
 from source import ssTranslate as fish
@@ -54,7 +55,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 			"export.source": "./",
 			"export.frame-as-png": "./",
 			"export.animation-as-gif": "./",
-			"export.animation-as-collage": "./"
+			"export.animation-as-hcollage": "./",
+			"export.animation-as-vcollage": "./"
 		}
 		working_dir_path = os.path.join("resources","meta","working_dirs.json")
 		if os.path.exists(working_dir_path):
@@ -142,7 +144,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 						cascade.images[image_name] = tk.PhotoImage(file=common.get_resource(f"{image_name}.png",os.path.join("meta","icons")))
 					else:
 						cascade.images[image_name] = None
-					cascade.add_command(label=display_name, image=cascade.images[image_name], compound=tk.LEFT, command=function_to_call)
+					cascade.add_command(label=display_name, image=cascade.images[image_name], compound=tk.LEFT, command=function_to_call, state="disabled" if function_to_call == None else "normal")
 			menu.add_cascade(label=name, menu=cascade)
 			return cascade
 
@@ -164,8 +166,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 													(fish.translate("menu","export.inject-new",os.path.join("meta")),"inject-new",self.copy_into_ROM),
 													(None,None,None),
 													(fish.translate("menu","export.frame-as-png",os.path.join("meta")),None,self.export_frame_as_png),
-													#(fish.translate("menu","export.animation-as-gif",os.path.join("meta")),None,self.export_animation_as_gif),
-													#(fish.translate("menu","export.animation-as-collage",os.path.join("meta")),None,self.export_animation_as_collage),
+													(fish.translate("menu","export.animation-as-gif",os.path.join("meta")),None,None),#self.export_animation_as_gif),
+													(fish.translate("menu","export.animation-as-hcollage",os.path.join("meta")),None,partial(self.export_animation_as_collage,"horizontal")),
+													(fish.translate("menu","export.animation-as-vcollage",os.path.join("meta")),None,None),#partial(self.export_animation_as_collage,"vertical")),
 											])
 		menu_options.append(import_menu)
 
@@ -542,8 +545,19 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def export_animation_as_gif(self):
 		raise NotImplementedError()
 
-	def export_animation_as_collage(self):
-		raise NotImplementedError()
+	def export_animation_as_collage(self,orientation="horizontal"):
+		if orientation == "vertical":
+			raise NotImplementedError()
+		filetypes = (("PNG Files","*.png"),)
+		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.animation-as-" + orientation[:1] + "collage"], title="Save " + orientation[:1].upper() + orientation[1:] + " Collage As...", filetypes=filetypes)
+		if filename:
+			returnvalue = self.sprite.export_animation_as_collage(filename,orientation)
+			if returnvalue:
+				self.working_dirs["export.animation-as-collage"] = filename[:filename.rfind('/')]
+				messagebox.showinfo("Save Complete", f"Saved as {filename}")
+			return returnvalue
+		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+			return False
 
 	def diagnostics(self):
 		# Debugging purposes
