@@ -112,6 +112,10 @@ class RomHandlerParent():
     def get_size_in_MB(self):
         return self._rom_size/(8*self._MEGABIT)
 
+    def get_size_in_MB(self):
+        return self._rom_size/(8*self._MEGABIT)
+
+
     def read(self,addr,encoding):
         #expects a ROM address and an encoding
         #

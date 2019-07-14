@@ -7,7 +7,7 @@ import importlib
 import json
 import tkinter as tk
 import random
-from PIL import Image, ImageTk, ImageFile
+from PIL import Image, ImageFile
 from source import ssTranslate as fish
 from source import widgetlib
 from source import romhandler
