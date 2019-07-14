@@ -6,7 +6,6 @@ import copy
 from PIL import Image
 from source import common
 
-
 def rom_export(player_sprite, old_rom, verbose=False):
 	rom = copy.deepcopy(old_rom)  #for safety we are going to deepcopy the ROM, in case we need to bail
 
@@ -77,7 +76,7 @@ def rom_export(player_sprite, old_rom, verbose=False):
 	if verbose: print("Stupid tile...", end="")
 	success_code = no_more_stupid(player_sprite,rom)
 	if verbose: print("stupid" if success_code else "FAIL")
-	
+
 	#because a DMA of zero bytes is essentially a guaranteed game crash, the designers had to make separate subroutines
 	# that made the upper tilemap not display in certain cases.  These subroutines are no longer necessary, because we
 	# fixed the issue in the DMA swap order code, and so now we need to get rid of the subroutines because they break
@@ -183,7 +182,7 @@ def reassign_gun_tilemaps(samus,rom):
 	OLD_DATA = [0x1F, 0x28, 0x1F, 0x28, 0x1F, 0x28, 0x1F, 0x68, 0x1F, 0xA8, 0x1F, 0xE8, 0x1F, 0x28, 0x1F, 0x68, 0x1F, 0x68, 0x1F, 0x68]
 	NEW_DATA = [TILE, PAL , TILE, PAL , TILE, PAL , TILE, PAL , TILE, PAL , TILE, PAL , TILE, PAL , TILE, PAL , TILE, PAL , TILE, PAL ]
 	success_codes.append(  rom._apply_single_fix_to_snes_address(0x90C791, OLD_DATA, NEW_DATA, "1"*len(OLD_DATA))  )
-	
+
 	return all(success_codes)
 
 #TODO: factor this out to RomHandler
@@ -230,7 +229,6 @@ def write_dma_data(samus,rom):
 		#the death DMA data needs to all be in the same bank (here placed in $FF)
 		death_freespace = FreeSpace([(0xFF8000, 0x1000000)])
 
-
 	DMA_dict = {}  #have to keep track of where we put all this stuff so that we can point to it afterwards
 
 	for image_name in samus.layout.data["images"]:
@@ -240,7 +238,7 @@ def write_dma_data(samus,rom):
 			DMA_data = get_raw_pose(samus, image_name)
 
 			size = len(DMA_data)
-			
+
 			address_to_write = freespace.get(size)
 
 			rom.bulk_write_to_snes_address(address_to_write,DMA_data,size)
@@ -299,7 +297,7 @@ def write_new_DMA_tables(DMA_dict,samus,rom):
 	#$92:D91E             dw CBEE, CCCE, CDA0, CE80, CEF7, CF6E, CFE5, D05C, D0E8, D12E, D613, D6A6, D74E
 	#and at 92:D938 (lower)
 	#$92:D938             dw D19E, D27E, D35E, D6D7, D406, D4A7, D54F, D786, D5F0, D79B, D605
-	
+
 	#freespace is from death tilemap region up through the usual DMA table region
 	UPPER_LOC = 0x92C580
 	LOWER_LOC = 0x92D600
@@ -330,7 +328,7 @@ def write_new_DMA_tables(DMA_dict,samus,rom):
 				rom.write_to_snes_address(0x92D91E+2*upper_table_number,address_to_write % 0x10000,2)  #index the new table
 			DMA_upper_table_indices[image_name] = (upper_table_number,upper_table_fill)
 			upper_table_fill += 1
-		
+
 		bottom_row_size = 0x20*(size//0x40)   #half of the tiles, floored (by the way we constructed the images originally)
 		top_row_size = size - bottom_row_size
 
@@ -704,7 +702,7 @@ def get_death_tilemap(direction, pose):
 		raise AssertionError(f"Unknown direction {direction} in get_death_tilemap()")
 	y_min = -32
 	body_palette = 0x2E if pose > 0 else 0x28
-		
+
 	for i in range(2):
 		for j in range(4):
 			x = x_min + 16*i
@@ -892,7 +890,7 @@ def create_new_control_code(samus,rom):
 		[0x69, 0x15, 0x00, 0x8D, 0x96, 0x0A, 0xA8, 0x6038],   #made the last two bytes a word for convenience in the next line
 		[0x69, 0x14, 0x00, 0x8D, 0x96, 0x0A, 0x4C, SUBROUTINE_LOCATION % 0x10000],
 		 "11111112")
-	
+
 	return success_code
 
 def implement_spin_attack(samus,rom):
@@ -900,7 +898,7 @@ def implement_spin_attack(samus,rom):
 	# so that we have a new battery of poses which are used to implement spin attack
 
 	#we're going to need some space in bank $91.  Bank $91 is super tight.
-	
+
 	#need to free up some space in $91812D-$91816E in order to relocate the screw attack sequence there.
 	#don't actually need any new code for this, because so much code is duplicated -- just need to move some JSR pointers
 	OLD_TABLE = [0x804D,0x8066,0x806E,0x8076,0x807E,0x8087,0x80B6,0x8086,
@@ -952,7 +950,7 @@ def implement_spin_attack(samus,rom):
 	#old code   $90:9D63 C9 1B 00    CMP #$001B    ;compare to 27 (near old location of the wall jump prompt)
 	#new code   $90:9D63 C9 36 00    CMP #$0036    ;compare to 54 (near new location of the wall jump prompt)
 	success_code = success_code and rom._apply_single_fix_to_snes_address(0x909D63,[0xC9,0x1B,0x00],[0xC9,0x36,0x00],"111")
-	
+
 	#we also need to relocate the walljump prompt correctly
 	#old code   $90:9DD4 A9 1A 00    LDA #$001A    ;go to 26 (old location of the wall jump prompt)
 	#old code   $90:9DD4 A9 35 00    LDA #$0035    ;go to 53 (new location of the wall jump prompt)
@@ -967,7 +965,7 @@ def implement_spin_attack(samus,rom):
 	#And bank $91 is super tight still...I am going to have to JSL.  How about over to the death tiles,
 	# which I'm going to relocate anyway?
 	NEW_SUBROUTINE_LOCATION = 0x9B8000
-	
+
 	'''
 	By and large this new subroutine borrows heavily from control code $FB, which has to do similar checks
 	AD A2 09    LDA $09A2         ; get equipped items
@@ -1008,37 +1006,37 @@ def implement_spin_attack(samus,rom):
 	8D 9A 0A        ;STA $0A9A
 	6B              ;RTL              ;GET OUT
 	'''
-	NEW_CODE = [0xAD, 0xA2, 0x09, 
-				0x89, 0x20, 0x00, 
-				0xD0, 0x20, 
-				0x22, 0x58, 0xEC, 0x90, 
-				0xAD, 0x5E, 0x19, 
-				0x30, 0x0E, 
-				0xC5, 0x14, 
-				0x10, 0x13, 
-				0xAD, 0x7E, 0x19, 
-				0x89, 0x04, 0x00, 
-				0xD0, 0x0B, 
-				0x80, 0x1D, 
-				0xAD, 0x62, 0x19, 
-				0x30, 0x04, 
-				0xC5, 0x14, 
-				0x30, 0x14, 
-				0xAD, 0xA2, 0x09, 
-				0x89, 0x08, 0x00, 
-				0xF0, 0x0C, 
-				0x89, 0x00, 0x02, 
-				0xF0, 0x0E, 
-				0xA9, 0x02, 0x00, 
-				0x8D, 0x9A, 0x0A, 
-				0x6B, 
-				0xA9, 0x01, 0x00, 
-				0x8D, 0x9A, 0x0A, 
-				0x6B, 
-				0xA9, 0x1C, 0x00, 
-				0x8D, 0x9A, 0x0A, 
+	NEW_CODE = [0xAD, 0xA2, 0x09,
+				0x89, 0x20, 0x00,
+				0xD0, 0x20,
+				0x22, 0x58, 0xEC, 0x90,
+				0xAD, 0x5E, 0x19,
+				0x30, 0x0E,
+				0xC5, 0x14,
+				0x10, 0x13,
+				0xAD, 0x7E, 0x19,
+				0x89, 0x04, 0x00,
+				0xD0, 0x0B,
+				0x80, 0x1D,
+				0xAD, 0x62, 0x19,
+				0x30, 0x04,
+				0xC5, 0x14,
+				0x30, 0x14,
+				0xAD, 0xA2, 0x09,
+				0x89, 0x08, 0x00,
+				0xF0, 0x0C,
+				0x89, 0x00, 0x02,
+				0xF0, 0x0E,
+				0xA9, 0x02, 0x00,
+				0x8D, 0x9A, 0x0A,
+				0x6B,
+				0xA9, 0x01, 0x00,
+				0x8D, 0x9A, 0x0A,
+				0x6B,
+				0xA9, 0x1C, 0x00,
+				0x8D, 0x9A, 0x0A,
 				0x6B]
-	
+
 	#put the new code in the ROM
 	rom.bulk_write_to_snes_address(NEW_SUBROUTINE_LOCATION,NEW_CODE,74)
 
@@ -1054,7 +1052,10 @@ def implement_spin_attack(samus,rom):
 	return success_code
 
 def insert_file_select_graphics(samus,rom):
-	#hard coded for now
+	#classically, the file select DMA data is located at $B6:C000.  However, many hacks relocate this to make more room for pause menu graphics.
+	file_select_data_location = rom.read_from_snes_address(0x818E34, 3)
+
+	#hard coded the image locations for now
 	file_select_graphics_block = Image.new("P",(128,24),0)
 	left_head = samus.images["file_select_head"]
 	file_select_graphics_block.paste(left_head,(0,0))
@@ -1088,15 +1089,14 @@ def insert_file_select_graphics(samus,rom):
 	file_select_DMA = common.convert_to_4bpp(file_select_graphics_block, (0,0), (0,0,128,16),None)
 	file_select_DMA.extend(common.convert_to_4bpp(file_select_graphics_block, (0,0), (0,16,128,32),None)[:0x200])
 
-	rom.bulk_write_to_snes_address(0xB6DA00,file_select_DMA,0x600)
+	rom.bulk_write_to_snes_address(file_select_data_location + 0x1A00,file_select_DMA,0x600)
 
 	stray_missile_DMA = common.convert_to_4bpp(stray_missile_image, (0,0), (0,0,8,8), None)
-	rom.bulk_write_to_snes_address(0xB6D900,stray_missile_DMA,0x20)
+	rom.bulk_write_to_snes_address(file_select_data_location + 0x1900,stray_missile_DMA,0x20)
 	stray_missilehead_DMA = common.convert_to_4bpp(stray_missilehead_image, (0,0), (0,0,8,8), None)
-	rom.bulk_write_to_snes_address(0xB6D980,stray_missilehead_DMA,0x20)
+	rom.bulk_write_to_snes_address(file_select_data_location + 0x1980,stray_missilehead_DMA,0x20)
 
 	return True
-
 
 def assign_palettes(samus,rom):
 	_,door_palette = samus.get_timed_palette("power","door")[0]
@@ -1122,7 +1122,7 @@ def assign_palettes(samus,rom):
 		heat_555 = [common.convert_to_555(pal) for pal in heat_palettes]
 		for i in range(16):
 			rom.write_to_snes_address(heat_base_addr+0x0A+0x22*i,heat_555[i][-0x0F:],"2"*0x0F)
-	
+
 	_,sepia_palette = samus.get_timed_palette("power","sepia")[0]
 	sepia_555 = common.convert_to_555(sepia_palette)
 	rom.write_to_snes_address(0x8CE569+2,sepia_555,"2"*0x0F)
@@ -1140,7 +1140,7 @@ def assign_palettes(samus,rom):
 	death_flesh_555 = [common.convert_to_555(pal) for pal in death_flesh_palettes]
 	for i in range(9):
 		rom.write_to_snes_address(0x9BA120+2+0x20*i,death_flesh_555[i],"2"*0x0F)
-	
+
 	crystal_flash_palettes = [pal for _,pal in samus.get_timed_palette("power","flash")]
 	crystal_flash_555 = [common.convert_to_555(pal) for pal in crystal_flash_palettes]
 	for i in range(6):
@@ -1180,7 +1180,7 @@ def assign_palettes(samus,rom):
 	xray_555 = common.convert_to_555(xray_colors)
 	rom.write_to_snes_address(0x9BA3C6,xray_555,"222")
 
-	hyper_beam_palettes = [pal for _,pal in samus.get_timed_palette("power","hyper beam")][::-1]
+	hyper_beam_palettes = [pal for _,pal in samus.get_timed_palette("power","hyper")][::-1]
 	hyper_beam_555 = [common.convert_to_555(pal) for pal in hyper_beam_palettes]
 	for i in range(10):
 		rom.write_to_snes_address(0x9BA240+2+0x20*i,hyper_beam_555[i],"2"*0x0F)
@@ -1206,10 +1206,8 @@ def assign_palettes(samus,rom):
 
 	return True
 
-
 def get_numbered_poses_old_and_new(samus,rom):
 	for animation_string, pose in samus.layout.reverse_lookup:
 		if animation_string[:2] == "0x":
 			animation_int = int(animation_string[2:],16)
 			yield animation_int, pose
-

@@ -1,6 +1,8 @@
 import importlib
+import itertools
 from source.spritelib import SpriteParent
 from source import common
+from source import widgetlib
 from . import rom_import, rom_export
 
 class Sprite(SpriteParent):
@@ -9,6 +11,12 @@ class Sprite(SpriteParent):
 
 		self.overview_scale_factor = 1    #Samus's sheet is BIG, so don't zoom in on the overview
 
+		self.overhead = False   #Samus is sideview, so only left/right direction buttons should show
+
+		# self.plugins = [
+		# 	("File Select Preview",None),
+		# 	("Ship Preview",None)
+		# ]
 
 	def import_from_ROM(self, rom):
 		#The history of the Samus import code is a story I will tell to my children
@@ -42,7 +50,7 @@ class Sprite(SpriteParent):
 		else:
 			raise AssertionError(f"Unrecognized color set request: {color_set}")
 
-	def get_timed_palette(self, overall_type="base", variant_type="standard"):
+	def get_timed_palette(self, overall_type="power", variant_type="standard"):
 		timed_palette = []
 		base_palette = self.get_colors_from_master(overall_type)
 
@@ -151,7 +159,7 @@ class Sprite(SpriteParent):
 			timed_palette.append((1,common.palette_shift(base_palette,(0,128,0))))
 			timed_palette.append((1,common.palette_shift(base_palette,(0,64,0))))
 
-		elif variant_type.lower().replace("_"," ") == "hyper beam":
+		elif variant_type.lower().replace("_"," ") == "hyper":
 			grayscale_palette = common.grayscale(self.get_colors_from_master("gravity"))
 			faded_palette = common.palette_pull_towards_color(grayscale_palette,(0,0,0),2.0/3.0)
 			timed_palette.append((2,common.palette_shift(faded_palette,(0xE0,0x20,0x20))))
@@ -232,4 +240,127 @@ class Sprite(SpriteParent):
 		else:
 			raise AssertionError(f"unrecognized palette request: {overall_type}, {variant_type}")
 
-		return timed_palette
+		#now scrub the palette to get rid of floats and numbers that are too large/small
+		return [(time,[(max(0,min(255,int(color_plane))) for color_plane in color) for color in palette]) for (time,palette) in timed_palette]
+
+	def get_spiffy_buttons(self, parent):
+		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
+
+		suit_group = spiffy_buttons.make_new_group("suit")
+		suit_group.add_blank_space()
+		suit_group.add("power", "suit-power.png")
+		suit_group.add("varia", "suit-varia.png")
+		suit_group.add("gravity", "suit-gravity.png")
+
+		variant_group = spiffy_buttons.make_new_group("variant")
+		variant_group.add("standard", "no-thing.png")
+		variant_group.add("charge", "variant-charge.png")
+		variant_group.add("speed_boost", "variant-speed_boost.png")
+		variant_group.add("speed_squat", "variant-speed_squat.png")
+		variant_group.add("hyper", "variant-hyper.png")
+		variant_group.add_newline()
+		variant_group.add_blank_space()
+		variant_group.add("heat", "effect-heat.png")
+		variant_group.add("xray", "effect-xray.png")
+		variant_group.add("sepia", "effect-sepia.png")
+		variant_group.add("door", "effect-door.png")
+
+		cannon_group = spiffy_buttons.make_new_group("cannon-port")
+		cannon_group.add("no", "no-thing.png")
+		cannon_group.add("yes", "yes-thing.png")
+
+		return spiffy_buttons
+
+	def get_direction_buttons(self, parent):
+		#overrides the parent WASD format
+		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
+
+		facing_group = direction_buttons.make_new_group("facing")
+		facing_group.add("left", "arrow-left.png")
+		facing_group.add("right", "arrow-right.png", default=True)
+
+		aiming_group = direction_buttons.make_new_group("aiming")
+		aiming_group.add("up", "arrow-up.png")
+		aiming_group.add("diag_up", "arrow-upright.png")
+		aiming_group.add_newline()
+		aiming_group.add("neutral", "no-thing.png", default=True)
+		aiming_group.add("shoot", "arrow-right.png")
+		aiming_group.add_newline()
+		aiming_group.add("down", "arrow-down.png")
+		aiming_group.add("diag_down", "arrow-downright.png")
+
+	# 	arrows_group = direction_buttons.make_new_group("arrows")
+	# 	arrows_group.add("upleft", "arrow-upleft.png")
+	# 	arrows_group.add("trueupleft", "arrow-up.png")
+	# 	arrows_group.add("trueupright", "arrow-up.png")
+	# 	arrows_group.add("upright", "arrow-upright.png")
+	# 	arrows_group.add_newline()
+	# 	arrows_group.add("left", "arrow-left.png")
+	# 	arrows_group.add_blank_space()
+	# 	arrows_group.add_blank_space()
+	# 	arrows_group.add("right", "arrow-right.png", default=True)
+	# 	arrows_group.add_newline()
+	# 	arrows_group.add("downleft", "arrow-downleft.png")
+	# 	arrows_group.add("truedownleft", "arrow-down.png")
+	# 	arrows_group.add("truedownright", "arrow-down.png")
+	# 	arrows_group.add("downright", "arrow-downright.png")
+
+		return direction_buttons
+
+	def get_current_pose_list(self):
+		direction_dict = self.animations[self.current_animation]
+		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
+			facing = self.facing_var.get().lower()	#grabbed from the direction buttons, which are named "facing"
+			aiming = self.aiming_var.get().lower()	#grabbed from the aiming buttons, which are named "aiming"
+
+			#now start searching for this facing and aiming in the JSON dict
+			#start going down the list of alternative aiming if a pose does not have the original
+			ALTERNATIVES = {
+				"up": "diag_up",
+				"diag_up": "shoot",
+				"shoot": "neutral",
+				"down": "diag_down",
+				"diag_down": "shoot"
+			}
+			while(self.concatenate_facing_and_aiming(facing,aiming) not in direction_dict):
+				if aiming in ALTERNATIVES:
+					aiming = ALTERNATIVES[aiming]
+				else:
+					return super().get_current_pose_list()  #don't worry about aiming
+
+			return direction_dict[self.concatenate_facing_and_aiming(facing,aiming)]
+
+		#do whatever the parent would do
+		return super().get_current_pose_list()
+
+	def concatenate_facing_and_aiming(self, facing, aiming):
+		return "_aim_".join([facing,aiming])
+
+	def get_current_palette(self, palette_type, default_range):
+		if self.spiffy_buttons_exist:
+			if palette_type is not None:
+				raise NotImplementedError(f"Not implemented to use palette type {palette_type} for Samus")
+			else:
+				suit_type = self.suit_var.get()
+				variant_type = self.variant_var.get()
+
+			#get the actual list of associated palettes
+			palette_timing_list = self.get_timed_palette(overall_type=suit_type, variant_type=variant_type)
+			#figure out the timing
+			palette_timing_progression = list(itertools.accumulate([duration for (duration,_) in palette_timing_list]))
+
+			#if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
+			if palette_timing_list[-1][0] == 0 and self.frame_getter() >= palette_timing_progression[-1]:
+				palette_number = -1    #use the last palette
+			else:
+				mod_frames = self.frame_getter() % palette_timing_progression[-1]
+				palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
+
+			#now actually get that specific palette
+			_,palette = palette_timing_list[palette_number]
+
+		else:
+			#do whatever the parent would do as a default
+			return super().get_current_palette(palette_type, default_range)
+
+		return palette

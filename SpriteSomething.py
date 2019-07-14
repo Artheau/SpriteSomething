@@ -21,7 +21,6 @@ def run_GUI(command_line_args):
 								f"{traceback.format_exc()}"
 								)
 
-	
 def process_command_line_args():
 	parser = ArgumentParser()
 	parser.add_argument("--sprite",
@@ -29,11 +28,12 @@ def process_command_line_args():
 						help="A sprite file to load upon opening",
 						metavar="<sprite_filename>",
 						default=os.path.join("resources","metroid3","samus","samus.png"))
+#						default=os.path.join("resources","zelda3","link","link.zspr"))
 
 	command_line_args = vars(parser.parse_args())
 	return command_line_args
 
-def process_CLI():
+def process_CLI(command_line_args):
 	raise NotImplementedError()
 
 if __name__ == "__main__":

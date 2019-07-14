@@ -2,6 +2,7 @@ import importlib
 import itertools
 from PIL import Image
 from source import common
+from source import widgetlib
 from string import ascii_uppercase
 from source.spritelib import SpriteParent
 
@@ -9,12 +10,17 @@ class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
 
+		self.plugins = [
+			("Sheet Trawler",None),
+			("Tracker Images",None)
+		]
+
 	def import_from_ROM(self, rom):
 		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)    #the big Link sheet
 		palette_data = rom.bulk_read_from_snes_address(0x1BD308,120)     #the palettes
 		palette_data.extend(rom.bulk_read_from_snes_address(0x1BEDF5,4)) #the glove colors
 		self.import_from_binary_data(pixel_data,palette_data)
-	
+
 	def import_from_binary_data(self,pixel_data,palette_data):
 		self.master_palette = [(0,0,0) for _ in range(0x40)]   #initialize the palette
 		#main palettes
@@ -48,7 +54,6 @@ class Sprite(SpriteParent):
 					this_image.paste(pastable_tile,position)
 				self.images[image_name] = this_image
 
-
 	def inject_into_ROM(self, rom):
 		#should work for the combo rom, VT rando, and the (J) rom.  Not sure about the (U) rom...maybe?
 
@@ -72,5 +77,64 @@ class Sprite(SpriteParent):
 		for i in range(2):
 			rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
 
-
 		return rom
+
+	def get_spiffy_buttons(self, parent):
+		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
+
+		mail_group = spiffy_buttons.make_new_group("mail")
+		mail_group.add_blank_space()
+		mail_group.add("green", "mail-green.png")
+		mail_group.add("blue", "mail-blue.png")
+		mail_group.add("red", "mail-red.png")
+
+		sword_group = spiffy_buttons.make_new_group("sword")
+		sword_group.add("none", "no-thing.png")
+		sword_group.add("fighter", "sword-fighters.png")
+		sword_group.add("master", "sword-master.png")
+		sword_group.add("tempered", "sword-tempered.png")
+		sword_group.add("gold", "sword-butter.png")
+
+		shield_group = spiffy_buttons.make_new_group("shield")
+		shield_group.add("none", "no-thing.png")
+		shield_group.add("fighter", "shield-fighters.png")
+		shield_group.add("fire", "shield-fire.png")
+		shield_group.add("mirror", "shield-mirror.png")
+
+		gloves_group = spiffy_buttons.make_new_group("gloves")
+		gloves_group.add("none", "no-thing.png")
+		gloves_group.add("power", "glove1.png")
+		gloves_group.add("titan", "glove2.png")
+
+		return spiffy_buttons
+
+	def get_current_palette(self, palette_type, default_range):
+		if self.spiffy_buttons_exist:
+			if palette_type == "bunny":
+				palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
+			else:
+				palette_indices = list(range(1,16))   #start with green mail and modify it as needed
+				mail_type = self.mail_var.get() if hasattr(self,"mail_var") else ""
+				gloves_type = self.gloves_var.get() if hasattr(self,"gloves_var") else ""
+				for i in range(0,len(palette_indices)):
+
+					if gloves_type != "none" and palette_indices[i] == 0x0D:
+						if gloves_type == "power":
+							palette_indices[i] = 0x10
+						elif gloves_type == "titan":
+							palette_indices[i] = 0x20
+						else:
+							raise AssertionError(f"unknown gloves type given by spiffy buttons: '{gloves_type}'")
+
+					elif mail_type != "green" and palette_indices[i] in range(0,16):
+						if mail_type == "blue":
+							palette_indices[i] += 16
+						elif mail_type == "red":
+							palette_indices[i] += 32
+						else:
+							raise AssertionError(f"unknown mail type given by spiffy buttons: '{mail_type}'")
+		else:
+			#do whatever the parent would do as a default
+			return super().get_current_palette(palette_type, default_range)
+
+		return [self.master_palette[i] for i in palette_indices]

@@ -26,13 +26,12 @@ def rom_import(sprite, rom):
 
 	return all_images
 
-
 def get_sprite_pose(sprite, rom, animation_ID, pose, bounding_box, upper=True,lower=True):
 	if type(animation_ID) is str:
 		if animation_ID[:2] == "0x":   #it's a hex code
 			return get_sprite_pose(sprite, rom, int(animation_ID[2:],16), pose, bounding_box, upper=upper,lower=lower)
 		elif animation_ID == "death_left":
-			tilemaps, DMA_writes, duration = rom.get_death_data(pose, facing="left")
+			tilemaps, DMA_writes, duration = rom.get_death_data(pose, facing="left") #FIXME: duration unused variable
 			if not upper:   #trim out the suit pieces
 				tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C != 0x08]
 			if not lower:   #trim out the body
@@ -84,4 +83,3 @@ def get_sprite_pose(sprite, rom, animation_ID, pose, bounding_box, upper=True,lo
 
 	constructed_image = common.image_from_raw_data(tilemaps, constructed_VRAM_data, bounding_box)
 	return constructed_image
-

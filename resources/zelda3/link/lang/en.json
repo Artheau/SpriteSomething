@@ -1,0 +1,39 @@
+{
+  "section": {
+    "facing": "Facing",
+    "mail": "Mail",
+    "sword": "Sword",
+    "shield": "Shield",
+    "gloves": "Gloves"
+  },
+  "Facing": {
+    "up": "Up",
+    "left": "Left",
+    "down": "Down",
+    "right": "Right"
+  },
+  "Mail": {
+    "green": "Green Mail",
+    "blue": "Blue Mail",
+    "red": "Red Mail",
+    "bunny": "Bunny Palette"
+  },
+  "Sword": {
+    "none": "No Sword",
+    "fighter": "Fighter's Sword",
+    "master": "Master Sword",
+    "tempered": "Tempered Sword",
+    "gold": "Golden Sword"
+  },
+  "Shield": {
+    "none": "No Shield",
+    "fighter": "Fighter's Shield",
+    "fire": "Fire Shield",
+    "mirror": "Mirror Shield"
+  },
+  "Gloves": {
+    "none": "No Gloves",
+    "power": "Power Glove",
+    "titan": "Titan's Mitt"
+  }
+}

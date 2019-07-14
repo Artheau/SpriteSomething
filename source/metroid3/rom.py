@@ -5,13 +5,11 @@
 #includes routines that load the rom and apply bugfixes
 #inherits from the generic romhandler
 
-
 if __name__ == "__main__":
 	raise AssertionError(f"Called main() on utility library {__file__}")
 
 import enum
 from source.romhandler import RomHandlerParent
-
 
 #enumeration for the suit types
 class SuitType(enum.Enum):
@@ -42,14 +40,12 @@ class PaletteType(enum.Enum):
 	INTRO_SHIP = enum.auto()         #ship while flying to planet Zebes
 	OUTRO_SHIP = enum.auto()         #ship while escaping from Zebes at the end
 
-
 class RomHandler(RomHandlerParent):
 	def __init__(self, filename):
 		super().__init__(filename)      #do the usual stuff
 
 		self._apply_bugfixes()
 		self._apply_improvements()
-
 
 	def get_pose_data(self,animation,pose,port_frame=0,upper=True,lower=True):
 		tilemaps = self._get_pose_tilemaps(animation,pose,upper=upper,lower=lower)
@@ -63,7 +59,6 @@ class RomHandler(RomHandlerParent):
 				DMA_writes[gun_tile] = gun_DMA       #join the DMA info at the end, as it overwrites the normal DMA
 
 		return tilemaps, DMA_writes, duration
-
 
 	def get_default_vram_data(self, equipped_weapon = "standard"):
 		#go in and get the data that is by default loaded into the VRAM.
@@ -90,7 +85,6 @@ class RomHandler(RomHandlerParent):
 
 		return DMA_writes
 
-
 	def get_pose_control_data(self,animation,pose):
 		#similar to get_pose_duration, except that this returns a list containing the pose control code
 		# and its accompanying arguments in a list
@@ -106,7 +100,6 @@ class RomHandler(RomHandlerParent):
 			return self.read_from_snes_address(duration_list_location+pose, "1211")    #one word and 2 byte arguments
 		else:
 			return [control_code]
-
 
 	def get_gun_data(self, animation, pose, frame=0x08):
 		#frame is used to tell the code how far the gun port is into the opening process
@@ -139,7 +132,7 @@ class RomHandler(RomHandlerParent):
 			#now what is left is a list of xy pairs.  we can just grab what we need.
 			x_position, y_position = self.read_from_snes_address(cannon_position_pointer + 2*(pose+1), "11")
 
-			
+
 			level_of_opening = min(2, frame//4)
 
 			tile, palette, gun_tile, gun_DMA = self.get_minimal_gun_data(direction, level_of_opening)
@@ -168,7 +161,6 @@ class RomHandler(RomHandlerParent):
 		gun_DMA = self.read_from_snes_address(DMA_pointer, "1"*0x20)
 
 		return tile, palette, gun_tile, gun_DMA
-
 
 	def get_death_data(self, pose, facing='left', suit=SuitType.POWER):
 		#get tilemap
@@ -205,15 +197,14 @@ class RomHandler(RomHandlerParent):
 			DMA_writes[dest_tile] = self.read_from_snes_address(source_data, "1"*write_size)
 
 		#how long to hold this pose, and an index to which palette to use
-		duration, palette_index = self.read_from_snes_address(0x9BB823 + 2*pose, "11")
+		duration, palette_index = self.read_from_snes_address(0x9BB823 + 2*pose, "11") #FIXME: palette_index unused variable
 
 		return tilemaps[::-1], DMA_writes, duration
 
-
-
 	def get_file_select_dma_data(self):
-		return {0x00: self.read_from_snes_address(0xB6C000, "1"*0x2000)}
-
+		#classically, the file select DMA data is located at $B6:C000.  However, many hacks relocate this to make more room for pause menu graphics.
+		file_select_data_location = self.read_from_snes_address(0x818E34, 3)
+		return {0x00: self.read_from_snes_address(file_select_data_location, "1"*0x2000)}
 
 	def get_file_select_tilemaps(self, item):
 		#For now, I have just coded these up by hand because it does not seem worth it to extract this information dynamically
@@ -263,7 +254,7 @@ class RomHandler(RomHandlerParent):
 		#returns a list.  Each element of the list is a tuple, where the first entry is the amount of time that the palette
 		# should display for (here $00 is a special case for static palettes).  The second entry is the 555 palette data.
 
-		PALETTE_READ_SIZE = "2"*0x10
+		PALETTE_READ_SIZE = "2"*0x10 #FIXME: unused variable
 
 		if base_type == PaletteType.STANDARD:
 			if suit_type == SuitType.POWER:
@@ -501,10 +492,8 @@ class RomHandler(RomHandlerParent):
 		skip_amount = 0x22 if add_transparency else 0x24
 		return [self._get_timed_palette(snes_address + skip_amount*i, add_transparency=add_transparency) for i in range(num_palettes)]
 
-
 	def _get_raw_palette(self,snes_address):
 		return self.read_from_snes_address(snes_address, "2"*0x10)
-
 
 	def _get_pose_tilemaps(self,animation,pose, upper=True, lower=True):
 		lower_tilemaps = self._get_pose_tilemaps_from_addr(0x92945D, animation, pose)
@@ -524,7 +513,6 @@ class RomHandler(RomHandlerParent):
 		#the tiles are rendered in this specific order: backwards lower, backwards upper
 		return (lower_tilemaps[::-1] if lower else []) + stupid_tile_tilemap + (upper_tilemaps[::-1] if upper else [])
 
-
 	def _get_pose_tilemaps_from_addr(self, base_addr, animation, pose):
 		#get the pointer to the list of pose pointers (in disassembly: get P??_UT or P??_LT)
 		animation_all_poses_index = self.read_from_snes_address(base_addr + 2*animation, 2)
@@ -537,7 +525,6 @@ class RomHandler(RomHandlerParent):
 			num_tilemaps = self.read_from_snes_address(pose_tilemaps_pointer, 2)
 		#and now get the tilemaps!  They start right after the word specifying their number
 		return [self.read_from_snes_address(pose_tilemaps_pointer + 2 + 5*i, "11111") for i in range(num_tilemaps)]
-
 
 	def _get_dma_data(self,animation,pose):
 		#get the pointer to the big list of table indices (in disassembly: get AFP_T??)
@@ -563,16 +550,13 @@ class RomHandler(RomHandlerParent):
 
 		return DMA_writes
 
-
 	def _get_pose_duration(self,animation, pose):
 		#get the duration list pointer (FD_?? in disassembly)
 		duration_list_location = self._get_duration_list_location(animation)
 		return self.read_from_snes_address(duration_list_location+pose,1)
 
-
 	def _get_duration_list_location(self, animation):
 		return 0x910000 + self.read_from_snes_address(0x91B010 + 2* animation,2)
-
 
 	def _apply_improvements(self):
 		#these are not mandatory for the animation viewer to work, but they are general quality of life improvements
@@ -637,20 +621,19 @@ class RomHandler(RomHandlerParent):
 		'''
 		;CBA5
 		XY_P49:     ;49:;Moonwalk, facing left
-		DB $02, $01 
-		DB $F1, $FD, $F1, $FC, $F1, $FC, $F1, $FD, $F1, $FC, $F1, $FC 
+		DB $02, $01
+		DB $F1, $FD, $F1, $FC, $F1, $FC, $F1, $FD, $F1, $FC, $F1, $FC
 
 		;CBB3
 		XY_P4A:     ;4A:;Moonwalk, facing right
-		DB $07, $01 
-		DB $07, $FD, $07, $FC, $07, $FC, $07, $FD, $07, $FC, $07, $FC 
+		DB $07, $01
+		DB $07, $FD, $07, $FC, $07, $FC, $07, $FD, $07, $FC, $07, $FC
 		'''
 		#in this case the cannon was actually placed onto the gun port backwards...
 		self._apply_single_fix_to_snes_address(0x90CBA5,[0x02,0x01,0xF1,0xFD,0xF1,0xFC,0xF1,0xFC,0xF1,0xFD,0xF1,0xFC,0xF1,0xFC],
 														[0x07,0x01,0xED,0xFD,0xED,0xFC,0xED,0xFC,0xED,0xFD,0xED,0xFC,0xED,0xFC], "1"*14)
 		self._apply_single_fix_to_snes_address(0x90CBB3,[0x07,0x01,0x07,0xFD,0x07,0xFC,0x07,0xFC,0x07,0xFD,0x07,0xFC,0x07,0xFC],
 														[0x02,0x01,0x0B,0xFD,0x0B,0xFC,0x0B,0xFC,0x0B,0xFD,0x0B,0xFC,0x0B,0xFC], "1"*14)
-
 
 	def _apply_bugfixes(self):
 		#these are significant typos that reference bad palettes or similar, and would raise assertion errors in any clean code
