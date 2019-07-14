@@ -208,42 +208,48 @@ class FreeSpace():
 
 def write_dma_data(samus,rom):
 	if rom._type.name == "EXHIROM":     #combo rom
-		#until my hand is slapped I am going to just take up all of the lower halves of banks 0x44-0x4B and 0x54-0x5B
-		freespace = FreeSpace([(bank * 0x10000,bank * 0x10000 + 0x8000) for bank in itertools.chain(range(0x44,0x4C),range(0x54,0x5B))])
+		#until my hand is slapped I am going to just take up all of the lower halves of banks 0x44-0x4B and 0x54-0x5A
+		freespace = FreeSpace([(bank * 0x10000,bank * 0x10000 + 0x8000) for bank in itertools.chain(range(0x44,0x4C),range(0x54,0x5A))])
 		#the death DMA data needs to all be in the same bank
-		death_freespace = FreeSpace([(0x5B0000,0x5B8000)])
+		death_freespace = FreeSpace([(0x5A0000,0x5A8000)])
 	elif rom._type.name == "EXLOROM":
 		#this is untested.  In theory works for oversized ROMs.  If not, please submit a bug report so that it can be fixed
 		if rom.get_size_in_MB() >= 8.0:   #use banks $73-$7D
-			freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in itertools.chain(range(0x9C,0xA0),range(0x73,0x7D))] + [(0x9B8200,0x9B9400)])
+			freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in itertools.chain(range(0x9C,0xA0),range(0x73,0x7D))])
 			death_freespace = FreeSpace([(0x7D8000, 0x7E0000)])
 		elif rom.get_size_in_MB() >= 6.0:   #use banks $35-$3F
-			freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in itertools.chain(range(0x9C,0xA0),range(0x35,0x3F))] + [(0x9B8200,0x9B9400)])
+			freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in itertools.chain(range(0x9C,0xA0),range(0x35,0x3F))])
 			death_freespace = FreeSpace([(0x3F8000, 0x400000)])
 		else:
 			raise AssertionError(f"Could not recognize size of ExLoRom: {rom.get_size_in_MB()}")
 	else:     #lorom: use banks $F5-$FF
 		#we would like this to be as compatible with ROM hacks as possible, so that hackers can use this program to add new graphics to their hacks
-		#so we will first use the original graphic space, and then work backwards from the end of the rom, and then use the death space from $9B
-		freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in itertools.chain(range(0x9C,0xA0),range(0xF5,0xFF))] + [(0x9B8200,0x9B9400)])
+		#so we will first use the original graphic space, and then work backwards from the end of the rom
+		freespace = FreeSpace([(bank * 0x10000 + 0x8000,bank * 0x10000 + 0x10000) for bank in itertools.chain(range(0x9C,0xA0),range(0xF5,0xFF))])
 		#the death DMA data needs to all be in the same bank (here placed in $FF)
 		death_freespace = FreeSpace([(0xFF8000, 0x1000000)])
 
 	DMA_dict = {}  #have to keep track of where we put all this stuff so that we can point to it afterwards
 
+
+	#check to make sure "dma_sequence" in layout.json contains all the needed keys
 	for image_name in samus.layout.data["images"]:
-		if image_name[:6] in ["palett","file_s","gun_po","death_"]:  #these are special cases which will go in other parts of memory
-			pass
-		else:
-			DMA_data = get_raw_pose(samus, image_name)
+		if image_name not in samus.layout.data["dma_sequence"]:
+			if image_name[:6] in ["palett","file_s","gun_po","death_"]:  #these are special cases which will go in other parts of memory
+				pass
+			else:
+				raise AssertionError(f"Error in Samus layout.json: {image_name} not in dma_sequence key")
 
-			size = len(DMA_data)
+	for image_name in samus.layout.data["dma_sequence"]:
+		DMA_data = get_raw_pose(samus, image_name)
 
-			address_to_write = freespace.get(size)
+		size = len(DMA_data)
 
-			rom.bulk_write_to_snes_address(address_to_write,DMA_data,size)
+		address_to_write = freespace.get(size)
 
-			DMA_dict[image_name] = (address_to_write, size)
+		rom.bulk_write_to_snes_address(address_to_write,DMA_data,size)
+
+		DMA_dict[image_name] = (address_to_write, size)
 
 	death_image_left = compile_death_image("left",samus,rom)
 	death_image_right = compile_death_image("right",samus,rom)
