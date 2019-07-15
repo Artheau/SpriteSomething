@@ -21,6 +21,7 @@ class SpriteParent():
 	def __init__(self, filename, manifest_dict, my_subpath):
 		self.classic_name = manifest_dict["name"]    #e.g. "Samus" or "Link"
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
+		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
 		self.layout = layoutlib.Layout(common.get_resource("layout.json",subdir=self.resource_subpath))
 		with open(common.get_resource("animations.json",subdir=self.resource_subpath)) as file:
@@ -92,6 +93,28 @@ class SpriteParent():
 			pixel_data_length = int.from_bytes(data[13:15], byteorder='little', signed=False)
 			palette_data_offset = int.from_bytes(data[15:19], byteorder='little', signed=False)
 			palette_data_length = int.from_bytes(data[19:21], byteorder='little', signed=False)
+			i = 29
+			'''
+			 4 (header) +
+			 1 (version) +
+			 4 (checksum) +
+			 4 (sprite data offset) +
+			 2 (sprite data size) +
+			 4 (pal data offset) +
+			 2 (pal data size) +
+			 2 (sprite type) +
+			 6 (reserved)
+			==
+			29 (start of metadata)
+			'''
+			for key in self.metadata.keys():
+				str_bytes = ""
+				endianness = "big" if key == "author.name-short" else "little"
+				while(not int.from_bytes(data[i:i+2], byteorder=endianness, signed=False) == 0):
+					str_bytes += hex(int.from_bytes(data[i:i+2], byteorder=endianness, signed=False))[2:]
+					i += 2
+				i += 2
+				self.metadata[key] = bytearray.fromhex(str_bytes).decode()
 			pixel_data = data[pixel_data_offset:pixel_data_offset+pixel_data_length]
 			palette_data = data[palette_data_offset:palette_data_offset+palette_data_length]
 			self.import_from_binary_data(pixel_data,palette_data)
@@ -102,10 +125,12 @@ class SpriteParent():
 		PANEL_HEIGHT = 64
 		metadata_section = tk.Frame(parent, name="metadata_section")
 		row = 0
-		for label in [fish.translate("meta","sprite.name",os.path.join("meta")),fish.translate("meta","author.name",os.path.join("meta")),fish.translate("meta","author.name-short",os.path.join("meta"))]:
+		for key in self.metadata.keys():
+			label = fish.translate("meta",key,os.path.join("meta"))
 			metadata_label = tk.Label(metadata_section, text=label, name=label.lower().replace(' ', '_'))
 			metadata_label.grid(row=row,column=1)
 			metadata_input = tk.Entry(metadata_section, name=label.lower().replace(' ', '_') + "_input")
+			metadata_input.insert(0,self.metadata[key])
 			metadata_input.grid(row=row,column=2)
 			row += 1
 		parent.add(metadata_section,minsize=PANEL_HEIGHT)
