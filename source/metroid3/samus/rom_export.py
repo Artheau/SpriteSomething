@@ -251,8 +251,8 @@ def write_dma_data(samus,rom):
 
 		DMA_dict[image_name] = (address_to_write, size)
 
-	death_image_left = compile_death_image("left",samus,rom)
-	death_image_right = compile_death_image("right",samus,rom)
+	death_image_left = compile_death_image("left",samus)
+	death_image_right = compile_death_image("right",samus)
 
 	death_DMA_loc = death_freespace.get(0)
 	left_dest = death_freespace.get(0x4000)
@@ -265,7 +265,7 @@ def write_dma_data(samus,rom):
 
 	return DMA_dict, death_DMA_loc, True
 
-def compile_death_image(direction,samus,rom):
+def compile_death_image(direction,samus):
 	#the death DMA are special because they have to all be loaded at once as one image
 	death_image = Image.new("P",(128,256),0)
 	#bodies

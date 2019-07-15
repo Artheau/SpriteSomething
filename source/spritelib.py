@@ -55,6 +55,9 @@ class SpriteParent():
 		#return the injected ROM
 		raise AssertionError("called export_to_ROM() on Sprite base class")
 
+	def export_sprite_as_rdc(self, rdc_file):
+		raise AssertionError("called export_sprite_as_rdc() on Sprite base class")
+
 	def get_current_palette(self, palette_type, default_range):
 		#in most cases the child class will override this in order to provide functionality to things like spiffy buttons
 		# and to implement dynamic palettes by leveraging self.frame_getter() to find the frame number
