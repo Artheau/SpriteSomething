@@ -1,5 +1,8 @@
 import importlib
 import itertools
+import json
+import os
+import urllib.request
 from PIL import Image
 from source import common
 from source import widgetlib
@@ -11,6 +14,7 @@ class Sprite(SpriteParent):
 		super().__init__(filename, manifest_dict, my_subpath)
 
 		self.plugins = [
+			("Download Official Sprites",self.get_alttpr_sprites),
 			("Sheet Trawler",None),
 			("Tracker Images",None)
 		]
@@ -138,3 +142,22 @@ class Sprite(SpriteParent):
 			return super().get_current_palette(palette_type, default_range)
 
 		return [self.master_palette[i] for i in palette_indices]
+
+	def get_alttpr_sprites(self):
+		success = False
+		official = os.path.join('.',"resources","zelda3","link","official")
+		if not os.path.exists(official):
+			os.makedirs(official)
+		alttpr_sprites_filename = "http://alttpr.com/sprites"
+		alttpr_sprites_req = urllib.request.urlopen(alttpr_sprites_filename)
+		alttpr_sprites = json.loads(alttpr_sprites_req.read().decode("utf-8"))
+		for sprite in alttpr_sprites:
+			sprite_data_req = urllib.request.urlopen(sprite["file"])
+			sprite_data = sprite_data_req.read()
+			sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]
+			sprite_destination = os.path.join(official,sprite_filename)
+			if not os.path.exists(sprite_destination):
+				with open(sprite_destination, "wb") as g:
+					g.write(sprite_data)
+					success = True
+		return success
