@@ -273,24 +273,23 @@ def compile_death_image(direction,samus,rom):
 		this_image = samus.images[f"death_{direction}{i if i > 0 else ''}"]
 		death_image.paste(this_image,(32*(i%4),64*(i//4)))   #paste the body images over two rows
 
-	#pieces
-	death_vram_locations = [(0,128),(24,128),(56,128),(0,176)]
-	for i in range(4):
+	#pieces indexed 0,1,3,4
+	death_vram_locations = [(0,(0,128)),(1,(24,128)),(3,(0,176)),(4,(56,128))]
+	for i,dest in death_vram_locations:
 		this_image = samus.images[f"death_{direction}_pieces{i if i > 0 else ''}"]
-		death_image.paste(this_image,death_vram_locations[i])
+		death_image.paste(this_image,dest)
 
-	#have to really cram this last one in here, shoehorn style, but it will be worth it...right?  I tell myself this.
-	this_image = samus.images[f"death_{direction}_pieces4"]
-	top_left_corner_image = this_image.crop((0,0,32,24))
-	big_wedge = this_image.crop((32,0,40,16))
-	small_wedge = this_image.crop((32,16,40,24))
-	top_right_corner_image = this_image.crop((40,0,72,24))
-	rest_of_image = this_image.crop((0,24,128,88))
-	death_image.paste(top_left_corner_image,(96,128))
-	death_image.paste(big_wedge,(96,152))
-	death_image.paste(small_wedge,(104,152))
-	death_image.paste(top_right_corner_image,(96,168))
-	death_image.paste(rest_of_image,(56,192))
+	#have to really puzzle piece2 in there
+	this_image = samus.images[f"death_{direction}_pieces2"]
+	for src,dest in [(( 0, 0,40,32),(56,216)),   #top 5x4
+					 (( 0,32,32,64),(96,216)),   #left bottom 4x4
+					 ((32,32,40,40),(56,248)),
+					 ((32,40,40,48),(64,248)),
+					 ((32,48,40,56),(72,248)),
+					 ((32,56,40,64),(80,248)),   #right bottom pieces 4x 1x1
+					]:
+		piece_image = this_image.crop(src)
+		death_image.paste(piece_image, dest)
 
 	return death_image
 
@@ -593,110 +592,109 @@ def get_death_tilemap(direction, pose):
 	tilemap = []
 
 	#start with the exploding pieces
-	pieces_palette = 0x29  #normally 0x28, but the last bit here goes to the next VRAM page to grab tiles
+	#some tiles overlap. this is intended, and isn't a big problem for death poses
 	if pose == 1:  #[-9,15,-25,23]
 		x_min = -9 if direction == "left" else -15
 		y_min = -25
-		for x,y,size,index in [(x_min   ,y_min   ,0xC2,0x00),
-							   (x_min   ,y_min+16,0xC2,0x20),
-							   (x_min   ,y_min+32,0xC2,0x40),
-							   (x_min+8 ,y_min   ,0xC2,0x01),  #yes I know they overlap
-							   (x_min+8 ,y_min+16,0xC2,0x21),
-							   (x_min+8 ,y_min+32,0xC2,0x41),
-							   ]:
-			tilemap.extend([x%0x100, size+(1 if x<0 else 0), y%0x100, index, pieces_palette])
+		tile_manifest = [(x_min   ,y_min   ,0xC2,0x00),
+						 (x_min   ,y_min+16,0xC2,0x20),
+						 (x_min   ,y_min+32,0xC2,0x40),
+						 (x_min+8 ,y_min   ,0xC2,0x01),
+						 (x_min+8 ,y_min+16,0xC2,0x21),
+						 (x_min+8 ,y_min+32,0xC2,0x41),
+						]
 	elif pose == 2:  #[-12,20,-25,23]
 		x_min = -12 if direction == "left" else -20
 		y_min = -25
-		for x,y,size,index in [(x_min   ,y_min   ,0xC2,0x03),
-							   (x_min   ,y_min+16,0xC2,0x23),
-							   (x_min   ,y_min+32,0xC2,0x43),
-							   (x_min+16,y_min   ,0xC2,0x05),
-							   (x_min+16,y_min+16,0xC2,0x25),
-							   (x_min+16,y_min+32,0xC2,0x45),
-							   ]:
-			tilemap.extend([x%0x100, size+(1 if x<0 else 0), y%0x100, index, pieces_palette])
+		tile_manifest = [(x_min   ,y_min   ,0xC2,0x03),
+						 (x_min   ,y_min+16,0xC2,0x23),
+						 (x_min   ,y_min+32,0xC2,0x43),
+						 (x_min+16,y_min   ,0xC2,0x05),
+						 (x_min+16,y_min+16,0xC2,0x25),
+						 (x_min+16,y_min+32,0xC2,0x45),
+						]
 	elif pose == 3:  #[-18,22,-35,29]
 		x_min = -18 if direction == "left" else -22
 		y_min = -35
-		for x,y,size,index in [(x_min   ,y_min   ,0xC2,0x07),
-							   (x_min   ,y_min+16,0xC2,0x27),
-							   (x_min   ,y_min+32,0xC2,0x47),
-							   (x_min   ,y_min+48,0xC2,0x67),
-							   (x_min+16,y_min   ,0xC2,0x09),
-							   (x_min+16,y_min+16,0xC2,0x29),
-							   (x_min+16,y_min+32,0xC2,0x49),
-							   (x_min+16,y_min+48,0xC2,0x69),
-							   (x_min+24,y_min   ,0xC2,0x0A),
-							   (x_min+24,y_min+16,0xC2,0x2A),
-							   (x_min+24,y_min+32,0xC2,0x4A),
-							   (x_min+24,y_min+48,0xC2,0x6A),
-							   ]:
-			tilemap.extend([x%0x100, size+(1 if x<0 else 0), y%0x100, index, pieces_palette])
+		tile_manifest = [(x_min   ,y_min   ,0xC2,0xB7),
+						 (x_min   ,y_min+16,0xC2,0xD7),
+						 (x_min+16,y_min   ,0xC2,0xB9),
+						 (x_min+16,y_min+16,0xC2,0xD9),
+						 (x_min+24,y_min   ,0xC2,0xBA),
+						 (x_min+24,y_min+16,0xC2,0xDA),   #top
+
+						 (x_min   ,y_min+32,0xC2,0xBC),
+						 (x_min   ,y_min+48,0xC2,0xDC),
+						 (x_min+16,y_min+32,0xC2,0xBE),
+						 (x_min+16,y_min+48,0xC2,0xDE),   #left bottom
+
+						 (x_min+32,y_min+32,0x00,0xF7),
+						 (x_min+32,y_min+40,0x00,0xF8),
+						 (x_min+32,y_min+48,0x00,0xF9),
+						 (x_min+32,y_min+56,0x00,0xFA),   #right bottom pieces
+						]
 	elif pose == 4:   #[-26,30,-42,38]
 		x_min = -26 if direction == "left" else -30
 		y_min = -42
-		for x,y,size,index in [(x_min   ,y_min   ,0xC2,0x60),
-							   (x_min   ,y_min+16,0xC2,0x80),
-							   (x_min   ,y_min+32,0xC2,0xA0),
-							   (x_min   ,y_min+48,0xC2,0xC0),
-							   (x_min   ,y_min+64,0xC2,0xE0),
-							   (x_min+16,y_min   ,0xC2,0x62),
-							   (x_min+16,y_min+16,0xC2,0x82),
-							   (x_min+16,y_min+32,0xC2,0xA2),
-							   (x_min+16,y_min+48,0xC2,0xC2),
-							   (x_min+16,y_min+64,0xC2,0xE2),
-							   (x_min+32,y_min   ,0xC2,0x64),
-							   (x_min+32,y_min+16,0xC2,0x84),
-							   (x_min+32,y_min+32,0xC2,0xA4),
-							   (x_min+32,y_min+48,0xC2,0xC4),
-							   (x_min+32,y_min+64,0xC2,0xE4),
-							   (x_min+40,y_min   ,0xC2,0x65),
-							   (x_min+40,y_min+16,0xC2,0x85),
-							   (x_min+40,y_min+32,0xC2,0xA5),
-							   (x_min+40,y_min+48,0xC2,0xC5),
-							   (x_min+40,y_min+64,0xC2,0xE5),
-							   ]:
-			tilemap.extend([x%0x100, size+(1 if x<0 else 0), y%0x100, index, pieces_palette])
+		tile_manifest = [(x_min   ,y_min   ,0xC2,0x60),
+						 (x_min   ,y_min+16,0xC2,0x80),
+						 (x_min   ,y_min+32,0xC2,0xA0),
+						 (x_min   ,y_min+48,0xC2,0xC0),
+						 (x_min   ,y_min+64,0xC2,0xE0),
+						 (x_min+16,y_min   ,0xC2,0x62),
+						 (x_min+16,y_min+16,0xC2,0x82),
+						 (x_min+16,y_min+32,0xC2,0xA2),
+						 (x_min+16,y_min+48,0xC2,0xC2),
+						 (x_min+16,y_min+64,0xC2,0xE2),
+						 (x_min+32,y_min   ,0xC2,0x64),
+						 (x_min+32,y_min+16,0xC2,0x84),
+						 (x_min+32,y_min+32,0xC2,0xA4),
+						 (x_min+32,y_min+48,0xC2,0xC4),
+						 (x_min+32,y_min+64,0xC2,0xE4),
+						 (x_min+40,y_min   ,0xC2,0x65),
+						 (x_min+40,y_min+16,0xC2,0x85),
+						 (x_min+40,y_min+32,0xC2,0xA5),
+						 (x_min+40,y_min+48,0xC2,0xC5),
+						 (x_min+40,y_min+64,0xC2,0xE5),
+						]
 	elif pose == 5:   #[-36,36,-45,43]
 		x_min = -36 if direction == "left" else -36
 		y_min = -45
-		for x,y,size,index in [(x_min   ,y_min   ,0xC2,0x0C),
-							   (x_min   ,y_min+8 ,0xC2,0x1C),
-							   (x_min+16,y_min   ,0xC2,0x0E),
-							   (x_min+16,y_min+8 ,0xC2,0x1E),   #top left corner
+		tile_manifest = [(x_min   ,y_min   ,0xC2,0x07),
+						 (x_min   ,y_min+16,0xC2,0x27),
+						 (x_min   ,y_min+32,0xC2,0x47),
+						 (x_min   ,y_min+48,0xC2,0x67),
+						 (x_min   ,y_min+64,0xC2,0x87),
+						 (x_min   ,y_min+72,0xC2,0x97),
+						 (x_min+16,y_min   ,0xC2,0x09),
+						 (x_min+16,y_min+16,0xC2,0x29),
+						 (x_min+16,y_min+32,0xC2,0x49),
+						 (x_min+16,y_min+48,0xC2,0x69),
+						 (x_min+16,y_min+64,0xC2,0x89),
+						 (x_min+16,y_min+72,0xC2,0x99),
+						 (x_min+32,y_min   ,0xC2,0x0B),
+						 (x_min+32,y_min+16,0xC2,0x2B),
+						 (x_min+32,y_min+32,0xC2,0x4B),
+						 (x_min+32,y_min+48,0xC2,0x6B),
+						 (x_min+32,y_min+64,0xC2,0x8B),
+						 (x_min+32,y_min+72,0xC2,0x9B),
+						 (x_min+48,y_min   ,0xC2,0x0D),
+						 (x_min+48,y_min+16,0xC2,0x2D),
+						 (x_min+48,y_min+32,0xC2,0x4D),
+						 (x_min+48,y_min+48,0xC2,0x6D),
+						 (x_min+48,y_min+64,0xC2,0x8D),
+						 (x_min+48,y_min+72,0xC2,0x9D),
+						 (x_min+56,y_min   ,0xC2,0x0E),
+						 (x_min+56,y_min+16,0xC2,0x2E),
+						 (x_min+56,y_min+32,0xC2,0x4E),
+						 (x_min+56,y_min+48,0xC2,0x6E),
+						 (x_min+56,y_min+64,0xC2,0x8E),
+						 (x_min+56,y_min+72,0xC2,0x9E),
+						]
 
-							   (x_min+32,y_min   ,0x00,0x3C),
-							   (x_min+32,y_min+8 ,0x00,0x4C),   #big wedge
-
-							   (x_min+32,y_min+16,0x00,0x3D),   #small wedge
-
-							   (x_min+40,y_min   ,0xC2,0x5C),
-							   (x_min+40,y_min+8 ,0xC2,0x6C),
-							   (x_min+56,y_min   ,0xC2,0x5E),
-							   (x_min+56,y_min+8 ,0xC2,0x6E),   #top right corner
-
-							   (x_min   ,y_min+24,0xC2,0x87),
-							   (x_min   ,y_min+40,0xC2,0xA7),
-							   (x_min   ,y_min+56,0xC2,0xC7),
-							   (x_min   ,y_min+72,0xC2,0xE7),
-							   (x_min+16,y_min+24,0xC2,0x89),
-							   (x_min+16,y_min+40,0xC2,0xA9),
-							   (x_min+16,y_min+56,0xC2,0xC9),
-							   (x_min+16,y_min+72,0xC2,0xE9),
-							   (x_min+32,y_min+24,0xC2,0x8B),
-							   (x_min+32,y_min+40,0xC2,0xAB),
-							   (x_min+32,y_min+56,0xC2,0xCB),
-							   (x_min+32,y_min+72,0xC2,0xEB),
-							   (x_min+48,y_min+24,0xC2,0x8D),
-							   (x_min+48,y_min+40,0xC2,0xAD),
-							   (x_min+48,y_min+56,0xC2,0xCD),
-							   (x_min+48,y_min+72,0xC2,0xED),
-							   (x_min+56,y_min+24,0xC2,0x8E),
-							   (x_min+56,y_min+40,0xC2,0xAE),
-							   (x_min+56,y_min+56,0xC2,0xCE),
-							   (x_min+56,y_min+72,0xC2,0xEE),   #rest of image
-							  ]:
+	pieces_palette = 0x29  #normally 0x28, but the last bit here goes to the next VRAM page to grab tiles
+	if pose in range(1,6):
+		for x,y,size,index in tile_manifest:
 			tilemap.extend([x%0x100, size+(1 if x<0 else 0), y%0x100, index, pieces_palette])
 
 	#now add the body
