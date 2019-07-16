@@ -53,6 +53,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			"file.save": "./",
 			"export.dest": "./",
 			"export.source": "./",
+			"export.sprite-as-rdc": "./",
 			"export.frame-as-png": "./",
 			"export.animation-as-gif": "./",
 			"export.animation-as-hcollage": "./",
@@ -165,6 +166,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 													(fish.translate("menu","export.inject",os.path.join("meta")),"inject",self.inject_into_ROM),
 													(fish.translate("menu","export.inject-new",os.path.join("meta")),"inject-new",self.copy_into_ROM),
 													(fish.translate("menu","export.inject-bulk",os.path.join("meta")),None,self.inject_into_ROM_bulk),
+													(None,None,None),
+													(fish.translate("menu","export.sprite-as-rdc",os.path.join("meta")),None,self.export_sprite_as_rdc),
 													(None,None,None),
 													(fish.translate("menu","export.frame-as-png",os.path.join("meta")),None,self.export_frame_as_png),
 													(fish.translate("menu","export.animation-as-gif",os.path.join("meta")),None,None),#self.export_animation_as_gif),
@@ -554,6 +557,18 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def inject_into_ROM_bulk(self):
 		self.copy_into_ROM_bulk(inject=True)
+
+	def export_sprite_as_rdc(self):
+		dest_filename = filedialog.asksaveasfilename(
+			title="Save RDC As...",
+			defaultextension=".rdc",
+			filetypes=[("RDC Files","*.rdc")],
+			initialdir=self.working_dirs["export.sprite-as-rdc"])
+		if dest_filename:
+			with open(dest_filename, "wb") as rdc_file:
+				self.sprite.export_sprite_as_rdc(rdc_file)
+			self.working_dirs["export.sprite-as-rdc"] = dest_filename[:dest_filename.rfind('/')]
+			messagebox.showinfo("Export success",f"Saved RDC as {dest_filename}")
 
 	def export_frame_as_png(self):
 		# Save a ZSPR or PNG.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default

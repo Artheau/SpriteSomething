@@ -3,7 +3,7 @@ import itertools
 from source.spritelib import SpriteParent
 from source import common
 from source import widgetlib
-from . import rom_import, rom_export
+from . import rom_import, rom_export, rdc_export
 
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
@@ -26,6 +26,10 @@ class Sprite(SpriteParent):
 	def inject_into_ROM(self, rom):
 		#The history of the Samus export code is a story I will tell to my grandchildren
 		return rom_export.rom_export(self, rom)
+
+	def export_sprite_as_rdc(self, rdc_file):
+		# Todo: wire up future author_name to the second argument
+		return rdc_export.rdc_export(self, None, rdc_file)
 
 	def get_colors_from_master(self, color_set):
 		#for internal class use.  For general use, call get_timed_palette()

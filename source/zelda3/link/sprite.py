@@ -8,6 +8,7 @@ from source import common
 from source import widgetlib
 from string import ascii_uppercase
 from source.spritelib import SpriteParent
+from . import rdc_export
 
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
@@ -82,6 +83,10 @@ class Sprite(SpriteParent):
 			rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
 
 		return rom
+
+	def export_sprite_as_rdc(self, rdc_file):
+		# Todo: wire up future author_name to the second argument
+		return rdc_export.rdc_export(self, None, rdc_file)
 
 	def get_spiffy_buttons(self, parent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
