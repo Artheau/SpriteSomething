@@ -1,30 +1,19 @@
 import itertools
-import struct
+import io
 from string import ascii_uppercase
-from source import common
+from source import common, rdc_format
+from source.rdc_format import BlockType, as_u16
 
 def rdc_export(sprite,author,rdc):
-	author = author.encode('utf8') if author else bytes()
-	header_format = b"RETRODATACONTAINER"
-	version = 0x01
+	rdc_format.create(author,rdc,(BlockType.LinkSprite,link_data(sprite)))
 
-	blocks = 1;
-	block_type = 0x01
-	block_offset = len(header_format) + 1 + 3 * 4 + len(author) + 1
+def link_data(sprite):
+	block = io.BytesIO()
 
-	rdc.write(header_format)
-	rdc.write(as_u8(version))
+	block.write(sprite_sheet(sprite))
+	block.write(palettes(sprite))
 
-	rdc.write(as_u32(blocks))
-	rdc.write(as_u32(block_type))
-	rdc.write(as_u32(block_offset))
-
-	rdc.write(author)
-	rdc.write(as_u8(0))
-
-	rdc.write(sprite_sheet(sprite))
-
-	rdc.write(palettes(sprite))
+	return block.getvalue()
 
 def sprite_sheet(sprite):	
 	upper = bytearray()
@@ -51,12 +40,3 @@ def palettes(sprite):
 	data.extend(itertools.chain.from_iterable([as_u16(colors_555[0x10*i+0x10]) for i in range(2)]))
 
 	return data
-
-def as_u8(value):
-	return struct.pack('B',value)
-
-def as_u16(value):
-	return struct.pack('<H',value)
-
-def as_u32(value):
-	return struct.pack('<L',value)

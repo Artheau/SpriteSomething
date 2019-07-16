@@ -1,35 +1,24 @@
 import itertools
-import struct
+import io
 from PIL import Image
-from source import common
+from source import common, rdc_format
+from source.rdc_format import BlockType, as_u16
 from . import rom_export
 
 def rdc_export(sprite,author,rdc):
-	author = author.encode('utf8') if author else bytes()
-	header_format = b"RETRODATACONTAINER"
-	version = 0x01
+	rdc_format.create(author,rdc,(BlockType.SamusSprite,samus_data(sprite)))
 
-	blocks = 1;
-	block_type = 0x04
-	block_offset = len(header_format) + 1 + 3 * 4 + len(author) + 1
+def samus_data(sprite):
+	block = io.BytesIO()
 
-	rdc.write(header_format)
-	rdc.write(as_u8(version))
+	block.write(dma_banks(sprite))
+	block.write(death_bank("left",sprite))
+	block.write(death_bank("right",sprite))
+	block.write(gun_port(sprite))
+	block.write(file_select(sprite))
+	block.write(palettes(sprite))
 
-	rdc.write(as_u32(blocks))
-	rdc.write(as_u32(block_type))
-	rdc.write(as_u32(block_offset))
-
-	rdc.write(author)
-	rdc.write(as_u8(0))
-
-	rdc.write(dma_banks(sprite))
-	rdc.write(death_bank("left",sprite))
-	rdc.write(death_bank("right",sprite))
-	rdc.write(gun_port(sprite))
-	rdc.write(file_select(sprite))
-
-	rdc.write(palettes(sprite))
+	return block.getvalue()
 
 def dma_banks(sprite):
 	return bytes(itertools.chain.from_iterable(rom_export.get_raw_pose(sprite,name) for name in sprite.layout.data["dma_sequence"]))
@@ -145,12 +134,3 @@ def palettes(sprite):
 			data.extend(itertools.chain.from_iterable([as_u16(c) for i in indices for c in colors_555[i]]))
 
 	return data
-
-def as_u8(value):
-	return struct.pack('B',value)
-
-def as_u16(value):
-	return struct.pack('<H',value)
-
-def as_u32(value):
-	return struct.pack('<L',value)
