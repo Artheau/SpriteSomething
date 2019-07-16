@@ -13,7 +13,7 @@ class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
 
-		self.plugins = [
+		self.plugins += [
 			("Download Official Sprites",self.get_alttpr_sprites),
 			("Sheet Trawler",None),
 			("Tracker Images",None)

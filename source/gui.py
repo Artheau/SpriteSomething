@@ -164,6 +164,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 											[
 													(fish.translate("menu","export.inject",os.path.join("meta")),"inject",self.inject_into_ROM),
 													(fish.translate("menu","export.inject-new",os.path.join("meta")),"inject-new",self.copy_into_ROM),
+													(fish.translate("menu","export.inject-bulk",os.path.join("meta")),None,self.inject_into_ROM_bulk),
 													(None,None,None),
 													(fish.translate("menu","export.frame-as-png",os.path.join("meta")),None,self.export_frame_as_png),
 													(fish.translate("menu","export.animation-as-gif",os.path.join("meta")),None,None),#self.export_animation_as_gif),
@@ -526,8 +527,33 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
 			messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 
+	def copy_into_ROM_bulk(self, inject=False):
+		source_filepath = None
+		if inject:
+			source_filepath = filedialog.askdirectory()
+		else:
+			raise AssertionError("Unsure if making copies fits this purpose well")
+
+		source_filenames = []
+		for r,d,f in os.walk(source_filepath):
+			for file in f:
+				_,file_extension = os.path.splitext(file)
+				if file_extension.lower() in ['.sfc','.smc']:
+					source_filenames.append(os.path.join(r,file))
+		for source_filename in source_filenames:
+			dest_filename = source_filename
+			rom = self.game.get_rom_from_filename(source_filename)
+			same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(source_filename)
+			is_zsm = "ZSM" in str(rom.get_name())
+			if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):
+				modified_rom = self.sprite.inject_into_ROM(rom)
+				modified_rom.save(dest_filename, overwrite=True)
+
 	def inject_into_ROM(self):
 		self.copy_into_ROM(inject=True)
+
+	def inject_into_ROM_bulk(self):
+		self.copy_into_ROM_bulk(inject=True)
 
 	def export_frame_as_png(self):
 		# Save a ZSPR or PNG.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default

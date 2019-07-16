@@ -13,7 +13,7 @@ class Sprite(SpriteParent):
 
 		self.overhead = False   #Samus is sideview, so only left/right direction buttons should show
 
-		# self.plugins = [
+		# self.plugins += [
 		# 	("File Select Preview",None),
 		# 	("Ship Preview",None)
 		# ]

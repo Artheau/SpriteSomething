@@ -87,7 +87,9 @@ class RomHandlerParent():
         elif self._type == RomType.EXHIROM and makeup_byte == 0x35:
             pass    #exhirom confirmed
         else:
-            raise AssertionError(f"Cannot recognize the makeup byte of this ROM: {hex(makeup_byte)}.")
+            #raise AssertionError(f"Cannot recognize the makeup byte of this ROM: {hex(makeup_byte)}.")
+            print(f"Cannot recognize the makeup byte of this ROM: {hex(makeup_byte)}.")
+            return None
 
         #information about onboard RAM/SRAM and enhancement chips lives here
         #rom_type_byte = self._read_from_internal_header(0x16, 1)
@@ -111,10 +113,6 @@ class RomHandlerParent():
 
     def get_size_in_MB(self):
         return self._rom_size/(8*self._MEGABIT)
-
-    def get_size_in_MB(self):
-        return self._rom_size/(8*self._MEGABIT)
-
 
     def read(self,addr,encoding):
         #expects a ROM address and an encoding
