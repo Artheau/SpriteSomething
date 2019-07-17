@@ -1,14 +1,10 @@
 import itertools
 import io
 from PIL import Image
-from source import common, rdc_format
-from source.rdc_format import BlockType, as_u16
+from source import common
 from . import rom_export
 
-def rdc_export(sprite,author,rdc):
-	rdc_format.create(author,rdc,(BlockType.SamusSprite,samus_data(sprite)))
-
-def samus_data(sprite):
+def get_raw_rdc_export_blocks(sprite):
 	block = io.BytesIO()
 
 	block.write(dma_banks(sprite))
@@ -18,7 +14,7 @@ def samus_data(sprite):
 	block.write(file_select(sprite))
 	block.write(palettes(sprite))
 
-	return block.getvalue()
+	return [block.getvalue()]
 
 def dma_banks(sprite):
 	return bytes(itertools.chain.from_iterable(rom_export.get_raw_pose(sprite,name) for name in sprite.layout.data["dma_sequence"]))
@@ -131,6 +127,6 @@ def palettes(sprite):
 		palettes = [pal for _,pal in palette_set(sprite.get_timed_palette(category,pose))]
 		for color_set,indices in data_sets:
 			colors_555 = [common.convert_to_555(color_set(pal)) for pal in palettes]
-			data.extend(itertools.chain.from_iterable([as_u16(c) for i in indices for c in colors_555[i]]))
+			data.extend(itertools.chain.from_iterable([common.as_u16(c) for i in indices for c in colors_555[i]]))
 
 	return data

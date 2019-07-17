@@ -13,6 +13,7 @@ class Sprite(SpriteParent):
 
 		self.overhead = False   #Samus is sideview, so only left/right direction buttons should show
 
+		#TODO: Make file select and ship be animations in the big list, or tie to the ship background
 		# self.plugins += [
 		# 	("File Select Preview",None),
 		# 	("Ship Preview",None)
@@ -27,9 +28,9 @@ class Sprite(SpriteParent):
 		#The history of the Samus export code is a story I will tell to my grandchildren
 		return rom_export.rom_export(self, rom)
 
-	def export_sprite_as_rdc(self, rdc_file):
-		# Todo: wire up future author_name to the second argument
-		return rdc_export.rdc_export(self, None, rdc_file)
+	def get_rdc_export_blocks(self):
+		SAMUS_EXPORT_BLOCK_TYPE = 4
+		return [(SAMUS_EXPORT_BLOCK_TYPE,block) for block in rdc_export.get_raw_rdc_export_blocks(self)]
 
 	def get_colors_from_master(self, color_set):
 		#for internal class use.  For general use, call get_timed_palette()

@@ -47,16 +47,13 @@ class SpriteParent():
 		#self.images, self.master_palette = ?, ?
 		raise AssertionError("called import_from_binary_data() on Sprite base class")
 
-	def save_as_ZSPR(self, filename):
-		#return True if the save was a success
-		raise AssertionError("called save_as_ZSPR() on Sprite base class")
-
 	def inject_into_ROM(self, rom):
 		#return the injected ROM
 		raise AssertionError("called export_to_ROM() on Sprite base class")
 
-	def export_sprite_as_rdc(self, rdc_file):
-		raise AssertionError("called export_sprite_as_rdc() on Sprite base class")
+	def get_rdc_export_blocks(self):
+		#return the binary blocks that are used to pack the RDC format
+		raise AssertionError("called get_sprite_export_blocks() on Sprite base class")
 
 	def get_current_palette(self, palette_type, default_range):
 		#in most cases the child class will override this in order to provide functionality to things like spiffy buttons
@@ -275,7 +272,7 @@ class SpriteParent():
 		elif file_extension.lower() == ".zspr":
 			return self.save_as_ZSPR(filename)
 		elif file_extension.lower() == ".rdc":
-			return self.export_sprite_as_rdc(filename)
+			return self.save_as_RDC(filename)
 		else:
 			tk.messagebox.showerror("ERROR", f"Did not recognize file type \"{file_extension}\"")
 			return False
@@ -284,6 +281,70 @@ class SpriteParent():
 		master_image = self.get_master_PNG_image()
 		master_image.save(filename)
 		return True
+
+	def save_as_ZSPR(self, filename):
+		#check to see if the functions exist (e.g. crashes hard if used on Samus)
+		#if hasattr(self, "get_binary_sprite_sheet") and hasattr(self, "get_binary_palettes"):
+		if False:   #commented out until it is finished
+			sprite_sheet = self.get_binary_sprite_sheet()
+			palettes = self.get_binary_palettes()
+			HEADER_STRING = b"ZSPR"
+			VERSION = 0x01
+			SPRITE_TYPE = 0x01   #this format has "1" for the player sprite
+			RESERVED_BYTES = b'\x00\x00\x00\x00\x00\x00'
+			UNICODE_NULL_CHAR = b'\x00\x00'
+			ASCII_NULL_CHAR = b'\x00'
+			with open(filename, "wb") as zspr_file:
+				zspr_file.write(HEADER_STRING)
+				zspr_file.write(common.as_u8(VERSION))
+				zspr_file.write(b"0000")   #TODO: checksum
+				zspr_file.write(b"0000")   #TODO: pointer to pixel data
+				zspr_file.write(common.as_u16(len(sprite_sheet)))
+				zspr_file.write(b"0000")   #TODO: pointer to palette data
+				zspr_file.write(common.as_u16(len(palettes)))
+				zspr_file.write(common.as_u8(SPRITE_TYPE))
+				zspr_file.write(RESERVED_BYTES)
+				zspr_file.write(self.metadata["sprite.name"].encode('utf-16'))  #TODO: little endian
+				zspr_file.write(UNICODE_NULL_CHAR)
+				zspr_file.write(self.metadata["author.name"].encode('utf-16'))  #TODO: little endian
+				zspr_file.write(UNICODE_NULL_CHAR)
+				zspr_file.write(self.metadata["author.name-short"].encode('ascii'))
+				zspr_file.write(ASCII_NULL_CHAR)
+				zspr_file.write(sprite_sheet)
+				zspr_file.write(palettes)
+			return True       #report success to caller
+		else:
+			return False      #report failure to caller
+
+	def save_as_RDC(self, filename):
+		raw_author_name = self.metadata["author.name-short"]
+		author = raw_author_name.encode('utf8') if raw_author_name else bytes()
+		HEADER_STRING = b"RETRODATACONTAINER"
+		VERSION = 0x01
+
+		blocks_with_type = self.get_rdc_export_blocks()
+		number_of_blocks = len(blocks_with_type)
+		
+		preample_length = len(HEADER_STRING) + 1
+		block_list_length = 4 + number_of_blocks * 8
+		author_field_length = len(author) + 1
+		block_offset = preample_length + block_list_length + author_field_length
+
+		with open(filename, "wb") as rdc_file:
+			rdc_file.write(HEADER_STRING)
+			rdc_file.write(common.as_u8(VERSION))
+			rdc_file.write(common.as_u32(number_of_blocks))
+			for block_type,block in blocks_with_type:
+				rdc_file.write(common.as_u32(block_type))
+				rdc_file.write(common.as_u32(block_offset))
+				block_offset += len(block)
+			rdc_file.write(author)
+			rdc_file.write(common.as_u8(0))
+
+			for _,block in blocks_with_type:
+				rdc_file.write(block)
+
+		return True   #indicate success to caller
 
 	def export_frame_as_PNG(self, filename):
 		#i = 0
@@ -369,3 +430,4 @@ class SpriteParent():
 		facing_group.add("right", "arrow-right.png", default=True)
 
 		return direction_buttons
+

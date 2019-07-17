@@ -2,13 +2,13 @@ import importlib
 import itertools
 import json
 import os
+import io
 import urllib.request
 from PIL import Image
 from source import common
 from source import widgetlib
 from string import ascii_uppercase
 from source.spritelib import SpriteParent
-from . import rdc_export
 
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
@@ -59,6 +59,13 @@ class Sprite(SpriteParent):
 					this_image.paste(pastable_tile,position)
 				self.images[image_name] = this_image
 
+	def get_rdc_export_blocks(self):
+		LINK_EXPORT_BLOCK_TYPE = 1
+		block = io.BytesIO()
+		block.write(self.get_binary_sprite_sheet())
+		block.write(self.get_binary_palettes())
+		return [(LINK_EXPORT_BLOCK_TYPE, block.getvalue())]
+
 	def inject_into_ROM(self, rom):
 		#should work for the combo rom, VT rando, and the (J) rom.  Not sure about the (U) rom...maybe?
 
@@ -83,10 +90,6 @@ class Sprite(SpriteParent):
 			rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
 
 		return rom
-
-	def export_sprite_as_rdc(self, rdc_file):
-		# Todo: wire up future author_name to the second argument
-		return rdc_export.rdc_export(self, None, rdc_file)
 
 	def get_spiffy_buttons(self, parent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
@@ -173,3 +176,30 @@ class Sprite(SpriteParent):
 			else:
 				print("    Skipping " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 		return success
+
+	def get_binary_sprite_sheet(self):	
+		top_half_of_rows = bytearray()
+		bottom_half_of_rows = bytearray()
+
+		# 28 rows, 8 columns
+		for image_name in [f"{row}{column}" for row in itertools.chain(ascii_uppercase, ["AA","AB"]) for column in range(8)]:
+			# AB7 holds the palette block so use null_block instead
+			image_name = image_name if image_name != "AB7" else "null_block"
+			raw_image = common.convert_to_4bpp(self.images[image_name],(0,0),(0,0,16,16),None)
+			top_half_of_rows += bytes(raw_image[:0x40])
+			bottom_half_of_rows += bytes(raw_image[0x40:])
+
+		return bytes(b for row_offset in range(0,len(top_half_of_rows),0x200) \
+					   for b in top_half_of_rows[row_offset:row_offset+0x200]+bottom_half_of_rows[row_offset:row_offset+0x200])
+
+	def get_binary_palettes(self):
+		raw_palette_data = bytearray()
+		colors_555 = common.convert_to_555(self.master_palette)
+
+		# Mail and bunny palettes
+		raw_palette_data.extend(itertools.chain.from_iterable([common.as_u16(c) for i in range(4) for c in colors_555[0x10*i+1:0x10*i+0x10]]))
+
+		# Glove colors
+		raw_palette_data.extend(itertools.chain.from_iterable([common.as_u16(colors_555[0x10*i+0x10]) for i in range(2)]))
+
+		return raw_palette_data
