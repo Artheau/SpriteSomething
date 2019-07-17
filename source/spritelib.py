@@ -274,6 +274,8 @@ class SpriteParent():
 			return self.save_as_PNG(filename)
 		elif file_extension.lower() == ".zspr":
 			return self.save_as_ZSPR(filename)
+		elif file_extension.lower() == ".rdc":
+			return self.export_sprite_as_rdc(filename)
 		else:
 			tk.messagebox.showerror("ERROR", f"Did not recognize file type \"{file_extension}\"")
 			return False

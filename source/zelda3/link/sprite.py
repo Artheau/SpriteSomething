@@ -156,13 +156,20 @@ class Sprite(SpriteParent):
 		alttpr_sprites_filename = "http://alttpr.com/sprites"
 		alttpr_sprites_req = urllib.request.urlopen(alttpr_sprites_filename)
 		alttpr_sprites = json.loads(alttpr_sprites_req.read().decode("utf-8"))
+		i = 0
+		total = len(alttpr_sprites)
+		print("   Downloading Official ALttPR Sprites")
 		for sprite in alttpr_sprites:
-			sprite_data_req = urllib.request.urlopen(sprite["file"])
-			sprite_data = sprite_data_req.read()
 			sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]
 			sprite_destination = os.path.join(official,sprite_filename)
+			i += 1
 			if not os.path.exists(sprite_destination):
 				with open(sprite_destination, "wb") as g:
+					sprite_data_req = urllib.request.urlopen(sprite["file"])
+					sprite_data = sprite_data_req.read()
+					print("    Writing " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 					g.write(sprite_data)
 					success = True
+			else:
+				print("    Skipping " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 		return success
