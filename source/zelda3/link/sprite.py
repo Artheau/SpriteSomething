@@ -120,6 +120,33 @@ class Sprite(SpriteParent):
 
 		return spiffy_buttons
 
+	def get_palette_buttons(self, parent):
+		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
+
+		palette_set = spiffy_buttons.make_new_group("palette", independent=True)
+		palette_set.add("id-0","blank.png")
+		palette_set.add("id-1","blank.png")
+		palette_set.add("id-2","blank.png")
+		palette_set.add("id-3","blank.png")
+		palette_set.add("id-4","blank.png")
+		palette_set.add("id-5","blank.png")
+		palette_set.add("id-6","blank.png")
+		palette_set.add("id-7","blank.png")
+		palette_set.add_newline()
+		palette_set.add("id-8","blank.png")
+		palette_set.add("id-9","blank.png")
+		palette_set.add("id-A","blank.png")
+		palette_set.add("id-B","blank.png")
+		palette_set.add("id-C","blank.png")
+		palette_set.add("id-D","blank.png")
+		palette_set.add("id-E","blank.png")
+		palette_set.add("id-F","blank.png")
+		palette_set.add_newline()
+		palette_set.add("id-G","blank.png")
+		palette_set.add("id-M","blank.png")
+
+		return spiffy_buttons
+
 	def get_current_palette(self, palette_type, default_range):
 		if self.spiffy_buttons_exist:
 			if palette_type == "bunny":
@@ -177,7 +204,7 @@ class Sprite(SpriteParent):
 				print("    Skipping " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 		return success
 
-	def get_binary_sprite_sheet(self):	
+	def get_binary_sprite_sheet(self):
 		top_half_of_rows = bytearray()
 		bottom_half_of_rows = bytearray()
 

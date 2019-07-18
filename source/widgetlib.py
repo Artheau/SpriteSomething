@@ -2,8 +2,10 @@
 
 import weakref    #because memory leaks are stupid
 import tkinter as tk
+import tkinter.colorchooser as colorchooser
 import json
 import os
+import re
 import locale
 from functools import partial
 from source import common
@@ -112,11 +114,11 @@ class SpiffyButtons():
 			center_align_grid_in_frame(self.spiffy_buttons_section)
 		self.max_row = 0
 
-	def make_new_group(self, label):
+	def make_new_group(self, label, independent=False):
 		#make a new variable in the sprite object called "<label>_var"
 		var_name = "_".join([label.lower(), "var"])
 		setattr(self.sprite_object, var_name, tk.StringVar())
-		new_group = SpiffyGroup(self, self.max_row, label, getattr(self.sprite_object, var_name))
+		new_group = SpiffyGroup(self, self.max_row, label, getattr(self.sprite_object, var_name), independent)
 		self.max_row += 1
 		return new_group
 
@@ -126,17 +128,24 @@ class SpiffyButtons():
 
 class SpiffyGroup():
 	#not meant to be used on its own, instead use class SpiffyButtons()
-	def __init__(self, parent, row, label, var):
+	def __init__(self, parent, row, label, var, independent=False):
 		label = fish.translate("section",label,os.path.join(parent.sprite_object.resource_subpath))
 		self.label = label
 		self.default_exists = False
 		self.parent = parent
+		self.independent = independent
+		self.palette_labels = common.get_resource("palette-buttons.json",os.path.join(self.parent.sprite_object.resource_subpath))
+		self.palette_buttons = []
 		self.var = var
 		self.col = 0
 		self.row = row
 
-		section_label = tk.Label(self.parent.spiffy_buttons_section, text=label + ':')
-		section_label.grid(row=self.row, column=self.col, sticky='E')
+		if self.palette_labels:
+			self.palette_labels = json.load(open(self.palette_labels))
+
+		if label and not label == "_":
+			section_label = tk.Label(self.parent.spiffy_buttons_section, text=label + ':')
+			section_label.grid(row=self.row, column=self.col, sticky='E')
 
 		self.col += 1
 
@@ -151,7 +160,24 @@ class SpiffyGroup():
 
 		display_text = fish.translate(self.label, internal_value_name, self.parent.sprite_object.resource_subpath)
 
-		button = tk.Radiobutton(
+		if self.independent and self.palette_labels:
+			bgcolor = self.palette_labels[internal_value_name]["color"]
+			display_text = self.palette_labels[internal_value_name]["name"]
+			button = tk.Button(
+				self.parent.spiffy_buttons_section,
+				image=img,
+				name="_".join([self.label.lower(), internal_value_name, "button"]),
+				text=display_text,
+				activebackground=bgcolor,
+				bg=bgcolor,
+				width=self.parent.DIMENSIONS["button"]["width"],
+				height=self.parent.DIMENSIONS["button"]["height"],
+				command=partial(self.press_color_button,(self.row * 8) + self.col)
+			)
+			ToolTip(button,"_".join([self.label.lower(), internal_value_name, "button"]))
+			self.palette_buttons.append(button)
+		else:
+			button = tk.Radiobutton(
 				self.parent.spiffy_buttons_section,
 				image=img,
 				name="_".join([self.label.lower(), internal_value_name, "button"]),
@@ -164,7 +190,7 @@ class SpiffyGroup():
 				height=self.parent.DIMENSIONS["button"]["height"],
 				indicatoron=False,
 				command=self.press_spiffy_button
-		)
+			)
 		bindings = None
 		keypresses = None
 		bindings_filename = common.get_resource("bindings.json","meta")
@@ -180,10 +206,11 @@ class SpiffyGroup():
 		button.image = img
 		button.grid(row=self.row, column=self.col)
 
-		if not self.default_exists or default:
-			button.select()
-			self.press_spiffy_button()
-			self.default_exists = True
+		if not self.independent:
+			if not self.default_exists or default:
+				button.select()
+				self.press_spiffy_button()
+				self.default_exists = True
 
 		self.col += 1
 
@@ -198,6 +225,17 @@ class SpiffyGroup():
 
 	def press_spiffy_button(self):
 		self.parent.sprite_object.update_animation()
+
+	def press_color_button(self,index):
+		color = str(colorchooser.askcolor())
+		matches = re.search(r'\(([^\)]*)\)([,\s\']*)([^\']*)(.*)',color)
+		if matches:
+			color = matches[3]
+			r = ("%x" % (int(int(color[1:3],16) / 8) * 8)).zfill(2)
+			g = ("%x" % (int(int(color[3:5],16) / 8) * 8)).zfill(2)
+			b = ("%x" % (int(int(color[5:7],16) / 8) * 8)).zfill(2)
+			color = '#' + r + g + b
+			self.palette_buttons[index-1].configure(bg=color)
 
 	def invoke_spiffy_button(self, button, event=None):
 		button.config(relief = tk.SUNKEN)

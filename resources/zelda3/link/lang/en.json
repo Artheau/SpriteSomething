@@ -4,7 +4,8 @@
     "mail": "Mail",
     "sword": "Sword",
     "shield": "Shield",
-    "gloves": "Gloves"
+    "gloves": "Gloves",
+    "palette": "_"
   },
   "Facing": {
     "up": "Up",

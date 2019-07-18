@@ -178,6 +178,10 @@ class SpriteParent():
 		self.spiffy_buttons_exist = True
 		parent.add(spiffy_panel,minsize=height)
 
+		palette_panel, height = self.get_palette_buttons(parent).get_panel()
+		self.palette_buttons_exist = True
+		parent.add(palette_panel,minsize=height)
+
 		self.update_overview_panel()
 
 		return animation_panel
@@ -345,7 +349,7 @@ class SpriteParent():
 
 		blocks_with_type = self.get_rdc_export_blocks()
 		number_of_blocks = len(blocks_with_type)
-		
+
 		preample_length = len(HEADER_STRING) + 1
 		block_list_length = 4 + number_of_blocks * 8
 		author_field_length = len(author) + 1
@@ -434,6 +438,11 @@ class SpriteParent():
 		#if this is not overriden by the child (sprite-specific) class, then there will be no spiffy buttons
 		return widgetlib.SpiffyButtons(self, parent)
 
+	#Mike likes palette buttons
+	def get_palette_buttons(self, parent):
+		#if this is not overridden by the child (sprite-specific) class, then there will be now palette buttons
+		return widgetlib.SpiffyButtons(self, parent)
+
 	#Art likes direction buttons
 	def get_direction_buttons(self, parent):
 		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
@@ -451,4 +460,3 @@ class SpriteParent():
 		facing_group.add("right", "arrow-right.png", default=True)
 
 		return direction_buttons
-

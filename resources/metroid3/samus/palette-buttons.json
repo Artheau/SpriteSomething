@@ -1,0 +1,18 @@
+{
+  "id-0": { "name": "Transparent",          "color":"#000000" },
+  "id-1": { "name": "Suit Lining (Dark)",   "color":"#404000" },
+  "id-2": { "name": "Body (Bright)",        "color":"#E8E800" },
+  "id-3": { "name": "Outline",              "color":"#280028" },
+  "id-4": { "name": "Visor",                "color":"#00F870" },
+  "id-5": { "name": "Metal (Dark)",         "color":"#406840" },
+  "id-6": { "name": "Glint/Sparkle/Shine",  "color":"#F8E0A8" },
+  "id-7": { "name": "Metal (Brightest)",    "color":"#90B090" },
+  "id-8": { "name": "Metal (Bright)",       "color":"#709070" },
+  "id-9": { "name": "Head (Brightest)",     "color":"#D82800" },
+  "id-A": { "name": "Body (Normal)",        "color":"#A8A800" },
+  "id-B": { "name": "Body (Dark)",          "color":"#585800" },
+  "id-C": { "name": "Suit Lining (Normal)", "color":"#A09800" },
+  "id-D": { "name": "Metal (Darkest)",      "color":"#204020" },
+  "id-E": { "name": "Head (Bright)",        "color":"#A01800" },
+  "id-F": { "name": "Head (Normal)",        "color":"#680000" }
+}
