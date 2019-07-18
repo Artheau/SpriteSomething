@@ -284,3 +284,15 @@ def as_u16(value):
 
 def as_u32(value):
 	return struct.pack('<L',value)
+
+def from_u8(buffer):
+	#returns a tuple with "quantity" number of elements
+	return struct.unpack_from('B',buffer)[0]
+
+def from_u16(buffer):
+	#returns a tuple with "quantity" number of elements
+	return struct.unpack_from('<H',buffer)[0]
+
+def from_u32(buffer):
+	#returns a tuple with "quantity" number of elements
+	return struct.unpack_from('<L',buffer)[0]

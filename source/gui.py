@@ -557,7 +557,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.copy_into_ROM_bulk(inject=True)
 
 	def export_frame_as_png(self):
-		# Save a ZSPR or PNG.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
 		filetypes = (("PNG Files","*.png"),)
 		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.frame-as-png"], title="Save Frame As...", filetypes=filetypes)
 		if filename:

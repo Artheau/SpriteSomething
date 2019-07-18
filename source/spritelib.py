@@ -9,6 +9,7 @@ import os
 import json
 import itertools
 import importlib
+import io
 from functools import partial
 from PIL import Image, ImageTk
 from source import ssTranslate as fish
@@ -93,7 +94,7 @@ class SpriteParent():
 			pixel_data_length = int.from_bytes(data[13:15], byteorder='little', signed=False)
 			palette_data_offset = int.from_bytes(data[15:19], byteorder='little', signed=False)
 			palette_data_length = int.from_bytes(data[19:21], byteorder='little', signed=False)
-			i = 29
+			offset = 29
 			'''
 			 4 (header) +
 			 1 (version) +
@@ -107,14 +108,20 @@ class SpriteParent():
 			==
 			29 (start of metadata)
 			'''
-			for key in self.metadata.keys():
-				str_bytes = ""
-				endianness = "big" if key == "author.name-short" else "little"
-				while(not int.from_bytes(data[i:i+2], byteorder=endianness, signed=False) == 0):
-					str_bytes += hex(int.from_bytes(data[i:i+2], byteorder=endianness, signed=False))[2:]
-					i += 2
-				i += 2
-				self.metadata[key] = bytearray.fromhex(str_bytes).decode()
+			#I hate little endian so much.  So much.
+			for key,byte_size in [("sprite.name",2),("author.name",2),("author.name-short",1)]:
+				i = 0
+				null_terminator = b"\x00"*byte_size
+				while data[offset+i:offset+i+byte_size] != null_terminator:
+					i += byte_size
+
+				raw_string_slice = data[offset:offset+i]
+				if byte_size == 1:
+					self.metadata[key] = str(raw_string_slice,encoding="ascii")
+				else:
+					self.metadata[key] = str(raw_string_slice,encoding="utf-16-le")
+				offset += i+byte_size   #have to add another byte_size to go over the null terminator
+
 			pixel_data = data[pixel_data_offset:pixel_data_offset+pixel_data_length]
 			palette_data = data[palette_data_offset:palette_data_offset+palette_data_length]
 			self.import_from_binary_data(pixel_data,palette_data)
@@ -284,34 +291,48 @@ class SpriteParent():
 
 	def save_as_ZSPR(self, filename):
 		#check to see if the functions exist (e.g. crashes hard if used on Samus)
-		#if hasattr(self, "get_binary_sprite_sheet") and hasattr(self, "get_binary_palettes"):
-		if False:   #commented out until it is finished
+		if hasattr(self, "get_binary_sprite_sheet") and hasattr(self, "get_binary_palettes"):
 			sprite_sheet = self.get_binary_sprite_sheet()
 			palettes = self.get_binary_palettes()
 			HEADER_STRING = b"ZSPR"
 			VERSION = 0x01
 			SPRITE_TYPE = 0x01   #this format has "1" for the player sprite
 			RESERVED_BYTES = b'\x00\x00\x00\x00\x00\x00'
-			UNICODE_NULL_CHAR = b'\x00\x00'
-			ASCII_NULL_CHAR = b'\x00'
+			QUAD_BYTE_NULL_CHAR = b'\x00\x00\x00\x00'
+			DOUBLE_BYTE_NULL_CHAR = b'\x00\x00'
+			SINGLE_BYTE_NULL_CHAR = b'\x00'
+
+			write_buffer = bytearray()
+
+			write_buffer.extend(HEADER_STRING)
+			write_buffer.extend(common.as_u8(VERSION))
+			checksum_start = len(write_buffer); write_buffer.extend(QUAD_BYTE_NULL_CHAR)
+			sprite_sheet_pointer = len(write_buffer); write_buffer.extend(QUAD_BYTE_NULL_CHAR)
+			write_buffer.extend(common.as_u16(len(sprite_sheet)))
+			palettes_pointer = len(write_buffer); write_buffer.extend(QUAD_BYTE_NULL_CHAR)
+			write_buffer.extend(common.as_u16(len(palettes)))
+			write_buffer.extend(common.as_u16(SPRITE_TYPE))
+			write_buffer.extend(RESERVED_BYTES)
+			write_buffer.extend(self.metadata["sprite.name"].encode('utf-16-le'))
+			write_buffer.extend(DOUBLE_BYTE_NULL_CHAR)
+			write_buffer.extend(self.metadata["author.name"].encode('utf-16-le'))
+			write_buffer.extend(DOUBLE_BYTE_NULL_CHAR)
+			write_buffer.extend(self.metadata["author.name-short"].encode('ascii'))
+			write_buffer.extend(SINGLE_BYTE_NULL_CHAR)
+			write_buffer[sprite_sheet_pointer:sprite_sheet_pointer+4] = common.as_u32(len(write_buffer))
+			write_buffer.extend(sprite_sheet)
+			write_buffer[palettes_pointer:palettes_pointer+4] = common.as_u32(len(write_buffer))
+			write_buffer.extend(palettes)
+
+			checksum = (sum(write_buffer) + 0xFF + 0xFF) % 0x10000
+			checksum_complement = 0xFFFF - checksum
+
+			write_buffer[checksum_start:checksum_start+2] = common.as_u16(checksum)
+			write_buffer[checksum_start+2:checksum_start+4] = common.as_u16(checksum_complement)
+
 			with open(filename, "wb") as zspr_file:
-				zspr_file.write(HEADER_STRING)
-				zspr_file.write(common.as_u8(VERSION))
-				zspr_file.write(b"0000")   #TODO: checksum
-				zspr_file.write(b"0000")   #TODO: pointer to pixel data
-				zspr_file.write(common.as_u16(len(sprite_sheet)))
-				zspr_file.write(b"0000")   #TODO: pointer to palette data
-				zspr_file.write(common.as_u16(len(palettes)))
-				zspr_file.write(common.as_u8(SPRITE_TYPE))
-				zspr_file.write(RESERVED_BYTES)
-				zspr_file.write(self.metadata["sprite.name"].encode('utf-16'))  #TODO: little endian
-				zspr_file.write(UNICODE_NULL_CHAR)
-				zspr_file.write(self.metadata["author.name"].encode('utf-16'))  #TODO: little endian
-				zspr_file.write(UNICODE_NULL_CHAR)
-				zspr_file.write(self.metadata["author.name-short"].encode('ascii'))
-				zspr_file.write(ASCII_NULL_CHAR)
-				zspr_file.write(sprite_sheet)
-				zspr_file.write(palettes)
+				zspr_file.write(write_buffer)
+
 			return True       #report success to caller
 		else:
 			return False      #report failure to caller
