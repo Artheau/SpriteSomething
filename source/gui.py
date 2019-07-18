@@ -495,13 +495,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def save_file_as(self):
 		# Save a ZSPR or PNG.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
-		filetypes = (("PNG Files","*.png"),("ZSPR Files","*.zspr"),("RDC Files","*.rdc"))
+		filetypes = (("Portable Network Graphics","*.png"),("ZSPR Sprite","*.zspr"),("Retro Data Container","*.rdc"))
 		filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialdir=self.working_dirs["file.save"], title="Save Sprite As...", filetypes=filetypes)
 		if filename:
 			returnvalue = self.sprite.save_as(filename)
 			if returnvalue:
 				self.working_dirs["file.save"] = filename[:filename.rfind('/')]
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
+			else:
+				messagebox.showerror("Not Yet Implemented",os.path.splitext(filename)[1][1:].upper() + " format not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
@@ -557,7 +559,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.copy_into_ROM_bulk(inject=True)
 
 	def export_frame_as_png(self):
-		filetypes = (("PNG Files","*.png"),)
+		filetypes = (("Portable Network Graphics","*.png"),)
 		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.frame-as-png"], title="Save Frame As...", filetypes=filetypes)
 		if filename:
 			returnvalue = self.sprite.export_frame_as_PNG(filename)
@@ -574,7 +576,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def export_animation_as_collage(self,orientation="horizontal"):
 		if orientation == "vertical":
 			raise NotImplementedError()
-		filetypes = (("PNG Files","*.png"),)
+		filetypes = (("Portable Network Graphics","*.png"),)
 		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.animation-as-" + orientation[:1] + "collage"], title="Save " + orientation[:1].upper() + orientation[1:] + " Collage As...", filetypes=filetypes)
 		if filename:
 			returnvalue = self.sprite.export_animation_as_collage(filename,orientation)
