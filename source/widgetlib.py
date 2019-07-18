@@ -134,8 +134,8 @@ class SpiffyGroup():
 		self.default_exists = False
 		self.parent = parent
 		self.independent = independent
+		self.parent.sprite_object.palette_buttons = []
 		self.palette_labels = common.get_resource("palette-buttons.json",os.path.join(self.parent.sprite_object.resource_subpath))
-		self.palette_buttons = []
 		self.var = var
 		self.col = 0
 		self.row = row
@@ -175,7 +175,7 @@ class SpiffyGroup():
 				command=partial(self.press_color_button,(self.row * 8) + self.col)
 			)
 			ToolTip(button,"_".join([self.label.lower(), internal_value_name, "button"]))
-			self.palette_buttons.append(button)
+			self.parent.sprite_object.palette_buttons.append(button)
 		else:
 			button = tk.Radiobutton(
 				self.parent.spiffy_buttons_section,
@@ -225,6 +225,20 @@ class SpiffyGroup():
 
 	def press_spiffy_button(self):
 		self.parent.sprite_object.update_animation()
+		if len(self.parent.sprite_object.palette_buttons) >= 15:
+			pose_list = self.parent.sprite_object.get_current_pose_list()
+			this_palette = []
+			if hasattr(self.parent.sprite_object,"suit_var"):
+				this_palette = self.parent.sprite_object.get_colors_from_master(self.parent.sprite_object.suit_var.get())
+			if hasattr(self.parent.sprite_object,"mail_var"):
+				pose_list = self.parent.sprite_object.get_current_pose_list()
+				for tile_info in pose_list[self.parent.sprite_object.pose_number]["tiles"][::-1]:
+					default_range = self.parent.sprite_object.layout.get_property("import palette interval", tile_info["image"])
+					this_palette = self.parent.sprite_object.get_current_palette(self.parent.sprite_object.mail_var.get(),default_range)
+			if len(this_palette) >= 15:
+				for i in range(len(this_palette)):
+					color = "#%02x%02x%02x" % this_palette[i]
+					self.parent.sprite_object.palette_buttons[i+1].configure(bg=color)
 
 	def press_color_button(self,index):
 		color = str(colorchooser.askcolor())
@@ -235,7 +249,7 @@ class SpiffyGroup():
 			g = ("%x" % (int(int(color[3:5],16) / 8) * 8)).zfill(2)
 			b = ("%x" % (int(int(color[5:7],16) / 8) * 8)).zfill(2)
 			color = '#' + r + g + b
-			self.palette_buttons[index-1].configure(bg=color)
+			self.parent.palette_buttons[index-1].configure(bg=color)
 
 	def invoke_spiffy_button(self, button, event=None):
 		button.config(relief = tk.SUNKEN)

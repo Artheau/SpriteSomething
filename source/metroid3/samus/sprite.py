@@ -277,9 +277,9 @@ class Sprite(SpriteParent):
 		return spiffy_buttons
 
 	def get_palette_buttons(self, parent):
-		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
+		palette_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="palette_buttons")
 
-		palette_set = spiffy_buttons.make_new_group("palette", independent=True)
+		palette_set = palette_buttons.make_new_group("palette", independent=True)
 		palette_set.add("id-0","blank.png")
 		palette_set.add("id-1","blank.png")
 		palette_set.add("id-2","blank.png")
@@ -298,7 +298,7 @@ class Sprite(SpriteParent):
 		palette_set.add("id-E","blank.png")
 		palette_set.add("id-F","blank.png")
 
-		return spiffy_buttons
+		return palette_buttons
 
 	def get_direction_buttons(self, parent):
 		#overrides the parent WASD format
