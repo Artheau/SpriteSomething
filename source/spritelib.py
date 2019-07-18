@@ -23,6 +23,7 @@ class SpriteParent():
 		self.classic_name = manifest_dict["name"]    #e.g. "Samus" or "Link"
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
+		self.metadata_tk_vars = {}   #TODO: All these Tk references need to go away eventually and be replaced by waterfalls (sorry TLC)
 		self.filename = filename
 		self.layout = layoutlib.Layout(common.get_resource("layout.json",subdir=self.resource_subpath))
 		with open(common.get_resource("animations.json",subdir=self.resource_subpath)) as file:
@@ -136,7 +137,8 @@ class SpriteParent():
 			label = fish.translate("meta",key,os.path.join("meta"))
 			metadata_label = tk.Label(metadata_section, text=label, name=label.lower().replace(' ', '_'))
 			metadata_label.grid(row=row,column=1)
-			metadata_input = tk.Entry(metadata_section, name=label.lower().replace(' ', '_') + "_input")
+			self.metadata_tk_vars[key] = tk.StringVar()
+			metadata_input = tk.Entry(metadata_section, textvariable=self.metadata_tk_vars[key], name=label.lower().replace(' ', '_') + "_input")
 			metadata_input.insert(0,self.metadata[key])
 			metadata_input.grid(row=row,column=2)
 			row += 1
@@ -290,6 +292,10 @@ class SpriteParent():
 		return True
 
 	def save_as_ZSPR(self, filename):
+		#TODO: Need to get rid of Tk stuff from the sprite class
+		for key in self.metadata:
+			self.metadata[key] = self.metadata_tk_vars[key].get()
+
 		#check to see if the functions exist (e.g. crashes hard if used on Samus)
 		if hasattr(self, "get_binary_sprite_sheet") and hasattr(self, "get_binary_palettes"):
 			sprite_sheet = self.get_binary_sprite_sheet()
