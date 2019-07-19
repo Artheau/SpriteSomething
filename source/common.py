@@ -66,9 +66,6 @@ def round_to_nearest_eight(val):
 	#take a value, divide by 8, floor it, contrain it, mult by 8
 	return snescolor_eighth(val) * 8
 
-def convert_hex_to_rgb(color):
-	return tuple(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
-
 def convert_555_to_rgb(color, recurse=True):
 	#converts either a single color or a list of colors in 555 format to their RGB 3-tuple equivalents
 	try:

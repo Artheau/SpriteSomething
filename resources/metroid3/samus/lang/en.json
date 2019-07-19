@@ -5,8 +5,7 @@
     "suit": "Suit",
     "variant": "Variant",
     "effect": "Effect",
-    "cannon-port": "Cannon Port",
-    "palette": "_"
+    "cannon-port": "Cannon Port"
   },
   "Aiming": {
     "up": "Straight Up",

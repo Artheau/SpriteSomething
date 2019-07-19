@@ -55,23 +55,6 @@ class Sprite(SpriteParent):
 		else:
 			raise AssertionError(f"Unrecognized color set request: {color_set}")
 
-	def set_color_in_master(self, color_value, color_set, color_index):
-		palette_switcher = {
-			"power":				0,
-			"base":					0,
-			"varia":				15,
-			"gravity":			30,
-			"death":				45,
-			"flash":				60,
-			"file_select":	75,
-			"door":					3,
-			"xray":					91,
-			"ship":					101
-		}
-		palette_index = palette_switcher.get(color_set)
-		color_value = common.convert_hex_to_rgb(color_value)
-		self.master_palette[palette_index + color_index] = color_value
-
 	def get_timed_palette(self, overall_type="power", variant_type="standard"):
 		timed_palette = []
 		base_palette = self.get_colors_from_master(overall_type)
@@ -268,46 +251,30 @@ class Sprite(SpriteParent):
 	def get_spiffy_buttons(self, parent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
-		#suit buttons
 		suit_group = spiffy_buttons.make_new_group("suit")
-		suit_group.add_blank_space()	#default has a value, skip a space
+		suit_group.add_blank_space()
 		suit_group.add("power", "suit-power.png")
 		suit_group.add("varia", "suit-varia.png")
 		suit_group.add("gravity", "suit-gravity.png")
 
-		#variant buttons; dynamic palettes
 		variant_group = spiffy_buttons.make_new_group("variant")
-		variant_group.add("standard", "no-thing.png")	#no variant
-		variant_group.add("charge", "variant-charge.png")	#charge beam
-		variant_group.add("speed_boost", "variant-speed_boost.png")	#speed boosting
-		variant_group.add("speed_squat", "variant-speed_squat.png")	#stored speed boost charge
-		variant_group.add("hyper", "variant-hyper.png")	#hyper beam
-		variant_group.add_newline()	#make a new line
-		variant_group.add_blank_space()	#align with above row, skip a space
-		variant_group.add("heat", "effect-heat.png")	#heated rooms
-		variant_group.add("xray", "effect-xray.png")	#using xray scope & in dark rooms
-		variant_group.add("sepia", "effect-sepia.png")	#during opening sequence flashbacks
-		variant_group.add("door", "effect-door.png")	#during door transition
+		variant_group.add("standard", "no-thing.png")
+		variant_group.add("charge", "variant-charge.png")
+		variant_group.add("speed_boost", "variant-speed_boost.png")
+		variant_group.add("speed_squat", "variant-speed_squat.png")
+		variant_group.add("hyper", "variant-hyper.png")
+		variant_group.add_newline()
+		variant_group.add_blank_space()
+		variant_group.add("heat", "effect-heat.png")
+		variant_group.add("xray", "effect-xray.png")
+		variant_group.add("sepia", "effect-sepia.png")
+		variant_group.add("door", "effect-door.png")
 
-		#cannon port off/on
 		cannon_group = spiffy_buttons.make_new_group("cannon-port")
 		cannon_group.add("no", "no-thing.png")
 		cannon_group.add("yes", "yes-thing.png")
 
 		return spiffy_buttons
-
-	def get_palette_buttons(self, parent):
-		palette_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="palette_buttons")
-
-		#iterate through 16 palette buttons, 2 lines of 8
-		palette_set = palette_buttons.make_new_group("palette", independent=True)
-		for i in range(16):
-			button_id = "id-" + format(i,'x').upper()
-			palette_set.add(button_id,"blank.png")
-			if i == 7:
-				palette_set.add_newline()
-
-		return palette_buttons
 
 	def get_direction_buttons(self, parent):
 		#overrides the parent WASD format

@@ -24,7 +24,7 @@ def make_GUI(command_line_args):
 		root.iconbitmap(default=common.get_resource('app.ico'))
 	except Exception:
 		pass
-	root.geometry("1024x768")       #window size
+	root.geometry("800x600")       #window size
 	root.configure(bg='#f0f0f0')   #background color
 	main_frame = SpriteSomethingMainFrame(root, command_line_args)
 	root.protocol("WM_DELETE_WINDOW", main_frame.exit)           #intercept when the user clicks the X
