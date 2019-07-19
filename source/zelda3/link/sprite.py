@@ -94,27 +94,31 @@ class Sprite(SpriteParent):
 	def get_spiffy_buttons(self, parent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
+		#mail buttons
 		mail_group = spiffy_buttons.make_new_group("mail")
-		mail_group.add_blank_space()
+		mail_group.add_blank_space()	#default has a value, skip a space
 		mail_group.add("green", "mail-green.png")
 		mail_group.add("blue", "mail-blue.png")
 		mail_group.add("red", "mail-red.png")
 
+		#sword buttons
 		sword_group = spiffy_buttons.make_new_group("sword")
-		sword_group.add("none", "no-thing.png")
+		sword_group.add("none", "no-thing.png")	#no sword
 		sword_group.add("fighter", "sword-fighters.png")
 		sword_group.add("master", "sword-master.png")
 		sword_group.add("tempered", "sword-tempered.png")
 		sword_group.add("gold", "sword-butter.png")
 
+		#shield buttons
 		shield_group = spiffy_buttons.make_new_group("shield")
-		shield_group.add("none", "no-thing.png")
+		shield_group.add("none", "no-thing.png")	#no shield
 		shield_group.add("fighter", "shield-fighters.png")
 		shield_group.add("fire", "shield-fire.png")
 		shield_group.add("mirror", "shield-mirror.png")
 
+		#gloves buttons
 		gloves_group = spiffy_buttons.make_new_group("gloves")
-		gloves_group.add("none", "no-thing.png")
+		gloves_group.add("none", "no-thing.png")	#no gloves
 		gloves_group.add("power", "glove1.png")
 		gloves_group.add("titan", "glove2.png")
 
@@ -123,6 +127,7 @@ class Sprite(SpriteParent):
 	def get_palette_buttons(self, parent):
 		palette_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="palette_buttons")
 
+		#iterate through 16 palette buttons, 2 lines of 8
 		palette_set = palette_buttons.make_new_group("palette", independent=True)
 		for i in range(16):
 			button_id = "id-" + format(i,'x').upper()
@@ -130,6 +135,7 @@ class Sprite(SpriteParent):
 			if i == 7:
 				palette_set.add_newline()
 		palette_set.add_newline()
+		#add a newline and a palette button for both gloves
 		for i in ['G','M']:
 			button_id = "id-" + i
 			palette_set.add(button_id,"blank.png")
