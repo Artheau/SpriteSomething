@@ -351,7 +351,7 @@ class SpriteParent():
 
 		blocks_with_type = self.get_rdc_export_blocks()
 		number_of_blocks = len(blocks_with_type)
-		
+
 		preample_length = len(HEADER_STRING) + 1
 		block_list_length = 4 + number_of_blocks * 8
 		author_field_length = len(author) + 1
@@ -457,4 +457,3 @@ class SpriteParent():
 		facing_group.add("right", "arrow-right.png", default=True)
 
 		return direction_buttons
-

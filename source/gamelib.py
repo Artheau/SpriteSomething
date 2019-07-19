@@ -2,11 +2,11 @@
 #handling backgrounds, etc.
 #handles import of new sprites
 
-import os
-import importlib
-import json
-import tkinter as tk
-import random
+import os							#for filesystem manipulation
+import importlib			#for importing libraries dynamically
+import json						#for reading JSON
+import tkinter as tk	#for GUI stuff
+import random					#for choosing background image to load on app startup
 from PIL import Image, ImageFile
 from source import ssTranslate as fish
 from source import widgetlib
