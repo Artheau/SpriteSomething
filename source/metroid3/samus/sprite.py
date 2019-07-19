@@ -55,6 +55,23 @@ class Sprite(SpriteParent):
 		else:
 			raise AssertionError(f"Unrecognized color set request: {color_set}")
 
+	def set_color_in_master(self, color_value, color_set, color_index):
+		palette_switcher = {
+			"power":				0,
+			"base":					0,
+			"varia":				15,
+			"gravity":			30,
+			"death":				45,
+			"flash":				60,
+			"file_select":	75,
+			"door":					3,
+			"xray":					91,
+			"ship":					101
+		}
+		palette_index = palette_switcher.get(color_set)
+		color_value = common.convert_hex_to_rgb(color_value)
+		self.master_palette[palette_index + color_index] = color_value
+
 	def get_timed_palette(self, overall_type="power", variant_type="standard"):
 		timed_palette = []
 		base_palette = self.get_colors_from_master(overall_type)

@@ -243,9 +243,9 @@ class SpiffyGroup():
 						color = "#%02x%02x%02x" % this_palette[i]
 						self.parent.sprite_object.palette_buttons[i+1].configure(bg=color)
 						self.parent.sprite_object.palette_buttons[i+1].configure(relief=tk.RAISED)
-			for i in [16,17]:
-				self.parent.sprite_object.palette_buttons[i].configure(relief=tk.RAISED)
 			if hasattr(self.parent.sprite_object,"gloves_var"):
+				for i in [16,17]:
+					self.parent.sprite_object.palette_buttons[i].configure(relief=tk.RAISED)
 				if not button.winfo_name().find("gloves") == -1 and button.winfo_name().find("no") == -1:
 					button_id = 16 if not button.winfo_name().find("power") == -1 else 17
 					self.parent.sprite_object.palette_buttons[button_id].configure(relief=tk.SUNKEN)
@@ -261,6 +261,12 @@ class SpiffyGroup():
 				b = ("%x" % (int(int(color[5:7],16) / 8) * 8)).zfill(2)
 				color = '#' + r + g + b
 				self.parent.sprite_object.palette_buttons[index-1].configure(bg=color)
+				if hasattr(self.parent.sprite_object,"mail_var"):
+					color_set = self.parent.sprite_object.mail_var.get()
+					self.parent.sprite_object.set_current_palette_color(color,color_set,index-1,0)
+				elif hasattr(self.parent.sprite_object,"suit_var"):
+					color_set = self.parent.sprite_object.suit_var.get()
+					self.parent.sprite_object.set_color_in_master(color,color_set,index-2)
 
 	def invoke_spiffy_button(self, button, event=None):
 		button.config(relief = tk.SUNKEN)

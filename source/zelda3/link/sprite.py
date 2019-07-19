@@ -173,6 +173,17 @@ class Sprite(SpriteParent):
 
 		return [self.master_palette[i] for i in palette_indices]
 
+	def set_current_palette_color(self, color_value, palette_type, color_index, default_range):
+		palette_switcher = {
+			"green": 0,
+			"blue": 16,
+			"red": 32,
+			"bunny": 48
+		}
+		palette_index = palette_switcher.get(palette_type)
+		color_value = common.convert_hex_to_rgb(color_value)
+		self.master_palette[palette_index + color_index] = color_value
+
 	def get_alttpr_sprites(self):
 		success = False
 		official = os.path.join('.',"resources","zelda3","link","official")

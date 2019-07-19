@@ -54,6 +54,9 @@ def get_tk_image(image):
 	img_str = base64.b64encode(buffered.getvalue())
 	return tk.PhotoImage(data=img_str)
 
+def convert_hex_to_rgb(color):
+	return tuple(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+
 def convert_555_to_rgb(color, recurse=True):
 	#converts either a single color or a list of colors in 555 format to their RGB 3-tuple equivalents
 	try:
