@@ -180,6 +180,10 @@ class SpriteParent():
 		self.spiffy_buttons_exist = True
 		parent.add(spiffy_panel,minsize=height)
 
+		palette_panel, height = self.get_palette_buttons(parent).get_panel()
+		self.palette_buttons_exist = True
+		parent.add(palette_panel,minsize=height)
+
 		self.update_overview_panel()
 
 		return animation_panel
@@ -204,7 +208,7 @@ class SpriteParent():
 		pose_list = self.get_current_pose_list()
 		full_tile_list = []
 		for tile_info in pose_list[self.pose_number]["tiles"][::-1]:
-			base_image = self.images[tile_info["image"]] #FIXME: Bombs if X-Ray is randomly chosen??? KEYERROR: xray_right0
+			base_image = self.images[tile_info["image"]] #FIXME: Bombs if X-Ray is randomly chosen??? KEYERROR: xray_right0,xray_crouch_right0
 			if "crop" in tile_info:
 				base_image = base_image.crop(tuple(tile_info["crop"]))
 			if "flip" in tile_info:
@@ -438,6 +442,11 @@ class SpriteParent():
 	#Mike likes spiffy buttons
 	def get_spiffy_buttons(self, parent):
 		#if this is not overriden by the child (sprite-specific) class, then there will be no spiffy buttons
+		return widgetlib.SpiffyButtons(self, parent)
+
+	#Mike likes palette buttons
+	def get_palette_buttons(self, parent):
+		#if this is not overridden by the child (sprite-specific) class, then there will be now palette buttons
 		return widgetlib.SpiffyButtons(self, parent)
 
 	#Art likes direction buttons
