@@ -1,80 +1,90 @@
-import json
-import os
-import random
+import json		#for reading JSON
+import os			#for filesystem manipulation
+import random	#for choosing random app titles, random game files & random sprites
 from source import common
 from source import constants as CONST
 from source import gamelib
 from source import spritelib
 from source import ssDiagnostics as diags
 
+#run CLI
 def make_CLI(command_line_args):
   init = CLIMainFrame(command_line_args)
 
+#make a class that's similar to the GUI class
 class CLIMainFrame():
 
   def __init__(self, command_line_args):
-    print(self.create_random_title() + " (v" + CONST.APP_VERSION + ')')
-    print("")
-    print("Initializing CLIMainFrame")
-    if command_line_args["mode"]:
+    print(self.create_random_title() + " (v" + CONST.APP_VERSION + ')')	#print title & version
+    print("")	#newline
+    print("Initializing CLIMainFrame")	#we made it, we're starting!
+    if command_line_args["mode"]:	#get the mode
       mode = command_line_args["mode"]
-      if mode[:4] == "diag":
+      if mode[:4] == "diag":	#run diagnostics & exit; SpriteSomething.[py|exe] --cli=1 --mode=diag
         print("\n".join(diags.output()))
         exit(1)
 
-      self.load_sprite(command_line_args["sprite"])
+      self.load_sprite(command_line_args["sprite"])	#we're loading a sprite!
 
-      if mode == "export":
+      if mode == "export":	#we're exporting as PNG/ZSPR/RDC based on the filetype provided, default to "export.png"
+				# SpriteSomething.[py|exe] --cli=1 --mode=export --export-filename=export.[png|zspr|rdc]
         export_filename = command_line_args["export-filename"] if "export-filename" in command_line_args else "export.png"
         self.save_file_as(export_filename)
-      elif "inject" in mode:
-        dest_default_path = os.path.join("resources",self.game.internal_name,"gamefiles","export")
-        source_default_path = os.path.join("resources",self.game.internal_name,"gamefiles","source")
-        dest_filename = os.path.join(dest_default_path,"export")
-        source_filename = os.path.join(source_default_path,self.game.internal_name)
+      elif "inject" in mode:	#we're injecting a [single|random] sprite into game file(s)
+				# SpriteSomething.[py|exe] --cli=1 --mode=inject --dest-filename=resources/zelda3/gamefiles/export/export.sfc \
+				#  --source-filename=resources/zelda3/gamefiles/source/zelda3.sfc
+        dest_default_path = os.path.join("resources",self.game.internal_name,"gamefiles","export")	#default export location | resources/zelda3/gamefiles/export/*.*
+        source_default_path = os.path.join("resources",self.game.internal_name,"gamefiles","source")	#default source location | resources/zelda3/gamefiles/source/*.*
+        dest_filename = os.path.join(dest_default_path,"export")	# resources/zelda3/gamefiles/export/export.*
+        source_filename = os.path.join(source_default_path,self.game.internal_name)	# resources/zelda3/gamefiles/source/zelda3.*
 
-        if not os.path.isdir(dest_default_path):
+        if not os.path.isdir(dest_default_path):	#make directories to get the designated destination if necessary
           os.makedirs(dest_default_path)
 
-        if "dest-filename" in command_line_args:
+        if "dest-filename" in command_line_args:	#if we've provide a destination, set it
           if not command_line_args["dest-filename"] == None:
             dest_filename = command_line_args["dest-filename"]
-        if "src-filename" in command_line_args:
+        if "src-filename" in command_line_args:	#if we've provided a source, set it
           if not command_line_args["src-filename"] == None:
             source_filename = command_line_args["src-filename"]
-        if "-bulk" in mode:
-          source_filepath = os.path.join("resources",self.game.internal_name,"gamefiles","inject")
-          if "src-filepath" in command_line_args:
+        if "-bulk" in mode:	#if we're injecting into many game files
+					# SpriteSomething.[py|exe] --cli=1 --mode=inject-bulk --src-filepath=resources/zelda3/gamefiles/inject
+          source_filepath = os.path.join("resources",self.game.internal_name,"gamefiles","inject")	#default inject location | resources/zelda3/gamefiles/inject/*.*
+          if "src-filepath" in command_line_args:	#if we've provided a source directory, set it
             if not command_line_args["src-filepath"] == None:
               source_filepath = command_line_args["src-filepath"]
-              if "-random" in mode:
+              if "-random" in mode:	#if we're injecting random sprites, get the directory
                 if "spr-filepath" in command_line_args:
                   if not command_line_args["spr-filepath"] == None:
-                    sprite_filepath = command_line_args["spr-filepath"]
+										# SpriteSomething.[py|exe] --cli=1 --mode=inject-bulk-random --src-filepath=resources/zelda3/gamefiles/inject \
+										#  --spr-filepath=resource/zelda3/link/official
+                    sprite_filepath = command_line_args["spr-filepath"]	#if we've provide a sprite directory, set it
                     self.randomize_into_ROM_bulk(source_filepath=source_filepath, sprite_filepath=sprite_filepath)
               else:
                 self.copy_into_ROM_bulk(source_filepath=source_filepath)
-        elif "-random" in mode:
+        elif "-random" in mode:	#we're injecting a random sprite into one game file
           if "spr-filepath" in command_line_args:
             if not command_line_args["spr-filepath"] == None:
               sprite_filepath = command_line_args["spr-filepath"]
               self.randomize_into_ROM(inject=True, source_filename=source_filename, dest_filename=dest_filename, sprite_filepath=sprite_filepath)
-        else:
+        else:	#we're injecting the loaded sprite into one game file
           if not os.path.isfile(source_filename) and not os.path.isfile(source_filename + ".sfc"):
+						#check that the provided source exists, if not, nuke it from orbit
             print("   Source File does not exist: " + source_filename)
             print("   Source File does not exist: " + source_filename + ".sfc")
             print("    Nuke it from orbit.")
             exit(1)
-          if not os.path.splitext(source_filename)[1]:
+          if not os.path.splitext(source_filename)[1]:	#if we don't have a file extension, default to *.sfc
             source_filename += ".sfc"
-          if not os.path.splitext(dest_filename)[1]:
+          if not os.path.splitext(dest_filename)[1]:	#if we don't have a file extension, default to *.sfc
             dest_filename += ".sfc"
-          self.copy_into_ROM("-new" not in mode,dest_filename,source_filename)
-      elif "get-" in mode and "-sprites" in mode:
-        print("  Downloading Sprites")
+          self.copy_into_ROM("-new" not in mode,dest_filename,source_filename)	#if we're injecting "-new", make a copy
+      elif "get-" in mode and "-sprites" in mode:	#get sprites
+        print("  Downloading Sprites")	#get ALttPR sprites
         if mode == "get-alttpr-sprites":
-          self.load_sprite(os.path.join("resources","zelda3","link","link.zspr"))
-          self.sprite.get_alttpr_sprites()
+					# SpriteSomething.[py|exe] --cli=1 --mode=get-alttpr-sprites
+          self.load_sprite(os.path.join("resources","zelda3","link","link.zspr"))	#load Link
+          self.sprite.get_alttpr_sprites()	#get ALttPR sprites; #FIXME: Do we want this in the sprite class or somewhere else?
       else:
         print("No valid CLI Mode provided")
     else:
@@ -99,14 +109,16 @@ class CLIMainFrame():
       app_name.append(random.choice(name_dict["post"]))
     return " ".join(app_name)
 
+	#load sprite
+	# Inbound:
+	#  sprite_filename: Filename of sprite to load
+	#  random: Include messages indicating that we're processing a random sprite
   def load_sprite(self, sprite_filename, random=False):
-    if not random:
-      print(" Loading Sprite for CLI")
+    print(" Loading " + ("Random " if random else "") + "Sprite for CLI")
 
     self.game, self.sprite = gamelib.autodetect(sprite_filename)
 
-    if not random:
-      print("  Loaded a \"" + self.sprite.classic_name + "\" Sprite for injection into " + self.game.name + " Game files")
+    print("  Loaded a \"" + self.sprite.classic_name + "\" Sprite for injection into " + self.game.name + " Game files")
     # Additional GUI stuff
 
   def save_file_as(self, export_filename):
@@ -115,50 +127,53 @@ class CLIMainFrame():
     print("   Exporting \"" + self.sprite.classic_name + "\" Sprite as " + os.path.splitext(export_filename)[1].upper() + " to " + export_filename)
     self.sprite.save_as(export_filename)
 
+	#inject/copy loaded sprite into game file
+	# Inbound:
+	#  inject: Are we injecting directly or making a copy?
+	#  dest_filename: Destination filename for game file
+	#  source_filename: Source filename for game file to copy from
   def copy_into_ROM(self, inject=False, dest_filename=None, source_filename=None):
     # Have a func that we send the filename to for source/destination
     #  since the GUI has extra dialogue boxes and stuff
     action = ""
-    if inject:
+    if inject:	#if we're injecting, the source & destination are the same
       source_filename = dest_filename
       action = "   Injecting into: " + source_filename
-    else:
+    else:	#else, make a copy
       action = "   Copying using data from: " + source_filename
-    rom = self.game.get_rom_from_filename(source_filename)
-    same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(source_filename)
-    is_zsm = "ZSM" in str(rom.get_name())
-    if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):
+    rom = self.game.get_rom_from_filename(source_filename)	#read ROM data
+    same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(source_filename)	#the game file matches
+    is_zsm = "ZSM" in str(rom.get_name())	#this is a ZSM game file
+    if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):	#if we've got a compatible game file, inject it!
       modified_rom = self.sprite.inject_into_ROM(rom)
       modified_rom.save(dest_filename, overwrite=True)
       print(action)
       print("    Injected \"" + self.sprite.classic_name + "\" into: " + dest_filename[dest_filename.rfind('\\')+1:])
     else:
-      msg = "   Game File does not match " + self.game.same_internal_name + '/'
+      msg = "   Game File does not match " + self.game.same_internal_name + '/'	#oops, it doesn't match
       msg += self.sprite.classic_name if not random else "random"
       msg += ": " + dest_filename[dest_filename.rfind('\\')+1:]
       print(msg)
 
+	#like above but for list of files
   def copy_into_ROM_bulk(self, source_filepath=None):
     # Have a func that we send the filename to for injecting
     #  since the GUI has to ask where the dir with game files is
     inject = True
-    if inject:
+    if inject:	#only injection is supported, and it's forced at this time #FIXME: Maybe don't force it?
       pass
     else:
       print("   Unsure if making copies fits this purpose well.")
       print("    Nuke it from orbit.")
 
-    if not source_filepath:
+    if not source_filepath:	#default source filepath | resources/zelda3/gamefiles/inject/*.*
       source_filepath = os.path.join("resources",self.game.internal_name,"gamefiles","inject")
-      if not os.path.isdir(source_filepath):
+      if not os.path.isdir(source_filepath):	#if directory doesn't exist, make it
         os.makedirs(source_filepath)
 
-    if not random:
-      print("   Injecting \"" + self.sprite.classic_name + "\" into: " + source_filepath)
-    else:
-      print("   Injecting into: " + source_filepath)
+    print("   Injecting " + ("Random " if random else "") + "\"" + self.sprite.classic_name + "\" into: " + source_filepath)
 
-    source_filenames = []
+    source_filenames = []	#walk through the game files and inject the loaded sprite
     for r,d,f in os.walk(source_filepath):
       for file in f:
         _,file_extension = os.path.splitext(file)
@@ -167,6 +182,9 @@ class CLIMainFrame():
     for source_filename in source_filenames:
       self.copy_into_ROM(inject=inject,dest_filename=source_filename,source_filename=source_filename)
 
+	#pick a random sprite and return the filename; accepts PNG/ZSPR/SFC/SMC/RDC
+	# Inbound:
+	#  sprite_filepath: Directory of sprites to select from
   def get_random_sprite(self, sprite_filepath=None):
     if os.path.exists(sprite_filepath):
       sprite_filenames = []
@@ -174,7 +192,7 @@ class CLIMainFrame():
         for r,d,f in os.walk(sprite_filepath):
           for file in f:
             _,file_extension = os.path.splitext(file)
-            if file_extension.lower() in [".png",".zspr",".sfc",".smc"]:
+            if file_extension.lower() in [".png",".zspr",".sfc",".smc",".rdc"]:
               sprite_filenames.append(os.path.join(r,file))
       elif os.path.isfile(sprite_filepath):
         sprite_filenames.append(sprite_filepath)
@@ -183,12 +201,21 @@ class CLIMainFrame():
       print("Sprite File not found")
       return False
 
+	#try to randomize a sprite and inject it
+	# Inbound:
+	#  inject: Are we injecting directly or making a copy?
+	#  dest_filename: Destination filename of game file
+	#  source_filename: Source filename to make a copy from
+	#  source_filepath: Directory of source game files
+	#  sprite_filepath: Directory of sprite files
   def randomize_into_ROM(self, inject=False, dest_filename=None, source_filename=None, source_filepath=None, sprite_filepath=None):
 #    self.load_sprite(self.get_random_sprite(sprite_filepath=sprite_filepath))
 #    self.copy_into_ROM(inject=inject, dest_filename=dest_filename,source_filename=source_filename)
     print("If you got here, it's busted.")
     pass
 
+	#try to randomize a sprite and inject it
+	#like above but for list of files
   def randomize_into_ROM_bulk(self, source_filepath=None, sprite_filepath=None, unique=False):
     used_sprites = []
     source_filenames = []
