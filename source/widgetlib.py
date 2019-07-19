@@ -188,9 +188,9 @@ class SpiffyGroup():
 				selectcolor=self.parent.DIMENSIONS["button"]["color.selected"],
 				width=self.parent.DIMENSIONS["button"]["width"],
 				height=self.parent.DIMENSIONS["button"]["height"],
-				indicatoron=False,
-				command=self.press_spiffy_button
+				indicatoron=False
 			)
+			button.configure(command=partial(self.press_spiffy_button,button))
 		bindings = None
 		keypresses = None
 		bindings_filename = common.get_resource("bindings.json","meta")
@@ -209,7 +209,7 @@ class SpiffyGroup():
 		if not self.independent:
 			if not self.default_exists or default:
 				button.select()
-				self.press_spiffy_button()
+				self.press_spiffy_button(button)
 				self.default_exists = True
 
 		self.col += 1
@@ -223,7 +223,7 @@ class SpiffyGroup():
 		self.parent.max_row += amount_of_space
 		return amount_of_space
 
-	def press_spiffy_button(self):
+	def press_spiffy_button(self, button):
 		self.parent.sprite_object.update_animation()
 		if len(self.parent.sprite_object.palette_buttons) >= 15:
 			pose_list = self.parent.sprite_object.get_current_pose_list()
@@ -237,19 +237,30 @@ class SpiffyGroup():
 					this_palette = self.parent.sprite_object.get_current_palette(self.parent.sprite_object.mail_var.get(),default_range)
 			if len(this_palette) >= 15:
 				for i in range(len(this_palette)):
-					color = "#%02x%02x%02x" % this_palette[i]
-					self.parent.sprite_object.palette_buttons[i+1].configure(bg=color)
+					if self.parent.sprite_object.classic_name in ["Link"] and i in [12]:
+						pass
+					else:
+						color = "#%02x%02x%02x" % this_palette[i]
+						self.parent.sprite_object.palette_buttons[i+1].configure(bg=color)
+						self.parent.sprite_object.palette_buttons[i+1].configure(relief=tk.RAISED)
+			for i in [16,17]:
+				self.parent.sprite_object.palette_buttons[i].configure(relief=tk.RAISED)
+			if hasattr(self.parent.sprite_object,"gloves_var"):
+				if not button.winfo_name().find("gloves") == -1 and button.winfo_name().find("no") == -1:
+					button_id = 16 if not button.winfo_name().find("power") == -1 else 17
+					self.parent.sprite_object.palette_buttons[button_id].configure(relief=tk.SUNKEN)
 
 	def press_color_button(self,index):
 		color = str(colorchooser.askcolor())
-		matches = re.search(r'\(([^\)]*)\)([,\s\']*)([^\']*)(.*)',color)
-		if matches:
-			color = matches[3]
-			r = ("%x" % (int(int(color[1:3],16) / 8) * 8)).zfill(2)
-			g = ("%x" % (int(int(color[3:5],16) / 8) * 8)).zfill(2)
-			b = ("%x" % (int(int(color[5:7],16) / 8) * 8)).zfill(2)
-			color = '#' + r + g + b
-			self.parent.palette_buttons[index-1].configure(bg=color)
+		if color.find("None") == -1:
+			matches = re.search(r'\(([^\)]*)\)([,\s\']*)([^\']*)(.*)',color)
+			if matches:
+				color = matches[3]
+				r = ("%x" % (int(int(color[1:3],16) / 8) * 8)).zfill(2)
+				g = ("%x" % (int(int(color[3:5],16) / 8) * 8)).zfill(2)
+				b = ("%x" % (int(int(color[5:7],16) / 8) * 8)).zfill(2)
+				color = '#' + r + g + b
+				self.parent.sprite_object.palette_buttons[index-1].configure(bg=color)
 
 	def invoke_spiffy_button(self, button, event=None):
 		button.config(relief = tk.SUNKEN)

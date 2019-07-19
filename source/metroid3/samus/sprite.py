@@ -280,23 +280,11 @@ class Sprite(SpriteParent):
 		palette_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="palette_buttons")
 
 		palette_set = palette_buttons.make_new_group("palette", independent=True)
-		palette_set.add("id-0","blank.png")
-		palette_set.add("id-1","blank.png")
-		palette_set.add("id-2","blank.png")
-		palette_set.add("id-3","blank.png")
-		palette_set.add("id-4","blank.png")
-		palette_set.add("id-5","blank.png")
-		palette_set.add("id-6","blank.png")
-		palette_set.add("id-7","blank.png")
-		palette_set.add_newline()
-		palette_set.add("id-8","blank.png")
-		palette_set.add("id-9","blank.png")
-		palette_set.add("id-A","blank.png")
-		palette_set.add("id-B","blank.png")
-		palette_set.add("id-C","blank.png")
-		palette_set.add("id-D","blank.png")
-		palette_set.add("id-E","blank.png")
-		palette_set.add("id-F","blank.png")
+		for i in range(16):
+			button_id = "id-" + format(i,'x').upper()
+			palette_set.add(button_id,"blank.png")
+			if i == 7:
+				palette_set.add_newline()
 
 		return palette_buttons
 
