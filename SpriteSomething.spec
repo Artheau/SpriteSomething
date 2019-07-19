@@ -30,7 +30,14 @@ a = Analysis(['SpriteSomething.py'],
              win_private_assemblies=False,
              cipher=block_cipher,
              noarchive=False)
-      
+
+# https://stackoverflow.com/questions/17034434/how-to-remove-exclude-modules-and-files-from-pyinstaller
+excluded_binaries = [
+        'VCRUNTIME140.dll',
+        'msvcp140.dll',
+        'mfc140u.dll']
+a.binaries = TOC([x for x in a.binaries if x[0] not in excluded_binaries])
+
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)
 exe = EXE(pyz,

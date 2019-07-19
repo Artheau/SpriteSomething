@@ -1,7 +1,8 @@
-import subprocess
-import os
+import subprocess	#for executing scripts within scripts
+import os					#for checking for dirs
 
 DEST_DIRECTORY = "."
+
 #UPX greatly reduces the filesize.  You can get this utility from https://upx.github.io/
 #just place it in a subdirectory named "upx" and this script will find it
 if os.path.isdir("upx"):

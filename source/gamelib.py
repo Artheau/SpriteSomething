@@ -2,11 +2,11 @@
 #handling backgrounds, etc.
 #handles import of new sprites
 
-import os
-import importlib
-import json
-import tkinter as tk
-import random
+import os							#for filesystem manipulation
+import importlib			#for importing libraries dynamically
+import json						#for reading JSON
+import tkinter as tk	#for GUI stuff
+import random					#for choosing background image to load on app startup
 from PIL import Image, ImageFile
 from source import ssTranslate as fish
 from source import widgetlib
@@ -104,9 +104,11 @@ class GameParent():
 		self.background_selection = tk.StringVar(background_panel)
 
 		background_filenames = common.gather_all_from_resource_subdirectory(os.path.join(self.internal_name,"backgrounds"))
-		self.background_selection.set(random.choice(background_filenames))
+		#FIXME: Hacky!
+		background_prettynames = [(i[:1].upper() + i[1:i.rfind('.')]) for i in background_filenames]
+		self.background_selection.set(random.choice(background_prettynames))
 
-		background_dropdown = tk.ttk.Combobox(background_panel, state="readonly", values=background_filenames, name="background_dropdown")
+		background_dropdown = tk.ttk.Combobox(background_panel, state="readonly", values=background_prettynames, name="background_dropdown")
 		background_dropdown.configure(width=BACKGROUND_DROPDOWN_WIDTH, exportselection=0, textvariable=self.background_selection)
 		background_dropdown.grid(row=0, column=2)
 
@@ -120,6 +122,7 @@ class GameParent():
 			if self.last_known_zoom == self.zoom_getter():
 				return   #there is nothing to do here, because nothing has changed
 		else:     #image name is different, so need to load a new image
+			image_filename = image_filename.lower() + ".png" #FIXME: Hacky!
 			self.raw_background = Image.open(common.get_resource(image_filename,subdir=os.path.join(self.internal_name,"backgrounds")))
 
 		#now re-zoom the image

@@ -57,6 +57,18 @@ def get_tk_image(image):
 def convert_hex_to_rgb(color):
 	return tuple(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
 
+def reduce_to_nearest_eighth(val):
+	#take a value, divide by 8, floor it
+	return int(val)//8
+
+def snescolor_eighth(val):
+	#take a value, divide by 8, floor it, constrain it
+	return max(0,min(31,reduce_to_nearest_eighth(val)))
+
+def round_to_nearest_eight(val):
+	#take a value, divide by 8, floor it, contrain it, mult by 8
+	return snescolor_eighth(val) * 8
+
 def convert_555_to_rgb(color, recurse=True):
 	#converts either a single color or a list of colors in 555 format to their RGB 3-tuple equivalents
 	try:
@@ -77,7 +89,7 @@ def convert_to_555(palette):   #expects (r,g,b) tuples in a list, returns big en
 	return [single_convert_to_555(color) for color in palette]
 
 def single_convert_to_555(color):  #expects an (r,g,b) tuple, returns a big endian 2-byte value
-	red,green,blue = [max(0,min(31,int(x)//8)) for x in color]
+	red,green,blue = [snescolor_eighth(x) for x in color]
 	return (     blue  * 1024) + \
 			(    green * 32  ) + \
 			(    red         )

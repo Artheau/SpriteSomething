@@ -2267,5 +2267,43 @@
 			{	"frames": 6,	"tiles": [	{"image": "grabbed_left_struggling4", "pos": [-19,-24]}	]	},
 			{	"frames": 6,	"tiles": [	{"image": "grabbed_left_struggling5", "pos": [-19,-24]}	]	}
 		]
+	},
+	"Death": {
+		"right": [
+			{	"frames": 40,	"tiles": [	{"image": "bonk_right", "pos": [-13,-24]}	]	},
+			{	"frames": 60,	"tiles": [	{"image": "bonk_right1", "pos": [-13,-24]}	]	},
+			{	"frames": 21,	"tiles": [	{"image": "death_right", "pos": [-20,-32]}	]	},
+			{	"frames": 6,	"tiles": [	{"image": "death_right1", "pos": [-20,-32]},
+											{"image": "death_right_pieces", "pos": [-15,-25]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "death_right2", "pos": [-20,-32]},
+											{"image": "death_right_pieces1", "pos": [-20,-25]}	]	},
+			{	"frames": 4,	"tiles": [	{"image": "death_right3", "pos": [-20,-32]},
+											{"image": "death_right_pieces2", "pos": [-22,-35]}	]	},
+			{	"frames": 5,	"tiles": [	{"image": "death_right4", "pos": [-20,-32]},
+											{"image": "death_right_pieces3", "pos": [-30,-42]}	]	},
+			{	"frames": 5,	"tiles": [	{"image": "death_right5", "pos": [-20,-32]},
+											{"image": "death_right_pieces4", "pos": [-36,-45]}	]	},
+			{	"frames": 6,	"tiles": [	{"image": "death_right6", "pos": [-20,-32]}	]	},
+			{	"frames": 6,	"tiles": [	{"image": "death_right6", "pos": [-20,-32]}	]	},
+			{	"frames": 90,	"tiles": [	{"image": "death_right7", "pos": [-20,-32]}	]	}
+		],
+		"left": [
+			{	"frames": 40,	"tiles": [	{"image": "bonk_left", "pos": [-19,-24]}	]	},
+			{	"frames": 60,	"tiles": [	{"image": "bonk_left1", "pos": [-19,-24]}	]	},
+			{	"frames": 21,	"tiles": [	{"image": "death_left", "pos": [-12,-32]}	]	},
+			{	"frames": 6,	"tiles": [	{"image": "death_left1", "pos": [-12,-32]},
+											{"image": "death_left_pieces", "pos": [-9,-25]}	]	},
+			{	"frames": 3,	"tiles": [	{"image": "death_left2", "pos": [-12,-32]},
+											{"image": "death_left_pieces1", "pos": [-12,-25]}	]	},
+			{	"frames": 4,	"tiles": [	{"image": "death_left3", "pos": [-12,-32]},
+											{"image": "death_left_pieces2", "pos": [-18,-35]}	]	},
+			{	"frames": 5,	"tiles": [	{"image": "death_left4", "pos": [-12,-32]},
+											{"image": "death_left_pieces3", "pos": [-26,-42]}	]	},
+			{	"frames": 5,	"tiles": [	{"image": "death_left5", "pos": [-12,-32]},
+											{"image": "death_left_pieces4", "pos": [-36,-45]}	]	},
+			{	"frames": 6,	"tiles": [	{"image": "death_left6", "pos": [-12,-32]}	]	},
+			{	"frames": 6,	"tiles": [	{"image": "death_left6", "pos": [-12,-32]}	]	},
+			{	"frames": 90,	"tiles": [	{"image": "death_left7", "pos": [-12,-32]}	]	}
+		]
 	}
 }

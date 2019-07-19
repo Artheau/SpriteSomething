@@ -1,9 +1,9 @@
-import importlib
+import importlib			#for dynamic imports
 import itertools
-import json
-import os
-import io
-import urllib.request
+import json						#for reading JSON
+import os							#for filesystem manipulation
+import io							#for filesystem manipution
+import urllib.request	#for downloading stuff
 from PIL import Image
 from source import common
 from source import widgetlib
@@ -184,29 +184,33 @@ class Sprite(SpriteParent):
 		color_value = common.convert_hex_to_rgb(color_value)
 		self.master_palette[palette_index + color_index] = color_value
 
+	#download ALttPR sprites
 	def get_alttpr_sprites(self):
-		success = False
-		official = os.path.join('.',"resources","zelda3","link","official")
+		success = False	#report success
+		official = os.path.join('.',"resources","zelda3","link","official")	#save to resources/zelda3/link/official/*.zspr
 		if not os.path.exists(official):
-			os.makedirs(official)
+			os.makedirs(official)	#make it if we don't have it
+
+		#make the request!
 		alttpr_sprites_filename = "http://alttpr.com/sprites"
 		alttpr_sprites_req = urllib.request.urlopen(alttpr_sprites_filename)
 		alttpr_sprites = json.loads(alttpr_sprites_req.read().decode("utf-8"))
+		#get an iterator and a counter for a makeshift progress bar
 		i = 0
 		total = len(alttpr_sprites)
 		print("   Downloading Official ALttPR Sprites")
 		for sprite in alttpr_sprites:
-			sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]
-			sprite_destination = os.path.join(official,sprite_filename)
-			i += 1
-			if not os.path.exists(sprite_destination):
+			sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
+			sprite_destination = os.path.join(official,sprite_filename)	#set the destination
+			i += 1	#iterate iterator
+			if not os.path.exists(sprite_destination):	#if we don't have it, download it
 				with open(sprite_destination, "wb") as g:
 					sprite_data_req = urllib.request.urlopen(sprite["file"])
 					sprite_data = sprite_data_req.read()
 					print("    Writing " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 					g.write(sprite_data)
 					success = True
-			else:
+			else:	#if we do have it, next!
 				print("    Skipping " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 		return success
 

@@ -1,13 +1,13 @@
-import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
-import random
-import json
-import re
-import traceback
-import os, sys
-import time
-import webbrowser
-from functools import partial
+import tkinter as tk	#for GUI stuff
+from tkinter import ttk, messagebox, filedialog	#for GUI stuff
+import random									#for choosing random app titles
+import json										#for reading JSON
+import re											#for regexes in hyperlinks in about box
+import traceback							#for error reporting
+import os, sys								#for filesystem manipulation
+import time										#for timekeeping
+import webbrowser							#for launching browser from about box
+from functools import partial	#for passing parameters to user-triggered function calls
 from source import widgetlib
 from source import ssDiagnostics as diagnostics
 from source import ssTranslate as fish
@@ -48,6 +48,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def __init__(self, master, command_line_args):
 		super().__init__(master)   #make the frame itself
 
+		#set default working dirs to same dir as script
 		self.working_dirs = {
 			"file.open": "./",
 			"file.save": "./",
@@ -59,6 +60,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			"export.animation-as-hcollage": "./",
 			"export.animation-as-vcollage": "./"
 		}
+		#read saved working dirs file if it exists and set these
 		working_dir_path = os.path.join("resources","meta","working_dirs.json")
 		if os.path.exists(working_dir_path):
 			with open(working_dir_path) as json_file:
@@ -68,6 +70,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		self.create_random_title()
 
+		#build and add toolbar
 		self.create_toolbar()
 
 		self.pack(fill=tk.BOTH, expand=1)    #main frame should take up the whole window
@@ -99,13 +102,20 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.app_title = " ".join(app_name)
 		self.master.title(self.app_title)
 
+	#create a toolbar
 	def create_toolbar(self):
 		toolbar = tk.Frame(self.master, bd=1, relief=tk.RAISED)
+		#create a toolbar button
+		# Inbound:
+		#  fish_key: Main key for translation
+		#  fish_subkey: Subkey for translation
+		#  image_filename: Image to use, default to blank
+		#  command: Command to associate with button, default to None
 		def create_toolbar_button(fish_key, fish_subkey, image_filename="blank.png",command=None):
 			icon_path = common.get_resource(image_filename,os.path.join("meta","icons"))
 			img = tk.PhotoImage(file=icon_path)
 			display_text = fish.translate(fish_key,fish_subkey,os.path.join("meta"))
-			button = tk.Button(toolbar,image=img,relief=tk.FLAT,command=command)
+			button = tk.Button(toolbar,image=img,relief=tk.FLAT,command=command,state="disabled" if command == None else "normal")
 			button.img = img
 			widgetlib.ToolTip(button,display_text)
 			button.pack(side=tk.LEFT,padx=2,pady=2)
@@ -113,15 +123,19 @@ class SpriteSomethingMainFrame(tk.Frame):
 		toolbar.pack(side=tk.TOP,fill=tk.X)
 		toolbar_buttons = []
 
+		#File -> Open
 		open_button = create_toolbar_button("menu","file.open","open.png",self.open_file)
 		toolbar_buttons.append(open_button)
 
+		#File -> Save
 		save_button = create_toolbar_button("menu","file.save","save.png",self.save_file_as)
 		toolbar_buttons.append(save_button)
 
+		#Export -> Inject
 		inject_button = create_toolbar_button("menu","export.inject","inject.png",self.inject_into_ROM)
 		toolbar_buttons.append(inject_button)
 
+		#Export -> Inject Copy
 		inject_new_button = create_toolbar_button("menu","export.inject-new","inject-new.png",self.copy_into_ROM)
 		toolbar_buttons.append(inject_new_button)
 
@@ -189,24 +203,34 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		return menu
 
+	#load plugins
 	def load_plugins(self):
 		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 
+		#if we've got Game plugins or Sprite plugins
 		if self.game.plugins or self.sprite.plugins:
+			#if we've got Game plugins, start the menu
 			if self.game.plugins:
 				game_plugins_menu = tk.Menu(self.menu, tearoff=0, name="game_plugins_menu")
+				#add the commands
 				for label, command in self.game.plugins:
 					game_plugins_menu.add_command(label=label,command=command,state="disabled" if command == None else "normal")
 				self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.game",os.path.join("meta")),menu=game_plugins_menu)
 
+			#if we've got Sprite plugins
 			if self.sprite.plugins:
 				sprite_plugins_menu = tk.Menu(self.menu, tearoff=0, name="sprite_plugins_menu")
+				#add the commands
 				for label, command in self.sprite.plugins:
 					sprite_plugins_menu.add_command(label=label,command=command,state="disabled" if command == None else "normal")
 				self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.sprite",os.path.join("meta")),menu=sprite_plugins_menu)
 		else:
+			#if we got nothin', say as such
 			self.menu.children["plugins_menu"].add_command(label=fish.translate("meta","none",os.path.join("meta")),state="disabled")
 
+	#load sprite
+	# Inbound:
+	#  sprite_filename: Filename of sprite to load
 	def load_sprite(self, sprite_filename):
 		self.game, self.sprite = gamelib.autodetect(sprite_filename)
 		self.sprite_coord = (100,100)        #an arbitrary default
@@ -222,11 +246,14 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.master.after_cancel(self.timer_callback)
 		if hasattr(self, "left_panel"):
 			for widget in self.left_panel.winfo_children():
+				#if we've got direction buttons
 				if "direction_buttons" in widget.winfo_name():
+					#get the main bindings file
 					bindings = None
 					bindings_filename = common.get_resource("bindings.json","meta")
 					with open(bindings_filename,encoding="utf-8") as f:
 						bindings = json.load(f)
+					#cycle through all spiffy buttons
 					for subwidget in widget.winfo_children():
 						if "_button" in subwidget.winfo_name():
 							button_name = subwidget.winfo_name().replace("_button","")
@@ -235,8 +262,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 							keypresses = None
 							keypresses_switcher = bindings[button_section] if button_section in bindings else {}
 							keypresses = keypresses_switcher.get(button_name.lower(),None)
+							#nuke all the bindings from orbit
 							for keypress in keypresses:
 								subwidget.unbind_all(keypress)
+							#nuke this button from orbit
 							subwidget.destroy()
 		self.left_panel = tk.PanedWindow(self.panes, orient=tk.VERTICAL, name="left_panel",width=250,handlesize=0,sashwidth=0,sashpad=2)
 		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
@@ -264,6 +293,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.attach_overview()
 		self.panes.add(self.right_panel)
 
+	#make a status bar
 	def create_status_bar(self):
 		if not hasattr(self, "status_bar"):
 			self.status_bar = StatusBar(self)
@@ -422,6 +452,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 		BUTTON_WIDTH = 7
 		self.current_grid_cell = 0
 
+		#make a vcr button label
+		# Inbound
+		#  textvariable: var to report back to
+		#  icon_name: filename of icon to use
 		def make_vcr_label(textvariable, icon_name):
 			icon_path = common.get_resource(icon_name,os.path.join("meta","icons"))
 			image = tk.PhotoImage(file=icon_path) if icon_path else None
@@ -432,6 +466,12 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.current_grid_cell += 1
 			return vcr_label
 
+		#make a vcr button
+		# Inbound
+		#  text: text label
+		#  icon_name: filename of icon to use
+		#  command: command to execute when pressed
+		#  side: alignment
 		def make_vcr_button(text, icon_name, command, side="right"):
 			icon_path = common.get_resource(icon_name,os.path.join("meta","icons"))
 			image = tk.PhotoImage(file=icon_path) if icon_path else None
@@ -449,27 +489,34 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.current_grid_cell += 1
 			return vcr_button
 
+		#make a container for all the buttons
 		vcr_buttons = []
+
+		#zoom controls
 		zoom_factor_label = make_vcr_label(self.zoom_factor, None)
 		zoom_out_button = make_vcr_button(fish.translate("vcr-controls","zoom-minus",os.path.join("meta")),None,zoom_out)
 		zoom_in_button = make_vcr_button(fish.translate("vcr-controls","zoom-plus",os.path.join("meta")),None,zoom_in)
 		vcr_buttons.append((zoom_factor_label,zoom_out_button,zoom_in_button,))
 
+		#speed controls
 		speed_factor_label = make_vcr_label(self.speed_factor,None)
 		speed_down_button = make_vcr_button(fish.translate("vcr-controls","speed-minus",os.path.join("meta")),None,speed_down)
 		speed_up_button = make_vcr_button(fish.translate("vcr-controls","speed-plus",os.path.join("meta")),None,speed_up)
 		vcr_buttons.append((speed_factor_label,speed_down_button,speed_up_button,))
 
+		#play controls
 		play_button = make_vcr_button(fish.translate("vcr-controls","play",os.path.join("meta")), "play.png", self.start_global_frame_timer)
 		play_one_button = make_vcr_button(fish.translate("vcr-controls","play-one",os.path.join("meta")), "play-one.png", self.play_once)
 		reset_button = make_vcr_button(fish.translate("vcr-controls","reset",os.path.join("meta")), None, self.reset_global_frame_timer)
 		vcr_buttons.append((play_button,play_one_button,reset_button,))
 
+		#frame step controls
 		frame_back_button = make_vcr_button(fish.translate("vcr-controls","frame-backward",os.path.join("meta")), "frame-backward.png", self.rewind_global_frame_timer,"left")
 		pause_button = make_vcr_button(fish.translate("vcr-controls","pause",os.path.join("meta")), "pause.png", self.pause_global_frame_timer)
 		frame_forward_button = make_vcr_button(fish.translate("vcr-controls","frame-forward",os.path.join("meta")), "frame-forward.png", self.step_global_frame_timer)
 		vcr_buttons.append((frame_back_button,pause_button,frame_forward_button,))
 
+		#pose step controls
 		step_back_button = make_vcr_button(fish.translate("vcr-controls","pose-backward",os.path.join("meta")), "step-backward.png", self.go_to_previous_pose, "left")
 		null_label = make_vcr_label("", None)
 		step_forward_button = make_vcr_button(fish.translate("vcr-controls","pose-forward",os.path.join("meta")), "step-forward.png", self.go_to_next_pose)
@@ -486,13 +533,16 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	############################ MENU BAR FUNCTIONS HERE ################################
 
+	#query user for file to open; ZSPR/PNG/SFC/SMC
 	def open_file(self):
 		#TODO: Give the user a chance to regret not saving their work
 		filename = filedialog.askopenfilename(initialdir=self.working_dirs["file.open"], title="Select Sprite", filetypes=(("Supported Types","*.zspr *.png *.sfc *.smc"),))
 		if filename:
+			#if we've got a filename, set the working dir and load the sprite
 			self.working_dirs["file.open"] = filename[:filename.rfind('/')]
 			self.load_sprite(filename)
 
+	#query user to export file; PNG/ZSPR/RDC
 	def save_file_as(self):
 		# Save a ZSPR or PNG.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
 		filetypes = (("Portable Network Graphics","*.png"),("ZSPR Sprite","*.zspr"),("Retro Data Container","*.rdc"))
@@ -508,6 +558,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
 
+	#query user to inject sprite into game file
+	# Inbound:
+	#  inject: Are we injecting directly or making a copy?
 	def copy_into_ROM(self, inject=False):
 		dest_filename = None
 		if inject:
@@ -530,14 +583,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
 			messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 
+	#query user for directory to inject sprite into
 	def copy_into_ROM_bulk(self, inject=False):
 		source_filepath = None
 		if inject:
-			source_filepath = filedialog.askdirectory()
+			source_filepath = filedialog.askdirectory()	#only injection is supported
 		else:
 			raise AssertionError("Unsure if making copies fits this purpose well")
 
-		source_filenames = []
+		source_filenames = []	#walk through the game files and inject the loaded sprite
 		for r,d,f in os.walk(source_filepath):
 			for file in f:
 				_,file_extension = os.path.splitext(file)
@@ -545,19 +599,22 @@ class SpriteSomethingMainFrame(tk.Frame):
 					source_filenames.append(os.path.join(r,file))
 		for source_filename in source_filenames:
 			dest_filename = source_filename
-			rom = self.game.get_rom_from_filename(source_filename)
-			same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(source_filename)
-			is_zsm = "ZSM" in str(rom.get_name())
-			if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):
+			rom = self.game.get_rom_from_filename(source_filename)	#read ROM data
+			same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(source_filename)	#the game file matches
+			is_zsm = "ZSM" in str(rom.get_name())	#this is a ZSM game file
+			if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):	#if we've got a compatible game file, inject it!
 				modified_rom = self.sprite.inject_into_ROM(rom)
 				modified_rom.save(dest_filename, overwrite=True)
 
+	#alias to inject into a game file
 	def inject_into_ROM(self):
 		self.copy_into_ROM(inject=True)
 
+	#alias to inject into a directory of game filefs
 	def inject_into_ROM_bulk(self):
 		self.copy_into_ROM_bulk(inject=True)
 
+	#export current frame as PNG
 	def export_frame_as_png(self):
 		filetypes = (("Portable Network Graphics","*.png"),)
 		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.frame-as-png"], title="Save Frame As...", filetypes=filetypes)
@@ -570,9 +627,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
 
+	#export current animation as GIF
 	def export_animation_as_gif(self):
 		raise NotImplementedError()
 
+	#export current animation as collage PNG
 	def export_animation_as_collage(self,orientation="horizontal"):
 		if orientation == "vertical":
 			raise NotImplementedError()
@@ -642,10 +701,12 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.add_text_link_array(lines, text)
 		text.bind("<Button-1>", lambda e: txtEvent(e))
 
+	#write working dirs to file
 	def save_working_dirs(self):
 		f = open("./resources/meta/working_dirs.json","w+")
 		f.write(json.dumps(self.working_dirs,indent=2))
 
+	#exit sequence
 	def exit(self):
 		#Until some kind of useful change/edit feature is implemented, no need to ask if they want to save their changes
 		save_before_exit = False #messagebox.askyesnocancel(self.app_title,"Do you want to save before exiting?")
