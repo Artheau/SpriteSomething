@@ -4,7 +4,7 @@ from PIL import Image
 from source import common
 from . import rom_export
 
-def get_raw_rdc_export_blocks(sprite):
+def get_raw_rdc_samus_block(sprite):
 	block = io.BytesIO()
 
 	block.write(dma_banks(sprite))
@@ -14,7 +14,7 @@ def get_raw_rdc_export_blocks(sprite):
 	block.write(file_select(sprite))
 	block.write(palettes(sprite))
 
-	return [block.getvalue()]
+	return block.getvalue()
 
 def dma_banks(sprite):
 	return bytes(itertools.chain.from_iterable(rom_export.get_raw_pose(sprite,name) for name in sprite.layout.data["dma_sequence"]))
