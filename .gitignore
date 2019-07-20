@@ -34,3 +34,6 @@ _test_macro.py
 
 # no working dirs file
 /resources/meta/working_dirs.json
+
+# no custom files
+custom/
