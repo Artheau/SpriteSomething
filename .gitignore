@@ -11,8 +11,9 @@ __pycache__/
 #do not include the upx compressor directory (you can get this utility from https://upx.github.io/)
 /upx
 
-# no vscode
+# no IDE stuff
 /.vscode
+/.idea
 
 # no PowerShell scripts
 *.ps*
