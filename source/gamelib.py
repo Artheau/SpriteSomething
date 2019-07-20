@@ -19,7 +19,8 @@ def autodetect(sprite_filename):
 	_,file_extension = os.path.splitext(sprite_filename)
 	if file_extension.lower() in [".sfc",".smc"]:
 		#If the file is a rom, then we can go into the internal header and get the name of the game
-		game = get_game_class_of_type(autodetect_game_type_from_rom_filename(sprite_filename))
+		game_names = autodetect_game_type_from_rom_filename(sprite_filename)
+		game = get_game_class_of_type(random.choice(game_names))	#FIXME: We actually care if there's more than one element here; choose random for now
 		#And by default, we will grab the player sprite from this game
 		sprite = game.make_player_sprite(sprite_filename)
 	elif file_extension.lower() == ".png":
@@ -51,14 +52,19 @@ def autodetect_game_type_from_rom(rom):
 	rom_name = rom.get_name()
 	with open(common.get_resource("game_header_info.json",subdir="meta")) as file:
 		game_header_info = json.load(file)
+
+	game_names = []
 	for game_name, header_name_list in game_header_info.items():
 		for header_name in header_name_list:
 			if rom_name[:len(header_name)] == header_name:
-				return game_name
-	else:
+				game_names.append(game_name)
+
+	if len(game_names) == 0:
+		game_names = None
 		#raise AssertionError(f"Could not identify the type of ROM from its header name: {rom_name}")
 		print(f"Could not identify the type of ROM from its header name: {rom_name}")
-		return None
+
+	return game_names
 
 def get_game_type_from_zspr_data(zspr_data):
 	#for now, until other types of ZSPR files exist, we will just assume that all ZSPR files are Zelda3 Link files
