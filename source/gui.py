@@ -75,7 +75,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		self.pack(fill=tk.BOTH, expand=1)    #main frame should take up the whole window
 
-		self.menu = self.create_menu_bar()
+		self.create_menu_bar()
 
 		self.panes = tk.PanedWindow(self, orient=tk.HORIZONTAL, name="two_columns")
 		self.panes.pack(fill=tk.BOTH, expand=1)
@@ -139,34 +139,43 @@ class SpriteSomethingMainFrame(tk.Frame):
 		inject_new_button = create_toolbar_button("menu","export.inject-new","inject-new.png",self.copy_into_ROM)
 		toolbar_buttons.append(inject_new_button)
 
+	def create_cascade(self, name, internal_name, options_list, parent_menu=None):
+		#options_list must be a list of 3-tuples containing
+		# Display Name
+		# image name (without the .png extension)
+		# function to call
+		if parent_menu == None:
+			parent_menu = self.menu
+		cascade = tk.Menu(parent_menu, tearoff=0, name=internal_name)
+		cascade.images = {}
+		for display_name,image_name,function_to_call in options_list:
+			if (display_name,image_name,function_to_call) == (None,None,None):
+				cascade.add_separator()
+			else:
+				if image_name:
+					image_filename = (f"{image_name}")
+					image_filename += ".gif" if "gif" in image_filename else ".png"
+					image_path = os.path.join("meta","icons")
+					if "game_plugins" in internal_name:
+						image_path = os.path.join(self.game.resource_subpath,"icons")
+					if "sprite_plugins" in internal_name:
+						image_path = os.path.join(self.sprite.resource_subpath,"icons")
+					cascade.images[image_name] = tk.PhotoImage(file=common.get_resource(image_filename,image_path))
+				else:
+					cascade.images[image_name] = None
+				cascade.add_command(label=display_name, image=cascade.images[image_name], compound=tk.LEFT, command=function_to_call, state="disabled" if function_to_call == None else "normal")
+		parent_menu.add_cascade(label=name, menu=cascade)
+		return cascade
+
 	def create_menu_bar(self):
 		#create the menu bar
-		menu = tk.Menu(self.master, name="menu_bar")
-		self.master.configure(menu=menu)
-
-		def create_cascade(name, internal_name, options_list):
-			#options_list must be a list of 3-tuples containing
-			# Display Name
-			# image name (without the .png extension)
-			# function to call
-			cascade = tk.Menu(menu, tearoff=0, name=internal_name)
-			cascade.images = {}
-			for display_name,image_name,function_to_call in options_list:
-				if (display_name,image_name,function_to_call) == (None,None,None):
-					cascade.add_separator()
-				else:
-					if image_name:
-						cascade.images[image_name] = tk.PhotoImage(file=common.get_resource(f"{image_name}.png",os.path.join("meta","icons")))
-					else:
-						cascade.images[image_name] = None
-					cascade.add_command(label=display_name, image=cascade.images[image_name], compound=tk.LEFT, command=function_to_call, state="disabled" if function_to_call == None else "normal")
-			menu.add_cascade(label=name, menu=cascade)
-			return cascade
+		self.menu = tk.Menu(self.master, name="menu_bar")
+		self.master.configure(menu=self.menu)
 
 		menu_options = []
 
 		#create the file menu
-		file_menu = create_cascade(fish.translate("menu","file",os.path.join("meta")), "file_menu",
+		file_menu = self.create_cascade(fish.translate("menu","file",os.path.join("meta")), "file_menu",
 											[
 													(fish.translate("menu","file.open",os.path.join("meta")),"open",self.open_file),
 													(fish.translate("menu","file.save",os.path.join("meta")),"save",self.save_file_as),
@@ -175,33 +184,32 @@ class SpriteSomethingMainFrame(tk.Frame):
 		menu_options.append(file_menu)
 
 		#create the import menu
-		import_menu = create_cascade(fish.translate("menu","export",os.path.join("meta")),"export_menu",
+		import_menu = self.create_cascade(fish.translate("menu","export",os.path.join("meta")),"export_menu",
 											[
 													(fish.translate("menu","export.inject",os.path.join("meta")),"inject",self.inject_into_ROM),
 													(fish.translate("menu","export.inject-new",os.path.join("meta")),"inject-new",self.copy_into_ROM),
-													(fish.translate("menu","export.inject-bulk",os.path.join("meta")),None,self.inject_into_ROM_bulk),
+													(fish.translate("menu","export.inject-bulk",os.path.join("meta")),"inject-bulk",self.inject_into_ROM_bulk),
 													(None,None,None),
-													(fish.translate("menu","export.frame-as-png",os.path.join("meta")),None,self.export_frame_as_png),
-													(fish.translate("menu","export.animation-as-gif",os.path.join("meta")),None,None),#self.export_animation_as_gif),
-													(fish.translate("menu","export.animation-as-hcollage",os.path.join("meta")),None,partial(self.export_animation_as_collage,"horizontal")),
-													(fish.translate("menu","export.animation-as-vcollage",os.path.join("meta")),None,None),#partial(self.export_animation_as_collage,"vertical")),
+													(fish.translate("menu","export.frame-as-png",os.path.join("meta")),"frame-as-png",self.export_frame_as_png),
+													(fish.translate("menu","export.animation-as-gif",os.path.join("meta")),"animation-as-gif",None),#self.export_animation_as_gif),
+													(fish.translate("menu","export.animation-as-hcollage",os.path.join("meta")),"animation-as-hcollage",partial(self.export_animation_as_collage,"horizontal")),
+													(fish.translate("menu","export.animation-as-vcollage",os.path.join("meta")),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
 											])
 		menu_options.append(import_menu)
 
 		#for future implementation
-		plugins_menu = tk.Menu(menu, tearoff=0, name="plugins_menu")
-		tools_menu = tk.Menu(menu, tearoff=0, name="tools_menu")
+		plugins_menu = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
+		tools_menu = tk.Menu(self.menu, tearoff=0, name="tools_menu")
 		tools_menu.add_cascade(label=fish.translate("menu","plugins",os.path.join("meta")), menu=plugins_menu)
-		menu.add_cascade(label=fish.translate("menu","tools",os.path.join("meta")), menu=tools_menu)
+		self.menu.add_cascade(label=fish.translate("menu","tools",os.path.join("meta")), menu=tools_menu)
 
-		help_menu = create_cascade(fish.translate("menu","help",os.path.join("meta")),"help_menu",
+		help_menu = self.create_cascade(fish.translate("menu","help",os.path.join("meta")),"help_menu",
 											[
-													(fish.translate("menu","help.diagnostics",os.path.join("meta")),None,self.diagnostics),
-													(fish.translate("menu","help.about",os.path.join("meta")),None,self.about),
+													(fish.translate("menu","help.diagnostics",os.path.join("meta")),"help-diagnostics",self.diagnostics),
+													(fish.translate("menu","help.about",os.path.join("meta")),"app",self.about),
 											])
 		menu_options.append(help_menu)
 
-		return menu
 
 	#load plugins
 	def load_plugins(self):
@@ -209,21 +217,24 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		#if we've got Game plugins or Sprite plugins
 		if self.game.plugins or self.sprite.plugins:
+			plugins_container = []
 			#if we've got Game plugins, start the menu
 			if self.game.plugins:
-				game_plugins_menu = tk.Menu(self.menu, tearoff=0, name="game_plugins_menu")
 				#add the commands
-				for label, command in self.game.plugins:
-					game_plugins_menu.add_command(label=label,command=command,state="disabled" if command == None else "normal")
-				self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.game",os.path.join("meta")),menu=game_plugins_menu)
+				commands = []
+				for label, icon, command in self.game.plugins:
+					commands.append((label,icon,command))
+				game_plugins_menu = self.create_cascade(fish.translate("menu","plugins.game",os.path.join("meta")),"game_plugins_menu",commands,self.menu.children["plugins_menu"])
+				plugins_container.append(game_plugins_menu)
 
 			#if we've got Sprite plugins
 			if self.sprite.plugins:
-				sprite_plugins_menu = tk.Menu(self.menu, tearoff=0, name="sprite_plugins_menu")
 				#add the commands
-				for label, command in self.sprite.plugins:
-					sprite_plugins_menu.add_command(label=label,command=command,state="disabled" if command == None else "normal")
-				self.menu.children["plugins_menu"].add_cascade(label=fish.translate("menu","plugins.sprite",os.path.join("meta")),menu=sprite_plugins_menu)
+				commands = []
+				for label, icon, command in self.sprite.plugins:
+					commands.append((label,icon,command))
+				sprite_plugins_menu = self.create_cascade(fish.translate("menu","plugins.sprite",os.path.join("meta")),"sprite_plugins_menu",commands,self.menu.children["plugins_menu"])
+				plugins_container.append(sprite_plugins_menu)
 		else:
 			#if we got nothin', say as such
 			self.menu.children["plugins_menu"].add_command(label=fish.translate("meta","none",os.path.join("meta")),state="disabled")

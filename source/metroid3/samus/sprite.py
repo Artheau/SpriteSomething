@@ -15,8 +15,8 @@ class Sprite(SpriteParent):
 
 		#TODO: Make file select and ship be animations in the big list, or tie to the ship background
 		# self.plugins += [
-		# 	("File Select Preview",None),
-		# 	("Ship Preview",None)
+		# 	("File Select Preview",None,None),
+		# 	("Ship Preview",None,None)
 		# ]
 
 	def import_from_ROM(self, rom):

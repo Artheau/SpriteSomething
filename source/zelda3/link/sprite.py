@@ -15,9 +15,9 @@ class Sprite(SpriteParent):
 		super().__init__(filename, manifest_dict, my_subpath)
 
 		self.plugins += [
-			("Download Official Sprites",self.get_alttpr_sprites),
-			("Sheet Trawler",None),
-			("Tracker Images",None)
+			("Download Official Sprites",None,self.get_alttpr_sprites),
+			("Sheet Trawler","plugins-sprite-sheet-trawler",None),
+			("Tracker Images",None,None)
 		]
 
 	def import_from_ROM(self, rom):
