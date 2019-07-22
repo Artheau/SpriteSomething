@@ -719,18 +719,21 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#exit sequence
 	def exit(self):
-		#Until some kind of useful change/edit feature is implemented, no need to ask if they want to save their changes
-		save_before_exit = False #messagebox.askyesnocancel(self.app_title,"Do you want to save before exiting?")
-		if save_before_exit != None:
-			if save_before_exit:
-				saved = self.save_file_as()
-				if saved:
+		if self.sprite.unsaved_changes:
+			save_before_exit = messagebox.askyesnocancel(self.app_title,"Do you want to save before exiting?")
+			if save_before_exit != None:
+				if save_before_exit:
+					saved = self.save_file_as()
+					if saved:
+						self.save_working_dirs()
+						sys.exit(0)
+				else:
+					messagebox.showwarning(self.app_title, "Death in Super Metroid loses progress since last save." + "\n" + "You have been eaten by a grue.")
 					self.save_working_dirs()
 					sys.exit(0)
-			else:
-				#messagebox.showwarning(self.app_title, "Death in Super Metroid loses progress since last save." + "\n" + "You have been eaten by a grue.")
-				self.save_working_dirs()
-				sys.exit(0)
+		else:
+			self.save_working_dirs()
+			sys.exit(0)
 
 	######################### HELPER FUNCTIONS ARE BELOW HERE ###############################
 

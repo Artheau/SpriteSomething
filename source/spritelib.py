@@ -30,6 +30,7 @@ class SpriteParent():
 			self.animations = json.load(file)
 		self.import_from_filename()
 		self.spiffy_buttons_exist = False
+		self.unsaved_changes = False #FIXME: Needs to not be in Sprite class
 		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
 
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
@@ -129,6 +130,18 @@ class SpriteParent():
 		else:
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
 
+	def metadata_changed_trace(self,*args):
+		#FIXME: Needs to not be in Sprite class
+		#touch We Made Changes var
+		#key of changed metadata is in args[0]
+		self.unsaved_changes = True
+
+	def metadata_changed_validation(self,key):
+		#FIXME: Needs to not be in Sprite class
+		#touch We Made Changes var
+		#key of changed metadata is in key
+		self.unsaved_changes = True
+
 	def attach_metadata_panel(self,parent):
 		PANEL_HEIGHT = 64
 		metadata_section = tk.Frame(parent, name="metadata_section")
@@ -140,6 +153,10 @@ class SpriteParent():
 			self.metadata_tk_vars[key] = tk.StringVar()
 			metadata_input = tk.Entry(metadata_section, textvariable=self.metadata_tk_vars[key], name=label.lower().replace(' ', '_') + "_input")
 			metadata_input.insert(0,self.metadata[key])
+			#trace method, fires when the field receives a change; may have more overhead than we'd like
+			self.metadata_tk_vars[key].trace_add("write",partial(self.metadata_changed_trace,key)) #FIXME: Add leakless trace for tk.Entry
+			#validation method, fires when the field loses focus; prone to not capturing changes if user exits before blurring the tk.Entry
+#			metadata_input.configure(validate="focusout",validatecommand=partial(self.metadata_changed_validation,key))
 			metadata_input.grid(row=row,column=2)
 			row += 1
 		parent.add(metadata_section,minsize=PANEL_HEIGHT)
