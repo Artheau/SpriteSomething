@@ -30,7 +30,7 @@ class Sprite(SpriteParent):
 
 	def get_rdc_export_blocks(self):
 		SAMUS_EXPORT_BLOCK_TYPE = 4
-		return [(SAMUS_EXPORT_BLOCK_TYPE,block) for block in rdc_export.get_raw_rdc_export_blocks(self)]
+		return [(SAMUS_EXPORT_BLOCK_TYPE,rdc_export.get_raw_rdc_samus_block(self))]
 
 	def get_colors_from_master(self, color_set):
 		#for internal class use.  For general use, call get_timed_palette()

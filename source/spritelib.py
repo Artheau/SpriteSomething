@@ -361,6 +361,10 @@ class SpriteParent():
 			return False      #report failure to caller
 
 	def save_as_RDC(self, filename):
+		#TODO: Need to get rid of Tk stuff from the sprite class
+		for key in self.metadata:
+			self.metadata[key] = self.metadata_tk_vars[key].get()
+
 		raw_author_name = self.metadata["author.name-short"]
 		author = raw_author_name.encode('utf8') if raw_author_name else bytes()
 		HEADER_STRING = b"RETRODATACONTAINER"
