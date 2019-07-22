@@ -33,6 +33,9 @@ _test_macro.py
 # no super famicom files
 *.sfc
 
+# no gamefiles
+gamefiles/
+
 # no working dirs file
 /resources/meta/working_dirs.json
 
