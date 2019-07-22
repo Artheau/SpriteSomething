@@ -221,7 +221,7 @@ class SpriteParent():
 		pose_list = self.get_current_pose_list()
 		full_tile_list = []
 		for tile_info in pose_list[self.pose_number]["tiles"][::-1]:
-			base_image = self.images[tile_info["image"]] #FIXME: Bombs if X-Ray is randomly chosen??? KEYERROR: xray_right0
+			base_image = self.images[tile_info["image"]]
 			if "crop" in tile_info:
 				base_image = base_image.crop(tuple(tile_info["crop"]))
 			if "flip" in tile_info:

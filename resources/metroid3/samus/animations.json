@@ -624,7 +624,7 @@
 		],
 		"left_aim_up": [
 			{ "frames": 2,	"tiles": [	{ "image": "crouch_left_aim_diag_up", "pos": [-27,-24] } ] },
-			{ "frames": 100,	"tiles": [	{ "image": "crouch_left_aim_up", "pos": [-27,-32] } ] }
+			{ "frames": 100,	"tiles": [	{ "image": "crouch_left_aim_up", "pos": [-19,-32] } ] }
 		],
 		"left_aim_diag_up": [
 			{	"frames": 1,	"tiles": [	{"image": "crouch_left_aim_diag_up", "pos": [-27,-24]}	]	}
@@ -640,6 +640,10 @@
 			{	"frames": 8,	"tiles": [	{"image": "crouch_right_heavy2", "pos": [-13,-24]}	]	},
 			{	"frames": 8,	"tiles": [	{"image": "crouch_right_heavy3", "pos": [-13,-24]}	]	}
 		],
+		"right_aim_up": [
+			{ "frames": 2,	"tiles": [	{ "image": "crouch_right_aim_diag_up", "pos": [-13,-24] } ] },
+			{ "frames": 100,	"tiles": [	{ "image": "crouch_right_aim_up", "pos": [-13,-32] } ] }
+		],
 		"left": [
 			{	"frames": 8,	"tiles": [	{"image": "crouch_left_heavy", "pos": [-19,-24]}	]	},
 			{	"frames": 8,	"tiles": [	{"image": "crouch_left_heavy1", "pos": [-19,-24]}	]	},
@@ -651,6 +655,10 @@
 		],
 		"right_aim_diag_down": [
 			{	"frames": 1,	"tiles": [	{"image": "crouch_right_aim_diag_down", "pos": [-13,-24]}	]	}
+		],
+		"left_aim_up": [
+			{ "frames": 2,	"tiles": [	{ "image": "crouch_left_aim_diag_up", "pos": [-27,-24] } ] },
+			{ "frames": 100,	"tiles": [	{ "image": "crouch_left_aim_up", "pos": [-19,-32] } ] }
 		],
 		"left_aim_diag_up": [
 			{	"frames": 1,	"tiles": [	{"image": "crouch_left_aim_diag_up", "pos": [-27,-24]}	]	}
@@ -680,24 +688,24 @@
 		"right_aim_up": [
 			{	"frames": 2,	"tiles": [	{ "image": "crouch_right_aim_diag_up", "pos": [-13,-24] } ] },
 			{	"frames": 20,	"tiles": [	{ "image": "crouch_right_aim_up", "pos": [-13,-24] } ] },
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-32]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_neutral_aim_up", "pos": [-16,-24]}	]	},
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-32]}	]	},
 			{ 	"frames": 2,	"tiles": [	{ "image": "crouch_left_aim_diag_up", "pos": [-27,-24] } ] },
-			{ 	"frames": 10,	"tiles": [	{ "image": "crouch_left_aim_up",	"pos": [-19,-24] } ] },
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-24]}	]	},
+			{ 	"frames": 10,	"tiles": [	{ "image": "crouch_left_aim_up",	"pos": [-19,-32] } ] },
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-32]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_neutral_aim_up", "pos": [-16,-24]}	]	},
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-24]}	]	}
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-32]}	]	}
 		],
 		"right_aim_diag_up": [
 			{	"frames": 20,	"tiles": [	{ "image": "crouch_right_aim_diag_up", "pos": [-13,-24] } ] },
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-32]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_neutral_aim_up", "pos": [-16,-24]}	]	},
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-32]}	]	},
 			{ 	"frames": 20,	"tiles": [	{ "image": "crouch_left_aim_diag_up", "pos": [-27,-24] } ] },
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-32]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_neutral_aim_up", "pos": [-16,-24]}	]	},
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-24]}	]	}
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-32]}	]	}
 		],
 		"right_aim_diag_down": [
 			{	"frames": 20,	"tiles": [	{ "image": "crouch_right_aim_diag_down", "pos": [-13,-24] } ] },
@@ -728,24 +736,24 @@
 		"left_aim_up": [
 			{ 	"frames": 2,	"tiles": [	{ "image": "crouch_left_aim_diag_up", "pos": [-27,-24] } ] },
 			{ 	"frames": 20,	"tiles": [	{ "image": "crouch_left_aim_up",	"pos": [-19,-24] } ] },
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-32]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_neutral_aim_up", "pos": [-16,-24]}	]	},
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-32]}	]	},
 			{	"frames": 2,	"tiles": [	{ "image": "crouch_right_aim_diag_up", "pos": [-13,-24] } ] },
 			{	"frames": 20,	"tiles": [	{ "image": "crouch_right_aim_up", "pos": [-13,-24] } ] },
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-32]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_neutral_aim_up", "pos": [-16,-24]}	]	},
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-24]}	]	}
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-32]}	]	}
 		],
 		"left_aim_diag_up": [
 			{ 	"frames": 20,	"tiles": [	{ "image": "crouch_left_aim_diag_up", "pos": [-27,-24] } ] },
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-32]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_neutral_aim_up", "pos": [-16,-24]}	]	},
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-32]}	]	},
 			{	"frames": 20,	"tiles": [	{ "image": "crouch_right_aim_diag_up", "pos": [-13,-24] } ] },
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-24]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_right_aim_up", "pos": [-16,-32]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_neutral_aim_up", "pos": [-16,-24]}	]	},
-			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-24]}	]	}
+			{	"frames": 2,	"tiles": [	{"image": "crouch_turn_left_aim_up", "pos": [-16,-32]}	]	}
 		],
 		"left_aim_diag_down": [
 			{ 	"frames": 20,	"tiles": [	{ "image": "crouch_left_aim_diag_down", "pos": [-27,-24] } ] },
@@ -802,11 +810,11 @@
 		],
 		"right_aim_down": [
 			{	"frames": 10,	"tiles": [	{"image": "stand_right_aim_diag_down", "pos": [-13,-29]}	]	},
-			{	"frames": 1,	"tiles": [	{"image": "jump_right_aim_down_begin", "pos": [-13,-27]}	]	},
+			{	"frames": 1,	"tiles": [	{"image": "jump_right_aim_diag_down_begin", "pos": [-13,-27]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "jump_right_aim_down", "pos": [-13,-27]}	]	},
 			{	"frames": 100,	"tiles": [	{"image": "jump_right_aim_down1", "pos": [-13,-27]}	]	},
-			{	"frames": 5,	"tiles": [	{"image": "jump_right_aim_down_land", "pos": [-13,-27]}	]	},
-			{	"frames": 2,	"tiles": [	{"image": "jump_right_aim_down_land1", "pos": [-13,-27]}	]	}
+			{	"frames": 5,	"tiles": [	{"image": "jump_right_aim_diag_down_land", "pos": [-13,-27]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "jump_right_aim_diag_down_land1", "pos": [-13,-27]}	]	}
 		],
 		"right_aim_diag_down": [
 			{	"frames": 10,	"tiles": [	{"image": "stand_right_aim_diag_down", "pos": [-13,-29] } ] },
@@ -835,8 +843,8 @@
 			{	"frames": 10,	"tiles": [	{ "image": "stand_left_aim_up", "pos": [-19,-29]}	]	},
 			{	"frames": 1,	"tiles": [	{ "image": "jump_left_aim_up_begin", "pos": [-19,-27]}	]	},
 			{	"frames": 100,	"tiles": [	{"image": "jump_left_aim_up1", "pos": [-19,-27]}	]	},
-			{	"frames": 5,	"tiles": [	{"image": "jump_left_aim_up_land", "pos": [-19,-27]}	]	},
-			{	"frames": 2,	"tiles": [	{"image": "jump_left_aim_up_land1", "pos": [-19,-27]}	]	}
+			{	"frames": 5,	"tiles": [	{"image": "jump_left_aim_diag_up_land", "pos": [-19,-27]}	]	},
+			{	"frames": 2,	"tiles": [	{"image": "jump_left_aim_diag_up_land1", "pos": [-19,-27]}	]	}
 		],
 		"left_aim_diag_up": [
 			{	"frames": 10,	"tiles": [	{"image": "stand_left_aim_diag_up",	"pos": [-27,-29] } ] },
@@ -1635,7 +1643,7 @@
 	},
 	"X-Ray": {
 		"right_aim_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_right0", "pos": [-13,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_right", "pos": [-13,-21]}	]	}
 		],
 		"right_aim_diag_up": [
 			{	"frames": 1,	"tiles": [	{"image": "xray_right1", "pos": [-13,-21]}	]	}
@@ -1650,7 +1658,7 @@
 			{	"frames": 1,	"tiles": [	{"image": "xray_right4", "pos": [-13,-21]}	]	}
 		],
 		"left_aim_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_left0", "pos": [-19,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_left", "pos": [-19,-21]}	]	}
 		],
 		"left_aim_diag_up": [
 			{	"frames": 1,	"tiles": [	{"image": "xray_left1", "pos": [-19,-21]}	]	}
@@ -1667,7 +1675,7 @@
 	},
 	"X-Ray Crouched": {
 		"right_aim_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right0", "pos": [-13,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right", "pos": [-13,-24]}	]	}
 		],
 		"right_aim_diag_up": [
 			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right1", "pos": [-13,-24]}	]	}
@@ -1682,7 +1690,7 @@
 			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right4", "pos": [-13,-24]}	]	}
 		],
 		"left_aim_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left0", "pos": [-19,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left", "pos": [-19,-24]}	]	}
 		],
 		"left_aim_diag_up": [
 			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left1", "pos": [-19,-24]}	]	}
