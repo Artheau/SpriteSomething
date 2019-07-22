@@ -21,9 +21,15 @@ def make_GUI(command_line_args):
 	root = tk.Tk()
 	#the .ico file will not work in Linux or Mac, so this bypasses the icon for those OSes
 	try:
-		root.iconbitmap(default=common.get_resource('app.ico'))
+		root.iconbitmap(default=common.get_resource('app.ico')) #Windows
 	except Exception:
-		pass
+		try:
+			root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file='@'+common.get_resource('app.gif'))) #Linux?
+		except Exception:
+			try:
+				root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file=common.get_resource('app.gif'))) #MacOSX?
+			except Exception:
+				pass #give up
 	root.geometry("800x600")       #window size
 	root.configure(bg='#f0f0f0')   #background color
 	main_frame = SpriteSomethingMainFrame(root, command_line_args)
