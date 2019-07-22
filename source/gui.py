@@ -111,11 +111,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  fish_subkey: Subkey for translation
 		#  image_filename: Image to use, default to blank
 		#  command: Command to associate with button, default to None
-		def create_toolbar_button(fish_key, fish_subkey, image_filename="blank.png",command=None):
-			icon_path = common.get_resource(image_filename,os.path.join("meta","icons"))
+		def create_toolbar_button(fish_key, fish_subkey, image_filename=None, command=None):
+			icon_path = common.get_resource(image_filename if not image_filename == None else "blank.png",os.path.join("meta","icons"))
 			img = tk.PhotoImage(file=icon_path)
 			display_text = fish.translate(fish_key,fish_subkey,os.path.join("meta"))
-			button = tk.Button(toolbar,image=img,relief=tk.FLAT,command=command,state="disabled" if command == None else "normal")
+			button = tk.Button(toolbar,image=img,relief=tk.FLAT,width=16,height=16,command=command,state="disabled" if command == None else "normal")
 			button.img = img
 			widgetlib.ToolTip(button,display_text)
 			button.pack(side=tk.LEFT,padx=2,pady=2)
@@ -460,17 +460,17 @@ class SpriteSomethingMainFrame(tk.Frame):
 		set_zoom_text()
 		set_speed_text()
 
-		BUTTON_WIDTH = 7
+		BUTTON_WIDTH = 60
 		self.current_grid_cell = 0
 
 		#make a vcr button label
 		# Inbound
 		#  textvariable: var to report back to
 		#  icon_name: filename of icon to use
-		def make_vcr_label(textvariable, icon_name):
-			icon_path = common.get_resource(icon_name,os.path.join("meta","icons"))
+		def make_vcr_label(textvariable, icon_name=None):
+			icon_path = common.get_resource(icon_name if not icon_name == None else "blank.png",os.path.join("meta","icons"))
 			image = tk.PhotoImage(file=icon_path) if icon_path else None
-			vcr_label = tk.Label(control_section, image=image, anchor='e', width=BUTTON_WIDTH, textvariable=textvariable)
+			vcr_label = tk.Label(control_section, image=image, anchor='e', compound="left", width=BUTTON_WIDTH, textvariable=textvariable)
 			vcr_label.grid(row = self.current_grid_cell//3,
 						column = 1 + (self.current_grid_cell % 3),
 						sticky=['nes'])
@@ -483,8 +483,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  icon_name: filename of icon to use
 		#  command: command to execute when pressed
 		#  side: alignment
-		def make_vcr_button(text, icon_name, command, side="right"):
-			icon_path = common.get_resource(icon_name,os.path.join("meta","icons"))
+		def make_vcr_button(text="", icon_name=None, command=None, side="right"):
+			icon_path = common.get_resource(icon_name if not icon_name == None else "blank.png",os.path.join("meta","icons"))
 			image = tk.PhotoImage(file=icon_path) if icon_path else None
 			if side == "right":
 				side = tk.RIGHT
@@ -505,20 +505,20 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		#zoom controls
 		zoom_factor_label = make_vcr_label(self.zoom_factor, None)
-		zoom_out_button = make_vcr_button(fish.translate("vcr-controls","zoom-minus",os.path.join("meta")),None,zoom_out)
-		zoom_in_button = make_vcr_button(fish.translate("vcr-controls","zoom-plus",os.path.join("meta")),None,zoom_in)
+		zoom_out_button = make_vcr_button(fish.translate("vcr-controls","zoom-minus",os.path.join("meta")),"zoom-out.png",zoom_out,"left")
+		zoom_in_button = make_vcr_button(fish.translate("vcr-controls","zoom-plus",os.path.join("meta")),"zoom-in.png",zoom_in)
 		vcr_buttons.append((zoom_factor_label,zoom_out_button,zoom_in_button,))
 
 		#speed controls
 		speed_factor_label = make_vcr_label(self.speed_factor,None)
-		speed_down_button = make_vcr_button(fish.translate("vcr-controls","speed-minus",os.path.join("meta")),None,speed_down)
-		speed_up_button = make_vcr_button(fish.translate("vcr-controls","speed-plus",os.path.join("meta")),None,speed_up)
+		speed_down_button = make_vcr_button(fish.translate("vcr-controls","speed-minus",os.path.join("meta")),"speed-down.png",speed_down,"left")
+		speed_up_button = make_vcr_button(fish.translate("vcr-controls","speed-plus",os.path.join("meta")),"speed-up.png",speed_up)
 		vcr_buttons.append((speed_factor_label,speed_down_button,speed_up_button,))
 
 		#play controls
 		play_button = make_vcr_button(fish.translate("vcr-controls","play",os.path.join("meta")), "play.png", self.start_global_frame_timer)
 		play_one_button = make_vcr_button(fish.translate("vcr-controls","play-one",os.path.join("meta")), "play-one.png", self.play_once)
-		reset_button = make_vcr_button(fish.translate("vcr-controls","reset",os.path.join("meta")), None, self.reset_global_frame_timer)
+		reset_button = make_vcr_button(fish.translate("vcr-controls","reset",os.path.join("meta")), "reset.png", self.reset_global_frame_timer)
 		vcr_buttons.append((play_button,play_one_button,reset_button,))
 
 		#frame step controls
