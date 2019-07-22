@@ -19,7 +19,7 @@ from source import common
 
 def make_GUI(command_line_args):
 	root = tk.Tk()
-	#the .ico file will not work in Linux or Mac, so this bypasses the icon for those OSes
+
 	try:
 		root.iconbitmap(default=common.get_resource('app.ico')) #Windows
 	except Exception:
@@ -711,7 +711,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		about.title(f"About {self.app_title}")
 		about.geometry(str(dims["window"]["width"]) + 'x' + str(dims["window"]["height"]))
 		about.resizable(tk.FALSE,tk.FALSE)
-		about.attributes("-toolwindow", 1)
+		#about.attributes("-toolwindow", 1)	#Linux doesn't like this
 		text = tk.Text(about, bg='#f0f0f0', font='TkDefaultFont', width=dims["textarea.characters"]["width"], height=dims["textarea.characters"]["height"])
 		text.pack()
 		text.configure(cursor="arrow")

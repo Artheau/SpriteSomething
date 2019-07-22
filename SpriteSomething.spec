@@ -14,6 +14,7 @@ def recurse_for_py_files(names_so_far):
           if file_extension == ".py":
             returnvalue.append(".".join(new_name_list + [base_file]))
         returnvalue.extend(recurse_for_py_files(new_name_list))
+    returnvalue.append("PIL._tkinter_finder") #Linux needs this
   return returnvalue
 
 hiddenimports = recurse_for_py_files(["source"])
