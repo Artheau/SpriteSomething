@@ -76,7 +76,4 @@ class NoMemoryLeaks(unittest.TestCase):
 
 
 if __name__ == '__main__':
-	#we are testing stuff that uses tkInter, and it needs to have a dummy display to test with
-	# https://askubuntu.com/questions/432255/what-is-the-display-environment-variable
-	os.environ["DISPLAY"] = ":0.0"
 	unittest.main()
