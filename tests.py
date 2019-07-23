@@ -6,21 +6,6 @@ import json         #need to audit our json files
 import os           #for path.join and similar, to find the files we want to audit
 import sys			#so that we can check to see which modules are imported at any given time
 
-#example:
-#
-# class TestStuff(unittest.TestCase):
-# 	#all tests must start with "test_"
-#     def test_make_sure_it_is_not_nothing(self):
-#     	self.assertFalse("it" == None)
-#
-#     def test_make_sure_it_is_something(self):
-#     	self.assertTrue("it" != None)
-#
-#     def test_make_sure_it_is_what_it_is(self):
-#     	my_metaphor = "it"
-#     	self.assertEqual(my_metaphor, "it")
-
-
 class SamusAnimationAudit(unittest.TestCase):
 	#TODO: these types of tests should be extended to all sprites
 	def __init__(self, *args, **kwargs):
@@ -58,7 +43,7 @@ class SamusAnimationAudit(unittest.TestCase):
 
 class DontGoChasingWaterfalls(unittest.TestCase):
 	#these tests are to make sure that we are are using class dependencies correctly,
-	# and that all information flows downwards.  Goal: No memory leaks sneaking in anymore
+	# and that all information flows downwards.
 
 	#TODO: extend this test to all sprites
 	def test_no_tk_in_sprite_class(self):
@@ -66,9 +51,10 @@ class DontGoChasingWaterfalls(unittest.TestCase):
 		from source.metroid3.samus import sprite
 		self.assertFalse('tkinter' in sys.modules)
 
+#this next class is inspired by a suggestion from Fry: https://www.youtube.com/watch?v=1Isjgc0oX0s
+class NoMemoryLeaks(unittest.TestCase):
 	#TODO: extend this test to a more general case
-	def test_no_memory_leaks(self):
-		#inspired by a suggestion by Fry: https://www.youtube.com/watch?v=1Isjgc0oX0s
+	def test_sprites_are_destroyed(self):
 		from source import gui
 		import tkinter as tk
 		import weakref       #we weakref something to see if it was garbage collected
