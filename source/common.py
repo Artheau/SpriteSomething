@@ -2,10 +2,7 @@ import os
 import itertools
 import struct
 import numpy as np
-import tkinter as tk
 from PIL import Image
-import base64
-from io import BytesIO    #for shenanigans
 
 def get_all_resources(desired_filename, subdir=None):
 	#gets the file from overrides AND resources (returns a list of filenames)
@@ -46,13 +43,6 @@ def apply_palette(image, palette):
 		image.putalpha(alpha_mask)
 	return image
 
-def get_tk_image(image):
-	#needed because the tkImage.PhotoImage conversion is SO slow for big images.  Like, you don't even know.
-	#LET THE SHENANIGANS BEGIN
-	buffered = BytesIO()
-	image.save(buffered, format="GIF")
-	img_str = base64.b64encode(buffered.getvalue())
-	return tk.PhotoImage(data=img_str)
 
 def reduce_to_nearest_eighth(val):
 	#take a value, divide by 8, floor it

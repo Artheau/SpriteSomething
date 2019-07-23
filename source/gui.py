@@ -309,7 +309,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.left_panel.add(self.get_reload_button(),minsize=MINSIZE)
 		self.attach_metadata_panel()
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
-		self.sprite.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
+		#TODO: Need to put the animation_panel code somewhere other than the sprite class
+		#self.sprite.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
 		self.left_panel.add(vcr_controls,minsize=MINSIZE)
 		self.panes.add(self.left_panel)
 

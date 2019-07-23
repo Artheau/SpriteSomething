@@ -2,7 +2,6 @@ import importlib
 import itertools
 from source.spritelib import SpriteParent
 from source import common
-from source import widgetlib
 from . import rom_import, rom_export, rdc_export
 
 class Sprite(SpriteParent):
