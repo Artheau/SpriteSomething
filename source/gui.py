@@ -125,7 +125,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  command: Command to associate with button, default to None
 		def create_toolbar_button(fish_key, fish_subkey, image_filename=None, command=None):
 			icon_path = common.get_resource(image_filename if not image_filename == None else "blank.png",os.path.join("meta","icons"))
-			img = tk.PhotoImage(file=icon_path)
+			#TODO: Fix this, it needs to route through PIL if we use PNG
+			img = None#tk.PhotoImage(file=icon_path)
 			display_text = self.fish.translate("meta",fish_key,fish_subkey)
 			button = tk.Button(toolbar,image=img,relief=tk.FLAT,width=16,height=16,command=command,state="disabled" if command == None else "normal")
 			button.img = img
@@ -172,7 +173,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 						image_path = os.path.join(self.game.resource_subpath,"icons")
 					if "sprite_plugins" in internal_name:
 						image_path = os.path.join(self.sprite.resource_subpath,"icons")
-					cascade.images[image_name] = tk.PhotoImage(file=common.get_resource(image_filename,image_path))
+					#TODO: need to route this through PIL to use PNG files
+					cascade.images[image_name] = None#tk.PhotoImage(file=common.get_resource(image_filename,image_path))
 				else:
 					cascade.images[image_name] = None
 				cascade.add_command(label=display_name, image=cascade.images[image_name], compound=tk.LEFT, command=function_to_call, state="disabled" if function_to_call == None else "normal")
@@ -513,7 +515,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  icon_name: filename of icon to use
 		def make_vcr_label(textvariable, icon_name=None):
 			icon_path = common.get_resource(icon_name if not icon_name == None else "blank.png",os.path.join("meta","icons"))
-			image = tk.PhotoImage(file=icon_path) if icon_path else None
+			#TODO: Need to use PIL to route PNG images
+			image = None#tk.PhotoImage(file=icon_path) if icon_path else None
 			vcr_label = tk.Label(control_section, image=image, anchor='e', compound="left", width=BUTTON_WIDTH, textvariable=textvariable)
 			vcr_label.grid(row = self.current_grid_cell//3,
 						column = 1 + (self.current_grid_cell % 3),
@@ -529,7 +532,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  side: alignment
 		def make_vcr_button(text="", icon_name=None, command=None, side="right"):
 			icon_path = common.get_resource(icon_name if not icon_name == None else "blank.png",os.path.join("meta","icons"))
-			image = tk.PhotoImage(file=icon_path) if icon_path else None
+			#TODO: Need to route through PIL to use PNG files
+			image = None#tk.PhotoImage(file=icon_path) if icon_path else None
 			if side == "right":
 				side = tk.RIGHT
 			elif side == "left":
