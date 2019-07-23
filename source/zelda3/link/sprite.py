@@ -91,43 +91,6 @@ class Sprite(SpriteParent):
 
 		return rom
 
-	def get_spiffy_buttons(self, parent, fish):
-		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
-
-		mail_group = spiffy_buttons.make_new_group("mail", fish)
-		mail_group.adds([
-			(None,"",None), #a blank space, baby
-			("green","mail-green.png",True),
-			("blue","mail-blue.png",False),
-			("red","mail-red.png",False)
-		],fish)
-
-		sword_group = spiffy_buttons.make_new_group("sword", fish)
-		sword_group.adds([
-			("none","no-thing.png",True),
-			("fighter","sword-fighters.png",False),
-			("master","sword-master.png",False),
-			("tempered","sword-tempered.png",False),
-			("gold","sword-butter.png",False)
-		],fish)
-
-		shield_group = spiffy_buttons.make_new_group("shield", fish)
-		shield_group.adds([
-			("none","no-thing.png",True),
-			("fighter","shield-fighters.png",False),
-			("fire","shield-fire.png",False),
-			("mirror","shield-mirror.png",False)
-		],fish)
-
-		gloves_group = spiffy_buttons.make_new_group("gloves", fish)
-		gloves_group.adds([
-			("none","no-thing.png",True),
-			("power","glove1.png",False),
-			("titan","glove2.png",False)
-		],fish)
-
-		return spiffy_buttons
-
 	def get_current_palette(self, palette_type, default_range):
 		if self.spiffy_buttons_exist:
 			if palette_type == "bunny":

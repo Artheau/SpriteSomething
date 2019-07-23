@@ -1,5 +1,6 @@
 import importlib
 import itertools
+import json
 from source.spritelib import SpriteParent
 from source import common
 from source import widgetlib
@@ -246,80 +247,6 @@ class Sprite(SpriteParent):
 
 		#now scrub the palette to get rid of floats and numbers that are too large/small
 		return [(time,[(max(0,min(255,int(color_plane))) for color_plane in color) for color in palette]) for (time,palette) in timed_palette]
-
-	def get_spiffy_buttons(self, parent, fish):
-		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
-
-		suit_group = spiffy_buttons.make_new_group("suit", fish)
-		suit_group.adds([
-			(None,"",None), #a blank space, baby
-			("power","suit-power.png",True),
-			("varia","suit-varia.png",False),
-			("gravity","suit-gravity.png",False)
-		],fish)
-
-		variant_group = spiffy_buttons.make_new_group("variant", fish)
-		variant_group.adds([
-			("standard","no-thing.png",True),
-			("charge","variant-charge.png",False),
-			("speed_boost","variant-speed_boost.png",False),
-			("speed_squat","variant-speed_squat.png",False),
-			("hyper","variant-hyper.png",False),
-			(None,None,None), #a newline
-			(None,"",None), #a blank space, baby
-			("heat","effect-heat.png",False),
-			("xray","effect-xray.png",False),
-			("sepia","effect-sepia.png",False),
-			("door","effect-door.png",False)
-		],fish)
-
-		cannon_group = spiffy_buttons.make_new_group("cannon-port", fish)
-		cannon_group.adds([
-			("no","no-thing.png",True),
-			("yes","yes-thing.png",False)
-		],fish)
-
-		return spiffy_buttons
-
-	def get_direction_buttons(self, parent, fish):
-		#overrides the parent WASD format
-		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
-
-		facing_group = direction_buttons.make_new_group("facing", fish)
-		facing_group.adds([
-			("left","arrow-left.png",False),
-			("right","arrow-right.png",True)
-		],fish)
-
-		aiming_group = direction_buttons.make_new_group("aiming", fish)
-		aiming_group.adds([
-			("up","arrow-up.png",False),
-			("diag_up","arrow-upright.png",False),
-			(None,None,None),
-			("neutral","no-thing.png",True),
-			("right","arrow-right.png",False),
-			(None,None,None),
-			("down","arrow-down.png",False),
-			("diag_down","arrow-downright.png",False)
-		],fish)
-
-	# 	arrows_group = direction_buttons.make_new_group("arrows")
-	# 	arrows_group.add("upleft", "arrow-upleft.png")
-	# 	arrows_group.add("trueupleft", "arrow-up.png")
-	# 	arrows_group.add("trueupright", "arrow-up.png")
-	# 	arrows_group.add("upright", "arrow-upright.png")
-	# 	arrows_group.add_newline()
-	# 	arrows_group.add("left", "arrow-left.png")
-	# 	arrows_group.add_blank_space()
-	# 	arrows_group.add_blank_space()
-	# 	arrows_group.add("right", "arrow-right.png", default=True)
-	# 	arrows_group.add_newline()
-	# 	arrows_group.add("downleft", "arrow-downleft.png")
-	# 	arrows_group.add("truedownleft", "arrow-down.png")
-	# 	arrows_group.add("truedownright", "arrow-down.png")
-	# 	arrows_group.add("downright", "arrow-downright.png")
-
-		return direction_buttons
 
 	def get_current_pose_list(self):
 		direction_dict = self.animations[self.current_animation]

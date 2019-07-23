@@ -1,0 +1,89 @@
+[
+	{
+		"group-fish-key": "mail",
+		"buttons": [
+			{
+				"meta": "blank"
+			},
+			{
+				"fish-subkey": "green",
+				"img": "mail-green.png",
+				"default": true
+			},
+			{
+				"fish-subkey": "blue",
+				"img": "mail-blue.png"
+			},
+			{
+				"fish-subkey": "red",
+				"img": "mail-red.png"
+			}
+		]
+	},
+	{
+		"group-fish-key": "sword",
+		"buttons": [
+			{
+				"fish-subkey": "none",
+				"img": "no-thing.png",
+				"default": true
+			},
+			{
+				"fish-subkey": "fighter",
+				"img": "sword-fighters.png"
+			},
+			{
+				"fish-subkey": "master",
+				"img": "sword-master.png"
+			},
+			{
+				"fish-subkey": "tempered",
+				"img": "sword-tempered.png"
+			},
+			{
+				"fish-subkey": "gold",
+				"img": "sword-butter.png"
+			}
+		]
+	},
+	{
+		"group-fish-key": "shield",
+		"buttons": [
+			{
+				"fish-subkey": "none",
+				"img": "no-thing.png",
+				"default": true
+			},
+			{
+				"fish-subkey": "fighter",
+				"img": "shield-fighters.png"
+			},
+			{
+				"fish-subkey": "fire",
+				"img": "shield-fire.png"
+			},
+			{
+				"fish-subkey": "mirror",
+				"img": "shield-mirror.png"
+			}
+		]
+	},
+	{
+		"group-fish-key": "gloves",
+		"buttons": [
+			{
+				"fish-subkey": "none",
+				"img": "no-thing.png",
+				"default": true
+			},
+			{
+				"fish-subkey": "power",
+				"img": "glove1.png"
+			},
+			{
+				"fish-subkey": "titan",
+				"img": "glove2.png"
+			}
+		]
+	}
+]
