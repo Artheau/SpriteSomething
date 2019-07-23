@@ -11,6 +11,8 @@ matrix:
     - name: "Python 3.7 on Xenial Linux"
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: xenial          # distribution required for Python >= 3.7
+      services:
+        - xvfb
     ################################################################################
 
     #######OS FOR HIPSTERS THAT ARE TOO HIP TO BE LIKE THE OTHER HIPSTERS###########
@@ -20,17 +22,20 @@ matrix:
     # - name: "Python 3.7 on Bionic Linux"
     #   python: 3.7
     #   dist: bionic
+    #   services:
+    #   - xvfb
     # - name: "Python 3.6 on Linux"
     #   python: 3.6
+    #   services:
+    #   - xvfb
     #################################################################################
     
     ##################OS FOR PEOPLE WITH BOTTOMLESS WALLETS#########################
-    #Getting virtual displays to work with Mac is a real pain.  Maybe one day it is worth trying again.
-    # - name: "Python 3.7 on macOS"
-    #   os: osx
-    #   osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
-    #   language: shell       # 'language: python' is an error on Travis CI macOS
-    ################################################################################
+    - name: "Python 3.7 on macOS"
+      os: osx
+      osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
+      language: shell       # 'language: python' is an error on Travis CI macOS
+    ###############################################################################
 
     #############OS FOR PEOPLE WHO LIKE PROPRIETARY SOFTWARE SUITES#################
     #Windows builds are really slow on Travis CI, but we are deving on Windows so maybe this is not a big thing
@@ -44,7 +49,9 @@ matrix:
     ################################################################################
 
 #dependencies are pillow and numpy
+#MacOS display hacks: https://github.com/travis-ci/travis-ci/issues/7313
 install:
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ( sudo Xvfb :99 -ac -screen 0 1024x768x8; echo ok )& fi
   - pip3 install --upgrade pip  # all three OSes agree about 'pip3'
   - pip install pillow numpy
 
@@ -52,11 +59,8 @@ install:
 # command to run tests
 # 'python' points to Python 2.7 on macOS but points to Python 3.7 on Linux and Windows
 # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
-
-#script:
-#  - xvfb-run python3 tests.py || xvfb-run python tests.py
 script:
-  - xvfb-run python tests.py
+  - python3 tests.py || python tests.py
 
 #I don't want your emails
 notifications:
