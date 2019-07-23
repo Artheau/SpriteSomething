@@ -33,24 +33,23 @@ class Sprite(SpriteParent):
 
 	def get_colors_from_master(self, color_set):
 		#for internal class use.  For general use, call get_timed_palette()
-		if color_set.lower() in ["power","base"]:
-			return self.master_palette[0:15]
-		elif color_set.lower() == "varia":
-			return self.master_palette[15:30]
-		elif color_set.lower() == "gravity":
-			return self.master_palette[30:45]
-		elif color_set.lower() == "death":
-			return self.master_palette[45:60]
-		elif color_set.lower() == "flash":
-			return self.master_palette[60:75]
-		elif color_set.lower().replace("_", " ") == "file select":
-			return self.master_palette[75:90]
-		elif color_set.lower() == "door":
-			return self.master_palette[3]
-		elif color_set.lower().replace("-", "").replace("_","") == "xray":
-			return self.master_palette[91:94]
-		elif color_set.lower() == "ship":
-			return self.master_palette[101:104]
+		color_set_switcher = {
+			"power": [0,15],
+			"base": [0,15],
+			"varia": [15,30],
+			"gravity": [30,45],
+			"death": [45,60],
+			"flash": [60,75],
+			"fileselect": [75,90],
+			"door": [3],
+			"xray": [91,94],
+			"ship": [101,104]
+		}
+		master_palette_indexes = color_set_switcher.get(color_set.lower().replace(' ',"").replace('-',"").replace('_',""))
+		if len(master_palette_indexes) == 1:
+			return self.master_palette[master_palette_indexes[0]]
+		elif len(master_palette_indexes) == 2:
+			return self.master_palette[master_palette_indexes[0]:master_palette_indexes[1]]
 		else:
 			raise AssertionError(f"Unrecognized color set request: {color_set}")
 
@@ -251,27 +250,33 @@ class Sprite(SpriteParent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
 		suit_group = spiffy_buttons.make_new_group("suit", fish)
-		suit_group.add_blank_space()
-		suit_group.add("power", "suit-power.png", fish)
-		suit_group.add("varia", "suit-varia.png", fish)
-		suit_group.add("gravity", "suit-gravity.png", fish)
+		suit_group.adds([
+			(None,"",None), #a blank space, baby
+			("power","suit-power.png",True),
+			("varia","suit-varia.png",False),
+			("gravity","suit-gravity.png",False)
+		],fish)
 
 		variant_group = spiffy_buttons.make_new_group("variant", fish)
-		variant_group.add("standard", "no-thing.png", fish)
-		variant_group.add("charge", "variant-charge.png", fish)
-		variant_group.add("speed_boost", "variant-speed_boost.png", fish)
-		variant_group.add("speed_squat", "variant-speed_squat.png", fish)
-		variant_group.add("hyper", "variant-hyper.png", fish)
-		variant_group.add_newline()
-		variant_group.add_blank_space()
-		variant_group.add("heat", "effect-heat.png", fish)
-		variant_group.add("xray", "effect-xray.png", fish)
-		variant_group.add("sepia", "effect-sepia.png", fish)
-		variant_group.add("door", "effect-door.png", fish)
+		variant_group.adds([
+			("standard","no-thing.png",True),
+			("charge","variant-charge.png",False),
+			("speed_boost","variant-speed_boost.png",False),
+			("speed_squat","variant-speed_squat.png",False),
+			("hyper","variant-hyper.png",False),
+			(None,None,None), #a newline
+			(None,"",None), #a blank space, baby
+			("heat","effect-heat.png",False),
+			("xray","effect-xray.png",False),
+			("sepia","effect-sepia.png",False),
+			("door","effect-door.png",False)
+		],fish)
 
 		cannon_group = spiffy_buttons.make_new_group("cannon-port", fish)
-		cannon_group.add("no", "no-thing.png", fish)
-		cannon_group.add("yes", "yes-thing.png", fish)
+		cannon_group.adds([
+			("no","no-thing.png",True),
+			("yes","yes-thing.png",False)
+		],fish)
 
 		return spiffy_buttons
 
@@ -280,18 +285,22 @@ class Sprite(SpriteParent):
 		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
 
 		facing_group = direction_buttons.make_new_group("facing", fish)
-		facing_group.add("left", "arrow-left.png", fish)
-		facing_group.add("right", "arrow-right.png", fish, default=True)
+		facing_group.adds([
+			("left","arrow-left.png",False),
+			("right","arrow-right.png",True)
+		],fish)
 
 		aiming_group = direction_buttons.make_new_group("aiming", fish)
-		aiming_group.add("up", "arrow-up.png", fish)
-		aiming_group.add("diag_up", "arrow-upright.png", fish)
-		aiming_group.add_newline()
-		aiming_group.add("neutral", "no-thing.png", fish, default=True)
-		aiming_group.add("shoot", "arrow-right.png", fish)
-		aiming_group.add_newline()
-		aiming_group.add("down", "arrow-down.png", fish)
-		aiming_group.add("diag_down", "arrow-downright.png", fish)
+		aiming_group.adds([
+			("up","arrow-up.png",False),
+			("diag_up","arrow-upright.png",False),
+			(None,None,None),
+			("neutral","no-thing.png",True),
+			("right","arrow-right.png",False),
+			(None,None,None),
+			("down","arrow-down.png",False),
+			("diag_down","arrow-downright.png",False)
+		],fish)
 
 	# 	arrows_group = direction_buttons.make_new_group("arrows")
 	# 	arrows_group.add("upleft", "arrow-upleft.png")
@@ -314,8 +323,8 @@ class Sprite(SpriteParent):
 	def get_current_pose_list(self):
 		direction_dict = self.animations[self.current_animation]
 		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
-			facing = self.facing_var.get().lower()	#grabbed from the direction buttons, which are named "facing"
-			aiming = self.aiming_var.get().lower()	#grabbed from the aiming buttons, which are named "aiming"
+			facing = self.facing_var.get().lower() if hasattr(self,"facing_var") else ""	#grabbed from the direction buttons, which are named "facing"
+			aiming = self.aiming_var.get().lower() if hasattr(self,"aiming_var") else ""	#grabbed from the aiming buttons, which are named "aiming"
 
 			#now start searching for this facing and aiming in the JSON dict
 			#start going down the list of alternative aiming if a pose does not have the original

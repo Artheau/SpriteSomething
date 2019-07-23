@@ -189,6 +189,15 @@ class SpiffyGroup():
 
 		self.col += 1
 
+	def adds(self, buttons, fish):
+		for (internal_value_name, image_filename, default) in buttons:
+			if internal_value_name == None and image_filename == None and default == None:
+				self.add_newline()
+			elif internal_value_name == None:
+				self.add_blank_space()
+			else:
+				self.add(internal_value_name, image_filename, fish, default)
+
 	def add_blank_space(self, amount_of_space=1):
 		self.col += amount_of_space
 
