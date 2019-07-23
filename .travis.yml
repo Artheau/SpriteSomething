@@ -11,8 +11,6 @@ matrix:
     - name: "Python 3.7 on Xenial Linux"
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: xenial          # distribution required for Python >= 3.7
-      services:
-        - xvfb              # for display emulation
     ################################################################################
 
     #######OS FOR HIPSTERS THAT ARE TOO HIP TO BE LIKE THE OTHER HIPSTERS###########
@@ -24,8 +22,6 @@ matrix:
     #   dist: bionic
     # - name: "Python 3.6 on Linux"
     #   python: 3.6
-    #   services:
-    #     - xvfb              # for display emulation
     #################################################################################
     
     ##################OS FOR PEOPLE WITH BOTTOMLESS WALLETS#########################
@@ -33,8 +29,6 @@ matrix:
       os: osx
       osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
       language: shell       # 'language: python' is an error on Travis CI macOS
-      services:
-        - xvfb              # for display emulation
     ################################################################################
 
     #############OS FOR PEOPLE WHO LIKE PROPRIETARY SOFTWARE SUITES#################
@@ -46,8 +40,6 @@ matrix:
     #     - choco install python
     #     - python -m pip install --upgrade pip
     #   env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
-    #   services:
-    #     - xvfb              # for display emulation
     ################################################################################
 
 #dependencies are pillow and numpy
@@ -61,7 +53,7 @@ install:
 # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
 
 script:
-  - python3 tests.py || python tests.py
+  - xvfb-run python3 tests.py || xvfb-run python tests.py
 
 #I don't want your emails
 notifications:
