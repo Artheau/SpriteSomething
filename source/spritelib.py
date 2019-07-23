@@ -22,14 +22,12 @@ class SpriteParent():
 		self.classic_name = manifest_dict["name"]    #e.g. "Samus" or "Link"
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
-		self.metadata_tk_vars = {}   #TODO: All these Tk references need to go away eventually and be replaced by waterfalls (sorry TLC)
 		self.filename = filename
 		self.layout = layoutlib.Layout(common.get_resource("layout.json",subdir=self.resource_subpath))
 		with open(common.get_resource("animations.json",subdir=self.resource_subpath)) as file:
 			self.animations = json.load(file)
 		self.import_from_filename()
 		self.spiffy_buttons_exist = False
-		self.unsaved_changes = False #FIXME: Needs to not be in Sprite class
 		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
 
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
@@ -128,37 +126,6 @@ class SpriteParent():
 			self.import_from_binary_data(pixel_data,palette_data)
 		else:
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
-
-	def metadata_changed_trace(self,*args):
-		#FIXME: Needs to not be in Sprite class
-		#touch We Made Changes var
-		#key of changed metadata is in args[0]
-		self.unsaved_changes = True
-
-	def metadata_changed_validation(self,key):
-		#FIXME: Needs to not be in Sprite class
-		#touch We Made Changes var
-		#key of changed metadata is in key
-		self.unsaved_changes = True
-
-	def attach_metadata_panel(self,parent,fish):
-		PANEL_HEIGHT = 64
-		metadata_section = tk.Frame(parent, name="metadata_section")
-		row = 0
-		for key in self.metadata.keys():
-			label = fish.translate("meta","meta",key)
-			metadata_label = tk.Label(metadata_section, text=label, name=label.lower().replace(' ', '_'))
-			metadata_label.grid(row=row,column=1)
-			self.metadata_tk_vars[key] = tk.StringVar()
-			metadata_input = tk.Entry(metadata_section, textvariable=self.metadata_tk_vars[key], name=label.lower().replace(' ', '_') + "_input")
-			metadata_input.insert(0,self.metadata[key])
-			#trace method, fires when the field receives a change; may have more overhead than we'd like
-			self.metadata_tk_vars[key].trace_add("write",partial(self.metadata_changed_trace,key)) #FIXME: Add leakless trace for tk.Entry
-			#validation method, fires when the field loses focus; prone to not capturing changes if user exits before blurring the tk.Entry
-#			metadata_input.configure(validate="focusout",validatecommand=partial(self.metadata_changed_validation,key))
-			metadata_input.grid(row=row,column=2)
-			row += 1
-		parent.add(metadata_section,minsize=PANEL_HEIGHT)
 
 	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, fish):
 		ANIMATION_DROPDOWN_WIDTH = 25
@@ -308,10 +275,6 @@ class SpriteParent():
 		return True
 
 	def save_as_ZSPR(self, filename):
-		#TODO: Need to get rid of Tk stuff from the sprite class
-		for key in self.metadata:
-			self.metadata[key] = self.metadata_tk_vars[key].get()
-
 		#check to see if the functions exist (e.g. crashes hard if used on Samus)
 		if hasattr(self, "get_binary_sprite_sheet") and hasattr(self, "get_binary_palettes"):
 			sprite_sheet = self.get_binary_sprite_sheet()
@@ -360,10 +323,6 @@ class SpriteParent():
 			return False      #report failure to caller
 
 	def save_as_RDC(self, filename):
-		#TODO: Need to get rid of Tk stuff from the sprite class
-		for key in self.metadata:
-			self.metadata[key] = self.metadata_tk_vars[key].get()
-
 		raw_author_name = self.metadata["author.name-short"]
 		author = raw_author_name.encode('utf8') if raw_author_name else bytes()
 		HEADER_STRING = b"RETRODATACONTAINER"

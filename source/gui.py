@@ -92,6 +92,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		self.load_sprite(command_line_args["sprite"])
 
+		self.unsaved_changes = False   #used to determine if we need to badger the user when they change things and try to exit
+
 	def create_random_title(self):
 		# Generate a new epic random title for this application
 		name_dict = {}
@@ -305,7 +307,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		MINSIZE = 25
 		vcr_controls = self.get_vcr_controls()  #have to do this early so that their values are available for other buttons
 		self.left_panel.add(self.get_reload_button(),minsize=MINSIZE)
-		self.sprite.attach_metadata_panel(self.left_panel,self.fish)
+		self.attach_metadata_panel()
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
 		self.sprite.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
 		self.left_panel.add(vcr_controls,minsize=MINSIZE)
@@ -316,6 +318,34 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.attach_canvas()
 		self.attach_overview()
 		self.panes.add(self.right_panel)
+
+	def attach_metadata_panel(self):
+		PANEL_HEIGHT = 64
+		metadata_section = tk.Frame(self.left_panel, name="metadata_section")
+		row = 0
+		self.metadata_textbox_vars = {}
+		for key in ["sprite.name","author.name","author.name-short"]:
+			label = self.fish.translate("meta","meta",key)
+			metadata_label = tk.Label(metadata_section, text=label, name=label.lower().replace(' ', '_'))
+			metadata_label.grid(row=row,column=1)
+			self.metadata_textbox_vars[key] = tk.StringVar()
+			metadata_input = tk.Entry(metadata_section, textvariable=self.metadata_textbox_vars[key], name=label.lower().replace(' ', '_') + "_input")
+			metadata_input.insert(0,self.sprite.metadata[key])
+
+			def metadata_changed_trace(key, *args):
+				#touch We Made Changes var
+				self.sprite.metadata[key] = self.metadata_textbox_vars[key].get()   #retrieve the GUI StringVar value and place it in the true metadata
+				self.unsaved_changes = True
+
+			#trace method, fires when the field receives a change; may have more overhead than we'd like
+			self.metadata_textbox_vars[key].trace_add("write",partial(metadata_changed_trace,key))
+			
+			#validation method, fires when the field loses focus; prone to not capturing changes if user exits before blurring the tk.Entry
+			#metadata_input.configure(validate="focusout",validatecommand=partial(metadata_changed_trace,key))
+
+			metadata_input.grid(row=row,column=2)
+			row += 1
+		self.left_panel.add(metadata_section,minsize=PANEL_HEIGHT)
 
 	#make a status bar
 	def create_status_bar(self):
@@ -559,26 +589,42 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#query user for file to open; ZSPR/PNG/SFC/SMC
 	def open_file(self):
-		#TODO: Give the user a chance to regret not saving their work
+		#Give the user a chance to regret not saving their work
+		if self.unsaved_changes:
+			save_before_open = messagebox.askyesnocancel(self.app_title,self.fish.translate("meta","dialogue","open.save-before-open"))
+			if save_before_open != None:    #didn't cancel
+				if save_before_open:        #if they chose to save, present save dialogue
+					saved = self.save_file_as()
+					if not saved:
+						messagebox.showerror(self.app_title,self.fish.translate("meta","dialogue","open.save-failed-during-open-attempt"))
+						return False          #don't open a new sprite; something went wrong with the save
+				else:      #chose not to save before opening
+					self.unsaved_changes = False
+				
 		filename = filedialog.askopenfilename(initialdir=self.working_dirs["file.open"], title=self.fish.translate("meta","dialogue","file.open.title"), filetypes=((self.fish.translate("meta","dialogue","file.open.types.label"),"*.zspr *.png *.sfc *.smc"),))
 		if filename:
 			#if we've got a filename, set the working dir and load the sprite
 			self.working_dirs["file.open"] = filename[:filename.rfind('/')]
 			self.load_sprite(filename)
+			return True        #report success to caller, if they care
+		else:
+			return False       #we didn't open anything
 
 	#query user to export file; PNG/ZSPR/RDC
 	def save_file_as(self):
-		# Save a ZSPR or PNG.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
+		# Save in one of the valid formats.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),(self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),(self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"))
 		filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
 		if filename:
-			returnvalue = self.sprite.save_as(filename)
-			if returnvalue:
-				self.working_dirs["file.save"] = filename[:filename.rfind('/')]
+			save_success_bool = self.sprite.save_as(filename)
+			if save_success_bool:
+				self.unsaved_changes = False
+				self.working_dirs["file.save"] = os.path.dirname(filename)
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
+				self.save_working_dirs()
 			else:
 				messagebox.showerror("Not Yet Implemented",os.path.splitext(filename)[1][1:].upper() + " format not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
-			return returnvalue
+			return save_success_bool
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
 
@@ -732,21 +778,21 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#exit sequence
 	def exit(self):
-		if self.sprite.unsaved_changes:
+		if self.unsaved_changes:
 			save_before_exit = messagebox.askyesnocancel(self.app_title,self.fish.translate("meta","dialogue","exit.save-before-exit"))
-			if save_before_exit != None:
+			if save_before_exit != None:        #didn't cancel
 				if save_before_exit:
 					saved = self.save_file_as()
-					if saved:
-						self.save_working_dirs()
-						sys.exit(0)
+					if not saved:
+						exit_anyway = messagebox.askyesno(self.app_title, self.fish.translate("meta","dialogue","exit.save-failed-during-exit-attempt"))
+						if not exit_anyway:
+							#user bails because their file didn't save
+							return
 				else:
-					messagebox.showwarning(self.app_title, self.fish.translate("meta","dialogue","exit.nosave-before-exit"))
-					self.save_working_dirs()
-					sys.exit(0)
-		else:
-			self.save_working_dirs()
-			sys.exit(0)
+					messagebox.showwarning(self.app_title, self.fish.translate("meta","dialogue","exit.nosave-before-exit"))   #TODO: can we add this humor somehow without forcing the user to close another dialogue box?
+
+		self.save_working_dirs()
+		sys.exit(0)
 
 	######################### HELPER FUNCTIONS ARE BELOW HERE ###############################
 
