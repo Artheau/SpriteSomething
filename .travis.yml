@@ -11,30 +11,17 @@ matrix:
     - name: "Python 3.7 on Xenial Linux"
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: xenial          # distribution required for Python >= 3.7
+      env: PYTHON_EXECUTABLE=python
       services:
         - xvfb
     ################################################################################
-
-    #######OS FOR HIPSTERS THAT ARE TOO HIP TO BE LIKE THE OTHER HIPSTERS###########
-    #one day I will decide to test on multiple versions of Linux, and on that day, I will happily activate these lines
-    #knowing my luck, on that day I will probably discover that they do not work
-    #
-    # - name: "Python 3.7 on Bionic Linux"
-    #   python: 3.7
-    #   dist: bionic
-    #   services:
-    #   - xvfb
-    # - name: "Python 3.6 on Linux"
-    #   python: 3.6
-    #   services:
-    #   - xvfb
-    #################################################################################
     
     ##################OS FOR PEOPLE WITH BOTTOMLESS WALLETS#########################
     - name: "Python 3.7 on macOS"
       os: osx
       osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
       language: shell       # 'language: python' is an error on Travis CI macOS
+      env: PYTHON_EXECUTABLE=python3
     ###############################################################################
 
     #############OS FOR PEOPLE WHO LIKE PROPRIETARY SOFTWARE SUITES#################
@@ -45,13 +32,12 @@ matrix:
     #   before_install:
     #     - choco install python
     #     - python -m pip install --upgrade pip
-    #   env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+    #   env: PATH=/c/Python37:/c/Python37/Scripts:$PATH; PYTHON_EXECUTABLE=python
     ################################################################################
 
 #dependencies are pillow and numpy
 #MacOS display hacks: https://github.com/travis-ci/travis-ci/issues/7313
 install:
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then ( sudo Xvfb :99 -ac -screen 0 1024x768x8; echo ok )& fi
   - pip3 install --upgrade pip  # all three OSes agree about 'pip3'
   - pip install pillow numpy
 
@@ -59,7 +45,7 @@ install:
 # 'python' points to Python 2.7 on macOS but points to Python 3.7 on Linux and Windows
 # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
 script:
-  - python3 tests.py || python tests.py
+  - $PYTHON_EXECUTABLE tests.py
 
 #I don't want your emails
 notifications:
