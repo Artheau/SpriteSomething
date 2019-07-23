@@ -248,51 +248,51 @@ class Sprite(SpriteParent):
 		#now scrub the palette to get rid of floats and numbers that are too large/small
 		return [(time,[(max(0,min(255,int(color_plane))) for color_plane in color) for color in palette]) for (time,palette) in timed_palette]
 
-	def get_spiffy_buttons(self, parent):
+	def get_spiffy_buttons(self, parent, fish):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
-		suit_group = spiffy_buttons.make_new_group("suit")
+		suit_group = spiffy_buttons.make_new_group("suit", fish)
 		suit_group.add_blank_space()
-		suit_group.add("power", "suit-power.png")
-		suit_group.add("varia", "suit-varia.png")
-		suit_group.add("gravity", "suit-gravity.png")
+		suit_group.add("power", "suit-power.png", fish)
+		suit_group.add("varia", "suit-varia.png", fish)
+		suit_group.add("gravity", "suit-gravity.png", fish)
 
-		variant_group = spiffy_buttons.make_new_group("variant")
-		variant_group.add("standard", "no-thing.png")
-		variant_group.add("charge", "variant-charge.png")
-		variant_group.add("speed_boost", "variant-speed_boost.png")
-		variant_group.add("speed_squat", "variant-speed_squat.png")
-		variant_group.add("hyper", "variant-hyper.png")
+		variant_group = spiffy_buttons.make_new_group("variant", fish)
+		variant_group.add("standard", "no-thing.png", fish)
+		variant_group.add("charge", "variant-charge.png", fish)
+		variant_group.add("speed_boost", "variant-speed_boost.png", fish)
+		variant_group.add("speed_squat", "variant-speed_squat.png", fish)
+		variant_group.add("hyper", "variant-hyper.png", fish)
 		variant_group.add_newline()
 		variant_group.add_blank_space()
-		variant_group.add("heat", "effect-heat.png")
-		variant_group.add("xray", "effect-xray.png")
-		variant_group.add("sepia", "effect-sepia.png")
-		variant_group.add("door", "effect-door.png")
+		variant_group.add("heat", "effect-heat.png", fish)
+		variant_group.add("xray", "effect-xray.png", fish)
+		variant_group.add("sepia", "effect-sepia.png", fish)
+		variant_group.add("door", "effect-door.png", fish)
 
-		cannon_group = spiffy_buttons.make_new_group("cannon-port")
-		cannon_group.add("no", "no-thing.png")
-		cannon_group.add("yes", "yes-thing.png")
+		cannon_group = spiffy_buttons.make_new_group("cannon-port", fish)
+		cannon_group.add("no", "no-thing.png", fish)
+		cannon_group.add("yes", "yes-thing.png", fish)
 
 		return spiffy_buttons
 
-	def get_direction_buttons(self, parent):
+	def get_direction_buttons(self, parent, fish):
 		#overrides the parent WASD format
 		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
 
-		facing_group = direction_buttons.make_new_group("facing")
-		facing_group.add("left", "arrow-left.png")
-		facing_group.add("right", "arrow-right.png", default=True)
+		facing_group = direction_buttons.make_new_group("facing", fish)
+		facing_group.add("left", "arrow-left.png", fish)
+		facing_group.add("right", "arrow-right.png", fish, default=True)
 
-		aiming_group = direction_buttons.make_new_group("aiming")
-		aiming_group.add("up", "arrow-up.png")
-		aiming_group.add("diag_up", "arrow-upright.png")
+		aiming_group = direction_buttons.make_new_group("aiming", fish)
+		aiming_group.add("up", "arrow-up.png", fish)
+		aiming_group.add("diag_up", "arrow-upright.png", fish)
 		aiming_group.add_newline()
-		aiming_group.add("neutral", "no-thing.png", default=True)
-		aiming_group.add("shoot", "arrow-right.png")
+		aiming_group.add("neutral", "no-thing.png", fish, default=True)
+		aiming_group.add("shoot", "arrow-right.png", fish)
 		aiming_group.add_newline()
-		aiming_group.add("down", "arrow-down.png")
-		aiming_group.add("diag_down", "arrow-downright.png")
+		aiming_group.add("down", "arrow-down.png", fish)
+		aiming_group.add("diag_down", "arrow-downright.png", fish)
 
 	# 	arrows_group = direction_buttons.make_new_group("arrows")
 	# 	arrows_group.add("upleft", "arrow-upleft.png")

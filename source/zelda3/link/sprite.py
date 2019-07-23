@@ -91,32 +91,32 @@ class Sprite(SpriteParent):
 
 		return rom
 
-	def get_spiffy_buttons(self, parent):
+	def get_spiffy_buttons(self, parent, fish):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
-		mail_group = spiffy_buttons.make_new_group("mail")
+		mail_group = spiffy_buttons.make_new_group("mail", fish)
 		mail_group.add_blank_space()
-		mail_group.add("green", "mail-green.png")
-		mail_group.add("blue", "mail-blue.png")
-		mail_group.add("red", "mail-red.png")
+		mail_group.add("green", "mail-green.png", fish)
+		mail_group.add("blue", "mail-blue.png", fish)
+		mail_group.add("red", "mail-red.png", fish)
 
-		sword_group = spiffy_buttons.make_new_group("sword")
-		sword_group.add("none", "no-thing.png")
-		sword_group.add("fighter", "sword-fighters.png")
-		sword_group.add("master", "sword-master.png")
-		sword_group.add("tempered", "sword-tempered.png")
-		sword_group.add("gold", "sword-butter.png")
+		sword_group = spiffy_buttons.make_new_group("sword", fish)
+		sword_group.add("none", "no-thing.png", fish)
+		sword_group.add("fighter", "sword-fighters.png", fish)
+		sword_group.add("master", "sword-master.png", fish)
+		sword_group.add("tempered", "sword-tempered.png", fish)
+		sword_group.add("gold", "sword-butter.png", fish)
 
-		shield_group = spiffy_buttons.make_new_group("shield")
-		shield_group.add("none", "no-thing.png")
-		shield_group.add("fighter", "shield-fighters.png")
-		shield_group.add("fire", "shield-fire.png")
-		shield_group.add("mirror", "shield-mirror.png")
+		shield_group = spiffy_buttons.make_new_group("shield", fish)
+		shield_group.add("none", "no-thing.png", fish)
+		shield_group.add("fighter", "shield-fighters.png", fish)
+		shield_group.add("fire", "shield-fire.png", fish)
+		shield_group.add("mirror", "shield-mirror.png", fish)
 
-		gloves_group = spiffy_buttons.make_new_group("gloves")
-		gloves_group.add("none", "no-thing.png")
-		gloves_group.add("power", "glove1.png")
-		gloves_group.add("titan", "glove2.png")
+		gloves_group = spiffy_buttons.make_new_group("gloves", fish)
+		gloves_group.add("none", "no-thing.png", fish)
+		gloves_group.add("power", "glove1.png", fish)
+		gloves_group.add("titan", "glove2.png", fish)
 
 		return spiffy_buttons
 

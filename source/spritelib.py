@@ -12,7 +12,6 @@ import importlib
 import io
 from functools import partial
 from PIL import Image, ImageTk
-from source import ssTranslate as fish
 from source import widgetlib
 from source import layoutlib
 from source import common
@@ -142,12 +141,12 @@ class SpriteParent():
 		#key of changed metadata is in key
 		self.unsaved_changes = True
 
-	def attach_metadata_panel(self,parent):
+	def attach_metadata_panel(self,parent,fish):
 		PANEL_HEIGHT = 64
 		metadata_section = tk.Frame(parent, name="metadata_section")
 		row = 0
 		for key in self.metadata.keys():
-			label = fish.translate("meta",key,os.path.join("meta"))
+			label = fish.translate("meta","meta",key)
 			metadata_label = tk.Label(metadata_section, text=label, name=label.lower().replace(' ', '_'))
 			metadata_label.grid(row=row,column=1)
 			self.metadata_tk_vars[key] = tk.StringVar()
@@ -161,7 +160,7 @@ class SpriteParent():
 			row += 1
 		parent.add(metadata_section,minsize=PANEL_HEIGHT)
 
-	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter):
+	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, fish):
 		ANIMATION_DROPDOWN_WIDTH = 25
 		PANEL_HEIGHT = 25
 		self.canvas = canvas
@@ -175,7 +174,7 @@ class SpriteParent():
 
 		animation_panel = tk.Frame(parent, name="animation_panel")
 		widgetlib.right_align_grid_in_frame(animation_panel)
-		animation_label = tk.Label(animation_panel, text=fish.translate("meta","animations",os.path.join("meta")) + ':')
+		animation_label = tk.Label(animation_panel, text=fish.translate("meta","meta","animations") + ':')
 		animation_label.grid(row=0, column=1)
 		self.animation_selection = tk.StringVar(animation_panel)
 
@@ -190,10 +189,10 @@ class SpriteParent():
 
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
 
-		direction_panel, height = self.get_direction_buttons(parent).get_panel()
+		direction_panel, height = self.get_direction_buttons(parent,fish).get_panel()
 		parent.add(direction_panel, minsize=height)
 
-		spiffy_panel, height = self.get_spiffy_buttons(parent).get_panel()
+		spiffy_panel, height = self.get_spiffy_buttons(parent,fish).get_panel()
 		self.spiffy_buttons_exist = True
 		parent.add(spiffy_panel,minsize=height)
 
@@ -457,24 +456,24 @@ class SpriteParent():
 			self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)
 
 	#Mike likes spiffy buttons
-	def get_spiffy_buttons(self, parent):
+	def get_spiffy_buttons(self, parent, fish):
 		#if this is not overriden by the child (sprite-specific) class, then there will be no spiffy buttons
-		return widgetlib.SpiffyButtons(self, parent)
+		return widgetlib.SpiffyButtons(self, parent, fish)
 
 	#Art likes direction buttons
-	def get_direction_buttons(self, parent):
+	def get_direction_buttons(self, parent, fish):
 		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
 		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
 
-		facing_group = direction_buttons.make_new_group("facing")
+		facing_group = direction_buttons.make_new_group("facing", fish)
 		if self.overhead:
 			facing_group.add_blank_space()
-			facing_group.add("up", "arrow-up.png")
+			facing_group.add("up", "arrow-up.png", fish)
 			facing_group.add_blank_space()
 			facing_group.add_newline()
-		facing_group.add("left", "arrow-left.png")
+		facing_group.add("left", "arrow-left.png", fish)
 		if self.overhead:
-			facing_group.add("down", "arrow-down.png")
-		facing_group.add("right", "arrow-right.png", default=True)
+			facing_group.add("down", "arrow-down.png", fish)
+		facing_group.add("right", "arrow-right.png", fish, default=True)
 
 		return direction_buttons
