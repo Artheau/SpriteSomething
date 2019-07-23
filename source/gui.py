@@ -132,24 +132,19 @@ class SpriteSomethingMainFrame(tk.Frame):
 			widgetlib.ToolTip(button,display_text)
 			button.pack(side=tk.LEFT,padx=2,pady=2)
 			return button
+
+		def create_toolbar_buttons(toolbar_buttons):
+			for (fish_keys,image_filename,command) in toolbar_buttons:
+				create_toolbar_button(fish_keys[0],fish_keys[1],image_filename,command)
+
 		toolbar.pack(side=tk.TOP,fill=tk.X)
-		toolbar_buttons = []
-
-		#File -> Open
-		open_button = create_toolbar_button("menu","file.open","open.png",self.open_file)
-		toolbar_buttons.append(open_button)
-
-		#File -> Save
-		save_button = create_toolbar_button("menu","file.save","save.png",self.save_file_as)
-		toolbar_buttons.append(save_button)
-
-		#Export -> Inject
-		inject_button = create_toolbar_button("menu","export.inject","inject.png",self.inject_into_ROM)
-		toolbar_buttons.append(inject_button)
-
-		#Export -> Inject Copy
-		inject_new_button = create_toolbar_button("menu","export.inject-new","inject-new.png",self.copy_into_ROM)
-		toolbar_buttons.append(inject_new_button)
+		toolbar_buttons = [
+			(["menu","file.open"],"open.png",self.open_file), #File -> Open
+			(["menu","file.save"],"save.png",self.save_file_as), #File -> Save
+			(["menu","export.inject"],"inject.png",self.inject_into_ROM), #Export -> Inject
+			(["menu","export.inject-new"],"inject-new.png",self.copy_into_ROM) #Export -> Inject Copy
+		]
+		create_toolbar_buttons(toolbar_buttons)
 
 	def create_cascade(self, name, internal_name, options_list, parent_menu=None):
 		#options_list must be a list of 3-tuples containing
@@ -339,7 +334,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 			#trace method, fires when the field receives a change; may have more overhead than we'd like
 			self.metadata_textbox_vars[key].trace_add("write",partial(metadata_changed_trace,key))
-			
+
 			#validation method, fires when the field loses focus; prone to not capturing changes if user exits before blurring the tk.Entry
 			#metadata_input.configure(validate="focusout",validatecommand=partial(metadata_changed_trace,key))
 
@@ -526,7 +521,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  icon_name: filename of icon to use
 		#  command: command to execute when pressed
 		#  side: alignment
-		def make_vcr_button(text="", icon_name=None, command=None, side="right"):
+		def make_vcr_button(text="", icon_name=None, command=None, side=""):
+			side = side if not side == "" else "right"
 			icon_path = common.get_resource(icon_name if not icon_name == None else "blank.png",os.path.join("meta","icons"))
 			image = tk.PhotoImage(file=icon_path) if icon_path else None
 			if side == "right":
@@ -541,40 +537,51 @@ class SpriteSomethingMainFrame(tk.Frame):
 						column = 1 + (self.current_grid_cell % 3),
 						sticky=['nesw','nesw','nesw'][self.current_grid_cell % 3])
 			self.current_grid_cell += 1
-			return vcr_button
+
+		def make_vcr_buttons(vcr_buttons_in):
+			vcr_buttons_out = []
+			for (fish_subkey, icon_name, command, side) in vcr_buttons_in:
+				vcr_buttons_out.append(make_vcr_button(self.fish.translate("meta","vcr-controls",fish_subkey), icon_name, command, side))
 
 		#make a container for all the buttons
 		vcr_buttons = []
 
 		#zoom controls
 		zoom_factor_label = make_vcr_label(self.zoom_factor, None)
-		zoom_out_button = make_vcr_button(self.fish.translate("meta","vcr-controls","zoom-minus"),"zoom-out.png",zoom_out,"left")
-		zoom_in_button = make_vcr_button(self.fish.translate("meta","vcr-controls","zoom-plus"),"zoom-in.png",zoom_in)
-		vcr_buttons.append((zoom_factor_label,zoom_out_button,zoom_in_button,))
+		zoom_buttons = [
+			("zoom-minus","zoom-out.png",zoom_out,"left"),
+			("zoom-plus","zoom-in.png",zoom_in,"")
+		]
+		make_vcr_buttons(zoom_buttons)
 
 		#speed controls
 		speed_factor_label = make_vcr_label(self.speed_factor,None)
-		speed_down_button = make_vcr_button(self.fish.translate("meta","vcr-controls","speed-minus"),"speed-down.png",speed_down,"left")
-		speed_up_button = make_vcr_button(self.fish.translate("meta","vcr-controls","speed-plus"),"speed-up.png",speed_up)
-		vcr_buttons.append((speed_factor_label,speed_down_button,speed_up_button,))
+		speed_buttons = [
+			("speed-minus","speed-down.png",speed_down,"left"),
+			("speed-plus","speed-up.png",speed_up,"")
+		]
+		make_vcr_buttons(speed_buttons)
 
 		#play controls
-		play_button = make_vcr_button(self.fish.translate("meta","vcr-controls","play"), "play.png", self.start_global_frame_timer)
-		play_one_button = make_vcr_button(self.fish.translate("meta","vcr-controls","play-one"), "play-one.png", self.play_once)
-		reset_button = make_vcr_button(self.fish.translate("meta","vcr-controls","reset"), "reset.png", self.reset_global_frame_timer)
-		vcr_buttons.append((play_button,play_one_button,reset_button,))
+		play_buttons = [
+			("play","play.png",self.start_global_frame_timer,""),
+			("play-one","play-one.png",self.play_once,""),
+			("reset","reset.png",self.reset_global_frame_timer,"")
+		]
+		make_vcr_buttons(play_buttons)
 
 		#frame step controls
-		frame_back_button = make_vcr_button(self.fish.translate("meta","vcr-controls","frame-backward"), "frame-backward.png", self.rewind_global_frame_timer,"left")
-		pause_button = make_vcr_button(self.fish.translate("meta","vcr-controls","pause"), "pause.png", self.pause_global_frame_timer)
-		frame_forward_button = make_vcr_button(self.fish.translate("meta","vcr-controls","frame-forward"), "frame-forward.png", self.step_global_frame_timer)
-		vcr_buttons.append((frame_back_button,pause_button,frame_forward_button,))
+		frame_step_buttons = [
+			("frame-backward","frame-backward.png",self.rewind_global_frame_timer,"left"),
+			("pause","pause.png",self.pause_global_frame_timer,""),
+			("frame-forward","frame-forward.png",self.step_global_frame_timer,"")
+		]
+		make_vcr_buttons(frame_step_buttons)
 
 		#pose step controls
-		step_back_button = make_vcr_button(self.fish.translate("meta","vcr-controls","pose-backward"), "step-backward.png", self.go_to_previous_pose, "left")
+		make_vcr_buttons([("pose-backward","step-backward.png",self.go_to_previous_pose,"left")])
 		null_label = make_vcr_label("", None)
-		step_forward_button = make_vcr_button(self.fish.translate("meta","vcr-controls","pose-forward"), "step-forward.png", self.go_to_next_pose)
-		vcr_buttons.append((step_back_button,null_label,step_forward_button,))
+		make_vcr_buttons([("pose-forward","step-forward.png",self.go_to_next_pose,"")])
 
 		return control_section
 
@@ -600,7 +607,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 						return False          #don't open a new sprite; something went wrong with the save
 				else:      #chose not to save before opening
 					self.unsaved_changes = False
-				
+
 		filename = filedialog.askopenfilename(initialdir=self.working_dirs["file.open"], title=self.fish.translate("meta","dialogue","file.open.title"), filetypes=((self.fish.translate("meta","dialogue","file.open.types.label"),"*.zspr *.png *.sfc *.smc"),))
 		if filename:
 			#if we've got a filename, set the working dir and load the sprite

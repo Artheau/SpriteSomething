@@ -95,28 +95,36 @@ class Sprite(SpriteParent):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
 		mail_group = spiffy_buttons.make_new_group("mail", fish)
-		mail_group.add_blank_space()
-		mail_group.add("green", "mail-green.png", fish)
-		mail_group.add("blue", "mail-blue.png", fish)
-		mail_group.add("red", "mail-red.png", fish)
+		mail_group.adds([
+			(None,"",None), #a blank space, baby
+			("green","mail-green.png",True),
+			("blue","mail-blue.png",False),
+			("red","mail-red.png",False)
+		],fish)
 
 		sword_group = spiffy_buttons.make_new_group("sword", fish)
-		sword_group.add("none", "no-thing.png", fish)
-		sword_group.add("fighter", "sword-fighters.png", fish)
-		sword_group.add("master", "sword-master.png", fish)
-		sword_group.add("tempered", "sword-tempered.png", fish)
-		sword_group.add("gold", "sword-butter.png", fish)
+		sword_group.adds([
+			("none","no-thing.png",True),
+			("fighter","sword-fighters.png",False),
+			("master","sword-master.png",False),
+			("tempered","sword-tempered.png",False),
+			("gold","sword-butter.png",False)
+		],fish)
 
 		shield_group = spiffy_buttons.make_new_group("shield", fish)
-		shield_group.add("none", "no-thing.png", fish)
-		shield_group.add("fighter", "shield-fighters.png", fish)
-		shield_group.add("fire", "shield-fire.png", fish)
-		shield_group.add("mirror", "shield-mirror.png", fish)
+		shield_group.adds([
+			("none","no-thing.png",True),
+			("fighter","shield-fighters.png",False),
+			("fire","shield-fire.png",False),
+			("mirror","shield-mirror.png",False)
+		],fish)
 
 		gloves_group = spiffy_buttons.make_new_group("gloves", fish)
-		gloves_group.add("none", "no-thing.png", fish)
-		gloves_group.add("power", "glove1.png", fish)
-		gloves_group.add("titan", "glove2.png", fish)
+		gloves_group.adds([
+			("none","no-thing.png",True),
+			("power","glove1.png",False),
+			("titan","glove2.png",False)
+		],fish)
 
 		return spiffy_buttons
 

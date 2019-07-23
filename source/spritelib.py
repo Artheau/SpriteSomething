@@ -426,10 +426,12 @@ class SpriteParent():
 
 		facing_group = direction_buttons.make_new_group("facing", fish)
 		if self.overhead:
-			facing_group.add_blank_space()
-			facing_group.add("up", "arrow-up.png", fish)
-			facing_group.add_blank_space()
-			facing_group.add_newline()
+			facing_group.adds([
+				(None,"",None), #a blank space, baby
+				("up","arrow-up.png",False),
+				(None,"",None), #a blank space, baby
+				(None,None,None)
+			],fish)
 		facing_group.add("left", "arrow-left.png", fish)
 		if self.overhead:
 			facing_group.add("down", "arrow-down.png", fish)
