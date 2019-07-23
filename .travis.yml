@@ -25,10 +25,11 @@ matrix:
     #################################################################################
     
     ##################OS FOR PEOPLE WITH BOTTOMLESS WALLETS#########################
-    - name: "Python 3.7 on macOS"
-      os: osx
-      osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
-      language: shell       # 'language: python' is an error on Travis CI macOS
+    #Getting virtual displays to work with Mac is a real pain.  Maybe one day it is worth trying again.
+    # - name: "Python 3.7 on macOS"
+    #   os: osx
+    #   osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
+    #   language: shell       # 'language: python' is an error on Travis CI macOS
     ################################################################################
 
     #############OS FOR PEOPLE WHO LIKE PROPRIETARY SOFTWARE SUITES#################
@@ -52,8 +53,10 @@ install:
 # 'python' points to Python 2.7 on macOS but points to Python 3.7 on Linux and Windows
 # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
 
+#script:
+#  - xvfb-run python3 tests.py || xvfb-run python tests.py
 script:
-  - xvfb-run python3 tests.py || xvfb-run python tests.py
+  - xvfb-run python tests.py
 
 #I don't want your emails
 notifications:
