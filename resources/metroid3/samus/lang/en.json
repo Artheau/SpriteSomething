@@ -29,10 +29,7 @@
     "charge": "Charge",
     "speed_boost": "Speed Boost",
     "speed_squat": "Speed Squat",
-    "hyper": "Hyper Beam"
-  },
-  "Effect": {
-    "none": "None",
+    "hyper": "Hyper Beam",
     "heat": "Heat",
     "xray": "X-Ray",
     "sepia": "Sepia",

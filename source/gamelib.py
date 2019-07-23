@@ -8,7 +8,6 @@ import json						#for reading JSON
 import tkinter as tk	#for GUI stuff
 import random					#for choosing background image to load on app startup
 from PIL import Image, ImageFile
-from source import ssTranslate as fish
 from source import widgetlib
 from source import romhandler
 from source import common
@@ -88,12 +87,13 @@ class GameParent():
 		self.name = "Game Parent Class"    #to be replaced by a name like "Super Metroid"
 		self.internal_name = "meta"        #to be replaced by the specific folder name that this app uses, e.g. "metroid3"
 		self.plugins = []
+		self.console = "snes" #to be replaced by the console that the game is native to, assuming SNES for now
 
 	############################# END ABSTRACT CODE ##############################
 
 	#the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
 
-	def attach_background_panel(self, parent, canvas, zoom_getter, frame_getter):
+	def attach_background_panel(self, parent, canvas, zoom_getter, frame_getter, fish):
 		#for now, accepting frame_getter as an argument because maybe the child class has animated backgrounds or something
 		BACKGROUND_DROPDOWN_WIDTH = 25
 		PANEL_HEIGHT = 25
@@ -105,7 +105,7 @@ class GameParent():
 
 		background_panel = tk.Frame(parent, name="background_panel")
 		widgetlib.right_align_grid_in_frame(background_panel)
-		background_label = tk.Label(background_panel, text=fish.translate("meta","background",os.path.join("meta")) + ':')
+		background_label = tk.Label(background_panel, text=fish.translate("meta","meta","background") + ':')
 		background_label.grid(row=0, column=1)
 		self.background_selection = tk.StringVar(background_panel)
 

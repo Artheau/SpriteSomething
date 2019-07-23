@@ -18,7 +18,7 @@ def right_align_grid_in_frame(frame):
 	frame.grid_columnconfigure(1000, weight=0)    #so I guess technically this just needs to be larger than the number of columns
 
 def left_align_grid_in_frame(frame):
-	raise AssertionError("Alinging left in frame is not yet implemented")
+	raise AssertionError("Aligning left in frame is not yet implemented")
 
 def leakless_dropdown_trace(object, var_to_trace, fun_to_call):
 	#this function will add a "trace" to a particular variable, that is, to allow that variable when changed to call a particular function
@@ -112,11 +112,11 @@ class SpiffyButtons():
 			center_align_grid_in_frame(self.spiffy_buttons_section)
 		self.max_row = 0
 
-	def make_new_group(self, label):
+	def make_new_group(self, label, fish):
 		#make a new variable in the sprite object called "<label>_var"
 		var_name = "_".join([label.lower(), "var"])
 		setattr(self.sprite_object, var_name, tk.StringVar())
-		new_group = SpiffyGroup(self, self.max_row, label, getattr(self.sprite_object, var_name))
+		new_group = SpiffyGroup(self, self.max_row, label, getattr(self.sprite_object, var_name), fish)
 		self.max_row += 1
 		return new_group
 
@@ -126,8 +126,8 @@ class SpiffyButtons():
 
 class SpiffyGroup():
 	#not meant to be used on its own, instead use class SpiffyButtons()
-	def __init__(self, parent, row, label, var):
-		label = fish.translate("section",label,os.path.join(parent.sprite_object.resource_subpath))
+	def __init__(self, parent, row, label, var, fish):
+		label = fish.translate(parent.sprite_object.resource_subpath,"section",label)
 		self.label = label
 		self.default_exists = False
 		self.parent = parent
@@ -140,7 +140,9 @@ class SpiffyGroup():
 
 		self.col += 1
 
-	def add(self, internal_value_name, image_filename="blank.png", default = False):
+	def add(self, internal_value_name, image_filename, fish, default=False):
+		if image_filename == None:
+			image_filename == "blank.png"
 		icon_path = common.get_resource(image_filename, os.path.join(self.parent.sprite_object.resource_subpath,"icons"))
 		if icon_path is None:
 			icon_path = common.get_resource(image_filename, os.path.join("meta","icons"))
@@ -149,7 +151,7 @@ class SpiffyGroup():
 
 		img = tk.PhotoImage(file=icon_path)
 
-		display_text = fish.translate(self.label, internal_value_name, self.parent.sprite_object.resource_subpath)
+		display_text = fish.translate(self.parent.sprite_object.resource_subpath, self.label, internal_value_name)
 
 		button = tk.Radiobutton(
 				self.parent.spiffy_buttons_section,
