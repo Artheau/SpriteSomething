@@ -4,6 +4,7 @@
 import unittest     #for unit testing, har har
 import json         #need to audit our json files
 import os           #for path.join and similar, to find the files we want to audit
+import sys			#so that we can check to see which modules are imported at any given time
 
 #example:
 #
@@ -55,6 +56,38 @@ class SamusAnimationAudit(unittest.TestCase):
 	# 	self.assertEqual(dma_sequence_images, supplied_images)
 
 
+class DontGoChasingWaterfalls(unittest.TestCase):
+	#these tests are to make sure that we are are using class dependencies correctly,
+	# and that all information flows downwards.  Goal: No memory leaks sneaking in anymore
+
+	#TODO: extend this test to all sprites
+	def test_no_tk_in_sprite_class(self):
+		#there should be no references to tkinter in the sprite class, because it is supposed to work from the CLI also.
+		from source.metroid3.samus import sprite
+		self.assertFalse('tkinter' in sys.modules)
+
+	#TODO: extend this test to a more general case
+	def test_no_memory_leaks(self):
+		#inspired by a suggestion by Fry: https://www.youtube.com/watch?v=1Isjgc0oX0s
+		from source import gui
+		import tkinter as tk
+		import weakref       #we weakref something to see if it was garbage collected
+		
+		#make the GUI in skeleton form (no looping)
+		pseudo_command_line_args = {"sprite": os.path.join("resources","zelda3","link","link.zspr")}
+		pseudo_root = tk.Tk()   #make a pseudo GUI environment
+		pseudo_root.withdraw()  #make the pseudo GUI invisible
+		GUI_skeleton = gui.SpriteSomethingMainFrame(pseudo_root, pseudo_command_line_args)
+
+		#save a weakref to the old sprite
+		old_sprite_ref = weakref.ref(GUI_skeleton.sprite)
+
+		#try to load a new sprite
+		GUI_skeleton.load_sprite(os.path.join("resources","metroid3","samus","samus.png"))
+
+		#see if the old one was garbage collected
+		self.assertTrue(old_sprite_ref() is None)
+
 
 if __name__ == '__main__':
-    unittest.main()
+	unittest.main()
