@@ -206,6 +206,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#for future implementation
 		plugins_menu = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 		tools_menu = tk.Menu(self.menu, tearoff=0, name="tools_menu")
+		tools_menu.add_command(label=fish.translate("menu","tools.palette-editor",os.path.join("meta")),command=None,state="disabled")
 		tools_menu.add_cascade(label=fish.translate("menu","plugins",os.path.join("meta")), menu=plugins_menu)
 		self.menu.add_cascade(label=fish.translate("menu","tools",os.path.join("meta")), menu=tools_menu)
 
