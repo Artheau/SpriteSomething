@@ -14,6 +14,12 @@ matrix:
       env: PYTHON_EXECUTABLE=python
       services:
         - xvfb
+    - name: "Python 3.6 on Xenial Linux"
+      python: 3.6
+      dist: xenial
+      env: PYTHON_EXECUTABLE=python
+      services:
+        - xvfb
     ################################################################################
     
     ##################OS FOR PEOPLE WITH BOTTOMLESS WALLETS#########################
