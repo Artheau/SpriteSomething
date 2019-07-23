@@ -8,6 +8,12 @@ language: python
 matrix:
   include:
     #######################OS FOR HIPSTERS AND IDEALISTS############################
+    - name: "Python 3.7 on Bionic Linux"
+      python: 3.7           # version number works for Linux but is ignored on macOS or Windows
+      dist: bionic          # distribution required for Python >= 3.7
+      env: PYTHON_EXECUTABLE=python
+      services:
+        - xvfb
     - name: "Python 3.7 on Xenial Linux"
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: xenial          # distribution required for Python >= 3.7
