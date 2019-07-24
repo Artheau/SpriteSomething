@@ -13,11 +13,12 @@ class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
 
-		self.plugins += [
-			#("Download Official Sprites",None,self.get_alttpr_sprites),
-			("Sheet Trawler","plugins-sprite-sheet-trawler",None),
-			("Tracker Images",None,None)
-		]
+		#TODO: Move to a new "plugins" file or directory
+		# self.plugins += [
+		# 	("Download Official Sprites",None,self.get_alttpr_sprites),
+		# 	("Sheet Trawler","plugins-sprite-sheet-trawler",None),
+		# 	("Tracker Images",None,None)
+		# ]
 
 	def import_from_ROM(self, rom):
 		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)    #the big Link sheet
