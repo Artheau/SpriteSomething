@@ -23,8 +23,8 @@ class SpriteParent():
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
-		self.layout = layoutlib.Layout(common.get_resource("layout.json",subdir=self.resource_subpath))
-		with open(common.get_resource("animations.json",subdir=self.resource_subpath)) as file:
+		self.layout = layoutlib.Layout(common.get_resource(self.resource_subpath,"layout.json"))
+		with open(common.get_resource(self.resource_subpath,"animations.json")) as file:
 			self.animations = json.load(file)
 		self.import_from_filename()
 		self.spiffy_buttons_exist = False
@@ -418,7 +418,7 @@ class SpriteParent():
 	def get_spiffy_buttons(self, parent, fish):
 		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
 
-		spiffy_manifest = common.get_resource("spiffy-buttons.json",self.resource_subpath)
+		spiffy_manifest = common.get_resource(self.resource_subpath,"spiffy-buttons.json")
 		if spiffy_manifest:
 			with open(spiffy_manifest) as f:
 				spiffy_list = json.load(f)
@@ -443,7 +443,7 @@ class SpriteParent():
 		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
 		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
 
-		direction_manifest = common.get_resource("direction-buttons.json",self.resource_subpath)
+		direction_manifest = common.get_resource(self.resource_subpath,"direction-buttons.json")
 		if direction_manifest:
 			with open(direction_manifest) as f:
 				direction_list = json.load(f)

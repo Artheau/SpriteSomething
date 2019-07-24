@@ -143,9 +143,9 @@ class SpiffyGroup():
 	def add(self, internal_value_name, image_filename, fish, default=False):
 		if image_filename == None:
 			image_filename == "blank.png"
-		icon_path = common.get_resource(image_filename, os.path.join(self.parent.sprite_object.resource_subpath,"icons"))
+		icon_path = common.get_resource([self.parent.sprite_object.resource_subpath,"icons"],image_filename)
 		if icon_path is None:
-			icon_path = common.get_resource(image_filename, os.path.join("meta","icons"))
+			icon_path = common.get_resource(["meta","icons"],image_filename)
 		if icon_path is None:
 			raise AssertionError(f"No image resource found with name {image_filename}")
 
@@ -169,7 +169,7 @@ class SpiffyGroup():
 		)
 		bindings = None
 		keypresses = None
-		bindings_filename = common.get_resource("bindings.json","meta")
+		bindings_filename = common.get_resource("meta","bindings.json")
 		with open(bindings_filename,encoding="utf-8") as f:
 			bindings = json.load(f)
 		keypresses_switcher = bindings[self.label.lower()] if self.label.lower() in bindings else {}
