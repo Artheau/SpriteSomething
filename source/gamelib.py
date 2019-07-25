@@ -163,10 +163,10 @@ class GameParent():
 			
 			try:
 				animationlib = importlib.import_module(f"{source_subpath}.animation")
-				animation_assist = animationlib.AnimationEngine(resource_subpath)
+				animation_assist = animationlib.AnimationEngine(resource_subpath, sprite)
 			except ImportError:    #there was no sprite-specific animation library, so import the parent
 				animationlib = importlib.import_module(f"source.animationlib")
-				animation_assist = animationlib.AnimationEngineParent(resource_subpath)
+				animation_assist = animationlib.AnimationEngineParent(resource_subpath, sprite)
 			
 			return sprite, animation_assist
 		else:

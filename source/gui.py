@@ -226,7 +226,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 
 		#if we've got Game plugins or Sprite plugins
-		if self.game.plugins or self.sprite.plugins:
+		if False:#self.game.plugins or self.sprite.plugins:
 			plugins_container = []
 			#if we've got Game plugins, start the menu
 			if self.game.plugins:
@@ -386,7 +386,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.start_global_frame_timer()
 
 	def update_sprite_animation(self):
-		self.sprite.update_animation()
+		pass#self.sprite.update_animation()
 
 	def start_global_frame_timer(self):
 		#called by play button

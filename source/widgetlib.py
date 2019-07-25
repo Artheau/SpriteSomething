@@ -90,7 +90,7 @@ class ToolTip(object):
 
 class SpiffyButtons():
 	#They are like buttons, except spiffy
-	def __init__(self, sprite_object, parent_frame, frame_name="spiffy_buttons", align="right"):
+	def __init__(self, parent_frame, frame_name="spiffy_buttons", align="right"):
 		self.DIMENSIONS = {
 			"button": {
 				"width": 20,

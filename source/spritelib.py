@@ -122,7 +122,7 @@ class SpriteParent():
 		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
 		self.import_from_filename()
 		self.update_overview_panel()
-		self.update_animation()
+		#self.update_animation()
 
 	def update_pose_number(self):
 		if hasattr(self, "frame_progression_table"):
@@ -157,6 +157,19 @@ class SpriteParent():
 			full_tile_list.append((base_image,tile_info["pos"]))
 
 		return full_tile_list
+
+	def get_pose_list(self, animation, direction):
+		direction_dict = self.animations[self.current_animation]
+		if direction in direction_dict:
+			return direction_dict[direction]
+		else:
+			return []
+
+	def get_image(self, animation, direction, pose, palettes):
+		#What I hope for this to do is to just retrieve a single PIL Image that corresponds to a particular pose in a particular animation using the specified list of palettes
+		# e.g. get_image("walk", "right", 2, ["red_mail", "master_sword"])
+		#and it will return a tuple of (Image, position_offset)
+		return self.get_tiles_for_current_pose()[0] #TODO: paste all these tiles togethers
 
 	def frames_in_this_animation(self):
 		return self.frame_progression_table[-1]

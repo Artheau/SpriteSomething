@@ -8,7 +8,8 @@ import itertools
 from source import common, widgetlib
 
 class AnimationEngineParent():
-	def __init__(self, my_subpath):
+	def __init__(self, my_subpath, sprite):          #TODO: do not import the sprite this way
+		self.sprite = sprite                         #TODO: do not import the sprite this way
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.spiffy_buttons_exist = False
 		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
@@ -49,14 +50,14 @@ class AnimationEngineParent():
 
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
 
-		direction_panel, height = self.get_direction_buttons(parent,fish).get_panel()
-		parent.add(direction_panel, minsize=height)
+		# direction_panel, height = self.get_direction_buttons(parent,fish).get_panel()
+		# parent.add(direction_panel, minsize=height)
 
-		spiffy_panel, height = self.get_spiffy_buttons(parent,fish).get_panel()
-		self.spiffy_buttons_exist = True
-		parent.add(spiffy_panel,minsize=height)
+		# spiffy_panel, height = self.get_spiffy_buttons(parent,fish).get_panel()
+		# self.spiffy_buttons_exist = True
+		# parent.add(spiffy_panel,minsize=height)
 
-		self.update_overview_panel()
+		# self.update_overview_panel()
 
 		return animation_panel
 
@@ -66,37 +67,36 @@ class AnimationEngineParent():
 
 	def update_animation(self):
 		pose_list = self.get_current_pose_list()
-		if "frames" not in pose_list[0]:      #might not be a frame entry for static poses
-			self.frame_progression_table = [1]
-		else:
-			self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
 
 		if hasattr(self,"sprite_IDs"):
 			for ID in self.sprite_IDs:
-				self.canvas.delete(ID)       #remove the old tiles
-		if hasattr(self,"active_tiles"):
-			for tile in self.active_tiles:
+				self.canvas.delete(ID)       #remove the old images
+		if hasattr(self,"active_images"):
+			for tile in self.active_images:
 				del tile                     #why this is not auto-destroyed is beyond me (memory leak otherwise)
 		self.sprite_IDs = []
-		self.active_tiles = []
+		self.active_images = []
 
-		for tile,offset in self.get_tiles_for_current_pose():
-			new_size = tuple(int(dim*self.zoom_getter()) for dim in tile.size)
-			#TODO: Fix this
-			scaled_tile = ImageTk.PhotoImage(tile.resize(new_size,resample=Image.NEAREST))
+		if pose_list:    #sometimes the pose list is empty, like if a bad direction is chosen
+			if "frames" not in pose_list[0]:      #might not be a frame entry for static poses
+				self.frame_progression_table = [1]
+			else:
+				self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
+
+			pose_image,offset = self.sprite.get_image("walk", "right", 2, ["red_mail", "master_sword"])  #TODO: Don't hardcode this
+			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
+			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
 			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_tile, anchor = tk.NW))
-			self.active_tiles.append(scaled_tile)     #if you skip this part, then the auto-destructor will get rid of your picture!
+			self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
 
 	def get_current_pose_list(self):
-		direction_dict = self.animations[self.current_animation]
 		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
 			if hasattr(self,"facing_var"):
 				direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
-				if direction in direction_dict:
-					return direction_dict[direction]
-		#otherwise just grab the first listed direction
-		return next(iter(direction_dict.values()))
+				return self.sprite.get_pose_list(self.current_animation, direction)
+		#otherwise there are no poses				
+		return []
 
 	#Mike likes spiffy buttons
 	def get_spiffy_buttons(self, parent, fish):
