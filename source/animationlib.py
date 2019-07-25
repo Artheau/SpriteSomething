@@ -5,17 +5,17 @@ import tkinter as tk
 import random
 import json
 import itertools
+from PIL import Image, ImageTk
 from source import common, gui_common, widgetlib
 
 class AnimationEngineParent():
 	def __init__(self, my_subpath, sprite):          #TODO: do not import the sprite this way
 		self.sprite = sprite                         #TODO: do not import the sprite this way
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
-		self.spiffy_buttons_exist = False
+		self.spiffy_dict = {}						 #the variables created by the spiffy buttons will go here
 		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
 		self.plugins = []
-		self.stringvars = {}
 
 		with open(common.get_resource(self.resource_subpath,"animations.json")) as file:
 			self.animations = json.load(file)
@@ -51,15 +51,15 @@ class AnimationEngineParent():
 
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
 
-		direction_panel, height, stringvars_needed = self.get_direction_buttons(parent,fish).get_panel()
-		for stringvar in stringvars_needed:
-			self.stringvars[stringvar] = tk.StringVar(direction_panel)
+		direction_panel, height, new_spiffy_dict = self.get_direction_buttons(parent,fish).get_panel()
+		self.spiffy_dict = {**self.spiffy_dict, **new_spiffy_dict}   #merge all the stringvars into this dict
+
+
 		parent.add(direction_panel, minsize=height)
 
-		spiffy_panel, height, stringvars_needed = self.get_spiffy_buttons(parent,fish).get_panel()
-		for stringvar in stringvars_needed:
-			self.stringvars[stringvar] = tk.StringVar(spiffy_panel)
-		self.spiffy_buttons_exist = True
+		spiffy_panel, height, new_spiffy_dict = self.get_spiffy_buttons(parent,fish).get_panel()
+		self.spiffy_dict = {**self.spiffy_dict, **new_spiffy_dict}   #merge all the stringvars into this dict
+
 		parent.add(spiffy_panel,minsize=height)
 
 		# self.update_overview_panel()
@@ -92,20 +92,20 @@ class AnimationEngineParent():
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
 			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
 			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
-			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_tile, anchor = tk.NW))
+			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_image, anchor = tk.NW))
 			self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
 
 	def get_current_pose_list(self):
-		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
-			if hasattr(self.stringvars,"facing_var"):
-				direction = self.stringvars.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
+		if self.spiffy_dict:     #see if we have any spiffy variables, which will indicate if the direction buttons exist
+			if "facing_var" in self.spiffy_dict:
+				direction = self.spiffy_dict["facing_var"].get().lower()   #grabbed from the direction buttons, which are named "facing"
 				return self.sprite.get_pose_list(self.current_animation, direction)
 		#otherwise there are no poses
 		return []
 
 	#Mike likes spiffy buttons
 	def get_spiffy_buttons(self, parent, fish):
-		spiffy_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath)
+		spiffy_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self)
 
 		spiffy_manifest = common.get_resource(self.resource_subpath,"spiffy-buttons.json")
 		if spiffy_manifest:
@@ -130,7 +130,7 @@ class AnimationEngineParent():
 	#Art likes direction buttons
 	def get_direction_buttons(self, parent, fish):
 		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
-		direction_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, frame_name="direction_buttons", align="center")
+		direction_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self, frame_name="direction_buttons", align="center")
 
 		direction_manifest = common.get_resource(self.resource_subpath,"direction-buttons.json")
 		if direction_manifest:

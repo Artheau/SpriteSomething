@@ -141,11 +141,9 @@ class SpriteParent():
 			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
 			self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x > mod_frames]))
 
-	def get_tiles_for_current_pose(self):
-		self.update_pose_number()
-		pose_list = self.get_current_pose_list()
+	def get_tiles_for_pose(self, animation, pose_number):
 		full_tile_list = []
-		for tile_info in pose_list[self.pose_number]["tiles"][::-1]:
+		for tile_info in pose_list[pose_number]["tiles"][::-1]:
 			base_image = self.images[tile_info["image"]]
 			if "crop" in tile_info:
 				base_image = base_image.crop(tuple(tile_info["crop"]))
@@ -159,7 +157,7 @@ class SpriteParent():
 				elif vflip:
 					base_image = base_image.transpose(Image.FLIP_TOP_BOTTOM)
 
-			palette_type = pose_list[self.pose_number]["palette"] if "palette" in pose_list[self.pose_number] else None
+			palette_type = pose_list[pose_number]["palette"] if "palette" in pose_list[pose_number] else None
 
 			default_range = self.layout.get_property("import palette interval", tile_info["image"])
 			this_palette = self.get_current_palette(palette_type, default_range)
@@ -171,7 +169,7 @@ class SpriteParent():
 		return full_tile_list
 
 	def get_pose_list(self, animation, direction):
-		direction_dict = self.animations[self.current_animation]
+		direction_dict = self.animations[animation]
 		if direction in direction_dict:
 			return direction_dict[direction]
 		else:
@@ -181,7 +179,8 @@ class SpriteParent():
 		#What I hope for this to do is to just retrieve a single PIL Image that corresponds to a particular pose in a particular animation using the specified list of palettes
 		# e.g. get_image("walk", "right", 2, ["red_mail", "master_sword"])
 		#and it will return a tuple of (Image, position_offset)
-		return self.get_tiles_for_current_pose()[0] #TODO: paste all these tiles togethers
+		#return self.get_tiles_for_pose(animation, pose)[0] #TODO: paste all the tiles togethers
+		return Image.new('RGB', (16,16)),(0,0)   #TODO: this is just temporary so that things compile during refactor
 
 	def frames_in_this_animation(self):
 		return self.frame_progression_table[-1]

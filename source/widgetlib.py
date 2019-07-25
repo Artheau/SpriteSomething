@@ -91,7 +91,7 @@ class ToolTip(object):
 
 class SpiffyButtons():
 	#They are like buttons, except spiffy
-	def __init__(self, parent_frame, sprite_resource_subpath, frame_name="spiffy_buttons", align="right"):
+	def __init__(self, parent_frame, sprite_resource_subpath, animation_engine, frame_name="spiffy_buttons", align="right"):
 		self.DIMENSIONS = {
 			"button": {
 				"width": 20,
@@ -103,11 +103,9 @@ class SpiffyButtons():
 				"height_per_button": 30
 			}
 		}
-		#disable sprite object in widgetlib
-		#self.sprite_object = sprite_object
+		self.get_animation_engine = weakref.ref(animation_engine)   #TODO: check if this is needed via unit tests.  being very careful not to make a hard link to this, to avoid circular references
 		self.sprite_resource_subpath = sprite_resource_subpath
 		self.spiffy_buttons_section = tk.Frame(parent_frame, name=frame_name)
-		self.stringvars_needed = []
 		if align[0].lower() == 'r':   #align right
 			right_align_grid_in_frame(self.spiffy_buttons_section)
 		elif align[0].lower() == 'l':  #align left
@@ -115,34 +113,36 @@ class SpiffyButtons():
 		else:
 			center_align_grid_in_frame(self.spiffy_buttons_section)
 		self.max_row = 0
+		self.spiffy_dict = {}
 
 	def make_new_group(self, label, fish):
 		#make a new variable in the sprite object called "<label>_var"
 		var_name = "_".join([label.lower(), "var"])
-		#disable sprite object in widgetlib
-		#setattr(self.sprite_object, var_name, tk.StringVar())
-		#new_group = SpiffyGroup(self, self.max_row, label, getattr(self.sprite_object, var_name), fish)
-		new_group = SpiffyGroup(self, self.max_row, label, "", self.sprite_resource_subpath, fish)
-		self.stringvars_needed.append(var_name)
+		self.spiffy_dict[var_name] = tk.StringVar()
+		new_group = SpiffyGroup(self, self.max_row, label, self.spiffy_dict[var_name], self.sprite_resource_subpath, self.get_animation_engine, fish)
 		self.max_row += 1
 		return new_group
 
 	def get_panel(self):
 		section_height = self.max_row*self.DIMENSIONS["panel"]["height_per_button"]
-		return self.spiffy_buttons_section, section_height, self.stringvars_needed
+		returnvalue = (self.spiffy_buttons_section, section_height, self.spiffy_dict)
+		#chance now to get rid of anything that might make circular references.  Use commands like "del self.<var>"
+		return returnvalue
 
 class SpiffyGroup():
 	#not meant to be used on its own, instead use class SpiffyButtons()
-	def __init__(self, parent, row, label, var, sprite_resource_subpath, fish):
+	def __init__(self, parent, row, label, var, sprite_resource_subpath, animation_engine_getter, fish):
 		#disable sprite object in widgetlib
 		self.sprite_resource_subpath = sprite_resource_subpath
-		label = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'),"section",label) #fish.translate(parent.sprite_object.resource_subpath,"section",label)
+		label = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'),"section",label) #fish.translate(parent.animation_engine.resource_subpath,"section",label)
 		self.label = label
 		self.default_exists = False
 		self.parent = parent
 		self.var = var
 		self.col = 0
 		self.row = row
+
+		self.get_animation_engine = animation_engine_getter
 
 		section_label = tk.Label(self.parent.spiffy_buttons_section, text=label + ':')
 		section_label.grid(row=self.row, column=self.col, sticky='E')
@@ -153,7 +153,7 @@ class SpiffyGroup():
 		if image_filename == None:
 			image_filename == "blank.png"
 		#disable sprite object in widgetlib
-		icon_path = common.get_resource([self.sprite_resource_subpath,"icons"],image_filename) #common.get_resource([self.parent.sprite_object.resource_subpath,"icons"],image_filename)
+		icon_path = common.get_resource([self.sprite_resource_subpath,"icons"],image_filename) #common.get_resource([self.parent.animation_engine.resource_subpath,"icons"],image_filename)
 		if icon_path is None:
 			icon_path = common.get_resource(["meta","icons"],image_filename)
 			if icon_path is None:
@@ -161,7 +161,7 @@ class SpiffyGroup():
 		img = ImageTk.PhotoImage(Image.open(icon_path))
 
 		#disable sprite object in widgetlib
-		display_text = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'), self.label, internal_value_name) #fish.translate(self.parent.sprite_object.resource_subpath, self.label, internal_value_name)
+		display_text = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'), self.label, internal_value_name) #fish.translate(self.parent.animation_engine.resource_subpath, self.label, internal_value_name)
 
 		button = tk.Radiobutton(
 		 		self.parent.spiffy_buttons_section,
@@ -218,9 +218,7 @@ class SpiffyGroup():
 		return amount_of_space
 
 	def press_spiffy_button(self):
-		#disable animations in widgetlib
-		#self.parent.sprite_object.update_animation()
-		pass
+		self.get_animation_engine().update_animation()
 
 	def invoke_spiffy_button(self, button, event=None):
 		button.config(relief = tk.SUNKEN)

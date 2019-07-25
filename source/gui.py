@@ -253,7 +253,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	# Inbound:
 	#  sprite_filename: Filename of sprite to load
 	def load_sprite(self, sprite_filename):
-		self.game, self.sprite, self.animation_assist = gamelib.autodetect(sprite_filename)
+		self.game, self.sprite, self.animation_engine = gamelib.autodetect(sprite_filename)
 		self.fish.add_translation_file(self.sprite.resource_subpath)
 		self.sprite_coord = (100,100)        #an arbitrary default
 		self.attach_both_panels()            #remake the GUI panels
@@ -306,7 +306,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.left_panel.add(self.get_reload_button(),minsize=MINSIZE)
 		self.attach_metadata_panel()
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
-		self.animation_assist.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
+		self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
 		self.left_panel.add(vcr_controls,minsize=MINSIZE)
 		self.panes.add(self.left_panel)
 
@@ -386,7 +386,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.start_global_frame_timer()
 
 	def update_sprite_animation(self):
-		pass#self.sprite.update_animation()
+		self.animation_engine.update_animation()
 
 	def start_global_frame_timer(self):
 		#called by play button

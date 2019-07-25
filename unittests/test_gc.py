@@ -26,6 +26,7 @@ class NoMemoryLeaks(unittest.TestCase):
 		#save a weakref to the old sprite
 		old_sprite_ref = weakref.ref(GUI_skeleton.sprite)
 		old_game_ref = weakref.ref(GUI_skeleton.game)
+		old_animation_engine_ref = weakref.ref(GUI_skeleton.animation_engine)
 
 		#try to load a new sprite
 		GUI_skeleton.load_sprite(os.path.join("resources","metroid3","samus","samus.png"))
@@ -33,13 +34,16 @@ class NoMemoryLeaks(unittest.TestCase):
 		#see if the old classes were garbage collected
 		self.assertTrue(old_sprite_ref() is None)
 		self.assertTrue(old_game_ref() is None)
+		self.assertTrue(old_animation_engine_ref() is None)
 
 		#now go the other way around and test going to Zelda3 from Metroid3
 		old_sprite_ref = weakref.ref(GUI_skeleton.sprite)
 		old_game_ref = weakref.ref(GUI_skeleton.game)
+		old_animation_engine_ref = weakref.ref(GUI_skeleton.animation_engine)
 		GUI_skeleton.load_sprite(os.path.join("resources","zelda3","link","link.zspr"))
 		self.assertTrue(old_sprite_ref() is None)
 		self.assertTrue(old_game_ref() is None)
+		self.assertTrue(old_animation_engine_ref() is None)
 
 
 if __name__ == '__main__':
