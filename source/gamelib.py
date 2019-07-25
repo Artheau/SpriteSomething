@@ -120,6 +120,7 @@ class GameParent():
 		self.canvas = canvas
 		self.zoom_getter = zoom_getter
 		self.frame_getter = frame_getter
+		self.background_datas = {"filename":{},"title":{}}
 		self.current_background_filename = None
 		self.last_known_zoom = None
 
@@ -129,9 +130,14 @@ class GameParent():
 		background_label.grid(row=0, column=1)
 		self.background_selection = tk.StringVar(background_panel)
 
-		background_filenames = common.gather_all_from_resource_subdirectory(os.path.join(self.internal_name,"backgrounds"))
-		#FIXME: Hacky!
-		background_prettynames = [(i[:1].upper() + i[1:i.rfind('.')]) for i in background_filenames]
+		background_manifests = common.get_all_resources([self.internal_name,"backgrounds"],"backgrounds.json")
+		for background_manifest in background_manifests:
+			with open(background_manifest) as f:
+				background_data = json.load(f)
+				for background in background_data:
+					self.background_datas["filename"][background["filename"]] = background["title"]
+					self.background_datas["title"][background["title"]] = background["filename"]
+		background_prettynames = list(self.background_datas["title"].keys())
 		self.background_selection.set(random.choice(background_prettynames))
 
 		background_dropdown = tk.ttk.Combobox(background_panel, state="readonly", values=background_prettynames, name="background_dropdown")
@@ -143,12 +149,12 @@ class GameParent():
 		parent.add(background_panel,minsize=PANEL_HEIGHT)
 		return background_panel
 
-	def set_background(self, image_filename):
-		if self.current_background_filename == image_filename:
+	def set_background(self, image_title):
+		if self.current_background_filename == self.background_datas["title"][image_title]:
 			if self.last_known_zoom == self.zoom_getter():
 				return   #there is nothing to do here, because nothing has changed
 		else:     #image name is different, so need to load a new image
-			image_filename = image_filename.lower() + ".png" #FIXME: Hacky!
+			image_filename = self.background_datas["title"][image_title]
 			self.raw_background = Image.open(common.get_resource([self.internal_name,"backgrounds"],image_filename))
 
 		#now re-zoom the image
