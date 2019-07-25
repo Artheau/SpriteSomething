@@ -15,6 +15,7 @@ class AnimationEngineParent():
 		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
 		self.plugins = []
+		self.stringvars = {}
 
 		with open(common.get_resource(self.resource_subpath,"animations.json")) as file:
 			self.animations = json.load(file)
@@ -50,10 +51,14 @@ class AnimationEngineParent():
 
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
 
-		direction_panel, height = self.get_direction_buttons(parent,fish).get_panel()
+		direction_panel, height, stringvars_needed = self.get_direction_buttons(parent,fish).get_panel()
+		for stringvar in stringvars_needed:
+			self.stringvars[stringvar] = tk.StringVar(direction_panel)
 		parent.add(direction_panel, minsize=height)
 
-		spiffy_panel, height = self.get_spiffy_buttons(parent,fish).get_panel()
+		spiffy_panel, height, stringvars_needed = self.get_spiffy_buttons(parent,fish).get_panel()
+		for stringvar in stringvars_needed:
+			self.stringvars[stringvar] = tk.StringVar(spiffy_panel)
 		self.spiffy_buttons_exist = True
 		parent.add(spiffy_panel,minsize=height)
 
@@ -92,8 +97,8 @@ class AnimationEngineParent():
 
 	def get_current_pose_list(self):
 		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
-			if hasattr(self,"facing_var"):
-				direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
+			if hasattr(self.stringvars,"facing_var"):
+				direction = self.stringvars.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
 				return self.sprite.get_pose_list(self.current_animation, direction)
 		#otherwise there are no poses
 		return []
