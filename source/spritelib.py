@@ -21,13 +21,25 @@ class SpriteParent():
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
+		self.plugins = None
+		self.has_plugins = False
 		self.layout = layoutlib.Layout(common.get_resource(self.resource_subpath,"layout.json"))
 		with open(common.get_resource(self.resource_subpath,"animations.json")) as file:
 			self.animations = json.load(file)
 		self.import_from_filename()
-		
+
 	#to make a new sprite class, you must write code for all of the functions in this section below.
 	############################# BEGIN ABSTRACT CODE ##############################
+
+	def load_plugins(self):
+		try:
+			plugins_path,_ = os.path.split(self.resource_subpath)
+			_,plugins_dir = os.path.split(plugins_path)
+			plugins_module = importlib.import_module(f"source.{plugins_dir}.{self.classic_name.lower()}.plugins")
+			self.plugins = plugins_module.Plugins()
+			self.has_plugins = True
+		except ModuleNotFoundError as err:
+			print(err)
 
 	def import_from_ROM(self, rom):
 		#self.images, self.master_palette = ?, ?
@@ -117,7 +129,7 @@ class SpriteParent():
 		else:
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
 
-	
+
 	def reload(self):
 		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
 		self.import_from_filename()

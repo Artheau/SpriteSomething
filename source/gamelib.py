@@ -88,12 +88,21 @@ class GameParent():
 	def __init__(self):
 		self.name = "Game Parent Class"    #to be replaced by a name like "Super Metroid"
 		self.internal_name = "meta"        #to be replaced by the specific folder name that this app uses, e.g. "metroid3"
-		self.plugins = []
+		self.plugins = None
+		self.has_plugins = None
 		self.console = "snes" #to be replaced by the console that the game is native to, assuming SNES for now
 
 	############################# END ABSTRACT CODE ##############################
 
 	#the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
+
+	def load_plugins(self):
+		try:
+			plugins_module = importlib.import_module(f"source.{self.internal_name}.plugins")
+			self.plugins = plugins_module.Plugins()
+			self.has_plugins = True
+		except ModuleNotFoundError as err:
+			print(err)
 
 	def attach_background_panel(self, parent, canvas, zoom_getter, frame_getter, fish):
 		#for now, accepting frame_getter as an argument because maybe the child class has animated backgrounds or something
@@ -160,14 +169,14 @@ class GameParent():
 			sprite_module = importlib.import_module(f"{source_subpath}.sprite")
 			resource_subpath = os.path.join(self.internal_name,folder_name)
 			sprite = sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],resource_subpath)
-			
+
 			try:
 				animationlib = importlib.import_module(f"{source_subpath}.animation")
 				animation_assist = animationlib.AnimationEngine(resource_subpath, sprite)
 			except ImportError:    #there was no sprite-specific animation library, so import the parent
 				animationlib = importlib.import_module(f"source.animationlib")
 				animation_assist = animationlib.AnimationEngineParent(resource_subpath, sprite)
-			
+
 			return sprite, animation_assist
 		else:
 			raise AssertionError(f"make_sprite_by_number() called for non-implemented sprite_number {sprite_number}")

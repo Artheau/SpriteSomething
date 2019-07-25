@@ -12,13 +12,7 @@ from source.spritelib import SpriteParent
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
-
-		#TODO: Move to a new "plugins" file or directory
-		# self.plugins += [
-		# 	("Download Official Sprites",None,self.get_alttpr_sprites),
-		# 	("Sheet Trawler","plugins-sprite-sheet-trawler",None),
-		# 	("Tracker Images",None,None)
-		# ]
+		self.load_plugins()
 
 	def import_from_ROM(self, rom):
 		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)    #the big Link sheet
@@ -92,66 +86,36 @@ class Sprite(SpriteParent):
 		return rom
 
 	def get_current_palette(self, palette_type, default_range):
-		if self.spiffy_buttons_exist:
-			if palette_type == "bunny":
-				palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
+		if hasattr(self,"spiffy_buttons_exist"):
+			if self.spiffy_buttons_exist:
+				if palette_type == "bunny":
+					palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
+				else:
+					palette_indices = list(range(1,16))   #start with green mail and modify it as needed
+					mail_type = self.mail_var.get() if hasattr(self,"mail_var") else ""
+					gloves_type = self.gloves_var.get() if hasattr(self,"gloves_var") else ""
+					for i in range(0,len(palette_indices)):
+
+						if gloves_type != "none" and palette_indices[i] == 0x0D:
+							if gloves_type == "power":
+								palette_indices[i] = 0x10
+							elif gloves_type == "titan":
+								palette_indices[i] = 0x20
+							else:
+								raise AssertionError(f"unknown gloves type given by spiffy buttons: '{gloves_type}'")
+
+						elif mail_type != "green" and palette_indices[i] in range(0,16):
+							if mail_type == "blue":
+								palette_indices[i] += 16
+							elif mail_type == "red":
+								palette_indices[i] += 32
+							else:
+								raise AssertionError(f"unknown mail type given by spiffy buttons: '{mail_type}'")
 			else:
-				palette_indices = list(range(1,16))   #start with green mail and modify it as needed
-				mail_type = self.mail_var.get() if hasattr(self,"mail_var") else ""
-				gloves_type = self.gloves_var.get() if hasattr(self,"gloves_var") else ""
-				for i in range(0,len(palette_indices)):
-
-					if gloves_type != "none" and palette_indices[i] == 0x0D:
-						if gloves_type == "power":
-							palette_indices[i] = 0x10
-						elif gloves_type == "titan":
-							palette_indices[i] = 0x20
-						else:
-							raise AssertionError(f"unknown gloves type given by spiffy buttons: '{gloves_type}'")
-
-					elif mail_type != "green" and palette_indices[i] in range(0,16):
-						if mail_type == "blue":
-							palette_indices[i] += 16
-						elif mail_type == "red":
-							palette_indices[i] += 32
-						else:
-							raise AssertionError(f"unknown mail type given by spiffy buttons: '{mail_type}'")
-		else:
-			#do whatever the parent would do as a default
-			return super().get_current_palette(palette_type, default_range)
+				#do whatever the parent would do as a default
+				return super().get_current_palette(palette_type, default_range)
 
 		return [self.master_palette[i] for i in palette_indices]
-
-	#download ALttPR sprites
-	#TODO: Need to fix this
-	# def get_alttpr_sprites(self):
-	# 	success = False	#report success
-	# 	official = os.path.join('.',"resources","zelda3","link","official")	#save to resources/zelda3/link/official/*.zspr
-	# 	if not os.path.exists(official):
-	# 		os.makedirs(official)	#make it if we don't have it
-
-	# 	#make the request!
-	# 	alttpr_sprites_filename = "http://alttpr.com/sprites"
-	# 	alttpr_sprites_req = urllib.request.urlopen(alttpr_sprites_filename)
-	# 	alttpr_sprites = json.loads(alttpr_sprites_req.read().decode("utf-8"))
-	# 	#get an iterator and a counter for a makeshift progress bar
-	# 	i = 0
-	# 	total = len(alttpr_sprites)
-	# 	print("   Downloading Official ALttPR Sprites")
-	# 	for sprite in alttpr_sprites:
-	# 		sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
-	# 		sprite_destination = os.path.join(official,sprite_filename)	#set the destination
-	# 		i += 1	#iterate iterator
-	# 		if not os.path.exists(sprite_destination):	#if we don't have it, download it
-	# 			with open(sprite_destination, "wb") as g:
-	# 				sprite_data_req = urllib.request.urlopen(sprite["file"])
-	# 				sprite_data = sprite_data_req.read()
-	# 				print("    Writing " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
-	# 				g.write(sprite_data)
-	# 				success = True
-	# 		else:	#if we do have it, next!
-	# 			print("    Skipping " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
-	# 	return success
 
 	def get_binary_sprite_sheet(self):
 		top_half_of_rows = bytearray()

@@ -226,22 +226,22 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 
 		#if we've got Game plugins or Sprite plugins
-		if False:#self.game.plugins or self.sprite.plugins:
+		if self.game.has_plugins or self.sprite.has_plugins:
 			plugins_container = []
 			#if we've got Game plugins, start the menu
-			if self.game.plugins:
+			if self.game.has_plugins:
 				#add the commands
 				commands = []
-				for label, icon, command in self.game.plugins:
+				for label, icon, command in self.game.plugins.get_plugins():
 					commands.append((label,icon,command))
 				game_plugins_menu = self.create_cascade(self.fish.translate("meta","menu","plugins.game"),"game_plugins_menu",commands,self.menu.children["plugins_menu"])
 				plugins_container.append(game_plugins_menu)
 
 			#if we've got Sprite plugins
-			if self.sprite.plugins:
+			if self.sprite.has_plugins:
 				#add the commands
 				commands = []
-				for label, icon, command in self.sprite.plugins:
+				for label, icon, command in self.sprite.plugins.get_plugins():
 					commands.append((label,icon,command))
 				sprite_plugins_menu = self.create_cascade(self.fish.translate("meta","menu","plugins.sprite"),"sprite_plugins_menu",commands,self.menu.children["plugins_menu"])
 				plugins_container.append(sprite_plugins_menu)
