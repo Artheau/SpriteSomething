@@ -107,6 +107,7 @@ class SpiffyButtons():
 		#self.sprite_object = sprite_object
 		self.sprite_resource_subpath = sprite_resource_subpath
 		self.spiffy_buttons_section = tk.Frame(parent_frame, name=frame_name)
+		self.stringvars_needed = []
 		if align[0].lower() == 'r':   #align right
 			right_align_grid_in_frame(self.spiffy_buttons_section)
 		elif align[0].lower() == 'l':  #align left
@@ -122,12 +123,13 @@ class SpiffyButtons():
 		#setattr(self.sprite_object, var_name, tk.StringVar())
 		#new_group = SpiffyGroup(self, self.max_row, label, getattr(self.sprite_object, var_name), fish)
 		new_group = SpiffyGroup(self, self.max_row, label, "", self.sprite_resource_subpath, fish)
+		self.stringvars_needed.append(var_name)
 		self.max_row += 1
 		return new_group
 
 	def get_panel(self):
 		section_height = self.max_row*self.DIMENSIONS["panel"]["height_per_button"]
-		return self.spiffy_buttons_section, section_height
+		return self.spiffy_buttons_section, section_height, self.stringvars_needed
 
 class SpiffyGroup():
 	#not meant to be used on its own, instead use class SpiffyButtons()

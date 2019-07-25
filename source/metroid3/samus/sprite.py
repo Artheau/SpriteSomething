@@ -249,7 +249,7 @@ class Sprite(SpriteParent):
 
 	def get_current_pose_list(self):
 		direction_dict = self.animations[self.current_animation]
-		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
+		if hasatttr(self,"spiffy_buttons_exist") and self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
 			facing = self.facing_var.get().lower() if hasattr(self,"facing_var") else ""	#grabbed from the direction buttons, which are named "facing"
 			aiming = self.aiming_var.get().lower() if hasattr(self,"aiming_var") else ""	#grabbed from the aiming buttons, which are named "aiming"
 
@@ -277,7 +277,7 @@ class Sprite(SpriteParent):
 		return "_aim_".join([facing,aiming])
 
 	def get_current_palette(self, palette_type, default_range):
-		if self.spiffy_buttons_exist:
+		if hasattr(self,"spiffy_buttons_exist") and self.spiffy_buttons_exist:
 			if palette_type is not None:
 				raise NotImplementedError(f"Not implemented to use palette type {palette_type} for Samus")
 			else:
