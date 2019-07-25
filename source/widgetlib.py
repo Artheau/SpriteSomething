@@ -5,8 +5,9 @@ import tkinter as tk
 import json
 import os
 import locale
+from PIL import Image, ImageTk
 from functools import partial
-from source import common
+from source import common, gui_common
 from source import ssTranslate as fish
 
 def center_align_grid_in_frame(frame):
@@ -153,27 +154,26 @@ class SpiffyGroup():
 		icon_path = common.get_resource([self.sprite_resource_subpath,"icons"],image_filename) #common.get_resource([self.parent.sprite_object.resource_subpath,"icons"],image_filename)
 		if icon_path is None:
 			icon_path = common.get_resource(["meta","icons"],image_filename)
-		if icon_path is None:
-			raise AssertionError(f"No image resource found with name {image_filename}")
-
-		img = tk.PhotoImage(file=icon_path)
+			if icon_path is None:
+				raise AssertionError(f"No image resource found with name {image_filename}")
+		img = ImageTk.PhotoImage(Image.open(icon_path))
 
 		#disable sprite object in widgetlib
 		display_text = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'), self.label, internal_value_name) #fish.translate(self.parent.sprite_object.resource_subpath, self.label, internal_value_name)
 
 		button = tk.Radiobutton(
-				self.parent.spiffy_buttons_section,
-				image=img,
-				name="_".join([self.label.lower(), internal_value_name, "button"]),
-				text=display_text,
-				variable=self.var,
-				value=internal_value_name,
-				activebackground=self.parent.DIMENSIONS["button"]["color.active"],
-				selectcolor=self.parent.DIMENSIONS["button"]["color.selected"],
-				width=self.parent.DIMENSIONS["button"]["width"],
-				height=self.parent.DIMENSIONS["button"]["height"],
-				indicatoron=False,
-				command=self.press_spiffy_button
+		 		self.parent.spiffy_buttons_section,
+		 		image=img,
+		 		name="_".join([self.label.lower(), internal_value_name, "button"]),
+		 		text=display_text,
+		 		variable=self.var,
+		 		value=internal_value_name,
+		 		activebackground=self.parent.DIMENSIONS["button"]["color.active"],
+		 		selectcolor=self.parent.DIMENSIONS["button"]["color.selected"],
+		 		width=self.parent.DIMENSIONS["button"]["width"],
+		 		height=self.parent.DIMENSIONS["button"]["height"],
+		 		indicatoron=False,
+		 		command=self.press_spiffy_button
 		)
 		bindings = None
 		keypresses = None

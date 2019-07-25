@@ -5,7 +5,7 @@ import tkinter as tk
 import random
 import json
 import itertools
-from source import common, widgetlib
+from source import common, gui_common, widgetlib
 
 class AnimationEngineParent():
 	def __init__(self, my_subpath, sprite):          #TODO: do not import the sprite this way

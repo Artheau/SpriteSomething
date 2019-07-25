@@ -53,17 +53,28 @@ class DontGoChasingWaterfalls(unittest.TestCase):
 
 #this next class is inspired by a suggestion from Fry: https://www.youtube.com/watch?v=1Isjgc0oX0s
 class NoMemoryLeaks(unittest.TestCase):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+
 	#TODO: extend this test to a more general case
 	def test_sprites_and_games_are_destroyed(self):
-		from source import gui
 		import tkinter as tk
 		import weakref       #we weakref something to see if it was garbage collected
+		from source import gui
+
 		
 		#make the GUI in skeleton form (no looping)
 		pseudo_command_line_args = {"sprite": os.path.join("resources","zelda3","link","link.zspr")}
 		pseudo_root = tk.Tk()   #make a pseudo GUI environment
 		pseudo_root.withdraw()  #make the pseudo GUI invisible
 		GUI_skeleton = gui.SpriteSomethingMainFrame(pseudo_root, pseudo_command_line_args)
+
+		#make sure the photoimage wrapper is not bypassed #TODO: move to its own test
+		try:
+			tk.PhotoImage(file=os.path.join("resources","meta","icons","blank.png"))
+			self.assertFalse("The wrapper in gui_common.py to prevent PNG files from going to PhotoImage has been disabled, maybe by a tk import?")
+		except AssertionError:
+			self.assertTrue(True)
 
 		#save a weakref to the old sprite
 		old_sprite_ref = weakref.ref(GUI_skeleton.sprite)
