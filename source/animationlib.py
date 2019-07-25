@@ -20,7 +20,7 @@ class AnimationEngineParent():
 			self.animations = json.load(file)
 
 		self.current_animation = next(iter(self.animations.keys())) #TODO: hook this to the animation dropdown
-		
+
 	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, fish):
 		ANIMATION_DROPDOWN_WIDTH = 25
 		PANEL_HEIGHT = 25
@@ -50,12 +50,12 @@ class AnimationEngineParent():
 
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
 
-		# direction_panel, height = self.get_direction_buttons(parent,fish).get_panel()
-		# parent.add(direction_panel, minsize=height)
+		direction_panel, height = self.get_direction_buttons(parent,fish).get_panel()
+		parent.add(direction_panel, minsize=height)
 
-		# spiffy_panel, height = self.get_spiffy_buttons(parent,fish).get_panel()
-		# self.spiffy_buttons_exist = True
-		# parent.add(spiffy_panel,minsize=height)
+		spiffy_panel, height = self.get_spiffy_buttons(parent,fish).get_panel()
+		self.spiffy_buttons_exist = True
+		parent.add(spiffy_panel,minsize=height)
 
 		# self.update_overview_panel()
 
@@ -95,12 +95,12 @@ class AnimationEngineParent():
 			if hasattr(self,"facing_var"):
 				direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
 				return self.sprite.get_pose_list(self.current_animation, direction)
-		#otherwise there are no poses				
+		#otherwise there are no poses
 		return []
 
 	#Mike likes spiffy buttons
 	def get_spiffy_buttons(self, parent, fish):
-		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
+		spiffy_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath)
 
 		spiffy_manifest = common.get_resource(self.resource_subpath,"spiffy-buttons.json")
 		if spiffy_manifest:
@@ -125,7 +125,7 @@ class AnimationEngineParent():
 	#Art likes direction buttons
 	def get_direction_buttons(self, parent, fish):
 		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
-		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
+		direction_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, frame_name="direction_buttons", align="center")
 
 		direction_manifest = common.get_resource(self.resource_subpath,"direction-buttons.json")
 		if direction_manifest:

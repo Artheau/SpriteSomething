@@ -13,7 +13,6 @@ class Plugins(PluginsParent):
 			("Pose as Tracker Images",None,None)
 		]
 		self.set_plugins(plugins)
-		print(self.get_plugins())
 
 	def get_alttpr_sprites(self):
 		success = False	#report success

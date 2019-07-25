@@ -28,13 +28,22 @@ def autodetect(sprite_filename):
 		ImageFile.LOAD_TRUNCATED_IMAGES = True
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
 		loaded_image = Image.open(sprite_filename)
-		if loaded_image.size == (128,448):      #This is the size of Z3Link's sheet
-			game = get_game_class_of_type("zelda3")
-			sprite, animation_assist = game.make_player_sprite(sprite_filename)
-		elif loaded_image.size == (876,2543):   #This is the size of M3Samus's sheet
-			game = get_game_class_of_type("metroid3")
-			sprite, animation_assist = game.make_player_sprite(sprite_filename)
-		else:
+		game_found = False
+		search_path = "resources"
+		for item in os.listdir(search_path):
+			if os.path.isdir(os.path.join(search_path,item)) and not item == "meta":
+				game_name = item
+				sprite_manifest_filename = os.path.join("resources",game_name,"manifest.json")
+				with open(sprite_manifest_filename) as f:
+					sprite_manifest = json.load(f)
+					for sprite_id in sprite_manifest:
+						if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"] and "dims" in sprite_manifest[sprite_id]["input"]["png"]:
+							check_size = sprite_manifest[sprite_id]["input"]["png"]["dims"]
+							if loaded_image.size == tuple(check_size):
+								game = get_game_class_of_type(game_name)
+								sprite, animation_assist = game.make_player_sprite(sprite_filename)
+								game_found = True
+		if not game_found:
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
 	elif file_extension.lower() == ".zspr":
 		with open(sprite_filename,"rb") as file:
@@ -102,7 +111,7 @@ class GameParent():
 			self.plugins = plugins_module.Plugins()
 			self.has_plugins = True
 		except ModuleNotFoundError as err:
-			print(err)
+			pass #not terribly interested right now
 
 	def attach_background_panel(self, parent, canvas, zoom_getter, frame_getter, fish):
 		#for now, accepting frame_getter as an argument because maybe the child class has animated backgrounds or something

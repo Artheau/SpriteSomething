@@ -2,6 +2,11 @@
 	"1": {
 		"type": "Player Character Sprite",
 		"name": "Link",
-		"folder name": "link"
+		"folder name": "link",
+		"input": {
+			"png": {
+				"dims": [128,448]
+			}
+		}
 	}
 }
