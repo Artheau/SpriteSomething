@@ -7,8 +7,7 @@ import sys           #for figuring out how python is called (e.g. python or pyth
 
 for test_file in ["test_asserts.py", "test_waterfalls.py", "test_gc.py"]:   #TODO: don't hardcode the file names
 	print(f"Running tests from {test_file}")
-	process_information = subprocess.run(f"{sys.executable} {os.path.join(os.getcwd(), 'unittests', test_file)}")
-	error_code = process_information.returncode
+	error_code = subprocess.check_call([sys.executable, os.path.join(os.getcwd(), 'unittests', test_file)])
 	if error_code != 0:
 		exit(error_code)   #early exit
 	
