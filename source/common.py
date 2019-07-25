@@ -4,20 +4,36 @@ import struct
 import numpy as np
 from PIL import Image
 
-def get_all_resources(desired_filename, subdir=None):
-	#gets the file from overrides AND resources (returns a list of filenames)
+def get_all_resources(subdir=None,desired_filename=None):
 	file_list = []
+
+	if not subdir == None and desired_filename == None:
+		desired_filename = subdir
+		subdir = "./"
+
+	if isinstance(subdir,list):
+		subdir = os.path.join(*subdir)
+
+	#gets the file from overrides AND resources (returns a list of filenames)
 	for directory in ["overrides","resources"]:
 		if subdir: directory = os.path.join(directory,subdir)
 		if os.path.isdir(directory):
 			for filename in os.listdir(directory):
 				if filename == desired_filename:
 					file_list.append(os.path.join(directory,filename))
+
 	return file_list
 
-def get_resource(desired_filename, subdir=None):
+def get_resource(subdir=None,desired_filename=None):
 	#gets the file from overrides.  If not there, then from resources.
-	file_list = get_all_resources(desired_filename,subdir=subdir)
+	if not subdir == None and desired_filename == None:
+		desired_filename = subdir
+		subdir = "./"
+
+	if isinstance(subdir,list):
+		subdir = os.path.join(*subdir)
+
+	file_list = get_all_resources(subdir,desired_filename)
 	return file_list[0] if file_list else None
 
 def gather_all_from_resource_subdirectory(subdir):

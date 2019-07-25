@@ -21,8 +21,8 @@ class SpriteParent():
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
-		self.layout = layoutlib.Layout(common.get_resource("layout.json",subdir=self.resource_subpath))
-		with open(common.get_resource("animations.json",subdir=self.resource_subpath)) as file:
+		self.layout = layoutlib.Layout(common.get_resource(self.resource_subpath,"layout.json"))
+		with open(common.get_resource(self.resource_subpath,"animations.json")) as file:
 			self.animations = json.load(file)
 		self.import_from_filename()
 		

@@ -51,7 +51,7 @@ def autodetect_game_type_from_rom_filename(filename):
 
 def autodetect_game_type_from_rom(rom):
 	rom_name = rom.get_name()
-	with open(common.get_resource("game_header_info.json",subdir="meta")) as file:
+	with open(common.get_resource("meta","game_header_info.json")) as file:
 		game_header_info = json.load(file)
 
 	game_names = []
@@ -131,7 +131,7 @@ class GameParent():
 				return   #there is nothing to do here, because nothing has changed
 		else:     #image name is different, so need to load a new image
 			image_filename = image_filename.lower() + ".png" #FIXME: Hacky!
-			self.raw_background = Image.open(common.get_resource(image_filename,subdir=os.path.join(self.internal_name,"backgrounds")))
+			self.raw_background = Image.open(common.get_resource([self.internal_name,"backgrounds"],image_filename))
 
 		#now re-zoom the image
 		new_size = tuple(int(dim*self.zoom_getter()) for dim in self.raw_background.size)
@@ -151,7 +151,7 @@ class GameParent():
 
 	def make_sprite_by_number(self, sprite_number, sprite_filename):
 		#go into the manifest and get the actual name of the sprite
-		with open(common.get_resource("manifest.json",self.internal_name)) as file:
+		with open(common.get_resource(self.internal_name,"manifest.json")) as file:
 			manifest = json.load(file)
 		if str(sprite_number) in manifest:
 			folder_name = manifest[str(sprite_number)]["folder name"]

@@ -126,7 +126,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  image_filename: Image to use, default to blank
 		#  command: Command to associate with button, default to None
 		def create_toolbar_button(fish_key, fish_subkey, image_filename=None, command=None):
-			icon_path = common.get_resource(image_filename if not image_filename == None else "blank.png",os.path.join("meta","icons"))
+			icon_path = common.get_resource(["meta","icons"],image_filename if not image_filename == None else "blank.png")
 			img = ImageTk.PhotoImage(Image.open(icon_path)) if icon_path else None
 			display_text = self.fish.translate("meta",fish_key,fish_subkey)
 			button = tk.Button(toolbar,image=img,relief=tk.FLAT,width=16,height=16,command=command,state="disabled" if command == None else "normal")
@@ -169,7 +169,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 						image_path = os.path.join(self.game.resource_subpath,"icons")
 					if "sprite_plugins" in internal_name:
 						image_path = os.path.join(self.sprite.resource_subpath,"icons")
-					cascade.images[image_name] = ImageTk.PhotoImage(Image.open(common.get_resource(image_filename,image_path)))
+					cascade.images[image_name] = ImageTk.PhotoImage(Image.open(common.get_resource(image_path,image_filename)))
 				else:
 					cascade.images[image_name] = None
 				cascade.add_command(label=display_name, image=cascade.images[image_name], compound=tk.LEFT, command=function_to_call, state="disabled" if function_to_call == None else "normal")
@@ -272,7 +272,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				if "direction_buttons" in widget.winfo_name():
 					#get the main bindings file
 					bindings = None
-					bindings_filename = common.get_resource("bindings.json","meta")
+					bindings_filename = common.get_resource("meta","bindings.json")
 					with open(bindings_filename,encoding="utf-8") as f:
 						bindings = json.load(f)
 					#cycle through all spiffy buttons
@@ -508,7 +508,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  textvariable: var to report back to
 		#  icon_name: filename of icon to use
 		def make_vcr_label(textvariable, icon_name=None):
-			icon_path = common.get_resource(icon_name if not icon_name == None else "blank.png",os.path.join("meta","icons"))
+			icon_path = common.get_resource(["meta","icons"],icon_name if not icon_name == None else "blank.png")
 			image = ImageTk.PhotoImage(Image.open(icon_path)) if icon_path else None
 			vcr_label = tk.Label(control_section, image=image, anchor='e', compound="left", width=BUTTON_WIDTH, textvariable=textvariable)
 			vcr_label.grid(row = self.current_grid_cell//3,
@@ -525,7 +525,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  side: alignment
 		def make_vcr_button(text="", icon_name=None, command=None, side=""):
 			side = side if not side == "" else "right"
-			icon_path = common.get_resource(icon_name if not icon_name == None else "blank.png",os.path.join("meta","icons"))
+			icon_path = common.get_resource(["meta","icons"],icon_name if not icon_name == None else "blank.png")
 			image = ImageTk.PhotoImage(Image.open(icon_path)) if icon_path else None
 			if side == "right":
 				side = tk.RIGHT
