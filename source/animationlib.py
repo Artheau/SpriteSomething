@@ -16,7 +16,7 @@ class AnimationEngineParent():
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
 		self.plugins = []
 
-		with open(common.get_resource("animations.json",subdir=self.resource_subpath)) as file:
+		with open(common.get_resource(self.resource_subpath,"animations.json")) as file:
 			self.animations = json.load(file)
 
 		self.current_animation = next(iter(self.animations.keys())) #TODO: hook this to the animation dropdown
@@ -100,25 +100,62 @@ class AnimationEngineParent():
 
 	#Mike likes spiffy buttons
 	def get_spiffy_buttons(self, parent, fish):
-		#if this is not overriden by the child (sprite-specific) class, then there will be no spiffy buttons
-		return widgetlib.SpiffyButtons(self, parent, fish)
+		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
+
+		spiffy_manifest = common.get_resource(self.resource_subpath,"spiffy-buttons.json")
+		if spiffy_manifest:
+			with open(spiffy_manifest) as f:
+				spiffy_list = json.load(f)
+
+				for group in spiffy_list:
+					group_key = group["group-fish-key"]
+					button_group = spiffy_buttons.make_new_group(group_key,fish)
+					button_list = []
+					for button in group["buttons"]:
+						if "meta" in button and button["meta"] == "newline":
+							button_list.append((None,None,None))
+						elif "meta" in button and button["meta"] == "blank": #a blank space, baby
+							button_list.append((None,"",None))
+						else:
+							button_list.append((button["fish-subkey"],button["img"],button["default"] if "default" in button else False))
+					button_group.adds(button_list,fish)
+
+		return spiffy_buttons
 
 	#Art likes direction buttons
 	def get_direction_buttons(self, parent, fish):
 		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
 		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
 
-		facing_group = direction_buttons.make_new_group("facing", fish)
-		if self.overhead:
-			facing_group.adds([
-				(None,"",None), #a blank space, baby
-				("up","arrow-up.png",False),
-				(None,"",None), #a blank space, baby
-				(None,None,None)
-			],fish)
-		facing_group.add("left", "arrow-left.png", fish)
-		if self.overhead:
-			facing_group.add("down", "arrow-down.png", fish)
-		facing_group.add("right", "arrow-right.png", fish, default=True)
+		direction_manifest = common.get_resource(self.resource_subpath,"direction-buttons.json")
+		if direction_manifest:
+			with open(direction_manifest) as f:
+				direction_list = json.load(f)
+
+				for group in direction_list:
+					group_key = group["group-fish-key"]
+					button_group = direction_buttons.make_new_group(group_key,fish)
+					button_list = []
+					for button in group["buttons"]:
+						if "meta" in button and button["meta"] == "newline":
+							button_list.append((None,None,None))
+						elif "meta" in button and button["meta"] == "blank": #a blank space, baby
+							button_list.append((None,"",None))
+						else:
+							button_list.append((button["fish-subkey"],button["img"],button["default"] if "default" in button else False))
+					button_group.adds(button_list,fish)
+		else:
+			facing_group = direction_buttons.make_new_group("facing", fish)
+			if self.overhead:
+				facing_group.adds([
+					(None,"",None), #a blank space, baby
+					("up","arrow-up.png",False),
+					(None,"",None), #a blank space, baby
+					(None,None,None)
+				],fish)
+			facing_group.add("left", "arrow-left.png", fish)
+			if self.overhead:
+				facing_group.add("down", "arrow-down.png", fish)
+			facing_group.add("right", "arrow-right.png", fish, default=True)
 
 		return direction_buttons
