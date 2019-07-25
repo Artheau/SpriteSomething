@@ -54,7 +54,7 @@ class DontGoChasingWaterfalls(unittest.TestCase):
 #this next class is inspired by a suggestion from Fry: https://www.youtube.com/watch?v=1Isjgc0oX0s
 class NoMemoryLeaks(unittest.TestCase):
 	#TODO: extend this test to a more general case
-	def test_sprites_are_destroyed(self):
+	def test_sprites_and_games_are_destroyed(self):
 		from source import gui
 		import tkinter as tk
 		import weakref       #we weakref something to see if it was garbage collected
@@ -67,12 +67,21 @@ class NoMemoryLeaks(unittest.TestCase):
 
 		#save a weakref to the old sprite
 		old_sprite_ref = weakref.ref(GUI_skeleton.sprite)
+		old_game_ref = weakref.ref(GUI_skeleton.game)
 
 		#try to load a new sprite
 		GUI_skeleton.load_sprite(os.path.join("resources","metroid3","samus","samus.png"))
 
-		#see if the old one was garbage collected
+		#see if the old classes were garbage collected
 		self.assertTrue(old_sprite_ref() is None)
+		self.assertTrue(old_game_ref() is None)
+
+		#now go the other way around and test going to Zelda3 from Metroid3
+		old_sprite_ref = weakref.ref(GUI_skeleton.sprite)
+		old_game_ref = weakref.ref(GUI_skeleton.game)
+		GUI_skeleton.load_sprite(os.path.join("resources","zelda3","link","link.zspr"))
+		self.assertTrue(old_sprite_ref() is None)
+		self.assertTrue(old_game_ref() is None)
 
 
 if __name__ == '__main__':
