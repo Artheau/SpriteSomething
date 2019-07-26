@@ -57,9 +57,9 @@ class SpriteParent():
 		#return the binary blocks that are used to pack the RDC format
 		raise AssertionError("called get_sprite_export_blocks() on Sprite base class")
 
-	def get_current_palette(self, palette_type, default_range):
+	def get_palette(self, palette_type, default_range, frame_number):
 		#in most cases the child class will override this in order to provide functionality to things like spiffy buttons
-		# and to implement dynamic palettes by leveraging self.frame_getter() to find the frame number
+		# and to implement dynamic palettes by leveraging the frame number
 
 		#if the child class didn't tell us what to do, just go back to whatever palette it was on when it was imported
 		return self.master_palette[default_range[0]:default_range[1]]
@@ -141,7 +141,7 @@ class SpriteParent():
 			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
 			self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x > mod_frames]))
 
-	def get_tiles_for_pose(self, animation, direction, pose_number, palettes):
+	def get_tiles_for_pose(self, animation, direction, pose_number, palettes, frame_number):
 		pose_list = self.get_pose_list(animation, direction)
 		full_tile_list = []
 		for tile_info in pose_list[pose_number]["tiles"][::-1]:
@@ -164,7 +164,7 @@ class SpriteParent():
 				palettes.append(pose_list[pose_number]["palette"])
 
 			default_range = self.layout.get_property("import palette interval", tile_info["image"])
-			this_palette = self.get_current_palette(palettes, default_range)
+			this_palette = self.get_palette(palettes, default_range, frame_number)
 
 			base_image = common.apply_palette(base_image, this_palette)
 
@@ -187,17 +187,18 @@ class SpriteParent():
 
 		working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y))
 		for new_image,(x,y) in tile_list:
-			working_image.paste(new_image,(x,y))    #TODO: need to mask this with an 'L' image so that transparency is honored
+			working_image.paste(new_image,(x-min_x,y-min_y))    #TODO: need to mask this with an 'L' image so that transparency is honored
 	
 		return working_image,(min_x,min_y)
 
-	def get_image(self, animation, direction, pose, palettes):
+	def get_image(self, animation, direction, pose, palettes, frame_number):
 		#What I hope for this to do is to just retrieve a single PIL Image that corresponds to a particular pose in a particular animation using the specified list of palettes
 		# e.g. get_image("Walk", "right", 2, ["red_mail", "master_sword"])
 		#and it will return (Image, position_offset)
-		tile_list = self.get_tiles_for_pose(animation, direction, pose, palettes)
-		assembled_image = self.assemble_tiles_to_completed_image(tile_list)
-		return assembled_image
+		#the frame number here is passed as an argument to allow for the implementation of dynamic palettes
+		tile_list = self.get_tiles_for_pose(animation, direction, pose, palettes, frame_number)
+		assembled_image, offset = self.assemble_tiles_to_completed_image(tile_list)
+		return assembled_image, offset
 
 	def frames_in_this_animation(self):
 		return self.frame_progression_table[-1]

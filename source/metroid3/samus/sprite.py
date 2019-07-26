@@ -276,31 +276,35 @@ class Sprite(SpriteParent):
 	def concatenate_facing_and_aiming(self, facing, aiming):
 		return "_aim_".join([facing,aiming])
 
-	def get_current_palette(self, palette_type, default_range):
-		if hasattr(self,"spiffy_buttons_exist") and self.spiffy_buttons_exist:
-			if palette_type is not None:
-				raise NotImplementedError(f"Not implemented to use palette type {palette_type} for Samus")
-			else:
-				suit_type = self.suit_var.get()
-				variant_type = self.variant_var.get()
+	def get_palette(self, palettes, default_range, frame_number):
+		#TODO: get dynamic palettes working again
+		self.frame_getter = lambda: 0   #TODO: this is temporary to get the code to compile
+		#get the actual list of associated palettes
+		palette_timing_list = self.get_timed_palette_converter(palettes)
+		#figure out the timing
+		palette_timing_progression = list(itertools.accumulate([duration for (duration,_) in palette_timing_list]))
 
-			#get the actual list of associated palettes
-			palette_timing_list = self.get_timed_palette(overall_type=suit_type, variant_type=variant_type)
-			#figure out the timing
-			palette_timing_progression = list(itertools.accumulate([duration for (duration,_) in palette_timing_list]))
-
-			#if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
-			if palette_timing_list[-1][0] == 0 and self.frame_getter() >= palette_timing_progression[-1]:
-				palette_number = -1    #use the last palette
-			else:
-				mod_frames = self.frame_getter() % palette_timing_progression[-1]
-				palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
-
-			#now actually get that specific palette
-			_,palette = palette_timing_list[palette_number]
-
+		#if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
+		if palette_timing_list[-1][0] == 0 and frame_number >= palette_timing_progression[-1]:
+			palette_number = -1    #use the last palette
 		else:
-			#do whatever the parent would do as a default
-			return super().get_current_palette(palette_type, default_range)
+			mod_frames = self.frame_getter() % palette_timing_progression[-1]
+			palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
+
+		#now actually get that specific palette
+		_,palette = palette_timing_list[palette_number]
 
 		return palette
+
+	def get_timed_palette_converter(self, palette_list):
+		#used to interface the new palette string format with the older get_timed_palette function.
+		# could be refactored into the main code later, if coding time was not a valuable resource
+
+		overall_type, variant_type = "power", "standard"   #defaults unless we are told otherwise
+		for palette_string in palette_list:
+			if palette_string.endswith("_suit"):
+				overall_type = palette_string.replace("_suit","")
+			if palette_string.endswith("_variant"):
+				variant_type = palette_string.replace("_variant","")
+		
+		return self.get_timed_palette(overall_type=overall_type, variant_type=variant_type)

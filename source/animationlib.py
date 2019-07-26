@@ -89,7 +89,7 @@ class AnimationEngineParent():
 				self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
 
 			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
-			pose_image,offset = self.sprite.get_image(self.current_animation, self.get_current_direction(), 0, palette_info)  #TODO: Don't hardcode the pose # (it is the third argument)
+			pose_image,offset = self.sprite.get_image(self.current_animation, self.get_current_direction(), 0, palette_info, self.frame_getter())  #TODO: Don't hardcode the pose # (it is the third argument)
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
 			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
 			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))

@@ -85,7 +85,7 @@ class Sprite(SpriteParent):
 
 		return rom
 
-	def get_current_palette(self, palettes, default_range):
+	def get_palette(self, palettes, default_range, frame_number):
 		if "bunny" in palettes:
 			palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
 		else:
