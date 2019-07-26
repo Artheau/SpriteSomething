@@ -121,7 +121,7 @@ class GameParent():
 		self.zoom_getter = zoom_getter
 		self.frame_getter = frame_getter
 		self.background_datas = {"filename":{},"title":{}}
-		self.current_background_filename = None
+		self.current_background_title = None
 		self.last_known_zoom = None
 
 		background_panel = tk.Frame(parent, name="background_panel")
@@ -150,7 +150,7 @@ class GameParent():
 		return background_panel
 
 	def set_background(self, image_title):
-		if self.current_background_filename == self.background_datas["title"][image_title]:
+		if self.current_background_title == image_title:
 			if self.last_known_zoom == self.zoom_getter():
 				return   #there is nothing to do here, because nothing has changed
 		else:     #image name is different, so need to load a new image
@@ -160,15 +160,15 @@ class GameParent():
 		#now re-zoom the image
 		new_size = tuple(int(dim*self.zoom_getter()) for dim in self.raw_background.size)
 		self.background_image = gui_common.get_tk_image(self.raw_background.resize(new_size,resample=Image.NEAREST))
-		if self.current_background_filename is None:
+		if self.current_background_title is None:
 			self.background_ID = self.canvas.create_image(0, 0, image=self.background_image, anchor=tk.NW)    #so that we can manipulate the object later
 		else:
 			self.canvas.itemconfig(self.background_ID, image=self.background_image)
 		self.last_known_zoom = self.zoom_getter()
-		self.current_background_filename = image_filename
+		self.current_background_title = image_title
 
 	def update_background_image(self):
-		self.set_background(self.current_background_filename)
+		self.set_background(self.current_background_title)
 
 	def make_player_sprite(self, sprite_filename):
 		return self.make_sprite_by_number(0x01, sprite_filename)
