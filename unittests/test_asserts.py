@@ -58,17 +58,27 @@ class GUIRunTimeTests(unittest.TestCase):
 		pseudo_root.withdraw()  #make the pseudo GUI invisible
 		self.GUI_skeleton = gui.SpriteSomethingMainFrame(pseudo_root, pseudo_command_line_args)
 
-	def test_photoimage_does_not_accept_png_files(self):
+	def minitest_photoimage_does_not_accept_png_files(self):
 		#make sure the photoimage wrapper is not bypassed #TODO: move to its own test
 		try:
-			tk.PhotoImage(file=os.path.join("resources","meta","icons","blank.png"))   #any PNG file can be used here
+			temp = tk.PhotoImage(file=os.path.join("resources","meta","icons","blank.png"))   #any PNG file can be used here
 			self.assertFalse("The wrapper in gui_common.py to prevent PNG files from going to PhotoImage has been disabled, maybe by a tk import?")
 		except AssertionError:
 			try:
-				tk.PhotoImage(file=os.path.join("resources","app.gif"))   #any GIF file can be used here
+				temp = tk.PhotoImage(file=os.path.join("resources","app.gif"))   #any GIF file can be used here
 				self.assertTrue(True)
 			except AssertionError:
 				self.assertFalse("tk.PhotoImage is not accepting GIF files.  Has it been rerouted?")
+
+	def minitest_zoom_function_does_not_crash_app(self):
+		#TODO: tie this test to the button press hooks directly
+		self.GUI_skeleton.current_zoom = 1.7
+		self.GUI_skeleton.game.update_background_image()
+		self.GUI_skeleton.update_sprite_animation()
+
+	def test_runtime(self):
+		self.minitest_photoimage_does_not_accept_png_files()
+		self.minitest_zoom_function_does_not_crash_app()
 
 if __name__ == '__main__':
 	unittest.main()
