@@ -10,3 +10,12 @@ if not os.path.exists("source"):
 		raise AssertionError("cannot find the root folder from test_common.py")
 
 sys.path.append(os.getcwd())    #append the root folder to the python path, for imports
+
+
+LINK_RESOURCE_SUBPATH = os.path.join("zelda3","link")
+LINK_RESOURCE_PATH = os.path.join("resources", LINK_RESOURCE_SUBPATH)
+LINK_FILENAME = os.path.join(LINK_RESOURCE_PATH,"link.zspr")
+
+SAMUS_RESOURCE_SUBPATH = os.path.join("metroid3","samus")
+SAMUS_RESOURCE_PATH = os.path.join("resources", SAMUS_RESOURCE_SUBPATH)
+SAMUS_FILENAME = os.path.join(SAMUS_RESOURCE_PATH,"samus.png")
