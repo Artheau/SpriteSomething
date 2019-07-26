@@ -85,35 +85,24 @@ class Sprite(SpriteParent):
 
 		return rom
 
-	def get_current_palette(self, palette_type, default_range):
-		if hasattr(self,"spiffy_buttons_exist"):
-			if self.spiffy_buttons_exist:
-				if palette_type == "bunny":
-					palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
-				else:
-					palette_indices = list(range(1,16))   #start with green mail and modify it as needed
-					mail_type = self.mail_var.get() if hasattr(self,"mail_var") else ""
-					gloves_type = self.gloves_var.get() if hasattr(self,"gloves_var") else ""
-					for i in range(0,len(palette_indices)):
+	def get_current_palette(self, palettes, default_range):
+		if "bunny" in palettes:
+			palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
+		else:
+			palette_indices = list(range(1,16))   #start with green mail and modify it as needed
+			for i in range(0,len(palette_indices)):
 
-						if gloves_type != "none" and palette_indices[i] == 0x0D:
-							if gloves_type == "power":
-								palette_indices[i] = 0x10
-							elif gloves_type == "titan":
-								palette_indices[i] = 0x20
-							else:
-								raise AssertionError(f"unknown gloves type given by spiffy buttons: '{gloves_type}'")
+				if palette_indices[i] == 0x0D:
+					if "power_gloves" in palettes:
+						palette_indices[i] = 0x10
+					elif "titan_gloves" in palettes:
+						palette_indices[i] = 0x20
 
-						elif mail_type != "green" and palette_indices[i] in range(0,16):
-							if mail_type == "blue":
-								palette_indices[i] += 16
-							elif mail_type == "red":
-								palette_indices[i] += 32
-							else:
-								raise AssertionError(f"unknown mail type given by spiffy buttons: '{mail_type}'")
-			else:
-				#do whatever the parent would do as a default
-				return super().get_current_palette(palette_type, default_range)
+				if palette_indices[i] in range(0,16):
+					if "blue_mail" in palettes:
+						palette_indices[i] += 16
+					elif "red_mail" in palettes:
+						palette_indices[i] += 32
 
 		return [self.master_palette[i] for i in palette_indices]
 

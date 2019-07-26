@@ -141,7 +141,8 @@ class SpriteParent():
 			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
 			self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x > mod_frames]))
 
-	def get_tiles_for_pose(self, animation, pose_number):
+	def get_tiles_for_pose(self, animation, direction, pose_number, palettes):
+		pose_list = self.get_pose_list(animation, direction)
 		full_tile_list = []
 		for tile_info in pose_list[pose_number]["tiles"][::-1]:
 			base_image = self.images[tile_info["image"]]
@@ -157,10 +158,13 @@ class SpriteParent():
 				elif vflip:
 					base_image = base_image.transpose(Image.FLIP_TOP_BOTTOM)
 
-			palette_type = pose_list[pose_number]["palette"] if "palette" in pose_list[pose_number] else None
+			#some poses have extra palette information, e.g. use "bunny" or "crystal_flash" palettes
+			# which can (whole or in part) override certain parts of the palette specified in the argument
+			if "palette" in pose_list[pose_number]:
+				palettes.append(pose_list[pose_number]["palette"])
 
 			default_range = self.layout.get_property("import palette interval", tile_info["image"])
-			this_palette = self.get_current_palette(palette_type, default_range)
+			this_palette = self.get_current_palette(palettes, default_range)
 
 			base_image = common.apply_palette(base_image, this_palette)
 
@@ -175,12 +179,25 @@ class SpriteParent():
 		else:
 			return []
 
+	def assemble_tiles_to_completed_image(self, tile_list):
+		min_x = min([x for im,(x,y) in tile_list])
+		min_y = min([y for im,(x,y) in tile_list])
+		max_x = max([im.size[0]+x for im,(x,y) in tile_list])
+		max_y = max([im.size[1]+y for im,(x,y) in tile_list])
+
+		working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y))
+		for new_image,(x,y) in tile_list:
+			working_image.paste(new_image,(x,y))    #TODO: need to mask this with an 'L' image so that transparency is honored
+	
+		return working_image,(min_x,min_y)
+
 	def get_image(self, animation, direction, pose, palettes):
 		#What I hope for this to do is to just retrieve a single PIL Image that corresponds to a particular pose in a particular animation using the specified list of palettes
-		# e.g. get_image("walk", "right", 2, ["red_mail", "master_sword"])
-		#and it will return a tuple of (Image, position_offset)
-		#return self.get_tiles_for_pose(animation, pose)[0] #TODO: paste all the tiles togethers
-		return Image.new('RGB', (16,16)),(0,0)   #TODO: this is just temporary so that things compile during refactor
+		# e.g. get_image("Walk", "right", 2, ["red_mail", "master_sword"])
+		#and it will return (Image, position_offset)
+		tile_list = self.get_tiles_for_pose(animation, direction, pose, palettes)
+		assembled_image = self.assemble_tiles_to_completed_image(tile_list)
+		return assembled_image
 
 	def frames_in_this_animation(self):
 		return self.frame_progression_table[-1]

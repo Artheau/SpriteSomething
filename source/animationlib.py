@@ -9,8 +9,8 @@ from PIL import Image, ImageTk
 from source import common, gui_common, widgetlib
 
 class AnimationEngineParent():
-	def __init__(self, my_subpath, sprite):          #TODO: do not import the sprite this way
-		self.sprite = sprite                         #TODO: do not import the sprite this way
+	def __init__(self, my_subpath, sprite):
+		self.sprite = sprite
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.spiffy_dict = {}						 #the variables created by the spiffy buttons will go here
 		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
@@ -20,7 +20,7 @@ class AnimationEngineParent():
 		with open(common.get_resource(self.resource_subpath,"animations.json")) as file:
 			self.animations = json.load(file)
 
-		self.current_animation = next(iter(self.animations.keys())) #TODO: hook this to the animation dropdown
+		self.current_animation = next(iter(self.animations.keys()))   #using a default value until the animation_panel attachment overrides this
 
 	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, fish):
 		ANIMATION_DROPDOWN_WIDTH = 25
@@ -88,7 +88,8 @@ class AnimationEngineParent():
 			else:
 				self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
 
-			pose_image,offset = self.sprite.get_image("walk", "right", 2, ["red_mail", "master_sword"])  #TODO: Don't hardcode this
+			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
+			pose_image,offset = self.sprite.get_image(self.current_animation, self.get_current_direction(), 0, palette_info)  #TODO: Don't hardcode the pose # (it is the third argument)
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
 			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
 			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
@@ -98,10 +99,13 @@ class AnimationEngineParent():
 	def get_current_pose_list(self):
 		if self.spiffy_dict:     #see if we have any spiffy variables, which will indicate if the direction buttons exist
 			if "facing_var" in self.spiffy_dict:
-				direction = self.spiffy_dict["facing_var"].get().lower()   #grabbed from the direction buttons, which are named "facing"
+				direction = self.get_current_direction()
 				return self.sprite.get_pose_list(self.current_animation, direction)
 		#otherwise there are no poses
 		return []
+
+	def get_current_direction(self):
+		return self.spiffy_dict["facing_var"].get().lower()   #grabbed from the direction buttons, which are named "facing"
 
 	#Mike likes spiffy buttons
 	def get_spiffy_buttons(self, parent, fish):
