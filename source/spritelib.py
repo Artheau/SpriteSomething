@@ -324,11 +324,11 @@ class SpriteParent():
 
 	def save_as_RDC(self, filename):
 		raw_author_name = self.metadata["author.name-short"]
-		author = raw_author_name.encode('utf8') if raw_author_name else bytes()
+		author = raw_author_name.encode('utf-8') if raw_author_name else bytes()
 		HEADER_STRING = b"RETRODATACONTAINER"
 		VERSION = 0x01
 
-		blocks_with_type = self.get_rdc_export_blocks()
+		blocks_with_type = self.get_rdc_meta_data_block() + self.get_rdc_export_blocks()
 		number_of_blocks = len(blocks_with_type)
 
 		preample_length = len(HEADER_STRING) + 1
@@ -351,6 +351,14 @@ class SpriteParent():
 				rdc_file.write(block)
 
 		return True   #indicate success to caller
+
+	def get_rdc_meta_data_block(self):
+		title_name = self.metadata["sprite.name"]
+		author_name = self.metadata["author.name"]
+		data = json.dumps({ "title": title_name, "author": author_name }, separators=(',',':')).encode('utf-8')
+
+		META_DATA_BLOCK_TYPE = 0
+		return [(META_DATA_BLOCK_TYPE, bytearray(common.as_u32(len(data))) + data)];
 
 	def export_frame_as_PNG(self, filename):
 		#i = 0
