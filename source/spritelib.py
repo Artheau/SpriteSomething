@@ -39,7 +39,7 @@ class SpriteParent():
 			self.plugins = plugins_module.Plugins()
 			self.has_plugins = True
 		except ModuleNotFoundError as err:
-			print(err)
+			print(err)        #TODO: This will fail silently if run through the GUI
 
 	def import_from_ROM(self, rom):
 		#self.images, self.master_palette = ?, ?
@@ -179,17 +179,24 @@ class SpriteParent():
 		else:
 			return []
 
+	def get_alternative_direction(self, animation, direction):
+		direction_dict = self.animations[animation]
+		return next(iter(direction_dict.keys()))
+
 	def assemble_tiles_to_completed_image(self, tile_list):
-		min_x = min([x for im,(x,y) in tile_list])
-		min_y = min([y for im,(x,y) in tile_list])
-		max_x = max([im.size[0]+x for im,(x,y) in tile_list])
-		max_y = max([im.size[1]+y for im,(x,y) in tile_list])
+		if tile_list:   #have to check this because some animations include "empty" poses
+			min_x = min([x for im,(x,y) in tile_list])
+			min_y = min([y for im,(x,y) in tile_list])
+			max_x = max([im.size[0]+x for im,(x,y) in tile_list])
+			max_y = max([im.size[1]+y for im,(x,y) in tile_list])
 
-		working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y))
-		for new_image,(x,y) in tile_list:
-			working_image.paste(new_image,(x-min_x,y-min_y))    #TODO: need to mask this with an 'L' image so that transparency is honored
+			working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y))
+			for new_image,(x,y) in tile_list:
+				working_image.paste(new_image,(x-min_x,y-min_y))    #TODO: need to mask this with an 'L' image so that transparency is honored
 
-		return working_image,(min_x,min_y)
+			return working_image,(min_x,min_y)
+		else:
+			return Image.new('RGBA',(1,1),0), (0,0)   #blank image and dummy offset
 
 	def get_image(self, animation, direction, pose, palettes, frame_number):
 		#What I hope for this to do is to just retrieve a single PIL Image that corresponds to a particular pose in a particular animation using the specified list of palettes

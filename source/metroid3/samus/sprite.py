@@ -247,31 +247,31 @@ class Sprite(SpriteParent):
 		#now scrub the palette to get rid of floats and numbers that are too large/small
 		return [(time,[(max(0,min(255,int(color_plane))) for color_plane in color) for color in palette]) for (time,palette) in timed_palette]
 
-	def get_current_pose_list(self):
-		direction_dict = self.animations[self.current_animation]
-		if hasatttr(self,"spiffy_buttons_exist") and self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
-			facing = self.facing_var.get().lower() if hasattr(self,"facing_var") else ""	#grabbed from the direction buttons, which are named "facing"
-			aiming = self.aiming_var.get().lower() if hasattr(self,"aiming_var") else ""	#grabbed from the aiming buttons, which are named "aiming"
+	def get_alternative_direction(self, animation, direction):
+		#suggest an alternative direction, which can be referenced if the original direction doesn't have an animation
+		direction_dict = self.animations[animation]
+		split_string = direction.split("_aim_")
+		facing = split_string[0]
+		aiming = split_string[1] if len(split_string) > 1 else ""
 
-			#now start searching for this facing and aiming in the JSON dict
-			#start going down the list of alternative aiming if a pose does not have the original
-			ALTERNATIVES = {
-				"up": "diag_up",
-				"diag_up": "shoot",
-				"shoot": "neutral",
-				"down": "diag_down",
-				"diag_down": "shoot"
-			}
-			while(self.concatenate_facing_and_aiming(facing,aiming) not in direction_dict):
-				if aiming in ALTERNATIVES:
-					aiming = ALTERNATIVES[aiming]
-				else:
-					return super().get_current_pose_list()  #don't worry about aiming
+		#now start searching for this facing and aiming in the JSON dict
+		#start going down the list of alternative aiming if a pose does not have the original
+		ALTERNATIVES = {
+			"up": "diag_up",
+			"diag_up": "shoot",
+			"down": "diag_down",
+			"diag_down": "shoot"
+		}
+		while(self.concatenate_facing_and_aiming(facing,aiming) not in direction_dict):
+			if aiming in ALTERNATIVES:
+				aiming = ALTERNATIVES[aiming]
+			elif facing in direction_dict:   #no aim was available, try the pure facing
+				return facing
+			else:    #now we are really screwed, so just do anything
+				return next(iter(direction_dict.keys()))
 
-			return direction_dict[self.concatenate_facing_and_aiming(facing,aiming)]
-
-		#do whatever the parent would do
-		return super().get_current_pose_list()
+		#if things went well, we are here
+		return "_aim_".join([facing,aiming])
 
 	def concatenate_facing_and_aiming(self, facing, aiming):
 		return "_aim_".join([facing,aiming])

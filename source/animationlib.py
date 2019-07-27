@@ -71,7 +71,11 @@ class AnimationEngineParent():
 		self.update_animation()
 
 	def update_animation(self):
-		pose_list = self.get_current_pose_list()
+		displayed_direction = self.get_current_direction()
+		pose_list = self.get_current_pose_list(displayed_direction)
+		if not pose_list:
+			displayed_direction = self.sprite.get_alternative_direction(self.current_animation, displayed_direction)
+			pose_list = self.get_current_pose_list(displayed_direction)
 
 		if hasattr(self,"sprite_IDs"):
 			for ID in self.sprite_IDs:
@@ -93,10 +97,10 @@ class AnimationEngineParent():
 			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
 			frame_number_pose_started_at = max((x for x in self.frame_progression_table if x <= mod_frames),default=None)
 			if frame_number_pose_started_at is not None:
-				self.pose_number = self.frame_progression_table.index(frame_number_pose_started_at)
+				self.pose_number = 1+self.frame_progression_table.index(frame_number_pose_started_at)
 			else:
 				self.pose_number = 0
-			pose_image,offset = self.sprite.get_image(self.current_animation, self.get_current_direction(), self.pose_number, palette_info, self.frame_getter())  #TODO: Don't hardcode the pose # (it is the third argument)
+			pose_image,offset = self.sprite.get_image(self.current_animation, displayed_direction, self.pose_number, palette_info, self.frame_getter())  #TODO: Don't hardcode the pose # (it is the third argument)
 			
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
 			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
@@ -117,16 +121,20 @@ class AnimationEngineParent():
 		prev_pose_at = max((x for x in self.frame_progression_table if x <= mod_frames), default=0)
 		return mod_frames - prev_pose_at + 1
 
-	def get_current_pose_list(self):
+	def get_current_pose_list(self, direction):
 		if self.spiffy_dict:     #see if we have any spiffy variables, which will indicate if the direction buttons exist
-			if "facing_var" in self.spiffy_dict:
-				direction = self.get_current_direction()
-				return self.sprite.get_pose_list(self.current_animation, direction)
-		#otherwise there are no poses
+			return self.sprite.get_pose_list(self.current_animation, direction)
+		#if there is no spiffy dict to determine directions, just don't do anything
 		return []
 
 	def get_current_direction(self):
-		return self.spiffy_dict["facing_var"].get().lower()   #grabbed from the direction buttons, which are named "facing"
+		if self.spiffy_dict:
+			direction = self.spiffy_dict["facing_var"].get().lower()   #grabbed from the direction buttons, which are named "facing"
+			if "aiming_var" in self.spiffy_dict:
+				direction = "_aim_".join([direction, self.spiffy_dict["aiming_var"].get().lower()])
+			return direction
+		else:
+			return "right"   #TODO: figure out a better way to handle the error case
 
 	#Mike likes spiffy buttons
 	def get_spiffy_buttons(self, parent, fish):
