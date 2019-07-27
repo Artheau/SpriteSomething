@@ -1352,7 +1352,7 @@
 			{	"frames": 4,	"tiles": [	{"image": "jump_right3", "pos": [-13,-27]}	]	},
 			{	"frames": 4,	"tiles": [	{"image": "jump_right4", "pos": [-13,-27]}	]	},
 			{	"frames": 80,	"tiles": [	{"image": "jump_right5", "pos": [-13,-27]}	]	},
-			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_right", "pos": [-16,-24]}	]	}
+			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_right", "pos": [-16,-24]}	], "palette": "shinespark_variant"	}
 		],
 		"right_aim_up": [
 			{	"frames": 10,	"tiles": [	{"image": "stand_right",  "pos": [-13,-21]}	]	},
@@ -1362,7 +1362,7 @@
 			{	"frames": 4,	"tiles": [	{"image": "jump_right3", "pos": [-13,-27]}	]	},
 			{	"frames": 4,	"tiles": [	{"image": "jump_right4", "pos": [-13,-27]}	]	},
 			{	"frames": 80,	"tiles": [	{"image": "jump_right5", "pos": [-13,-27]}	]	},
-			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_right", "pos": [-16,-24]}	]	}
+			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_right", "pos": [-16,-24]}	], "palette": "shinespark_variant"	}
 		],
 		"right_aim_diag_down": [
 			{	"frames": 10,	"tiles": [	{"image": "stand_right",  "pos": [-13,-21]}	]	},
@@ -1372,13 +1372,13 @@
 			{	"frames": 4,	"tiles": [	{"image": "jump_right3", "pos": [-13,-27]}	]	},
 			{	"frames": 4,	"tiles": [	{"image": "jump_right4", "pos": [-13,-27]}	]	},
 			{	"frames": 80,	"tiles": [	{"image": "jump_right5", "pos": [-13,-27]}	]	},
-			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_right", "pos": [-16,-24]}	]	}
+			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_right", "pos": [-16,-24]}	], "palette": "shinespark_variant"	}
 		],
 		"right_aim_shoot": [
-			{	"frames": 1,	"tiles": [	{"image": "shine_spark_right", "pos": [-24,-20]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "shine_spark_right", "pos": [-24,-20]}	], "palette": "shinespark_variant"	}
 		],
 		"right_aim_diag_up": [
-			{	"frames": 1,	"tiles": [	{"image": "shine_spark_right", "pos": [-24,-20]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "shine_spark_right", "pos": [-24,-20]}	], "palette": "shinespark_variant"	}
 		],
 		"left": [
 			{	"frames": 10,	"tiles": [	{"image": "stand_left", "pos": [-19,-21]}	]	},
@@ -1388,7 +1388,7 @@
 			{	"frames": 4,	"tiles": [	{"image": "jump_left3", "pos": [-19,-27]}	]	},
 			{	"frames": 4,	"tiles": [	{"image": "jump_left4", "pos": [-19,-27]}	]	},
 			{	"frames": 80,	"tiles": [	{"image": "jump_left5", "pos": [-19,-27]}	]	},
-			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_left", "pos": [-16,-24]}	]	}
+			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_left", "pos": [-16,-24]}	], "palette": "shinespark_variant"	}
 		],
 		"left_aim_up": [
 			{	"frames": 10,	"tiles": [	{"image": "stand_left", "pos": [-19,-21]}	]	},
@@ -1398,7 +1398,7 @@
 			{	"frames": 4,	"tiles": [	{"image": "jump_left3", "pos": [-19,-27]}	]	},
 			{	"frames": 4,	"tiles": [	{"image": "jump_left4", "pos": [-19,-27]}	]	},
 			{	"frames": 80,	"tiles": [	{"image": "jump_left5", "pos": [-19,-27]}	]	},
-			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_left", "pos": [-16,-24]}	]	}
+			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_left", "pos": [-16,-24]}	], "palette": "shinespark_variant"	}
 		],
 		"left_aim_diag_down": [
 			{	"frames": 10,	"tiles": [	{"image": "stand_left",  "pos": [-19,-21]}	]	},
@@ -1408,13 +1408,13 @@
 			{	"frames": 4,	"tiles": [	{"image": "jump_left3", "pos": [-19,-27]}	]	},
 			{	"frames": 4,	"tiles": [	{"image": "jump_left4", "pos": [-19,-27]}	]	},
 			{	"frames": 80,	"tiles": [	{"image": "jump_left5", "pos": [-19,-27]}	]	},
-			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_left", "pos": [-16,-24]}	]	}
+			{	"frames": 200,	"tiles": [	{"image": "shine_spark_vertical_left", "pos": [-16,-24]}	], "palette": "shinespark_variant"	}
 		],
 		"left_aim_shoot": [
-			{	"frames": 1,	"tiles": [	{"image": "shine_spark_left", "pos": [-16,-20]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "shine_spark_left", "pos": [-16,-20]}	], "palette": "shinespark_variant"	}
 		],
 		"left_aim_diag_up": [
-			{	"frames": 1,	"tiles": [	{"image": "shine_spark_left", "pos": [-16,-20]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "shine_spark_left", "pos": [-16,-20]}	], "palette": "shinespark_variant"	}
 		]
 	},
 	"Fall": {
