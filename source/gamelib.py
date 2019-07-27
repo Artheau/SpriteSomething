@@ -22,7 +22,7 @@ def autodetect(sprite_filename):
 		game_names = autodetect_game_type_from_rom_filename(sprite_filename)
 		game = get_game_class_of_type(random.choice(game_names))	#FIXME: We actually care if there's more than one element here; choose random for now
 		#And by default, we will grab the player sprite from this game
-		sprite = game.make_player_sprite(sprite_filename)
+		sprite, animation_assist = game.make_player_sprite(sprite_filename)
 	elif file_extension.lower() == ".png":
 		#the following line prevents a "cannot identify image" error from PIL
 		ImageFile.LOAD_TRUNCATED_IMAGES = True
