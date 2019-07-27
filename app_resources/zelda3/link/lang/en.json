@@ -1,4 +1,5 @@
 {
+  "$schema": "../manifests/link-language.schema.json",
   "section": {
     "facing": "Facing",
     "mail": "Mail",

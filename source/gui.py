@@ -102,10 +102,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 		for filename in common.get_all_resources(["meta","manifests"],"app_names.json"):
 			with open(filename) as name_file:
 				for key,item in json.load(name_file).items():
-					if key in name_dict:
-						name_dict[key].extend(item)
-					else:
-						name_dict[key] = item
+					if not key == "$schema":
+						if key in name_dict:
+							name_dict[key].extend(item)
+						else:
+							name_dict[key] = item
 		app_name = []
 		if random.choice([True,False]):
 			app_name.append(random.choice(name_dict["pre"]))

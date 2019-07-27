@@ -1,4 +1,5 @@
 {
+	"$schema": "../../../../schema/animations.schema.json",
 	"Stand": {
 		"right_aim_up": [
 			{ "frames": 2,	"tiles": [	{ "image": "stand_right_aim_diag_up",	"pos": [-13,-29] } ] },
@@ -1639,7 +1640,7 @@
 			{	"frames": 2,	"tiles": [	{"image": "roll_out_right7", "pos": [-20,-24]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "roll_out_right8", "pos": [-20,-24]}	]	},
 			{	"frames": 100,	"tiles": [	{"image": "roll_out_right9", "pos": [-20,-24]}	]	}
-		]		
+		]
 	},
 	"X-Ray": {
 		"right_aim_up": [
@@ -1841,7 +1842,7 @@
 			{	"frames": 10,	"tiles": [	{"image": "crouch_left2", "pos": [-19,-24]}	]	},
 			{	"frames": 10,	"tiles": [	{"image": "crouch_left3", "pos": [-19,-24]}	]	},
 			{	"frames": 3,	"tiles": [	{"image": "morph_left", "pos": [-16,-19]}	]	},
-			{	"frames": 3,	"tiles": [	{"image": "morph_left1", "pos": [-16,-13]}	]	},			
+			{	"frames": 3,	"tiles": [	{"image": "morph_left1", "pos": [-16,-13]}	]	},
 			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left", "pos": [-16,-15]}	]	},
 			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left1", "pos": [-16,-15]}	]	},
 			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left2", "pos": [-16,-15]}	]	},
@@ -1851,7 +1852,7 @@
 			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left6", "pos": [-16,-15]}	]	},
 			{	"frames": 3,	"tiles": [	{"image": "morphball_stand_left7", "pos": [-16,-15]}	]	},
 			{	"frames": 3,	"tiles": [	{"image": "morph_left1", "pos": [-16,-13]}	]	},
-			{	"frames": 3,	"tiles": [	{"image": "morph_left", "pos": [-16,-19]}	]	}			
+			{	"frames": 3,	"tiles": [	{"image": "morph_left", "pos": [-16,-19]}	]	}
 		]
 	},
 	"Morphball Stationary": {
@@ -2018,7 +2019,7 @@
 											{"image": "crystal_bubble_right_medium", "pos": [0,-32]},
 											{"image": "crystal_bubble_right_medium", "pos": [0,0], "flip":"v"},
 											{"image": "crystal_bubble_right_medium", "pos": [-32,-32], "flip":"h"},
-											{"image": "crystal_bubble_right_medium", "pos": [-32,0], "flip":"hv"}	
+											{"image": "crystal_bubble_right_medium", "pos": [-32,0], "flip":"hv"}
 										]	},
 			{	"frames": 3,	"tiles": [	{"image": "morph_right1", "pos": [-16,-13]},
 											{"image": "crystal_bubble_right_small", "pos": [0,-32]},

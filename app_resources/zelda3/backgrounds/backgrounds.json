@@ -1,10 +1,13 @@
-[
-	{
-		"filename": "cell.png",
-		"title": "Budget Retreat"
-	},
-	{
-		"filename": "throne.png",
-		"title": "Throne Room"
-	}
-]
+{
+	"$schema": "../../../schema/backgrounds.schema.json",
+	"backgrounds": [
+		{
+			"filename": "cell.png",
+			"title": "Budget Retreat"
+		},
+		{
+			"filename": "throne.png",
+			"title": "Throne Room"
+		}
+	]
+}

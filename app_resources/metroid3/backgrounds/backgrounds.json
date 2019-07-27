@@ -1,10 +1,13 @@
-[
-	{
-		"filename": "colony.png",
-		"title": "Space Colony"
-	},
-	{
-		"filename": "title.png",
-		"title": "Title Screen"
-	}
-]
+{
+	"$schema": "../../../schema/backgrounds.schema.json",
+	"backgrounds": [
+		{
+			"filename": "colony.png",
+			"title": "Space Colony"
+		},
+		{
+			"filename": "title.png",
+			"title": "Title Screen"
+		}
+	]
+}

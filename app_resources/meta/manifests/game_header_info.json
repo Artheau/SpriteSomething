@@ -1,4 +1,5 @@
 {
+	"$schema": "../../../schema/game-header-info.schema.json",
 	"metroid3": [
 		"ZSM",
 		"Super Metroid",

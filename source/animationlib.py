@@ -19,6 +19,8 @@ class AnimationEngineParent():
 
 		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
+		if "$schema" in self.animations:
+			del self.animations["$schema"]
 
 		self.current_animation = next(iter(self.animations.keys()))   #using a default value until the animation_panel attachment overrides this
 
@@ -122,7 +124,7 @@ class AnimationEngineParent():
 			with open(spiffy_manifest) as f:
 				spiffy_list = json.load(f)
 
-				for group in spiffy_list:
+				for group in spiffy_list["button-groups"]:
 					group_key = group["group-fish-key"]
 					button_group = spiffy_buttons.make_new_group(group_key,fish)
 					button_list = []
@@ -147,7 +149,7 @@ class AnimationEngineParent():
 			with open(direction_manifest) as f:
 				direction_list = json.load(f)
 
-				for group in direction_list:
+				for group in direction_list["button-groups"]:
 					group_key = group["group-fish-key"]
 					button_group = direction_buttons.make_new_group(group_key,fish)
 					button_list = []
