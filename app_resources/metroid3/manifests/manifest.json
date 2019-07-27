@@ -1,0 +1,12 @@
+{
+	"1": {
+		"type": "Player Character Sprite",
+		"name": "Samus",
+		"folder name": "samus",
+		"input": {
+			"png": {
+				"dims": [876,2543]
+			}
+		}
+	}
+}

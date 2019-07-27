@@ -37,7 +37,7 @@ _test_macro.py
 gamefiles/
 
 # no working dirs file
-/resources/meta/working_dirs.json
+working_dirs.json
 
 # no custom files
 custom/
