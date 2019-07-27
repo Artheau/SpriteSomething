@@ -278,7 +278,7 @@ class Sprite(SpriteParent):
 
 	def get_palette(self, palettes, default_range, frame_number):
 		#TODO: get dynamic palettes working again
-		self.frame_getter = lambda: 0   #TODO: this is temporary to get the code to compile
+		#self.frame_getter = lambda: 0   #TODO: this is temporary to get the code to compile
 		#get the actual list of associated palettes
 		palette_timing_list = self.get_timed_palette_converter(palettes)
 		#figure out the timing
@@ -288,7 +288,7 @@ class Sprite(SpriteParent):
 		if palette_timing_list[-1][0] == 0 and frame_number >= palette_timing_progression[-1]:
 			palette_number = -1    #use the last palette
 		else:
-			mod_frames = self.frame_getter() % palette_timing_progression[-1]
+			mod_frames = frame_number % palette_timing_progression[-1]
 			palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
 
 		#now actually get that specific palette
@@ -306,5 +306,5 @@ class Sprite(SpriteParent):
 				overall_type = palette_string.replace("_suit","")
 			if palette_string.endswith("_variant"):
 				variant_type = palette_string.replace("_variant","")
-		
+
 		return self.get_timed_palette(overall_type=overall_type, variant_type=variant_type)

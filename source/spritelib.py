@@ -160,8 +160,17 @@ class SpriteParent():
 
 			#some poses have extra palette information, e.g. use "bunny" or "crystal_flash" palettes
 			# which can (whole or in part) override certain parts of the palette specified in the argument
+			new_palette = None
 			if "palette" in pose_list[pose_number]:
-				palettes.append(pose_list[pose_number]["palette"])
+				new_palette = pose_list[pose_number]["palette"]
+			if "palette" in tile_info:
+				new_palette = tile_info["palette"]
+
+			if new_palette:
+				new_palette_type = new_palette[new_palette.find('_'):]
+				for i in range(len(palettes)):
+					if new_palette_type in palettes[i]:
+						palettes[i] = new_palette
 
 			default_range = self.layout.get_property("import palette interval", tile_info["image"])
 			this_palette = self.get_palette(palettes, default_range, frame_number)
