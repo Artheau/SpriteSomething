@@ -2,5 +2,9 @@
 	{
 		"filename": "ship.png",
 		"title": "Samus' Ship"
+	},
+	{
+		"filename": "zebes.png",
+		"title": "Planet Zebes"
 	}
 ]
