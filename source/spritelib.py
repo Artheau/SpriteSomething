@@ -23,8 +23,8 @@ class SpriteParent():
 		self.filename = filename
 		self.plugins = None
 		self.has_plugins = False
-		self.layout = layoutlib.Layout(common.get_resource(self.resource_subpath,"layout.json"))
-		with open(common.get_resource(self.resource_subpath,"animations.json")) as file:
+		self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"))
+		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
 		self.import_from_filename()
 
@@ -188,7 +188,7 @@ class SpriteParent():
 		working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y))
 		for new_image,(x,y) in tile_list:
 			working_image.paste(new_image,(x-min_x,y-min_y))    #TODO: need to mask this with an 'L' image so that transparency is honored
-	
+
 		return working_image,(min_x,min_y)
 
 	def get_image(self, animation, direction, pose, palettes, frame_number):

@@ -16,7 +16,7 @@ class Plugins(PluginsParent):
 
 	def get_alttpr_sprites(self):
 		success = False	#report success
-		official = os.path.join('.',"resources","zelda3","link","official")	#save to resources/zelda3/link/official/*.zspr
+		official = os.path.join('.',"user_resources","zelda3","link","sheets","official")	#save to user_resources/zelda3/link/sheets/official/*.zspr
 		if not os.path.exists(official):
 			os.makedirs(official)	#make it if we don't have it
 

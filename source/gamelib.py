@@ -29,11 +29,11 @@ def autodetect(sprite_filename):
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
 		loaded_image = Image.open(sprite_filename)
 		game_found = False
-		search_path = "resources"
+		search_path = "app_resources"
 		for item in os.listdir(search_path):
 			if os.path.isdir(os.path.join(search_path,item)) and not item == "meta":
 				game_name = item
-				sprite_manifest_filename = os.path.join("resources",game_name,"manifest.json")
+				sprite_manifest_filename = os.path.join(search_path,game_name,"manifests","manifest.json")
 				with open(sprite_manifest_filename) as f:
 					sprite_manifest = json.load(f)
 					for sprite_id in sprite_manifest:
@@ -60,7 +60,7 @@ def autodetect_game_type_from_rom_filename(filename):
 
 def autodetect_game_type_from_rom(rom):
 	rom_name = rom.get_name()
-	with open(common.get_resource("meta","game_header_info.json")) as file:
+	with open(common.get_resource(["meta","manifests"],"game_header_info.json")) as file:
 		game_header_info = json.load(file)
 
 	game_names = []
@@ -175,7 +175,7 @@ class GameParent():
 
 	def make_sprite_by_number(self, sprite_number, sprite_filename):
 		#go into the manifest and get the actual name of the sprite
-		with open(common.get_resource(self.internal_name,"manifest.json")) as file:
+		with open(common.get_resource([self.internal_name,"manifests"],"manifest.json")) as file:
 			manifest = json.load(file)
 		if str(sprite_number) in manifest:
 			folder_name = manifest[str(sprite_number)]["folder name"]

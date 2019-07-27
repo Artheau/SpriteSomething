@@ -19,9 +19,9 @@ class SamusAnimationAudit(unittest.TestCase):
 	#TODO: these types of tests should be extended to all sprites
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
-		with open(os.path.join(SAMUS_RESOURCE_PATH,"animations.json")) as inFile:
+		with open(os.path.join(SAMUS_RESOURCE_PATH,"manifests","animations.json")) as inFile:
 			self.samus_animations = json.load(inFile)
-		with open(os.path.join(SAMUS_RESOURCE_PATH,"layout.json")) as inFile:
+		with open(os.path.join(SAMUS_RESOURCE_PATH,"manifests","layout.json")) as inFile:
 			self.samus_layout = json.load(inFile)
 
 	def test_animations_use_valid_image_names(self):
@@ -55,7 +55,7 @@ class SpiffyButtonAudit(unittest.TestCase):
 	def image_is_same(self, image1, image2):  #not a test; don't name this "test"
 		diff = ImageChops.difference(image1, image2)
 		return diff.getbbox() is None  #no bbox if they are the same
-		
+
 	def test_link_palette_audit(self):
 		from source.zelda3.link import sprite as link_sprite_source_file
 		PALETTES_TO_CHECK = [	[],
@@ -116,11 +116,11 @@ class GUIRunTimeTests(unittest.TestCase):
 	def minitest_photoimage_does_not_accept_png_files(self):
 		#make sure the photoimage wrapper is not bypassed #TODO: move to its own test
 		try:
-			temp = tk.PhotoImage(file=os.path.join("resources","meta","icons","blank.png"))   #any PNG file can be used here
+			temp = tk.PhotoImage(file=os.path.join("app_resources","meta","icons","blank.png"))   #any PNG file can be used here
 			self.assertFalse("The wrapper in gui_common.py to prevent PNG files from going to PhotoImage has been disabled, maybe by a tk import?")
 		except AssertionError:
 			try:
-				temp = tk.PhotoImage(file=os.path.join("resources","app.gif"))   #any GIF file can be used here
+				temp = tk.PhotoImage(file=os.path.join("app_resources","meta","icons","app.gif"))   #any GIF file can be used here
 				self.assertTrue(True)
 			except AssertionError:
 				self.assertFalse("tk.PhotoImage is not accepting GIF files.  Has it been rerouted?")

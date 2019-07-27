@@ -17,7 +17,7 @@ class AnimationEngineParent():
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
 		self.plugins = []
 
-		with open(common.get_resource(self.resource_subpath,"animations.json")) as file:
+		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
 
 		self.current_animation = next(iter(self.animations.keys()))   #using a default value until the animation_panel attachment overrides this
@@ -117,7 +117,7 @@ class AnimationEngineParent():
 	def get_spiffy_buttons(self, parent, fish):
 		spiffy_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self)
 
-		spiffy_manifest = common.get_resource(self.resource_subpath,"spiffy-buttons.json")
+		spiffy_manifest = common.get_resource([self.resource_subpath,"manifests"],"spiffy-buttons.json")
 		if spiffy_manifest:
 			with open(spiffy_manifest) as f:
 				spiffy_list = json.load(f)
@@ -142,7 +142,7 @@ class AnimationEngineParent():
 		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
 		direction_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self, frame_name="direction_buttons", align="center")
 
-		direction_manifest = common.get_resource(self.resource_subpath,"direction-buttons.json")
+		direction_manifest = common.get_resource([self.resource_subpath,"manifests"],"direction-buttons.json")
 		if direction_manifest:
 			with open(direction_manifest) as f:
 				direction_list = json.load(f)

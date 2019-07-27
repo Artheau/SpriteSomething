@@ -24,13 +24,13 @@ def make_GUI(command_line_args):
 	root = tk.Tk()
 
 	try:
-		root.iconbitmap(default=common.get_resource('app.ico')) #Windows
+		root.iconbitmap(default=common.get_resource(["meta","icons"],'app.ico')) #Windows
 	except Exception:
 		try:
-			root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file='@'+common.get_resource('app.gif'))) #Linux?
+			root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file='@'+common.get_resource(["meta","icons"],'app.gif'))) #Linux?
 		except Exception:
 			try:
-				root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file=common.get_resource('app.gif'))) #MacOSX?
+				root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file=common.get_resource(["meta","icons"],'app.gif'))) #MacOSX?
 			except Exception:
 				pass #give up
 	root.geometry("800x600")       #window size
@@ -70,7 +70,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			"export.animation-as-vcollage": "./"
 		}
 		#read saved working dirs file if it exists and set these
-		working_dir_path = os.path.join("resources","meta","working_dirs.json")
+		working_dir_path = os.path.join("user_resources","meta","manifests","working_dirs.json")
 		if os.path.exists(working_dir_path):
 			with open(working_dir_path) as json_file:
 				data = json.load(json_file)
@@ -99,7 +99,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def create_random_title(self):
 		# Generate a new epic random title for this application
 		name_dict = {}
-		for filename in common.get_all_resources("app_names.json"):
+		for filename in common.get_all_resources(["meta","manifests"],"app_names.json"):
 			with open(filename) as name_file:
 				for key,item in json.load(name_file).items():
 					if key in name_dict:
@@ -272,7 +272,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				if "direction_buttons" in widget.winfo_name():
 					#get the main bindings file
 					bindings = None
-					bindings_filename = common.get_resource("meta","bindings.json")
+					bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
 					with open(bindings_filename,encoding="utf-8") as f:
 						bindings = json.load(f)
 					#cycle through all spiffy buttons
@@ -782,7 +782,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#write working dirs to file
 	def save_working_dirs(self):
-		f = open("./resources/meta/working_dirs.json","w+")
+		f = open("./user_resources/meta/manifests/working_dirs.json","w+")
 		f.write(json.dumps(self.working_dirs,indent=2))
 
 	#exit sequence

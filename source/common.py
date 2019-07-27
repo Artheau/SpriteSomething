@@ -14,8 +14,8 @@ def get_all_resources(subdir=None,desired_filename=None):
 	if isinstance(subdir,list):
 		subdir = os.path.join(*subdir)
 
-	#gets the file from overrides AND resources (returns a list of filenames)
-	for directory in ["overrides","resources"]:
+	#gets the file from user_resources AND app_resources (returns a list of filenames)
+	for directory in ["user_resources","app_resources"]:
 		if subdir: directory = os.path.join(directory,subdir)
 		if os.path.isdir(directory):
 			for filename in os.listdir(directory):
@@ -41,7 +41,7 @@ def gather_all_from_resource_subdirectory(subdir):
 	# and then also throws in all the filenames from the same subdirectory in overrides
 	#does not recurse
 	file_list = []
-	for directory in ["resources","overrides"]:
+	for directory in ["app_resources","user_resources"]:
 		directory = os.path.join(directory,subdir)
 		if os.path.isdir(directory):
 			for filename in os.listdir(directory):
