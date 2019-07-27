@@ -118,31 +118,42 @@ class Sprite(SpriteParent):
 			timed_palette.append((0,base_palette))
 
 		elif variant_type.lower() == "heat":
-			timed_palette.append((16,common.palette_shift(base_palette,(0,0,0))))
-			timed_palette.append((4,common.palette_shift(base_palette,(8,0,0))))
-			timed_palette.append((4,common.palette_shift(base_palette,(8,0,0))))
-			timed_palette.append((5,common.palette_shift(base_palette,(16,0,0))))
-			timed_palette.append((6,common.palette_shift(base_palette,(16,0,0))))
-			timed_palette.append((7,common.palette_shift(base_palette,(24,0,0))))
-			timed_palette.append((8,common.palette_shift(base_palette,(24,0,0))))
-			timed_palette.append((8,common.palette_shift(base_palette,(40,0,0))))
-			timed_palette.append((8,common.palette_shift(base_palette,(40,0,0))))
-			timed_palette.append((8,common.palette_shift(base_palette,(24,0,0))))
-			timed_palette.append((7,common.palette_shift(base_palette,(24,0,0))))
-			timed_palette.append((6,common.palette_shift(base_palette,(16,0,0))))
-			timed_palette.append((5,common.palette_shift(base_palette,(16,0,0))))
-			timed_palette.append((4,common.palette_shift(base_palette,(8,0,0))))
-			timed_palette.append((4,common.palette_shift(base_palette,(8,0,0))))
-			timed_palette.append((3,common.palette_shift(base_palette,(8,0,0))))
+			palette_shifts = [
+				{ "index": 16, "color": (0,0,0) },
+				{ "index": 4, "color": (8,0,0) },
+				{ "index": 4, "color": (8,0,0) },
+				{ "index": 5, "color": (16,0,0) },
+				{ "index": 6, "color": (16,0,0) },
+				{ "index": 7, "color": (24,0,0) },
+				{ "index": 8, "color": (24,0,0) },
+				{ "index": 8, "color": (40,0,0) },
+				{ "index": 8, "color": (40,0,0) },
+				{ "index": 8, "color": (24,0,0) },
+				{ "index": 7, "color": (24,0,0) },
+				{ "index": 6, "color": (16,0,0) },
+				{ "index": 5, "color": (16,0,0) },
+				{ "index": 4, "color": (8,0,0) },
+				{ "index": 4, "color": (8,0,0) },
+				{ "index": 3, "color": (8,0,0) }
+			]
+
+			for shift in palette_shifts:
+				timed_palette.append((shift["index"],common.palette_shift(base_palette,shift["color"])))
 
 		elif variant_type.lower() == "charge":
 			timed_palette = [(1, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(i)/8.0)) for i in range(8)]
 
 		elif variant_type.lower().replace("_"," ") == "speed boost":
-			timed_palette.append((4,common.palette_shift(base_palette,(0,0,0))))
-			timed_palette.append((4,common.palette_shift(base_palette,(0,0,80))))
-			timed_palette.append((4,common.palette_shift(base_palette,(0,40,160))))
-			timed_palette.append((0,common.palette_shift(base_palette,(20,100,240))))  #(0,120,160)
+
+			palette_shifts = [
+				{ "index": 4, "color": (0,0,0) },
+				{ "index": 4, "color": (0,0,80) },
+				{ "index": 4, "color": (0,40,160) },
+				{ "index": 0, "color": (20,100,240) } #(0,120,160)
+			]
+
+			for shift in palette_shifts:
+				timed_palette.append((shift["index"],common.palette_shift(base_palette,shift["color"])))
 
 		elif variant_type.lower().replace("_"," ") == "speed squat":
 			#i = 0 1 2 3 2 1 0 2 3 2 1 0 1 2...
@@ -150,32 +161,48 @@ class Sprite(SpriteParent):
 			timed_palette.extend([(1,common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(i)/4.0)) for i in [2,1]])
 
 		elif variant_type.lower().replace("_","").replace(" ","") == "shinespark":
-			timed_palette.append((1,common.palette_shift(base_palette,(0,0,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(64,64,32))))
-			timed_palette.append((1,common.palette_shift(base_palette,(104,104,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(176,176,64))))
+			palette_shifts = [
+				{ "index": 1, "color": (0,0,0) },
+				{ "index": 1, "color": (64,64,32) },
+				{ "index": 1, "color": (104,104,0) },
+				{ "index": 1, "color": (176,176,64) }
+			]
+
+			for shift in palette_shifts:
+				timed_palette.append((shift["index"],common.palette_shift(base_palette,shift["color"])))
 
 		elif variant_type.lower().replace("_"," ") == "screw attack":
-			timed_palette.append((1,common.palette_shift(base_palette,(0,0,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(0,64,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(0,128,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(0,192,40))))
-			timed_palette.append((1,common.palette_shift(base_palette,(0,128,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(0,64,0))))
+			palette_shifts = [
+				{ "index": 1, "color": (0,0,0) },
+				{ "index": 1, "color": (0,64,0) },
+				{ "index": 1, "color": (0,128,0) },
+				{ "index": 1, "color": (0,192,40) },
+				{ "index": 1, "color": (0,128,0) },
+				{ "index": 1, "color": (0,64,0) }
+			]
+
+			for shift in palette_shifts:
+				timed_palette.append((shift["index"],common.palette_shift(base_palette,shift["color"])))
 
 		elif variant_type.lower().replace("_"," ") == "hyper":
+			palette_shifts = [
+				{ "index": 2, "color": (0xE0,0x20,0x20) },
+				{ "index": 2, "color": (0xE0,0x68,0x10) },
+				{ "index": 2, "color": (0xE0,0xE0,0x00) },
+				{ "index": 2, "color": (0x58,0xE0,0x00) },
+				{ "index": 2, "color": (0x00,0xE0,0x00) },
+				{ "index": 2, "color": (0x08,0x85,0x40) },
+				{ "index": 2, "color": (0x08,0x60,0x80) },
+				{ "index": 2, "color": (0x50,0x30,0x90) },
+				{ "index": 2, "color": (0x90,0x00,0x90) },
+				{ "index": 2, "color": (0xA8,0x10,0x58) }
+			]
+
 			grayscale_palette = common.grayscale(self.get_colors_from_master("gravity"))
 			faded_palette = common.palette_pull_towards_color(grayscale_palette,(0,0,0),2.0/3.0)
-			timed_palette.append((2,common.palette_shift(faded_palette,(0xE0,0x20,0x20))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0xE0,0x68,0x10))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0xE0,0xE0,0x00))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x58,0xE0,0x00))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x00,0xE0,0x00))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x08,0x85,0x40))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x08,0x60,0x80))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x50,0x30,0x90))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x90,0x00,0x90))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0xA8,0x10,0x58))))
+
+			for shift in palette_shifts:
+				timed_palette.append((shift["index"],common.palette_shift(faded_palette,shift["color"])))
 
 		elif variant_type.lower().replace("_"," ") == "death suit":
 			timed_palette.append((21, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(0.0)/8.0)))
