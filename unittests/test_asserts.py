@@ -21,6 +21,8 @@ class SamusAnimationAudit(unittest.TestCase):
 		super().__init__(*args, **kwargs)
 		with open(os.path.join(SAMUS_RESOURCE_PATH,"manifests","animations.json")) as inFile:
 			self.samus_animations = json.load(inFile)
+			if "$schema" in self.samus_animations: #skip schema definition as it's not an animation
+				del self.samus_animations["$schema"]
 		with open(os.path.join(SAMUS_RESOURCE_PATH,"manifests","layout.json")) as inFile:
 			self.samus_layout = json.load(inFile)
 
