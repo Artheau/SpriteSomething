@@ -200,19 +200,6 @@ class SpriteParent():
 		assembled_image, offset = self.assemble_tiles_to_completed_image(tile_list)
 		return assembled_image, offset
 
-	def frames_in_this_animation(self):
-		return self.frame_progression_table[-1]
-
-	def frames_left_in_this_pose(self):
-		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
-		next_pose_at = min(x for x in self.frame_progression_table if x > mod_frames)
-		return next_pose_at - mod_frames
-
-	def frames_to_previous_pose(self):
-		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
-		prev_pose_at = max((x for x in self.frame_progression_table if x <= mod_frames), default=0)
-		return mod_frames - prev_pose_at + 1
-
 	def save_as(self, filename):
 		_,file_extension = os.path.splitext(filename)
 		if file_extension.lower() == ".png":

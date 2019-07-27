@@ -68,7 +68,6 @@ class AnimationEngineParent():
 
 	def set_animation(self, animation_name):
 		self.current_animation = animation_name
-		self.pose_number = 0 #reset pose number so we don't have an OOB error
 		self.update_animation()
 
 	def update_animation(self):
@@ -91,16 +90,32 @@ class AnimationEngineParent():
 
 			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
-			self.pose_number = 0 #TODO: Don't hardcode the pose number, disable to animate one pose per frame
+			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
+			frame_number_pose_started_at = max((x for x in self.frame_progression_table if x <= mod_frames),default=None)
+			if frame_number_pose_started_at is not None:
+				self.pose_number = self.frame_progression_table.index(frame_number_pose_started_at)
+			else:
+				self.pose_number = 0
 			pose_image,offset = self.sprite.get_image(self.current_animation, self.get_current_direction(), self.pose_number, palette_info, self.frame_getter())  #TODO: Don't hardcode the pose # (it is the third argument)
-			self.pose_number = self.pose_number + 1 if self.pose_number < len(pose_list) - 1 else 0
-#			self.pose_number = self.pose_number + 1 if ((self.pose_number < len(pose_list) - 1) and (self.frames_left_in_this_pose() == 0)) else 0 #TODO: Fix "frame_progression_table"
-
+			
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
 			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
 			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_image, anchor = tk.NW))
 			self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
+
+	def frames_in_this_animation(self):
+		return self.frame_progression_table[-1]
+
+	def frames_left_in_this_pose(self):
+		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
+		next_pose_at = min(x for x in self.frame_progression_table if x > mod_frames)
+		return next_pose_at - mod_frames
+
+	def frames_to_previous_pose(self):
+		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
+		prev_pose_at = max((x for x in self.frame_progression_table if x <= mod_frames), default=0)
+		return mod_frames - prev_pose_at + 1
 
 	def get_current_pose_list(self):
 		if self.spiffy_dict:     #see if we have any spiffy variables, which will indicate if the direction buttons exist
