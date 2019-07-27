@@ -68,6 +68,7 @@ class AnimationEngineParent():
 
 	def set_animation(self, animation_name):
 		self.current_animation = animation_name
+		self.pose_number = 0 #reset pose number so we don't have an OOB error
 		self.update_animation()
 
 	def update_animation(self):
@@ -89,7 +90,12 @@ class AnimationEngineParent():
 				self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
 
 			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
-			pose_image,offset = self.sprite.get_image(self.current_animation, self.get_current_direction(), 0, palette_info, self.frame_getter())  #TODO: Don't hardcode the pose # (it is the third argument)
+
+			self.pose_number = 0 #TODO: Don't hardcode the pose number, disable to animate one pose per frame
+			pose_image,offset = self.sprite.get_image(self.current_animation, self.get_current_direction(), self.pose_number, palette_info, self.frame_getter())  #TODO: Don't hardcode the pose # (it is the third argument)
+			self.pose_number = self.pose_number + 1 if self.pose_number < len(pose_list) - 1 else 0
+#			self.pose_number = self.pose_number + 1 if ((self.pose_number < len(pose_list) - 1) and (self.frames_left_in_this_pose() == 0)) else 0 #TODO: Fix "frame_progression_table"
+
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
 			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
 			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
