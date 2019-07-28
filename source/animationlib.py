@@ -14,12 +14,7 @@ class AnimationEngineParent():
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.spiffy_dict = {}						 #the variables created by the spiffy buttons will go here
 		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
-		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
-
-		#TODO: Need to do implement custom overview_scale_factor in a way that is extendable.
-		# Hardcoding this for every sprite is shameful.
-		if sprite.classic_name == "Samus":
-			self.overview_scale_factor = 1    #Samus's sheet is BIG, so don't zoom in on the overview
+		self.overview_scale_factor = sprite.overview_scale_factor #when the overview is made, it is scaled up by this amount
 
 		self.plugins = []
 		self.prev_palette_info = []
@@ -120,7 +115,7 @@ class AnimationEngineParent():
 			current_frame -= self.palette_last_transition_frame
 
 			pose_image,offset = self.sprite.get_image(self.current_animation, displayed_direction, self.pose_number, palette_info, current_frame)
-			
+
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
 			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
 			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
@@ -230,4 +225,3 @@ class AnimationEngineParent():
 			scaled_image = scaled_image.copy()
 			self.overview_image = gui_common.get_tk_image(scaled_image)
 			self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)
-

@@ -23,6 +23,9 @@ class SpriteParent():
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
+		self.overview_scale_factor = 2
+		if "input" in manifest_dict and "png" in manifest_dict["input"] and "overview-scale-factor" in manifest_dict["input"]["png"]:
+			self.overview_scale_factor = manifest_dict["input"]["png"]["overview-scale-factor"]
 		self.plugins = None
 		self.has_plugins = False
 		self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"))

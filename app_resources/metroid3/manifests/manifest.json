@@ -5,7 +5,8 @@
 		"folder name": "samus",
 		"input": {
 			"png": {
-				"dims": [876,2543]
+				"dims": [876,2543],
+				"overview-scale-factor": 1
 			}
 		}
 	}
