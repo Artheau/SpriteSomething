@@ -8,6 +8,7 @@ import json						#for reading JSON
 import tkinter as tk	#for GUI stuff
 import random					#for choosing background image to load on app startup
 from PIL import Image, ImageFile
+from functools import partial
 from source import widgetlib
 from source import romhandler
 from source import common
@@ -20,7 +21,16 @@ def autodetect(sprite_filename):
 	if file_extension.lower() in [".sfc",".smc"]:
 		#If the file is a rom, then we can go into the internal header and get the name of the game
 		game_names = autodetect_game_type_from_rom_filename(sprite_filename)
-		game = get_game_class_of_type(random.choice(game_names))	#FIXME: We actually care if there's more than one element here; choose random for now
+		selected_game = None
+
+		#prompt user for input
+		#FIXME: Ugh, more tk
+		selected_game = gui_common.create_chooser(game_names)
+
+		if not selected_game:
+			selected_game = random.choice(game_names)
+
+		game = get_game_class_of_type(selected_game)
 		#And by default, we will grab the player sprite from this game
 		sprite, animation_assist = game.make_player_sprite(sprite_filename)
 	elif file_extension.lower() == ".png":
