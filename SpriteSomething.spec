@@ -12,9 +12,12 @@ def recurse_for_py_files(names_so_far):
         for filename in os.listdir(os.path.join(*new_name_list)):
           base_file,file_extension = os.path.splitext(filename)
           if file_extension == ".py":
-            returnvalue.append(".".join(new_name_list + [base_file]))
+            new_name = ".".join(new_name_list+[base_file])
+            if not new_name in returnvalue:
+            	returnvalue.append(new_name)
         returnvalue.extend(recurse_for_py_files(new_name_list))
-    returnvalue.append("PIL._tkinter_finder") #Linux needs this
+  returnvalue.append("PIL._tkinter_finder") #Linux needs this
+  returnvalue.append("source.animationlib") #Windows missed this
   return returnvalue
 
 hiddenimports = recurse_for_py_files(["source"])
