@@ -203,27 +203,15 @@ class Sprite(SpriteParent):
 				timed_palette.append((shift["index"],common.palette_shift(faded_palette,shift["color"])))
 
 		elif variant_type.lower().replace("_"," ") == "death suit":
-			timed_palette.append((21, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(0.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(1.0)/8.0)))
-			timed_palette.append((3, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(2.0)/8.0)))
-			timed_palette.append((4, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(3.0)/8.0)))
-			timed_palette.append((5, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(4.0)/8.0)))
-			timed_palette.append((5, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(5.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(6.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(7.0)/8.0)))
-			timed_palette.append((80, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(8.0)/8.0)))
+			palette_indexes = [21,6,3,4,5,5,6,6,80]
+			for i in range(len(palette_indexes)):
+				timed_palette.append((palette_indexes[i], common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(i)/8.0)))
 
 		elif variant_type.lower() == "death":
 			death_palette = self.get_colors_from_master("death")
-			timed_palette.append((21, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(0.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(1.0)/8.0)))
-			timed_palette.append((3, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(2.0)/8.0)))
-			timed_palette.append((4, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(3.0)/8.0)))
-			timed_palette.append((5, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(4.0)/8.0)))
-			timed_palette.append((5, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(5.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(6.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(7.0)/8.0)))
-			timed_palette.append((80, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(8.0)/8.0)))
+			palette_indexes = [21,6,3,4,5,5,6,6,80]
+			for i in range(len(palette_indexes)):
+				timed_palette.append((palette_indexes[i], common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(i)/8.0)))
 
 		elif variant_type.lower() == "flash":
 			#in the ROM, the flash timing is technically coded as "2", but that looks abnormally fast if rendered outside the ROM,
@@ -232,12 +220,18 @@ class Sprite(SpriteParent):
 			flash_master_palette = self.get_colors_from_master("flash")
 			flash_bright_portion = flash_master_palette[:9]
 			flash_rotating_portion = flash_master_palette[9:]
-			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(0,0,0))    + flash_rotating_portion[6:] + flash_rotating_portion[:6]))
-			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(24,24,24))    + flash_rotating_portion[5:] + flash_rotating_portion[:5]))
-			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(56,56,56))    + flash_rotating_portion[4:] + flash_rotating_portion[:4]))
-			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(88,88,88)) + flash_rotating_portion[3:] + flash_rotating_portion[:3]))
-			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(56,56,56))    + flash_rotating_portion[2:] + flash_rotating_portion[:2]))
-			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(24,24,24))    + flash_rotating_portion[1:] + flash_rotating_portion[:1]))
+			palette_shifts = [
+				( 0, 0, 0),
+				(24,24,24),
+				(56,56,56),
+				(88,88,88),
+				(56,56,56),
+				(24,24,24)
+			]
+			for i in range(len(palette_shifts)):
+				color = palette_shifts[i]
+				str_index = len(palette_shifts) - i
+				timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,color) + flash_rotating_portion[str_index:] + flash_rotating_portion[:str_index]))
 
 		elif variant_type.lower() == "sepia":
 			timed_palette = [(0, common.sepia(self.get_colors_from_master("power")))]
