@@ -199,10 +199,9 @@ class SpriteParent():
 			max_x = max([im.size[0]+x for im,(x,y) in tile_list])
 			max_y = max([im.size[1]+y for im,(x,y) in tile_list])
 
-			working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y))
+			working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y),0)   #start out with a transparent image that is correctly sized
 			for new_image,(x,y) in tile_list:
-				working_image.paste(new_image,(x-min_x,y-min_y))    #TODO: need to mask this with an 'L' image so that transparency is honored
-
+				working_image.paste(new_image,(x-min_x,y-min_y),new_image)   #the third argument is the transparency mask, so it is not redudant to use the same variable name twice
 			return working_image,(min_x,min_y)
 		else:
 			return Image.new('RGBA',(1,1),0), (0,0)   #blank image and dummy offset
@@ -330,8 +329,7 @@ class SpriteParent():
 			for tile in tiles:
 				image_names.append(tile["image"])
 
-		for i,row in enumerate(self.layout.get_rows()): #FIXME: i unused variable
-
+		for row in self.layout.get_rows():
 			for image_name in row:   #for every image referenced explicitly in the layout
 				if image_name in image_names:
 					image = self.images[image_name]

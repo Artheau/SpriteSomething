@@ -228,15 +228,18 @@ class Sprite(SpriteParent):
 			timed_palette.append((80, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(8.0)/8.0)))
 
 		elif variant_type.lower() == "flash":
+			#in the ROM, the flash timing is technically coded as "2", but that looks abnormally fast if rendered outside the ROM,
+			# so maybe there is some hidden code in the ROM that doubles that before it is used
+			FLASH_TIMING = 4
 			flash_master_palette = self.get_colors_from_master("flash")
 			flash_bright_portion = flash_master_palette[:9]
 			flash_rotating_portion = flash_master_palette[9:]
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(0,0,0))    + flash_rotating_portion[6:] + flash_rotating_portion[:6]))
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(24,24,24))    + flash_rotating_portion[5:] + flash_rotating_portion[:5]))
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(56,56,56))    + flash_rotating_portion[4:] + flash_rotating_portion[:4]))
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(88,88,88)) + flash_rotating_portion[3:] + flash_rotating_portion[:3]))
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(56,56,56))    + flash_rotating_portion[2:] + flash_rotating_portion[:2]))
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(24,24,24))    + flash_rotating_portion[1:] + flash_rotating_portion[:1]))
+			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(0,0,0))    + flash_rotating_portion[6:] + flash_rotating_portion[:6]))
+			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(24,24,24))    + flash_rotating_portion[5:] + flash_rotating_portion[:5]))
+			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(56,56,56))    + flash_rotating_portion[4:] + flash_rotating_portion[:4]))
+			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(88,88,88)) + flash_rotating_portion[3:] + flash_rotating_portion[:3]))
+			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(56,56,56))    + flash_rotating_portion[2:] + flash_rotating_portion[:2]))
+			timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,(24,24,24))    + flash_rotating_portion[1:] + flash_rotating_portion[:1]))
 
 		elif variant_type.lower() == "sepia":
 			timed_palette = [(0, common.sepia(self.get_colors_from_master("power")))]
@@ -304,8 +307,6 @@ class Sprite(SpriteParent):
 		return "_aim_".join([facing,aiming])
 
 	def get_palette(self, palettes, default_range, frame_number):
-		#TODO: get dynamic palettes working again
-		#self.frame_getter = lambda: 0   #TODO: this is temporary to get the code to compile
 		#get the actual list of associated palettes
 		palette_timing_list = self.get_timed_palette_converter(palettes)
 		#figure out the timing

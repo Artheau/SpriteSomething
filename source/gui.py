@@ -404,7 +404,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.update_sprite_animation()
 
 	def play_once(self):
-		self.frames_left_before_freeze = self.sprite.frames_in_this_animation()
+		self.frames_left_before_freeze = self.animation_engine.frames_in_this_animation()
 		if self.freeze_ray:   #if we were frozen before
 			self.freeze_ray = False
 			self.time_marches_forward()
@@ -431,11 +431,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.advance_global_frame_timer()
 
 	def go_to_previous_pose(self):
-		self.frame_number = max(0,self.frame_number - self.sprite.frames_to_previous_pose())
+		self.frame_number = max(0,self.frame_number - self.animation_engine.frames_to_previous_pose())
 		self.pause_global_frame_timer()
 
 	def go_to_next_pose(self):
-		self.frame_number = self.frame_number + self.sprite.frames_left_in_this_pose()
+		self.frame_number = self.frame_number + self.animation_engine.frames_left_in_this_pose()
 		self.pause_global_frame_timer()
 
 	def time_marches_forward(self):

@@ -16,6 +16,7 @@ class AnimationEngineParent():
 		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
 		self.plugins = []
+		self.prev_palette_info = []
 
 		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
@@ -100,7 +101,19 @@ class AnimationEngineParent():
 				self.pose_number = 1+self.frame_progression_table.index(frame_number_pose_started_at)
 			else:
 				self.pose_number = 0
-			pose_image,offset = self.sprite.get_image(self.current_animation, displayed_direction, self.pose_number, palette_info, self.frame_getter())  #TODO: Don't hardcode the pose # (it is the third argument)
+
+			current_frame = self.frame_getter()
+			#this block is attempting to get mixed palette animations to work correctly with button switches
+			# at the time of writing this comment, this only seems to work well for speed boost palette
+			if current_frame > 0:     #TODO: is this check needed?  Not sure.  Maybe someone can do weird things by being creative with the VCR buttons
+				if palette_info != self.prev_palette_info:
+					self.palette_last_transition_frame = current_frame   #TODO: Can we hook up some kind of "palette timer reset" command here from animations.json to fix Samus death palette?
+			else:
+				self.palette_last_transition_frame = 0
+			self.prev_palette_info = palette_info.copy()
+			current_frame -= self.palette_last_transition_frame
+
+			pose_image,offset = self.sprite.get_image(self.current_animation, displayed_direction, self.pose_number, palette_info, current_frame)
 			
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
 			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
