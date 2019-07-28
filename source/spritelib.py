@@ -14,6 +14,8 @@ from PIL import Image
 from source import layoutlib
 from source import common
 
+#TODO: make this an actual abstract class by importing 'abc' and doing the things
+
 class SpriteParent():
 	#parent class for sprites to inherit
 	def __init__(self, filename, manifest_dict, my_subpath):
@@ -128,13 +130,6 @@ class SpriteParent():
 			self.import_from_binary_data(pixel_data,palette_data)
 		else:
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
-
-
-	def reload(self):
-		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
-		self.import_from_filename()
-		self.update_overview_panel()
-		#self.update_animation()
 
 	def update_pose_number(self):
 		if hasattr(self, "frame_progression_table"):
@@ -356,17 +351,3 @@ class SpriteParent():
 
 	def get_master_PNG_image(self):
 		return self.layout.export_all_images_to_PNG(self.images,self.master_palette)
-
-	def update_overview_panel(self):
-		image = self.get_master_PNG_image()
-		scaled_image = image.resize(tuple(int(x*self.overview_scale_factor) for x in image.size))
-
-		if hasattr(self,"overview_ID") and self.overview_ID is not None:
-			del self.overview_image
-			self.overview_image = common.get_tk_image(scaled_image)
-			self.overview_canvas.itemconfig(self.overview_ID, image=self.overview_image)
-		else:
-			import time
-			scaled_image = scaled_image.copy()
-			self.overview_image = common.get_tk_image(scaled_image)
-			self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)

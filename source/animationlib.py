@@ -15,6 +15,12 @@ class AnimationEngineParent():
 		self.spiffy_dict = {}						 #the variables created by the spiffy buttons will go here
 		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
 		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
+
+		#TODO: Need to do implement custom overview_scale_factor in a way that is extendable.
+		# Hardcoding this for every sprite is shameful.
+		if sprite.classic_name == "Samus":
+			self.overview_scale_factor = 1    #Samus's sheet is BIG, so don't zoom in on the overview
+
 		self.plugins = []
 		self.prev_palette_info = []
 
@@ -63,7 +69,7 @@ class AnimationEngineParent():
 
 		parent.add(spiffy_panel,minsize=height)
 
-		# self.update_overview_panel()
+		self.update_overview_panel()
 
 		return animation_panel
 
@@ -210,3 +216,18 @@ class AnimationEngineParent():
 			facing_group.add("right", "arrow-right.png", fish, default=True)
 
 		return direction_buttons
+
+	def update_overview_panel(self):
+		image = self.sprite.get_master_PNG_image()
+		scaled_image = image.resize(tuple(int(x*self.overview_scale_factor) for x in image.size))
+
+		if hasattr(self,"overview_ID") and self.overview_ID is not None:
+			del self.overview_image
+			self.overview_image = gui_common.get_tk_image(scaled_image)
+			self.overview_canvas.itemconfig(self.overview_ID, image=self.overview_image)
+		else:
+			import time
+			scaled_image = scaled_image.copy()
+			self.overview_image = gui_common.get_tk_image(scaled_image)
+			self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)
+

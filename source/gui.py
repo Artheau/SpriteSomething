@@ -590,9 +590,16 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def get_reload_button(self):
 		reload_section = tk.Frame(self.left_panel, name="reload_section")
 		widgetlib.center_align_grid_in_frame(reload_section)
-		reload_button = tk.Button(reload_section, text=self.fish.translate("meta","meta","reload"), padx=20, command=self.sprite.reload)
+		reload_button = tk.Button(reload_section, text=self.fish.translate("meta","meta","reload"), padx=20, command=self.reload)
 		reload_button.grid(row=0,column=1)
 		return reload_section
+
+	def reload(self):
+		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
+		self.sprite.import_from_filename()
+		self.animation_engine.update_overview_panel()   #TODO: Need to decide if this belongs in animation_engine
+		self.animation_engine.update_animation()
+		
 
 	############################ MENU BAR FUNCTIONS HERE ################################
 
