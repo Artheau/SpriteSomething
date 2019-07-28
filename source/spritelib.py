@@ -227,7 +227,7 @@ class SpriteParent():
 
 	def save_as_PNG(self, filename):
 		master_image = self.get_master_PNG_image()
-		master_image.save(filename)
+		master_image.save(filename, "PNG")
 		return True
 
 	def save_as_ZSPR(self, filename):
