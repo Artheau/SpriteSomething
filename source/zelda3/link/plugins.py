@@ -3,6 +3,7 @@ import os
 import urllib
 from source import common
 from source.pluginslib import PluginsParent
+from . import equipment
 
 class Plugins(PluginsParent):
 	def __init__(self):
@@ -10,9 +11,13 @@ class Plugins(PluginsParent):
 		plugins = [
 			("Download Official Sprites",None,self.get_alttpr_sprites),
 			("Sheet Trawler",None,None),
-			("Pose as Tracker Images",None,None)
+			("Pose as Tracker Images",None,None)#,
+			#("Equipment",None,self.equipment_test)
 		]
 		self.set_plugins(plugins)
+
+	def equipment_test(self):
+		equipment.equipment_test()
 
 	def get_alttpr_sprites(self):
 		success = False	#report success
