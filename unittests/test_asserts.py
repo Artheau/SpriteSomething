@@ -11,9 +11,42 @@ import unittest     #for unit testing, har har
 import json         #need to audit our json files
 import os           #for path.join and similar, to find the files we want to audit
 import tkinter as tk   #testing tk wrappers
+import tempfile   #for mock-saving files, in order to check the validity of the save
 from PIL import ImageChops #for testing if images are same/different
 
 from source import gui #need to import the GUI to test it
+from source.zelda3.link import sprite as link_sprite_library
+from source.metroid3.samus import sprite as samus_sprite_library
+
+class ExportAudit(unittest.TestCase):
+	def same(self, file1, file2):   #not a test, just a helper function
+		return file1.read() == file2.read()
+
+	def test_link_zspr_export(self):
+		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH)
+		_, temporary_zspr_filename = tempfile.mkstemp()
+		self.assertTrue(link_sprite.save_as_ZSPR(temporary_zspr_filename))
+		with open(LINK_FILENAME,"rb") as original_file_contents:
+			with open(temporary_zspr_filename,"rb") as temp_zspr:
+				self.assertTrue(self.same(original_file_contents,temp_zspr))
+
+	def test_link_rdc_export(self):
+		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH)
+		_, temporary_rdc_filename = tempfile.mkstemp()
+		self.assertTrue(link_sprite.save_as_RDC(temporary_rdc_filename))
+		LINK_RDC_FILENAME = os.path.join(LINK_RESOURCE_PATH,"sheets","link.rdc")
+		with open(LINK_RDC_FILENAME,"rb") as original_file_contents:
+			with open(temporary_rdc_filename,"rb") as temp_rdc:
+				self.assertTrue(self.same(original_file_contents,temp_rdc))
+
+	def test_samus_rdc_export(self):
+		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH)
+		_, temporary_rdc_filename = tempfile.mkstemp()
+		self.assertTrue(samus_sprite.save_as_RDC(temporary_rdc_filename))
+		SAMUS_RDC_FILENAME = os.path.join(SAMUS_RESOURCE_PATH,"sheets","samus.rdc")
+		with open(SAMUS_RDC_FILENAME,"rb") as original_file_contents:
+			with open(temporary_rdc_filename,"rb") as temp_rdc:
+				self.assertTrue(self.same(original_file_contents,temp_rdc))
 
 class SamusAnimationAudit(unittest.TestCase):
 	#TODO: these types of tests should be extended to all sprites
@@ -57,7 +90,6 @@ class SpiffyButtonAudit(unittest.TestCase):
 		return diff.getbbox() is None  #no bbox if they are the same
 
 	def test_link_palette_audit(self):
-		from source.zelda3.link import sprite as link_sprite_source_file
 		PALETTES_TO_CHECK = [	[],
 								["power_gloves"],
 								["titan_gloves"],
@@ -69,7 +101,7 @@ class SpiffyButtonAudit(unittest.TestCase):
 								["red_mail", "titan_gloves"],
 								["titan_gloves"],
 							]
-		link_sprite = link_sprite_source_file.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH)
+		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH)
 
 		old_image = None
 		for i in range(0,len(PALETTES_TO_CHECK)):
@@ -80,7 +112,6 @@ class SpiffyButtonAudit(unittest.TestCase):
 
 	def test_samus_palette_audit(self):
 		#TODO: Need to audit the timed palettes also
-		from source.metroid3.samus import sprite as samus_sprite_source_file
 		PALETTES_TO_CHECK = [	[],
 								["varia_suit"],
 								["varia_suit","xray_variant"],
@@ -94,7 +125,7 @@ class SpiffyButtonAudit(unittest.TestCase):
 								["door_variant"],
 								[],
 							]
-		samus_sprite = samus_sprite_source_file.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH)
+		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH)
 
 		old_image = None
 		for i in range(0,len(PALETTES_TO_CHECK)):
