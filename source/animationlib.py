@@ -73,12 +73,6 @@ class AnimationEngineParent():
 		self.update_animation()
 
 	def update_animation(self):
-		displayed_direction = self.get_current_direction()
-		pose_list = self.get_current_pose_list(displayed_direction)
-		if not pose_list:
-			displayed_direction = self.sprite.get_alternative_direction(self.current_animation, displayed_direction)
-			pose_list = self.get_current_pose_list(displayed_direction)
-
 		if hasattr(self,"sprite_IDs"):
 			for ID in self.sprite_IDs:
 				self.canvas.delete(ID)       #remove the old images
@@ -88,7 +82,23 @@ class AnimationEngineParent():
 		self.sprite_IDs = []
 		self.active_images = []
 
-		if pose_list:    #sometimes the pose list is empty, like if a bad direction is chosen
+		pose_image, offset = self.get_current_image()
+
+		if pose_image:
+			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
+			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
+			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
+			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_image, anchor = tk.NW))
+			self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
+
+	def get_current_image(self):
+		displayed_direction = self.get_current_direction()
+		pose_list = self.get_current_pose_list(displayed_direction)
+		if not pose_list:
+			displayed_direction = self.sprite.get_alternative_direction(self.current_animation, displayed_direction)
+			pose_list = self.get_current_pose_list(displayed_direction)
+
+		if pose_list:
 			if "frames" not in pose_list[0]:      #might not be a frame entry for static poses
 				self.frame_progression_table = [1]
 			else:
@@ -115,12 +125,11 @@ class AnimationEngineParent():
 			current_frame -= self.palette_last_transition_frame
 
 			pose_image,offset = self.sprite.get_image(self.current_animation, displayed_direction, self.pose_number, palette_info, current_frame)
+		else:
+			pose_image,offset = None,(0,0)
 
-			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
-			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
-			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
-			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_image, anchor = tk.NW))
-			self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
+		return pose_image, offset
+
 
 	def frames_in_this_animation(self):
 		return self.frame_progression_table[-1]
@@ -225,3 +234,44 @@ class AnimationEngineParent():
 			scaled_image = scaled_image.copy()
 			self.overview_image = gui_common.get_tk_image(scaled_image)
 			self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)
+
+	def export_frame_as_PNG(self, filename):
+		#TODO: should this be factored out to the sprite class as some kind of export_as_PNG(animation, direction, ..., filename) call?
+		current_image, _ = self.get_current_image()
+		new_size = tuple(int(dim*self.zoom_getter()) for dim in current_image.size)
+		img_to_save = current_image.resize(new_size,resample=Image.NEAREST)
+		img_to_save.save(filename)
+		
+	def export_animation_as_collage(self, filename, orientation="horizontal"):
+		#TODO: should this be factored out to the sprite class as some kind of export_as_collage(animation, direction, ..., filename) call?
+		image_list = []
+		
+		displayed_direction = self.get_current_direction()
+		pose_list = self.get_current_pose_list(displayed_direction)
+		if not pose_list:
+			displayed_direction = self.sprite.get_alternative_direction(self.current_animation, displayed_direction)
+			pose_list = self.get_current_pose_list(displayed_direction)
+
+		for pose_number in range(len(pose_list)):
+			image_list.append(self.sprite.get_image(self.current_animation, displayed_direction, pose_number, [], 0)) #TODO: incorporate palettes from spiffy buttons/animations.json, and meaningfully apply a palette number
+
+		collage = None
+		if orientation == "horizontal":
+			#TODO: Factor this and the corresponding code in layoutlib.py out to common.py
+			y_min = min([-origin[1] for image,origin in image_list])
+			y_max = max([image.size[1]-origin[1] for image,origin in image_list])
+
+			collage_width = sum([image.size[0] for image,_ in image_list])
+			collage_y_size = y_max-y_min
+
+			collage = Image.new("RGBA",(collage_width,collage_y_size),0)
+
+			current_x_position = 0
+			for image, origin in image_list:
+				collage.paste(image, (current_x_position,-origin[1]-y_min))
+				current_x_position += image.size[0]
+
+		elif orientation == "vertical":
+			# VERTICAL
+			raise NotImplementedError()
+		collage.save(filename)
