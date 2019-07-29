@@ -1,0 +1,11 @@
+[
+	{
+		"filename": "ship.png",
+		"title": "Samus's Ship",
+		"snarky_comment": "Even though Samus's name ends in an 'S', because she is only one person, there is still an 's' after the apostrophe."
+	},
+	{
+		"filename": "zebes.png",
+		"title": "Planet Zebes"
+	}
+]

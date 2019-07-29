@@ -4,9 +4,9 @@ import os
 from source import common
 
 class BabelFish():
-	def __init__(self,subpath=["meta"],lang="es"):
+	def __init__(self,subpath=["meta"],lang=None):
 		localization_string = locale.getdefaultlocale()[0] #get set localization
-		self.locale = localization_string[:2] if lang == None else lang #let caller override localization
+		self.locale = localization_string[:2] if lang is None else lang #let caller override localization
 		self.langs = ["en"] #start with English
 		if(not self.locale == "en"): #add localization
 			self.langs.append(self.locale)

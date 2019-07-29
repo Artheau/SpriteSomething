@@ -8,20 +8,24 @@ language: python
 matrix:
   include:
     #######################OS FOR HIPSTERS AND IDEALISTS############################
+    - name: "Python 3.7 on Bionic Linux"
+      python: 3.7           # version number works for Linux but is ignored on macOS or Windows
+      dist: bionic          # distribution required for Python >= 3.7
+      env: PYTHON_EXECUTABLE=python
+      services:
+        - xvfb
     - name: "Python 3.7 on Xenial Linux"
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: xenial          # distribution required for Python >= 3.7
-    ################################################################################
-
-    #######OS FOR HIPSTERS THAT ARE TOO HIP TO BE LIKE THE OTHER HIPSTERS###########
-    #one day I will decide to test on multiple versions of Linux, and on that day, I will happily activate these lines
-    #knowing my luck, on that day I will probably discover that they do not work
-    #
-    # - name: "Python 3.7 on Bionic Linux"
-    #   python: 3.7
-    #   dist: bionic
-    # - name: "Python 3.6 on Linux"
-    #   python: 3.6
+      env: PYTHON_EXECUTABLE=python
+      services:
+        - xvfb
+    - name: "Python 3.6 on Xenial Linux"
+      python: 3.6
+      dist: xenial
+      env: PYTHON_EXECUTABLE=python
+      services:
+        - xvfb
     ################################################################################
     
     ##################OS FOR PEOPLE WITH BOTTOMLESS WALLETS#########################
@@ -29,17 +33,18 @@ matrix:
       os: osx
       osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
       language: shell       # 'language: python' is an error on Travis CI macOS
-    ################################################################################
+      env: PYTHON_EXECUTABLE=python3
+    ###############################################################################
 
     #############OS FOR PEOPLE WHO LIKE PROPRIETARY SOFTWARE SUITES#################
-    #Windows builds are really slow on Travis CI, but we are deving on Windows so maybe this is not a big thing
-    # - name: "Python 3.7 on Windows"
-    #   os: windows           # Windows 10.0.17134 N/A Build 17134
-    #   language: shell       # 'language: python' is an error on Travis CI Windows
-    #   before_install:
-    #     - choco install python
-    #     - python -m pip install --upgrade pip
-    #   env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
+    #Windows builds are really slow on Travis CI
+    - name: "Python 3.7 on Windows"
+      os: windows           # Windows 10.0.17134 N/A Build 17134
+      language: shell       # 'language: python' is an error on Travis CI Windows
+      before_install:
+        - choco install python
+        - python -m pip install --upgrade pip
+      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH; PYTHON_EXECUTABLE=python
     ################################################################################
 
 #dependencies are pillow and numpy
@@ -47,12 +52,11 @@ install:
   - pip3 install --upgrade pip  # all three OSes agree about 'pip3'
   - pip install pillow numpy
 
-
 # command to run tests
 # 'python' points to Python 2.7 on macOS but points to Python 3.7 on Linux and Windows
 # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
 script:
-  - python3 tests.py || python tests.py
+  - $PYTHON_EXECUTABLE tests.py
 
 #I don't want your emails
 notifications:

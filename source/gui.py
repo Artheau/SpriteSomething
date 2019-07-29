@@ -8,6 +8,7 @@ import os, sys								#for filesystem manipulation
 import time										#for timekeeping
 import webbrowser							#for launching browser from about box
 from functools import partial	#for passing parameters to user-triggered function calls
+from PIL import Image,ImageTk    #for converting PNG to formats that tk can use
 from source import widgetlib
 from source import ssDiagnostics as diagnostics
 from source import ssTranslate as fish
@@ -16,19 +17,20 @@ from source import constants as CONST
 from source.ssTranslate import BabelFish
 from source.tkHyperlinkManager import HyperlinkManager
 from source.tkSimpleStatusBar import StatusBar
-from source import common
+from source import common, gui_common
+
 
 def make_GUI(command_line_args):
 	root = tk.Tk()
 
 	try:
-		root.iconbitmap(default=common.get_resource('app.ico')) #Windows
+		root.iconbitmap(default=common.get_resource(["meta","icons"],'app.ico')) #Windows
 	except Exception:
 		try:
-			root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file='@'+common.get_resource('app.gif'))) #Linux?
+			root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file='@'+common.get_resource(["meta","icons"],'app.gif'))) #Linux?
 		except Exception:
 			try:
-				root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file=common.get_resource('app.gif'))) #MacOSX?
+				root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file=common.get_resource(["meta","icons"],'app.gif'))) #MacOSX?
 			except Exception:
 				pass #give up
 	root.geometry("800x600")       #window size
@@ -68,7 +70,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			"export.animation-as-vcollage": "./"
 		}
 		#read saved working dirs file if it exists and set these
-		working_dir_path = os.path.join("resources","meta","working_dirs.json")
+		working_dir_path = os.path.join("user_resources","meta","manifests","working_dirs.json")
 		if os.path.exists(working_dir_path):
 			with open(working_dir_path) as json_file:
 				data = json.load(json_file)
@@ -97,7 +99,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def create_random_title(self):
 		# Generate a new epic random title for this application
 		name_dict = {}
-		for filename in common.get_all_resources("app_names.json"):
+		for filename in common.get_all_resources(["meta","manifests"],"app_names.json"):
 			with open(filename) as name_file:
 				for key,item in json.load(name_file).items():
 					if key in name_dict:
@@ -125,7 +127,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  command: Command to associate with button, default to None
 		def create_toolbar_button(fish_key, fish_subkey, image_filename=None, command=None):
 			icon_path = common.get_resource(["meta","icons"],image_filename if not image_filename == None else "blank.png")
-			img = tk.PhotoImage(file=icon_path)
+			img = ImageTk.PhotoImage(Image.open(icon_path)) if icon_path else None
 			display_text = self.fish.translate("meta",fish_key,fish_subkey)
 			button = tk.Button(toolbar,image=img,relief=tk.FLAT,width=16,height=16,command=command,state="disabled" if command == None else "normal")
 			button.img = img
@@ -167,7 +169,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 						image_path = os.path.join(self.game.resource_subpath,"icons")
 					if "sprite_plugins" in internal_name:
 						image_path = os.path.join(self.sprite.resource_subpath,"icons")
-					cascade.images[image_name] = tk.PhotoImage(file=common.get_resource(image_path,image_filename))
+					cascade.images[image_name] = ImageTk.PhotoImage(Image.open(common.get_resource(image_path,image_filename)))
 				else:
 					cascade.images[image_name] = None
 				cascade.add_command(label=display_name, image=cascade.images[image_name], compound=tk.LEFT, command=function_to_call, state="disabled" if function_to_call == None else "normal")
@@ -200,7 +202,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 													(self.fish.translate("meta","menu","export.frame-as-png"),"frame-as-png",self.export_frame_as_png),
 													(self.fish.translate("meta","menu","export.animation-as-gif"),"animation-as-gif",None),#self.export_animation_as_gif),
 													(self.fish.translate("meta","menu","export.animation-as-hcollage"),"animation-as-hcollage",partial(self.export_animation_as_collage,"horizontal")),
-													(self.fish.translate("meta","menu","export.animation-as-vcollage"),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
+													#(self.fish.translate("meta","menu","export.animation-as-vcollage"),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
 											])
 		menu_options.append(import_menu)
 
@@ -224,22 +226,22 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 
 		#if we've got Game plugins or Sprite plugins
-		if self.game.plugins or self.sprite.plugins:
+		if self.game.has_plugins or self.sprite.has_plugins:
 			plugins_container = []
 			#if we've got Game plugins, start the menu
-			if self.game.plugins:
+			if self.game.has_plugins:
 				#add the commands
 				commands = []
-				for label, icon, command in self.game.plugins:
+				for label, icon, command in self.game.plugins.get_plugins():
 					commands.append((label,icon,command))
 				game_plugins_menu = self.create_cascade(self.fish.translate("meta","menu","plugins.game"),"game_plugins_menu",commands,self.menu.children["plugins_menu"])
 				plugins_container.append(game_plugins_menu)
 
 			#if we've got Sprite plugins
-			if self.sprite.plugins:
+			if self.sprite.has_plugins:
 				#add the commands
 				commands = []
-				for label, icon, command in self.sprite.plugins:
+				for label, icon, command in self.sprite.plugins.get_plugins():
 					commands.append((label,icon,command))
 				sprite_plugins_menu = self.create_cascade(self.fish.translate("meta","menu","plugins.sprite"),"sprite_plugins_menu",commands,self.menu.children["plugins_menu"])
 				plugins_container.append(sprite_plugins_menu)
@@ -251,7 +253,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	# Inbound:
 	#  sprite_filename: Filename of sprite to load
 	def load_sprite(self, sprite_filename):
-		self.game, self.sprite = gamelib.autodetect(sprite_filename)
+		self.game, self.sprite, self.animation_engine = gamelib.autodetect(sprite_filename)
 		self.fish.add_translation_file(self.sprite.resource_subpath)
 		self.sprite_coord = (100,100)        #an arbitrary default
 		self.attach_both_panels()            #remake the GUI panels
@@ -270,7 +272,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				if "direction_buttons" in widget.winfo_name():
 					#get the main bindings file
 					bindings = None
-					bindings_filename = common.get_resource("meta","bindings.json")
+					bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
 					with open(bindings_filename,encoding="utf-8") as f:
 						bindings = json.load(f)
 					#cycle through all spiffy buttons
@@ -304,7 +306,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.left_panel.add(self.get_reload_button(),minsize=MINSIZE)
 		self.attach_metadata_panel()
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
-		self.sprite.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
+		self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
 		self.left_panel.add(vcr_controls,minsize=MINSIZE)
 		self.panes.add(self.left_panel)
 
@@ -384,7 +386,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.start_global_frame_timer()
 
 	def update_sprite_animation(self):
-		self.sprite.update_animation()
+		self.animation_engine.update_animation()
 
 	def start_global_frame_timer(self):
 		#called by play button
@@ -402,7 +404,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.update_sprite_animation()
 
 	def play_once(self):
-		self.frames_left_before_freeze = self.sprite.frames_in_this_animation()
+		self.frames_left_before_freeze = self.animation_engine.frames_in_this_animation()
 		if self.freeze_ray:   #if we were frozen before
 			self.freeze_ray = False
 			self.time_marches_forward()
@@ -429,11 +431,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.advance_global_frame_timer()
 
 	def go_to_previous_pose(self):
-		self.frame_number = max(0,self.frame_number - self.sprite.frames_to_previous_pose())
+		self.frame_number = max(0,self.frame_number - self.animation_engine.frames_to_previous_pose())
 		self.pause_global_frame_timer()
 
 	def go_to_next_pose(self):
-		self.frame_number = self.frame_number + self.sprite.frames_left_in_this_pose()
+		self.frame_number = self.frame_number + self.animation_engine.frames_left_in_this_pose()
 		self.pause_global_frame_timer()
 
 	def time_marches_forward(self):
@@ -507,7 +509,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#  icon_name: filename of icon to use
 		def make_vcr_label(textvariable, icon_name=None):
 			icon_path = common.get_resource(["meta","icons"],icon_name if not icon_name == None else "blank.png")
-			image = tk.PhotoImage(file=icon_path) if icon_path else None
+			image = ImageTk.PhotoImage(Image.open(icon_path)) if icon_path else None
 			vcr_label = tk.Label(control_section, image=image, anchor='e', compound="left", width=BUTTON_WIDTH, textvariable=textvariable)
 			vcr_label.grid(row = self.current_grid_cell//3,
 						column = 1 + (self.current_grid_cell % 3),
@@ -524,7 +526,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		def make_vcr_button(text="", icon_name=None, command=None, side=""):
 			side = side if not side == "" else "right"
 			icon_path = common.get_resource(["meta","icons"],icon_name if not icon_name == None else "blank.png")
-			image = tk.PhotoImage(file=icon_path) if icon_path else None
+			image = ImageTk.PhotoImage(Image.open(icon_path)) if icon_path else None
 			if side == "right":
 				side = tk.RIGHT
 			elif side == "left":
@@ -588,9 +590,16 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def get_reload_button(self):
 		reload_section = tk.Frame(self.left_panel, name="reload_section")
 		widgetlib.center_align_grid_in_frame(reload_section)
-		reload_button = tk.Button(reload_section, text=self.fish.translate("meta","meta","reload"), padx=20, command=self.sprite.reload)
+		reload_button = tk.Button(reload_section, text=self.fish.translate("meta","meta","reload"), padx=20, command=self.reload)
 		reload_button.grid(row=0,column=1)
 		return reload_section
+
+	def reload(self):
+		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
+		self.sprite.import_from_filename()
+		self.animation_engine.update_overview_panel()   #TODO: Need to decide if this belongs in animation_engine
+		self.animation_engine.update_animation()
+		
 
 	############################ MENU BAR FUNCTIONS HERE ################################
 
@@ -696,7 +705,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),)
 		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.frame-as-png"), filetypes=filetypes)
 		if filename:
-			returnvalue = self.sprite.export_frame_as_PNG(filename)
+			returnvalue = self.animation_engine.export_frame_as_PNG(filename)
 			if returnvalue:
 				self.working_dirs["export.frame-as-png"] = filename[:filename.rfind('/')]
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
@@ -715,7 +724,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),)
 		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.animation-as-" + orientation[:1] + "collage"], title=self.fish.translate("meta","dialogue","export.animation-as-" + orientation[:1] + "collage"), filetypes=filetypes)
 		if filename:
-			returnvalue = self.sprite.export_animation_as_collage(filename,orientation)
+			returnvalue = self.animation_engine.export_animation_as_collage(filename,orientation)
 			if returnvalue:
 				self.working_dirs["export.animation-as-collage"] = filename[:filename.rfind('/')]
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
@@ -760,7 +769,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 				  "SpriteSomething v" + CONST.APP_VERSION,
 				  "",
 				  "Created by:",
-				  "Artheau & Mike Trethewey",
+				  "[Artheau](http://github.com/Artheau/PixelArt)",
+				  "[Mike Trethewey](http://github.com/miketrethewey)",
 				  "",
 				  "Based on:",
 				  "[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
@@ -780,7 +790,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#write working dirs to file
 	def save_working_dirs(self):
-		f = open("./resources/meta/working_dirs.json","w+")
+		f = open("./user_resources/meta/manifests/working_dirs.json","w+")
 		f.write(json.dumps(self.working_dirs,indent=2))
 
 	#exit sequence

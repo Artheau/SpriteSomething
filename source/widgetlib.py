@@ -5,8 +5,9 @@ import tkinter as tk
 import json
 import os
 import locale
+from PIL import Image, ImageTk
 from functools import partial
-from source import common
+from source import common, gui_common
 from source import ssTranslate as fish
 
 def center_align_grid_in_frame(frame):
@@ -90,7 +91,7 @@ class ToolTip(object):
 
 class SpiffyButtons():
 	#They are like buttons, except spiffy
-	def __init__(self, sprite_object, parent_frame, frame_name="spiffy_buttons", align="right"):
+	def __init__(self, parent_frame, sprite_resource_subpath, animation_engine, frame_name="spiffy_buttons", align="right"):
 		self.DIMENSIONS = {
 			"button": {
 				"width": 20,
@@ -102,7 +103,8 @@ class SpiffyButtons():
 				"height_per_button": 30
 			}
 		}
-		self.sprite_object = sprite_object
+		self.get_animation_engine = weakref.ref(animation_engine)   #TODO: check if this is needed via unit tests.  being very careful not to make a hard link to this, to avoid circular references
+		self.sprite_resource_subpath = sprite_resource_subpath
 		self.spiffy_buttons_section = tk.Frame(parent_frame, name=frame_name)
 		if align[0].lower() == 'r':   #align right
 			right_align_grid_in_frame(self.spiffy_buttons_section)
@@ -111,29 +113,36 @@ class SpiffyButtons():
 		else:
 			center_align_grid_in_frame(self.spiffy_buttons_section)
 		self.max_row = 0
+		self.spiffy_dict = {}
 
 	def make_new_group(self, label, fish):
 		#make a new variable in the sprite object called "<label>_var"
 		var_name = "_".join([label.lower(), "var"])
-		setattr(self.sprite_object, var_name, tk.StringVar())
-		new_group = SpiffyGroup(self, self.max_row, label, getattr(self.sprite_object, var_name), fish)
+		self.spiffy_dict[var_name] = tk.StringVar()
+		new_group = SpiffyGroup(self, self.max_row, label, self.spiffy_dict[var_name], self.sprite_resource_subpath, self.get_animation_engine, fish)
 		self.max_row += 1
 		return new_group
 
 	def get_panel(self):
 		section_height = self.max_row*self.DIMENSIONS["panel"]["height_per_button"]
-		return self.spiffy_buttons_section, section_height
+		returnvalue = (self.spiffy_buttons_section, section_height, self.spiffy_dict)
+		#chance now to get rid of anything that might make circular references.  Use commands like "del self.<var>"
+		return returnvalue
 
 class SpiffyGroup():
 	#not meant to be used on its own, instead use class SpiffyButtons()
-	def __init__(self, parent, row, label, var, fish):
-		label = fish.translate(parent.sprite_object.resource_subpath,"section",label)
+	def __init__(self, parent, row, label, var, sprite_resource_subpath, animation_engine_getter, fish):
+		#disable sprite object in widgetlib
+		self.sprite_resource_subpath = sprite_resource_subpath
+		label = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'),"section",label) #fish.translate(parent.animation_engine.resource_subpath,"section",label)
 		self.label = label
 		self.default_exists = False
 		self.parent = parent
 		self.var = var
 		self.col = 0
 		self.row = row
+
+		self.get_animation_engine = animation_engine_getter
 
 		section_label = tk.Label(self.parent.spiffy_buttons_section, text=label + ':')
 		section_label.grid(row=self.row, column=self.col, sticky='E')
@@ -143,33 +152,34 @@ class SpiffyGroup():
 	def add(self, internal_value_name, image_filename, fish, default=False):
 		if image_filename == None:
 			image_filename == "blank.png"
-		icon_path = common.get_resource([self.parent.sprite_object.resource_subpath,"icons"],image_filename)
+		#disable sprite object in widgetlib
+		icon_path = common.get_resource([self.sprite_resource_subpath,"icons"],image_filename) #common.get_resource([self.parent.animation_engine.resource_subpath,"icons"],image_filename)
 		if icon_path is None:
 			icon_path = common.get_resource(["meta","icons"],image_filename)
-		if icon_path is None:
-			raise AssertionError(f"No image resource found with name {image_filename}")
+			if icon_path is None:
+				raise AssertionError(f"No image resource found with name {image_filename}")
+		img = ImageTk.PhotoImage(Image.open(icon_path))
 
-		img = tk.PhotoImage(file=icon_path)
-
-		display_text = fish.translate(self.parent.sprite_object.resource_subpath, self.label, internal_value_name)
+		#disable sprite object in widgetlib
+		display_text = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'), self.label, internal_value_name) #fish.translate(self.parent.animation_engine.resource_subpath, self.label, internal_value_name)
 
 		button = tk.Radiobutton(
-				self.parent.spiffy_buttons_section,
-				image=img,
-				name="_".join([self.label.lower(), internal_value_name, "button"]),
-				text=display_text,
-				variable=self.var,
-				value=internal_value_name,
-				activebackground=self.parent.DIMENSIONS["button"]["color.active"],
-				selectcolor=self.parent.DIMENSIONS["button"]["color.selected"],
-				width=self.parent.DIMENSIONS["button"]["width"],
-				height=self.parent.DIMENSIONS["button"]["height"],
-				indicatoron=False,
-				command=self.press_spiffy_button
+		 		self.parent.spiffy_buttons_section,
+		 		image=img,
+		 		name="_".join([self.label.lower(), internal_value_name, "button"]),
+		 		text=display_text,
+		 		variable=self.var,
+		 		value=internal_value_name,
+		 		activebackground=self.parent.DIMENSIONS["button"]["color.active"],
+		 		selectcolor=self.parent.DIMENSIONS["button"]["color.selected"],
+		 		width=self.parent.DIMENSIONS["button"]["width"],
+		 		height=self.parent.DIMENSIONS["button"]["height"],
+		 		indicatoron=False,
+		 		command=self.press_spiffy_button
 		)
 		bindings = None
 		keypresses = None
-		bindings_filename = common.get_resource("meta","bindings.json")
+		bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
 		with open(bindings_filename,encoding="utf-8") as f:
 			bindings = json.load(f)
 		keypresses_switcher = bindings[self.label.lower()] if self.label.lower() in bindings else {}
@@ -208,7 +218,7 @@ class SpiffyGroup():
 		return amount_of_space
 
 	def press_spiffy_button(self):
-		self.parent.sprite_object.update_animation()
+		self.get_animation_engine().update_animation()
 
 	def invoke_spiffy_button(self, button, event=None):
 		button.config(relief = tk.SUNKEN)

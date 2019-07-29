@@ -3,7 +3,6 @@
 #they have to contain PIL images of all of their data, and the offset info, and how to assemble it
 #and they have to interpret the global frame timer, and communicate back when to next check in
 
-import tkinter as tk
 import random
 import os
 import json
@@ -11,10 +10,11 @@ import itertools
 import importlib
 import io
 from functools import partial
-from PIL import Image, ImageTk
-from source import widgetlib
+from PIL import Image
 from source import layoutlib
 from source import common
+
+#TODO: make this an actual abstract class by importing 'abc' and doing the things
 
 class SpriteParent():
 	#parent class for sprites to inherit
@@ -23,21 +23,28 @@ class SpriteParent():
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
-		self.layout = layoutlib.Layout(common.get_resource(self.resource_subpath,"layout.json"))
-		with open(common.get_resource(self.resource_subpath,"animations.json")) as file:
+		self.overview_scale_factor = 2
+		if "input" in manifest_dict and "png" in manifest_dict["input"] and "overview-scale-factor" in manifest_dict["input"]["png"]:
+			self.overview_scale_factor = manifest_dict["input"]["png"]["overview-scale-factor"]
+		self.plugins = None
+		self.has_plugins = False
+		self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"))
+		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
 		self.import_from_filename()
-		self.spiffy_buttons_exist = False
-		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
-
-		self.overview_scale_factor = 2               #when the overview is made, it is scaled up by this amount
-		self.plugins = []
-
-	# def __del__(self):
-	# 	tk.messagebox.showinfo("Notification", "I am destroyed")
 
 	#to make a new sprite class, you must write code for all of the functions in this section below.
 	############################# BEGIN ABSTRACT CODE ##############################
+
+	def load_plugins(self):
+		try:
+			plugins_path,_ = os.path.split(self.resource_subpath)
+			_,plugins_dir = os.path.split(plugins_path)
+			plugins_module = importlib.import_module(f"source.{plugins_dir}.{self.classic_name.lower()}.plugins")
+			self.plugins = plugins_module.Plugins()
+			self.has_plugins = True
+		except ModuleNotFoundError as err:
+			print(err)        #TODO: This will fail silently if run through the GUI
 
 	def import_from_ROM(self, rom):
 		#self.images, self.master_palette = ?, ?
@@ -55,9 +62,9 @@ class SpriteParent():
 		#return the binary blocks that are used to pack the RDC format
 		raise AssertionError("called get_sprite_export_blocks() on Sprite base class")
 
-	def get_current_palette(self, palette_type, default_range):
+	def get_palette(self, palette_type, default_range, frame_number):
 		#in most cases the child class will override this in order to provide functionality to things like spiffy buttons
-		# and to implement dynamic palettes by leveraging self.frame_getter() to find the frame number
+		# and to implement dynamic palettes by leveraging the frame number
 
 		#if the child class didn't tell us what to do, just go back to whatever palette it was on when it was imported
 		return self.master_palette[default_range[0]:default_range[1]]
@@ -127,66 +134,15 @@ class SpriteParent():
 		else:
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
 
-	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, fish):
-		ANIMATION_DROPDOWN_WIDTH = 25
-		PANEL_HEIGHT = 25
-		self.canvas = canvas
-		self.overview_canvas = overview_canvas
-		self.zoom_getter = zoom_getter
-		self.frame_getter = frame_getter
-		self.coord_getter = coord_getter
-		self.current_animation = None
-		self.pose_number = None
-		self.palette_number = None
-
-		animation_panel = tk.Frame(parent, name="animation_panel")
-		widgetlib.right_align_grid_in_frame(animation_panel)
-		animation_label = tk.Label(animation_panel, text=fish.translate("meta","meta","animations") + ':')
-		animation_label.grid(row=0, column=1)
-		self.animation_selection = tk.StringVar(animation_panel)
-
-		self.animation_selection.set(random.choice(list(self.animations.keys())))
-
-		animation_dropdown = tk.ttk.Combobox(animation_panel, state="readonly", values=list(self.animations.keys()), name="animation_dropdown")
-		animation_dropdown.configure(width=ANIMATION_DROPDOWN_WIDTH, exportselection=0, textvariable=self.animation_selection)
-		animation_dropdown.grid(row=0, column=2)
-		self.set_animation(self.animation_selection.get())
-
-		widgetlib.leakless_dropdown_trace(self, "animation_selection", "set_animation")
-
-		parent.add(animation_panel,minsize=PANEL_HEIGHT)
-
-		direction_panel, height = self.get_direction_buttons(parent,fish).get_panel()
-		parent.add(direction_panel, minsize=height)
-
-		spiffy_panel, height = self.get_spiffy_buttons(parent,fish).get_panel()
-		self.spiffy_buttons_exist = True
-		parent.add(spiffy_panel,minsize=height)
-
-		self.update_overview_panel()
-
-		return animation_panel
-
-	def reload(self):
-		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
-		self.import_from_filename()
-		self.update_overview_panel()
-		self.update_animation()
-
-	def set_animation(self, animation_name):
-		self.current_animation = animation_name
-		self.update_animation()
-
 	def update_pose_number(self):
 		if hasattr(self, "frame_progression_table"):
 			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
 			self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x > mod_frames]))
 
-	def get_tiles_for_current_pose(self):
-		self.update_pose_number()
-		pose_list = self.get_current_pose_list()
+	def get_tiles_for_pose(self, animation, direction, pose_number, palettes, frame_number):
+		pose_list = self.get_pose_list(animation, direction)
 		full_tile_list = []
-		for tile_info in pose_list[self.pose_number]["tiles"][::-1]:
+		for tile_info in pose_list[pose_number]["tiles"][::-1]:
 			base_image = self.images[tile_info["image"]]
 			if "crop" in tile_info:
 				base_image = base_image.crop(tuple(tile_info["crop"]))
@@ -200,10 +156,22 @@ class SpriteParent():
 				elif vflip:
 					base_image = base_image.transpose(Image.FLIP_TOP_BOTTOM)
 
-			palette_type = pose_list[self.pose_number]["palette"] if "palette" in pose_list[self.pose_number] else None
+			#some poses have extra palette information, e.g. use "bunny" or "crystal_flash" palettes
+			# which can (whole or in part) override certain parts of the palette specified in the argument
+			new_palette = None
+			if "palette" in pose_list[pose_number]:
+				new_palette = pose_list[pose_number]["palette"]
+			if "palette" in tile_info:
+				new_palette = tile_info["palette"]
+
+			if new_palette:
+				new_palette_type = new_palette[new_palette.rfind('_'):]
+				for i in range(len(palettes)):
+					if new_palette_type in palettes[i]:
+						palettes[i] = new_palette
 
 			default_range = self.layout.get_property("import palette interval", tile_info["image"])
-			this_palette = self.get_current_palette(palette_type, default_range)
+			this_palette = self.get_palette(palettes, default_range, frame_number)
 
 			base_image = common.apply_palette(base_image, this_palette)
 
@@ -211,51 +179,39 @@ class SpriteParent():
 
 		return full_tile_list
 
-	def get_current_pose_list(self):
-		direction_dict = self.animations[self.current_animation]
-		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
-			if hasattr(self,"facing_var"):
-				direction = self.facing_var.get().lower()   #grabbed from the direction buttons, which are named "facing"
-				if direction in direction_dict:
-					return direction_dict[direction]
-		#otherwise just grab the first listed direction
-		return next(iter(direction_dict.values()))
-
-	def frames_in_this_animation(self):
-		return self.frame_progression_table[-1]
-
-	def frames_left_in_this_pose(self):
-		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
-		next_pose_at = min(x for x in self.frame_progression_table if x > mod_frames)
-		return next_pose_at - mod_frames
-
-	def frames_to_previous_pose(self):
-		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
-		prev_pose_at = max((x for x in self.frame_progression_table if x <= mod_frames), default=0)
-		return mod_frames - prev_pose_at + 1
-
-	def update_animation(self):
-		pose_list = self.get_current_pose_list()
-		if "frames" not in pose_list[0]:      #might not be a frame entry for static poses
-			self.frame_progression_table = [1]
+	def get_pose_list(self, animation, direction):
+		direction_dict = self.animations[animation]
+		if direction in direction_dict:
+			return direction_dict[direction]
 		else:
-			self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
+			return []
 
-		if hasattr(self,"sprite_IDs"):
-			for ID in self.sprite_IDs:
-				self.canvas.delete(ID)       #remove the old tiles
-		if hasattr(self,"active_tiles"):
-			for tile in self.active_tiles:
-				del tile                     #why this is not auto-destroyed is beyond me (memory leak otherwise)
-		self.sprite_IDs = []
-		self.active_tiles = []
+	def get_alternative_direction(self, animation, direction):
+		direction_dict = self.animations[animation]
+		return next(iter(direction_dict.keys()))
 
-		for tile,offset in self.get_tiles_for_current_pose():
-			new_size = tuple(int(dim*self.zoom_getter()) for dim in tile.size)
-			scaled_tile = ImageTk.PhotoImage(tile.resize(new_size,resample=Image.NEAREST))
-			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
-			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_tile, anchor = tk.NW))
-			self.active_tiles.append(scaled_tile)     #if you skip this part, then the auto-destructor will get rid of your picture!
+	def assemble_tiles_to_completed_image(self, tile_list):
+		if tile_list:   #have to check this because some animations include "empty" poses
+			min_x = min([x for im,(x,y) in tile_list])
+			min_y = min([y for im,(x,y) in tile_list])
+			max_x = max([im.size[0]+x for im,(x,y) in tile_list])
+			max_y = max([im.size[1]+y for im,(x,y) in tile_list])
+
+			working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y),0)   #start out with a transparent image that is correctly sized
+			for new_image,(x,y) in tile_list:
+				working_image.paste(new_image,(x-min_x,y-min_y),new_image)   #the third argument is the transparency mask, so it is not redudant to use the same variable name twice
+			return working_image,(min_x,min_y)
+		else:
+			return Image.new('RGBA',(1,1),0), (0,0)   #blank image and dummy offset
+
+	def get_image(self, animation, direction, pose, palettes, frame_number):
+		#What I hope for this to do is to just retrieve a single PIL Image that corresponds to a particular pose in a particular animation using the specified list of palettes
+		# e.g. get_image("Walk", "right", 2, ["red_mail", "master_sword"])
+		#and it will return (Image, position_offset)
+		#the frame number here is passed as an argument to allow for the implementation of dynamic palettes
+		tile_list = self.get_tiles_for_pose(animation, direction, pose, palettes, frame_number)
+		assembled_image, offset = self.assemble_tiles_to_completed_image(tile_list)
+		return assembled_image, offset
 
 	def save_as(self, filename):
 		_,file_extension = os.path.splitext(filename)
@@ -271,7 +227,7 @@ class SpriteParent():
 
 	def save_as_PNG(self, filename):
 		master_image = self.get_master_PNG_image()
-		master_image.save(filename)
+		master_image.save(filename, "PNG")
 		return True
 
 	def save_as_ZSPR(self, filename):
@@ -360,126 +316,5 @@ class SpriteParent():
 		META_DATA_BLOCK_TYPE = 0
 		return [(META_DATA_BLOCK_TYPE, bytearray(common.as_u32(len(data))) + data)];
 
-	def export_frame_as_PNG(self, filename):
-		#i = 0
-		for tile,_ in self.get_tiles_for_current_pose():
-			new_size = tuple(int(dim*self.zoom_getter()) for dim in tile.size)
-			img_to_save = Image.new("RGBA", new_size, 0)
-			img_to_save = tile.resize(new_size,resample=Image.NEAREST)
-			#filename = filename[:filename.rfind('.')] + str(i) + filename[filename.rfind('.'):]
-			img_to_save.save(filename)
-			#i += 1
-
-	def export_animation_as_collage(self, filename, orientation="horizontal"):
-		image_names = []
-		image_list = []
-		poses = self.get_current_pose_list()
-		for pose in poses:
-			tiles = pose["tiles"]
-			for tile in tiles:
-				image_names.append(tile["image"])
-
-		for i,row in enumerate(self.layout.get_rows()): #FIXME: i unused variable
-
-			for image_name in row:   #for every image referenced explicitly in the layout
-				if image_name in image_names:
-					image = self.images[image_name]
-
-					xmin,ymin,xmax,ymax = self.layout.get_bounding_box(image_name)
-					if not image:    #there was no image there to grab, so make a blank image
-						image = Image.new("RGBA", (xmax-xmin,ymax-ymin), 0)
-
-					palette = self.layout.get_property("import palette interval", image_name)
-					palette = self.master_palette[palette[0]:palette[1]] if palette else []
-
-					image = common.apply_palette(image, palette)
-					bordered_image, origin = self.layout.add_borders_and_scale(image, (-xmin,-ymin), image_name)
-					image_list.append((bordered_image, origin))
-
-		collage = None
-		if orientation == "horizontal":
-			# HORIZONTAL
-			collage = self.layout.make_horizontal_collage(image_list)
-		elif orientation == "vertical":
-			# VERTICAL
-			raise NotImplementedError()
-		collage.save(filename)
-
 	def get_master_PNG_image(self):
 		return self.layout.export_all_images_to_PNG(self.images,self.master_palette)
-
-	def update_overview_panel(self):
-		image = self.get_master_PNG_image()
-		scaled_image = image.resize(tuple(int(x*self.overview_scale_factor) for x in image.size))
-
-		if hasattr(self,"overview_ID") and self.overview_ID is not None:
-			del self.overview_image
-			self.overview_image = common.get_tk_image(scaled_image)
-			self.overview_canvas.itemconfig(self.overview_ID, image=self.overview_image)
-		else:
-			import time
-			scaled_image = scaled_image.copy()
-			self.overview_image = common.get_tk_image(scaled_image)
-			self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)
-
-	#Mike likes spiffy buttons
-	def get_spiffy_buttons(self, parent, fish):
-		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
-
-		spiffy_manifest = common.get_resource(self.resource_subpath,"spiffy-buttons.json")
-		if spiffy_manifest:
-			with open(spiffy_manifest) as f:
-				spiffy_list = json.load(f)
-
-				for group in spiffy_list:
-					group_key = group["group-fish-key"]
-					button_group = spiffy_buttons.make_new_group(group_key,fish)
-					button_list = []
-					for button in group["buttons"]:
-						if "meta" in button and button["meta"] == "newline":
-							button_list.append((None,None,None))
-						elif "meta" in button and button["meta"] == "blank": #a blank space, baby
-							button_list.append((None,"",None))
-						else:
-							button_list.append((button["fish-subkey"],button["img"],button["default"] if "default" in button else False))
-					button_group.adds(button_list,fish)
-
-		return spiffy_buttons
-
-	#Art likes direction buttons
-	def get_direction_buttons(self, parent, fish):
-		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
-		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
-
-		direction_manifest = common.get_resource(self.resource_subpath,"direction-buttons.json")
-		if direction_manifest:
-			with open(direction_manifest) as f:
-				direction_list = json.load(f)
-
-				for group in direction_list:
-					group_key = group["group-fish-key"]
-					button_group = direction_buttons.make_new_group(group_key,fish)
-					button_list = []
-					for button in group["buttons"]:
-						if "meta" in button and button["meta"] == "newline":
-							button_list.append((None,None,None))
-						elif "meta" in button and button["meta"] == "blank": #a blank space, baby
-							button_list.append((None,"",None))
-						else:
-							button_list.append((button["fish-subkey"],button["img"],button["default"] if "default" in button else False))
-					button_group.adds(button_list,fish)
-		else:
-			facing_group = direction_buttons.make_new_group("facing", fish)
-			if self.overhead:
-				facing_group.adds([
-					(None,"",None), #a blank space, baby
-					("up","arrow-up.png",False),
-					(None,"",None), #a blank space, baby
-					(None,None,None)
-				],fish)
-			facing_group.add("left", "arrow-left.png", fish)
-			if self.overhead:
-				facing_group.add("down", "arrow-down.png", fish)
-			facing_group.add("right", "arrow-right.png", fish, default=True)
-
-		return direction_buttons

@@ -37,7 +37,9 @@ _test_macro.py
 gamefiles/
 
 # no working dirs file
-/resources/meta/working_dirs.json
+working_dirs.json
 
 # no custom files
 custom/
+user_resources/metroid3/samus/sheets
+user_resources/zelda3/link/sheets
