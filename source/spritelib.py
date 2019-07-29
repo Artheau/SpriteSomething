@@ -165,7 +165,7 @@ class SpriteParent():
 				new_palette = tile_info["palette"]
 
 			if new_palette:
-				new_palette_type = new_palette[new_palette.find('_'):]
+				new_palette_type = new_palette[new_palette.rfind('_'):]
 				for i in range(len(palettes)):
 					if new_palette_type in palettes[i]:
 						palettes[i] = new_palette
