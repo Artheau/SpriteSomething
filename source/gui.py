@@ -33,7 +33,7 @@ def make_GUI(command_line_args):
 				root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file=common.get_resource(["meta","icons"],'app.gif'))) #MacOSX?
 			except Exception:
 				pass #give up
-	root.geometry("800x600")       #window size
+	root.geometry("900x768")       #window size
 	root.configure(bg='#f0f0f0')   #background color
 	main_frame = SpriteSomethingMainFrame(root, command_line_args)
 	root.protocol("WM_DELETE_WINDOW", main_frame.exit)           #intercept when the user clicks the X
@@ -290,7 +290,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 									subwidget.unbind_all(keypress)
 								#nuke this button from orbit
 								subwidget.destroy()
-		self.left_panel = tk.PanedWindow(self.panes, orient=tk.VERTICAL, name="left_panel",width=250,handlesize=0,sashwidth=0,sashpad=2)
+		self.left_panel = tk.PanedWindow(self.panes, orient=tk.VERTICAL, name="left_panel",width=320,handlesize=0,sashwidth=0,sashpad=2)
 		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
 		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
 		self.overview_frame = tk.Frame(self.right_panel, name="overview_frame")
@@ -326,7 +326,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			metadata_label = tk.Label(metadata_section, text=label, name=label.lower().replace(' ', '_'))
 			metadata_label.grid(row=row,column=1)
 			self.metadata_textbox_vars[key] = tk.StringVar()
-			metadata_input = tk.Entry(metadata_section, textvariable=self.metadata_textbox_vars[key], name=label.lower().replace(' ', '_') + "_input")
+			metadata_input = tk.Entry(metadata_section, textvariable=self.metadata_textbox_vars[key], name=label.lower().replace(' ', '_') + "_input", width=25)
 			metadata_input.insert(0,self.sprite.metadata[key])
 
 			def metadata_changed_trace(key, *args):
@@ -342,7 +342,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 			metadata_input.grid(row=row,column=2)
 			row += 1
-		self.left_panel.add(metadata_section,minsize=PANEL_HEIGHT)
+		self.left_panel.add(metadata_section,minsize=PANEL_HEIGHT,sticky="e")
 
 	#make a status bar
 	def create_status_bar(self):
@@ -599,7 +599,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.sprite.import_from_filename()
 		self.animation_engine.update_overview_panel()   #TODO: Need to decide if this belongs in animation_engine
 		self.animation_engine.update_animation()
-		
+
 
 	############################ MENU BAR FUNCTIONS HERE ################################
 
