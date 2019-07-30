@@ -47,12 +47,14 @@ jobs:
       script:
         - ${PYTHON_EXECUTABLE} build.py
         - ls
+        - export DEPLOY=yes
 #      before_deploy:
         - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
         - export BUILD_FILENAME=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
         - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then mv $BUILD_FILENAME \"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}\"; fi"
         - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
+        - "echo \"Deploy: \" ${DEPLOY}"
       deploy:
         provider: releases
         api_key:
@@ -64,7 +66,7 @@ jobs:
           repo: Artheau/SpriteSomething
           branch: master
 #          branch: standardize
-          python: 3.7
+          condition: ${DEPLOY} == "yes"
 #          tags: true
 #          tag_name: "${TRAVIS_TAG}"
           draft: true
@@ -78,6 +80,9 @@ jobs:
       name: "3.7 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.7
+      after_script:
+        - "export DEPLOY=no"
+        - "echo \"Deploy: \" ${DEPLOY}"
 
     # 3.6 on Xenial
     - <<: *tests
@@ -88,6 +93,9 @@ jobs:
       name: "3.6 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.6
+      after_script:
+        - "export DEPLOY=no"
+        - "echo \"Deploy: \" ${DEPLOY}"
 
     # 3.7 on macOS
     - <<: *tests
@@ -106,6 +114,9 @@ jobs:
       language: shell
       before_script:
         - export PYTHON_EXECUTABLE=python3
+      after_script:
+        - "export DEPLOY=yes"
+        - "echo \"Deploy: \" ${DEPLOY}"
 
     # 3.7 on Windows
     - <<: *tests
@@ -130,6 +141,9 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
+      after_script:
+        - "export DEPLOY=yes"
+        - "echo \"Deploy: \" ${DEPLOY}"
 
 notifications:
   email: false
