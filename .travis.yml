@@ -5,8 +5,8 @@
 language: python
 
 #default VM settings
-python: 3.7
 dist: bionic
+python: 3.7
 env:
   global:
     - PYTHON_EXECUTABLE="python"
@@ -31,6 +31,8 @@ jobs:
     - &tests
       stage: "Unit Tests"
       name: "3.7 on Bionic: Test"
+      dist: bionic
+      python: 3.7
       services: xvfb
       script: ${PYTHON_EXECUTABLE} tests.py
 
@@ -38,35 +40,60 @@ jobs:
     - &build
       stage: "Build Binaries"
       name: "3.7 on Bionic: Build"
+      dist: bionic
+      python: 3.7
       services: xvfb
       skip_cleanup: true
       script:
         - ${PYTHON_EXECUTABLE} build.py
         - ls
+        - ls -p | egrep '^(.\/)?(\w)*(.exe|$)'
+
+    # Deploy
+    - &deploy-github-releases
+      stage: "Deploy to GitHub Releases"
+      name: "Deploy"
+      deploy:
+        provider: releases
+        api_key:
+          secure: $GITHUB_TOKEN_mm1
+        file_glob: true
+        file: /^(.\/)?(\w)*(.exe|$)/gm
+        skip_cleanup: true
+        on:
+          repo: Artheau/SpriteSomething
+          branch: master
+#          branch: standardize
+          python: 3.7
+#          tags: true
+          draft: true
 
     # 3.7 on Xenial
     - <<: *tests
       name: "3.7 on Xenial: Test"
       dist: xenial
+      python: 3.7
     - <<: *build
       name: "3.7 on Xenial: Build"
       dist: xenial
+      python: 3.7
 
     # 3.6 on Xenial
     - <<: *tests
       name: "3.6 on Xenial: Test"
-      python: 3.6
       dist: xenial
+      python: 3.6
     - <<: *build
       name: "3.6 on Xenial: Build"
-      python: 3.6
       dist: xenial
+      python: 3.6
 
     # 3.7 on macOS
     - <<: *tests
       name: "3.7 on macOS: Test"
       os: osx
       osx_image: xcode10.2
+      python: 3.7
       language: shell
       before_script:
         - export PYTHON_EXECUTABLE=python3
@@ -74,6 +101,7 @@ jobs:
       name: "3.7 on macOS: Build"
       os: osx
       osx_image: xcode10.2
+      python: 3.7
       language: shell
       before_script:
         - export PYTHON_EXECUTABLE=python3
@@ -82,6 +110,7 @@ jobs:
     - <<: *tests
       name: "3.7 on Windows: Test"
       os: windows
+      python: 3.7
       language: shell
       before_install:
         - choco install python
@@ -92,6 +121,7 @@ jobs:
     - <<: *build
       name: "3.7 on Windows: Build"
       os: windows
+      python: 3.7
       language: shell
       before_install:
         - choco install python
@@ -99,20 +129,6 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-
-deploy:
-  provider: releases
-  api_key:
-    secure: $GITHUB_TOKEN_mm1
-  file_glob: true
-  file: /^(.\/)?(\w)*(.exe|$)/gm
-  skip_cleanup: true
-  on:
-    repo: Artheau/SpriteSomething
-    branch: standardize
-    python: 3.7
-#    tags: true
-    draft: true
 
 notifications:
   email: false
