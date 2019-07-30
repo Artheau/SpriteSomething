@@ -36,7 +36,7 @@ env:
 # install pillow, numpy for app
 # install pyinstaller for distilling
 install:
-  - pip install -U pip wheel
+  - pip3 install -U pip wheel
   - pip install -r "./app_resources/meta/manifests/pip_requirements.txt"
 
 # get UPX
