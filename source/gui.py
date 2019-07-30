@@ -600,7 +600,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.animation_engine.update_overview_panel()   #TODO: Need to decide if this belongs in animation_engine
 		self.animation_engine.update_animation()
 
-
 	############################ MENU BAR FUNCTIONS HERE ################################
 
 	#query user for file to open; ZSPR/PNG/SFC/SMC

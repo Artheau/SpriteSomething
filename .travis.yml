@@ -116,10 +116,12 @@ jobs:
       name: "Python 3.7 on Ubuntu Xenial: Test"
       dist: xenial
       python: "3.7"
+      services: xvfb
     - <<: *build-deploy
       name: "3.7 on Xenial: Build/No Deploy"
       dist: xenial
       python: "3.7"
+      services: xvfb
       before_script:
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
@@ -129,10 +131,12 @@ jobs:
       name: "Python 3.6 on Ubuntu Xenial: Test"
       dist: xenial
       python: "3.6"
+      services: xvfb
     - <<: *build-deploy
       name: "3.6 on Xenial: Build/No Deploy"
       dist: xenial
       python: "3.6"
+      services: xvfb
       before_script:
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
@@ -143,6 +147,7 @@ jobs:
       os: osx
       osx_image: xcode10.2
       python: "3.7"
+      services:
       language: shell
       before_install:
         - export PYTHON_EXECUTABLE=python3
@@ -151,6 +156,7 @@ jobs:
       os: osx
       osx_image: xcode10.2
       python: "3.7"
+      services:
       language: shell
       before_install:
         - export PYTHON_EXECUTABLE=python3
@@ -160,6 +166,7 @@ jobs:
       name: "Python 3.7 on Windows 10 v1803: Test"
       os: windows
       python: "3.7"
+      services: xvfb
       language: shell
       before_install:
         - choco install python
@@ -171,6 +178,7 @@ jobs:
       name: "3.7 on Windows: Build/Deploy"
       os: windows
       python: "3.7"
+      services: xvfb
       language: shell
       before_install:
         - choco install python
