@@ -20,20 +20,17 @@ env:
     - PYTHON_EXECUTABLE="python"
     - UPX_VERSION=3.95
 
-# before_cache
 # cache
-# after_cache
 # before_install
 # install
-# after_install
 ## jobs ##
 # before_script
 # script
-# after_script
+# before_cache
+# after_success
 # before_deploy
 # deploy
 # after_deploy
-# after_success
 
 # upgrade pip
 # install pillow, numpy for app
@@ -41,9 +38,10 @@ env:
 install:
   - pip3 install -U pip wheel
   - pip install -r "./app_resources/meta/manifests/pip_requirements.txt"
+  - export DEPLOY=yes
 
 # get UPX
-after_install:
+before_script:
   - wget https://github.com/upx/upx/releases/download/v${UPX_VERSION}/upx-${UPX_VERSION}-amd64_linux.tar.gz
   - sudo tar -C /usr/local -xf upx-${UPX_VERSION}-amd64_linux.tar.gz
   - mv /usr/local/upx-${UPX_VERSION}-amd64_linux/ $HOME/upx/
@@ -70,8 +68,7 @@ jobs:
       script:
         - ${PYTHON_EXECUTABLE} build.py
         - ls
-        - export DEPLOY=yes
-#      before_deploy:
+#      after_success:
         - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
         - export BUILD_FILENAME=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
@@ -113,7 +110,7 @@ jobs:
       name: "3.7 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.7
-      after_script:
+      before_script:
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
 
@@ -126,7 +123,7 @@ jobs:
       name: "3.6 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.6
-      after_script:
+      before_script:
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
 
@@ -147,9 +144,6 @@ jobs:
       language: shell
       before_script:
         - export PYTHON_EXECUTABLE=python3
-      after_script:
-        - "export DEPLOY=yes"
-        - "echo \"Deploy: ${DEPLOY}\""
 
     # 3.7 on Windows
     - <<: *tests
@@ -174,9 +168,6 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-      after_script:
-        - "export DEPLOY=yes"
-        - "echo \"Deploy: ${DEPLOY}\""
 
 notifications:
   email: false
