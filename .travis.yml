@@ -77,7 +77,7 @@ jobs:
       script:
         - ${PYTHON_EXECUTABLE} build.py
         - ls
-#      after_success:
+      after_success:
         - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
         - export BUILD_FILENAME=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
@@ -96,6 +96,7 @@ jobs:
         - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
         - export FILES_TO_UPLOAD=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
         - "echo \"Deploy: ${DEPLOY}\""
+        - "echo \"Files to Upload: ${FILES_TO_UPLOAD}\""
       deploy:
         provider: releases
         api_key:
