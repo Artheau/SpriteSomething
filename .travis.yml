@@ -47,7 +47,7 @@ jobs:
       script:
         - ${PYTHON_EXECUTABLE} build.py
         - ls
-      before_deploy:
+#      before_deploy:
         - ls -p | egrep '^(.\/)?(\w)*(.exe|$)'
         - export BUILD_FILENAME=(ls -p | egrep '^(.\/)?(\w)*(.exe|$)')
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
