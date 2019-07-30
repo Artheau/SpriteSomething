@@ -45,14 +45,14 @@ before_script:
   - export UPX_SLUG=upx-${UPX_VERSION}-amd64_linux
   - export UPX_FILE=${UPX_SLUG}.tar.xz
   - export UPX_URL=https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_FILE}
-  - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then wget --output-document=${UPX_FILE} ${UPX_URL}; else curl -L ${UPX_URL} --output ${UPX_FILE}; fi
-  - mkdir -p $HOME/upx
+#  - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then wget --output-document=${UPX_FILE} ${UPX_URL}; else curl -L ${UPX_URL} --output ${UPX_FILE}; fi
+#  - mkdir -p $HOME/upx
 #  - unxz *.tar.xz
 #  - tar -C $HOME/upx -xf *.tar
-  - tar -C $HOME/upx -xJf *.tar.xz
-  - mkdir -p $HOME/${TRAVIS_REPO_SLUG}/upx
-  - mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
-  - rm -r $HOME/upx
+#  - tar -C $HOME/upx -xJf *.tar.xz
+#  - mkdir -p $HOME/${TRAVIS_REPO_SLUG}/upx
+#  - mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
+#  - rm -r $HOME/upx
 
 jobs:
   include:
