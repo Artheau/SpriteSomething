@@ -10,6 +10,7 @@ cache:
     - $HOME/.cache/pip #linux
     - $HOME/Library/Caches/pip #macosx
     - $HOME/AppData/Local/pip/Cache #windows
+    - $HOME/upx #upx
 
 #default VM settings
 dist: bionic
@@ -43,9 +44,9 @@ install:
 
 # get UPX
 #after_install:
-#  - wget https://github.com/upx/upx/releases/download/v{$UPX_VERSION}/upx-${UPX_VERSION}-amd64_linux.tar.gz
-#  - sudo tar -C /usr/local -xf upx-${UPX_VERSION}-amd64_linux.tar.gz
-#  - mv /usr/local/upx-${UPX_VERSION}-amd64_linux/ ./upx/
+  - wget https://github.com/upx/upx/releases/download/v{$UPX_VERSION}/upx-${UPX_VERSION}-amd64_linux.tar.gz
+  - sudo tar -C /usr/local -xf upx-${UPX_VERSION}-amd64_linux.tar.gz
+  - mv /usr/local/upx-${UPX_VERSION}-amd64_linux/ $HOME/upx/
 
 jobs:
   include:
