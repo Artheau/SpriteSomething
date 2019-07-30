@@ -37,7 +37,7 @@ env:
 # install pyinstaller for distilling
 install:
   - pip install -U pip wheel
-  - pip install -r "./app_resources/manifests/pip_requirements.txt"
+  - pip install -r "./app_resources/meta/manifests/pip_requirements.txt"
 
 # get UPX
 #after_install:
