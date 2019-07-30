@@ -109,8 +109,8 @@ jobs:
           repo: Artheau/SpriteSomething
           condition: $DEPLOY == "yes"
 #          branch: master
-          branch: standardize
-#          tags: true
+#          branch: standardize
+          tags: true
           draft: true
 
     # 3.7 on Xenial
