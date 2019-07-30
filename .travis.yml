@@ -99,7 +99,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: Artheau/SpriteSomething
-#    branch: master
+    branch: standardize
 #    python: 3.7
 #    tags: true
     draft: true
