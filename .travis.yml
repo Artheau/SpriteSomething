@@ -14,19 +14,16 @@ matrix:
     - name: Python 3.7 on Bionic Linux
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: bionic          # distribution required for Python >= 3.7
-      env: PYTHON_EXECUTABLE=python
       services:
         - xvfb
     - name: Python 3.7 on Xenial Linux
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: xenial          # distribution required for Python >= 3.7
-      env: PYTHON_EXECUTABLE=python
       services:
         - xvfb
     - name: Python 3.6 on Xenial Linux
       python: 3.6
       dist: xenial
-      env: PYTHON_EXECUTABLE=python
       services:
         - xvfb
     ################################################################################
@@ -36,7 +33,6 @@ matrix:
       os: osx
       osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
       language: shell       # 'language: python' is an error on Travis CI macOS
-      env: PYTHON_EXECUTABLE=python3
     ###############################################################################
 
     #############OS FOR PEOPLE WHO LIKE PROPRIETARY SOFTWARE SUITES#################
@@ -47,7 +43,7 @@ matrix:
       before_install:
         - choco install python
         - python -m pip install --upgrade pip
-      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH; PYTHON_EXECUTABLE=python
+      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH
     ################################################################################
 
 #get upx for compression
@@ -68,11 +64,11 @@ jobs:
     # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
     - stage: test
       name: Unit Tests
-      script: $PYTHON_EXECUTABLE tests.py
+      script: python3 tests.py || python tests.py
     # run build script
     - stage: build
       name: Build Binary
-      script: $PYTHON_EXECUTABLE build.py
+      script: python3 build.py || python build.py
 
 # before deploy, set up some vars
 #before_deploy:
