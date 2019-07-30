@@ -4,6 +4,11 @@
 #this is a python project, designed to be compatible with 3.6+
 language: python
 
+# cache pip
+cache:
+  directories:
+    - $HOME/.cache/pip
+
 #default VM settings
 dist: bionic
 python: 3.7
@@ -12,18 +17,33 @@ env:
     - PYTHON_EXECUTABLE="python"
     - UPX_VERSION=3.95
 
-# get UPX
-#before_install:
-#  - wget https://github.com/upx/upx/releases/download/v{$UPX_VERSION}/upx-${UPX_VERSION}-amd64_linux.tar.gz
-#  - sudo tar -C /usr/local -xf upx-${UPX_VERSION}-amd64_linux.tar.gz
-#  - mv /usr/local/upx-${UPX_VERSION}-amd64_linux/ ./upx/
+# before_cache
+# cache
+# after_cache
+# before_install
+# install
+# after_install
+## jobs ##
+# before_script
+# script
+# after_script
+# before_deploy
+# deploy
+# after_deploy
+# after_success
 
 # upgrade pip
 # install pillow, numpy for app
 # install pyinstaller for distilling
 install:
-  - pip3 install --upgrade pip
-  - pip install pillow numpy pyinstaller
+  - pip install -U pip wheel
+  - pip install -r "./app_resources/manifests/requirements.txt"
+
+# get UPX
+#after_install:
+#  - wget https://github.com/upx/upx/releases/download/v{$UPX_VERSION}/upx-${UPX_VERSION}-amd64_linux.tar.gz
+#  - sudo tar -C /usr/local -xf upx-${UPX_VERSION}-amd64_linux.tar.gz
+#  - mv /usr/local/upx-${UPX_VERSION}-amd64_linux/ ./upx/
 
 jobs:
   include:
@@ -90,7 +110,7 @@ jobs:
       name: "3.7 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.7
-      before_deploy:
+      after_install:
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
 
@@ -103,7 +123,7 @@ jobs:
       name: "3.6 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.6
-      before_deploy:
+      after_install:
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
 
