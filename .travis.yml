@@ -14,10 +14,6 @@ matrix:
     - name: Python 3.7 on Bionic Linux
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: bionic          # distribution required for Python >= 3.7
-      before_script:
-        - "export DISPLAY=:99.0"
-        - "sh -e /etc/init.d/xvfb start"
-        - sleep 3
     - name: Python 3.7 on Xenial Linux
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: xenial          # distribution required for Python >= 3.7
@@ -70,7 +66,13 @@ jobs:
     # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
     - stage: test
       name: Unit Tests
-      script: python3 tests.py || python tests.py
+      script:
+        - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
+            export DISPLAY=:99.0;
+            sh -e /etc/init.d/xvfb start;
+            sleep 3;
+          fi
+        - python3 tests.py || python tests.py
     # run build script
     - stage: build
       name: Build Binary
