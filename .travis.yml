@@ -49,7 +49,7 @@ jobs:
         - ls
 #      before_deploy:
         - ls -p | egrep '^(.\/)?(\w)*(.exe|$)'
-        - export BUILD_FILENAME=(ls -p | egrep '^(.\/)?(\w)*(.exe|$)')
+        - export BUILD_FILENAME=$(ls -p | egrep '^(.\/)?(\w)*(.exe|$)')
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
         - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then mv BUILD_FILENAME \"$BUILD_FILENAME-$TRAVIS_TAG-$TRAVIS_OS_NAME\"; fi"
         - ls -p | egrep '^(.\/)?(\w)*(.exe|$)'
@@ -66,6 +66,7 @@ jobs:
 #          branch: standardize
           python: 3.7
 #          tags: true
+#          tag_name: "${TRAVIS_TAG}"
           draft: true
 
     # 3.7 on Xenial
