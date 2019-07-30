@@ -45,7 +45,7 @@ before_script:
   - export UPX_SLUG=upx-${UPX_VERSION}-amd64_linux
   - export UPX_FILE=${UPX_SLUG}.tar.xz
   - export UPX_URL=https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_FILE}
-  - if [ "${TRAVIS_OS_NAME}" == "windows" ] then; wget --output-document=${UPX_FILE} ${UPX_URL}; else curl -L ${UPX_URL} --output ${UPX_FILE}; fi
+  - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then wget --output-document=${UPX_FILE} ${UPX_URL}; else curl -L ${UPX_URL} --output ${UPX_FILE}; fi
   - mkdir -p $HOME/upx
   - tar -C $HOME/upx -xf ${UPX_FILE}
   - mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
