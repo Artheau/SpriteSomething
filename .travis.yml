@@ -31,20 +31,14 @@ jobs:
     - &tests
       stage: "Unit Tests"
       name: "3.7 on Bionic: Test"
-
-      # Linux needs a "screen" for tkinter
-      before_script:
-        - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
-            export DISPLAY=:99.0;
-            sh -e /etc/init.d/xvfb start;
-            sleep 3;
-            fi
-        - ${PYTHON_EXECUTABLE} tests.py
+      services: xvfb
+      script: ${PYTHON_EXECUTABLE} tests.py
 
     # 3.7 on Bionic Build
     - &build
       stage: "Build Binaries"
       name: "3.7 on Bionic: Build"
+      services: xvfb
       skip_cleanup: true
       script:
         - ${PYTHON_EXECUTABLE} build.py
@@ -74,14 +68,14 @@ jobs:
       os: osx
       osx_image: xcode10.2
       language: shell
-      script:
+      before_script:
         - export PYTHON_EXECUTABLE=python3
     - <<: *build
       name: "3.7 on macOS: Build"
       os: osx
       osx_image: xcode10.2
       language: shell
-      script:
+      before_script:
         - export PYTHON_EXECUTABLE=python3
 
     # 3.7 on Windows
@@ -91,7 +85,9 @@ jobs:
       language: shell
       before_install:
         - choco install python
-        - python -m pip install --upgrade pip
+        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        - ${PYTHON_EXECUTABLE} get-pip.py
+        - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
     - <<: *build
       name: "3.7 on Windows: Build"
@@ -99,7 +95,9 @@ jobs:
       language: shell
       before_install:
         - choco install python
-        - python -m pip install --upgrade pip
+        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        - ${PYTHON_EXECUTABLE} get-pip.py
+        - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
 
 deploy:
