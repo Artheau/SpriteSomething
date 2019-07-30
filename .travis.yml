@@ -33,7 +33,7 @@ jobs:
       name: "3.7 on Bionic: Test"
 
       # Linux needs a "screen" for tkinter
-      script:
+      before_script:
         - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
             export DISPLAY=:99.0;
             sh -e /etc/init.d/xvfb start;
@@ -105,14 +105,14 @@ jobs:
 deploy:
   provider: releases
   api_key:
-    secret: $GITHUB_TOKEN_mm1
+    secure: $GITHUB_TOKEN_mm1
   file_glob: true
   file: /^(.\/)?(\w)*(.exe|$)/gm
   skip_cleanup: true
   on:
     repo: Artheau/SpriteSomething
     branch: standardize
-#    python: 3.7
+    python: 3.7
 #    tags: true
     draft: true
 
