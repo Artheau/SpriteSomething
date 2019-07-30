@@ -25,36 +25,30 @@ install:
   - pip3 install --upgrade pip
   - pip install pillow numpy pyinstaller
 
-# create Unit Testing alias
-tests: &tests
-  - stage: "Tests"
-    name: "Unit Testing"
-
-    # Linux needs a "screen" for tkinter
-    script:
-      - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
-          export DISPLAY=:99.0;
-          sh -e /etc/init.d/xvfb start;
-          sleep 3;
-          fi
-      - $PYTHON_EXECUTABLE tests.py
-
-# create Build alias
-build: &build
-  - stage: "Build"
-    name: "Build Binaries"
-    skip_cleanup: true
-    script:
-      - $PYTHON_EXECUTABLE build.py
-      - ls
-
 jobs:
   include:
-    # 3.7 on Bionic
-    - <<: *tests
-      name: "3.7 on Bionic: Test"
-    - <<: *build
-      name: "3.7 on Bionic: Build"
+    # create Unit Testing alias
+    - &tests
+      stage: "Tests"
+      name: "Unit Testing"
+
+      # Linux needs a "screen" for tkinter
+      script:
+        - if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
+            export DISPLAY=:99.0;
+            sh -e /etc/init.d/xvfb start;
+            sleep 3;
+            fi
+        - $PYTHON_EXECUTABLE tests.py
+
+    # create Build alias
+    - &build
+      stage: "Build"
+      name: "Build Binaries"
+      skip_cleanup: true
+      script:
+        - $PYTHON_EXECUTABLE build.py
+        - ls
 
     # 3.7 on Xenial
     - <<: *tests
