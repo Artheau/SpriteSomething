@@ -85,20 +85,20 @@ jobs:
       language: shell
       before_install:
         - choco install python
+        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
     - <<: *build
       name: "3.7 on Windows: Build"
       os: windows
       language: shell
       before_install:
         - choco install python
+        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
 
 deploy:
   provider: releases
