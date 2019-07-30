@@ -36,6 +36,8 @@ env:
 # install pillow, numpy for app
 # install pyinstaller for distilling
 install:
+  - sudo apt-get update
+  - sudo apt-get install -y tar
   - pip3 install -U pip wheel
   - pip install -r "./app_resources/meta/manifests/pip_requirements.txt"
   - export DEPLOY=yes
@@ -48,6 +50,7 @@ before_script:
   - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then wget --output-document=${UPX_FILE} ${UPX_URL}; else curl -L ${UPX_URL} --output ${UPX_FILE}; fi
   - mkdir -p $HOME/upx
   - tar -C $HOME/upx -xf ${UPX_FILE}
+  - mkdir -p $HOME/${TRAVIS_REPO_SLUG}/upx
   - mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
   - rm -r $HOME/upx
 
