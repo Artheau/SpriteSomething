@@ -139,6 +139,7 @@ class GUIRunTimeTests(unittest.TestCase):
 	def __init__(self, *args, **kwargs):
 		super().__init__(*args, **kwargs)
 		#make the GUI in skeleton form (no looping)
+		os.environ["DISPLAY"] = 0 #make a pseudo-display to print to
 		pseudo_command_line_args = {"sprite": LINK_FILENAME}
 		pseudo_root = tk.Tk()   #make a pseudo GUI environment
 		pseudo_root.withdraw()  #make the pseudo GUI invisible
