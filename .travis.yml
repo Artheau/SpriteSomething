@@ -42,8 +42,8 @@ install:
 
 # get UPX
 before_script:
-  - wget https://github.com/upx/upx/releases/download/v${UPX_VERSION}/upx-${UPX_VERSION}-amd64_linux.tar.xz
-  - sudo tar -C /usr/local -xf upx-${UPX_VERSION}-amd64_linux.tar.gz
+  - curl https://github.com/upx/upx/releases/download/v${UPX_VERSION}/upx-${UPX_VERSION}-amd64_linux.tar.xz
+  - tar -C /usr/local -xf upx-${UPX_VERSION}-amd64_linux.tar.xz
   - mv /usr/local/upx-${UPX_VERSION}-amd64_linux/ $HOME/upx/
 
 jobs:
