@@ -53,13 +53,7 @@ jobs:
         - export BUILD_FILENAME=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
         - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then \
-            if [ \"${BUILD_FILENAME/.}\" == \"${BUILD_FILENAME}\" ]; then \
-              export DEST_EXTENSION=\"\"; \
-            else \
-              export DEST_EXTENSION=\"${BUILD_FILENAME##*.}\"; \
-              export BUILD_FILENAME=\"${BUILD_FILENAME%.*}\"; \
-            fi; \
-            export DEST_FILENAME=\"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}${DEST_EXTENSION}\"; \
+            export DEST_FILENAME=\"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}\"; \
             echo \"Build Filename: ${BUILD_FILENAME}\"; \
             echo \"Dest Filename:  ${DEST_FILENAME}\"; \
             mv $BUILD_FILENAME $DEST_FILENAME; \
@@ -90,7 +84,7 @@ jobs:
       name: "3.7 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.7
-      after_script:
+      before_deploy:
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
 
@@ -103,7 +97,7 @@ jobs:
       name: "3.6 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.6
-      after_script:
+      before_deploy:
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
 
