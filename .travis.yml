@@ -46,8 +46,7 @@ before_script:
   - mkdir -p $HOME/upx/stage
   - tar -C $HOME/upx/stage -xf upx-${UPX_VERSION}-amd64_linux.tar.xz
   - mv $HOME/upx/stage/upx-${UPX_VERSION}-amd64_linux/* $HOME/upx
-  - rm $HOME/upx/stage/upx-${UPX_VERSION}-amd64_linux
-  - rm $HOME/upx/stage
+  - rm -r $HOME/upx/stage
 
 jobs:
   include:
@@ -89,17 +88,18 @@ jobs:
             mv $BUILD_FILENAME $DEST_FILENAME; \
           fi"
         - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
+        - export FILES_TO_UPLOAD=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
         - "echo \"Deploy: ${DEPLOY}\""
       deploy:
         provider: releases
         api_key:
           secure: $GITHUB_TOKEN_mm1
         file_glob: true
-        file: /^(.\/)?(\w)*(.exe|$)/gm
+        file: $FILES_TO_UPLOAD
         skip_cleanup: true
         on:
           repo: Artheau/SpriteSomething
-          condition: ${DEPLOY} == "yes"
+          condition: $DEPLOY == "yes"
           branch: master
 #          branch: standardize
 #          tags: true
