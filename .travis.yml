@@ -36,8 +36,8 @@ jobs:
       services: xvfb
       script: ${PYTHON_EXECUTABLE} tests.py
 
-    # 3.7 on Bionic Build
-    - &build
+    # 3.7 on Bionic Build/Deploy
+    - &build-deploy
       stage: "Build & Deploy Binaries"
       name: "3.7 on Bionic: Build/Deploy"
       dist: bionic
@@ -52,9 +52,19 @@ jobs:
         - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
         - export BUILD_FILENAME=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
-        - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then mv $BUILD_FILENAME \"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}\"; fi"
+        - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then \
+            if [ \"${BUILD_FILENAME/.}\" == \"${BUILD_FILENAME}\" ]; then
+              export DEST_EXTENSION=\"\"; \
+            else \
+              export DEST_EXTENSION=\"${BUILD_FILENAME##*.}\"; \
+              export BUILD_FILENAME=\"${BUILD_FILENAME%.*}\"; \
+            export DEST_FILENAME=\"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}${DEST_EXTENSION}\"; \
+            echo \"Build Filename: ${BUILD_FILENAME}\"; \
+            echo \"Dest Filename:  ${DEST_FILENAME}\"; \
+            mv $BUILD_FILENAME $DEST_FILENAME; \
+          fi"
         - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
-        - "echo \"Deploy: \" ${DEPLOY}"
+        - "echo \"Deploy: ${DEPLOY}\""
       deploy:
         provider: releases
         api_key:
@@ -64,11 +74,10 @@ jobs:
         skip_cleanup: true
         on:
           repo: Artheau/SpriteSomething
+          condition: ${DEPLOY} == "yes"
           branch: master
 #          branch: standardize
-          condition: ${DEPLOY} == "yes"
 #          tags: true
-#          tag_name: "${TRAVIS_TAG}"
           draft: true
 
     # 3.7 on Xenial
@@ -76,26 +85,26 @@ jobs:
       name: "Python 3.7 on Ubuntu Xenial: Test"
       dist: xenial
       python: 3.7
-    - <<: *build
+    - <<: *build-deploy
       name: "3.7 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.7
       after_script:
         - "export DEPLOY=no"
-        - "echo \"Deploy: \" ${DEPLOY}"
+        - "echo \"Deploy: ${DEPLOY}\""
 
     # 3.6 on Xenial
     - <<: *tests
       name: "Python 3.6 on Ubuntu Xenial: Test"
       dist: xenial
       python: 3.6
-    - <<: *build
+    - <<: *build-deploy
       name: "3.6 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.6
       after_script:
         - "export DEPLOY=no"
-        - "echo \"Deploy: \" ${DEPLOY}"
+        - "echo \"Deploy: ${DEPLOY}\""
 
     # 3.7 on macOS
     - <<: *tests
@@ -106,7 +115,7 @@ jobs:
       language: shell
       before_script:
         - export PYTHON_EXECUTABLE=python3
-    - <<: *build
+    - <<: *build-deploy
       name: "3.7 on macOS: Build/Deploy"
       os: osx
       osx_image: xcode10.2
@@ -116,7 +125,7 @@ jobs:
         - export PYTHON_EXECUTABLE=python3
       after_script:
         - "export DEPLOY=yes"
-        - "echo \"Deploy: \" ${DEPLOY}"
+        - "echo \"Deploy: ${DEPLOY}\""
 
     # 3.7 on Windows
     - <<: *tests
@@ -130,7 +139,7 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-    - <<: *build
+    - <<: *build-deploy
       name: "3.7 on Windows: Build/Deploy"
       os: windows
       python: 3.7
@@ -143,7 +152,7 @@ jobs:
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
       after_script:
         - "export DEPLOY=yes"
-        - "echo \"Deploy: \" ${DEPLOY}"
+        - "echo \"Deploy: ${DEPLOY}\""
 
 notifications:
   email: false
