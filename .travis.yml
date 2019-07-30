@@ -42,11 +42,14 @@ install:
 
 # get UPX
 before_script:
-  - curl -L https://github.com/upx/upx/releases/download/v${UPX_VERSION}/upx-${UPX_VERSION}-amd64_linux.tar.xz --output upx-${UPX_VERSION}-amd64_linux.tar.xz
-  - mkdir -p $HOME/upx/stage
-  - tar -C $HOME/upx/stage -xf upx-${UPX_VERSION}-amd64_linux.tar.xz
-  - mv $HOME/upx/stage/upx-${UPX_VERSION}-amd64_linux/* $HOME/upx
-  - rm -r $HOME/upx/stage
+  - export UPX_SLUG=upx-${UPX_VERSION}-amd64_linux
+  - export UPX_FILE=${UPX_SLUG}.tar.xz
+  - export UPX_URL=https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_FILE}
+  - if [ "${TRAVIS_OS_NAME}" == "windows" ] then; wget --output-document=${UPX_FILE} ${UPX_URL}; else curl -L ${UPX_URL} --output ${UPX_FILE}; fi
+  - mkdir -p $HOME/upx
+  - tar -C $HOME/upx -xf ${UPX_FILE}
+  - mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
+  - rm -r $HOME/upx
 
 jobs:
   include:
