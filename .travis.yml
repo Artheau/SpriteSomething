@@ -30,7 +30,7 @@ jobs:
     # 3.7 on Bionic Test
     - &tests
       stage: "Unit Tests"
-      name: "3.7 on Bionic: Test"
+      name: "Python 3.7 on Ubuntu Bionic: Test"
       dist: bionic
       python: 3.7
       services: xvfb
@@ -38,8 +38,8 @@ jobs:
 
     # 3.7 on Bionic Build
     - &build
-      stage: "Build Binaries"
-      name: "3.7 on Bionic: Build"
+      stage: "Build & Deploy Binaries"
+      name: "3.7 on Bionic: Build/Deploy"
       dist: bionic
       python: 3.7
       services: xvfb
@@ -47,12 +47,12 @@ jobs:
       script:
         - ${PYTHON_EXECUTABLE} build.py
         - ls
+      before_deploy:
         - ls -p | egrep '^(.\/)?(\w)*(.exe|$)'
-
-    # Deploy
-    - &deploy-github-releases
-      stage: "Deploy to GitHub Releases"
-      name: "Deploy"
+        - export BUILD_FILENAME=(ls -p | egrep '^(.\/)?(\w)*(.exe|$)')
+        - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
+        - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then mv BUILD_FILENAME \"$BUILD_FILENAME-$TRAVIS_TAG-$TRAVIS_OS_NAME\"; fi"
+        - ls -p | egrep '^(.\/)?(\w)*(.exe|$)'
       deploy:
         provider: releases
         api_key:
@@ -70,27 +70,27 @@ jobs:
 
     # 3.7 on Xenial
     - <<: *tests
-      name: "3.7 on Xenial: Test"
+      name: "Python 3.7 on Ubuntu Xenial: Test"
       dist: xenial
       python: 3.7
     - <<: *build
-      name: "3.7 on Xenial: Build"
+      name: "3.7 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.7
 
     # 3.6 on Xenial
     - <<: *tests
-      name: "3.6 on Xenial: Test"
+      name: "Python 3.6 on Ubuntu Xenial: Test"
       dist: xenial
       python: 3.6
     - <<: *build
-      name: "3.6 on Xenial: Build"
+      name: "3.6 on Xenial: Build/Deploy"
       dist: xenial
       python: 3.6
 
     # 3.7 on macOS
     - <<: *tests
-      name: "3.7 on macOS: Test"
+      name: "Python 3.7 on MacOSX 10.14 xcode 10.2: Test"
       os: osx
       osx_image: xcode10.2
       python: 3.7
@@ -98,7 +98,7 @@ jobs:
       before_script:
         - export PYTHON_EXECUTABLE=python3
     - <<: *build
-      name: "3.7 on macOS: Build"
+      name: "3.7 on macOS: Build/Deploy"
       os: osx
       osx_image: xcode10.2
       python: 3.7
@@ -108,7 +108,7 @@ jobs:
 
     # 3.7 on Windows
     - <<: *tests
-      name: "3.7 on Windows: Test"
+      name: "Python 3.7 on Windows 10 v1803: Test"
       os: windows
       python: 3.7
       language: shell
@@ -119,7 +119,7 @@ jobs:
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
     - <<: *build
-      name: "3.7 on Windows: Build"
+      name: "3.7 on Windows: Build/Deploy"
       os: windows
       python: 3.7
       language: shell
