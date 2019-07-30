@@ -51,7 +51,7 @@ jobs:
         - ls -p | egrep '^(.\/)?(\w)*(.exe|$)'
         - export BUILD_FILENAME=$(ls -p | egrep '^(.\/)?(\w)*(.exe|$)')
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
-        - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then mv BUILD_FILENAME \"$BUILD_FILENAME-$TRAVIS_TAG-$TRAVIS_OS_NAME\"; fi"
+        - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then mv $BUILD_FILENAME \"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}\"; fi"
         - ls -p | egrep '^(.\/)?(\w)*(.exe|$)'
       deploy:
         provider: releases
