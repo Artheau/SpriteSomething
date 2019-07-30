@@ -43,7 +43,7 @@ install:
   - pip install -r "./app_resources/meta/manifests/pip_requirements.txt"
 
 # get UPX
-#after_install:
+after_install:
   - wget https://github.com/upx/upx/releases/download/v{$UPX_VERSION}/upx-${UPX_VERSION}-amd64_linux.tar.gz
   - sudo tar -C /usr/local -xf upx-${UPX_VERSION}-amd64_linux.tar.gz
   - mv /usr/local/upx-${UPX_VERSION}-amd64_linux/ $HOME/upx/
