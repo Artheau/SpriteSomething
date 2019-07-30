@@ -108,8 +108,8 @@ jobs:
         on:
           repo: Artheau/SpriteSomething
           condition: $DEPLOY == "yes"
-          branch: master
-#          branch: standardize
+#          branch: master
+          branch: standardize
 #          tags: true
           draft: true
 
