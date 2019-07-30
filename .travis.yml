@@ -4,32 +4,35 @@
 #this is a python project, designed to be compatible with 3.6+
 language: python
 
+#define UPX version
+env: UPX_VERSION=3.95
+
 #this next block tests the project across a number of operating systems
 matrix:
   include:
     #######################OS FOR HIPSTERS AND IDEALISTS############################
-    - name: "Python 3.7 on Bionic Linux"
+    - name: Python 3.7 on Bionic Linux
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: bionic          # distribution required for Python >= 3.7
       env: PYTHON_EXECUTABLE=python
       services:
         - xvfb
-    - name: "Python 3.7 on Xenial Linux"
+    - name: Python 3.7 on Xenial Linux
       python: 3.7           # version number works for Linux but is ignored on macOS or Windows
       dist: xenial          # distribution required for Python >= 3.7
       env: PYTHON_EXECUTABLE=python
       services:
         - xvfb
-    - name: "Python 3.6 on Xenial Linux"
+    - name: Python 3.6 on Xenial Linux
       python: 3.6
       dist: xenial
       env: PYTHON_EXECUTABLE=python
       services:
         - xvfb
     ################################################################################
-    
+
     ##################OS FOR PEOPLE WITH BOTTOMLESS WALLETS#########################
-    - name: "Python 3.7 on macOS"
+    - name: Python 3.7 on macOS
       os: osx
       osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
       language: shell       # 'language: python' is an error on Travis CI macOS
@@ -38,7 +41,7 @@ matrix:
 
     #############OS FOR PEOPLE WHO LIKE PROPRIETARY SOFTWARE SUITES#################
     #Windows builds are really slow on Travis CI
-    - name: "Python 3.7 on Windows"
+    - name: Python 3.7 on Windows
       os: windows           # Windows 10.0.17134 N/A Build 17134
       language: shell       # 'language: python' is an error on Travis CI Windows
       before_install:
@@ -47,16 +50,55 @@ matrix:
       env: PATH=/c/Python37:/c/Python37/Scripts:$PATH; PYTHON_EXECUTABLE=python
     ################################################################################
 
-#dependencies are pillow and numpy
+#get upx for compression
+#before_install:
+#  - wget https://github.com/upx/upx/releases/download/v{$UPX_VERSION}/upx-${UPX_VERSION}-amd64_linux.tar.gz
+#  - sudo tar -C /usr/local -xf upx-${UPX_VERSION}-amd64_linux.tar.gz
+#  - mv /usr/local/upx-${UPX_VERSION}-amd64_linux/ ./upx/
+
+#dependencies are pillow and numpy; pyinstaller for distilling
 install:
   - pip3 install --upgrade pip  # all three OSes agree about 'pip3'
-  - pip install pillow numpy
+  - pip install pillow numpy pyinstaller
 
-# command to run tests
-# 'python' points to Python 2.7 on macOS but points to Python 3.7 on Linux and Windows
-# 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
-script:
-  - $PYTHON_EXECUTABLE tests.py
+jobs:
+  include:
+    # command to run tests
+    # 'python' points to Python 2.7 on macOS but points to Python 3.7 on Linux and Windows
+    # 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
+    - stage: test
+      name: Unit Tests
+      script: $PYTHON_EXECUTABLE tests.py
+    # run build script
+    - stage: build
+      name: Build Binary
+      script: $PYTHON_EXECUTABLE build.py
+
+# before deploy, set up some vars
+#before_deploy:
+#  - git config -- local user.name "GitHub"
+#  - git config -- local user.email "github@example.com"
+#  - export TRAVIS_TAG="${TRAVIS_TAG}.${TRAVIS_BUILD_ID}"
+#  - git tag $TRAVIS_TAG
+
+# deploy to GitHub Releases
+# provide API Key
+# upload files that have no extension or are an exe
+# skip cleanup
+# only deploy if tag is present
+deploy:
+  provider: releases
+  api_key:
+    secure: ot7SAY/CXTo7CU5Z4S5W447S31kb1ZhiukDa9gzolL8YNgpA+6jOFHwakojVbEoNwFeSGLC7PBugn/4UttVZ7UP3IRScepwHckiBt5ZAkPIFIs6z2ZglscT7/j8Ryhv9TUkYA6lZdrhNHf8QT3L+KcFL3Wm96L2ZfNj+lLWHSCvoLWIXdVCemzTfh8vxpA1UF7Na8FfdvuXI2/2gPYI9oe3Ai1v9mPmPTk7f1r4Pe1Tf0kIrC6z3txMDAglu0oFrOIMF4HPr5QsGwZtLSdK/XHcpVG1qMScv5hw/c0jO+rCrM38fxwBJyHjpSno2AOxNCVfowuOWaHFK7w38ZCEiWNfIEdd1UHTO50IlTEVVs4PElYEHCgFYz5vxQuKTPPzwiK/X8mgKgnhChs/MXvVuLfaRkWqH0NNADFROe2eLvKQcvlGh12EyeLVlkTOb6OmTWSKpitAMkVIv2hyU0uOS+jwaRYuLr8owoaaZ9Dl5DjL8m8XxtIVgz4r/7BTD9ApgtFKU6PRszhGTpN/sCZ9haY2v9IXIFqRzCS/4p02ubBthqL2o6lJhvrXo+HVs+2xyk8M+cSoJpbgtaL002BhiexeTfnxdnscULkpD1bE8EA0Ik5lD0pTZnm8n78yoj82vFw2JtrlpbCrCR7+tMSuxY6WFUQz12lTluOKXMzbySqQ=
+  file_glob: true # allow regexes in file upload selector
+  file: /^(.\/)?(\w)*(.exe|$)/gm # can start with "./", can have exe or no extension
+  skip_cleanup: true
+  on:
+    repo: Artheau/SpriteSomething
+#    branch: master
+#    python: 3.7
+#    tags: true
+    draft: true
 
 #I don't want your emails
 notifications:
