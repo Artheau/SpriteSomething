@@ -27,10 +27,10 @@ install:
 
 jobs:
   include:
-    # create Unit Testing alias
+    # 3.7 on Bionic Test
     - &tests
-      stage: "Tests"
-      name: "Unit Testing"
+      stage: "Unit Tests"
+      name: "3.7 on Bionic: Test"
 
       # Linux needs a "screen" for tkinter
       script:
@@ -39,15 +39,15 @@ jobs:
             sh -e /etc/init.d/xvfb start;
             sleep 3;
             fi
-        - $PYTHON_EXECUTABLE tests.py
+        - ${PYTHON_EXECUTABLE} tests.py
 
-    # create Build alias
+    # 3.7 on Bionic Build
     - &build
-      stage: "Build"
-      name: "Build Binaries"
+      stage: "Build Binaries"
+      name: "3.7 on Bionic: Build"
       skip_cleanup: true
       script:
-        - $PYTHON_EXECUTABLE build.py
+        - ${PYTHON_EXECUTABLE} build.py
         - ls
 
     # 3.7 on Xenial
