@@ -53,7 +53,13 @@ jobs:
         - export BUILD_FILENAME=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
         - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then \
-            export DEST_FILENAME=\"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}\"; \
+            if [ \"${BUILD_FILENAME/.}\" == \"${BUILD_FILENAME}\" ]; then \
+              export DEST_EXTENSION=\"\"; \
+            else \
+              export DEST_EXTENSION=\".${BUILD_FILENAME##*.}\"; \
+              export BUILD_FILENAME=\"${BUILD_FILENAME%.*}\"; \
+            fi; \
+            export DEST_FILENAME=\"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}${DEST_EXTENSION}\"; \
             echo \"Build Filename: ${BUILD_FILENAME}\"; \
             echo \"Dest Filename:  ${DEST_FILENAME}\"; \
             mv $BUILD_FILENAME $DEST_FILENAME; \
