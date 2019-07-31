@@ -1,4 +1,5 @@
 {
+	"$schema": "../../../../schema/png-layout.schema.json",
 	"comment":
 	[
 		"This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",
@@ -37,7 +38,7 @@
 		[
 			"stand_left_heavy3", "stand_left_heavy2", "stand_left_heavy1", "stand_left_heavy",
 				"stand_left3", "stand_left2", "stand_left1", "stand_left",
-				
+
 			"stand_turn_left", "stand_turn_neutral", "stand_turn_right",
 
 			"stand_right", "stand_right1", "stand_right2", "stand_right3",
@@ -73,38 +74,38 @@
 		],
 		[
 			"run_left9", "run_left8", "run_left7", "run_left6", "run_left5",
-				"run_left4", "run_left3", "run_left2", "run_left1", "run_left", 
+				"run_left4", "run_left3", "run_left2", "run_left1", "run_left",
 			"run_right", "run_right1", "run_right2", "run_right3", "run_right4",
 				"run_right5", "run_right6", "run_right7", "run_right8", "run_right9"
 		],
 		[
 			"run_left_aim_diag_up9", "run_left_aim_diag_up8", "run_left_aim_diag_up7", "run_left_aim_diag_up6", "run_left_aim_diag_up5",
-				"run_left_aim_diag_up4", "run_left_aim_diag_up3", "run_left_aim_diag_up2", "run_left_aim_diag_up1", "run_left_aim_diag_up", 
+				"run_left_aim_diag_up4", "run_left_aim_diag_up3", "run_left_aim_diag_up2", "run_left_aim_diag_up1", "run_left_aim_diag_up",
 			"run_right_aim_diag_up", "run_right_aim_diag_up1", "run_right_aim_diag_up2", "run_right_aim_diag_up3", "run_right_aim_diag_up4",
 				"run_right_aim_diag_up5", "run_right_aim_diag_up6", "run_right_aim_diag_up7", "run_right_aim_diag_up8", "run_right_aim_diag_up9"
 		],
 		[
 			"run_left_shooting9", "run_left_shooting8", "run_left_shooting7", "run_left_shooting6", "run_left_shooting5",
-				"run_left_shooting4", "run_left_shooting3", "run_left_shooting2", "run_left_shooting1", "run_left_shooting", 
+				"run_left_shooting4", "run_left_shooting3", "run_left_shooting2", "run_left_shooting1", "run_left_shooting",
 			"run_right_shooting", "run_right_shooting1", "run_right_shooting2", "run_right_shooting3", "run_right_shooting4",
 				"run_right_shooting5", "run_right_shooting6", "run_right_shooting7", "run_right_shooting8", "run_right_shooting9"
 		],
 		[
 			"run_left_aim_diag_down9", "run_left_aim_diag_down8", "run_left_aim_diag_down7", "run_left_aim_diag_down6", "run_left_aim_diag_down5",
-				"run_left_aim_diag_down4", "run_left_aim_diag_down3", "run_left_aim_diag_down2", "run_left_aim_diag_down1", "run_left_aim_diag_down", 
+				"run_left_aim_diag_down4", "run_left_aim_diag_down3", "run_left_aim_diag_down2", "run_left_aim_diag_down1", "run_left_aim_diag_down",
 			"run_right_aim_diag_down", "run_right_aim_diag_down1", "run_right_aim_diag_down2", "run_right_aim_diag_down3", "run_right_aim_diag_down4",
 				"run_right_aim_diag_down5", "run_right_aim_diag_down6", "run_right_aim_diag_down7", "run_right_aim_diag_down8", "run_right_aim_diag_down9"
 		],
 		[
-			"moonwalk_left_aim_diag_up5", "moonwalk_left_aim_diag_up4", "moonwalk_left_aim_diag_up3", "moonwalk_left_aim_diag_up2", "moonwalk_left_aim_diag_up1", "moonwalk_left_aim_diag_up", 
+			"moonwalk_left_aim_diag_up5", "moonwalk_left_aim_diag_up4", "moonwalk_left_aim_diag_up3", "moonwalk_left_aim_diag_up2", "moonwalk_left_aim_diag_up1", "moonwalk_left_aim_diag_up",
 			"moonwalk_right_aim_diag_up", "moonwalk_right_aim_diag_up1", "moonwalk_right_aim_diag_up2", "moonwalk_right_aim_diag_up3", "moonwalk_right_aim_diag_up4", "moonwalk_right_aim_diag_up5"
 		],
 		[
-			"moonwalk_left5", "moonwalk_left4", "moonwalk_left3", "moonwalk_left2", "moonwalk_left1", "moonwalk_left", 
+			"moonwalk_left5", "moonwalk_left4", "moonwalk_left3", "moonwalk_left2", "moonwalk_left1", "moonwalk_left",
 			"moonwalk_right", "moonwalk_right1", "moonwalk_right2", "moonwalk_right3", "moonwalk_right4", "moonwalk_right5"
 		],
 		[
-			"moonwalk_left_aim_diag_down5", "moonwalk_left_aim_diag_down4", "moonwalk_left_aim_diag_down3", "moonwalk_left_aim_diag_down2", "moonwalk_left_aim_diag_down1", "moonwalk_left_aim_diag_down", 
+			"moonwalk_left_aim_diag_down5", "moonwalk_left_aim_diag_down4", "moonwalk_left_aim_diag_down3", "moonwalk_left_aim_diag_down2", "moonwalk_left_aim_diag_down1", "moonwalk_left_aim_diag_down",
 			"moonwalk_right_aim_diag_down", "moonwalk_right_aim_diag_down1", "moonwalk_right_aim_diag_down2", "moonwalk_right_aim_diag_down3", "moonwalk_right_aim_diag_down4", "moonwalk_right_aim_diag_down5"
 		],
 		[
@@ -181,11 +182,11 @@
 			"fall_right_aim_down","fall_right_aim_down1"
 		],
 		[
-			"xray_left4", "xray_left3", "xray_left2", "xray_left1", "xray_left", 
+			"xray_left4", "xray_left3", "xray_left2", "xray_left1", "xray_left",
 			"xray_right", "xray_right1", "xray_right2", "xray_right3", "xray_right4"
 		],
 		[
-			"xray_crouch_left4", "xray_crouch_left3", "xray_crouch_left2", "xray_crouch_left1", "xray_crouch_left", 
+			"xray_crouch_left4", "xray_crouch_left3", "xray_crouch_left2", "xray_crouch_left1", "xray_crouch_left",
 			"xray_crouch_right", "xray_crouch_right1", "xray_crouch_right2", "xray_crouch_right3", "xray_crouch_right4"
 		],
 		[
@@ -229,7 +230,7 @@
 			"shine_spark_left", "shine_spark_vertical_left", "shine_spark_vertical_right", "shine_spark_right"
 		],
 		[
-			"sparks_left3", "sparks_left2", "sparks_left1", "sparks_left", 
+			"sparks_left3", "sparks_left2", "sparks_left1", "sparks_left",
 			"space_jump_left7", "space_jump_left6", "space_jump_left5", "space_jump_left4",
 			"space_jump_left3", "space_jump_left2", "space_jump_left1", "space_jump_left",
 			"space_jump_right", "space_jump_right1", "space_jump_right2", "space_jump_right3",
@@ -561,7 +562,7 @@
 			"parent": "elevator",
 			"used by": [["0x9B",0]]
 		},
-		
+
 		"launcher_varia": {
 			"description": "Used when wearing varia or gravity suit and loading from a save point",
 			"parent": "launcher",
@@ -641,43 +642,43 @@
 			"dimensions": [-19,-21,13,27],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x02",0],["0x8A",0]]	
+			"used by": [["0x02",0],["0x8A",0]]
 		},
 
 		"stand_left1": {
 			"parent": "stand_left",
-			"used by": [["0x02",1]]	
+			"used by": [["0x02",1]]
 		},
 
 		"stand_left2": {
 			"parent": "stand_left",
-			"used by": [["0x02",2]]	
+			"used by": [["0x02",2]]
 		},
 
 		"stand_left3": {
 			"parent": "stand_left",
-			"used by": [["0x02",3]]	
+			"used by": [["0x02",3]]
 		},
-		
+
 		"stand_left_heavy": {
 			"description": "While standing with low health, begins to breathe heavily",
 			"parent": "stand_left",
-			"used by": [["0x02",5]]	
+			"used by": [["0x02",5]]
 		},
-		
+
 		"stand_left_heavy1": {
 			"parent": "stand_left_heavy",
-			"used by": [["0x02",6]]	
+			"used by": [["0x02",6]]
 		},
-		
+
 		"stand_left_heavy2": {
 			"parent": "stand_left_heavy",
-			"used by": [["0x02",7]]	
+			"used by": [["0x02",7]]
 		},
-		
+
 		"stand_left_heavy3": {
 			"parent": "stand_left_heavy",
-			"used by": [["0x02",8]]	
+			"used by": [["0x02",8]]
 		},
 
 		"stand_right": {
@@ -685,43 +686,43 @@
 			"dimensions": [-13,-21,19,27],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x01",0],["0x89",0]]	
+			"used by": [["0x01",0],["0x89",0]]
 		},
 
 		"stand_right1": {
 			"parent": "stand_right",
-			"used by": [["0x01",1]]	
+			"used by": [["0x01",1]]
 		},
 
 		"stand_right2": {
 			"parent": "stand_right",
-			"used by": [["0x01",2]]	
+			"used by": [["0x01",2]]
 		},
 
 		"stand_right3": {
 			"parent": "stand_right",
-			"used by": [["0x01",3]]	
+			"used by": [["0x01",3]]
 		},
-		
+
 		"stand_right_heavy": {
 			"description": "While standing with low health, begins to breathe heavily",
 			"parent": "stand_right",
-			"used by": [["0x01",5]]	
+			"used by": [["0x01",5]]
 		},
-		
+
 		"stand_right_heavy1": {
 			"parent": "stand_right_heavy",
-			"used by": [["0x01",6]]	
+			"used by": [["0x01",6]]
 		},
-		
+
 		"stand_right_heavy2": {
 			"parent": "stand_right_heavy",
-			"used by": [["0x01",7]]	
+			"used by": [["0x01",7]]
 		},
-		
+
 		"stand_right_heavy3": {
 			"parent": "stand_right_heavy",
-			"used by": [["0x01",8]]	
+			"used by": [["0x01",8]]
 		},
 
 		"stand_left_aim_up": {
@@ -811,43 +812,43 @@
 			"dimensions": [-19,-24,13,16],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x28",0],["0xB5",0]]	
+			"used by": [["0x28",0],["0xB5",0]]
 		},
 
 		"crouch_left1": {
 			"parent": "crouch_left",
-			"used by": [["0x28",1]]	
+			"used by": [["0x28",1]]
 		},
 
 		"crouch_left2": {
 			"parent": "crouch_left",
-			"used by": [["0x28",2]]	
+			"used by": [["0x28",2]]
 		},
 
 		"crouch_left3": {
 			"parent": "crouch_left",
-			"used by": [["0x28",3]]	
+			"used by": [["0x28",3]]
 		},
-		
+
 		"crouch_left_heavy": {
 			"description": "While crouching with low health, begins to breathe heavily",
 			"parent": "crouch_left",
-			"used by": [["0x28",5]]	
+			"used by": [["0x28",5]]
 		},
-		
+
 		"crouch_left_heavy1": {
 			"parent": "crouch_left_heavy",
-			"used by": [["0x28",6]]	
+			"used by": [["0x28",6]]
 		},
-		
+
 		"crouch_left_heavy2": {
 			"parent": "crouch_left_heavy",
-			"used by": [["0x28",7]]	
+			"used by": [["0x28",7]]
 		},
-		
+
 		"crouch_left_heavy3": {
 			"parent": "crouch_left_heavy",
-			"used by": [["0x28",8]]	
+			"used by": [["0x28",8]]
 		},
 
 		"crouch_right": {
@@ -855,43 +856,43 @@
 			"dimensions": [-13,-24,19,16],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x27",0],["0xB4",0]]	
+			"used by": [["0x27",0],["0xB4",0]]
 		},
 
 		"crouch_right1": {
 			"parent": "crouch_right",
-			"used by": [["0x27",1]]	
+			"used by": [["0x27",1]]
 		},
 
 		"crouch_right2": {
 			"parent": "crouch_right",
-			"used by": [["0x27",2]]	
+			"used by": [["0x27",2]]
 		},
 
 		"crouch_right3": {
 			"parent": "crouch_right",
-			"used by": [["0x27",3]]	
+			"used by": [["0x27",3]]
 		},
-		
+
 		"crouch_right_heavy": {
 			"description": "While crouching with low health, begins to breathe heavily",
 			"parent": "crouch_right",
-			"used by": [["0x27",5]]	
+			"used by": [["0x27",5]]
 		},
-		
+
 		"crouch_right_heavy1": {
 			"parent": "crouch_right_heavy",
-			"used by": [["0x27",6]]	
+			"used by": [["0x27",6]]
 		},
-		
+
 		"crouch_right_heavy2": {
 			"parent": "crouch_right_heavy",
-			"used by": [["0x27",7]]	
+			"used by": [["0x27",7]]
 		},
-		
+
 		"crouch_right_heavy3": {
 			"parent": "crouch_right_heavy",
-			"used by": [["0x27",8]]	
+			"used by": [["0x27",8]]
 		},
 
 		"run_left": {
@@ -899,7 +900,7 @@
 			"dimensions": [-22,-21,18,27],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x0A",0]]	
+			"used by": [["0x0A",0]]
 		},
 
 		"run_left1": {
@@ -916,7 +917,7 @@
 			"parent": "run_left",
 			"used by": [["0x0A",3]]
 		},
-		
+
 		"run_left4": {
 			"parent": "run_left",
 			"used by": [["0x0A",4]]
@@ -952,7 +953,7 @@
 			"dimensions": [-18,-21,22,27],
 			"palette": "0x28",
 			"import palette interval": [0,15],
-			"used by": [["0x09",0]]	
+			"used by": [["0x09",0]]
 		},
 
 		"run_right1": {
@@ -969,7 +970,7 @@
 			"parent": "run_right",
 			"used by": [["0x09",3]]
 		},
-		
+
 		"run_right4": {
 			"parent": "run_right",
 			"used by": [["0x09",4]]
@@ -1003,7 +1004,7 @@
 		"run_left_shooting": {
 			"description": "Running while firing the arm cannon, so that the arm is extended forward",
 			"parent": "run_left",
-			"used by": [["0x0C",0]]	
+			"used by": [["0x0C",0]]
 		},
 
 		"run_left_shooting1": {
@@ -1020,7 +1021,7 @@
 			"parent": "run_left_shooting",
 			"used by": [["0x0C",3]]
 		},
-		
+
 		"run_left_shooting4": {
 			"parent": "run_left_shooting",
 			"used by": [["0x0C",4]]
@@ -1054,7 +1055,7 @@
 		"run_right_shooting": {
 			"description": "Running while firing the arm cannon, so that the arm is extended forward",
 			"parent": "run_right",
-			"used by": [["0x0B",0]]	
+			"used by": [["0x0B",0]]
 		},
 
 		"run_right_shooting1": {
@@ -1071,7 +1072,7 @@
 			"parent": "run_right_shooting",
 			"used by": [["0x0B",3]]
 		},
-		
+
 		"run_right_shooting4": {
 			"parent": "run_right_shooting",
 			"used by": [["0x0B",4]]
@@ -1106,7 +1107,7 @@
 			"description": "Running while aiming diagonally upwards",
 			"parent": "run_left",
 			"extra area": [[-22,-29,-6,-21]],
-			"used by": [["0x10",0]]	
+			"used by": [["0x10",0]]
 		},
 
 		"run_left_aim_diag_up1": {
@@ -1123,7 +1124,7 @@
 			"parent": "run_left_aim_diag_up",
 			"used by": [["0x10",3]]
 		},
-		
+
 		"run_left_aim_diag_up4": {
 			"parent": "run_left_aim_diag_up",
 			"used by": [["0x10",4]]
@@ -1158,7 +1159,7 @@
 			"description": "Running while aiming diagonally upwards",
 			"parent": "run_right",
 			"extra area": [[6,-29,22,-21]],
-			"used by": [["0x0F",0]]	
+			"used by": [["0x0F",0]]
 		},
 
 		"run_right_aim_diag_up1": {
@@ -1175,7 +1176,7 @@
 			"parent": "run_right_aim_diag_up",
 			"used by": [["0x0F",3]]
 		},
-		
+
 		"run_right_aim_diag_up4": {
 			"parent": "run_right_aim_diag_up",
 			"used by": [["0x0F",4]]
@@ -1209,7 +1210,7 @@
 		"run_left_aim_diag_down": {
 			"description": "Running while aiming diagonally downwards",
 			"parent": "run_left",
-			"used by": [["0x12",0]]	
+			"used by": [["0x12",0]]
 		},
 
 		"run_left_aim_diag_down1": {
@@ -1226,7 +1227,7 @@
 			"parent": "run_left_aim_diag_down",
 			"used by": [["0x12",3]]
 		},
-		
+
 		"run_left_aim_diag_down4": {
 			"parent": "run_left_aim_diag_down",
 			"used by": [["0x12",4]]
@@ -1260,7 +1261,7 @@
 		"run_right_aim_diag_down": {
 			"description": "Running while aiming diagonally downwards",
 			"parent": "run_right",
-			"used by": [["0x11",0]]	
+			"used by": [["0x11",0]]
 		},
 
 		"run_right_aim_diag_down1": {
@@ -1277,7 +1278,7 @@
 			"parent": "run_right_aim_diag_down",
 			"used by": [["0x11",3]]
 		},
-		
+
 		"run_right_aim_diag_down4": {
 			"parent": "run_right_aim_diag_down",
 			"used by": [["0x11",4]]
@@ -3882,7 +3883,7 @@
 			"dimensions": [-19,-28,13,20],
 			"parent": "stand_left",
 			"shift": [0,9],
-			"used by": [["0xE9",14],["0xE9",19],["0xE9",23]]			
+			"used by": [["0xE9",14],["0xE9",19],["0xE9",23]]
 		},
 
 		"supplication_left_stand_attempt1": {

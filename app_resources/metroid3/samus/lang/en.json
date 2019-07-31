@@ -1,4 +1,5 @@
 {
+  "$schema": "../manifests/samus-language.schema.json",
   "section": {
     "aiming": "Aiming",
     "facing": "Facing",

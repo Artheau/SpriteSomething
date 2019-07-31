@@ -1,26 +1,27 @@
 {
-  "menu": {
-    "file": "File",
-    "file.open": "Open",
-    "file.save": "Save As...",
-    "file.exit": "Exit",
-    "export": "Export",
-    "export.inject": "Inject into Game File",
-    "export.inject-new": "Copy to new Game File",
-    "export.inject-bulk": "Inject into directory of Game Files",
-    "export.frame-as-png": "Frame as PNG",
-    "export.animation-as-gif": "Animation as GIF",
-    "export.animation-as-hcollage": "Animation as Horizontal Collage",
-    "export.animation-as-vcollage": "Animation as Vertical Collage",
-    "tools": "Tools",
-    "tools.palette-editor": "Palette Editor",
-    "plugins": "Plugins",
-    "plugins.game": "Game",
-    "plugins.sprite": "Sprite",
-    "help": "Help",
-    "help.diagnostics": "Diagnostics",
-    "help.about": "About"
-  },
+	"$schema": "../manifests/meta-language.schema.json",
+	"menu": {
+		"file": "File",
+		"file.open": "Open",
+		"file.save": "Save As...",
+		"file.exit": "Exit",
+		"export": "Export",
+		"export.inject": "Inject into Game File",
+		"export.inject-new": "Copy to new Game File",
+		"export.inject-bulk": "Inject into directory of Game Files",
+		"export.frame-as-png": "Frame as PNG",
+		"export.animation-as-gif": "Animation as GIF",
+		"export.animation-as-hcollage": "Animation as Horizontal Collage",
+		"export.animation-as-vcollage": "Animation as Vertical Collage",
+		"tools": "Tools",
+		"tools.palette-editor": "Palette Editor",
+		"plugins": "Plugins",
+		"plugins.game": "Game",
+		"plugins.sprite": "Sprite",
+		"help": "Help",
+		"help.diagnostics": "Diagnostics",
+		"help.about": "About"
+	},
 	"dialogue": {
 		"file.open.title": "Select Sprite",
 		"file.open.types.label": "Supported Types",
@@ -37,37 +38,37 @@
 		"export.frame-as-png": "Save Frame As...",
 		"export.animation-as-hcollage": "Save Horizontal Collage As...",
 		"export.animation-as-vcollage": "Save Vertical Collage As...",
-        "open.save-before-open": "You have unsaved changes.\n\nDo you want to save before opening a new file?",
-        "open.save-failed-during-open-attempt": "The file was NOT saved.",
+		"open.save-before-open": "You have unsaved changes.\n\nDo you want to save before opening a new file?",
+		"open.save-failed-during-open-attempt": "The file was NOT saved.",
 		"exit.save-before-exit": "You have unsaved changes.\n\nDo you want to save before exiting?",
 		"exit.nosave-before-exit": "Death in Super Metroid loses progress since last save.\nYou have been eaten by a grue.",
-        "exit.save-failed-during-exit-attempt": "The file was NOT saved successfully.  Do you want to exit anyway?"
+		"exit.save-failed-during-exit-attempt": "The file was NOT saved successfully.  Do you want to exit anyway?"
 	},
-  "meta": {
-    "none": "None",
-    "reload": "Reload",
-    "sprite.name": "Sprite Name",
-    "author.name": "Author Name",
-    "author.name-short": "Author Name Short",
-    "background": "Background",
-    "animations": "Animations"
-  },
-  "tab": {
-    "animations": "Animations",
-    "overview": "Overview"
-  },
-  "vcr-controls": {
-    "zoom-minus": "Zoom -",
-    "zoom-plus": "Zoom +",
-    "speed-minus": "Speed -",
-    "speed-plus": "Speed +",
-    "play": "Play",
-    "play-one": "Play 1",
-    "reset": "Reset",
-    "frame-backward": "Frame",
-    "pause": "Pause",
-    "frame-forward": "Frame",
-    "pose-backward": "Pose",
-    "pose-forward": "Pose"
-  }
+	"meta": {
+		"none": "None",
+		"reload": "Reload",
+		"sprite.name": "Sprite Name",
+		"author.name": "Author Name",
+		"author.name-short": "Author Name Short",
+		"background": "Background",
+		"animations": "Animations"
+	},
+	"tab": {
+		"animations": "Animations",
+		"overview": "Overview"
+	},
+	"vcr-controls": {
+		"zoom-minus": "Zoom -",
+		"zoom-plus": "Zoom +",
+		"speed-minus": "Speed -",
+		"speed-plus": "Speed +",
+		"play": "Play",
+		"play-one": "Play 1",
+		"reset": "Reset",
+		"frame-backward": "Frame",
+		"pause": "Pause",
+		"frame-forward": "Frame",
+		"pose-backward": "Pose",
+		"pose-forward": "Pose"
+	}
 }

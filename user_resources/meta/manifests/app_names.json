@@ -1,4 +1,5 @@
 {
+    "$schema": "../../../schema/app-names.schema.json",
     "pre": [
         "Enchanted"
     ],
@@ -6,6 +7,6 @@
         "Baton"
     ],
     "post": [
-        "Preston, Esq."
+        "the low temperatures did not affect me"
     ]
 }

@@ -32,9 +32,9 @@ class BabelFish():
 			domain = domain.replace(os.sep,'.')
 		my_lang = self.lang_defns[self.locale] #handle for localization
 		en_lang = self.lang_defns["en"] #handle for English
-		if domain in my_lang and key in my_lang[domain] and subkey in my_lang[domain][key]: #get localization first
+		if domain in my_lang and key in my_lang[domain] and subkey in my_lang[domain][key] and not my_lang[domain][key][subkey] == "": #get localization first
 			display_text = my_lang[domain][key][subkey]
-		elif domain in en_lang and key in en_lang[domain] and subkey in en_lang[domain][key]: #gracefully degrade to English
+		elif domain in en_lang and key in en_lang[domain] and subkey in en_lang[domain][key] and not en_lang[domain][key][subkey] == "": #gracefully degrade to English
 			display_text = en_lang[domain][key][subkey]
 		else:
 			print("Can't Translate: ",domain,key,subkey)

@@ -1,4 +1,5 @@
 {
+	"$schema": "../../../../schema/animations.schema.json",
     "Stand": {
         "right": [
             {

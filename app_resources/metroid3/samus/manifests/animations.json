@@ -1,4 +1,5 @@
 {
+	"$schema": "../../../../schema/animations.schema.json",
 	"Stand": {
 		"right_aim_up": [
 			{ "frames": 2,	"tiles": [	{ "image": "stand_right_aim_diag_up",	"pos": [-13,-29] } ] },
