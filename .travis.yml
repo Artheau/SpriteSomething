@@ -141,7 +141,7 @@ jobs:
       services: xvfb
       language: shell
       before_install:
-        - export PYTHON_EXECUTABLE=python3
+        - export PYTHON_EXECUTABLE=python
         - ./scripts/win-before_install.sh
     - <<: *build-deploy
       name: "3.7 on Windows: Build/Deploy"
@@ -150,7 +150,7 @@ jobs:
       services: xvfb
       language: shell
       before_install:
-        - export PYTHON_EXECUTABLE=python3
+        - export PYTHON_EXECUTABLE=python
         - ./scripts/win-before_install.sh
 
 notifications:
