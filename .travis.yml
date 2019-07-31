@@ -41,21 +41,9 @@ install:
   - export DEPLOY=yes
 
 # get UPX
-before_script:
-  - export UPX_SLUG=upx-${UPX_VERSION}-amd64_linux
-  - export UPX_FILE=${UPX_SLUG}.tar.xz
-  - export UPX_URL=https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_FILE}
-  - mkdir -p $HOME/upx
-  - mkdir -p $HOME/${TRAVIS_REPO_SLUG}/upx
-  - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
-      wget --output-document=${UPX_FILE} ${UPX_URL}; \
-      arc unarchive *.tar.gz $HOME/upx; \
-    else \
-      curl -L ${UPX_URL} --output ${UPX_FILE}; \
-      tar -C $HOME/upx -xf *.tar.xz; \
-    fi"
-  - mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
-  - rm -r $HOME/upx
+# negated in Test Phase
+# negated in Xenial
+before_script: ./scripts/get_upx.sh
 
 jobs:
   include:
@@ -78,29 +66,11 @@ jobs:
       services: xvfb
       skip_cleanup: true
       script:
+        #run build script
+        #list files to see what was built
         - ${PYTHON_EXECUTABLE} build.py
         - ls
-      after_success:
-        - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
-        - export BUILD_FILENAME=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
-        - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
-        - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then \
-            if [ \"${BUILD_FILENAME/.}\" == \"${BUILD_FILENAME}\" ]; then \
-              export DEST_EXTENSION=\"\"; \
-            else \
-              export DEST_EXTENSION=\".${BUILD_FILENAME##*.}\"; \
-              export BUILD_FILENAME=\"${BUILD_FILENAME%.*}\"; \
-            fi; \
-            export DEST_FILENAME=\"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}${DEST_EXTENSION}\"; \
-            echo \"Build Filename: ${BUILD_FILENAME}\"; \
-            echo \"Dest Filename:  ${DEST_FILENAME}\"; \
-            mv $BUILD_FILENAME $DEST_FILENAME; \
-          fi"
-        - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
-        - export FILES_TO_UPLOAD=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
-        - "echo \"Deploy: ${DEPLOY}\""
-        - "echo \"Files to Upload: ${FILES_TO_UPLOAD}\""
-        - "echo \"Git tag: ${TRAVIS_TAG}\""
+      after_success: ./scripts/after_success.sh
       deploy:
         provider: releases
         api_key:
@@ -125,9 +95,7 @@ jobs:
       dist: xenial
       python: "3.7"
       services: xvfb
-      before_script:
-        - "export DEPLOY=no"
-        - "echo \"Deploy: ${DEPLOY}\""
+      before_script: ./scripts/deploy_no.sh
 
     # 3.6 on Xenial
     - <<: *tests
@@ -140,9 +108,7 @@ jobs:
       dist: xenial
       python: "3.6"
       services: xvfb
-      before_script:
-        - "export DEPLOY=no"
-        - "echo \"Deploy: ${DEPLOY}\""
+      before_script: ./scripts/deploy_no.sh
 
     # 3.7 on macOS
     - <<: *tests
@@ -171,26 +137,14 @@ jobs:
       python: "3.7"
       services: xvfb
       language: shell
-      before_install:
-        - choco install python
-        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
-        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-        - ${PYTHON_EXECUTABLE} get-pip.py
-        - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        - choco install archiver
+      before_install: ./scripts/win-before_install.sh
     - <<: *build-deploy
       name: "3.7 on Windows: Build/Deploy"
       os: windows
       python: "3.7"
       services: xvfb
       language: shell
-      before_install:
-        - choco install python
-        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
-        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-        - ${PYTHON_EXECUTABLE} get-pip.py
-        - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        - choco install archiver
+      before_install: ./scripts/win-before_install.sh
 
 notifications:
   email: false
