@@ -37,7 +37,6 @@ env:
 # install pyinstaller for distilling
 install:
   - ${PYTHON_EXECUTABLE} --version
-  - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
   - pip3 --version
   - pip3 install -U wheel
   - ${PYTHON_EXECUTABLE} -m pip install -r "./app_resources/meta/manifests/pip_requirements.txt"
@@ -141,7 +140,6 @@ jobs:
       services: xvfb
       language: shell
       before_install:
-        - export PYTHON_EXECUTABLE=python
         - ./scripts/win-before_install.sh
     - <<: *build-deploy
       name: "3.7 on Windows: Build/Deploy"
@@ -150,7 +148,6 @@ jobs:
       services: xvfb
       language: shell
       before_install:
-        - export PYTHON_EXECUTABLE=python
         - ./scripts/win-before_install.sh
 
 notifications:
