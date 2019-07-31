@@ -47,11 +47,6 @@ install:
     fi"
   - export DEPLOY=yes
 
-# get UPX
-# negated in Test Phase
-# negated in Xenial
-before_script: bash ./scripts/get_upx.sh
-
 jobs:
   include:
     # 3.7 on Bionic Test
@@ -76,6 +71,7 @@ jobs:
         #run upx script
         #run build script
         #list files to see what was built
+#upx still doesn't quite work with race conditions of downloading vs processing
         - "if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
             bash ./scripts/get_upx.sh; \
           fi"

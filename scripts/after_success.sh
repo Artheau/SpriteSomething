@@ -28,5 +28,9 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	DEST_FILENAME="${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}${DEST_EXTENSION}"
 	echo "Build Filename: ${BUILD_FILENAME}"
 	echo "Dest Filename:  ${DEST_FILENAME}"
+
 	mv $BUILD_FILENAME $DEST_FILENAME
+
+	FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d " " -f 5)
+	echo "Filesize:       ${FILESIZE}"
 fi
