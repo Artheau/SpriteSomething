@@ -24,7 +24,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	#build the filename
 	#current: <build_filename>-<git_tag>-<os_name>-<linux_distro><file_extension>
 	DEST_FILENAME="${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}"
-	if [ "${TRAVIS_DIST}" != "" ]; then
+	if [ "${TRAVIS_DIST}" != "" && "${TRAVIS_DIST}" != "notset" ]; then
 		DEST_FILENAME="${DEST_FILENAME}-${TRAVIS_DIST}"
 	fi
 	DEST_FILENAME="${DEST_FILENAME}${DEST_EXTENSION}"

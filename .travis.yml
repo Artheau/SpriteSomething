@@ -96,6 +96,7 @@ jobs:
         #list binaries
         - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
         #save list
+        #FIXME: Need a new regex to get the binaries now that we've got periods in there due to version number
         - export FILES_TO_UPLOAD=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
         #output final deployment info
         - "echo \"Deploy: ${DEPLOY}\""
