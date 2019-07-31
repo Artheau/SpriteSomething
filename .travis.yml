@@ -122,8 +122,7 @@ jobs:
       python: "3.7"
       services:
       language: shell
-      before_install:
-        - export PYTHON_EXECUTABLE=python3
+      before_install: export PYTHON_EXECUTABLE=python3
     - <<: *build-deploy
       name: "3.7 on MacOSX: Build/Deploy"
       os: osx
@@ -131,8 +130,7 @@ jobs:
       python: "3.7"
       services:
       language: shell
-      before_install:
-        - export PYTHON_EXECUTABLE=python3
+      before_install: export PYTHON_EXECUTABLE=python3
 
     # 3.7 on Windows
     - <<: *tests
@@ -141,16 +139,14 @@ jobs:
       python: "3.7"
       services: xvfb
       language: shell
-      before_install:
-        - ./scripts/win-before_install.sh
+      before_install: export PYTHON_EXECUTABLE=python3; ./scripts/win-before_install.sh
     - <<: *build-deploy
       name: "3.7 on Windows: Build/Deploy"
       os: windows
       python: "3.7"
       services: xvfb
       language: shell
-      before_install:
-        - ./scripts/win-before_install.sh
+      before_install: export PYTHON_EXECUTABLE=python3; ./scripts/win-before_install.sh
 
 notifications:
   email: false
