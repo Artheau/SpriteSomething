@@ -122,8 +122,6 @@ class Layout():
 		y_min = min([-origin[1] for image,origin in image_list])
 		y_max = max([image.size[1]-origin[1] for image,origin in image_list])
 
-		num_images = len(image_list) #FIXME: unused variable
-
 		collage_width = sum([image.size[0] for image,_ in image_list])
 		collage_y_size = y_max-y_min
 
@@ -157,7 +155,7 @@ class Layout():
 
 	def export_all_images_to_PNG(self, all_images, master_palette):
 		all_collages = []
-		for i,row in enumerate(self.get_rows()): #FIXME: i unused variable
+		for row in self.get_rows():
 
 			this_row_images = []
 			for image_name in row:   #for every image referenced explicitly in the layout
@@ -184,7 +182,7 @@ class Layout():
 	def extract_all_images_from_master(self, master_image):
 		all_images = {}
 		master_height = 0
-		for i,row in enumerate(self.get_rows()): #FIXME: i unused variable
+		for row in self.get_rows():
 			row_width = 0
 			row_y_min,row_y_max = float('Inf'),-float('Inf')
 			for image_name in row:   #for every image referenced explicitly in the layout

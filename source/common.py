@@ -122,7 +122,7 @@ def image_from_raw_data(tilemaps, DMA_writes, bounding_box):
 		v_flip = tilemap[4] & 0x80
 		h_flip = tilemap[4] & 0x40
 		#priority = (tilemap[4] //0x10) % 0b100                   #TODO: implement a priority system
-		palette = (tilemap[4] //2) % 0b1000												#FIXME: unused variable
+		#palette = (tilemap[4] //2) % 0b1000					  #in theory, the palette index here could be used to render if we wanted a ROM-dependent implementation
 
 		def draw_tile_to_canvas(new_x_offset, new_y_offset, new_index):
 			tile_to_write = convert_tile_from_bitplanes(DMA_writes[new_index])

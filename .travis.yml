@@ -4,60 +4,188 @@
 #this is a python project, designed to be compatible with 3.6+
 language: python
 
-#this next block tests the project across a number of operating systems
-matrix:
-  include:
-    #######################OS FOR HIPSTERS AND IDEALISTS############################
-    - name: "Python 3.7 on Bionic Linux"
-      python: 3.7           # version number works for Linux but is ignored on macOS or Windows
-      dist: bionic          # distribution required for Python >= 3.7
-      env: PYTHON_EXECUTABLE=python
-      services:
-        - xvfb
-    - name: "Python 3.7 on Xenial Linux"
-      python: 3.7           # version number works for Linux but is ignored on macOS or Windows
-      dist: xenial          # distribution required for Python >= 3.7
-      env: PYTHON_EXECUTABLE=python
-      services:
-        - xvfb
-    - name: "Python 3.6 on Xenial Linux"
-      python: 3.6
-      dist: xenial
-      env: PYTHON_EXECUTABLE=python
-      services:
-        - xvfb
-    ################################################################################
-    
-    ##################OS FOR PEOPLE WITH BOTTOMLESS WALLETS#########################
-    - name: "Python 3.7 on macOS"
-      os: osx
-      osx_image: xcode10.2  # Python 3.7.2 running on macOS 10.14.3
-      language: shell       # 'language: python' is an error on Travis CI macOS
-      env: PYTHON_EXECUTABLE=python3
-    ###############################################################################
+# cache pip
+cache:
+  directories:
+    - $HOME/.cache/pip #linux
+    - $HOME/Library/Caches/pip #macosx
+    - $HOME/AppData/Local/pip/Cache #windows
+    - $HOME/upx #upx
 
-    #############OS FOR PEOPLE WHO LIKE PROPRIETARY SOFTWARE SUITES#################
-    #Windows builds are really slow on Travis CI
-    - name: "Python 3.7 on Windows"
-      os: windows           # Windows 10.0.17134 N/A Build 17134
-      language: shell       # 'language: python' is an error on Travis CI Windows
+#default VM settings
+dist: bionic
+python: "3.7"
+env:
+  global:
+    - PYTHON_EXECUTABLE="python"
+    - UPX_VERSION="3.95"
+
+# cache
+# before_install
+# install
+### jobs ###
+# before_script
+# script
+# before_cache
+# after_success
+# before_deploy
+# deploy
+# after_deploy
+
+# upgrade pip
+# install pillow, numpy for app
+# install pyinstaller for distilling
+install:
+  - pip3 install -U pip wheel
+  - pip install -r "./app_resources/meta/manifests/pip_requirements.txt"
+  - export DEPLOY=yes
+
+# get UPX
+before_script:
+  - export UPX_SLUG=upx-${UPX_VERSION}-amd64_linux
+  - export UPX_FILE=${UPX_SLUG}.tar.xz
+  - export UPX_URL=https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_FILE}
+#  - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then wget --output-document=${UPX_FILE} ${UPX_URL}; else curl -L ${UPX_URL} --output ${UPX_FILE}; fi
+#  - mkdir -p $HOME/upx
+#  - unxz *.tar.xz
+#  - tar -C $HOME/upx -xf *.tar
+#  - tar -C $HOME/upx -xJf *.tar.xz
+#  - mkdir -p $HOME/${TRAVIS_REPO_SLUG}/upx
+#  - mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
+#  - rm -r $HOME/upx
+
+jobs:
+  include:
+    # 3.7 on Bionic Test
+    - &tests
+      stage: "Unit Tests"
+      name: "Python 3.7 on Ubuntu Bionic: Test"
+      dist: bionic
+      python: "3.7"
+      services: xvfb
+      before_script: echo "#do nothing before script"
+      script: ${PYTHON_EXECUTABLE} tests.py
+
+    # 3.7 on Bionic Build/Deploy
+    - &build-deploy
+      stage: "Build & Deploy Binaries"
+      name: "3.7 on Bionic: Build/Deploy"
+      dist: bionic
+      python: "3.7"
+      services: xvfb
+      skip_cleanup: true
+      script:
+        - ${PYTHON_EXECUTABLE} build.py
+        - ls
+      after_success:
+        - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
+        - export BUILD_FILENAME=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
+        - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
+        - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then \
+            if [ \"${BUILD_FILENAME/.}\" == \"${BUILD_FILENAME}\" ]; then \
+              export DEST_EXTENSION=\"\"; \
+            else \
+              export DEST_EXTENSION=\".${BUILD_FILENAME##*.}\"; \
+              export BUILD_FILENAME=\"${BUILD_FILENAME%.*}\"; \
+            fi; \
+            export DEST_FILENAME=\"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}${DEST_EXTENSION}\"; \
+            echo \"Build Filename: ${BUILD_FILENAME}\"; \
+            echo \"Dest Filename:  ${DEST_FILENAME}\"; \
+            mv $BUILD_FILENAME $DEST_FILENAME; \
+          fi"
+        - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
+        - export FILES_TO_UPLOAD=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
+        - "echo \"Deploy: ${DEPLOY}\""
+        - "echo \"Files to Upload: ${FILES_TO_UPLOAD}\""
+        - "echo \"Git tag: ${TRAVIS_TAG}\""
+      deploy:
+        provider: releases
+        api_key:
+          secure: $GITHUB_TOKEN_mm1
+        file_glob: true
+        file: $FILES_TO_UPLOAD
+        skip_cleanup: true
+        on:
+          repo: Artheau/SpriteSomething
+          condition: $DEPLOY == "yes"
+          branch: master
+          draft: true
+
+    # 3.7 on Xenial
+    - <<: *tests
+      name: "Python 3.7 on Ubuntu Xenial: Test"
+      dist: xenial
+      python: "3.7"
+      services: xvfb
+    - <<: *build-deploy
+      name: "3.7 on Xenial: Build/No Deploy"
+      dist: xenial
+      python: "3.7"
+      services: xvfb
+      before_script:
+        - "export DEPLOY=no"
+        - "echo \"Deploy: ${DEPLOY}\""
+
+    # 3.6 on Xenial
+    - <<: *tests
+      name: "Python 3.6 on Ubuntu Xenial: Test"
+      dist: xenial
+      python: "3.6"
+      services: xvfb
+    - <<: *build-deploy
+      name: "3.6 on Xenial: Build/No Deploy"
+      dist: xenial
+      python: "3.6"
+      services: xvfb
+      before_script:
+        - "export DEPLOY=no"
+        - "echo \"Deploy: ${DEPLOY}\""
+
+    # 3.7 on macOS
+    - <<: *tests
+      name: "Python 3.7 on MacOSX 10.14 xcode 10.2: Test"
+      os: osx
+      osx_image: xcode10.2
+      python: "3.7"
+      services:
+      language: shell
+      before_install:
+        - export PYTHON_EXECUTABLE=python3
+    - <<: *build-deploy
+      name: "3.7 on MacOSX: Build/Deploy"
+      os: osx
+      osx_image: xcode10.2
+      python: "3.7"
+      services:
+      language: shell
+      before_install:
+        - export PYTHON_EXECUTABLE=python3
+
+    # 3.7 on Windows
+    - <<: *tests
+      name: "Python 3.7 on Windows 10 v1803: Test"
+      os: windows
+      python: "3.7"
+      services: xvfb
+      language: shell
       before_install:
         - choco install python
-        - python -m pip install --upgrade pip
-      env: PATH=/c/Python37:/c/Python37/Scripts:$PATH; PYTHON_EXECUTABLE=python
-    ################################################################################
+        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
+        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        - ${PYTHON_EXECUTABLE} get-pip.py
+        - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
+    - <<: *build-deploy
+      name: "3.7 on Windows: Build/Deploy"
+      os: windows
+      python: "3.7"
+      services: xvfb
+      language: shell
+      before_install:
+        - choco install python
+        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
+        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        - ${PYTHON_EXECUTABLE} get-pip.py
+        - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
 
-#dependencies are pillow and numpy
-install:
-  - pip3 install --upgrade pip  # all three OSes agree about 'pip3'
-  - pip install pillow numpy
-
-# command to run tests
-# 'python' points to Python 2.7 on macOS but points to Python 3.7 on Linux and Windows
-# 'python3' is a 'command not found' error on Windows but 'py' works on Windows only
-script:
-  - $PYTHON_EXECUTABLE tests.py
-
-#I don't want your emails
 notifications:
   email: false

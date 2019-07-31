@@ -72,16 +72,18 @@ class RomHandler(RomHandlerParent):
 		DMA_writes = {0x00: self.bulk_read_from_snes_address(0x9AD200,0x2000)}
 
 		#row 0x30 is populated with 8 tiles depending upon equipped weapon (0x30-0x37)
-		if equipped_weapon in ["regular","standard","charge"]:
-			DMA_writes[0x30] = self.bulk_read_from_snes_address(0x9AF200,0x100)
-		elif equipped_weapon in ["ice"]:
-			DMA_writes[0x30] = self.bulk_read_from_snes_address(0x9AF400,0x100)
-		elif equipped_weapon in ["wave"]:
-			DMA_writes[0x30] = self.bulk_read_from_snes_address(0x9AF600,0x100)
-		elif equipped_weapon in ["plasma"]:
-			DMA_writes[0x30] =  self.bulk_read_from_snes_address(0x9AF800,0x100)
-		elif equipped_weapon in ["spazer"]:
-			DMA_writes[0x30] = self.bulk_read_from_snes_address(0x9AFA00,0x100)
+		equipped_weapon_switcher = {
+			"regular": 0x9AF200,
+			"standard": 0x9AF200,
+			"charge": 0x9AF200,
+
+			"ice": 0x9AF400,
+			"wave": 0x9AF600,
+			"plasma": 0x9AF800,
+			"spazer": 0x9AFA00
+		}
+		snes_address = equipped_weapon_switcher.get(equipped_weapon)
+		DMA_writes[0x30] = self.bulk_read_from_snes_address(snes_address,0x100)
 
 		return DMA_writes
 
@@ -90,14 +92,20 @@ class RomHandler(RomHandlerParent):
 		# and its accompanying arguments in a list
 		duration_list_location = self._get_duration_list_location(animation)
 		control_code = self.read_from_snes_address(duration_list_location+pose,1)
-		if control_code in [0xF8,0xFD,0xFE]:
-			return self.read_from_snes_address(duration_list_location+pose, "11")  #these codes have one byte-sized argument
-		elif control_code == 0xF9:
-			return self.read_from_snes_address(duration_list_location+pose, "121111")  #has one word and 4 byte arguments
-		elif control_code == 0xFA:
-			return self.read_from_snes_address(duration_list_location+pose, "111")   #two byte arguments
-		elif control_code == 0xFC:
-			return self.read_from_snes_address(duration_list_location+pose, "1211")    #one word and 2 byte arguments
+
+		control_code_switcher = {
+			0xF8: "11", #these codes have one byte-sized argument
+			0xFD: "11",
+			0xFE: "11",
+
+			0xF9: "121111", #has one word and 4 byte arguments
+			0xFA: "111", #two byte arguments
+			0xFC: "1211" #one word and 2 byte arguments
+		}
+		read_type = control_code_switcher.get(control_code)
+
+		if read_type:
+			return self.read_from_snes_address(duration_list_location+pose, read_type)
 		else:
 			return [control_code]
 

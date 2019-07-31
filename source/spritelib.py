@@ -14,6 +14,8 @@ from PIL import Image
 from source import layoutlib
 from source import common
 
+#TODO: make this an actual abstract class by importing 'abc' and doing the things
+
 class SpriteParent():
 	#parent class for sprites to inherit
 	def __init__(self, filename, manifest_dict, my_subpath):
@@ -21,6 +23,9 @@ class SpriteParent():
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
+		self.overview_scale_factor = 2
+		if "input" in manifest_dict and "png" in manifest_dict["input"] and "overview-scale-factor" in manifest_dict["input"]["png"]:
+			self.overview_scale_factor = manifest_dict["input"]["png"]["overview-scale-factor"]
 		self.plugins = None
 		self.has_plugins = False
 		self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"))
@@ -39,7 +44,7 @@ class SpriteParent():
 			self.plugins = plugins_module.Plugins()
 			self.has_plugins = True
 		except ModuleNotFoundError as err:
-			print(err)
+			print(err)        #TODO: This will fail silently if run through the GUI
 
 	def import_from_ROM(self, rom):
 		#self.images, self.master_palette = ?, ?
@@ -129,13 +134,6 @@ class SpriteParent():
 		else:
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
 
-
-	def reload(self):
-		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
-		self.import_from_filename()
-		self.update_overview_panel()
-		#self.update_animation()
-
 	def update_pose_number(self):
 		if hasattr(self, "frame_progression_table"):
 			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
@@ -160,8 +158,17 @@ class SpriteParent():
 
 			#some poses have extra palette information, e.g. use "bunny" or "crystal_flash" palettes
 			# which can (whole or in part) override certain parts of the palette specified in the argument
+			new_palette = None
 			if "palette" in pose_list[pose_number]:
-				palettes.append(pose_list[pose_number]["palette"])
+				new_palette = pose_list[pose_number]["palette"]
+			if "palette" in tile_info:
+				new_palette = tile_info["palette"]
+
+			if new_palette:
+				new_palette_type = new_palette[new_palette.rfind('_'):]
+				for i in range(len(palettes)):
+					if new_palette_type in palettes[i]:
+						palettes[i] = new_palette
 
 			default_range = self.layout.get_property("import palette interval", tile_info["image"])
 			this_palette = self.get_palette(palettes, default_range, frame_number)
@@ -179,17 +186,23 @@ class SpriteParent():
 		else:
 			return []
 
+	def get_alternative_direction(self, animation, direction):
+		direction_dict = self.animations[animation]
+		return next(iter(direction_dict.keys()))
+
 	def assemble_tiles_to_completed_image(self, tile_list):
-		min_x = min([x for im,(x,y) in tile_list])
-		min_y = min([y for im,(x,y) in tile_list])
-		max_x = max([im.size[0]+x for im,(x,y) in tile_list])
-		max_y = max([im.size[1]+y for im,(x,y) in tile_list])
+		if tile_list:   #have to check this because some animations include "empty" poses
+			min_x = min([x for im,(x,y) in tile_list])
+			min_y = min([y for im,(x,y) in tile_list])
+			max_x = max([im.size[0]+x for im,(x,y) in tile_list])
+			max_y = max([im.size[1]+y for im,(x,y) in tile_list])
 
-		working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y))
-		for new_image,(x,y) in tile_list:
-			working_image.paste(new_image,(x-min_x,y-min_y))    #TODO: need to mask this with an 'L' image so that transparency is honored
-
-		return working_image,(min_x,min_y)
+			working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y),0)   #start out with a transparent image that is correctly sized
+			for new_image,(x,y) in tile_list:
+				working_image.paste(new_image,(x-min_x,y-min_y),new_image)   #the third argument is the transparency mask, so it is not redudant to use the same variable name twice
+			return working_image,(min_x,min_y)
+		else:
+			return Image.new('RGBA',(1,1),0), (0,0)   #blank image and dummy offset
 
 	def get_image(self, animation, direction, pose, palettes, frame_number):
 		#What I hope for this to do is to just retrieve a single PIL Image that corresponds to a particular pose in a particular animation using the specified list of palettes
@@ -199,19 +212,6 @@ class SpriteParent():
 		tile_list = self.get_tiles_for_pose(animation, direction, pose, palettes, frame_number)
 		assembled_image, offset = self.assemble_tiles_to_completed_image(tile_list)
 		return assembled_image, offset
-
-	def frames_in_this_animation(self):
-		return self.frame_progression_table[-1]
-
-	def frames_left_in_this_pose(self):
-		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
-		next_pose_at = min(x for x in self.frame_progression_table if x > mod_frames)
-		return next_pose_at - mod_frames
-
-	def frames_to_previous_pose(self):
-		mod_frames = self.frame_getter() % self.frame_progression_table[-1]
-		prev_pose_at = max((x for x in self.frame_progression_table if x <= mod_frames), default=0)
-		return mod_frames - prev_pose_at + 1
 
 	def save_as(self, filename):
 		_,file_extension = os.path.splitext(filename)
@@ -227,7 +227,7 @@ class SpriteParent():
 
 	def save_as_PNG(self, filename):
 		master_image = self.get_master_PNG_image()
-		master_image.save(filename)
+		master_image.save(filename, "PNG")
 		return True
 
 	def save_as_ZSPR(self, filename):
@@ -280,11 +280,11 @@ class SpriteParent():
 
 	def save_as_RDC(self, filename):
 		raw_author_name = self.metadata["author.name-short"]
-		author = raw_author_name.encode('utf8') if raw_author_name else bytes()
+		author = raw_author_name.encode('utf-8') if raw_author_name else bytes()
 		HEADER_STRING = b"RETRODATACONTAINER"
 		VERSION = 0x01
 
-		blocks_with_type = self.get_rdc_export_blocks()
+		blocks_with_type = self.get_rdc_meta_data_block() + self.get_rdc_export_blocks()
 		number_of_blocks = len(blocks_with_type)
 
 		preample_length = len(HEADER_STRING) + 1
@@ -308,64 +308,13 @@ class SpriteParent():
 
 		return True   #indicate success to caller
 
-	def export_frame_as_PNG(self, filename):
-		#i = 0
-		for tile,_ in self.get_tiles_for_current_pose():
-			new_size = tuple(int(dim*self.zoom_getter()) for dim in tile.size)
-			img_to_save = Image.new("RGBA", new_size, 0)
-			img_to_save = tile.resize(new_size,resample=Image.NEAREST)
-			#filename = filename[:filename.rfind('.')] + str(i) + filename[filename.rfind('.'):]
-			img_to_save.save(filename)
-			#i += 1
+	def get_rdc_meta_data_block(self):
+		title_name = self.metadata["sprite.name"]
+		author_name = self.metadata["author.name"]
+		data = json.dumps({ "title": title_name, "author": author_name }, separators=(',',':')).encode('utf-8')
 
-	def export_animation_as_collage(self, filename, orientation="horizontal"):
-		image_names = []
-		image_list = []
-		poses = self.get_current_pose_list()
-		for pose in poses:
-			tiles = pose["tiles"]
-			for tile in tiles:
-				image_names.append(tile["image"])
-
-		for i,row in enumerate(self.layout.get_rows()): #FIXME: i unused variable
-
-			for image_name in row:   #for every image referenced explicitly in the layout
-				if image_name in image_names:
-					image = self.images[image_name]
-
-					xmin,ymin,xmax,ymax = self.layout.get_bounding_box(image_name)
-					if not image:    #there was no image there to grab, so make a blank image
-						image = Image.new("RGBA", (xmax-xmin,ymax-ymin), 0)
-
-					palette = self.layout.get_property("import palette interval", image_name)
-					palette = self.master_palette[palette[0]:palette[1]] if palette else []
-
-					image = common.apply_palette(image, palette)
-					bordered_image, origin = self.layout.add_borders_and_scale(image, (-xmin,-ymin), image_name)
-					image_list.append((bordered_image, origin))
-
-		collage = None
-		if orientation == "horizontal":
-			# HORIZONTAL
-			collage = self.layout.make_horizontal_collage(image_list)
-		elif orientation == "vertical":
-			# VERTICAL
-			raise NotImplementedError()
-		collage.save(filename)
+		META_DATA_BLOCK_TYPE = 0
+		return [(META_DATA_BLOCK_TYPE, bytearray(common.as_u32(len(data))) + data)];
 
 	def get_master_PNG_image(self):
 		return self.layout.export_all_images_to_PNG(self.images,self.master_palette)
-
-	def update_overview_panel(self):
-		image = self.get_master_PNG_image()
-		scaled_image = image.resize(tuple(int(x*self.overview_scale_factor) for x in image.size))
-
-		if hasattr(self,"overview_ID") and self.overview_ID is not None:
-			del self.overview_image
-			self.overview_image = common.get_tk_image(scaled_image)
-			self.overview_canvas.itemconfig(self.overview_ID, image=self.overview_image)
-		else:
-			import time
-			scaled_image = scaled_image.copy()
-			self.overview_image = common.get_tk_image(scaled_image)
-			self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)

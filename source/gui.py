@@ -33,7 +33,7 @@ def make_GUI(command_line_args):
 				root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file=common.get_resource(["meta","icons"],'app.gif'))) #MacOSX?
 			except Exception:
 				pass #give up
-	root.geometry("800x600")       #window size
+	root.geometry("900x768")       #window size
 	root.configure(bg='#f0f0f0')   #background color
 	main_frame = SpriteSomethingMainFrame(root, command_line_args)
 	root.protocol("WM_DELETE_WINDOW", main_frame.exit)           #intercept when the user clicks the X
@@ -203,7 +203,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 													(self.fish.translate("meta","menu","export.frame-as-png"),"frame-as-png",self.export_frame_as_png),
 													(self.fish.translate("meta","menu","export.animation-as-gif"),"animation-as-gif",None),#self.export_animation_as_gif),
 													(self.fish.translate("meta","menu","export.animation-as-hcollage"),"animation-as-hcollage",partial(self.export_animation_as_collage,"horizontal")),
-													(self.fish.translate("meta","menu","export.animation-as-vcollage"),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
+													#(self.fish.translate("meta","menu","export.animation-as-vcollage"),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
 											])
 		menu_options.append(import_menu)
 
@@ -291,7 +291,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 									subwidget.unbind_all(keypress)
 								#nuke this button from orbit
 								subwidget.destroy()
-		self.left_panel = tk.PanedWindow(self.panes, orient=tk.VERTICAL, name="left_panel",width=250,handlesize=0,sashwidth=0,sashpad=2)
+		self.left_panel = tk.PanedWindow(self.panes, orient=tk.VERTICAL, name="left_panel",width=320,handlesize=0,sashwidth=0,sashpad=2)
 		self.right_panel = ttk.Notebook(self.panes, name="right_pane")
 		self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
 		self.overview_frame = tk.Frame(self.right_panel, name="overview_frame")
@@ -327,7 +327,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			metadata_label = tk.Label(metadata_section, text=label, name=label.lower().replace(' ', '_'))
 			metadata_label.grid(row=row,column=1)
 			self.metadata_textbox_vars[key] = tk.StringVar()
-			metadata_input = tk.Entry(metadata_section, textvariable=self.metadata_textbox_vars[key], name=label.lower().replace(' ', '_') + "_input")
+			metadata_input = tk.Entry(metadata_section, textvariable=self.metadata_textbox_vars[key], name=label.lower().replace(' ', '_') + "_input", width=25)
 			metadata_input.insert(0,self.sprite.metadata[key])
 
 			def metadata_changed_trace(key, *args):
@@ -343,7 +343,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 			metadata_input.grid(row=row,column=2)
 			row += 1
-		self.left_panel.add(metadata_section,minsize=PANEL_HEIGHT)
+		self.left_panel.add(metadata_section,minsize=PANEL_HEIGHT,sticky="e")
 
 	#make a status bar
 	def create_status_bar(self):
@@ -405,7 +405,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.update_sprite_animation()
 
 	def play_once(self):
-		self.frames_left_before_freeze = self.sprite.frames_in_this_animation()
+		self.frames_left_before_freeze = self.animation_engine.frames_in_this_animation()
 		if self.freeze_ray:   #if we were frozen before
 			self.freeze_ray = False
 			self.time_marches_forward()
@@ -432,11 +432,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.advance_global_frame_timer()
 
 	def go_to_previous_pose(self):
-		self.frame_number = max(0,self.frame_number - self.sprite.frames_to_previous_pose())
+		self.frame_number = max(0,self.frame_number - self.animation_engine.frames_to_previous_pose())
 		self.pause_global_frame_timer()
 
 	def go_to_next_pose(self):
-		self.frame_number = self.frame_number + self.sprite.frames_left_in_this_pose()
+		self.frame_number = self.frame_number + self.animation_engine.frames_left_in_this_pose()
 		self.pause_global_frame_timer()
 
 	def time_marches_forward(self):
@@ -591,9 +591,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def get_reload_button(self):
 		reload_section = tk.Frame(self.left_panel, name="reload_section")
 		widgetlib.center_align_grid_in_frame(reload_section)
-		reload_button = tk.Button(reload_section, text=self.fish.translate("meta","meta","reload"), padx=20, command=self.sprite.reload)
+		reload_button = tk.Button(reload_section, text=self.fish.translate("meta","meta","reload"), padx=20, command=self.reload)
 		reload_button.grid(row=0,column=1)
 		return reload_section
+
+	def reload(self):
+		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
+		self.sprite.import_from_filename()
+		self.animation_engine.update_overview_panel()   #TODO: Need to decide if this belongs in animation_engine
+		self.animation_engine.update_animation()
 
 	############################ MENU BAR FUNCTIONS HERE ################################
 
@@ -699,7 +705,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),)
 		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.frame-as-png"), filetypes=filetypes)
 		if filename:
-			returnvalue = self.sprite.export_frame_as_PNG(filename)
+			returnvalue = self.animation_engine.export_frame_as_PNG(filename)
 			if returnvalue:
 				self.working_dirs["export.frame-as-png"] = filename[:filename.rfind('/')]
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
@@ -718,7 +724,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),)
 		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.animation-as-" + orientation[:1] + "collage"], title=self.fish.translate("meta","dialogue","export.animation-as-" + orientation[:1] + "collage"), filetypes=filetypes)
 		if filename:
-			returnvalue = self.sprite.export_animation_as_collage(filename,orientation)
+			returnvalue = self.animation_engine.export_animation_as_collage(filename,orientation)
 			if returnvalue:
 				self.working_dirs["export.animation-as-collage"] = filename[:filename.rfind('/')]
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
@@ -763,7 +769,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 				  "SpriteSomething v" + CONST.APP_VERSION,
 				  "",
 				  "Created by:",
-				  "Artheau & Mike Trethewey",
+				  "[Artheau](http://github.com/Artheau/PixelArt)",
+				  "[Mike Trethewey](http://github.com/miketrethewey)",
 				  "",
 				  "Based on:",
 				  "[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
