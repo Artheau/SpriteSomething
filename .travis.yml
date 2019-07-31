@@ -77,7 +77,27 @@ jobs:
         #list files to see what was built
         - ${PYTHON_EXECUTABLE} build.py
         - ls
-      after_success: ./scripts/after_success.sh
+      after_success:
+        #if no tag was submitted, let's build one
+	      #current: default to build number (a 3-digit number at this time above 150)
+	      #future:  <major>.<minor>.<build_number>,
+	      # to be read from a text file that's in the repo with the intended <major>.<minor> version numbers
+	      # FIXME: Do that
+        - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then \
+            export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; \
+          fi"
+        #prepare files to upload
+        - ./scripts/after_success.sh
+        #list binaries
+        - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
+        #save list
+        - export FILES_TO_UPLOAD=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
+        #output final deployment info
+        - "echo \"Deploy: ${DEPLOY}\""
+        - "echo \"Files to Upload: ${FILES_TO_UPLOAD}\""
+        - "echo \"Git tag: ${TRAVIS_TAG}\""
+
+
       deploy:
         provider: releases
         api_key:
@@ -102,7 +122,9 @@ jobs:
       dist: xenial
       python: "3.7"
       services: xvfb
-      before_script: ./scripts/deploy_no.sh
+      before_script:
+        - "export DEPLOY=no"
+        - "echo \"Deploy: ${DEPLOY}\""
 
     # 3.6 on Xenial
     - <<: *tests
@@ -115,7 +137,9 @@ jobs:
       dist: xenial
       python: "3.6"
       services: xvfb
-      before_script: ./scripts/deploy_no.sh
+      before_script:
+        - "export DEPLOY=no"
+        - "echo \"Deploy: ${DEPLOY}\""
 
     # 3.7 on macOS
     - <<: *tests

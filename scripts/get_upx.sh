@@ -3,9 +3,9 @@
 set -ev
 
 #set up download url
-export UPX_SLUG=upx-${UPX_VERSION}-amd64_linux
-export UPX_FILE=${UPX_SLUG}.tar.xz
-export UPX_URL=https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_FILE}
+UPX_SLUG=upx-${UPX_VERSION}-amd64_linux
+UPX_FILE=${UPX_SLUG}.tar.xz
+UPX_URL=https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_FILE}
 
 #make some dirs
 mkdir -p $HOME/upx
