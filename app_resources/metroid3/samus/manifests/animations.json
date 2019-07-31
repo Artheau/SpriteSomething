@@ -1644,66 +1644,66 @@
 	},
 	"X-Ray": {
 		"right_aim_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_right", "pos": [-13,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_right", "pos": [-13,-21]}	], "palette": "xray_variant"	}
 		],
 		"right_aim_diag_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_right1", "pos": [-13,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_right1", "pos": [-13,-21]}	], "palette": "xray_variant"	}
 		],
 		"right": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_right2", "pos": [-13,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_right2", "pos": [-13,-21]}	], "palette": "xray_variant"	}
 		],
 		"right_aim_diag_down": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_right3", "pos": [-13,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_right3", "pos": [-13,-21]}	], "palette": "xray_variant"	}
 		],
 		"right_aim_down": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_right4", "pos": [-13,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_right4", "pos": [-13,-21]}	], "palette": "xray_variant"	}
 		],
 		"left_aim_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_left", "pos": [-19,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_left", "pos": [-19,-21]}	], "palette": "xray_variant"	}
 		],
 		"left_aim_diag_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_left1", "pos": [-19,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_left1", "pos": [-19,-21]}	], "palette": "xray_variant"	}
 		],
 		"left": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_left2", "pos": [-19,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_left2", "pos": [-19,-21]}	], "palette": "xray_variant"	}
 		],
 		"left_aim_diag_down": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_left3", "pos": [-19,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_left3", "pos": [-19,-21]}	], "palette": "xray_variant"	}
 		],
 		"left_aim_down": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_left4", "pos": [-19,-21]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_left4", "pos": [-19,-21]}	], "palette": "xray_variant"	}
 		]
 	},
 	"X-Ray Crouched": {
 		"right_aim_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right", "pos": [-13,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right", "pos": [-13,-24]}	], "palette": "xray_variant"	}
 		],
 		"right_aim_diag_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right1", "pos": [-13,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right1", "pos": [-13,-24]}	], "palette": "xray_variant"	}
 		],
 		"right": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right2", "pos": [-13,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right2", "pos": [-13,-24]}	], "palette": "xray_variant"	}
 		],
 		"right_aim_diag_down": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right3", "pos": [-13,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right3", "pos": [-13,-24]}	], "palette": "xray_variant"	}
 		],
 		"right_aim_down": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right4", "pos": [-13,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_right4", "pos": [-13,-24]}	], "palette": "xray_variant"	}
 		],
 		"left_aim_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left", "pos": [-19,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left", "pos": [-19,-24]}	], "palette": "xray_variant"	}
 		],
 		"left_aim_diag_up": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left1", "pos": [-19,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left1", "pos": [-19,-24]}	], "palette": "xray_variant"	}
 		],
 		"left": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left2", "pos": [-19,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left2", "pos": [-19,-24]}	], "palette": "xray_variant"	}
 		],
 		"left_aim_diag_down": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left3", "pos": [-19,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left3", "pos": [-19,-24]}	], "palette": "xray_variant"	}
 		],
 		"left_aim_down": [
-			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left4", "pos": [-19,-24]}	]	}
+			{	"frames": 1,	"tiles": [	{"image": "xray_crouch_left4", "pos": [-19,-24]}	], "palette": "xray_variant"	}
 		]
 	},
 	"Supplication": {
