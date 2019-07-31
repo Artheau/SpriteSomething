@@ -45,14 +45,15 @@ before_script:
   - export UPX_SLUG=upx-${UPX_VERSION}-amd64_linux
   - export UPX_FILE=${UPX_SLUG}.tar.xz
   - export UPX_URL=https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_FILE}
+  - mkdir -p $HOME/upx
+  - mkdir -p $HOME/${TRAVIS_REPO_SLUG}/upx
   - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
       wget --output-document=${UPX_FILE} ${UPX_URL}; \
+      arc unarchive *.tar.gz $HOME/upx; \
     else \
       curl -L ${UPX_URL} --output ${UPX_FILE}; \
+      tar -C $HOME/upx -xf *.tar.xz; \
     fi"
-  - mkdir -p $HOME/upx
-  - tar -C $HOME/upx -xf *.tar.xz
-  - mkdir -p $HOME/${TRAVIS_REPO_SLUG}/upx
   - mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
   - rm -r $HOME/upx
 
@@ -176,7 +177,7 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        - choco install xz-utils
+        - choco install archiver
     - <<: *build-deploy
       name: "3.7 on Windows: Build/Deploy"
       os: windows
@@ -189,7 +190,7 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        - choco install xz-utils
+        - choco install archiver
 
 notifications:
   email: false
