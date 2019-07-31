@@ -9,7 +9,6 @@ choco install archiver
 choco install python
 
 #export path of python
-./scripts/set_python3.sh
 export PATH=/c/Python37:/c/Python37/Scripts:$PATH
 
 #get pip getter
