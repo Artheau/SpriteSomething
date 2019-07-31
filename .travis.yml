@@ -69,14 +69,17 @@ jobs:
       skip_cleanup: true
       script:
         #run upx script
+        # upx still doesn't quite work with race conditions of downloading vs processing
+        # try to beat the race condition by having all this in one line
         #run build script
         #list files to see what was built
-#upx still doesn't quite work with race conditions of downloading vs processing
-        - "if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
-            bash ./scripts/get_upx.sh; \
+        - "if true; then \
+            if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
+              bash ./scripts/get_upx.sh; \
+            fi; \
+            ${PYTHON_EXECUTABLE} build.py; \
+            ls; \
           fi"
-        - ${PYTHON_EXECUTABLE} build.py
-        - ls
       after_success:
         #if no tag was submitted, let's build one
         #current: default to build number (a 3-digit number at this time above 150)
