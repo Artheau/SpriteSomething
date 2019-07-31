@@ -101,7 +101,7 @@ jobs:
       deploy:
         provider: releases
         api_key:
-          secure: $GITHUB_TOKEN_mm1
+          secure: $GITHUB_DEPLOY_KEY
         file_glob: true
         file: $FILES_TO_UPLOAD
         skip_cleanup: true
