@@ -16,13 +16,16 @@ if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
 	#curl seems to fail on windows builds
 	wget --output-document=${UPX_FILE} ${UPX_URL}
 	#use archiver that we installed before getting here
-  arc unarchive *.tar.xz $HOME/upx
+	arc unarchive *.tar.xz $HOME/upx
+	#move upx to where pyinstaller expects it to be
+	mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
+	#delete the folder we extracted it to initially
+	rm -r $HOME/upx
 else
 	curl -L ${UPX_URL} --output ${UPX_FILE}
-  tar -C $HOME/upx -xf *.tar.xz
+	tar -C $HOME/upx -xf *.tar.xz
+	#move upx to where pyinstaller expects it to be
+	mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
+	#delete the folder we extracted it to initially
+	rm -r $HOME/upx
 fi
-
-#move upx to where pyinstaller expects it to be
-mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
-#delete the folder we extracted it to initially
-rm -r $HOME/upx

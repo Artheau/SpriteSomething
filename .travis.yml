@@ -73,8 +73,12 @@ jobs:
       services: xvfb
       skip_cleanup: true
       script:
+        #run upx script
         #run build script
         #list files to see what was built
+        - "if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
+            ./scripts/get_upx.sh \
+          fi"
         - ${PYTHON_EXECUTABLE} build.py
         - ls
       after_success:
