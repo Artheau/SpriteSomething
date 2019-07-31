@@ -37,9 +37,7 @@ env:
 # install pyinstaller for distilling
 install:
   - ${PYTHON_EXECUTABLE} --version
-  - pip3 --version
-  - pip3 install -U wheel
-  - ${PYTHON_EXECUTABLE} -m pip install -r "./app_resources/meta/manifests/pip_requirements.txt"
+  - ./scripts/pip_requirements.sh
   - export DEPLOY=yes
 
 # get UPX
