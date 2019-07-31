@@ -50,7 +50,7 @@ install:
 # get UPX
 # negated in Test Phase
 # negated in Xenial
-before_script: ./scripts/get_upx.sh
+before_script: bash ./scripts/get_upx.sh
 
 jobs:
   include:
@@ -77,7 +77,7 @@ jobs:
         #run build script
         #list files to see what was built
         - "if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
-            ./scripts/get_upx.sh \
+            bash ./scripts/get_upx.sh; \
           fi"
         - ${PYTHON_EXECUTABLE} build.py
         - ls
@@ -91,7 +91,7 @@ jobs:
             export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; \
           fi"
         #prepare files to upload
-        - ./scripts/after_success.sh
+        - bash ./scripts/after_success.sh
         #list binaries
         - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
         #save list
@@ -175,7 +175,7 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        - ./scripts/win-before_install.sh
+        - bash ./scripts/win-before_install.sh
     - <<: *build-deploy
       name: "3.7 on Windows: Build/Deploy"
       os: windows
@@ -188,7 +188,7 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        - ./scripts/win-before_install.sh
+        - bash ./scripts/win-before_install.sh
 
 notifications:
   email: false
