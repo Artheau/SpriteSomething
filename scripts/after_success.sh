@@ -22,10 +22,12 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	fi
 
 	#build the filename
-	#current: <build_filename>-<git_tag>-<os_name><file_extension>
-	#future:  <build_filename>-<git_tag>-<os_name>-<linux_distro><file_extension>
-	#FIXME: Do that
-	DEST_FILENAME="${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}${DEST_EXTENSION}"
+	#current: <build_filename>-<git_tag>-<os_name>-<linux_distro><file_extension>
+	DEST_FILENAME="${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}"
+	if [ "${TRAVIS_DIST}" != "" ]; then
+		DEST_FILENAME="${DEST_FILENAME}-${TRAVIS_DIST}"
+	fi
+	DEST_FILENAME="${DEST_FILENAME}${DEST_EXTENSION}"
 	echo "Build Filename: ${BUILD_FILENAME}"
 	echo "Dest Filename:  ${DEST_FILENAME}"
 

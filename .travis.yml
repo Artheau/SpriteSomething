@@ -88,7 +88,8 @@ jobs:
         # to be read from a text file that's in the repo with the intended <major>.<minor> version numbers
         # FIXME: Do that
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then \
-            export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; \
+            APP_VERSION=$(head -n 1 ./app_resources/meta/manifests/app_version.txt); \
+            export TRAVIS_TAG=\"${APP_VERSION}.${TRAVIS_BUILD_NUMBER}\"; \
           fi"
         #prepare files to upload
         - bash ./scripts/after_success.sh
