@@ -2,11 +2,18 @@
 
 set -ev
 
-#list binaries
-ls -p | pcregrep -M ${REGEX}
+if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
+	ls -p > "./build/SpriteSomething/filename.txt"
+	${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
+	BUILD_FILENAME=$(head -n 1 ./build/SpriteSomething/filename.txt)
+	rm "./build/SpriteSomething/filename.txt"
+else
+	#list binaries
+	ls -p | pcregrep -M ${REGEX}
 
-#save list
-BUILD_FILENAME=$(ls -p | pcregrep -M ${REGEX})
+	#save list
+	BUILD_FILENAME=$(ls -p | pcregrep -M ${REGEX})
+fi
 
 #if we've got a filename
 if [ "${BUILD_FILENAME}" != "" ]; then
@@ -33,6 +40,10 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 
 	mv $BUILD_FILENAME $DEST_FILENAME
 
-	FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d " " -f 5)
+	FILESIZE_DELIM = " "
+	if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
+		FILESIZE_DELIM = "\t"
+	fi
+	FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d ${FILESIZE_DELIM} -f 5)
 	echo "Filesize:       ${FILESIZE}"
 fi
