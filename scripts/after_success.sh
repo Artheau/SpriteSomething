@@ -45,11 +45,12 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 		arc archive ../${ZIP_FILENAME} ./${EXCLUDES}
 		mkdir ./archive
 		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
+		echo ${DEST_FILENAME} > "./build/SpriteSomething/filename.txt"
 		#echo "./archive/${ZIP_FILENAME}" > "./build/SpriteSomething/filename.txt"
 		${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
 	else
 		if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-			EXCLUDES=" --exclude=./build"
+			EXCLUDES=""
 		fi
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
 		tar -czf ../${ZIP_FILENAME} ./${EXCLUDES}
