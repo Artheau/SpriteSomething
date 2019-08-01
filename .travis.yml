@@ -84,12 +84,12 @@ jobs:
           fi"
       after_success:
         #if no tag was submitted, let's build one
-        #current: default to build number (a 3-digit number at this time above 150)
-        #future:  <major>.<minor>.<build_number>,
+        #current: <major>.<minor>.<build_number>
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then \
             APP_VERSION=$(head -n 1 ./app_resources/meta/manifests/app_version.txt); \
             export TRAVIS_TAG=\"${APP_VERSION}.${TRAVIS_BUILD_NUMBER}\"; \
-          fi"
+          fi; \
+          \"${TRAVIS_TAG}\" > ./app_resources/meta/manifests/app_version.txt"
         #prepare files to upload
         - bash ./scripts/after_success.sh
         #list binaries
