@@ -3,10 +3,10 @@
 set -ev
 
 #list binaries
-ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
+ls -p | pcregrep -M ${REGEX}
 
 #save list
-BUILD_FILENAME=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
+BUILD_FILENAME=$(ls -p | pcregrep -M ${REGEX})
 
 #if we've got a filename
 if [ "${BUILD_FILENAME}" != "" ]; then
