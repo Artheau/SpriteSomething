@@ -39,10 +39,15 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 
 	mv $BUILD_FILENAME $DEST_FILENAME
 
-	FILESIZE_DELIM=" "
-	if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-		FILESIZE_DELIM="\t"
+	if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
+		ls -p > "./build/SpriteSomething/filename.txt"
+		${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
 	fi
-	FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d "${FILESIZE_DELIM}" -f 5)
+
+	if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
+		FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -f 5)
+	else
+		FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d "${FILESIZE_DELIM}" -f 5)
+	fi
 	echo "Filesize:       ${FILESIZE}"
 fi
