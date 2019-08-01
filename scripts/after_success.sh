@@ -45,7 +45,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	fi
 
 	if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-		FILESIZE=$(ls -lh ${DEST_FILENAME} | pcregrep -M "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
+		FILESIZE=$(ls -lh ${DEST_FILENAME} | pcregrep -M -o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
 	else
 		FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d " " -f 5)
 	fi
