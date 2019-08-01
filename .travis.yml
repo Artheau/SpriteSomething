@@ -89,7 +89,7 @@ jobs:
             APP_VERSION=$(head -n 1 ./app_resources/meta/manifests/app_version.txt); \
             export TRAVIS_TAG=\"${APP_VERSION}.${TRAVIS_BUILD_NUMBER}\"; \
           fi; \
-          \"${TRAVIS_TAG}\" > ./app_resources/meta/manifests/app_version.txt"
+          echo \"${TRAVIS_TAG}\" > ./app_resources/meta/manifests/app_version.txt"
         #prepare files to upload
         - bash ./scripts/after_success.sh
         #list binaries

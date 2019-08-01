@@ -29,25 +29,31 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 
 	#build the filename
 	#current: <build_filename>-<git_tag>-<os_name>-<linux_distro><file_extension>
-	DEST_FILENAME="${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}"
+	DEST_SLUG="${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}"
 	if [ "${TRAVIS_DIST}" != "" ] && [ "${TRAVIS_DIST}" != "notset" ]; then
-		DEST_FILENAME="${DEST_FILENAME}-${TRAVIS_DIST}"
+		DEST_SLUG="${DEST_FILENAME}-${TRAVIS_DIST}"
 	fi
-	DEST_FILENAME="${DEST_FILENAME}${DEST_EXTENSION}"
-	echo "Build Filename: ${BUILD_FILENAME}"
-	echo "Dest Filename:  ${DEST_FILENAME}"
+	DEST_FILENAME="${DEST_SLUG}${DEST_EXTENSION}"
 
 	mv $BUILD_FILENAME $DEST_FILENAME
 
 	if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
 		ls -p > "./build/SpriteSomething/filename.txt"
 		${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
+		ZIP_FILENAME="${DEST_SLUG}.zip"
+		arc archive ${ZIP_FILENAME} ./
+	else
+		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
+		tar -czf ${ZIP_FILENAME} ./
 	fi
 
+	echo "Build Filename: ${BUILD_FILENAME}"
+	echo "Dest Filename:  ${DEST_FILENAME}"
+	echo "Zip Filename:   ${ZIP_FILENAME}"
 	if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
 		FILESIZE=$(ls -lh ${DEST_FILENAME} | pcregrep -M -o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
 	else
 		FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d " " -f 5)
 	fi
-	echo "Filesize:       ${FILESIZE}"
+	echo "Build Filesize: ${FILESIZE}"
 fi
