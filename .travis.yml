@@ -93,10 +93,14 @@ jobs:
         #prepare files to upload
         - bash ./scripts/after_success.sh
         #list binaries
-        - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
         #save list
-        #FIXME: Need a new regex to get the binaries now that we've got periods in there due to version number
-        - export FILES_TO_UPLOAD=$(ls -p | pcregrep -M ${REGEX})
+        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
+            head -n 1 ./build/SpriteSomething/filename.txt | cat; \
+            export FILES_TO_UPLOAD=$(head -n 1 ./build/SpriteSomething/filename.txt); \
+          else \
+            ls -p | pcregrep -M ${REGEX}; \
+            export FILES_TO_UPLOAD=$(ls -p | pcregrep -M ${REGEX}); \
+          fi"
         #output final deployment info
         - "echo \"Deploy: ${DEPLOY}\""
         - "echo \"Files to Upload: ${FILES_TO_UPLOAD}\""
