@@ -21,6 +21,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 		#we've got no extension
 		#it's a linux or mac build
 		DEST_EXTENSION=""
+		DEST_SLUG="${BUILD_FILENAME}"
 	else
 		#we've got an extension, save it (with a prepended period) and the filename portion
 		DEST_EXTENSION=".${BUILD_FILENAME##*.}"
@@ -46,7 +47,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 		arc archive ${ZIP_FILENAME} ./
 	else
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
-		tar -czf ${ZIP_FILENAME} ./
+		tar -czf ${ZIP_FILENAME} ./ --exclude ${ZIP_FILENAME}
 	fi
 
 	echo "Build Filename: ${BUILD_FILENAME}"
