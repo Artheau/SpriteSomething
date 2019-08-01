@@ -24,14 +24,14 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	else
 		#we've got an extension, save it (with a prepended period) and the filename portion
 		DEST_EXTENSION=".${BUILD_FILENAME##*.}"
-		BUILD_FILENAME="${BUILD_FILENAME%.*}"
+		DEST_SLUG="${BUILD_FILENAME%.*}"
 	fi
 
 	#build the filename
 	#current: <build_filename>-<git_tag>-<os_name>-<linux_distro><file_extension>
-	DEST_SLUG="${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}"
+	DEST_SLUG="${DEST_SLUG}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}"
 	if [ "${TRAVIS_DIST}" != "" ] && [ "${TRAVIS_DIST}" != "notset" ]; then
-		DEST_SLUG="${DEST_FILENAME}-${TRAVIS_DIST}"
+		DEST_SLUG="${DEST_SLUG}-${TRAVIS_DIST}"
 	fi
 	DEST_FILENAME="${DEST_SLUG}${DEST_EXTENSION}"
 
