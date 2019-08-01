@@ -35,6 +35,8 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	fi
 	DEST_FILENAME="${DEST_SLUG}${DEST_EXTENSION}"
 
+	echo "Build Filename: ${BUILD_FILENAME}"
+	echo "Dest Filename:  ${DEST_FILENAME}"
 	mv $BUILD_FILENAME $DEST_FILENAME
 
 	if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
