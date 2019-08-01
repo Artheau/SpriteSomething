@@ -51,14 +51,14 @@ install:
 jobs:
   include:
     # 3.7 on Bionic Test
-#    - &tests
-#      stage: "Unit Tests"
-#      name: "Python 3.7 on Ubuntu Bionic: Test"
-#      dist: bionic
-#      python: "3.7"
-#      services: xvfb
-#      before_script: echo "#do nothing before script"
-#      script: ${PYTHON_EXECUTABLE} tests.py
+    - &tests
+      stage: "Unit Tests"
+      name: "Python 3.7 on Ubuntu Bionic: Test"
+      dist: bionic
+      python: "3.7"
+      services: xvfb
+      before_script: echo "#do nothing before script"
+      script: ${PYTHON_EXECUTABLE} tests.py
 
     # 3.7 on Bionic Build/Deploy
     - &build-deploy
@@ -120,11 +120,11 @@ jobs:
           branch: master
 
     # 3.7 on Xenial
-#    - <<: *tests
-#      name: "Python 3.7 on Ubuntu Xenial: Test"
-#      dist: xenial
-#      python: "3.7"
-#      services: xvfb
+    - <<: *tests
+      name: "Python 3.7 on Ubuntu Xenial: Test"
+      dist: xenial
+      python: "3.7"
+      services: xvfb
     - <<: *build-deploy
       name: "3.7 on Xenial: Build/No Deploy"
       dist: xenial
@@ -135,29 +135,29 @@ jobs:
         - "echo \"Deploy: ${DEPLOY}\""
 
     # 3.6 on Xenial
-#    - <<: *tests
-#      name: "Python 3.6 on Ubuntu Xenial: Test"
-#      dist: xenial
-#      python: "3.6"
-#      services: xvfb
-#    - <<: *build-deploy
-#      name: "3.6 on Xenial: Build/No Deploy"
-#      dist: xenial
-#      python: "3.6"
-#      services: xvfb
-#      before_script:
-#        - "export DEPLOY=no"
-#        - "echo \"Deploy: ${DEPLOY}\""
+    - <<: *tests
+      name: "Python 3.6 on Ubuntu Xenial: Test"
+      dist: xenial
+      python: "3.6"
+      services: xvfb
+    - <<: *build-deploy
+      name: "3.6 on Xenial: Build/No Deploy"
+      dist: xenial
+      python: "3.6"
+      services: xvfb
+      before_script:
+        - "export DEPLOY=no"
+        - "echo \"Deploy: ${DEPLOY}\""
 
     # 3.7 on macOS
-#    - <<: *tests
-#      name: "Python 3.7 on MacOSX 10.14 xcode 10.2: Test"
-#      os: osx
-#      osx_image: xcode10.2
-#      python: "3.7"
-#      services:
-#      language: shell
-#      before_install: export PYTHON_EXECUTABLE=python3
+    - <<: *tests
+      name: "Python 3.7 on MacOSX 10.14 xcode 10.2: Test"
+      os: osx
+      osx_image: xcode10.2
+      python: "3.7"
+      services:
+      language: shell
+      before_install: export PYTHON_EXECUTABLE=python3
     - <<: *build-deploy
       name: "3.7 on MacOSX: Build/Deploy"
       os: osx
@@ -168,19 +168,19 @@ jobs:
       before_install: export PYTHON_EXECUTABLE=python3
 
     # 3.7 on Windows
-#    - <<: *tests
-#      name: "Python 3.7 on Windows 10 v1803: Test"
-#      os: windows
-#      python: "3.7"
-#      services: xvfb
-#      language: shell
-#      before_install:
-#        - choco install python
-#        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
-#        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-#        - ${PYTHON_EXECUTABLE} get-pip.py
-#        - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-#        - bash ./scripts/win-before_install.sh
+    - <<: *tests
+      name: "Python 3.7 on Windows 10 v1803: Test"
+      os: windows
+      python: "3.7"
+      services: xvfb
+      language: shell
+      before_install:
+        - choco install python
+        - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
+        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        - ${PYTHON_EXECUTABLE} get-pip.py
+        - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
+        - bash ./scripts/win-before_install.sh
     - <<: *build-deploy
       name: "3.7 on Windows: Build/Deploy"
       os: windows

@@ -45,9 +45,9 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	fi
 
 	if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-		FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -f 5)
+		FILESIZE=$(ls -lh ${DEST_FILENAME} | pcregrep -M "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
 	else
-		FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d "${FILESIZE_DELIM}" -f 5)
+		FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d " " -f 5)
 	fi
 	echo "Filesize:       ${FILESIZE}"
 fi
