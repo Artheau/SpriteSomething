@@ -12,12 +12,6 @@ cache:
     - $HOME/AppData/Local/pip/Cache #windows
     - $HOME/upx #upx
 
-#apt items
-addons:
-  apt:
-    packages:
-      - pcregrep
-
 #default VM settings
 dist: bionic
 python: "3.7"
@@ -73,6 +67,7 @@ jobs:
       dist: bionic
       python: "3.7"
       services: xvfb
+      before_install: sudo apt-get install pcregrep
       skip_cleanup: true
       script:
         #run upx script
