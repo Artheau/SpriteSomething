@@ -41,7 +41,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	EXCLUDES="--exclude=./__pycache__ --exclude=./build "
 	if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
 		ZIP_FILENAME="${DEST_SLUG}.zip"
-		arc archive ../${ZIP_FILENAME} ./ --exclude=./__pycache__/ --exclude=./build/
+		arc archive ../${ZIP_FILENAME} ./ ${EXCLUDES}
 		mkdir ./archive
 		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
 		echo "./archive/${ZIP_FILENAME}" > "./build/SpriteSomething/filename.txt"
