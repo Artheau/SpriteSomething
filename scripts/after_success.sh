@@ -36,23 +36,25 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	fi
 	DEST_FILENAME="${DEST_SLUG}${DEST_EXTENSION}"
 
-	echo "Build Filename: ${BUILD_FILENAME}"
-	echo "Dest Filename:  ${DEST_FILENAME}"
 	mv $BUILD_FILENAME $DEST_FILENAME
 
 	if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
-		ls -p > "./build/SpriteSomething/filename.txt"
-		${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
 		ZIP_FILENAME="${DEST_SLUG}.zip"
 		arc archive ../${ZIP_FILENAME} ./ --exclude=./__pycache__ --exclude=./build --exclude=./upx
+		mkdir ./archive
+		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
+		echo "./archive/${ZIP_FILENAME}" > "./build/SpriteSomething/filename.txt"
+		${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
 	else
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
 		tar -czf ../${ZIP_FILENAME} ./ --exclude=./__pycache__ --exclude=./build --exclude=./upx
+		mkdir ./archive
+		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
 	fi
 
 	echo "Build Filename: ${BUILD_FILENAME}"
 	echo "Dest Filename:  ${DEST_FILENAME}"
-	echo "Zip Filename:   ../${ZIP_FILENAME}"
+	echo "Zip Filename:   ./archive/${ZIP_FILENAME}"
 	if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
 		FILESIZE=$(ls -lh ${DEST_FILENAME} | pcregrep -M -o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
 	else

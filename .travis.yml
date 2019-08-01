@@ -104,7 +104,7 @@ jobs:
           fi"
         #output final deployment info
         - "echo \"Deploy: ${DEPLOY}\""
-        - "echo \"Files to Upload: ${FILES_TO_UPLOAD}\""
+        - "echo \"Files to Upload: ./archive/*\""
         - "echo \"Git tag: ${TRAVIS_TAG}\""
 
       deploy:
