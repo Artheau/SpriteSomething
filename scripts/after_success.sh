@@ -38,20 +38,21 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 
 	mv $BUILD_FILENAME $DEST_FILENAME
 
-	EXCLUDES="--exclude=./__pycache__ --exclude=./build "
+	EXCLUDES=" --exclude=./__pycache__ --exclude=./build"
 	if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
+		EXCLUDES=""
 		ZIP_FILENAME="${DEST_SLUG}.zip"
-		arc archive ../${ZIP_FILENAME} ./ ${EXCLUDES}
+		arc archive ../${ZIP_FILENAME} ./${EXCLUDES}
 		mkdir ./archive
 		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
-		echo "./archive/${ZIP_FILENAME}" > "./build/SpriteSomething/filename.txt"
+		#echo "./archive/${ZIP_FILENAME}" > "./build/SpriteSomething/filename.txt"
 		${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
 	else
 		if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-			EXCLUDES=""
+			EXCLUDES=" --exclude=./build"
 		fi
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
-		tar -czf ../${ZIP_FILENAME} ./ ${EXCLUDES}
+		tar -czf ../${ZIP_FILENAME} ./${EXCLUDES}
 		mkdir ./archive
 		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
 	fi
