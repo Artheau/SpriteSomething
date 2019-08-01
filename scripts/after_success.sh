@@ -40,14 +40,14 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 
 	if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
 		ZIP_FILENAME="${DEST_SLUG}.zip"
-		arc archive ../${ZIP_FILENAME} ./ --exclude=./__pycache__ --exclude=./build --exclude=./upx
+		arc archive ../${ZIP_FILENAME} ./ --exclude=./__pycache__/ --exclude=./build/
 		mkdir ./archive
 		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
 		echo "./archive/${ZIP_FILENAME}" > "./build/SpriteSomething/filename.txt"
 		${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
 	else
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
-		tar -czf ../${ZIP_FILENAME} ./ --exclude=./__pycache__ --exclude=./build --exclude=./upx
+		tar -czf ../${ZIP_FILENAME} ./ --exclude=./__pycache__/ --exclude=./build/
 		mkdir ./archive
 		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
 	fi
@@ -57,8 +57,11 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	echo "Zip Filename:   ./archive/${ZIP_FILENAME}"
 	if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
 		FILESIZE=$(ls -lh ${DEST_FILENAME} | pcregrep -M -o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
+		ZIPSIZE=$(ls -lh ./archive/${ZIP_FILENAME} | pcregrep -M -o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
 	else
 		FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d " " -f 5)
+		ZIPSIZE=$(ls -lh ./archive/${ZIP_FILENAME} | cut -d " " -f 5)
 	fi
 	echo "Build Filesize: ${FILESIZE}"
+	echo "Zip Filesize:   ${FILESIZE}"
 fi
