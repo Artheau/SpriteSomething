@@ -38,6 +38,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 
 	mv $BUILD_FILENAME $DEST_FILENAME
 
+	EXCLUDES="--exclude=./__pycache__ --exclude=./build "
 	if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
 		ZIP_FILENAME="${DEST_SLUG}.zip"
 		arc archive ../${ZIP_FILENAME} ./ --exclude=./__pycache__/ --exclude=./build/
@@ -46,8 +47,11 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 		echo "./archive/${ZIP_FILENAME}" > "./build/SpriteSomething/filename.txt"
 		${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
 	else
+		if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
+			EXCLUDES=""
+		fi
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
-		tar -czf ../${ZIP_FILENAME} ./ --exclude=./__pycache__/ --exclude=./build/
+		tar -czf ../${ZIP_FILENAME} ./ ${EXCLUDES}
 		mkdir ./archive
 		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
 	fi
@@ -63,5 +67,5 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 		ZIPSIZE=$(ls -lh ./archive/${ZIP_FILENAME} | cut -d " " -f 5)
 	fi
 	echo "Build Filesize: ${FILESIZE}"
-	echo "Zip Filesize:   ${FILESIZE}"
+	echo "Zip Filesize:   ${ZIPSIZE}"
 fi
