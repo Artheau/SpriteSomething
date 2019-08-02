@@ -41,7 +41,7 @@ install:
   - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
       pip --version; \
       pip install -r \"./app_resources/meta/manifests/pip_requirements.txt\"; \
-      pip install regex \
+      pip install regex; \
     else \
  	    pip3 --version; \
 	    pip3 install -U wheel; \
