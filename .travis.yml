@@ -19,6 +19,7 @@ env:
   global:
     - PYTHON_EXECUTABLE="python"
     - UPX_VERSION="3.95"
+    - REGEX="^([-\w]*)([.]|$)([\d]|exe|$)([.]|$)([\d]+|$)([-[:alpha:].]+|$)"
 
 # cache
 # before_install
@@ -34,25 +35,19 @@ env:
 
 # upgrade pip
 # install pillow, numpy for app
-# install pyinstaller for distilling
+# install pyinstaller, regex for distilling
 install:
-  - pip3 install -U pip wheel
-  - pip install -r "./app_resources/meta/manifests/pip_requirements.txt"
+  - ${PYTHON_EXECUTABLE} --version
+  - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
+      pip --version; \
+      pip install -r \"./app_resources/meta/manifests/pip_requirements.txt\"; \
+      pip install regex; \
+    else \
+ 	    pip3 --version; \
+	    pip3 install -U wheel; \
+      pip3 install -r \"./app_resources/meta/manifests/pip_requirements.txt\"; \
+    fi"
   - export DEPLOY=yes
-
-# get UPX
-before_script:
-  - export UPX_SLUG=upx-${UPX_VERSION}-amd64_linux
-  - export UPX_FILE=${UPX_SLUG}.tar.xz
-  - export UPX_URL=https://github.com/upx/upx/releases/download/v${UPX_VERSION}/${UPX_FILE}
-#  - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then wget --output-document=${UPX_FILE} ${UPX_URL}; else curl -L ${UPX_URL} --output ${UPX_FILE}; fi
-#  - mkdir -p $HOME/upx
-#  - unxz *.tar.xz
-#  - tar -C $HOME/upx -xf *.tar
-#  - tar -C $HOME/upx -xJf *.tar.xz
-#  - mkdir -p $HOME/${TRAVIS_REPO_SLUG}/upx
-#  - mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
-#  - rm -r $HOME/upx
 
 jobs:
   include:
@@ -73,31 +68,50 @@ jobs:
       dist: bionic
       python: "3.7"
       services: xvfb
+      before_install: sudo apt-get install pcregrep
       skip_cleanup: true
       script:
+        #run upx script
+        # upx still doesn't quite work with race conditions of downloading vs processing
+        # try to beat the race condition by having all this in one line
+        #run build script
+        #list files to see what was built
+#        - "if [ true ]; then \
+#            if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
+#              bash ./scripts/get_upx.sh; \
+#            fi; \
+#            ${PYTHON_EXECUTABLE} build.py; \
+#            ls; \
+#          fi"
         - ${PYTHON_EXECUTABLE} build.py
-        - ls
       after_success:
-        - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
-        - export BUILD_FILENAME=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
-        - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then export TRAVIS_TAG=\"${TRAVIS_BUILD_NUMBER}\"; fi"
-        - "if [ \"${BUILD_FILENAME}\" != \"\" ]; then \
-            if [ \"${BUILD_FILENAME/.}\" == \"${BUILD_FILENAME}\" ]; then \
-              export DEST_EXTENSION=\"\"; \
-            else \
-              export DEST_EXTENSION=\".${BUILD_FILENAME##*.}\"; \
-              export BUILD_FILENAME=\"${BUILD_FILENAME%.*}\"; \
-            fi; \
-            export DEST_FILENAME=\"${BUILD_FILENAME}-${TRAVIS_TAG}-${TRAVIS_OS_NAME}${DEST_EXTENSION}\"; \
-            echo \"Build Filename: ${BUILD_FILENAME}\"; \
-            echo \"Dest Filename:  ${DEST_FILENAME}\"; \
-            mv $BUILD_FILENAME $DEST_FILENAME; \
+        #if no tag was submitted, let's build one
+        #current: <major>.<minor>.<build_number>
+        - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then \
+            APP_VERSION=$(head -n 1 ./app_resources/meta/manifests/app_version.txt); \
+            export TRAVIS_TAG=\"${APP_VERSION}.${TRAVIS_BUILD_NUMBER}\"; \
+          fi; \
+          echo \"${TRAVIS_TAG}\" > ./app_resources/meta/manifests/app_version.txt"
+        #prepare files to upload
+        - bash ./scripts/after_success.sh
+        #list binaries
+        #save list
+        #windows: deploy from filename notes
+        #else: deploy both the archive and the binary at this time
+        #FIXME: once the archive is ironed out, deploy just that; will take some edits to get that to work out
+        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
+            head -n 1 ../build/filename.txt | cat; \
+            export FILES_TO_UPLOAD=$(head -n 1 ../build/filename.txt); \
+          else \
+            ls -p | pcregrep -M ${REGEX}; \
+            export FILES_TO_UPLOAD=$(ls -p | pcregrep -M ${REGEX}); \
           fi"
-        - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
-        - export FILES_TO_UPLOAD=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
+#        - export FILES_TO_UPLOAD=../deploy/*
+        #output final deployment info
         - "echo \"Deploy: ${DEPLOY}\""
         - "echo \"Files to Upload: ${FILES_TO_UPLOAD}\""
         - "echo \"Git tag: ${TRAVIS_TAG}\""
+
       deploy:
         provider: releases
         api_key:
@@ -110,7 +124,6 @@ jobs:
           repo: Artheau/SpriteSomething
           condition: $DEPLOY == "yes"
           branch: master
-
 
     # 3.7 on Xenial
     - <<: *tests
@@ -150,8 +163,7 @@ jobs:
       python: "3.7"
       services:
       language: shell
-      before_install:
-        - export PYTHON_EXECUTABLE=python3
+      before_install: export PYTHON_EXECUTABLE=python3
     - <<: *build-deploy
       name: "3.7 on MacOSX: Build/Deploy"
       os: osx
@@ -159,8 +171,7 @@ jobs:
       python: "3.7"
       services:
       language: shell
-      before_install:
-        - export PYTHON_EXECUTABLE=python3
+      before_install: export PYTHON_EXECUTABLE=python3
 
     # 3.7 on Windows
     - <<: *tests
@@ -175,6 +186,7 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
+        - bash ./scripts/win-before_install.sh
     - <<: *build-deploy
       name: "3.7 on Windows: Build/Deploy"
       os: windows
@@ -187,6 +199,7 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
+        - bash ./scripts/win-before_install.sh
 
 notifications:
   email: false

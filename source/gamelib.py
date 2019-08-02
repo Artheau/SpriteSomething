@@ -144,7 +144,7 @@ class GameParent():
 		for background_manifest in background_manifests:
 			with open(background_manifest) as f:
 				background_data = json.load(f)
-				for background in background_data:
+				for background in background_data["backgrounds"]:
 					self.background_datas["filename"][background["filename"]] = background["title"]
 					self.background_datas["title"][background["title"]] = background["filename"]
 		background_prettynames = list(self.background_datas["title"].keys())

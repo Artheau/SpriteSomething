@@ -1,4 +1,9 @@
-APP_VERSION = "0.2.0"
+from source import common
+
+APP_VERSION = ""
+app_version_filename = common.get_resource(["meta","manifests"],"app_version.txt")
+with(open(app_version_filename)) as f:
+	APP_VERSION = f.read()
 
 MAX_FRAMES = 1E9     #maximum number of frames an animation will display before it stops
 
