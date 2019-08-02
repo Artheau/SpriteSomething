@@ -19,6 +19,7 @@ env:
   global:
     - PYTHON_EXECUTABLE="python"
     - UPX_VERSION="3.95"
+    - REGEX="^([-\w]*)([.]|$)([\d]|exe|$)([.]|$)([\d]+|$)([-[:alpha:].]+|$)"
 
 # cache
 # before_install
@@ -34,12 +35,13 @@ env:
 
 # upgrade pip
 # install pillow, numpy for app
-# install pyinstaller for distilling
+# install pyinstaller, regex for distilling
 install:
   - ${PYTHON_EXECUTABLE} --version
   - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
       pip --version; \
       pip install -r \"./app_resources/meta/manifests/pip_requirements.txt\"; \
+      pip install regex; \
     else \
  	    pip3 --version; \
 	    pip3 install -U wheel; \
@@ -66,6 +68,7 @@ jobs:
       dist: bionic
       python: "3.7"
       services: xvfb
+      before_install: sudo apt-get install pcregrep
       skip_cleanup: true
       script:
         #run upx script
@@ -83,21 +86,27 @@ jobs:
         - ${PYTHON_EXECUTABLE} build.py
       after_success:
         #if no tag was submitted, let's build one
-        #current: default to build number (a 3-digit number at this time above 150)
-        #future:  <major>.<minor>.<build_number>,
-        # to be read from a text file that's in the repo with the intended <major>.<minor> version numbers
-        # FIXME: Do that
+        #current: <major>.<minor>.<build_number>
         - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then \
             APP_VERSION=$(head -n 1 ./app_resources/meta/manifests/app_version.txt); \
             export TRAVIS_TAG=\"${APP_VERSION}.${TRAVIS_BUILD_NUMBER}\"; \
-          fi"
+          fi; \
+          echo \"${TRAVIS_TAG}\" > ./app_resources/meta/manifests/app_version.txt"
         #prepare files to upload
         - bash ./scripts/after_success.sh
         #list binaries
-        - ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)'
         #save list
-        #FIXME: Need a new regex to get the binaries now that we've got periods in there due to version number
-        - export FILES_TO_UPLOAD=$(ls -p | grep -E '^(.\/)?([[:alnum:]-])*(.exe|$)')
+        #windows: deploy from filename notes
+        #else: deploy both the archive and the binary at this time
+        #FIXME: once the archive is ironed out, deploy just that; will take some edits to get that to work out
+        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
+            head -n 1 ../build/filename.txt | cat; \
+            export FILES_TO_UPLOAD=$(head -n 1 ../build/filename.txt); \
+          else \
+            ls -p | pcregrep -M ${REGEX}; \
+            export FILES_TO_UPLOAD=$(ls -p | pcregrep -M ${REGEX}); \
+          fi"
+#        - export FILES_TO_UPLOAD=../deploy/*
         #output final deployment info
         - "echo \"Deploy: ${DEPLOY}\""
         - "echo \"Files to Upload: ${FILES_TO_UPLOAD}\""
@@ -110,11 +119,11 @@ jobs:
         file_glob: true
         file: $FILES_TO_UPLOAD
         skip_cleanup: true
+        draft: true
         on:
           repo: Artheau/SpriteSomething
           condition: $DEPLOY == "yes"
           branch: master
-          draft: true
 
     # 3.7 on Xenial
     - <<: *tests

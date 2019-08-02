@@ -21,7 +21,9 @@ if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
 
 	#move upx to where pyinstaller expects it to be
 	mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
-	echo "Moved UPX"
+	echo "UPX SRC:  $HOME/upx/${UPX_SLUG}/"
+	echo "UPX DEST: $HOME/${TRAVIS_REPO_SLUG}/upx/"
+	echo "Listing UPX:"
 
 	ls -p $HOME/${TRAVIS_REPO_SLUG}/upx
 else
@@ -30,7 +32,9 @@ else
 
 	#move upx to where pyinstaller expects it to be
 	mv $HOME/upx/${UPX_SLUG}/* $HOME/${TRAVIS_REPO_SLUG}/upx
-	echo "Moved UPX"
+	echo "UPX SRC:  $HOME/upx/${UPX_SLUG}/"
+	echo "UPX DEST: $HOME/${TRAVIS_REPO_SLUG}/upx/"
+	echo "Listing UPX:"
 
 	ls -p $HOME/${TRAVIS_REPO_SLUG}/upx
 fi
