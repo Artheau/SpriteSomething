@@ -2,10 +2,18 @@
 
 set -ev
 
+#make dir to put the archive/binary in
+mkdir ../deploy
+#make dir to put some build metadata in
+mkdir ../build
+
+#if we're on windows, jot down a note of the files in the dir
 if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
-	ls -p > "./build/SpriteSomething/filename.txt"
+	ls -p > "../build/filename.txt"
+	#use my pcregrep script to list binaries
 	${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
-	BUILD_FILENAME=$(head -n 1 ./build/SpriteSomething/filename.txt)
+	#get the first listing
+	BUILD_FILENAME=$(head -n 1 ../build/filename.txt)
 else
 	#list binaries
 	ls -p | pcregrep -M ${REGEX}
@@ -36,37 +44,52 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	fi
 	DEST_FILENAME="${DEST_SLUG}${DEST_EXTENSION}"
 
-	mv $BUILD_FILENAME $DEST_FILENAME
+	#move binary to a temp folder
+	mv $BUILD_FILENAME ../build/$DEST_FILENAME
 
-	EXCLUDES=" --exclude=./__pycache__ --exclude=./build"
+	#clean the git slate but don't clobber stuff if we're running this locally
+	git clean -dx --exclude=.vscode --exclude=*.json
+
+	#move the binary back
+	mv ../build/$DEST_FILENAME ./$DEST_FILENAME
+
 	if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
-		EXCLUDES=""
+		#windows uses archiver
+		#jot down a note of what the filename is
+		#use my pcregrep script to list binaries
+		#move the zip to deployment folder
 		ZIP_FILENAME="${DEST_SLUG}.zip"
-		arc archive ../${ZIP_FILENAME} ./${EXCLUDES}
-		mkdir ./archive
-		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
-		echo ${DEST_FILENAME} > "./build/SpriteSomething/filename.txt"
-		#echo "./archive/${ZIP_FILENAME}" > "./build/SpriteSomething/filename.txt"
+		arc archive ../${ZIP_FILENAME} ./
+		mv ../${ZIP_FILENAME} ../deploy/${ZIP_FILENAME}
+		echo ${DEST_FILENAME} > "../build/filename.txt"	#deploy binary
+		#echo "../deploy/${ZIP_FILENAME}" > "../build/filename.txt"	#deploy archive
 		${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
 	else
-		if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
-			EXCLUDES=""
-		fi
+		#else, we're using tar
+		#move the zip to deployment folder
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
-		tar -czf ../${ZIP_FILENAME} ./${EXCLUDES}
-		mkdir ./archive
-		mv ../${ZIP_FILENAME} ./archive/${ZIP_FILENAME}
+		tar -czf ../${ZIP_FILENAME} ./
+		mv ../${ZIP_FILENAME} ../deploy/${ZIP_FILENAME}
 	fi
 
+	#print summary of info
+	#filename of initial binary
+	#filename of final binary
+	#filename of archive
+	#filesize of binary
+	#filesize of archive
+	# sometimes the archive is super huger than the binary, and that's weird; trying to understand it a bit more
 	echo "Build Filename: ${BUILD_FILENAME}"
 	echo "Dest Filename:  ${DEST_FILENAME}"
-	echo "Zip Filename:   ./archive/${ZIP_FILENAME}"
+	echo "Zip Filename:   ../deploy/${ZIP_FILENAME}"
 	if [ "${TRAVIS_OS_NAME}" == "osx" ]; then
+		#macosx does this weird, gotta use the native delimiter and capture it
 		FILESIZE=$(ls -lh ${DEST_FILENAME} | pcregrep -M -o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
-		ZIPSIZE=$(ls -lh ./archive/${ZIP_FILENAME} | pcregrep -M -o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
+		ZIPSIZE=$(ls -lh ../deploy/${ZIP_FILENAME} | pcregrep -M -o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
 	else
+		#the rest are standardized
 		FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d " " -f 5)
-		ZIPSIZE=$(ls -lh ./archive/${ZIP_FILENAME} | cut -d " " -f 5)
+		ZIPSIZE=$(ls -lh ../deploy/${ZIP_FILENAME} | cut -d " " -f 5)
 	fi
 	echo "Build Filesize: ${FILESIZE}"
 	echo "Zip Filesize:   ${ZIPSIZE}"
