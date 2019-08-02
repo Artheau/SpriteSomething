@@ -56,4 +56,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=False )   #   <--- change this to True to enable command prompt when the app runs
+          console=True )   #   <--- change this to True to enable command prompt when the app runs
