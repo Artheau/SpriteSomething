@@ -61,8 +61,8 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 		ZIP_FILENAME="${DEST_SLUG}.zip"
 		arc archive ../${ZIP_FILENAME} ./
 		mv ../${ZIP_FILENAME} ../deploy/${ZIP_FILENAME}
-		echo ${DEST_FILENAME} > "../build/filename.txt"	#deploy binary
-		#echo "../deploy/${ZIP_FILENAME}" > "../build/filename.txt"	#deploy archive
+		#echo ${DEST_FILENAME} > "../build/filename.txt"	#deploy binary
+		echo "../deploy/${ZIP_FILENAME}" > "../build/filename.txt"	#deploy archive
 		${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
 	else
 		#else, we're using tar
