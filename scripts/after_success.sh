@@ -48,7 +48,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	mv $BUILD_FILENAME ../build/$DEST_FILENAME
 
 	#clean the git slate but don't clobber stuff if we're running this locally
-	git clean -dx --exclude=.vscode --exclude=*.json
+	git clean -dfx --exclude=.vscode --exclude=*.json
 
 	#move the binary back
 	mv ../build/$DEST_FILENAME ./$DEST_FILENAME
