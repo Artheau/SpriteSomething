@@ -19,6 +19,7 @@ env:
   global:
     - PYTHON_EXECUTABLE="python"
     - UPX_VERSION="3.95"
+    - GR_CLI_VERSION="1.3.0"
     - REGEX="^([-\w]*)([.]|$)([\d]|exe|$)([.]|$)([\d]+|$)([-[:alpha:].]+|$)"
 
 # cache
@@ -113,18 +114,21 @@ jobs:
         - "echo \"Files to Upload: ${FILES_TO_UPLOAD}\""
         - "echo \"Git tag: ${TRAVIS_TAG}\""
 
+      before_deploy:
+        - curl https://miketrethewey.github.io/github-release-cli/v${GR_CLI_VERSION}/github-releaser-travis -L --output github-releaser && chmod +x github-releaser
+        - export GITHUB_OAUTH_TOKEN=${GITHUB_DEPLOY_KEY}
+        - export BODY=$(envsubst < ./RELEASENOTES.md)
+        - export FILES=${FILES_TO_UPLOAD}
+
       deploy:
-        provider: releases
-        api_key:
-          secure: $GITHUB_DEPLOY_KEY
-        file_glob: true
-        file: $FILES_TO_UPLOAD
+        provider: script
+        script: ./github-releaser -draft -verbose
         skip_cleanup: true
         draft: true
         on:
           repo: Artheau/SpriteSomething
           condition: $DEPLOY == "yes"
-          branch: master
+          branch: travis-test
 
     # 3.7 on Xenial
     - <<: *tests
