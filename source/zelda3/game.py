@@ -1,5 +1,4 @@
-import importlib
-from ..gamelib import GameParent
+from source.gamelib import GameParent
 
 class Game(GameParent):
 	def __init__(self):

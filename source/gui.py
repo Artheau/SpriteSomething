@@ -4,7 +4,7 @@ import random									#for choosing random app titles
 import json										#for reading JSON
 import re											#for regexes in hyperlinks in about box
 import traceback							#for error reporting
-import os, sys								#for filesystem manipulation
+import os, stat, sys					#for filesystem manipulation
 import time										#for timekeeping
 import webbrowser							#for launching browser from about box
 from functools import partial	#for passing parameters to user-triggered function calls
@@ -70,10 +70,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 			"export.animation-as-vcollage": "./"
 		}
 		#read saved working dirs file if it exists and set these
-		working_dir_path = os.path.join("user_resources","meta","manifests","working_dirs.json")
+		working_dir_path = os.path.join(".","user_resources","meta","manifests","working_dirs.json")
 		if os.path.exists(working_dir_path):
 			with open(working_dir_path) as json_file:
 				data = json.load(json_file)
+				json_file.close()
 				for k,v in data.items():
 					self.working_dirs[k] = v
 
@@ -107,6 +108,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 							name_dict[key].extend(item)
 						else:
 							name_dict[key] = item
+				name_file.close()
 		app_name = []
 		if random.choice([True,False]):
 			app_name.append(random.choice(name_dict["pre"]))
@@ -276,6 +278,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 					bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
 					with open(bindings_filename,encoding="utf-8") as f:
 						bindings = json.load(f)
+						f.close()
 					#cycle through all spiffy buttons
 					for subwidget in widget.winfo_children():
 						if "_button" in subwidget.winfo_name():
@@ -790,8 +793,20 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#write working dirs to file
 	def save_working_dirs(self):
-		f = open("./user_resources/meta/manifests/working_dirs.json","w+")
+		user_resources_path = os.path.join(".","user_resources")
+		print(user_resources_path,oct(stat.S_IMODE(os.lstat(user_resources_path).st_mode)))
+		for r,d,f in os.walk(user_resources_path):
+			for i in d:
+				if "meta" in r or "meta" in i:
+					print(os.path.join(r,i),oct(stat.S_IMODE(os.lstat(os.path.join(r,i)).st_mode)))
+			for j in f:
+				if "working" in j:
+					print(os.path.join(r,j),oct(stat.S_IMODE(os.lstat(os.path.join(r,j)).st_mode)))
+		working_dirs_path = os.path.join(user_resources_path,"meta","manifests")
+		f = open(os.path.join(working_dirs_path,"working_dirs.json"),"w+")
 		f.write(json.dumps(self.working_dirs,indent=2))
+		os.chmod(os.path.join(working_dirs_path,"working_dirs.json"),0o777)
+		f.close()
 
 	#exit sequence
 	def exit(self):

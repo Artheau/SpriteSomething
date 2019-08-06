@@ -31,6 +31,7 @@ class SpriteParent():
 		self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"))
 		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
+			file.close()
 		self.import_from_filename()
 
 	#to make a new sprite class, you must write code for all of the functions in this section below.
@@ -92,6 +93,7 @@ class SpriteParent():
 	def import_from_ZSPR(self):
 		with open(self.filename,"rb") as file:
 			data = bytearray(file.read())
+			file.close()
 
 		if data[0:4] != bytes(ord(x) for x in 'ZSPR'):
 			raise AssertionError("This file does not have a valid ZSPR header")
@@ -135,7 +137,7 @@ class SpriteParent():
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
 
 	def update_pose_number(self):
-		if hasattr(self, "frame_progression_table"):
+		if hasattr(self,"frame_getter") and hasattr(self, "frame_progression_table"):
 			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
 			self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x > mod_frames]))
 
@@ -222,7 +224,7 @@ class SpriteParent():
 		elif file_extension.lower() == ".rdc":
 			return self.save_as_RDC(filename)
 		else:
-			tk.messagebox.showerror("ERROR", f"Did not recognize file type \"{file_extension}\"")
+			#tk.messagebox.showerror("ERROR", f"Did not recognize file type \"{file_extension}\"")
 			return False
 
 	def save_as_PNG(self, filename):
@@ -273,6 +275,7 @@ class SpriteParent():
 
 			with open(filename, "wb") as zspr_file:
 				zspr_file.write(write_buffer)
+				zspr_file.close()
 
 			return True       #report success to caller
 		else:
@@ -305,6 +308,7 @@ class SpriteParent():
 
 			for _,block in blocks_with_type:
 				rdc_file.write(block)
+			rdc_file.close()
 
 		return True   #indicate success to caller
 
@@ -314,7 +318,7 @@ class SpriteParent():
 		data = json.dumps({ "title": title_name, "author": author_name }, separators=(',',':')).encode('utf-8')
 
 		META_DATA_BLOCK_TYPE = 0
-		return [(META_DATA_BLOCK_TYPE, bytearray(common.as_u32(len(data))) + data)];
+		return [(META_DATA_BLOCK_TYPE, bytearray(common.as_u32(len(data))) + data)]
 
 	def get_master_PNG_image(self):
 		return self.layout.export_all_images_to_PNG(self.images,self.master_palette)

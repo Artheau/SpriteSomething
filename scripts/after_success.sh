@@ -7,9 +7,15 @@ mkdir ../deploy
 #make dir to put some build metadata in
 mkdir ../build
 
+#chmod user_resources to hopefully fix working_dirs.json issue
+chmod 777 "./user_resources"
+chmod 777 "./user_resources/meta"
+chmod 777 "./user_resources/meta/manifests"
+
 #if we're on windows, jot down a note of the files in the dir
 if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
 	ls -p > "../build/filename.txt"
+	chmod 777 "../build/filename.txt"
 	#use my pcregrep script to list binaries
 	${PYTHON_EXECUTABLE} ./source/fakepcregrep.py
 	#get the first listing

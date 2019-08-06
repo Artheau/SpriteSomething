@@ -55,6 +55,7 @@ def create_chooser(game_names):
 			sprite_name = ""
 			with open(common.get_resource([game_name,"manifests"],"manifest.json")) as f:
 				manifest = json.load(f)
+				f.close()
 				sprite_name = manifest["1"]["name"]
 			game_button = tk.Button(
 				game_chooser,

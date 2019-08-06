@@ -100,6 +100,7 @@ class CLIMainFrame():
             name_dict[key].extend(item)
           else:
             name_dict[key] = item
+        name_file.close()
     app_name = []
     if random.choice([True,False]):
       app_name.append(random.choice(name_dict["pre"]))
@@ -116,7 +117,7 @@ class CLIMainFrame():
   def load_sprite(self, sprite_filename, random=False):
     print(" Loading " + ("Random " if random else "") + "Sprite for CLI")
 
-    self.game, self.sprite = gamelib.autodetect(sprite_filename)
+    self.game, self.sprite, _ = gamelib.autodetect(sprite_filename)
 
     print("  Loaded a \"" + self.sprite.classic_name + "\" Sprite for injection into " + self.game.name + " Game files")
     # Additional GUI stuff
