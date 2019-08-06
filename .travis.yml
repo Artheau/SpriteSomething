@@ -124,8 +124,7 @@ jobs:
         on:
           repo: Artheau/SpriteSomething
           condition: $DEPLOY == "yes"
-#          branch: master
-          branch: travis-test
+          branch: master
 
     # 3.7 on Xenial
     - <<: *tests
