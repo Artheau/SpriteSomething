@@ -794,18 +794,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 	#write working dirs to file
 	def save_working_dirs(self):
 		user_resources_path = os.path.join(".","user_resources")
-		print(user_resources_path,oct(stat.S_IMODE(os.lstat(user_resources_path).st_mode)))
-		for r,d,f in os.walk(user_resources_path):
-			for i in d:
-				if "meta" in r or "meta" in i:
-					print(os.path.join(r,i),oct(stat.S_IMODE(os.lstat(os.path.join(r,i)).st_mode)))
-			for j in f:
-				if "working" in j:
-					print(os.path.join(r,j),oct(stat.S_IMODE(os.lstat(os.path.join(r,j)).st_mode)))
 		working_dirs_path = os.path.join(user_resources_path,"meta","manifests")
 		f = open(os.path.join(working_dirs_path,"working_dirs.json"),"w+")
 		f.write(json.dumps(self.working_dirs,indent=2))
-		os.chmod(os.path.join(working_dirs_path,"working_dirs.json"),0o777)
+		os.chmod(os.path.join(working_dirs_path,"working_dirs.json"),0o775)
 		f.close()
 
 	#exit sequence
