@@ -26,6 +26,7 @@ class BabelFish():
 			if langs_filename: #if we've got a file
 				with open(langs_filename,encoding="utf-8") as f: #open it
 					self.lang_defns[lang][subpath[:subpath.rfind(os.sep)].replace(os.sep,'.')] = json.load(f) #save translation definitions
+					f.close()
 
 	def translate(self, domain="", key="", subkey=""): #three levels of keys
 		if os.sep in domain:

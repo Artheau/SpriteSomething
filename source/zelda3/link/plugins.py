@@ -43,6 +43,7 @@ class Plugins(PluginsParent):
 					sprite_data = sprite_data_req.read()
 					print("    Writing " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 					g.write(sprite_data)
+					g.close()
 					success = True
 			else:	#if we do have it, next!
 				print("    Skipping " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)

@@ -13,6 +13,7 @@ class Layout():
 	def __init__(self, filename):
 		with open(filename) as inFile:
 			self.data = json.load(inFile)
+			inFile.close()
 		self.reverse_lookup = {}
 		for image_name,image_info in self.data["images"].items():
 			for image_ref in image_info["used by"]:

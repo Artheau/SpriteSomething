@@ -21,6 +21,7 @@ class AnimationEngineParent():
 
 		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
+			file.close()
 		if "$schema" in self.animations:
 			del self.animations["$schema"]
 
@@ -169,6 +170,7 @@ class AnimationEngineParent():
 		if spiffy_manifest:
 			with open(spiffy_manifest) as f:
 				spiffy_list = json.load(f)
+				f.close()
 
 				for group in spiffy_list["button-groups"]:
 					group_key = group["group-fish-key"]
@@ -194,6 +196,7 @@ class AnimationEngineParent():
 		if direction_manifest:
 			with open(direction_manifest) as f:
 				direction_list = json.load(f)
+				f.close()
 
 				for group in direction_list["button-groups"]:
 					group_key = group["group-fish-key"]
@@ -243,11 +246,11 @@ class AnimationEngineParent():
 		new_size = tuple(int(dim*self.zoom_getter()) for dim in current_image.size)
 		img_to_save = current_image.resize(new_size,resample=Image.NEAREST)
 		img_to_save.save(filename)
-		
+
 	def export_animation_as_collage(self, filename, orientation="horizontal"):
 		#TODO: should this be factored out to the sprite class as some kind of export_as_collage(animation, direction, ..., filename) call?
 		image_list = []
-		
+
 		displayed_direction = self.get_current_direction()
 		pose_list = self.get_current_pose_list(displayed_direction)
 		if not pose_list:
