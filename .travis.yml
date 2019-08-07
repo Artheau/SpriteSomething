@@ -135,7 +135,7 @@ jobs:
 
       deploy:
         provider: script
-        script: ./github-releaser -draft -verbose -version
+        script: ./github-releaser -draft
         skip_cleanup: true
         draft: true
         on:
