@@ -110,9 +110,9 @@ jobs:
           export TRAVIS_TAG=\"v${TRAVIS_TAG}\"" #prepend 'v' to tag name
         - export FILES_TO_UPLOAD=../deploy/* #deploy archive
         #output final deployment info
-        - "echo \"Deploy: ${DEPLOY}\""
-        - "echo \"Files to Upload: ${FILES_TO_UPLOAD}\""
-        - "echo \"Git tag: ${TRAVIS_TAG}\""
+        - "echo \"Deploy:          ${DEPLOY}\"; \
+          echo \"Files to Upload: ${FILES_TO_UPLOAD}\"; \
+          echo \"Git tag:         ${TRAVIS_TAG}\""
 
       before_deploy:
         - "RFILE=\"github-releaser-travis\"; \
@@ -124,14 +124,14 @@ jobs:
           export RELEASER=${RFILE}"
         - curl https://miketrethewey.github.io/github-release-cli/v${GR_CLI_VERSION}/${RELEASER} -L --output github-releaser && chmod +x github-releaser
         - export GITHUB_OAUTH_TOKEN=${GITHUB_DEPLOY_KEY}
-        - export RELEASE_NAME=$(echo "SpriteSomething $TRAVIS_TAG" | envsubst)
-        - export BODY=$(envsubst < ./RELEASENOTES.md)
+        - export RELEASE_NAME="SpriteSomething ${TRAVIS_TAG}"
+        - export BODY=$(cat < ./RELEASENOTES.md)
         - export FILES=${FILES_TO_UPLOAD}
         #output actual deployment info
-        - "echo \"Deploy:          ${DEPLOY}\""
-        - "echo \"Files to Upload: ${FILES}\""
-        - "echo \"Release Name:    ${RELEASE_NAME}\""
-        - "echo \"Git tag:         ${TRAVIS_TAG}\""
+        - "echo \"Deploy:          ${DEPLOY}\"; \
+          echo \"Files to Upload: ${FILES_TO_UPLOAD}\"; \
+          echo \"Release Name:    ${RELEASE_NAME}\"; \
+          echo \"Git tag:         ${TRAVIS_TAG}\""
 
       deploy:
         provider: script
