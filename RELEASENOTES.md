@@ -46,6 +46,6 @@ This preview version of SpriteSomething includes many basic features of the main
 * Link's Swords & Shields and other props that may be relevant to specific animations
 * Link's Zap Palette for both the Zap and Ether animations
 
-Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.4) and Windows (built on Windows 10) all built on python 3.7 are available.
+Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.14 xcode 10.2) and Windows (built on Windows 10 v1803) all built on python 3.7 are available.
 
 If you would prefer to run/build from source, you can download the source code for this release below.  See `BUILDING.md` for instructions.

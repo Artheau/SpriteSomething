@@ -115,14 +115,27 @@ jobs:
         - "echo \"Git tag: ${TRAVIS_TAG}\""
 
       before_deploy:
-        - curl https://miketrethewey.github.io/github-release-cli/v${GR_CLI_VERSION}/github-releaser-travis -L --output github-releaser && chmod +x github-releaser
+        - "RFILE=\"github-releaser-travis\"; \
+          if [ \"${TRAVIS_OS_NAME}\" == \"osx\" ]; then \
+            RFILE=\"${RFILE}-mac\"; \
+          elif [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
+            RFILE=\"${RFILE}.exe\"; \
+          fi; \
+          export RELEASER=${RFILE}"
+        - curl https://miketrethewey.github.io/github-release-cli/v${GR_CLI_VERSION}/${RELEASER} -L --output github-releaser && chmod +x github-releaser
         - export GITHUB_OAUTH_TOKEN=${GITHUB_DEPLOY_KEY}
+        - export RELEASE_NAME=$(echo "SpriteSomething $TRAVIS_TAG" | envsubst)
         - export BODY=$(envsubst < ./RELEASENOTES.md)
         - export FILES=${FILES_TO_UPLOAD}
+        #output actual deployment info
+        - "echo \"Deploy:          ${DEPLOY}\""
+        - "echo \"Files to Upload: ${FILES}\""
+        - "echo \"Release Name:    ${RELEASE_NAME}\""
+        - "echo \"Git tag:         ${TRAVIS_TAG}\""
 
       deploy:
         provider: script
-        script: bash ./github-releaser -draft -verbose
+        script: ./github-releaser -draft -verbose -version
         skip_cleanup: true
         draft: true
         on:
