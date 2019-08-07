@@ -129,19 +129,20 @@ jobs:
         - export FILES=${FILES_TO_UPLOAD}
         #output actual deployment info
         - "echo \"Deploy:          ${DEPLOY}\"; \
-          echo \"Files to Upload: ${FILES_TO_UPLOAD}\"; \
+          echo \"Files to Upload: ${FILES}\"; \
           echo \"Release Name:    ${RELEASE_NAME}\"; \
           echo \"Git tag:         ${TRAVIS_TAG}\""
 
       deploy:
         provider: script
-        script: ./github-releaser -draft
+        script: ./github-releaser -draft -verbose
         skip_cleanup: true
         draft: true
         on:
           repo: Artheau/SpriteSomething
           condition: $DEPLOY == "yes"
           branch: travis-test
+          tags: true
 
     # 3.7 on Xenial
     - <<: *tests
