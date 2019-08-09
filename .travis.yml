@@ -127,7 +127,8 @@ jobs:
             export GITHUB_OAUTH_TOKEN=${GITHUB_DEPLOY_KEY}; \
             export BODY=$(cat < ./RELEASENOTES.md); \
           elif [ \"${DEPLOYMENT}\" == \"travis\" ]; then \
-            export BODY=\"Please see [RELEASENOTES.md](/${TRAVIS_REPO_SLUG}/blob/${TRAVIS_TAG}/RELEASENOTES.md) for description.\" \
+            export BODY=\"Please see RELEASENOTES.md for description.\"; \
+            export BODY=\"Please see [RELEASENOTES.md](/${TRAVIS_REPO_SLUG}/blob/${TRAVIS_TAG}/RELEASENOTES.md) for description.\"; \
           else \
             export BODY=\"\"; \
           fi;"
