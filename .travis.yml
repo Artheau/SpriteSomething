@@ -106,7 +106,7 @@ jobs:
         #global var set at top to indicate which route to use
         #each route has dis/advantages
         #now that we have the tag sorted, set it in git
-        - export TRAVIS_TAG = "v${TRAVIS_TAG}"
+        - export TRAVIS_TAG="v${TRAVIS_TAG}"
         - export RELEASE_NAME="SpriteSomething ${TRAVIS_TAG}"
         - export FILES=../deploy/* #deploy archive
         - git tag $TRAVIS_TAG
