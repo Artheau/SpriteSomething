@@ -21,6 +21,8 @@ env:
     - UPX_VERSION="3.95"
     - GR_CLI_VERSION="1.3.0"
     - REGEX="^([-\w]*)([.]|$)([\d]|exe|$)([.]|$)([\d]+|$)([-[:alpha:].]+|$)"
+    - DEPLOYMENT="travis"
+#    - DEPLOYMENT="github-releaser-cli"
 
 # cache
 # before_install
@@ -39,6 +41,9 @@ env:
 # install pyinstaller, regex for distilling
 install:
   - ${PYTHON_EXECUTABLE} --version
+  #install python dependencies
+  # windows uses pip
+  # linux & macosx use pip3
   - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
       pip --version; \
       pip install -r \"./app_resources/meta/manifests/pip_requirements.txt\"; \
@@ -48,6 +53,7 @@ install:
 	    pip3 install -U wheel; \
       pip3 install -r \"./app_resources/meta/manifests/pip_requirements.txt\"; \
     fi"
+  #default deployment is yes
   - export DEPLOY=yes
 
 jobs:
@@ -58,7 +64,7 @@ jobs:
       name: "Python 3.7 on Ubuntu Bionic: Test"
       dist: bionic
       python: "3.7"
-      services: xvfb
+      services: xvfb #needs a screen for tkinter
       before_script: echo "#do nothing before script"
       script: ${PYTHON_EXECUTABLE} tests.py
 
@@ -68,15 +74,14 @@ jobs:
       name: "3.7 on Bionic: Build/Deploy"
       dist: bionic
       python: "3.7"
-      services: xvfb
-      before_install: sudo apt-get install pcregrep
+      services: xvfb #needs a screen for tkinter
+      before_install: sudo apt-get install pcregrep #get special regex stuff
       skip_cleanup: true
       script:
         #run upx script
         # upx still doesn't quite work with race conditions of downloading vs processing
         # try to beat the race condition by having all this in one line
         #run build script
-        #list files to see what was built
 #        - "if [ true ]; then \
 #            if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
 #              bash ./scripts/get_upx.sh; \
@@ -95,67 +100,87 @@ jobs:
           echo \"${TRAVIS_TAG}\" > ./app_resources/meta/manifests/app_version.txt"
         #prepare files to upload
         - bash ./scripts/after_success.sh
-        #list binaries
-        #save list
-        #windows: deploy from filename notes
-        #else: deploy the binary
-        #there's a line just above the final deployment info that can overwrite to deploy the archive
-        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
-            head -n 1 ../build/filename.txt | cat; \
-            export FILES_TO_UPLOAD=$(head -n 1 ../build/filename.txt); \
-          else \
-            ls -p | pcregrep -M ${REGEX}; \
-            export FILES_TO_UPLOAD=$(ls -p | pcregrep -M ${REGEX}); \
-          fi; \
-          export TRAVIS_TAG=\"v${TRAVIS_TAG}\"" #prepend 'v' to tag name
-        - export FILES_TO_UPLOAD=../deploy/* #deploy archive
-        #output final deployment info
-        - "echo \"Deploy:          ${DEPLOY}\"; \
-          echo \"Files to Upload: ${FILES_TO_UPLOAD}\"; \
-          echo \"Git tag:         ${TRAVIS_TAG}\""
 
       before_deploy:
-        - "RFILE=\"github-releaser-travis\"; \
-          if [ \"${TRAVIS_OS_NAME}\" == \"osx\" ]; then \
-            RFILE=\"${RFILE}-mac\"; \
-          elif [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
-            RFILE=\"${RFILE}.exe\"; \
-          fi; \
-          export RELEASER=${RFILE}"
-        - curl https://miketrethewey.github.io/github-release-cli/v${GR_CLI_VERSION}/${RELEASER} -L --output github-releaser && chmod +x github-releaser
-        - export GITHUB_OAUTH_TOKEN=${GITHUB_DEPLOY_KEY}
+        #set up stuff for both deployment routes
+        #global var set at top to indicate which route to use
+        #each route has dis/advantages
+        #now that we have the tag sorted, set it in git
+        - export TRAVIS_TAG = "v${TRAVIS_TAG}"
         - export RELEASE_NAME="SpriteSomething ${TRAVIS_TAG}"
-        - export BODY=$(cat < ./RELEASENOTES.md)
-        - export FILES=${FILES_TO_UPLOAD}
+        - export FILES=../deploy/* #deploy archive
+        - git tag $TRAVIS_TAG
+        #if we're using GitHub Releaser CLI
+        # download,install,setup app
+        # set oauth token properly
+        # set body for release since we can do that
+        #else, set body as a hyperlink to RELEASENOTES.md
+        - "if [ \"${DEPLOYMENT}\" == \"github-releaser-cli\" ]; then \
+            RFILE=\"github-releaser-travis\"; \
+            if [ \"${TRAVIS_OS_NAME}\" == \"osx\" ]; then \
+              RFILE=\"${RFILE}-mac\"; \
+            elif [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
+              RFILE=\"${RFILE}.exe\"; \
+            fi; \
+            RELEASER=${RFILE}; \
+            curl https://miketrethewey.github.io/github-release-cli/v${GR_CLI_VERSION}/${RELEASER} -L --output github-releaser && chmod +x github-releaser; \
+            export GITHUB_OAUTH_TOKEN=${GITHUB_DEPLOY_KEY}; \
+            export BODY=$(cat < ./RELEASENOTES.md); \
+          elif [ \"${DEPLOYMENT}\" == \"travis\" ]; then \
+            export BODY=\"Please see [RELEASENOTES.md](/${TRAVIS_REPO_SLUG}/blob/${TRAVIS_TAG}/RELEASENOTES.md) for description.\" \
+          else \
+            export BODY=\"\"; \
+          fi;"
         #output actual deployment info
         - "echo \"Deploy:          ${DEPLOY}\"; \
           echo \"Files to Upload: ${FILES}\"; \
           echo \"Release Name:    ${RELEASE_NAME}\"; \
           echo \"Git tag:         ${TRAVIS_TAG}\""
 
+# Travis CI GitHub Releases provider
       deploy:
-        provider: script
-        script: ./github-releaser -draft -verbose
+        provider: releases
+        api_key:
+          secure: ${GITHUB_DEPLOY_KEY}
+        name: ${RELEASE_NAME}
+        body: ${BODY}
+        file_glob: true
+        file: ${FILES}
         skip_cleanup: true
         draft: true
         on:
           repo: Artheau/SpriteSomething
           condition: $DEPLOY == "yes"
           branch: travis-test
-          tags: true
+
+# GitHub Release CLI
+#  waiting on lindell/github-release-cli#3
+#  expected: 1 release with provided release body with 3 binaries
+#  actual: 3 releases with provided release body with 1 binary each
+#      deploy:
+#        provider: script
+#        script: ./github-releaser -draft -verbose
+#        skip_cleanup: true
+#        draft: true
+#        on:
+#          repo: Artheau/SpriteSomething
+#          condition: $DEPLOY == "yes"
+#          branch: travis-test
 
     # 3.7 on Xenial
     - <<: *tests
       name: "Python 3.7 on Ubuntu Xenial: Test"
       dist: xenial
       python: "3.7"
-      services: xvfb
+      services: xvfb #needs a screen for tkinter
     - <<: *build-deploy
       name: "3.7 on Xenial: Build/No Deploy"
       dist: xenial
       python: "3.7"
-      services: xvfb
+      services: xvfb #needs a screen for tkinter
       before_script:
+        #cancel deploy
+        # print value for confirmation
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
 
@@ -164,13 +189,15 @@ jobs:
       name: "Python 3.6 on Ubuntu Xenial: Test"
       dist: xenial
       python: "3.6"
-      services: xvfb
+      services: xvfb #needs a screen for tkinter
     - <<: *build-deploy
       name: "3.6 on Xenial: Build/No Deploy"
       dist: xenial
       python: "3.6"
-      services: xvfb
+      services: xvfb #needs a screen for tkinter
       before_script:
+        #cancel deploy
+        # print value for confirmation
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
 
@@ -180,26 +207,36 @@ jobs:
       os: osx
       osx_image: xcode10.2
       python: "3.7"
-      services:
-      language: shell
-      before_install: export PYTHON_EXECUTABLE=python3
+      services: #cancel services
+      language: shell #'language: python' breaks on Travis CI macOSX
+      before_install:
+        #macosx uses python3
+        - export PYTHON_EXECUTABLE=python3
     - <<: *build-deploy
       name: "3.7 on MacOSX: Build/Deploy"
       os: osx
       osx_image: xcode10.2
       python: "3.7"
-      services:
-      language: shell
-      before_install: export PYTHON_EXECUTABLE=python3
+      services: #cancel services
+      language: shell #'language: python' breaks on Travis CI macOSX
+      before_install:
+        #macosx uses python3
+        - export PYTHON_EXECUTABLE=python3
 
     # 3.7 on Windows
+    # Windows VMs currently are slow
     - <<: *tests
       name: "Python 3.7 on Windows 10 v1803: Test"
       os: windows
       python: "3.7"
-      services: xvfb
-      language: shell
+      services: xvfb #needs a screen for tkinter
+      language: shell #'language: python' breaks on Travis CI Windows
       before_install:
+        #install python
+        #set python path
+        #get pip
+        #install pip
+        #install more windows dependences
         - choco install python
         - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -210,9 +247,14 @@ jobs:
       name: "3.7 on Windows: Build/Deploy"
       os: windows
       python: "3.7"
-      services: xvfb
-      language: shell
+      services: xvfb #needs a screen for tkinter
+      language: shell #'language: python' breaks on Travis CI Windows
       before_install:
+        #install python
+        #set python path
+        #get pip
+        #install pip
+        #install more windows dependences
         - choco install python
         - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
@@ -220,5 +262,6 @@ jobs:
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - bash ./scripts/win-before_install.sh
 
+#nobody wants emails
 notifications:
   email: false
