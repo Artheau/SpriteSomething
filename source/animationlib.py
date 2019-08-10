@@ -178,11 +178,13 @@ class AnimationEngineParent():
 					button_list = []
 					for button in group["buttons"]:
 						if "meta" in button and button["meta"] == "newline":
-							button_list.append((None,None,None))
+							button_list.append((None,None,None,None))
 						elif "meta" in button and button["meta"] == "blank": #a blank space, baby
-							button_list.append((None,"",None))
+							button_list.append((None,"",None,None))
 						else:
-							button_list.append((button["fish-subkey"],button["img"],button["default"] if "default" in button else False))
+							default = button["default"] if "default" in button else False
+							disabled = group["disabled"] if "disabled" in group else False
+							button_list.append((button["fish-subkey"],button["img"],default,disabled))
 					button_group.adds(button_list,fish)
 
 		return spiffy_buttons
@@ -204,20 +206,22 @@ class AnimationEngineParent():
 					button_list = []
 					for button in group["buttons"]:
 						if "meta" in button and button["meta"] == "newline":
-							button_list.append((None,None,None))
+							button_list.append((None,None,None,None))
 						elif "meta" in button and button["meta"] == "blank": #a blank space, baby
-							button_list.append((None,"",None))
+							button_list.append((None,"",None,None))
 						else:
-							button_list.append((button["fish-subkey"],button["img"],button["default"] if "default" in button else False))
+							default = button["default"] if "default" in button else False
+							disabled = group["disabled"] if "disabled" in group else False
+							button_list.append((button["fish-subkey"],button["img"],default,disabled))
 					button_group.adds(button_list,fish)
 		else:
 			facing_group = direction_buttons.make_new_group("facing", fish)
 			if self.overhead:
 				facing_group.adds([
-					(None,"",None), #a blank space, baby
-					("up","arrow-up.png",False),
-					(None,"",None), #a blank space, baby
-					(None,None,None)
+					(None,"",None,None), #a blank space, baby
+					("up","arrow-up.png",False,False),
+					(None,"",None,None), #a blank space, baby
+					(None,None,None,None)
 				],fish)
 			facing_group.add("left", "arrow-left.png", fish)
 			if self.overhead:

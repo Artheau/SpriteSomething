@@ -72,6 +72,7 @@
 		},
 		{
 			"group-fish-key": "cannon-port",
+			"disabled": true,
 			"buttons": [
 				{
 					"fish-subkey": "no",
