@@ -21,8 +21,8 @@ env:
     - UPX_VERSION="3.95"
     - GR_CLI_VERSION="1.3.0"
     - REGEX="^([-\w]*)([.]|$)([\d]|exe|$)([.]|$)([\d]+|$)([-[:alpha:].]+|$)"
-#    - DEPLOYMENT="travis"
-    - DEPLOYMENT="github-releaser-cli"
+    - DEPLOYMENT="travis"
+#    - DEPLOYMENT="github-releaser-cli"
 
 # cache
 # before_install
@@ -138,34 +138,34 @@ jobs:
           echo \"Git tag:         ${TRAVIS_TAG}\""
 
 # Travis CI GitHub Releases provider
-#      deploy:
-#        provider: releases
-#        api_key:
-#          secure: ${GITHUB_DEPLOY_KEY}
-#        name: ${RELEASE_NAME}
-#        body: ${BODY}
-#        file_glob: true
-#        file: ${FILES}
-#        skip_cleanup: true
-#        draft: true
-#        on:
-#          repo: Artheau/SpriteSomething
-#          condition: $DEPLOY == "yes"
-#          branch: travis-test
-
-# GitHub Release CLI
-#  waiting on lindell/github-release-cli#3
-#  expected: 1 release with provided release body with 3 binaries
-#  actual: 3 releases with provided release body with 1 binary each
       deploy:
-        provider: script
-        script: ./github-releaser -draft -verbose
+        provider: releases
+        api_key:
+          secure: ${GITHUB_DEPLOY_KEY}
+        name: ${RELEASE_NAME}
+        body: ${BODY}
+        file_glob: true
+        file: ${FILES}
         skip_cleanup: true
         draft: true
         on:
           repo: Artheau/SpriteSomething
           condition: $DEPLOY == "yes"
           branch: travis-test
+
+# GitHub Release CLI
+#  waiting on lindell/github-release-cli#3
+#  expected: 1 release with provided release body with 3 binaries
+#  actual: 3 releases with provided release body with 1 binary each
+#      deploy:
+#        provider: script
+#        script: ./github-releaser -draft -verbose
+#        skip_cleanup: true
+#        draft: true
+#        on:
+#          repo: Artheau/SpriteSomething
+#          condition: $DEPLOY == "yes"
+#          branch: travis-test
 
     # 3.7 on Xenial
     - <<: *tests
