@@ -184,23 +184,6 @@ jobs:
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
 
-    # 3.6 on Xenial
-    - <<: *tests
-      name: "Python 3.6 on Ubuntu Xenial: Test"
-      dist: xenial
-      python: "3.6"
-      services: xvfb #needs a screen for tkinter
-    - <<: *build-deploy
-      name: "3.6 on Xenial: Build/No Deploy"
-      dist: xenial
-      python: "3.6"
-      services: xvfb #needs a screen for tkinter
-      before_script:
-        #cancel deploy
-        # print value for confirmation
-        - "export DEPLOY=no"
-        - "echo \"Deploy: ${DEPLOY}\""
-
     # 3.7 on macOS
     - <<: *tests
       name: "Python 3.7 on MacOSX 10.14 xcode 10.2: Test"
