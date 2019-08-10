@@ -12,6 +12,33 @@ from source.spritelib import SpriteParent
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
+		self.link_globals = {}
+		self.link_globals["zap_palette"] = [
+#				(  0,  0,  0),
+				(  0,  0,  0),
+				(208,184, 24),
+				(136,112,248),
+				(  0,  0,  0),
+				(208,192,248),
+				(  0,  0,  0),
+				(208,192,248),
+
+				(112, 88,224),
+				(136,112,248),
+				( 56, 40,128),
+				(136,112,248),
+				( 56, 40,128),
+				( 72, 56,144),
+				(120, 48,160),
+				(192,128,240)
+		]
+		self.link_globals["sword_palette"] = [
+			#blade, border, hilt
+			[(248,248,248),(248,248, 72),(104,136,184)], #fighters
+			[(112,144,248),(160,248,216),(168, 56, 56)], #master
+			[(216, 72, 16),(248,160, 40),(104,160,248)], #tempered
+			[(248,200,  0),(248,248,200),(  0,144, 72)]  #golden
+		]
 		self.load_plugins()
 
 	def import_from_ROM(self, rom):
@@ -92,25 +119,7 @@ class Sprite(SpriteParent):
 			this_palette.append((0,0,0))
 
 		if "zap_mail" in palettes:
-			this_palette = [
-#				(  0,  0,  0),
-				(  0,  0,  0),
-				(208,184, 24),
-				(136,112,248),
-				(  0,  0,  0),
-				(208,192,248),
-				(  0,  0,  0),
-				(208,192,248),
-
-				(112, 88,224),
-				(136,112,248),
-				( 56, 40,128),
-				(136,112,248),
-				( 56, 40,128),
-				( 72, 56,144),
-				(120, 48,160),
-				(192,128,240)
-			]
+			this_palette = self.link_globals["zap_palette"]
 		elif "bunny_mail" in palettes:
 			palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
 		else:
