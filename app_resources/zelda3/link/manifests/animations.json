@@ -5679,7 +5679,8 @@
                             7
                         ]
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 1,
@@ -5766,7 +5767,8 @@
                             8
                         ]
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 1,
@@ -5853,7 +5855,8 @@
                             7
                         ]
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 1,
@@ -5940,7 +5943,8 @@
                             8
                         ]
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 1,
@@ -13482,7 +13486,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13522,7 +13527,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13562,7 +13568,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13602,7 +13609,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13642,7 +13650,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13682,7 +13691,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13722,7 +13732,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13762,7 +13773,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13802,7 +13814,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13842,7 +13855,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13882,7 +13896,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13922,7 +13937,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -13962,7 +13978,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -14002,7 +14019,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -14042,7 +14060,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -14082,7 +14101,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -14122,7 +14142,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -14162,7 +14183,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             },
             {
                 "frames": 4,
@@ -14202,7 +14224,8 @@
                         ],
                         "flip": "h"
                     }
-                ]
+                ],
+								"palette": "zap_mail"
             }
         ]
     },
@@ -16240,7 +16263,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             }
         ],
         "up": [
@@ -16262,7 +16285,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             }
         ],
         "down": [
@@ -16284,7 +16307,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             }
         ],
         "left": [
@@ -16308,7 +16331,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             }
         ]
     },
@@ -16332,7 +16355,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16352,7 +16375,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 6,
@@ -16372,7 +16395,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16392,7 +16415,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16412,7 +16435,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16432,7 +16455,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 6,
@@ -16452,7 +16475,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16472,7 +16495,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 2,
@@ -16492,7 +16515,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16512,7 +16535,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             }
         ],
         "up": [
@@ -16534,7 +16557,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16554,7 +16577,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 6,
@@ -16574,7 +16597,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16595,7 +16618,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             }
         ],
         "down": [
@@ -16617,7 +16640,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16637,7 +16660,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 6,
@@ -16657,7 +16680,7 @@
                         ]
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16678,7 +16701,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             }
         ],
         "left": [
@@ -16702,7 +16725,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16724,7 +16747,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 6,
@@ -16746,7 +16769,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16768,7 +16791,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16790,7 +16813,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16812,7 +16835,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 6,
@@ -16834,7 +16857,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16856,7 +16879,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 2,
@@ -16878,7 +16901,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             },
             {
                 "frames": 4,
@@ -16900,7 +16923,7 @@
                         "flip": "h"
                     }
                 ],
-                "palette": "bunny"
+                "palette": "bunny_mail"
             }
         ]
     },

@@ -86,7 +86,32 @@ class Sprite(SpriteParent):
 		return rom
 
 	def get_palette(self, palettes, default_range, frame_number):
-		if "bunny" in palettes:
+		palette_indices = None
+		this_palette = []
+		for i in range(1,16):
+			this_palette.append((0,0,0))
+
+		if "zap_mail" in palettes:
+			this_palette = [
+#				(  0,  0,  0),
+				(  0,  0,  0),
+				(208,184, 24),
+				(136,112,248),
+				(  0,  0,  0),
+				(208,192,248),
+				(  0,  0,  0),
+				(208,192,248),
+
+				(112, 88,224),
+				(136,112,248),
+				( 56, 40,128),
+				(136,112,248),
+				( 56, 40,128),
+				( 72, 56,144),
+				(120, 48,160),
+				(192,128,240)
+			]
+		elif "bunny_mail" in palettes:
 			palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
 		else:
 			palette_indices = list(range(1,16))   #start with green mail and modify it as needed
@@ -104,7 +129,11 @@ class Sprite(SpriteParent):
 					elif "red_mail" in palettes:
 						palette_indices[i] += 32
 
-		return [self.master_palette[i] for i in palette_indices]
+		if palette_indices:
+			for i in range(0,len(palette_indices)):
+				this_palette[i] = self.master_palette[palette_indices[i]]
+
+		return this_palette
 
 	def get_binary_sprite_sheet(self):
 		top_half_of_rows = bytearray()
