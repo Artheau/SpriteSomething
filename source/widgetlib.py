@@ -149,7 +149,7 @@ class SpiffyGroup():
 
 		self.col += 1
 
-	def add(self, internal_value_name, image_filename, fish, default=False):
+	def add(self, internal_value_name, image_filename, fish, default=False, disabled=False):
 		if image_filename == None:
 			image_filename == "blank.png"
 		#disable sprite object in widgetlib
@@ -177,6 +177,8 @@ class SpiffyGroup():
 		 		indicatoron=False,
 		 		command=self.press_spiffy_button
 		)
+		if disabled:
+			button.configure(state="disabled")
 		bindings = None
 		keypresses = None
 		bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
@@ -201,13 +203,13 @@ class SpiffyGroup():
 		self.col += 1
 
 	def adds(self, buttons, fish):
-		for (internal_value_name, image_filename, default) in buttons:
+		for (internal_value_name, image_filename, default, disabled) in buttons:
 			if internal_value_name == None and image_filename == None and default == None:
 				self.add_newline()
 			elif internal_value_name == None:
 				self.add_blank_space()
 			else:
-				self.add(internal_value_name, image_filename, fish, default)
+				self.add(internal_value_name, image_filename, fish, default, disabled)
 
 	def add_blank_space(self, amount_of_space=1):
 		self.col += amount_of_space
