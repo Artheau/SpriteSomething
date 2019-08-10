@@ -151,7 +151,7 @@ jobs:
         on:
           repo: Artheau/SpriteSomething
           condition: $DEPLOY == "yes"
-          branch: travis-test
+          branch: master
 
 # GitHub Release CLI
 #  waiting on lindell/github-release-cli#3
@@ -165,7 +165,7 @@ jobs:
 #        on:
 #          repo: Artheau/SpriteSomething
 #          condition: $DEPLOY == "yes"
-#          branch: travis-test
+#          branch: master
 
     # 3.7 on Xenial
     - <<: *tests
