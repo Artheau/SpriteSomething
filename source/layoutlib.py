@@ -108,15 +108,19 @@ class Layout():
 
 	def get_property(self, this_property, image_name):
 		FAILSAFE = 100
-		for _ in range(FAILSAFE):
-			if this_property in self.data["images"][image_name]:
-				return self.data["images"][image_name][this_property]
-			elif "parent" in self.data["images"][image_name]:
-				image_name = self.data["images"][image_name]["parent"]
+		if image_name in self.data["images"]:
+			for _ in range(FAILSAFE):
+				if this_property in self.data["images"][image_name]:
+					return self.data["images"][image_name][this_property]
+				elif "parent" in self.data["images"][image_name]:
+					image_name = self.data["images"][image_name]["parent"]
+				else:
+					return None
 			else:
-				return None
+				raise AssertionError(f"Encountered infinite parental loop in layout.json while investigating {image_name}")
 		else:
-			raise AssertionError(f"Encountered infinite parental loop in layout.json while investigating {image_name}")
+			#print(f"Key not found in layout.json while investigating {image_name}")
+			pass
 
 	def make_horizontal_collage(self, image_list):
 		#assembles images horizontally and encapsulates them in a border.
@@ -223,6 +227,8 @@ class Layout():
 				master_width += xmax-xmin+2*self.data["border_size"] + max(spacer,0)
 
 				all_images[image_name] = this_image
+
+		all_images["transparent"] = Image.new("RGBA",(0,0),0)
 
 		master_palettes = list(all_images["palette_block"].convert("RGB").getdata())
 

@@ -2333,6 +2333,22 @@
             {
                 "frames": 2,
                 "tiles": [
+										{
+												"image": "SWORD1",
+												"pos": [
+														7,
+														18
+												],
+												"flip": "both"
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-7,
+														4
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -9583,6 +9599,13 @@
                 "frames": 10000,
                 "tiles": [
                     {
+                        "image": "pendant",
+                        "pos": [
+                            5,
+                            -15
+                        ]
+                    },
+                    {
                         "image": "L1",
                         "pos": [
                             -1,
@@ -9605,6 +9628,13 @@
             {
                 "frames": 10000,
                 "tiles": [
+                    {
+                        "image": "crystal",
+                        "pos": [
+                            0,
+                            -15
+                        ]
+                    },
                     {
                         "image": "Z2",
                         "pos": [

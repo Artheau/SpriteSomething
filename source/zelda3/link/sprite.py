@@ -12,6 +12,8 @@ from source.spritelib import SpriteParent
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
+		self.load_plugins()
+
 		self.link_globals = {}
 		self.link_globals["zap_palette"] = [
 #				(  0,  0,  0),
@@ -39,7 +41,22 @@ class Sprite(SpriteParent):
 			[(216, 72, 16),(248,160, 40),(104,160,248)], #tempered
 			[(248,200,  0),(248,248,200),(  0,144, 72)]  #golden
 		]
-		self.load_plugins()
+
+		self.equipment = self.plugins.equipment_test(False)
+		self.images = dict(self.images,**self.equipment)
+
+	def get_alternate_tile(self, image_name, palettes):
+		slugs = {}
+		image_found = False
+		for palette in palettes:
+			if '_' in palette:
+				slugs[palette[palette.rfind('_')+1:]] = palette[:palette.rfind('_')]
+		for item in ["SWORD","SHIELD"]:
+			if (not image_found) and (item in image_name):
+				image_found = True
+				image_name = image_name.replace(item,slugs[item.lower()] + '_' + item.lower()) if not ("none_" + item.lower()) in palettes else "transparent"
+
+		return self.images[image_name]
 
 	def import_from_ROM(self, rom):
 		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)    #the big Link sheet
@@ -65,6 +82,7 @@ class Sprite(SpriteParent):
 		palette_block = palette_block.convert('RGBA')
 
 		self.images = {}
+		self.images["transparent"] = Image.new("RGBA",(0,0),0)
 		self.images["palette_block"] = palette_block
 
 		for i,row in enumerate(itertools.chain(ascii_uppercase, ["AA","AB"])):

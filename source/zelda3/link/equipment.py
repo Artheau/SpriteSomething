@@ -6,7 +6,7 @@ def coord_calc(origin,dims):
 	w, h = dims
 	return (x1,x2,w+x1,h+x2)
 
-def equipment_test():
+def equipment_test(save=False):
 	#get equipment image
 	equipment_image = Image.open(common.get_resource(["zelda3","link","sheets"],"equipment.png"))
 
@@ -130,4 +130,7 @@ def equipment_test():
 		icon_coords = icon_specs.get(icon)
 		cropped_image = equipment_image.crop(icon_coords)
 		equipment[icon] = cropped_image
-		cropped_image.save("./user_resources/zelda3/link/sheets/" + icon + ".png")
+		if save:
+			cropped_image.save("./user_resources/zelda3/link/sheets/" + icon + ".png")
+
+	return equipment
