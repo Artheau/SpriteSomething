@@ -233,7 +233,7 @@ class Layout():
 		master_palettes = list(all_images["palette_block"].convert("RGB").getdata())
 
 		for image_name, this_image in all_images.items():
-			if image_name != "palette_block":
+			if not image_name in ["transparent","palette_block"]:
 				import_palette = self.get_property("import palette interval", image_name)
 				palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]   #flatten the RGB values
 				palette = palette + palette[:3]*(256-(len(palette)//3))
