@@ -167,12 +167,12 @@
 	},
 	"Moonwalk": {
 		"right": [
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [7,-3]}, {"image": "moonwalk_left",	"pos": [-13,-27]}	]	},
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [7,-4]}, {"image": "moonwalk_left1",	"pos": [-13,-27]}	]	},
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [7,-4]}, {"image": "moonwalk_left2",	"pos": [-13,-27]}	]	},
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [7,-3]}, {"image": "moonwalk_left3",	"pos": [-13,-27]}	]	},
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [7,-4]}, {"image": "moonwalk_left4",	"pos": [-13,-27]}	]	},
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [7,-4]}, {"image": "moonwalk_left5",	"pos": [-13,-27]}	]	}
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [11,-3]}, {"image": "moonwalk_left",	"pos": [-13,-27]}	]	},
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [11,-4]}, {"image": "moonwalk_left1",	"pos": [-13,-27]}	]	},
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [11,-4]}, {"image": "moonwalk_left2",	"pos": [-13,-27]}	]	},
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [11,-3]}, {"image": "moonwalk_left3",	"pos": [-13,-27]}	]	},
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [11,-4]}, {"image": "moonwalk_left4",	"pos": [-13,-27]}	]	},
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_right2", "pos": [11,-4]}, {"image": "moonwalk_left5",	"pos": [-13,-27]}	]	}
 		],
 		"right_aim_diag_up": [
 			{	"frames": 16,		"tiles": [	{"image": "gun_port_right_aim_diag_up2", "pos": [12,-22]}, {"image": "moonwalk_left_aim_diag_up",	"pos": [-13,-27]}	]	},
@@ -191,12 +191,12 @@
 			{	"frames": 16,		"tiles": [	{"image": "gun_port_right_aim_diag_down2", "pos": [11,0]}, {"image": "moonwalk_left_aim_diag_down5",	"pos": [-13,-27]}	]	}
 		],
 		"left": [
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-15,-3]}, {"image": "moonwalk_right",	"pos": [-19,-27]}	]	},
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-15,-4]}, {"image": "moonwalk_right1",	"pos": [-19,-27]}	]	},
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-15,-4]}, {"image": "moonwalk_right2",	"pos": [-19,-27]}	]	},
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-15,-3]}, {"image": "moonwalk_right3",	"pos": [-19,-27]}	]	},
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-15,-4]}, {"image": "moonwalk_right4",	"pos": [-19,-27]}	]	},
-			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-15,-4]}, {"image": "moonwalk_right5",	"pos": [-19,-27]}	]	}
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "moonwalk_right",	"pos": [-19,-27]}	]	},
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-19,-4]}, {"image": "moonwalk_right1",	"pos": [-19,-27]}	]	},
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-19,-4]}, {"image": "moonwalk_right2",	"pos": [-19,-27]}	]	},
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "moonwalk_right3",	"pos": [-19,-27]}	]	},
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-19,-4]}, {"image": "moonwalk_right4",	"pos": [-19,-27]}	]	},
+			{	"frames": 16,		"tiles": [	{"image": "gun_port_left2", "pos": [-19,-4]}, {"image": "moonwalk_right5",	"pos": [-19,-27]}	]	}
 		],
 		"left_aim_diag_up": [
 			{	"frames": 16,		"tiles": [	{"image": "gun_port_left_aim_diag_up2", "pos": [-20,-22]}, {"image": "moonwalk_right_aim_diag_up",	"pos": [-19,-27]}	]	},
@@ -575,7 +575,7 @@
 			{ "frames": 3,	"tiles": [	{"image": "crouch_transition_left_aim_up", "pos": [-19,-32]}	]	}
 		],
 		"left_aim_diag_up": [
-			{ "frames": 20,	"tiles": [	{"image": "stand_left_aim_diag_up", "pos": [-27,-29]}	]	},
+			{ "frames": 20,	"tiles": [	{"image": "gun_port_left_aim_diag_up2", "pos": [-21,-23]}, {"image": "stand_left_aim_diag_up", "pos": [-27,-29]}	]	},
 			{ "frames": 3,	"tiles": [	{"image": "gun_port_left_aim_diag_up2", "pos": [-22,-24]}, {"image": "crouch_transition_left_aim_diag_up", "pos": [-27,-24]}	]	},
 			{ "frames": 20,	"tiles": [	{"image": "gun_port_left_aim_diag_up2", "pos": [-22,-24]}, {"image": "crouch_left_aim_diag_up", "pos": [-27,-24]}	]	},
 			{ "frames": 3,	"tiles": [	{"image": "gun_port_left_aim_diag_up2", "pos": [-22,-24]}, {"image": "crouch_transition_left_aim_diag_up", "pos": [-27,-24]}	]	}
@@ -861,7 +861,7 @@
 			{	"frames": 10,	"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "stand_left3", "pos": [-19,-21]}	]	},
 			{	"frames": 1,	"tiles": [	{"image": "jump_left_begin", "pos": [-19,-27]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "jump_left_shoot", "pos": [-19,-27]}	]	},
-			{	"frames": 100,	"tiles": [	{"image": "gun_port_left2", "pos": [19,-3]}, {"image": "jump_left_shoot1", "pos": [-19,-27]}	]	},
+			{	"frames": 100,	"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "jump_left_shoot1", "pos": [-19,-27]}	]	},
 			{	"frames": 5,	"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "jump_left_shoot_land", "pos": [-19,-27]}	]	},
 			{	"frames": 2,	"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "jump_left_shoot_land1", "pos": [-19,-27]}	]	}
 		],
@@ -1469,11 +1469,11 @@
 			{ "frames": 100,	"tiles": [	{"image": "fall_left4", "pos": [-19,-27]} ] }
 		],
 		"left_aim_shoot": [
-			{ "frames": 8,	"tiles": [	{"image": "gun_port_left2", "pos": [19,-3]}, {"image": "fall_left_shoot", "pos": [-19,-27]} ] },
-			{ "frames": 6,	"tiles": [	{"image": "gun_port_left2", "pos": [19,-3]}, {"image": "fall_left_shoot1", "pos": [-19,-27]} ] },
-			{ "frames": 30,	"tiles": [	{"image": "gun_port_left2", "pos": [19,-3]}, {"image": "fall_left_shoot2", "pos": [-19,-27]} ] },
-			{ "frames": 8,	"tiles": [	{"image": "gun_port_left2", "pos": [19,-3]}, {"image": "fall_left_shoot3", "pos": [-19,-27]} ] },
-			{ "frames": 100,	"tiles": [	{"image": "gun_port_left2", "pos": [19,-3]}, {"image": "fall_left_shoot4", "pos": [-19,-27]} ] }
+			{ "frames": 8,	"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "fall_left_shoot", "pos": [-19,-27]} ] },
+			{ "frames": 6,	"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "fall_left_shoot1", "pos": [-19,-27]} ] },
+			{ "frames": 30,	"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "fall_left_shoot2", "pos": [-19,-27]} ] },
+			{ "frames": 8,	"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "fall_left_shoot3", "pos": [-19,-27]} ] },
+			{ "frames": 100,	"tiles": [	{"image": "gun_port_left2", "pos": [-19,-3]}, {"image": "fall_left_shoot4", "pos": [-19,-27]} ] }
 		],
 		"left_aim_diag_down": [
 			{ "frames": 2,	"tiles": [	{"image": "gun_port_left_aim_diag_down2", "pos": [-19,1]}, {"image": "fall_left_aim_diag_down", "pos": [-19,-27]} ] },
