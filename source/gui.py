@@ -312,6 +312,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
 		self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
 		self.left_panel.add(vcr_controls,minsize=MINSIZE)
+		self.animation_engine.attach_tile_details_panel(self.left_panel,self.fish)
 		self.panes.add(self.left_panel)
 
 	def attach_right_panel(self):

@@ -15,6 +15,9 @@ class AnimationEngineParent():
 		self.spiffy_dict = {}						 #the variables created by the spiffy buttons will go here
 		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
 		self.overview_scale_factor = sprite.overview_scale_factor #when the overview is made, it is scaled up by this amount
+		self.step_number_label = tk.Label()
+		self.step_total_label = tk.Label()
+		self.tiles_list_label = tk.Label()
 
 		self.plugins = []
 		self.prev_palette_info = []
@@ -71,6 +74,37 @@ class AnimationEngineParent():
 
 		return animation_panel
 
+	def attach_tile_details_panel(self, parent, fish):
+		tile_details_panel = tk.Frame(parent, name="tile_details_panel")
+		widgetlib.right_align_grid_in_frame(tile_details_panel)
+
+		# Step: <step_number_label> / <step_total_label>
+		# Tiles: <tile_list>
+		step_panel = tk.Frame(parent, name="step_panel")
+		widgetlib.right_align_grid_in_frame(step_panel)
+		step_label = tk.Label(step_panel, text=fish.translate("meta","meta","step") + ':')
+		step_label.grid(row=0, column=1)
+
+		self.step_number_label = tk.Label(step_panel, text='0')
+		self.step_number_label.grid(row=0, column=2)
+
+		step_sep = tk.Label(step_panel, text='/')
+		step_sep.grid(row=0, column=3)
+
+		self.step_total_label = tk.Label(step_panel, text='0')
+		self.step_total_label.grid(row=0, column=4)
+
+		parent.add(step_panel)
+
+		tiles_list_panel = tk.Frame(parent, name="tiles_list_panel")
+		widgetlib.right_align_grid_in_frame(tiles_list_panel)
+		self.tiles_list_label = tk.Label(tiles_list_panel, text='', justify=tk.RIGHT)
+		self.tiles_list_label.grid(row=1, column=2)
+
+		parent.add(tiles_list_panel)
+
+		return tile_details_panel
+
 	def set_animation(self, animation_name):
 		self.current_animation = animation_name
 		self.update_animation()
@@ -97,6 +131,7 @@ class AnimationEngineParent():
 	def get_current_image(self):
 		displayed_direction = self.get_current_direction()
 		pose_list = self.get_current_pose_list(displayed_direction)
+		tile_list = []
 		if not pose_list:
 			displayed_direction = self.sprite.get_alternative_direction(self.current_animation, displayed_direction)
 			pose_list = self.get_current_pose_list(displayed_direction)
@@ -128,8 +163,31 @@ class AnimationEngineParent():
 			current_frame -= self.palette_last_transition_frame
 
 			pose_image,offset = self.sprite.get_image(self.current_animation, displayed_direction, self.pose_number, palette_info, current_frame)
+			tile_list = self.sprite.get_tiles_for_pose(self.current_animation, displayed_direction, self.pose_number, palette_info, current_frame)
 		else:
 			pose_image,offset = None,(0,0)
+
+		if self.pose_number is not None:
+			self.step_number_label.config(text=str(self.pose_number+1))
+		if pose_list:
+			self.step_total_label.config(text=str(len(pose_list)))
+			tile_list_text = ""
+		if self.pose_number is not None and pose_list:
+			pose = pose_list[self.pose_number]
+			for tile in pose["tiles"]:
+				tile_list_text += tile["image"]
+				if "flip" in tile:
+					flip_switcher = {
+						"h": "X-flip",
+						"v": "Y-flip",
+						"both": "180-rotation",
+						"hv": "180-rotation",
+						"vh": "180-rotation"
+					}
+					flip = flip_switcher.get(tile["flip"]) if tile["flip"] in flip_switcher else ""
+					tile_list_text += ' ' + flip
+				tile_list_text += "\n"
+			self.tiles_list_label.config(text=tile_list_text)
 
 		return pose_image, offset
 
