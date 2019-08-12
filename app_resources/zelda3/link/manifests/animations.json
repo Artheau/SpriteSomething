@@ -2327,6 +2327,14 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "SWORD5",
+												"pos": [
+														-9,
+														10
+												],
+												"flip": "h"
+										},
                     {
                         "image": "F0",
                         "pos": [
@@ -2346,12 +2354,28 @@
                             16,
                             8
                         ]
-                    }
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-7,
+														-1
+												],
+												"flip": "h"
+										}
                 ]
             },
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "SWORD6",
+												"pos": [
+														-9,
+														14
+												],
+												"flip": "both"
+										},
                     {
                         "image": "F0",
                         "pos": [
@@ -2371,12 +2395,28 @@
                             16,
                             8
                         ]
-                    }
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-7,
+														-1
+												],
+												"flip": "h"
+										}
                 ]
             },
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "SWORD2",
+												"pos": [
+														-8,
+														17
+												],
+												"flip": "both"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -2390,12 +2430,28 @@
                             0,
                             8
                         ]
-                    }
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-7,
+														2
+												],
+												"flip": "h"
+										}
                 ]
             },
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "SWORD9",
+												"pos": [
+														-7,
+														19
+												],
+												"flip": "both"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -2409,12 +2465,28 @@
                             0,
                             8
                         ]
-                    }
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-7,
+														2
+												],
+												"flip": "h"
+										}
                 ]
             },
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "SWORD9",
+												"pos": [
+														-3,
+														21
+												],
+												"flip": "both"
+										},
                     {
                         "image": "A4",
                         "pos": [
@@ -2428,12 +2500,28 @@
                             0,
                             8
                         ]
-                    }
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														4
+												],
+												"flip": "h"
+										}
                 ]
             },
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SWORD10",
+												"pos": [
+														9,
+														24
+												],
+												"flip": "both"
+										},
                     {
                         "image": "A4",
                         "pos": [
@@ -2447,12 +2535,28 @@
                             0,
                             8
                         ]
-                    }
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														6
+												],
+												"flip": "h"
+										}
                 ]
             },
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "SWORD12",
+												"pos": [
+														12,
+														19
+												],
+												"flip": "v"
+										},
                     {
                         "image": "A4",
                         "pos": [
@@ -2466,12 +2570,28 @@
                             0,
                             8
                         ]
-                    }
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														4
+												],
+												"flip": "h"
+										}
                 ]
             },
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "SWORD2",
+												"pos": [
+														14,
+														17
+												],
+												"flip": "v"
+										},
                     {
                         "image": "A3",
                         "pos": [
@@ -2485,12 +2605,28 @@
                             0,
                             8
                         ]
-                    }
+                    },
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														4
+												],
+												"flip": "h"
+										}
                 ]
             },
             {
                 "frames": 2,
                 "tiles": [
+										{
+												"image": "SWORD6",
+												"pos": [
+														16,
+														15
+												],
+												"flip": "v"
+										},
                     {
                         "image": "A3",
                         "pos": [
@@ -2504,7 +2640,15 @@
                             0,
                             8
                         ]
-                    }
+                    },
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														4
+												],
+												"flip": "h"
+										}
                 ]
             }
         ],

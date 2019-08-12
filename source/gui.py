@@ -600,6 +600,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def reload(self):
 		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
+		self.sprite.load_animations()
 		self.sprite.import_from_filename()
 		self.animation_engine.update_overview_panel()   #TODO: Need to decide if this belongs in animation_engine
 		self.animation_engine.update_animation()
