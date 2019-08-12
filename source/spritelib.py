@@ -28,10 +28,8 @@ class SpriteParent():
 			self.overview_scale_factor = manifest_dict["input"]["png"]["overview-scale-factor"]
 		self.plugins = None
 		self.has_plugins = False
-		self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"))
-		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
-			self.animations = json.load(file)
-			file.close()
+		self.load_layout()
+		self.load_animations()
 		self.import_from_filename()
 
 	#to make a new sprite class, you must write code for all of the functions in this section below.
@@ -74,6 +72,13 @@ class SpriteParent():
 
 	#the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
 
+	def load_layout(self):
+		self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"))
+	def load_animations(self):
+		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
+			self.animations = json.load(file)
+			file.close()
+
 	def import_from_filename(self):
 		_,file_extension = os.path.splitext(self.filename)
 		if file_extension.lower() == '.png':
@@ -86,6 +91,7 @@ class SpriteParent():
 			_,rom_dir = os.path.split(rom_path)
 			rom_module = importlib.import_module(f"source.{rom_dir}.rom")
 			self.import_from_ROM(rom_module.RomHandler(self.filename))
+		self.import_cleanup()
 
 	def import_from_PNG(self):
 		self.images, self.master_palette = self.layout.extract_all_images_from_master(Image.open(self.filename))
@@ -135,6 +141,9 @@ class SpriteParent():
 			self.import_from_binary_data(pixel_data,palette_data)
 		else:
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
+
+	def import_cleanup(self):
+		pass
 
 	def update_pose_number(self):
 		if hasattr(self,"frame_getter") and hasattr(self, "frame_progression_table"):
