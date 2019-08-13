@@ -151,7 +151,7 @@ class SpriteParent():
 			self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x > mod_frames]))
 
 	def get_alternate_tile(self, image_name):
-		raise AssertionError("Image called {image_name} not found!")
+		raise AssertionError(f"Image called {image_name} not found!")
 
 	def get_tiles_for_pose(self, animation, direction, pose_number, palettes, frame_number):
 		pose_list = self.get_pose_list(animation, direction)
