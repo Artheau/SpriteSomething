@@ -74,7 +74,8 @@ class SamusAnimationAudit(unittest.TestCase):
 			for directed_animation in animation.values():
 				for pose in directed_animation: #directed_animation is a list, not a dict
 					for tile in pose["tiles"]:  #pose["tiles"] is a list, not a dict
-						referenced_images.add(tile["image"])
+						if not tile["image"].startswith("optional_"):
+							referenced_images.add(tile["image"])
 
 		supplied_images = set(self.samus_layout["images"].keys())
 		bad_image_references = referenced_images.difference(supplied_images)
