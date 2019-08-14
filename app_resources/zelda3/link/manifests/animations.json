@@ -10149,6 +10149,13 @@
             {
                 "frames": 20,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-1,
+														-12
+												]
+										},
                     {
                         "image": "L6",
                         "pos": [
@@ -10168,6 +10175,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-1,
+														-12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10187,6 +10201,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														2,
+														-12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10206,6 +10227,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														6,
+														-12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10225,6 +10253,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														10,
+														-12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10244,6 +10279,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														14,
+														-12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10263,6 +10305,20 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														19,
+														-11
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														5,
+														2
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10282,6 +10338,20 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														22,
+														-11
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														5,
+														2
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10301,6 +10371,20 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														26,
+														-10
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														5,
+														2
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10320,6 +10404,20 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														30,
+														-9
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														5,
+														2
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10339,6 +10437,20 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														34,
+														-9
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														5,
+														2
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10360,6 +10472,13 @@
             {
                 "frames": 20,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-11
+												]
+										},
                     {
                         "image": "L7",
                         "pos": [
@@ -10379,6 +10498,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-11
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -10398,6 +10524,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-15
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -10417,6 +10550,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-19
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -10436,6 +10576,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-22
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -10455,6 +10602,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-26
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -10474,6 +10628,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-30
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -10487,12 +10648,26 @@
                             0,
                             8
                         ]
-                    }
+                    },
+										{
+												"image": "SHIELD2",
+												"pos": [
+														5,
+														3
+												]
+										}
                 ]
             },
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-32
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -10506,12 +10681,26 @@
                             0,
                             8
                         ]
-                    }
+                    },
+										{
+												"image": "SHIELD2",
+												"pos": [
+														5,
+														3
+												]
+										}
                 ]
             },
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-36
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -10525,12 +10714,26 @@
                             0,
                             8
                         ]
-                    }
+                    },
+										{
+												"image": "SHIELD2",
+												"pos": [
+														5,
+														3
+												]
+										}
                 ]
             },
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-44
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -10544,12 +10747,26 @@
                             0,
                             8
                         ]
-                    }
-                ]
+                    },
+ 										{
+												"image": "SHIELD2",
+												"pos": [
+														5,
+														3
+												]
+										}
+               ]
             },
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-48
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -10563,7 +10780,14 @@
                             0,
                             8
                         ]
-                    }
+                    },
+ 										{
+												"image": "SHIELD2",
+												"pos": [
+														5,
+														3
+												]
+										}
                 ]
             }
         ],
@@ -10571,6 +10795,13 @@
             {
                 "frames": 20,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-11
+												]
+										},
                     {
                         "image": "L5",
                         "pos": [
@@ -10590,6 +10821,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-11
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -10609,6 +10847,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-8
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -10628,6 +10873,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														-4
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -10647,6 +10899,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														0
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -10666,6 +10925,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														4
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -10685,6 +10951,20 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														8
+												]
+										},
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														7
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -10704,6 +10984,20 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														12
+												]
+										},
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														7
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -10723,6 +11017,20 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														16
+												]
+										},
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														7
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -10742,6 +11050,20 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														20
+												]
+										},
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														7
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -10761,6 +11083,20 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														0,
+														24
+												]
+										},
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														7
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -10782,6 +11118,13 @@
             {
                 "frames": 20,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														1,
+														-12
+												]
+										},
                     {
                         "image": "L6",
                         "pos": [
@@ -10803,6 +11146,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														1,
+														-12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10824,6 +11174,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-2,
+														-12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10845,6 +11202,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-6,
+														-12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10866,6 +11230,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-10,
+														-12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10887,6 +11258,13 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-14,
+														-12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10908,6 +11286,21 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-19,
+														-11
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-5,
+														2
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10929,6 +11322,21 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-22,
+														-11
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-5,
+														2
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10950,6 +11358,21 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-26,
+														-10
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-5,
+														2
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10971,6 +11394,21 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-30,
+														-9
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-5,
+														2
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -10992,6 +11430,21 @@
             {
                 "frames": 1,
                 "tiles": [
+										{
+												"image": "bush",
+												"pos": [
+														-34,
+														-9
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-5,
+														2
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
