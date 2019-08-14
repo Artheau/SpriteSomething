@@ -1,6 +1,7 @@
 import importlib
 import itertools
 import json
+from PIL import Image
 from source.spritelib import SpriteParent
 from source import common
 from . import rom_import, rom_export, rdc_export
@@ -328,3 +329,18 @@ class Sprite(SpriteParent):
 				variant_type = palette_string.replace("_variant","")
 
 		return self.get_timed_palette(overall_type=overall_type, variant_type=variant_type)
+
+	def get_alternate_tile(self, image_name, palettes):
+		slugs = {}
+		for palette in palettes:
+			if '_' in palette:
+				slugs[palette[palette.rfind('_')+1:]] = palette[:palette.rfind('_')]
+		OPTIONAL_PORT_STRING = "optional_"
+		if image_name.startswith(OPTIONAL_PORT_STRING):    #as would be for the cannon ports, which are optionally present
+			if "yes_cannon-port" in palettes:
+				image_name = image_name.replace(OPTIONAL_PORT_STRING,"")
+				return self.images[image_name]
+			else:
+				return Image.new("RGBA",(0,0),0)
+		else:
+			raise AssertionError(f"Could not locate tile with name {image_name}")

@@ -44,15 +44,18 @@ class Sprite(SpriteParent):
 
 	def get_alternate_tile(self, image_name, palettes):
 		slugs = {}
-		image_found = False
 		for palette in palettes:
 			if '_' in palette:
 				slugs[palette[palette.rfind('_')+1:]] = palette[:palette.rfind('_')]
 		for item in ["SWORD","SHIELD"]:
-			if (not image_found) and (item in image_name) and (item.lower() in slugs):
-				image_found = True
-				image_name = image_name.replace(item,slugs[item.lower()] + '_' + item.lower()) if not ("none_" + item.lower()) in palettes else "transparent"
-		return self.images[image_name]
+			if image_name.startswith(item):
+				if item.lower() in slugs:
+					image_name = image_name.replace(item,slugs[item.lower()] + '_' + item.lower()) if not ("none_" + item.lower()) in palettes else "transparent"
+					return self.images[image_name]
+				else:
+					return Image.new("RGBA",(0,0),0)    #TODO: Track down why this function is being called without spiffy button info during sprite load
+		else:
+			raise AssertionError(f"Could not locate tile with name {image_name}")
 
 	def import_cleanup(self):
 		self.load_plugins()
