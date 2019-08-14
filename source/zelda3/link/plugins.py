@@ -17,7 +17,7 @@ class Plugins(PluginsParent):
 		]
 		self.set_plugins(plugins)
 
-	def equipment_test(self, save):
+	def equipment_test(self, save=False):
 		return equipment.equipment_test(save)
 
 	def get_alttpr_sprites(self):

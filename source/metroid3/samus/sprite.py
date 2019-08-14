@@ -9,6 +9,7 @@ from . import rom_import, rom_export, rdc_export
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
+		self.load_plugins()
 
 		self.overhead = False   #Samus is sideview, so only left/right direction buttons should show
 
@@ -54,50 +55,6 @@ class Sprite(SpriteParent):
 			raise AssertionError(f"Unrecognized color set request: {color_set}")
 
 	def get_timed_palette(self, overall_type="power", variant_type="standard"):
-		#notes for projectiles
-		charge_projectile = {
-			"power": [
-				(107, 40, 33),
-				(173, 81, 57),
-				(255,121, 49),
-				(247,231,  0),
-				(255,255,165),
-				(255,255,255)
-			],
-			"ice": [
-				(  0, 56,173),
-				(  0,121,222),
-				(  0,182,255),
-				( 82,199,231),
-				(115,223,255),
-				(255,255,255)
-			],
-			"wave": [
-				( 99,  0, 99),
-				(181,  0,181),
-				(255,  0,255),
-				(255,113,255),
-				(255,182,255),
-				(255,255,255)
-			],
-			"spazer": [
-				(115, 56,  0),
-				(181,134,  0),
-				(255,255,  0),
-				(255,255,148),
-				(255,255,214),
-				(255,255,255)
-			],
-			"plasma": [
-				(  0, 97, 41),
-				(  0,166, 74),
-				(  0,255,115),
-				(148,255,148),
-				(214,255,214),
-				(255,255,255)
-			]
-		}
-
 		timed_palette = []
 		base_palette = self.get_colors_from_master(overall_type)
 
@@ -313,6 +270,113 @@ class Sprite(SpriteParent):
 
 		#now scrub the palette to get rid of floats and numbers that are too large/small
 		return [(time,[(max(0,min(255,int(color_plane))) for color_plane in color) for color in palette]) for (time,palette) in timed_palette]
+
+	def get_projectile_priority(self, projectiles=["power_beam"]):
+		for beam in ["power","spazer","wave","plasma","ice"]:
+			if beam in projectiles or (beam + "_beam") in projectiles:
+				projectile = beam
+		return projectile
+
+	def get_projectile(self, projectile="lemon"):
+		'''
+		BEHAVIOR
+		========
+		lemon:				16 frames, alternate on/off starting with on; then starting a new shot
+		iced lemon:		randomly choose ice0 or ice1/ice2, drop a particle shower ice_particle[0-3]
+			ice0:				16 frames, alternate on/off starting with on, h-flip each time; then starting a new shot
+			ice1/ice2:	16 frames, alternate on/off starting with on, cycle 1/2 each time; then starting a new shot
+		wave:					16 frames, run trail in bell curve, each spot deteriorates
+		spazer:				16 frames, shoot single, alternate on/shift/off starting with on, split to 3 with space of 6, space of 14; then starting a new shot
+		plasma:				16 frames, shoot single, alternate on/shift/off starting with on, continue to grow to 32 long
+
+		CHARGING BEHAVIOR
+		=================
+		frames: 0 1 0 1 0 1 0 1 2 1 2 1 2 1 2 1 2 3 [2 3]
+
+		CHARGED SHOT BEHAVIOR
+		=====================
+		lemon:	[4 5], orange ice particles
+		ice:		[4 5], blue ice particles
+		wave:		[4 5], wave particles
+		spazer:	special charge shot, no particles, alternate standard spazer/special
+		plasma:	special charge shot, no particles, alternate standard plasma/special
+
+		COMBO BEHAVIOR
+		==============
+						COLOR		NUMBER	BEHAVIOR
+						=====		======	========
+		ice:		BLUE		single	ice particles
+		plasma:	green		single	plasma texture
+		wave:		purple	trail		wave motion
+		spazer:	yellow	TRIPLE	spazer texture
+		lemon:	no change
+
+		<-- higher priority
+		COLOR:		ice, plasma, wave, spazer, lemon
+		NUMBER: 	spazer, plasma+wave (double), plasma, wave, ice, lemon
+		BEHAVIOR:	ice, wave, plasma, spazer, lemon
+
+		SIZE
+		====
+		lemon:			no change
+		iced lemon:	no change
+		wave:				no change
+		spazer:			starts 9 long, then 16 long
+		plasma:			starts 5 long, then 32 long
+		'''
+		pass
+
+	def get_charged_spark(self, projectile="power_beam"):
+		# Ice:		Blue		ice_beam
+		# Plasma:	Green		plasma_beam
+		# Wave:		Purple	wave_beam
+		# Spazer:	Yellow	spazer_beam
+		# Power:	Lemon		power_beam
+		# Charged Shots use all 6 colors
+		# Charged Shots Ice-like particles use [0,1,2,5]
+		charge_switcher = {
+			"power_beam": [
+				(107, 40, 33),
+				(173, 81, 57),
+				(255,121, 49),
+				(247,231,  0),
+				(255,255,165),
+				(255,255,255)
+			],
+			"ice_beam": [
+				(  0, 56,173),
+				(  0,121,222),
+				(  0,182,255),
+				( 82,199,231),
+				(115,223,255),
+				(255,255,255)
+			],
+			"wave_beam": [
+				( 99,  0, 99),
+				(181,  0,181),
+				(255,  0,255),
+				(255,113,255),
+				(255,182,255),
+				(255,255,255)
+			],
+			"spazer_beam": [
+				(115, 56,  0),
+				(181,134,  0),
+				(255,255,  0),
+				(255,255,148),
+				(255,255,214),
+				(255,255,255)
+			],
+			"plasma_beam": [
+				(  0, 97, 41),
+				(  0,166, 74),
+				(  0,255,115),
+				(148,255,148),
+				(214,255,214),
+				(255,255,255)
+			]
+		}
+		charge_palette = charge_switcher.get(projectile) if projectile in charge_switcher else charge_switcher.get("power_beam")
 
 	def get_alternative_direction(self, animation, direction):
 		#suggest an alternative direction, which can be referenced if the original direction doesn't have an animation
