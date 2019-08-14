@@ -54,6 +54,50 @@ class Sprite(SpriteParent):
 			raise AssertionError(f"Unrecognized color set request: {color_set}")
 
 	def get_timed_palette(self, overall_type="power", variant_type="standard"):
+		#notes for projectiles
+		charge_projectile = {
+			"power": [
+				(107, 40, 33),
+				(173, 81, 57),
+				(255,121, 49),
+				(247,231,  0),
+				(255,255,165),
+				(255,255,255)
+			],
+			"ice": [
+				(  0, 56,173),
+				(  0,121,222),
+				(  0,182,255),
+				( 82,199,231),
+				(115,223,255),
+				(255,255,255)
+			],
+			"wave": [
+				( 99,  0, 99),
+				(181,  0,181),
+				(255,  0,255),
+				(255,113,255),
+				(255,182,255),
+				(255,255,255)
+			],
+			"spazer": [
+				(115, 56,  0),
+				(181,134,  0),
+				(255,255,  0),
+				(255,255,148),
+				(255,255,214),
+				(255,255,255)
+			],
+			"plasma": [
+				(  0, 97, 41),
+				(  0,166, 74),
+				(  0,255,115),
+				(148,255,148),
+				(214,255,214),
+				(255,255,255)
+			]
+		}
+
 		timed_palette = []
 		base_palette = self.get_colors_from_master(overall_type)
 
