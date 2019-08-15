@@ -404,6 +404,7 @@ class Sprite(SpriteParent):
 				]
 			}
 		}
+		tiles = {} #don't do this stuff yet
 
 		if animation in tiles:
 			if direction in tiles[animation]:
