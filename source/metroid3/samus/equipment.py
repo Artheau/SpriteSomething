@@ -109,8 +109,6 @@ def equipment_test(save=False):
 		x2 = 32
 		icon_specs["wave" + str(i)] = coord_calc((x1,x2),(w,h))
 
-	print(icon_specs)
-
 	#cycle through collected icons and write to disk
 	for icon in icon_specs:
 		icon_coords = icon_specs.get(icon)

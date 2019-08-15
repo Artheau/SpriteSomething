@@ -142,6 +142,9 @@ class SpriteParent():
 		else:
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
 
+	def get_supplemental_tiles(self,animation,direction,pose_number,palettes,frame_number):
+		return []
+
 	def import_cleanup(self):
 		pass
 
@@ -155,8 +158,10 @@ class SpriteParent():
 
 	def get_tiles_for_pose(self, animation, direction, pose_number, palettes, frame_number):
 		pose_list = self.get_pose_list(animation, direction)
+		tile_list = pose_list[pose_number]["tiles"][::-1]
+		tile_list += self.get_supplemental_tiles(animation,direction,pose_number,palettes,frame_number)
 		full_tile_list = []
-		for tile_info in pose_list[pose_number]["tiles"][::-1]:
+		for tile_info in tile_list:
 			#some poses have extra palette information, e.g. use "bunny" or "crystal_flash" palettes
 			# which can (whole or in part) override certain parts of the palette specified in the argument
 			new_palette = None

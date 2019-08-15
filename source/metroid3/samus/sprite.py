@@ -19,6 +19,12 @@ class Sprite(SpriteParent):
 		# 	("Ship Preview",None,None)
 		# ]
 
+	def import_cleanup(self):
+		self.load_plugins()
+		self.images["transparent"] = Image.new("RGBA",(0,0),0)
+		self.equipment = self.plugins.equipment_test(False)
+		self.images = dict(self.images,**self.equipment)
+
 	def import_from_ROM(self, rom):
 		#The history of the Samus import code is a story I will tell to my children
 		self.images = rom_import.rom_import(self, rom)
@@ -326,7 +332,7 @@ class Sprite(SpriteParent):
 		'''
 		pass
 
-	def get_charged_spark(self, projectile="power_beam"):
+	def get_projectile_palette(self, projectile="power_beam"):
 		# Ice:		Blue		ice_beam
 		# Plasma:	Green		plasma_beam
 		# Wave:		Purple	wave_beam
@@ -334,7 +340,7 @@ class Sprite(SpriteParent):
 		# Power:	Lemon		power_beam
 		# Charged Shots use all 6 colors
 		# Charged Shots Ice-like particles use [0,1,2,5]
-		charge_switcher = {
+		palette_switcher = {
 			"power_beam": [
 				(107, 40, 33),
 				(173, 81, 57),
@@ -376,7 +382,41 @@ class Sprite(SpriteParent):
 				(255,255,255)
 			]
 		}
-		charge_palette = charge_switcher.get(projectile) if projectile in charge_switcher else charge_switcher.get("power_beam")
+
+		palette = palette_switcher.get(projectile) if projectile in palette_switcher else palette_switcher.get("power_beam")
+
+		return palette
+
+	def get_supplemental_tiles(self,animation,direction,pose_number,palettes,frame_number):
+		return_tiles = []
+
+		tiles = { #tiles
+			"Stand": { #Stand
+				"right": [ #right
+					{
+						"pose": [0],
+						"frame": list(range(16)),
+						"image": "lemon_right",
+						"pos": [11,-8],
+						"pos_offset": [8,0],
+						"palette": "power_beam_projectile"
+					}
+				]
+			}
+		}
+
+		if animation in tiles:
+			if direction in tiles[animation]:
+				for direction_tile in tiles[animation][direction]:
+					if pose_number in direction_tile["pose"]:
+						for frame_check in direction_tile["frame"]:
+							if frame_number == frame_check or frame_check > 0 and frame_number % frame_check == 0:
+								print(str(frame_check) + " in pose")
+								direction_tile["pos"][0] += direction_tile["pos_offset"][0] * frame_check
+								direction_tile["pos"][1] += direction_tile["pos_offset"][1] * frame_check
+								return_tiles.append(direction_tile)
+
+		return return_tiles
 
 	def get_alternative_direction(self, animation, direction):
 		#suggest an alternative direction, which can be referenced if the original direction doesn't have an animation
