@@ -15651,6 +15651,13 @@
             {
                 "frames": 10000,
                 "tiles": [
+										{
+												"image": "SWORD0",
+												"pos": [
+														13,
+														-6
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -15682,6 +15689,20 @@
             {
                 "frames": 10000,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-5,
+														9
+												]
+										},
+										{
+												"image": "SWORD1",
+												"pos": [
+														12,
+														-7
+												]
+										},
                     {
                         "image": "A3",
                         "pos": [
