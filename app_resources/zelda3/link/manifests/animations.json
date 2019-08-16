@@ -15753,6 +15753,13 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "bow2",
+												"pos": [
+														1,
+														9
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -15779,6 +15786,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "bow0",
+												"pos": [
+														11,
+														6
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -15805,6 +15819,13 @@
             {
                 "frames": 9,
                 "tiles": [
+										{
+												"image": "bow0",
+												"pos": [
+														11,
+														6
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -15873,6 +15894,14 @@
                             8
                         ]
                     },
+										{
+												"image": "bow0",
+												"pos": [
+														-3,
+														5
+												],
+												"flip": "h"
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -15899,6 +15928,13 @@
                             8
                         ]
                     },
+										{
+												"image": "bow1",
+												"pos": [
+														-5,
+														8
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -15925,6 +15961,13 @@
                             8
                         ]
                     },
+										{
+												"image": "bow1",
+												"pos": [
+														-5,
+														8
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -15965,6 +16008,13 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "bow0",
+												"pos": [
+														10,
+														9
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -15991,6 +16041,14 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "bow1",
+												"pos": [
+														2,
+														14
+												],
+												"flip": "v"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -16017,6 +16075,14 @@
             {
                 "frames": 9,
                 "tiles": [
+										{
+												"image": "bow1",
+												"pos": [
+														2,
+														14
+												],
+												"flip": "v"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -16073,6 +16139,14 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "bow2",
+												"pos": [
+														-1,
+														9
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -16101,6 +16175,14 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "bow0",
+												"pos": [
+														-3,
+														6
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -16129,6 +16211,14 @@
             {
                 "frames": 9,
                 "tiles": [
+										{
+												"image": "bow0",
+												"pos": [
+														-3,
+														6
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
