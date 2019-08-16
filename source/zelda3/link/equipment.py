@@ -102,7 +102,7 @@ def equipment_test(save=False):
 		"hook2": (( 0,232),(16, 8)), #vertical
 		"hook3": ((16,232),( 8, 8)), #chainlink
 		"hook4": ((24,224),( 8,16)), #horizontal
-		"boom": ((32,224),(16,16)), #NE
+		"boomerang": ((32,224),(16,16)), #NE
 		"bow0": (( 0,256),( 8,16)),
 		"bow1": ((16,256),(16, 8)),
 		"bow2": ((32,256),(16,16)),
