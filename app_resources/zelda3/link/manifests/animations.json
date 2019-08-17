@@ -21097,6 +21097,13 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "rod0",
+												"pos": [
+														6,
+														-4
+												]
+										},
                     {
                         "image": "G2",
                         "pos": [
@@ -21161,6 +21168,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "rod4",
+												"pos": [
+														10,
+														0
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -21187,6 +21201,13 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "rod2",
+												"pos": [
+														10,
+														13
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -21215,6 +21236,13 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "rod1",
+												"pos": [
+														-2,
+														-9
+												]
+										},
                     {
                         "image": "G3",
                         "pos": [
@@ -21293,6 +21321,13 @@
                             8
                         ]
                     },
+										{
+												"image": "rod0",
+												"pos": [
+														-2,
+														-4
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -21319,6 +21354,13 @@
                             8
                         ]
                     },
+										{
+												"image": "rod5",
+												"pos": [
+														-2,
+														-2
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -21333,6 +21375,13 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "rod0",
+												"pos": [
+														10,
+														-4
+												]
+										},
                     {
                         "image": "G1",
                         "pos": [
@@ -21397,6 +21446,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "rod3",
+												"pos": [
+														10,
+														10
+												]
+										},
                     {
                         "image": "A3",
                         "pos": [
@@ -21423,6 +21479,14 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "rod1",
+												"pos": [
+														9,
+														19
+												],
+												"flip": "v"
+										},
                     {
                         "image": "A3",
                         "pos": [
@@ -21451,6 +21515,14 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "rod0",
+												"pos": [
+														2,
+														-4
+												],
+												"flip": "h"
+										},
                     {
                         "image": "G2",
                         "pos": [
@@ -21519,6 +21591,14 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "rod4",
+												"pos": [
+														-10,
+														0
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -21547,6 +21627,14 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "rod2",
+												"pos": [
+														-10,
+														13
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
