@@ -22529,6 +22529,21 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD1",
+												"pos": [
+														7,
+														18
+												],
+												"flip": "both"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -22555,6 +22570,22 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-6,
+														3
+												],
+												"flip": "h"
+										},
+										{
+												"image": "SWORD6",
+												"pos": [
+														-10,
+														17
+												],
+												"flip": "both"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -22597,6 +22628,21 @@
                             8
                         ]
                     },
+										{
+												"image": "SWORD0",
+												"pos": [
+														1,
+														-6
+												]
+										},
+										{
+												"image": "SHIELD2",
+												"pos": [
+														6,
+														2
+												],
+												"flip": "h"
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -22609,6 +22655,21 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "SHIELD1",
+												"pos": [
+														6,
+														3
+												]
+										},
+										{
+												"image": "SWORD6",
+												"pos": [
+														10,
+														17
+												],
+												"flip": "v"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -22635,6 +22696,21 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD1",
+												"pos": [
+														7,
+														18
+												],
+												"flip": "both"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -22661,6 +22737,22 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-6,
+														3
+												],
+												"flip": "h"
+										},
+										{
+												"image": "SWORD6",
+												"pos": [
+														-10,
+														17
+												],
+												"flip": "both"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -22703,6 +22795,21 @@
                             8
                         ]
                     },
+										{
+												"image": "SWORD0",
+												"pos": [
+														1,
+														-6
+												]
+										},
+										{
+												"image": "SHIELD2",
+												"pos": [
+														6,
+														2
+												],
+												"flip": "h"
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -22715,6 +22822,21 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "SHIELD1",
+												"pos": [
+														6,
+														3
+												]
+										},
+										{
+												"image": "SWORD6",
+												"pos": [
+														10,
+														17
+												],
+												"flip": "v"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -22741,6 +22863,21 @@
             {
                 "frames": 8,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD6",
+												"pos": [
+														16,
+														15
+												],
+												"flip": "v"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -22767,6 +22904,20 @@
             {
                 "frames": 9,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD1",
+												"pos": [
+														14,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -22792,8 +22943,63 @@
                 ]
             },
             {
+                "frames": 9,
+                "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
+                    {
+                        "image": "A7",
+                        "pos": [
+                            0,
+                            -1
+                        ]
+                    },
+                    {
+                        "image": "P4",
+                        "pos": [
+                            0,
+                            8
+                        ],
+                        "flip": "h"
+                    },
+                    {
+                        "image": "main_shadow",
+                        "pos": [
+                            0,
+                            7
+                        ]
+                    }
+                ]
+            },
+						{
                 "frames": 12,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -22822,6 +23028,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -22849,6 +23069,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -22877,6 +23111,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -22904,6 +23152,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -22932,6 +23194,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -22959,6 +23235,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -22987,6 +23277,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23014,6 +23318,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23042,6 +23360,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23069,6 +23401,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23097,6 +23443,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23124,6 +23484,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23152,6 +23526,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23179,6 +23567,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23207,6 +23609,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23234,6 +23650,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23262,6 +23692,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23289,6 +23733,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23317,6 +23775,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23344,6 +23816,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23372,6 +23858,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23399,6 +23899,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23427,6 +23941,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23454,6 +23982,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23482,6 +24024,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23509,6 +24065,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23537,6 +24107,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23564,6 +24148,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23592,6 +24190,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23619,6 +24231,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23647,6 +24273,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23674,6 +24314,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23702,6 +24356,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23729,6 +24397,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD3",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD11",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23757,6 +24439,20 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SHIELD0",
+												"pos": [
+														-4,
+														8
+												]
+										},
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														-6
+												]
+										},
                     {
                         "image": "A7",
                         "pos": [
@@ -23780,34 +24476,6 @@
                         ]
                     }
                 ]
-            },
-            {
-                "frames": 1,
-                "tiles": [
-                    {
-                        "image": "A7",
-                        "pos": [
-                            0,
-                            -1
-                        ]
-                    },
-                    {
-                        "image": "P4",
-                        "pos": [
-                            0,
-                            8
-                        ],
-                        "flip": "h"
-                    },
-                    {
-                        "image": "main_shadow",
-                        "pos": [
-                            0,
-                            7
-                        ]
-                    }
-                ],
-								"palette": "zap_mail"
             }
         ]
     },
