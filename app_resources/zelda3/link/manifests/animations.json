@@ -27602,6 +27602,13 @@
                             8
                         ]
                     },
+										{
+												"image": "book",
+												"pos": [
+														-4,
+														0
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
