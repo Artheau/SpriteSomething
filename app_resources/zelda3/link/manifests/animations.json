@@ -27262,6 +27262,13 @@
                             7
                         ]
                     },
+										{
+												"image": "bugnet0",
+												"pos": [
+														-10,
+														-5
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -27288,6 +27295,13 @@
                             7
                         ]
                     },
+										{
+												"image": "bugnet1",
+												"pos": [
+														1,
+														-9
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -27315,6 +27329,13 @@
                         ],
                         "flip": "h"
                     },
+										{
+												"image": "bugnet2",
+												"pos": [
+														13,
+														-6
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -27341,6 +27362,13 @@
                             7
                         ]
                     },
+										{
+												"image": "bugnet3",
+												"pos": [
+														15,
+														2
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -27353,6 +27381,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "bugnet4",
+												"pos": [
+														10,
+														12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -27381,6 +27416,14 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "bugnet1",
+												"pos": [
+														-1,
+														19
+												],
+												"flip": "both"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -27409,6 +27452,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "bugnet5",
+												"pos": [
+														-11,
+														14
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -27435,6 +27485,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "bugnet6",
+												"pos": [
+														-17,
+														5
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -27475,6 +27532,13 @@
                             7
                         ]
                     },
+										{
+												"image": "bugnet0",
+												"pos": [
+														-10,
+														-5
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -27501,6 +27565,13 @@
                             7
                         ]
                     },
+										{
+												"image": "bugnet1",
+												"pos": [
+														1,
+														-9
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
