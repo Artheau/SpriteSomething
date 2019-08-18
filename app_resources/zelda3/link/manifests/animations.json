@@ -26935,6 +26935,13 @@
             {
                 "frames": 8,
                 "tiles": [
+										{
+												"image": "shovel0",
+												"pos": [
+														8,
+														15
+												]
+										},
                     {
                         "image": "B7",
                         "pos": [
@@ -26961,6 +26968,13 @@
             {
                 "frames": 19,
                 "tiles": [
+										{
+												"image": "shovel0",
+												"pos": [
+														12,
+														16
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -27001,6 +27015,13 @@
                             7
                         ]
                     },
+										{
+												"image": "shovel1",
+												"pos": [
+														-1,
+														-5
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -27015,6 +27036,14 @@
             {
                 "frames": 8,
                 "tiles": [
+										{
+												"image": "shovel0",
+												"pos": [
+														0,
+														15
+												],
+												"flip": "h"
+										},
                     {
                         "image": "B7",
                         "pos": [
@@ -27043,6 +27072,14 @@
             {
                 "frames": 19,
                 "tiles": [
+										{
+												"image": "shovel0",
+												"pos": [
+														-4,
+														16
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -27087,6 +27124,14 @@
                         ],
                         "flip": "h"
                     },
+										{
+												"image": "shovel1",
+												"pos": [
+														9,
+														-5
+												],
+												"flip": "h"
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
