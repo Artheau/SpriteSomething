@@ -26278,6 +26278,13 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "hammer0",
+												"pos": [
+														7,
+														-4
+												]
+										},
                     {
                         "image": "G2",
                         "pos": [
@@ -26330,6 +26337,13 @@
                             16
                         ]
                     },
+										{
+												"image": "SHIELD2",
+												"pos": [
+														-1,
+														2
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -26342,6 +26356,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "hammer6",
+												"pos": [
+														11,
+														0
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -26356,6 +26377,13 @@
                             7
                         ]
                     },
+										{
+												"image": "SHIELD2",
+												"pos": [
+														-1,
+														2
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -26368,6 +26396,13 @@
             {
                 "frames": 18,
                 "tiles": [
+										{
+												"image": "hammer4",
+												"pos": [
+														12,
+														13
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -26382,6 +26417,13 @@
                             7
                         ]
                     },
+										{
+												"image": "SHIELD2",
+												"pos": [
+														-1,
+														2
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -26396,6 +26438,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "hammer2",
+												"pos": [
+														-2,
+														-8
+												]
+										},
                     {
                         "image": "G3",
                         "pos": [
@@ -26448,6 +26497,13 @@
                             16
                         ]
                     },
+										{
+												"image": "SHIELD1",
+												"pos": [
+														7,
+														3
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -26474,6 +26530,20 @@
                             8
                         ]
                     },
+										{
+												"image": "hammer1",
+												"pos": [
+														-2,
+														-4
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														7,
+														3
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -26500,6 +26570,20 @@
                             8
                         ]
                     },
+										{
+												"image": "hammer3",
+												"pos": [
+														-2,
+														-3
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														7,
+														3
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -26514,6 +26598,21 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "hammer1",
+												"pos": [
+														10,
+														-2
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														5
+												],
+												"flip": "h"
+										},
                     {
                         "image": "G1",
                         "pos": [
@@ -26578,6 +26677,21 @@
             {
                 "frames": 5,
                 "tiles": [
+										{
+												"image": "hammer5",
+												"pos": [
+														10,
+														10
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														5
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A3",
                         "pos": [
@@ -26604,6 +26718,22 @@
             {
                 "frames": 18,
                 "tiles": [
+										{
+												"image": "hammer2",
+												"pos": [
+														9,
+														18
+												],
+												"flip": "v"
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														5
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A3",
                         "pos": [
@@ -26632,6 +26762,14 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "hammer0",
+												"pos": [
+														1,
+														-4
+												],
+												"flip": "h"
+										},
                     {
                         "image": "G2",
                         "pos": [
@@ -26688,6 +26826,13 @@
                         ],
                         "flip": "h"
                     },
+										{
+												"image": "SHIELD2",
+												"pos": [
+														0,
+														2
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -26700,6 +26845,14 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "hammer6",
+												"pos": [
+														-11,
+														0
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -26716,6 +26869,13 @@
                         ],
                         "flip": "h"
                     },
+										{
+												"image": "SHIELD2",
+												"pos": [
+														0,
+														2
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -26728,6 +26888,14 @@
             {
                 "frames": 18,
                 "tiles": [
+										{
+												"image": "hammer4",
+												"pos": [
+														-12,
+														13
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -26744,6 +26912,13 @@
                         ],
                         "flip": "h"
                     },
+										{
+												"image": "SHIELD2",
+												"pos": [
+														0,
+														2
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
