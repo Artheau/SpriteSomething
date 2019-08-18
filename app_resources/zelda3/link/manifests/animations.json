@@ -27148,6 +27148,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "swagduck0",
+												"pos": [
+														8,
+														-21
+												]
+										},
                     {
                         "image": "L1",
                         "pos": [
@@ -27167,6 +27174,13 @@
             {
                 "frames": 8,
                 "tiles": [
+										{
+												"image": "swagduck1",
+												"pos": [
+														8,
+														-21
+												]
+										},
                     {
                         "image": "L1",
                         "pos": [
