@@ -27745,6 +27745,14 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "cane3",
+												"pos": [
+														-13,
+														-1
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -27772,6 +27780,14 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "cane0",
+												"pos": [
+														4,
+														-4
+												],
+												"flip": "h"
+										},
                     {
                         "image": "L6",
                         "pos": [
@@ -27798,6 +27814,13 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "cane2",
+												"pos": [
+														13,
+														11
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -27826,6 +27849,13 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "cane0",
+												"pos": [
+														-1,
+														4
+												]
+										},
                     {
                         "image": "F1",
                         "pos": [
@@ -27860,6 +27890,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "cane0",
+												"pos": [
+														-3,
+														-3
+												]
+										},
                     {
                         "image": "A2",
                         "pos": [
@@ -27902,6 +27939,13 @@
                             8
                         ]
                     },
+										{
+												"image": "cane4",
+												"pos": [
+														-3,
+														-8
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -27938,6 +27982,13 @@
                             8
                         ]
                     },
+										{
+												"image": "cane0",
+												"pos": [
+														9,
+														-8
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -27950,6 +28001,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "cane0",
+												"pos": [
+														12,
+														-3
+												]
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -27977,6 +28035,14 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "cane1",
+												"pos": [
+														8,
+														16
+												],
+												"flip": "v"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -28005,6 +28071,13 @@
             {
                 "frames": 3,
                 "tiles": [
+										{
+												"image": "cane3",
+												"pos": [
+														13,
+														-1
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -28033,6 +28106,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "cane0",
+												"pos": [
+														4,
+														-4
+												]
+										},
                     {
                         "image": "L6",
                         "pos": [
@@ -28061,6 +28141,14 @@
             {
                 "frames": 6,
                 "tiles": [
+										{
+												"image": "cane2",
+												"pos": [
+														-13,
+														11
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
