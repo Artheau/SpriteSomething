@@ -2,25 +2,38 @@ import os
 import itertools
 import struct
 import numpy as np
-import tkinter as tk
 from PIL import Image
-import base64
-from io import BytesIO    #for shenanigans
 
-def get_all_resources(desired_filename, subdir=None):
-	#gets the file from overrides AND resources (returns a list of filenames)
+def get_all_resources(subdir=None,desired_filename=None):
 	file_list = []
-	for directory in ["overrides","resources"]:
+
+	if not subdir == None and desired_filename == None:
+		desired_filename = subdir
+		subdir = "./"
+
+	if isinstance(subdir,list):
+		subdir = os.path.join(*subdir)
+
+	#gets the file from user_resources AND app_resources (returns a list of filenames)
+	for directory in ["user_resources","app_resources"]:
 		if subdir: directory = os.path.join(directory,subdir)
 		if os.path.isdir(directory):
 			for filename in os.listdir(directory):
 				if filename == desired_filename:
 					file_list.append(os.path.join(directory,filename))
+
 	return file_list
 
-def get_resource(desired_filename, subdir=None):
+def get_resource(subdir=None,desired_filename=None):
 	#gets the file from overrides.  If not there, then from resources.
-	file_list = get_all_resources(desired_filename,subdir=subdir)
+	if not subdir == None and desired_filename == None:
+		desired_filename = subdir
+		subdir = "./"
+
+	if isinstance(subdir,list):
+		subdir = os.path.join(*subdir)
+
+	file_list = get_all_resources(subdir,desired_filename)
 	return file_list[0] if file_list else None
 
 def gather_all_from_resource_subdirectory(subdir):
@@ -28,7 +41,7 @@ def gather_all_from_resource_subdirectory(subdir):
 	# and then also throws in all the filenames from the same subdirectory in overrides
 	#does not recurse
 	file_list = []
-	for directory in ["resources","overrides"]:
+	for directory in ["app_resources","user_resources"]:
 		directory = os.path.join(directory,subdir)
 		if os.path.isdir(directory):
 			for filename in os.listdir(directory):
@@ -45,17 +58,6 @@ def apply_palette(image, palette):
 		image = image.convert('RGBA')
 		image.putalpha(alpha_mask)
 	return image
-
-def get_tk_image(image):
-	#needed because the tkImage.PhotoImage conversion is SO slow for big images.  Like, you don't even know.
-	#LET THE SHENANIGANS BEGIN
-	buffered = BytesIO()
-	image.save(buffered, format="GIF")
-	img_str = base64.b64encode(buffered.getvalue())
-	return tk.PhotoImage(data=img_str)
-
-def convert_hex_to_rgb(color):
-	return tuple(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
 
 def reduce_to_nearest_eighth(val):
 	#take a value, divide by 8, floor it
@@ -119,7 +121,7 @@ def image_from_raw_data(tilemaps, DMA_writes, bounding_box):
 		v_flip = tilemap[4] & 0x80
 		h_flip = tilemap[4] & 0x40
 		#priority = (tilemap[4] //0x10) % 0b100                   #TODO: implement a priority system
-		palette = (tilemap[4] //2) % 0b1000												#FIXME: unused variable
+		#palette = (tilemap[4] //2) % 0b1000					  #in theory, the palette index here could be used to render if we wanted a ROM-dependent implementation
 
 		def draw_tile_to_canvas(new_x_offset, new_y_offset, new_index):
 			tile_to_write = convert_tile_from_bitplanes(DMA_writes[new_index])

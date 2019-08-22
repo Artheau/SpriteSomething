@@ -1,23 +1,29 @@
 import importlib
 import itertools
+import json
+from PIL import Image
 from source.spritelib import SpriteParent
 from source import common
-from source import widgetlib
 from . import rom_import, rom_export, rdc_export
 
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
-
-		self.overview_scale_factor = 1    #Samus's sheet is BIG, so don't zoom in on the overview
+		self.load_plugins()
 
 		self.overhead = False   #Samus is sideview, so only left/right direction buttons should show
 
 		#TODO: Make file select and ship be animations in the big list, or tie to the ship background
 		# self.plugins += [
-		# 	("File Select Preview",None),
-		# 	("Ship Preview",None)
+		# 	("File Select Preview",None,None),
+		# 	("Ship Preview",None,None)
 		# ]
+
+	def import_cleanup(self):
+		self.load_plugins()
+		self.images["transparent"] = Image.new("RGBA",(0,0),0)
+		self.equipment = self.plugins.equipment_test(False)
+		self.images = dict(self.images,**self.equipment)
 
 	def import_from_ROM(self, rom):
 		#The history of the Samus import code is a story I will tell to my children
@@ -30,47 +36,29 @@ class Sprite(SpriteParent):
 
 	def get_rdc_export_blocks(self):
 		SAMUS_EXPORT_BLOCK_TYPE = 4
-		return [(SAMUS_EXPORT_BLOCK_TYPE,block) for block in rdc_export.get_raw_rdc_export_blocks(self)]
+		return [(SAMUS_EXPORT_BLOCK_TYPE,rdc_export.get_raw_rdc_samus_block(self))]
 
 	def get_colors_from_master(self, color_set):
 		#for internal class use.  For general use, call get_timed_palette()
-		if color_set.lower() in ["power","base"]:
-			return self.master_palette[0:15]
-		elif color_set.lower() == "varia":
-			return self.master_palette[15:30]
-		elif color_set.lower() == "gravity":
-			return self.master_palette[30:45]
-		elif color_set.lower() == "death":
-			return self.master_palette[45:60]
-		elif color_set.lower() == "flash":
-			return self.master_palette[60:75]
-		elif color_set.lower().replace("_", " ") == "file select":
-			return self.master_palette[75:90]
-		elif color_set.lower() == "door":
-			return self.master_palette[3]
-		elif color_set.lower().replace("-", "").replace("_","") == "xray":
-			return self.master_palette[91:94]
-		elif color_set.lower() == "ship":
-			return self.master_palette[101:104]
+		color_set_switcher = {
+			"power": [0,15],
+			"base": [0,15],
+			"varia": [15,30],
+			"gravity": [30,45],
+			"death": [45,60],
+			"flash": [60,75],
+			"fileselect": [75,90],
+			"door": [3],
+			"xray": [91,94],
+			"ship": [101,104]
+		}
+		master_palette_indexes = color_set_switcher.get(color_set.lower().replace(' ',"").replace('-',"").replace('_',""))
+		if len(master_palette_indexes) == 1:
+			return self.master_palette[master_palette_indexes[0]]
+		elif len(master_palette_indexes) == 2:
+			return self.master_palette[master_palette_indexes[0]:master_palette_indexes[1]]
 		else:
 			raise AssertionError(f"Unrecognized color set request: {color_set}")
-
-	def set_color_in_master(self, color_value, color_set, color_index):
-		palette_switcher = {
-			"power":				0,
-			"base":					0,
-			"varia":				15,
-			"gravity":			30,
-			"death":				45,
-			"flash":				60,
-			"file_select":	75,
-			"door":					3,
-			"xray":					91,
-			"ship":					101
-		}
-		palette_index = palette_switcher.get(color_set)
-		color_value = common.convert_hex_to_rgb(color_value)
-		self.master_palette[palette_index + color_index] = color_value
 
 	def get_timed_palette(self, overall_type="power", variant_type="standard"):
 		timed_palette = []
@@ -136,31 +124,42 @@ class Sprite(SpriteParent):
 			timed_palette.append((0,base_palette))
 
 		elif variant_type.lower() == "heat":
-			timed_palette.append((16,common.palette_shift(base_palette,(0,0,0))))
-			timed_palette.append((4,common.palette_shift(base_palette,(8,0,0))))
-			timed_palette.append((4,common.palette_shift(base_palette,(8,0,0))))
-			timed_palette.append((5,common.palette_shift(base_palette,(16,0,0))))
-			timed_palette.append((6,common.palette_shift(base_palette,(16,0,0))))
-			timed_palette.append((7,common.palette_shift(base_palette,(24,0,0))))
-			timed_palette.append((8,common.palette_shift(base_palette,(24,0,0))))
-			timed_palette.append((8,common.palette_shift(base_palette,(40,0,0))))
-			timed_palette.append((8,common.palette_shift(base_palette,(40,0,0))))
-			timed_palette.append((8,common.palette_shift(base_palette,(24,0,0))))
-			timed_palette.append((7,common.palette_shift(base_palette,(24,0,0))))
-			timed_palette.append((6,common.palette_shift(base_palette,(16,0,0))))
-			timed_palette.append((5,common.palette_shift(base_palette,(16,0,0))))
-			timed_palette.append((4,common.palette_shift(base_palette,(8,0,0))))
-			timed_palette.append((4,common.palette_shift(base_palette,(8,0,0))))
-			timed_palette.append((3,common.palette_shift(base_palette,(8,0,0))))
+			palette_shifts = [
+				{ "index": 16, "color": (0,0,0) },
+				{ "index": 4, "color": (8,0,0) },
+				{ "index": 4, "color": (8,0,0) },
+				{ "index": 5, "color": (16,0,0) },
+				{ "index": 6, "color": (16,0,0) },
+				{ "index": 7, "color": (24,0,0) },
+				{ "index": 8, "color": (24,0,0) },
+				{ "index": 8, "color": (40,0,0) },
+				{ "index": 8, "color": (40,0,0) },
+				{ "index": 8, "color": (24,0,0) },
+				{ "index": 7, "color": (24,0,0) },
+				{ "index": 6, "color": (16,0,0) },
+				{ "index": 5, "color": (16,0,0) },
+				{ "index": 4, "color": (8,0,0) },
+				{ "index": 4, "color": (8,0,0) },
+				{ "index": 3, "color": (8,0,0) }
+			]
+
+			for shift in palette_shifts:
+				timed_palette.append((shift["index"],common.palette_shift(base_palette,shift["color"])))
 
 		elif variant_type.lower() == "charge":
 			timed_palette = [(1, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(i)/8.0)) for i in range(8)]
 
 		elif variant_type.lower().replace("_"," ") == "speed boost":
-			timed_palette.append((4,common.palette_shift(base_palette,(0,0,0))))
-			timed_palette.append((4,common.palette_shift(base_palette,(0,0,80))))
-			timed_palette.append((4,common.palette_shift(base_palette,(0,40,160))))
-			timed_palette.append((0,common.palette_shift(base_palette,(20,100,240))))  #(0,120,160)
+
+			palette_shifts = [
+				{ "index": 4, "color": (0,0,0) },
+				{ "index": 4, "color": (0,0,80) },
+				{ "index": 4, "color": (0,40,160) },
+				{ "index": 0, "color": (20,100,240) } #(0,120,160)
+			]
+
+			for shift in palette_shifts:
+				timed_palette.append((shift["index"],common.palette_shift(base_palette,shift["color"])))
 
 		elif variant_type.lower().replace("_"," ") == "speed squat":
 			#i = 0 1 2 3 2 1 0 2 3 2 1 0 1 2...
@@ -168,66 +167,79 @@ class Sprite(SpriteParent):
 			timed_palette.extend([(1,common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(i)/4.0)) for i in [2,1]])
 
 		elif variant_type.lower().replace("_","").replace(" ","") == "shinespark":
-			timed_palette.append((1,common.palette_shift(base_palette,(0,0,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(64,64,32))))
-			timed_palette.append((1,common.palette_shift(base_palette,(104,104,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(176,176,64))))
+			palette_shifts = [
+				{ "index": 1, "color": (0,0,0) },
+				{ "index": 1, "color": (64,64,32) },
+				{ "index": 1, "color": (104,104,0) },
+				{ "index": 1, "color": (176,176,64) }
+			]
+
+			for shift in palette_shifts:
+				timed_palette.append((shift["index"],common.palette_shift(base_palette,shift["color"])))
 
 		elif variant_type.lower().replace("_"," ") == "screw attack":
-			timed_palette.append((1,common.palette_shift(base_palette,(0,0,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(0,64,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(0,128,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(0,192,40))))
-			timed_palette.append((1,common.palette_shift(base_palette,(0,128,0))))
-			timed_palette.append((1,common.palette_shift(base_palette,(0,64,0))))
+			palette_shifts = [
+				{ "index": 1, "color": (0,0,0) },
+				{ "index": 1, "color": (0,64,0) },
+				{ "index": 1, "color": (0,128,0) },
+				{ "index": 1, "color": (0,192,40) },
+				{ "index": 1, "color": (0,128,0) },
+				{ "index": 1, "color": (0,64,0) }
+			]
+
+			for shift in palette_shifts:
+				timed_palette.append((shift["index"],common.palette_shift(base_palette,shift["color"])))
 
 		elif variant_type.lower().replace("_"," ") == "hyper":
+			palette_shifts = [
+				{ "index": 2, "color": (0xE0,0x20,0x20) },
+				{ "index": 2, "color": (0xE0,0x68,0x10) },
+				{ "index": 2, "color": (0xE0,0xE0,0x00) },
+				{ "index": 2, "color": (0x58,0xE0,0x00) },
+				{ "index": 2, "color": (0x00,0xE0,0x00) },
+				{ "index": 2, "color": (0x08,0x85,0x40) },
+				{ "index": 2, "color": (0x08,0x60,0x80) },
+				{ "index": 2, "color": (0x50,0x30,0x90) },
+				{ "index": 2, "color": (0x90,0x00,0x90) },
+				{ "index": 2, "color": (0xA8,0x10,0x58) }
+			]
+
 			grayscale_palette = common.grayscale(self.get_colors_from_master("gravity"))
 			faded_palette = common.palette_pull_towards_color(grayscale_palette,(0,0,0),2.0/3.0)
-			timed_palette.append((2,common.palette_shift(faded_palette,(0xE0,0x20,0x20))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0xE0,0x68,0x10))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0xE0,0xE0,0x00))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x58,0xE0,0x00))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x00,0xE0,0x00))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x08,0x85,0x40))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x08,0x60,0x80))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x50,0x30,0x90))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0x90,0x00,0x90))))
-			timed_palette.append((2,common.palette_shift(faded_palette,(0xA8,0x10,0x58))))
+
+			for shift in palette_shifts:
+				timed_palette.append((shift["index"],common.palette_shift(faded_palette,shift["color"])))
 
 		elif variant_type.lower().replace("_"," ") == "death suit":
-			timed_palette.append((21, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(0.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(1.0)/8.0)))
-			timed_palette.append((3, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(2.0)/8.0)))
-			timed_palette.append((4, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(3.0)/8.0)))
-			timed_palette.append((5, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(4.0)/8.0)))
-			timed_palette.append((5, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(5.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(6.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(7.0)/8.0)))
-			timed_palette.append((80, common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(8.0)/8.0)))
+			palette_indexes = [21,6,3,4,5,5,6,6,80]
+			for i in range(len(palette_indexes)):
+				timed_palette.append((palette_indexes[i], common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(i)/8.0)))
 
 		elif variant_type.lower() == "death":
 			death_palette = self.get_colors_from_master("death")
-			timed_palette.append((21, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(0.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(1.0)/8.0)))
-			timed_palette.append((3, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(2.0)/8.0)))
-			timed_palette.append((4, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(3.0)/8.0)))
-			timed_palette.append((5, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(4.0)/8.0)))
-			timed_palette.append((5, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(5.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(6.0)/8.0)))
-			timed_palette.append((6, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(7.0)/8.0)))
-			timed_palette.append((80, common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(8.0)/8.0)))
+			palette_indexes = [21,6,3,4,5,5,6,6,80]
+			for i in range(len(palette_indexes)):
+				timed_palette.append((palette_indexes[i], common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(i)/8.0)))
 
 		elif variant_type.lower() == "flash":
+			#in the ROM, the flash timing is technically coded as "2", but that looks abnormally fast if rendered outside the ROM,
+			# so maybe there is some hidden code in the ROM that doubles that before it is used
+			FLASH_TIMING = 4
 			flash_master_palette = self.get_colors_from_master("flash")
 			flash_bright_portion = flash_master_palette[:9]
 			flash_rotating_portion = flash_master_palette[9:]
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(0,0,0))    + flash_rotating_portion[6:] + flash_rotating_portion[:6]))
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(24,24,24))    + flash_rotating_portion[5:] + flash_rotating_portion[:5]))
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(56,56,56))    + flash_rotating_portion[4:] + flash_rotating_portion[:4]))
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(88,88,88)) + flash_rotating_portion[3:] + flash_rotating_portion[:3]))
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(56,56,56))    + flash_rotating_portion[2:] + flash_rotating_portion[:2]))
-			timed_palette.append((2,common.palette_shift(flash_bright_portion,(24,24,24))    + flash_rotating_portion[1:] + flash_rotating_portion[:1]))
+			palette_shifts = [
+				( 0, 0, 0),
+				(24,24,24),
+				(56,56,56),
+				(88,88,88),
+				(56,56,56),
+				(24,24,24)
+			]
+			for i in range(len(palette_shifts)):
+				color = palette_shifts[i]
+				str_index = len(palette_shifts) - i
+				timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,color) + flash_rotating_portion[str_index:] + flash_rotating_portion[:str_index]))
 
 		elif variant_type.lower() == "sepia":
 			timed_palette = [(0, common.sepia(self.get_colors_from_master("power")))]
@@ -265,140 +277,219 @@ class Sprite(SpriteParent):
 		#now scrub the palette to get rid of floats and numbers that are too large/small
 		return [(time,[(max(0,min(255,int(color_plane))) for color_plane in color) for color in palette]) for (time,palette) in timed_palette]
 
-	def get_spiffy_buttons(self, parent):
-		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
+	def get_projectile_priority(self, projectiles=["power_beam"]):
+		for beam in ["power","spazer","wave","plasma","ice"]:
+			if beam in projectiles or (beam + "_beam") in projectiles:
+				projectile = beam
+		return projectile
 
-		#suit buttons
-		suit_group = spiffy_buttons.make_new_group("suit")
-		suit_group.add_blank_space()	#default has a value, skip a space
-		suit_group.add("power", "suit-power.png")
-		suit_group.add("varia", "suit-varia.png")
-		suit_group.add("gravity", "suit-gravity.png")
+	def get_projectile(self, projectile="lemon"):
+		'''
+		BEHAVIOR
+		========
+		lemon:				16 frames, alternate on/off starting with on; then starting a new shot
+		iced lemon:		randomly choose ice0 or ice1/ice2, drop a particle shower ice_particle[0-3]
+			ice0:				16 frames, alternate on/off starting with on, h-flip each time; then starting a new shot
+			ice1/ice2:	16 frames, alternate on/off starting with on, cycle 1/2 each time; then starting a new shot
+		wave:					16 frames, run trail in bell curve, each spot deteriorates
+		spazer:				16 frames, shoot single, alternate on/shift/off starting with on, split to 3 with space of 6, space of 14; then starting a new shot
+		plasma:				16 frames, shoot single, alternate on/shift/off starting with on, continue to grow to 32 long
 
-		#variant buttons; dynamic palettes
-		variant_group = spiffy_buttons.make_new_group("variant")
-		variant_group.add("standard", "no-thing.png")	#no variant
-		variant_group.add("charge", "variant-charge.png")	#charge beam
-		variant_group.add("speed_boost", "variant-speed_boost.png")	#speed boosting
-		variant_group.add("speed_squat", "variant-speed_squat.png")	#stored speed boost charge
-		variant_group.add("hyper", "variant-hyper.png")	#hyper beam
-		variant_group.add_newline()	#make a new line
-		variant_group.add_blank_space()	#align with above row, skip a space
-		variant_group.add("heat", "effect-heat.png")	#heated rooms
-		variant_group.add("xray", "effect-xray.png")	#using xray scope & in dark rooms
-		variant_group.add("sepia", "effect-sepia.png")	#during opening sequence flashbacks
-		variant_group.add("door", "effect-door.png")	#during door transition
+		CHARGING BEHAVIOR
+		=================
+		frames: 0 1 0 1 0 1 0 1 2 1 2 1 2 1 2 1 2 3 [2 3]
 
-		#cannon port off/on
-		cannon_group = spiffy_buttons.make_new_group("cannon-port")
-		cannon_group.add("no", "no-thing.png")
-		cannon_group.add("yes", "yes-thing.png")
+		CHARGED SHOT BEHAVIOR
+		=====================
+		lemon:	[4 5], orange ice particles
+		ice:		[4 5], blue ice particles
+		wave:		[4 5], wave particles
+		spazer:	special charge shot, no particles, alternate standard spazer/special
+		plasma:	special charge shot, no particles, alternate standard plasma/special
 
-		return spiffy_buttons
+		COMBO BEHAVIOR
+		==============
+						COLOR		NUMBER	BEHAVIOR
+						=====		======	========
+		ice:		BLUE		single	ice particles
+		plasma:	green		single	plasma texture
+		wave:		purple	trail		wave motion
+		spazer:	yellow	TRIPLE	spazer texture
+		lemon:	no change
 
-	def get_palette_buttons(self, parent):
-		palette_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="palette_buttons")
+		<-- higher priority
+		COLOR:		ice, plasma, wave, spazer, lemon
+		NUMBER: 	spazer, plasma+wave (double), plasma, wave, ice, lemon
+		BEHAVIOR:	ice, wave, plasma, spazer, lemon
 
-		#iterate through 16 palette buttons, 2 lines of 8
-		palette_set = palette_buttons.make_new_group("palette", independent=True)
-		for i in range(16):
-			button_id = "id-" + format(i,'x').upper()
-			palette_set.add(button_id,"blank.png")
-			if i == 7:
-				palette_set.add_newline()
+		SIZE
+		====
+		lemon:			no change
+		iced lemon:	no change
+		wave:				no change
+		spazer:			starts 9 long, then 16 long
+		plasma:			starts 5 long, then 32 long
+		'''
+		pass
 
-		return palette_buttons
+	def get_projectile_palette(self, projectile="power_beam"):
+		# Ice:		Blue		ice_beam
+		# Plasma:	Green		plasma_beam
+		# Wave:		Purple	wave_beam
+		# Spazer:	Yellow	spazer_beam
+		# Power:	Lemon		power_beam
+		# Charged Shots use all 6 colors
+		# Charged Shots Ice-like particles use [0,1,2,5]
+		palette_switcher = {
+			"power_beam": [
+				(107, 40, 33),
+				(173, 81, 57),
+				(255,121, 49),
+				(247,231,  0),
+				(255,255,165),
+				(255,255,255)
+			],
+			"ice_beam": [
+				(  0, 56,173),
+				(  0,121,222),
+				(  0,182,255),
+				( 82,199,231),
+				(115,223,255),
+				(255,255,255)
+			],
+			"wave_beam": [
+				( 99,  0, 99),
+				(181,  0,181),
+				(255,  0,255),
+				(255,113,255),
+				(255,182,255),
+				(255,255,255)
+			],
+			"spazer_beam": [
+				(115, 56,  0),
+				(181,134,  0),
+				(255,255,  0),
+				(255,255,148),
+				(255,255,214),
+				(255,255,255)
+			],
+			"plasma_beam": [
+				(  0, 97, 41),
+				(  0,166, 74),
+				(  0,255,115),
+				(148,255,148),
+				(214,255,214),
+				(255,255,255)
+			]
+		}
 
-	def get_direction_buttons(self, parent):
-		#overrides the parent WASD format
-		direction_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="direction_buttons", align="center")
+		palette = palette_switcher.get(projectile) if projectile in palette_switcher else palette_switcher.get("power_beam")
 
-		facing_group = direction_buttons.make_new_group("facing")
-		facing_group.add("left", "arrow-left.png")
-		facing_group.add("right", "arrow-right.png", default=True)
+		return palette
 
-		aiming_group = direction_buttons.make_new_group("aiming")
-		aiming_group.add("up", "arrow-up.png")
-		aiming_group.add("diag_up", "arrow-upright.png")
-		aiming_group.add_newline()
-		aiming_group.add("neutral", "no-thing.png", default=True)
-		aiming_group.add("shoot", "arrow-right.png")
-		aiming_group.add_newline()
-		aiming_group.add("down", "arrow-down.png")
-		aiming_group.add("diag_down", "arrow-downright.png")
+	def get_supplemental_tiles(self,animation,direction,pose_number,palettes,frame_number):
+		return_tiles = []
 
-	# 	arrows_group = direction_buttons.make_new_group("arrows")
-	# 	arrows_group.add("upleft", "arrow-upleft.png")
-	# 	arrows_group.add("trueupleft", "arrow-up.png")
-	# 	arrows_group.add("trueupright", "arrow-up.png")
-	# 	arrows_group.add("upright", "arrow-upright.png")
-	# 	arrows_group.add_newline()
-	# 	arrows_group.add("left", "arrow-left.png")
-	# 	arrows_group.add_blank_space()
-	# 	arrows_group.add_blank_space()
-	# 	arrows_group.add("right", "arrow-right.png", default=True)
-	# 	arrows_group.add_newline()
-	# 	arrows_group.add("downleft", "arrow-downleft.png")
-	# 	arrows_group.add("truedownleft", "arrow-down.png")
-	# 	arrows_group.add("truedownright", "arrow-down.png")
-	# 	arrows_group.add("downright", "arrow-downright.png")
-
-		return direction_buttons
-
-	def get_current_pose_list(self):
-		direction_dict = self.animations[self.current_animation]
-		if self.spiffy_buttons_exist:     #this will also indicate if the direction buttons exist
-			facing = self.facing_var.get().lower()	#grabbed from the direction buttons, which are named "facing"
-			aiming = self.aiming_var.get().lower()	#grabbed from the aiming buttons, which are named "aiming"
-
-			#now start searching for this facing and aiming in the JSON dict
-			#start going down the list of alternative aiming if a pose does not have the original
-			ALTERNATIVES = {
-				"up": "diag_up",
-				"diag_up": "shoot",
-				"shoot": "neutral",
-				"down": "diag_down",
-				"diag_down": "shoot"
+		tiles = { #tiles
+			"Stand": { #Stand
+				"right": [ #right
+					{
+						"pose": [0],
+						"frame": list(range(16)),
+						"image": "lemon_right",
+						"pos": [11,-8],
+						"pos_offset": [8,0],
+						"palette": "power_beam_projectile"
+					}
+				]
 			}
-			while(self.concatenate_facing_and_aiming(facing,aiming) not in direction_dict):
-				if aiming in ALTERNATIVES:
-					aiming = ALTERNATIVES[aiming]
-				else:
-					return super().get_current_pose_list()  #don't worry about aiming
+		}
+		tiles = {} #don't do this stuff yet
 
-			return direction_dict[self.concatenate_facing_and_aiming(facing,aiming)]
+		if animation in tiles:
+			if direction in tiles[animation]:
+				for direction_tile in tiles[animation][direction]:
+					if pose_number in direction_tile["pose"]:
+						for frame_check in direction_tile["frame"]:
+							if frame_number == frame_check or frame_check > 0 and frame_number % frame_check == 0:
+								print(str(frame_check) + " in pose")
+								direction_tile["pos"][0] += direction_tile["pos_offset"][0] * frame_check
+								direction_tile["pos"][1] += direction_tile["pos_offset"][1] * frame_check
+								return_tiles.append(direction_tile)
 
-		#do whatever the parent would do
-		return super().get_current_pose_list()
+		return return_tiles
+
+	def get_alternative_direction(self, animation, direction):
+		#suggest an alternative direction, which can be referenced if the original direction doesn't have an animation
+		direction_dict = self.animations[animation]
+		split_string = direction.split("_aim_")
+		facing = split_string[0]
+		aiming = split_string[1] if len(split_string) > 1 else ""
+
+		#now start searching for this facing and aiming in the JSON dict
+		#start going down the list of alternative aiming if a pose does not have the original
+		ALTERNATIVES = {
+			"up": "diag_up",
+			"diag_up": "shoot",
+			"down": "diag_down",
+			"diag_down": "shoot"
+		}
+		while(self.concatenate_facing_and_aiming(facing,aiming) not in direction_dict):
+			if aiming in ALTERNATIVES:
+				aiming = ALTERNATIVES[aiming]
+			elif facing in direction_dict:   #no aim was available, try the pure facing
+				return facing
+			else:    #now we are really screwed, so just do anything
+				return next(iter(direction_dict.keys()))
+
+		#if things went well, we are here
+		return "_aim_".join([facing,aiming])
 
 	def concatenate_facing_and_aiming(self, facing, aiming):
 		return "_aim_".join([facing,aiming])
 
-	def get_current_palette(self, palette_type, default_range):
-		if self.spiffy_buttons_exist:
-			if palette_type is not None:
-				raise NotImplementedError(f"Not implemented to use palette type {palette_type} for Samus")
-			else:
-				suit_type = self.suit_var.get()
-				variant_type = self.variant_var.get()
+	def get_palette(self, palettes, default_range, frame_number):
+		#get the actual list of associated palettes
+		palette_timing_list = self.get_timed_palette_converter(palettes)
+		#figure out the timing
+		palette_timing_progression = list(itertools.accumulate([duration for (duration,_) in palette_timing_list]))
 
-			#get the actual list of associated palettes
-			palette_timing_list = self.get_timed_palette(overall_type=suit_type, variant_type=variant_type)
-			#figure out the timing
-			palette_timing_progression = list(itertools.accumulate([duration for (duration,_) in palette_timing_list]))
-
-			#if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
-			if palette_timing_list[-1][0] == 0 and self.frame_getter() >= palette_timing_progression[-1]:
-				palette_number = -1    #use the last palette
-			else:
-				mod_frames = self.frame_getter() % palette_timing_progression[-1]
-				palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
-
-			#now actually get that specific palette
-			_,palette = palette_timing_list[palette_number]
-
+		#if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
+		if palette_timing_list[-1][0] == 0 and frame_number >= palette_timing_progression[-1]:
+			palette_number = -1    #use the last palette
 		else:
-			#do whatever the parent would do as a default
-			return super().get_current_palette(palette_type, default_range)
+			mod_frames = frame_number % palette_timing_progression[-1]
+			palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
+
+		#now actually get that specific palette
+		_,palette = palette_timing_list[palette_number]
 
 		return palette
+
+	def get_timed_palette_converter(self, palette_list):
+		#used to interface the new palette string format with the older get_timed_palette function.
+		# could be refactored into the main code later, if coding time was not a valuable resource
+
+		overall_type, variant_type = "power", "standard"   #defaults unless we are told otherwise
+		for palette_string in palette_list:
+			if palette_string.endswith("_suit"):
+				overall_type = palette_string.replace("_suit","")
+			if palette_string.endswith("_variant"):
+				variant_type = palette_string.replace("_variant","")
+
+		return self.get_timed_palette(overall_type=overall_type, variant_type=variant_type)
+
+	def get_alternate_tile(self, image_name, palettes):
+		slugs = {}
+		for palette in palettes:
+			if '_' in palette:
+				slugs[palette[palette.rfind('_')+1:]] = palette[:palette.rfind('_')]
+		OPTIONAL_PORT_STRING = "optional_"
+		if image_name.startswith(OPTIONAL_PORT_STRING):    #as would be for the cannon ports, which are optionally present
+			if "yes_cannon-port" in palettes:
+				image_name = image_name.replace(OPTIONAL_PORT_STRING,"")
+				return self.images[image_name]
+			else:
+				return Image.new("RGBA",(0,0),0)
+		else:
+			raise AssertionError(f"Could not locate tile with name {image_name}")

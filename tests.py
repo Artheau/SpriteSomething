@@ -1,19 +1,19 @@
-#unit testing framework
-#I have no idea what I'm doing:  http://www.quickmeme.com/meme/3p0di5
+#there are several tests that must be run separately,
+#e.g. cannot test which modules are imported if they are globally imported
 
-import unittest
+import subprocess    #for calling the tests in their own sandboxes
+import os            #for joining paths
+import sys           #for figuring out how python is called (e.g. python or python3)
 
-class TestStuff(unittest.TestCase):
-	#all tests must start with "test_"
-    def test_make_sure_it_is_not_nothing(self):
-    	self.assertFalse("it" == None)
-
-    def test_make_sure_it_is_something(self):
-    	self.assertTrue("it" != None)
-
-    def test_make_sure_it_is_what_it_is(self):
-    	my_metaphor = "it"
-    	self.assertEqual(my_metaphor, "it")
-
-if __name__ == '__main__':
-    unittest.main()
+for test_file in ["test_asserts.py", "test_waterfalls.py", "test_gc.py"]:   #TODO: don't hardcode the file names
+	print('='*80)
+	print(f"Running tests from {test_file}")
+	error_code = subprocess.check_call([sys.executable, os.path.join(os.getcwd(), 'unittests', test_file)])
+	if error_code != 0:
+		exit(error_code)   #early exit
+	else:
+		print('='*80)
+		print("\n")
+	
+print('='*80)
+exit(error_code)   #standard exit, with error_code = 0

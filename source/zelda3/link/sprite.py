@@ -6,19 +6,62 @@ import io							#for filesystem manipution
 import urllib.request	#for downloading stuff
 from PIL import Image
 from source import common
-from source import widgetlib
 from string import ascii_uppercase
 from source.spritelib import SpriteParent
 
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
+		self.load_plugins()
 
-		self.plugins += [
-			("Download Official Sprites",self.get_alttpr_sprites),
-			("Sheet Trawler",None),
-			("Tracker Images",None)
+		self.link_globals = {}
+		self.link_globals["zap_palette"] = [
+#				(  0,  0,  0),
+				(  0,  0,  0),
+				(208,184, 24),
+				(136,112,248),
+				(  0,  0,  0),
+				(208,192,248),
+				(  0,  0,  0),
+				(208,192,248),
+
+				(112, 88,224),
+				(136,112,248),
+				( 56, 40,128),
+				(136,112,248),
+				( 56, 40,128),
+				( 72, 56,144),
+				(120, 48,160),
+				(192,128,240)
 		]
+		self.link_globals["sword_palette"] = [
+			#blade, border, hilt
+			[(248,248,248),(248,248, 72),(104,136,184)], #fighters
+			[(112,144,248),(160,248,216),(168, 56, 56)], #master
+			[(216, 72, 16),(248,160, 40),(104,160,248)], #tempered
+			[(248,200,  0),(248,248,200),(  0,144, 72)]  #golden
+		]
+
+	def get_alternate_tile(self, image_name, palettes):
+		slugs = {}
+		for palette in palettes:
+			if '_' in palette:
+				slugs[palette[palette.rfind('_')+1:]] = palette[:palette.rfind('_')]
+		for item in ["SWORD","SHIELD"]:
+			if image_name.startswith(item):
+				if item.lower() in slugs:
+					image_name = image_name.replace(item,slugs[item.lower()] + '_' + item.lower()) if not ("none_" + item.lower()) in palettes else "transparent"
+					return self.images[image_name]
+				else:
+					return Image.new("RGBA",(0,0),0)    #TODO: Track down why this function is being called without spiffy button info during sprite load
+		else:
+			raise AssertionError(f"Could not locate tile with name {image_name}")
+
+	def import_cleanup(self):
+		self.load_plugins()
+		self.images["transparent"] = Image.new("RGBA",(0,0),0)
+		self.equipment = self.plugins.equipment_test(False)
+		self.images = dict(self.images,**self.equipment)
 
 	def import_from_ROM(self, rom):
 		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)    #the big Link sheet
@@ -91,128 +134,37 @@ class Sprite(SpriteParent):
 
 		return rom
 
-	def get_spiffy_buttons(self, parent):
-		spiffy_buttons = widgetlib.SpiffyButtons(self, parent)
+	def get_palette(self, palettes, default_range, frame_number):
+		palette_indices = None
+		this_palette = []
+		for i in range(1,16):
+			this_palette.append((0,0,0))
 
-		#mail buttons
-		mail_group = spiffy_buttons.make_new_group("mail")
-		mail_group.add_blank_space()	#default has a value, skip a space
-		mail_group.add("green", "mail-green.png")
-		mail_group.add("blue", "mail-blue.png")
-		mail_group.add("red", "mail-red.png")
-
-		#sword buttons
-		sword_group = spiffy_buttons.make_new_group("sword")
-		sword_group.add("none", "no-thing.png")	#no sword
-		sword_group.add("fighter", "sword-fighters.png")
-		sword_group.add("master", "sword-master.png")
-		sword_group.add("tempered", "sword-tempered.png")
-		sword_group.add("gold", "sword-butter.png")
-
-		#shield buttons
-		shield_group = spiffy_buttons.make_new_group("shield")
-		shield_group.add("none", "no-thing.png")	#no shield
-		shield_group.add("fighter", "shield-fighters.png")
-		shield_group.add("fire", "shield-fire.png")
-		shield_group.add("mirror", "shield-mirror.png")
-
-		#gloves buttons
-		gloves_group = spiffy_buttons.make_new_group("gloves")
-		gloves_group.add("none", "no-thing.png")	#no gloves
-		gloves_group.add("power", "glove1.png")
-		gloves_group.add("titan", "glove2.png")
-
-		return spiffy_buttons
-
-	def get_palette_buttons(self, parent):
-		palette_buttons = widgetlib.SpiffyButtons(self, parent, frame_name="palette_buttons")
-
-		#iterate through 16 palette buttons, 2 lines of 8
-		palette_set = palette_buttons.make_new_group("palette", independent=True)
-		for i in range(16):
-			button_id = "id-" + format(i,'x').upper()
-			palette_set.add(button_id,"blank.png")
-			if i == 7:
-				palette_set.add_newline()
-		palette_set.add_newline()
-		#add a newline and a palette button for both gloves
-		for i in ['G','M']:
-			button_id = "id-" + i
-			palette_set.add(button_id,"blank.png")
-
-		return palette_buttons
-
-	def get_current_palette(self, palette_type, default_range):
-		if self.spiffy_buttons_exist:
-			if palette_type == "bunny":
-				palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
-			else:
-				palette_indices = list(range(1,16))   #start with green mail and modify it as needed
-				mail_type = self.mail_var.get() if hasattr(self,"mail_var") else ""
-				gloves_type = self.gloves_var.get() if hasattr(self,"gloves_var") else ""
-				for i in range(0,len(palette_indices)):
-
-					if gloves_type != "none" and palette_indices[i] == 0x0D:
-						if gloves_type == "power":
-							palette_indices[i] = 0x10
-						elif gloves_type == "titan":
-							palette_indices[i] = 0x20
-						else:
-							raise AssertionError(f"unknown gloves type given by spiffy buttons: '{gloves_type}'")
-
-					elif mail_type != "green" and palette_indices[i] in range(0,16):
-						if mail_type == "blue":
-							palette_indices[i] += 16
-						elif mail_type == "red":
-							palette_indices[i] += 32
-						else:
-							raise AssertionError(f"unknown mail type given by spiffy buttons: '{mail_type}'")
+		if "zap_mail" in palettes:
+			this_palette = self.link_globals["zap_palette"]
+		elif "bunny_mail" in palettes:
+			palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
 		else:
-			#do whatever the parent would do as a default
-			return super().get_current_palette(palette_type, default_range)
+			palette_indices = list(range(1,16))   #start with green mail and modify it as needed
+			for i in range(0,len(palette_indices)):
 
-		return [self.master_palette[i] for i in palette_indices]
+				if palette_indices[i] == 0x0D:
+					if "power_gloves" in palettes:
+						palette_indices[i] = 0x10
+					elif "titan_gloves" in palettes:
+						palette_indices[i] = 0x20
 
-	def set_current_palette_color(self, color_value, palette_type, color_index, default_range):
-		palette_switcher = {
-			"green": 0,
-			"blue": 16,
-			"red": 32,
-			"bunny": 48
-		}
-		palette_index = palette_switcher.get(palette_type)
-		color_value = common.convert_hex_to_rgb(color_value)
-		self.master_palette[palette_index + color_index] = color_value
+				if palette_indices[i] in range(0,16):
+					if "blue_mail" in palettes:
+						palette_indices[i] += 16
+					elif "red_mail" in palettes:
+						palette_indices[i] += 32
 
-	#download ALttPR sprites
-	def get_alttpr_sprites(self):
-		success = False	#report success
-		official = os.path.join('.',"resources","zelda3","link","official")	#save to resources/zelda3/link/official/*.zspr
-		if not os.path.exists(official):
-			os.makedirs(official)	#make it if we don't have it
+		if palette_indices:
+			for i in range(0,len(palette_indices)):
+				this_palette[i] = self.master_palette[palette_indices[i]]
 
-		#make the request!
-		alttpr_sprites_filename = "http://alttpr.com/sprites"
-		alttpr_sprites_req = urllib.request.urlopen(alttpr_sprites_filename)
-		alttpr_sprites = json.loads(alttpr_sprites_req.read().decode("utf-8"))
-		#get an iterator and a counter for a makeshift progress bar
-		i = 0
-		total = len(alttpr_sprites)
-		print("   Downloading Official ALttPR Sprites")
-		for sprite in alttpr_sprites:
-			sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
-			sprite_destination = os.path.join(official,sprite_filename)	#set the destination
-			i += 1	#iterate iterator
-			if not os.path.exists(sprite_destination):	#if we don't have it, download it
-				with open(sprite_destination, "wb") as g:
-					sprite_data_req = urllib.request.urlopen(sprite["file"])
-					sprite_data = sprite_data_req.read()
-					print("    Writing " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
-					g.write(sprite_data)
-					success = True
-			else:	#if we do have it, next!
-				print("    Skipping " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
-		return success
+		return this_palette
 
 	def get_binary_sprite_sheet(self):
 		top_half_of_rows = bytearray()

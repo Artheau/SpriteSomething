@@ -1,0 +1,77 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://raw.githubusercontent.om/Artheau/SpriteSomething/master/schema/game-sprite-manifest.schema.json",
+	"type": "object",
+	"title": "SpriteSomething Game Sprite Manifest Schema",
+	"description": "A manifest that details the sprite types (by ID) for a given game",
+	"properties": {
+		"type": {
+			"$id": "#/properties/type",
+			"type": "string",
+			"title": "Sprite Type ID",
+			"description": "Title of the sprite type represented by this Sprite Type ID",
+			"default": "",
+			"examples": [
+				"Player Character Sprite"
+			],
+			"pattern": "^(.*)$"
+		},
+		"name": {
+			"$id": "#/properties/name",
+			"type": "string",
+			"title": "Sprite Name",
+			"description": "The original in-universe name of this Sprite Type ID",
+			"default": "",
+			"examples": [
+				"Link"
+			],
+			"pattern": "^(.*)$"
+		},
+		"folder name": {
+			"$id": "#/properties/folder name",
+			"type": "string",
+			"title": "Folder Name",
+			"description": "The canonical folder name of this Sprite Type ID",
+			"default": "",
+			"examples": [
+				"link"
+			],
+			"pattern": "^(.*)$"
+		},
+		"input": {
+			"$id": "#/properties/input",
+			"type": "object",
+			"title": "Input Specifications",
+			"description": "An object that includes different forms of input files for this particular Sprite Type ID",
+			"properties": {
+				"png": {
+					"$id": "#/properties/input/properties/png",
+					"type": "object",
+					"title": "PNG Input",
+					"required": [
+						"dims"
+					],
+					"properties": {
+						"dims": {
+							"$id": "#/properties/input/properties/png/properties/dims",
+							"type": "array",
+							"title": "Dimensions",
+							"description": "Width by Height",
+							"items": {
+								"$id": "#/properties/1/properties/input/properties/png/properties/dims/items",
+								"type": "integer",
+								"title": "Dimension Measures",
+								"description": "Width by Height",
+								"default": 0,
+								"examples": [
+									128,
+									448
+								]
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -13,6 +13,7 @@ class Layout():
 	def __init__(self, filename):
 		with open(filename) as inFile:
 			self.data = json.load(inFile)
+			inFile.close()
 		self.reverse_lookup = {}
 		for image_name,image_info in self.data["images"].items():
 			for image_ref in image_info["used by"]:
@@ -107,22 +108,24 @@ class Layout():
 
 	def get_property(self, this_property, image_name):
 		FAILSAFE = 100
-		for _ in range(FAILSAFE):
-			if this_property in self.data["images"][image_name]:
-				return self.data["images"][image_name][this_property]
-			elif "parent" in self.data["images"][image_name]:
-				image_name = self.data["images"][image_name]["parent"]
+		if image_name in self.data["images"]:
+			for _ in range(FAILSAFE):
+				if this_property in self.data["images"][image_name]:
+					return self.data["images"][image_name][this_property]
+				elif "parent" in self.data["images"][image_name]:
+					image_name = self.data["images"][image_name]["parent"]
+				else:
+					return None
 			else:
-				return None
+				raise AssertionError(f"Encountered infinite parental loop in layout.json while investigating {image_name}")
 		else:
-			raise AssertionError(f"Encountered infinite parental loop in layout.json while investigating {image_name}")
+			#print(f"Key not found in layout.json while investigating {image_name}")
+			pass
 
 	def make_horizontal_collage(self, image_list):
 		#assembles images horizontally and encapsulates them in a border.
 		y_min = min([-origin[1] for image,origin in image_list])
 		y_max = max([image.size[1]-origin[1] for image,origin in image_list])
-
-		num_images = len(image_list) #FIXME: unused variable
 
 		collage_width = sum([image.size[0] for image,_ in image_list])
 		collage_y_size = y_max-y_min
@@ -157,7 +160,7 @@ class Layout():
 
 	def export_all_images_to_PNG(self, all_images, master_palette):
 		all_collages = []
-		for i,row in enumerate(self.get_rows()): #FIXME: i unused variable
+		for row in self.get_rows():
 
 			this_row_images = []
 			for image_name in row:   #for every image referenced explicitly in the layout
@@ -184,7 +187,7 @@ class Layout():
 	def extract_all_images_from_master(self, master_image):
 		all_images = {}
 		master_height = 0
-		for i,row in enumerate(self.get_rows()): #FIXME: i unused variable
+		for row in self.get_rows():
 			row_width = 0
 			row_y_min,row_y_max = float('Inf'),-float('Inf')
 			for image_name in row:   #for every image referenced explicitly in the layout
@@ -225,10 +228,12 @@ class Layout():
 
 				all_images[image_name] = this_image
 
+		all_images["transparent"] = Image.new("RGBA",(0,0),0)
+
 		master_palettes = list(all_images["palette_block"].convert("RGB").getdata())
 
 		for image_name, this_image in all_images.items():
-			if image_name != "palette_block":
+			if not image_name in ["transparent","palette_block"]:
 				import_palette = self.get_property("import palette interval", image_name)
 				palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]   #flatten the RGB values
 				palette = palette + palette[:3]*(256-(len(palette)//3))

@@ -1,0 +1,13 @@
+{
+	"$schema": "../../../schema/backgrounds.schema.json",
+	"backgrounds": [
+		{
+			"filename": "ship.png",
+			"title": "Samus' Ship"
+		},
+		{
+			"filename": "zebes.png",
+			"title": "Planet Zebes"
+		}
+	]
+}
