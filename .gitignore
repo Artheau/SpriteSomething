@@ -33,7 +33,7 @@ _test_macro.py
 *.sfc
 
 # no working dirs file
-/resources/meta/working_dirs.json
+working_dirs.json
 
 # no custom files
 custom/
