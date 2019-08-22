@@ -139,15 +139,18 @@ class SpiffyGroup():
 		self.default_exists = False
 		self.parent = parent
 		self.independent = independent
-		self.palette_labels = common.get_resource([sprite_resource_subpath,"manifests"],"palette-buttons.json")
+		self.palette_labels = []
+		palette_manifest = common.get_resource([sprite_resource_subpath,"manifests"],"palette-buttons.json")
 		self.var = var
 		self.col = 0
 		self.row = row
 
 		self.get_animation_engine = animation_engine_getter
 
-		if self.palette_labels:
-			self.palette_labels = json.load(open(self.palette_labels))
+		if palette_manifest:
+			with open(palette_manifest) as f:
+				self.palette_labels = json.load(f)
+				f.close()
 
 		if label and not label == '_':
 			section_label = tk.Label(self.parent.spiffy_buttons_section, text=label + ':')

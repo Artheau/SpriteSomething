@@ -29,15 +29,19 @@ class BabelFish():
 					f.close()
 
 	def translate(self, domain="", key="", subkey=""): #three levels of keys
-		if os.sep in domain:
-			domain = domain.replace(os.sep,'.')
-		my_lang = self.lang_defns[self.locale] #handle for localization
-		en_lang = self.lang_defns["en"] #handle for English
-		if domain in my_lang and key in my_lang[domain] and subkey in my_lang[domain][key] and not my_lang[domain][key][subkey] == "": #get localization first
-			display_text = my_lang[domain][key][subkey]
-		elif domain in en_lang and key in en_lang[domain] and subkey in en_lang[domain][key] and not en_lang[domain][key][subkey] == "": #gracefully degrade to English
-			display_text = en_lang[domain][key][subkey]
-		else:
-			print("Can't Translate: ",domain,key,subkey)
-			display_text = subkey.title() + ' ' + key #ungracefully degrade to requested keys
+		display_text = ""
+
+		if not "id-" in subkey:
+			if os.sep in domain:
+				domain = domain.replace(os.sep,'.')
+			my_lang = self.lang_defns[self.locale] #handle for localization
+			en_lang = self.lang_defns["en"] #handle for English
+			if domain in my_lang and key in my_lang[domain] and subkey in my_lang[domain][key] and not my_lang[domain][key][subkey] == "": #get localization first
+				display_text = my_lang[domain][key][subkey]
+			elif domain in en_lang and key in en_lang[domain] and subkey in en_lang[domain][key] and not en_lang[domain][key][subkey] == "": #gracefully degrade to English
+				display_text = en_lang[domain][key][subkey]
+			else:
+				print("Can't Translate: ",domain,key,subkey)
+				display_text = subkey.title() + ' ' + key #ungracefully degrade to requested keys
+
 		return display_text
