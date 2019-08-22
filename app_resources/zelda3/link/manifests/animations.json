@@ -31993,6 +31993,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SWORD5",
+												"pos": [
+														12,
+														12
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -32019,6 +32026,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SWORD5",
+												"pos": [
+														16,
+														11
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -32045,6 +32059,13 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SWORD5",
+												"pos": [
+														8,
+														8
+												]
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -32087,6 +32108,20 @@
                             8
                         ]
                     },
+										{
+												"image": "SWORD0",
+												"pos": [
+														-2,
+														-4
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														8,
+														5
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -32113,6 +32148,20 @@
                             8
                         ]
                     },
+										{
+												"image": "SWORD1",
+												"pos": [
+														2,
+														-8
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														8,
+														3
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -32139,6 +32188,20 @@
                             8
                         ]
                     },
+										{
+												"image": "SWORD0",
+												"pos": [
+														-2,
+														1
+												]
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														8,
+														5
+												]
+										},
                     {
                         "image": "main_shadow",
                         "pos": [
@@ -32153,6 +32216,22 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														13
+												],
+												"flip": "v"
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														5
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -32179,6 +32258,22 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SWORD1",
+												"pos": [
+														7,
+														20
+												],
+												"flip": "both"
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														6
+												],
+												"flip": "h"
+										},
                     {
                         "image": "E3",
                         "pos": [
@@ -32205,6 +32300,22 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SWORD0",
+												"pos": [
+														11,
+														17
+												],
+												"flip": "v"
+										},
+										{
+												"image": "SHIELD1",
+												"pos": [
+														-8,
+														5
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A1",
                         "pos": [
@@ -32233,6 +32344,14 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SWORD5",
+												"pos": [
+														-12,
+														12
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -32261,6 +32380,14 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SWORD5",
+												"pos": [
+														-16,
+														11
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
@@ -32289,6 +32416,14 @@
             {
                 "frames": 4,
                 "tiles": [
+										{
+												"image": "SWORD5",
+												"pos": [
+														-8,
+														8
+												],
+												"flip": "h"
+										},
                     {
                         "image": "A0",
                         "pos": [
