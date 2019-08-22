@@ -312,6 +312,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
 		self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
 		self.left_panel.add(vcr_controls,minsize=MINSIZE)
+		self.animation_engine.attach_tile_details_panel(self.left_panel,self.fish)
 		self.panes.add(self.left_panel)
 
 	def attach_right_panel(self):
@@ -600,6 +601,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def reload(self):
 		#activated when the reload button is pressed.  Should reload the sprite from the file but not manipulate the buttons
+		self.sprite.load_animations()
 		self.sprite.import_from_filename()
 		self.animation_engine.update_overview_panel()   #TODO: Need to decide if this belongs in animation_engine
 		self.animation_engine.update_animation()

@@ -1,6 +1,7 @@
 import importlib
 import itertools
 import json
+from PIL import Image
 from source.spritelib import SpriteParent
 from source import common
 from . import rom_import, rom_export, rdc_export
@@ -8,6 +9,7 @@ from . import rom_import, rom_export, rdc_export
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
 		super().__init__(filename, manifest_dict, my_subpath)
+		self.load_plugins()
 
 		self.overhead = False   #Samus is sideview, so only left/right direction buttons should show
 
@@ -16,6 +18,12 @@ class Sprite(SpriteParent):
 		# 	("File Select Preview",None,None),
 		# 	("Ship Preview",None,None)
 		# ]
+
+	def import_cleanup(self):
+		self.load_plugins()
+		self.images["transparent"] = Image.new("RGBA",(0,0),0)
+		self.equipment = self.plugins.equipment_test(False)
+		self.images = dict(self.images,**self.equipment)
 
 	def import_from_ROM(self, rom):
 		#The history of the Samus import code is a story I will tell to my children
@@ -269,6 +277,148 @@ class Sprite(SpriteParent):
 		#now scrub the palette to get rid of floats and numbers that are too large/small
 		return [(time,[(max(0,min(255,int(color_plane))) for color_plane in color) for color in palette]) for (time,palette) in timed_palette]
 
+	def get_projectile_priority(self, projectiles=["power_beam"]):
+		for beam in ["power","spazer","wave","plasma","ice"]:
+			if beam in projectiles or (beam + "_beam") in projectiles:
+				projectile = beam
+		return projectile
+
+	def get_projectile(self, projectile="lemon"):
+		'''
+		BEHAVIOR
+		========
+		lemon:				16 frames, alternate on/off starting with on; then starting a new shot
+		iced lemon:		randomly choose ice0 or ice1/ice2, drop a particle shower ice_particle[0-3]
+			ice0:				16 frames, alternate on/off starting with on, h-flip each time; then starting a new shot
+			ice1/ice2:	16 frames, alternate on/off starting with on, cycle 1/2 each time; then starting a new shot
+		wave:					16 frames, run trail in bell curve, each spot deteriorates
+		spazer:				16 frames, shoot single, alternate on/shift/off starting with on, split to 3 with space of 6, space of 14; then starting a new shot
+		plasma:				16 frames, shoot single, alternate on/shift/off starting with on, continue to grow to 32 long
+
+		CHARGING BEHAVIOR
+		=================
+		frames: 0 1 0 1 0 1 0 1 2 1 2 1 2 1 2 1 2 3 [2 3]
+
+		CHARGED SHOT BEHAVIOR
+		=====================
+		lemon:	[4 5], orange ice particles
+		ice:		[4 5], blue ice particles
+		wave:		[4 5], wave particles
+		spazer:	special charge shot, no particles, alternate standard spazer/special
+		plasma:	special charge shot, no particles, alternate standard plasma/special
+
+		COMBO BEHAVIOR
+		==============
+						COLOR		NUMBER	BEHAVIOR
+						=====		======	========
+		ice:		BLUE		single	ice particles
+		plasma:	green		single	plasma texture
+		wave:		purple	trail		wave motion
+		spazer:	yellow	TRIPLE	spazer texture
+		lemon:	no change
+
+		<-- higher priority
+		COLOR:		ice, plasma, wave, spazer, lemon
+		NUMBER: 	spazer, plasma+wave (double), plasma, wave, ice, lemon
+		BEHAVIOR:	ice, wave, plasma, spazer, lemon
+
+		SIZE
+		====
+		lemon:			no change
+		iced lemon:	no change
+		wave:				no change
+		spazer:			starts 9 long, then 16 long
+		plasma:			starts 5 long, then 32 long
+		'''
+		pass
+
+	def get_projectile_palette(self, projectile="power_beam"):
+		# Ice:		Blue		ice_beam
+		# Plasma:	Green		plasma_beam
+		# Wave:		Purple	wave_beam
+		# Spazer:	Yellow	spazer_beam
+		# Power:	Lemon		power_beam
+		# Charged Shots use all 6 colors
+		# Charged Shots Ice-like particles use [0,1,2,5]
+		palette_switcher = {
+			"power_beam": [
+				(107, 40, 33),
+				(173, 81, 57),
+				(255,121, 49),
+				(247,231,  0),
+				(255,255,165),
+				(255,255,255)
+			],
+			"ice_beam": [
+				(  0, 56,173),
+				(  0,121,222),
+				(  0,182,255),
+				( 82,199,231),
+				(115,223,255),
+				(255,255,255)
+			],
+			"wave_beam": [
+				( 99,  0, 99),
+				(181,  0,181),
+				(255,  0,255),
+				(255,113,255),
+				(255,182,255),
+				(255,255,255)
+			],
+			"spazer_beam": [
+				(115, 56,  0),
+				(181,134,  0),
+				(255,255,  0),
+				(255,255,148),
+				(255,255,214),
+				(255,255,255)
+			],
+			"plasma_beam": [
+				(  0, 97, 41),
+				(  0,166, 74),
+				(  0,255,115),
+				(148,255,148),
+				(214,255,214),
+				(255,255,255)
+			]
+		}
+
+		palette = palette_switcher.get(projectile) if projectile in palette_switcher else palette_switcher.get("power_beam")
+
+		return palette
+
+	def get_supplemental_tiles(self,animation,direction,pose_number,palettes,frame_number):
+		return_tiles = []
+
+		tiles = { #tiles
+			"Stand": { #Stand
+				"right": [ #right
+					{
+						"pose": [0],
+						"frame": list(range(16)),
+						"image": "lemon_right",
+						"pos": [11,-8],
+						"pos_offset": [8,0],
+						"palette": "power_beam_projectile"
+					}
+				]
+			}
+		}
+		tiles = {} #don't do this stuff yet
+
+		if animation in tiles:
+			if direction in tiles[animation]:
+				for direction_tile in tiles[animation][direction]:
+					if pose_number in direction_tile["pose"]:
+						for frame_check in direction_tile["frame"]:
+							if frame_number == frame_check or frame_check > 0 and frame_number % frame_check == 0:
+								print(str(frame_check) + " in pose")
+								direction_tile["pos"][0] += direction_tile["pos_offset"][0] * frame_check
+								direction_tile["pos"][1] += direction_tile["pos_offset"][1] * frame_check
+								return_tiles.append(direction_tile)
+
+		return return_tiles
+
 	def get_alternative_direction(self, animation, direction):
 		#suggest an alternative direction, which can be referenced if the original direction doesn't have an animation
 		direction_dict = self.animations[animation]
@@ -328,3 +478,18 @@ class Sprite(SpriteParent):
 				variant_type = palette_string.replace("_variant","")
 
 		return self.get_timed_palette(overall_type=overall_type, variant_type=variant_type)
+
+	def get_alternate_tile(self, image_name, palettes):
+		slugs = {}
+		for palette in palettes:
+			if '_' in palette:
+				slugs[palette[palette.rfind('_')+1:]] = palette[:palette.rfind('_')]
+		OPTIONAL_PORT_STRING = "optional_"
+		if image_name.startswith(OPTIONAL_PORT_STRING):    #as would be for the cannon ports, which are optionally present
+			if "yes_cannon-port" in palettes:
+				image_name = image_name.replace(OPTIONAL_PORT_STRING,"")
+				return self.images[image_name]
+			else:
+				return Image.new("RGBA",(0,0),0)
+		else:
+			raise AssertionError(f"Could not locate tile with name {image_name}")

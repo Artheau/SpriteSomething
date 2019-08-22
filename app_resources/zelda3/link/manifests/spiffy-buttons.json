@@ -24,7 +24,6 @@
 		},
 		{
 			"group-fish-key": "sword",
-			"disabled": true,
 			"buttons": [
 				{
 					"fish-subkey": "none",
@@ -51,7 +50,6 @@
 		},
 		{
 			"group-fish-key": "shield",
-			"disabled": true,
 			"buttons": [
 				{
 					"fish-subkey": "none",
