@@ -59,6 +59,9 @@ def apply_palette(image, palette):
 		image.putalpha(alpha_mask)
 	return image
 
+def convert_hex_to_rgb(color):
+	return tuple(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+
 def reduce_to_nearest_eighth(val):
 	#take a value, divide by 8, floor it
 	return int(val)//8

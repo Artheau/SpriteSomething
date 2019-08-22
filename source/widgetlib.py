@@ -115,11 +115,11 @@ class SpiffyButtons():
 		self.max_row = 0
 		self.spiffy_dict = {}
 
-	def make_new_group(self, label, fish):
+	def make_new_group(self, label, fish, independent=False):
 		#make a new variable in the sprite object called "<label>_var"
 		var_name = "_".join([label.lower(), "var"])
 		self.spiffy_dict[var_name] = tk.StringVar()
-		new_group = SpiffyGroup(self, self.max_row, label, self.spiffy_dict[var_name], self.sprite_resource_subpath, self.get_animation_engine, fish)
+		new_group = SpiffyGroup(self, self.max_row, label, self.spiffy_dict[var_name], self.sprite_resource_subpath, self.get_animation_engine, fish, independent)
 		self.max_row += 1
 		return new_group
 
@@ -131,21 +131,27 @@ class SpiffyButtons():
 
 class SpiffyGroup():
 	#not meant to be used on its own, instead use class SpiffyButtons()
-	def __init__(self, parent, row, label, var, sprite_resource_subpath, animation_engine_getter, fish):
+	def __init__(self, parent, row, label, var, sprite_resource_subpath, animation_engine_getter, fish, independent=False):
 		#disable sprite object in widgetlib
 		self.sprite_resource_subpath = sprite_resource_subpath
 		label = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'),"section",label) #fish.translate(parent.animation_engine.resource_subpath,"section",label)
 		self.label = label
 		self.default_exists = False
 		self.parent = parent
+		self.independent = independent
+		self.palette_labels = common.get_resource([sprite_resource_subpath,"manifests"],"palette-buttons.json")
 		self.var = var
 		self.col = 0
 		self.row = row
 
 		self.get_animation_engine = animation_engine_getter
 
-		section_label = tk.Label(self.parent.spiffy_buttons_section, text=label + ':')
-		section_label.grid(row=self.row, column=self.col, sticky='E')
+		if self.palette_labels:
+			self.palette_labels = json.load(open(self.palette_labels))
+
+		if label and not label == '_':
+			section_label = tk.Label(self.parent.spiffy_buttons_section, text=label + ':')
+			section_label.grid(row=self.row, column=self.col, sticky='E')
 
 		self.col += 1
 
@@ -163,7 +169,24 @@ class SpiffyGroup():
 		#disable sprite object in widgetlib
 		display_text = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'), self.label, internal_value_name) #fish.translate(self.parent.animation_engine.resource_subpath, self.label, internal_value_name)
 
-		button = tk.Radiobutton(
+		if self.independent and self.palette_labels:
+			bgcolor = self.palette_labels[internal_value_name]["color"]
+			display_text = self.palette_labels[internal_value_name]["name"]
+			button = tk.Button(
+				self.parent.spiffy_buttons_section,
+				image=img,
+				name="_".join([self.label.lower(), internal_value_name, "button"]),
+				text=display_text,
+				activebackground=bgcolor,
+				bg=bgcolor,
+				width=self.parent.DIMENSIONS["button"]["width"],
+				height=self.parent.DIMENSIONS["button"]["height"],
+				command=partial(self.press_color_button,(self.row * 8) + self.col)
+			)
+			ToolTip(button,"_".join([self.label.lower(), internal_value_name, "button"]))
+			self.parent.get_animation_engine().palette_buttons.append(button)
+		else:
+			button = tk.Radiobutton(
 		 		self.parent.spiffy_buttons_section,
 		 		image=img,
 		 		name="_".join([self.label.lower(), internal_value_name, "button"]),
@@ -174,9 +197,9 @@ class SpiffyGroup():
 		 		selectcolor=self.parent.DIMENSIONS["button"]["color.selected"],
 		 		width=self.parent.DIMENSIONS["button"]["width"],
 		 		height=self.parent.DIMENSIONS["button"]["height"],
-		 		indicatoron=False,
-		 		command=self.press_spiffy_button
-		)
+		 		indicatoron=False
+			)
+			button.configure(command=partial(self.press_spiffy_button,button))
 		if disabled:
 			button.configure(state="disabled")
 		bindings = None
@@ -195,10 +218,11 @@ class SpiffyGroup():
 		button.image = img
 		button.grid(row=self.row, column=self.col)
 
-		if not self.default_exists or default:
-			button.select()
-			self.press_spiffy_button()
-			self.default_exists = True
+		if not self.independent:
+			if not self.default_exists or default:
+				button.select()
+				self.press_spiffy_button(button)
+				self.default_exists = True
 
 		self.col += 1
 
@@ -220,7 +244,12 @@ class SpiffyGroup():
 		self.parent.max_row += amount_of_space
 		return amount_of_space
 
-	def press_spiffy_button(self):
+	def press_spiffy_button(self, button):
+		self.get_animation_engine().press_spiffy_button(button)
+		self.get_animation_engine().update_animation()
+
+	def press_color_button(self, color):
+		self.get_animation_engine().press_color_button(color)
 		self.get_animation_engine().update_animation()
 
 	def invoke_spiffy_button(self, button, event=None):

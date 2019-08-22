@@ -2,8 +2,10 @@
 #in particular, keeps track of information like which palette the sprite is using, etc.
 
 import tkinter as tk
+import tkinter.colorchooser as colorchooser
 import random
 import json
+import re
 import itertools
 from PIL import Image, ImageTk
 from source import common, gui_common, widgetlib
@@ -19,6 +21,7 @@ class AnimationEngineParent():
 		self.step_total_label = tk.Label()
 		self.tiles_list_label = tk.Label()
 
+		self.palette_buttons = []
 		self.plugins = []
 		self.prev_palette_info = []
 
@@ -62,13 +65,17 @@ class AnimationEngineParent():
 		direction_panel, height, new_spiffy_dict = self.get_direction_buttons(parent,fish).get_panel()
 		self.spiffy_dict = {**self.spiffy_dict, **new_spiffy_dict}   #merge all the stringvars into this dict
 
-
 		parent.add(direction_panel, minsize=height)
 
 		spiffy_panel, height, new_spiffy_dict = self.get_spiffy_buttons(parent,fish).get_panel()
 		self.spiffy_dict = {**self.spiffy_dict, **new_spiffy_dict}   #merge all the stringvars into this dict
 
 		parent.add(spiffy_panel,minsize=height)
+
+		palette_panel, height, new_spiffy_dict = self.get_palette_buttons(parent,fish).get_panel()
+		self.spiffy_dict = {**self.spiffy_dict, **new_spiffy_dict}	#merge all the stringvars into this dict
+
+		parent.add(palette_panel,minsize=height)
 
 		self.update_overview_panel()
 
@@ -131,7 +138,6 @@ class AnimationEngineParent():
 	def get_current_image(self):
 		displayed_direction = self.get_current_direction()
 		pose_list = self.get_current_pose_list(displayed_direction)
-		tile_list = []
 		if not pose_list:
 			displayed_direction = self.sprite.get_alternative_direction(self.current_animation, displayed_direction)
 			pose_list = self.get_current_pose_list(displayed_direction)
@@ -247,6 +253,26 @@ class AnimationEngineParent():
 
 		return spiffy_buttons
 
+	#Mike likes palette buttons
+	def get_palette_buttons(self, parent, fish):
+		palette_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self, frame_name="palette_buttons")
+
+		palette_manifest = common.get_resource([self.resource_subpath,"manifests"],"palette-buttons.json")
+		if palette_manifest:
+			with open(palette_manifest) as f:
+				palette_list = json.load(f)
+				f.close()
+
+				button_group = palette_buttons.make_new_group("palette",fish,independent=True)
+				i = 1
+				for color in palette_list:
+					button_group.add(color,"blank.png",fish)
+					if i % 8 == 0:
+						button_group.add_newline()
+					i += 1
+
+		return palette_buttons
+
 	#Art likes direction buttons
 	def get_direction_buttons(self, parent, fish):
 		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
@@ -342,3 +368,34 @@ class AnimationEngineParent():
 			# VERTICAL
 			raise NotImplementedError()
 		collage.save(filename)
+
+	def press_spiffy_button(self, button):
+		if len(self.palette_buttons) >= 15:
+			this_palette = self.sprite.get_this_palette(self.spiffy_dict)
+			if len(this_palette) >= 15:
+				for i in range(len(this_palette)):
+					if self.sprite.classic_name in ["Link"] and i in [12]:
+						pass
+					else:
+						color = "#%02x%02x%02x" % this_palette[i]
+						self.palette_buttons[i+1].configure(bg=color)
+						self.palette_buttons[i+1].configure(relief=tk.RAISED)
+			if "gloves_var" in self.spiffy_dict:
+				for i in [16,17]:
+					self.palette_buttons[i].configure(relief=tk.RAISED)
+				if not button.winfo_name().find("gloves") == -1 and button.winfo_name().find("no") == -1:
+					button_id = 16 if not button.winfo_name().find("power") == -1 else 17
+					self.palette_buttons[button_id].configure(relief=tk.SUNKEN)
+
+	def press_color_button(self,index):
+		color = str(colorchooser.askcolor())
+		if color.find("None") == -1:
+			matches = re.search(r'\(([^\)]*)\)([,\s\']*)([^\']*)(.*)',color)
+			if matches:
+				color = matches[3]
+				r = ("%x" % (int(int(color[1:3],16) / 8) * 8)).zfill(2)
+				g = ("%x" % (int(int(color[3:5],16) / 8) * 8)).zfill(2)
+				b = ("%x" % (int(int(color[5:7],16) / 8) * 8)).zfill(2)
+				color = '#' + r + g + b
+				self.palette_buttons[index-1].configure(bg=color)
+				self.sprite.set_color_from_palette_button(color,index,self.spiffy_dict)

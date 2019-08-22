@@ -68,6 +68,12 @@ class SpriteParent():
 		#if the child class didn't tell us what to do, just go back to whatever palette it was on when it was imported
 		return self.master_palette[default_range[0]:default_range[1]]
 
+	def get_this_palette(self,var_dict):
+		return AssertionError("called get_this_palette() on Sprite base class")
+
+	def set_color_from_palette_button(self,color,index,var_dict):
+		return AssertionError("called set_color_from_palette_button() on Sprite base class")
+
 	############################# END ABSTRACT CODE ##############################
 
 	#the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
