@@ -41,10 +41,9 @@ This preview version of SpriteSomething includes many basic features of the main
 
 * Command-line interface
 
-### Features NOT included in this preview
+### Known Issues in this release
 
-* Link's Swords & Shields and other props that may be relevant to specific animations
-* Link's Zap Palette for both the Zap and Ether animations
+* Samus does not have all her animations rendered to the correct center of gravity
 
 Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.14 xcode 10.2) and Windows (built on Windows 10 v1803) all built on python 3.7 are available.
 

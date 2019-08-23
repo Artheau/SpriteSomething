@@ -6,7 +6,7 @@ def coord_calc(origin,dims):
 	w, h = dims
 	return (x1,x2,w+x1,h+x2)
 
-def equipment_test():
+def equipment_test(save=False):
 	#get equipment image
 	equipment_image = Image.open(common.get_resource(["zelda3","link","sheets"],"equipment.png"))
 
@@ -102,7 +102,7 @@ def equipment_test():
 		"hook2": (( 0,232),(16, 8)), #vertical
 		"hook3": ((16,232),( 8, 8)), #chainlink
 		"hook4": ((24,224),( 8,16)), #horizontal
-		"boom": ((32,224),(16,16)), #NE
+		"boomerang": ((32,224),(16,16)), #NE
 		"bow0": (( 0,256),( 8,16)),
 		"bow1": ((16,256),(16, 8)),
 		"bow2": ((32,256),(16,16)),
@@ -130,4 +130,7 @@ def equipment_test():
 		icon_coords = icon_specs.get(icon)
 		cropped_image = equipment_image.crop(icon_coords)
 		equipment[icon] = cropped_image
-		cropped_image.save("./user_resources/zelda3/link/sheets/" + icon + ".png")
+		if save:
+			cropped_image.save("./user_resources/zelda3/link/sheets/" + icon + ".png")
+
+	return equipment

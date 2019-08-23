@@ -1,6 +1,7 @@
 import json
 import os
 import urllib
+from functools import partial
 from source import common
 from source.pluginslib import PluginsParent
 from . import equipment
@@ -16,8 +17,8 @@ class Plugins(PluginsParent):
 		]
 		self.set_plugins(plugins)
 
-	def equipment_test(self):
-		equipment.equipment_test()
+	def equipment_test(self, save=False):
+		return equipment.equipment_test(save)
 
 	def get_alttpr_sprites(self):
 		success = False	#report success

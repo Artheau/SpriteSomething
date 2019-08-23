@@ -14,6 +14,55 @@ class Sprite(SpriteParent):
 		super().__init__(filename, manifest_dict, my_subpath)
 		self.load_plugins()
 
+		self.link_globals = {}
+		self.link_globals["zap_palette"] = [
+#				(  0,  0,  0),
+				(  0,  0,  0),
+				(208,184, 24),
+				(136,112,248),
+				(  0,  0,  0),
+				(208,192,248),
+				(  0,  0,  0),
+				(208,192,248),
+
+				(112, 88,224),
+				(136,112,248),
+				( 56, 40,128),
+				(136,112,248),
+				( 56, 40,128),
+				( 72, 56,144),
+				(120, 48,160),
+				(192,128,240)
+		]
+		self.link_globals["sword_palette"] = [
+			#blade, border, hilt
+			[(248,248,248),(248,248, 72),(104,136,184)], #fighters
+			[(112,144,248),(160,248,216),(168, 56, 56)], #master
+			[(216, 72, 16),(248,160, 40),(104,160,248)], #tempered
+			[(248,200,  0),(248,248,200),(  0,144, 72)]  #golden
+		]
+
+	def get_alternate_tile(self, image_name, palettes):
+		slugs = {}
+		for palette in palettes:
+			if '_' in palette:
+				slugs[palette[palette.rfind('_')+1:]] = palette[:palette.rfind('_')]
+		for item in ["SWORD","SHIELD"]:
+			if image_name.startswith(item):
+				if item.lower() in slugs:
+					image_name = image_name.replace(item,slugs[item.lower()] + '_' + item.lower()) if not ("none_" + item.lower()) in palettes else "transparent"
+					return self.images[image_name]
+				else:
+					return Image.new("RGBA",(0,0),0)    #TODO: Track down why this function is being called without spiffy button info during sprite load
+		else:
+			raise AssertionError(f"Could not locate tile with name {image_name}")
+
+	def import_cleanup(self):
+		self.load_plugins()
+		self.images["transparent"] = Image.new("RGBA",(0,0),0)
+		self.equipment = self.plugins.equipment_test(False)
+		self.images = dict(self.images,**self.equipment)
+
 	def import_from_ROM(self, rom):
 		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)    #the big Link sheet
 		palette_data = rom.bulk_read_from_snes_address(0x1BD308,120)     #the palettes
@@ -86,7 +135,14 @@ class Sprite(SpriteParent):
 		return rom
 
 	def get_palette(self, palettes, default_range, frame_number):
-		if "bunny" in palettes:
+		palette_indices = None
+		this_palette = []
+		for i in range(1,16):
+			this_palette.append((0,0,0))
+
+		if "zap_mail" in palettes:
+			this_palette = self.link_globals["zap_palette"]
+		elif "bunny_mail" in palettes:
 			palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
 		else:
 			palette_indices = list(range(1,16))   #start with green mail and modify it as needed
@@ -104,7 +160,11 @@ class Sprite(SpriteParent):
 					elif "red_mail" in palettes:
 						palette_indices[i] += 32
 
-		return [self.master_palette[i] for i in palette_indices]
+		if palette_indices:
+			for i in range(0,len(palette_indices)):
+				this_palette[i] = self.master_palette[palette_indices[i]]
+
+		return this_palette
 
 	def get_binary_sprite_sheet(self):
 		top_half_of_rows = bytearray()
