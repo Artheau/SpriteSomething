@@ -171,10 +171,7 @@ class SpriteParent():
 				new_palette = tile_info["palette"]
 
 			if new_palette:
-				new_palette_type = new_palette[new_palette.rfind('_'):]
-				for i in range(len(palettes)):
-					if new_palette_type in palettes[i]:
-						palettes[i] = new_palette
+				palettes.append(new_palette)
 
 			base_image = self.images[tile_info["image"]] if tile_info["image"] in self.images else self.get_alternate_tile(tile_info["image"], palettes)
 			if "crop" in tile_info:

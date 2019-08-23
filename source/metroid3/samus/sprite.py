@@ -473,9 +473,21 @@ class Sprite(SpriteParent):
 		overall_type, variant_type = "power", "standard"   #defaults unless we are told otherwise
 		for palette_string in palette_list:
 			if palette_string.endswith("_suit"):
+				#if we've got a suit base
+				# [power|varia|gravity]
 				overall_type = palette_string.replace("_suit","")
 			if palette_string.endswith("_variant"):
-				variant_type = palette_string.replace("_variant","")
+				#if we've got a variant
+				this_variant = palette_string.replace("_variant","")
+				#if it's not currently set to base
+				if variant_type not in ["standard"]:
+					#if we're not trying to set it to these low-priority ones
+					if this_variant not in ["xray"]:
+						#set it
+						variant_type = this_variant
+				#else, move it away from standard
+				else:
+					variant_type = this_variant
 
 		return self.get_timed_palette(overall_type=overall_type, variant_type=variant_type)
 
