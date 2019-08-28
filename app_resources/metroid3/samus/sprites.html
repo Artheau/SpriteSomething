@@ -1,0 +1,74 @@
+<html>
+<head>
+<title>Samus Sprites</title>
+<script>
+function readTextFile(file) {
+  let rawFile = new XMLHttpRequest();
+  let allText = "";
+  rawFile.open("GET", file, false);
+  rawFile.onreadystatechange = function () {
+    if(rawFile.readyState === 4) {
+      if(rawFile.status === 200 || rawFile.status == 0) {
+        allText = rawFile.responseText;
+      }
+    }
+  }
+  rawFile.send(null);
+
+  return allText;
+}
+
+function init() {
+  let spritesManifest = readTextFile(".\\sprites.json");
+  let sprites = JSON.parse(spritesManifest);
+  sprites.sort(function(a,b) {
+    return a.name.localeCompare(b.name);
+  });
+  for (let sprite in sprites) {
+    sprite = sprites[sprite];
+    let name = sprite.name;
+    let author = sprite.author;
+    let file = sprite.file;
+    let sprite_object = document.createElement("div");
+    let name_line = document.createElement("div");
+    let name_link = document.createElement("a");
+    let author_line = document.createElement("div");
+
+    sprite_object.className = "sprite";
+
+    name_link.innerHTML = name;
+    name_link.href = file;
+    name_line.className = "name";
+    name_line.appendChild(name_link);
+
+    author_line.innerHTML = author;
+    author_line.className = "author";
+
+    sprite_object.appendChild(name_line);
+    sprite_object.appendChild(author_line);
+
+    document.getElementById("sprites_container").appendChild(sprite_object);
+  }
+}
+
+window.onload = function() {
+  init();
+}
+</script>
+<style type="text/css">
+.sprite {
+  border: 1px solid #ffffff;
+  float:  left;
+  width:  160px;
+  height: 150px;
+}
+.name, .author {
+  text-align: center;
+}
+</style>
+</head>
+<body>
+  <h1>Samus Sprites</h1>
+  <div id="sprites_container"></div>
+</body>
+</html>
