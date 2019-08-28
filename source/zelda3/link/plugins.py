@@ -1,6 +1,7 @@
 import json
 import os
 import urllib
+from tkinter import messagebox
 from functools import partial
 from source import common
 from source.pluginslib import PluginsParent
@@ -34,6 +35,7 @@ class Plugins(PluginsParent):
 		i = 0
 		total = len(alttpr_sprites)
 		print("   Downloading Official ALttPR Sprites")
+		messagebox.showwarning("Downloading Official ALttPR Sprites","Wait a little bit, dude, there's " + str(total) + " sprites.")
 		for sprite in alttpr_sprites:
 			sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
 			sprite_destination = os.path.join(official,sprite_filename)	#set the destination
