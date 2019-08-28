@@ -5,6 +5,7 @@
 		"file.open": "Open",
 		"file.save": "Save As...",
 		"file.exit": "Exit",
+		"bundle": "Bundle",
 		"export": "Export",
 		"export.inject": "Inject into Game File",
 		"export.inject-new": "Copy to new Game File",

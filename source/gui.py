@@ -195,8 +195,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 											])
 		menu_options.append(file_menu)
 
-		#create the import menu
-		import_menu = self.create_cascade(self.fish.translate("meta","menu","export"),"export_menu",
+		#create the export menu
+		export_menu = self.create_cascade(self.fish.translate("meta","menu","export"),"export_menu",
 											[
 													(self.fish.translate("meta","menu","export.inject"),"inject",self.inject_into_ROM),
 													(self.fish.translate("meta","menu","export.inject-new"),"inject-new",self.copy_into_ROM),
@@ -207,7 +207,29 @@ class SpriteSomethingMainFrame(tk.Frame):
 													(self.fish.translate("meta","menu","export.animation-as-hcollage"),"animation-as-hcollage",partial(self.export_animation_as_collage,"horizontal")),
 													#(self.fish.translate("meta","menu","export.animation-as-vcollage"),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
 											])
-		menu_options.append(import_menu)
+		menu_options.append(export_menu)
+
+		bundled_sprites = []
+		root = "app_resources"
+		for gamedir in os.listdir(root):
+			if os.path.isdir(os.path.join(root,gamedir)):
+				if not gamedir == "meta":
+					with open(os.path.join(root,gamedir,"manifests","manifest.json")) as game_manifest:
+						sprites = json.load(game_manifest)
+						for id,sprite in sprites.items():
+							if not id == "$schema":
+								name = sprite["name"]
+								folder = sprite["folder name"]
+								path = os.path.join(root,gamedir,folder,"sheets")
+								filename = ""
+								for filetype in [".rdc",".zspr",".png"]:
+									filepath = os.path.join(path,folder+filetype)
+									if os.path.isfile(filepath):
+										filename = filepath
+								bundled_sprites.append((name,None,partial(self.load_sprite,filename)))
+					game_manifest.close()
+		bundle_menu = self.create_cascade(self.fish.translate("meta","menu","bundle"),"bundle_menu",bundled_sprites)
+		menu_options.append(bundle_menu)
 
 		#for future implementation
 		plugins_menu = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
