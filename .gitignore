@@ -1,0 +1,45 @@
+# no pycache
+__pycache__/
+
+# no build dir
+/build
+/dist
+
+# no executables (for now)
+*.exe
+
+#do not include the upx compressor directory (you can get this utility from https://upx.github.io/)
+/upx
+
+# no IDE stuff
+/.vscode
+/.idea
+
+# no PowerShell scripts
+*.ps*
+
+# no images output
+/images
+
+# no pip installer
+get-pip.py
+
+# do not include the macro used to simulate the command line
+_test_macro.py
+
+# no super nintendo files
+*.smc
+
+# no super famicom files
+*.sfc
+
+# no gamefiles
+gamefiles/
+
+# no working dirs file
+working_dirs.json
+
+# no custom files
+custom/
+user_resources/metroid3/samus/sheets
+user_resources/zelda3/link/sheets
