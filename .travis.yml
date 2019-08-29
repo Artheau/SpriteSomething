@@ -136,6 +136,7 @@ jobs:
           fi;"
         #output actual deployment info
         - "echo \"Deploy:          ${DEPLOY}\"; \
+          echo \"Deploy Pages:    ${DEPLOY_PAGES}\"; \
           echo \"Files to Upload: ${FILES}\"; \
           echo \"Release Name:    ${RELEASE_NAME}\"; \
           echo \"Git tag:         ${TRAVIS_TAG}\""
@@ -257,7 +258,7 @@ jobs:
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - bash ./scripts/win-before_install.sh
     - <<: *build-deploy
-      name: "3.7 on Windows: Build/Deploy"
+      name: "3.7 on Windows: Build/Deploy/Pages"
       os: windows
       python: "3.7"
       services: xvfb #needs a screen for tkinter
@@ -268,13 +269,14 @@ jobs:
         #get pip
         #install pip
         #install more windows dependences
-        #deploy to GitHub Pages
         - choco install python
         - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - bash ./scripts/win-before_install.sh
+      after_install:
+        #deploy to GitHub Pages
         - export DEPLOY_PAGES=yes
 
 #nobody wants emails
