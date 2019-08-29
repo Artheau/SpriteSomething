@@ -103,7 +103,7 @@ jobs:
         #prepare files to upload
         - bash ./scripts/after_success.sh
         #Windows VM will deploy to GitHub Pages
-        - if [ \"${TRAVIS_OS_NAME}\" == \"windows\"]; then \
+        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\"]; then \
             export DEPLOY_PAGES=yes; \
           fi"
 
