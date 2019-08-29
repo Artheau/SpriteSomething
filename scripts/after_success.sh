@@ -16,6 +16,12 @@ echo "${TRAVIS_TAG}" > "../pages/app_resources/meta/manifests/app_version.txt"
 #move GitHub pages files to staging area
 mv ./pages_resources/* ../pages/app_resources
 
+echo "Dir Listing of Pages App Resources"
+ls -F ../pages/app_resources
+
+echo "Dir Listing of Staging Area"
+ls -F ../
+
 #chmod user_resources to hopefully fix working_dirs.json issue
 chmod 775 "./user_resources"
 chmod 775 "./user_resources/meta"

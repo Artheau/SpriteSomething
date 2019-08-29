@@ -143,6 +143,7 @@ jobs:
         - "echo \"Deploy:          ${DEPLOY}\"; \
           echo \"Deploy Pages:    ${DEPLOY_PAGES}\"; \
           echo \"Files to Upload: ${FILES}\"; \
+          echo \"GHPages Staging: ${PAGES}\"; \
           echo \"Release Name:    ${RELEASE_NAME}\"; \
           echo \"Git tag:         ${TRAVIS_TAG}\""
 
