@@ -164,7 +164,7 @@ jobs:
           keep_history: true
           on:
             repo: Artheau/SpriteSomething
-#            condition: $DEPLOY_PAGES == "yes"
+            condition: $DEPLOY_PAGES == "yes"
             branch: travis-test
 
 # GitHub Release CLI
