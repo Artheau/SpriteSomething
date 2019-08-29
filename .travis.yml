@@ -287,7 +287,7 @@ jobs:
       before_script:
         #enable GHPages deploy
         # print value for confirmation
-        - "export DEPLOY_PAGES=no"
+        - "export DEPLOY_PAGES=yes"
         - "echo \"Deploy Pages: ${DEPLOY_PAGES}\""
 
 #nobody wants emails
