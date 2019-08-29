@@ -111,7 +111,7 @@ jobs:
         - export TRAVIS_TAG="v${TRAVIS_TAG}"
         - export RELEASE_NAME="SpriteSomething ${TRAVIS_TAG}"
         - export FILES=../deploy/* #deploy archive
-        - export PAGES=../pages/* #deploy pages
+        - export PAGES=../pages #deploy pages
         - git tag $TRAVIS_TAG
         #if we're using GitHub Releaser CLI
         # download,install,setup app
