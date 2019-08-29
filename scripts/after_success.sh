@@ -6,6 +6,12 @@ set -ev
 mkdir ../deploy
 #make dir to put some build metadata in
 mkdir ../build
+#make dir to put build version in
+mkdir ../pages
+mkdir ../pages/app_resources
+mkdir ../pages/app_resources/meta
+mkdir ../pages/app_resources/meta/manifests
+echo "${TRAVIS_TAG}" > "../pages/app_resources/meta/manifests/app_version.txt"
 
 #chmod user_resources to hopefully fix working_dirs.json issue
 chmod 775 "./user_resources"

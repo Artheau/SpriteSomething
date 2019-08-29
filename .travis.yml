@@ -55,6 +55,8 @@ install:
     fi"
   #default deployment is yes
   - export DEPLOY=yes
+  #default pages deployment is no
+  - export DEPLOY_PAGES=no
 
 jobs:
   include:
@@ -109,6 +111,7 @@ jobs:
         - export TRAVIS_TAG="v${TRAVIS_TAG}"
         - export RELEASE_NAME="SpriteSomething ${TRAVIS_TAG}"
         - export FILES=../deploy/* #deploy archive
+        - export PAGES=../pages/* #deploy pages
         - git tag $TRAVIS_TAG
         #if we're using GitHub Releaser CLI
         # download,install,setup app
@@ -139,19 +142,29 @@ jobs:
 
 # Travis CI GitHub Releases provider
       deploy:
-        provider: releases
-        api_key:
-          secure: ${GITHUB_DEPLOY_KEY}
-        name: ${RELEASE_NAME}
-        body: ${BODY}
-        file_glob: true
-        file: ${FILES}
-        skip_cleanup: true
-        draft: true
-        on:
-          repo: Artheau/SpriteSomething
-          condition: $DEPLOY == "yes"
-          branch: master
+        - provider: releases
+          api_key:
+            secure: ${GITHUB_DEPLOY_KEY}
+          name: ${RELEASE_NAME}
+          body: ${BODY}
+          file_glob: true
+          file: ${FILES}
+          skip_cleanup: true
+          draft: true
+          on:
+            repo: Artheau/SpriteSomething
+            condition: $DEPLOY == "yes"
+            branch: master
+# Travis CI GitHub Pages provider
+        - provider: pages
+          local_dir: ${PAGES}
+          skip_cleanup: true
+          github_token: ${GITHUB_DEPLOY_KEY}
+          keep_history: true
+          on:
+            repo: Artheau/SpriteSomething
+            condition: $DEPLOY_PAGES == "yes"
+            branch: travis-test
 
 # GitHub Release CLI
 #  waiting on lindell/github-release-cli#3
@@ -255,12 +268,14 @@ jobs:
         #get pip
         #install pip
         #install more windows dependences
+        #deploy to GitHub Pages
         - choco install python
         - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - bash ./scripts/win-before_install.sh
+        - export DEPLOY_PAGES=yes
 
 #nobody wants emails
 notifications:
