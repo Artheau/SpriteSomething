@@ -6,11 +6,9 @@ language: python
 
 # cache pip
 cache:
-  directories:
-    - $HOME/.cache/pip #linux
-    - $HOME/Library/Caches/pip #macosx
-    - $HOME/AppData/Local/pip/Cache #windows
-    - $HOME/upx #upx
+  - pip
+#  directories:
+#    - $HOME/upx #upx
 
 #default VM settings
 dist: bionic
