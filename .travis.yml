@@ -72,7 +72,7 @@ jobs:
 
     # 3.7 on Bionic Build/Deploy
     - &build-deploy
-      stage: "Build & Deploy Binaries"
+      stage: "Build/Deploy Binaries; Deploy GitHub Pages"
       name: "3.7 on Bionic: Build/Deploy"
       dist: bionic
       python: "3.7"
@@ -164,7 +164,7 @@ jobs:
           keep_history: true
           on:
             repo: Artheau/SpriteSomething
-            condition: $DEPLOY_PAGES == "yes"
+#            condition: $DEPLOY_PAGES == "yes"
             branch: travis-test
 
 # GitHub Release CLI
