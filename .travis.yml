@@ -103,9 +103,10 @@ jobs:
         #prepare files to upload
         - bash ./scripts/after_success.sh
         #Windows VM will deploy to GitHub Pages
-        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\"]; then \
-            export DEPLOY_PAGES=yes; \
-          fi"
+        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
+            export DEPLOY_PAGES=\"yes\"; \
+          fi; \
+          echo \"Deploy Pages: ${DEPLOY_PAGES}\";"
 
       before_deploy:
         #set up stuff for both deployment routes
