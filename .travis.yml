@@ -102,6 +102,10 @@ jobs:
           echo \"${TRAVIS_TAG}\" > ./app_resources/meta/manifests/app_version.txt"
         #prepare files to upload
         - bash ./scripts/after_success.sh
+        #Windows VM will deploy to GitHub Pages
+        - if [ \"${TRAVIS_OS_NAME}\" == \"windows\"]; then \
+            export DEPLOY_PAGES=yes; \
+          fi"
 
       before_deploy:
         #set up stuff for both deployment routes
@@ -275,9 +279,6 @@ jobs:
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - bash ./scripts/win-before_install.sh
-      after_script:
-        #deploy to GitHub Pages
-        - export DEPLOY_PAGES=yes
 
 #nobody wants emails
 notifications:
