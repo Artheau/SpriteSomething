@@ -14,7 +14,7 @@ mkdir ../pages/app_resources/meta/manifests
 echo "${TRAVIS_TAG}" > "../pages/app_resources/meta/manifests/app_version.txt"
 
 #copy GitHub pages files to staging area
-cp -a ./pages_resources/* ../pages/app_resources
+cp -rf ./pages_resources ../pages/app_resources
 #nuke GitHub pages files from source code
 rm -rf ./pages_resources
 
