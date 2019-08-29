@@ -6,9 +6,11 @@ language: python
 
 # cache pip
 cache:
-  - pip
-#  directories:
-#    - $HOME/upx #upx
+  directories:
+    - $HOME/.cache/pip #linux
+    - $HOME/Library/Caches/pip #macosx
+    - $HOME/AppData/Local/pip/Cache #windows
+    - $HOME/upx #upx
 
 #default VM settings
 dist: bionic
@@ -22,21 +24,10 @@ env:
     - DEPLOYMENT="travis"
 #    - DEPLOYMENT="github-releaser-cli"
 
-# cache
-# before_install
-# install
-### jobs ###
-# before_script
-# script
-# before_cache
-# after_success
-# before_deploy
-# deploy
-# after_deploy
-
 # upgrade pip
 # install pillow, numpy for app
 # install pyinstaller, regex for distilling
+# 4 Step
 install:
   - ${PYTHON_EXECUTABLE} --version
   #install python dependencies
@@ -56,6 +47,7 @@ install:
   #default pages deployment is no
   - export DEPLOY_PAGES=no
 
+# 5 Step
 jobs:
   include:
     # 3.7 on Bionic Test
@@ -65,7 +57,9 @@ jobs:
       dist: bionic
       python: "3.7"
       services: xvfb #needs a screen for tkinter
+      # 6 Step
       before_script: echo "#do nothing before script"
+      # 7 Step
       script: ${PYTHON_EXECUTABLE} tests.py
 
     # 3.7 on Bionic Build/Deploy
@@ -75,8 +69,10 @@ jobs:
       dist: bionic
       python: "3.7"
       services: xvfb #needs a screen for tkinter
+      # 3 Step
       before_install: sudo apt-get install pcregrep #get special regex stuff
       skip_cleanup: true
+      # 7 Step
       script:
         #run upx script
         # upx still doesn't quite work with race conditions of downloading vs processing
@@ -90,6 +86,7 @@ jobs:
 #            ls; \
 #          fi"
         - ${PYTHON_EXECUTABLE} build.py
+      # 9 Step
       after_success:
         #if no tag was submitted, let's build one
         #current: <major>.<minor>.<build_number>
@@ -98,14 +95,15 @@ jobs:
             export TRAVIS_TAG=\"${APP_VERSION}.${TRAVIS_BUILD_NUMBER}\"; \
           fi; \
           echo \"${TRAVIS_TAG}\" > ./app_resources/meta/manifests/app_version.txt"
-        #prepare files to upload
-        - bash ./scripts/after_success.sh
         #Windows VM will deploy to GitHub Pages
         - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
             export DEPLOY_PAGES=\"yes\"; \
           fi; \
           echo \"Deploy Pages: ${DEPLOY_PAGES}\";"
+        #prepare files to upload
+        - bash ./scripts/after_success.sh
 
+      # 10 Step
       before_deploy:
         #set up stuff for both deployment routes
         #global var set at top to indicate which route to use
@@ -146,6 +144,7 @@ jobs:
           echo \"Git tag:         ${TRAVIS_TAG}\""
 
 # Travis CI GitHub Releases provider
+      # 11 Step
       deploy:
         - provider: releases
           api_key:
@@ -196,8 +195,9 @@ jobs:
       dist: xenial
       python: "3.7"
       services: xvfb #needs a screen for tkinter
+      # 6 Step
       before_script:
-        #cancel deploy
+        #cancel GHReleases deploy
         # print value for confirmation
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
@@ -213,6 +213,7 @@ jobs:
       dist: xenial
       python: "3.6"
       services: xvfb #needs a screen for tkinter
+      # 6 Step
       before_script:
         #cancel deploy
         # print value for confirmation
@@ -227,6 +228,7 @@ jobs:
       python: "3.7"
       services: #cancel services
       language: shell #'language: python' breaks on Travis CI macOSX
+      # 3 Step
       before_install:
         #macosx uses python3
         - export PYTHON_EXECUTABLE=python3
@@ -237,6 +239,7 @@ jobs:
       python: "3.7"
       services: #cancel services
       language: shell #'language: python' breaks on Travis CI macOSX
+      # 3 Step
       before_install:
         #macosx uses python3
         - export PYTHON_EXECUTABLE=python3
@@ -249,6 +252,7 @@ jobs:
       python: "3.7"
       services: xvfb #needs a screen for tkinter
       language: shell #'language: python' breaks on Travis CI Windows
+      # 3 Step
       before_install:
         #install python
         #set python path
@@ -267,6 +271,7 @@ jobs:
       python: "3.7"
       services: xvfb #needs a screen for tkinter
       language: shell #'language: python' breaks on Travis CI Windows
+      # 3 Step
       before_install:
         #install python
         #set python path
@@ -279,6 +284,11 @@ jobs:
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - bash ./scripts/win-before_install.sh
+      before_script:
+        #enable GHPages deploy
+        # print value for confirmation
+        - "export DEPLOY_PAGES=no"
+        - "echo \"Deploy Pages: ${DEPLOY_PAGES}\""
 
 #nobody wants emails
 notifications:
