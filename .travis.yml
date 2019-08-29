@@ -275,7 +275,7 @@ jobs:
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - bash ./scripts/win-before_install.sh
-      after_install:
+      after_success:
         #deploy to GitHub Pages
         - export DEPLOY_PAGES=yes
 
