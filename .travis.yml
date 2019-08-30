@@ -163,7 +163,7 @@ jobs:
           on:
             repo: Artheau/SpriteSomething
             condition: $DEPLOY_PAGES == "yes"
-            branch: travis-test
+            branch: master
 
 # GitHub Release CLI
 #  waiting on lindell/github-release-cli#3
