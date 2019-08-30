@@ -6,11 +6,30 @@ set -ev
 mkdir ../deploy
 #make dir to put some build metadata in
 mkdir ../build
+#make dir to put build version in
+mkdir -p ../pages/app_resources/meta/manifests/
+echo "${TRAVIS_TAG}" > "../pages/app_resources/meta/manifests/app_version.txt"
 
 #chmod user_resources to hopefully fix working_dirs.json issue
 chmod 775 "./user_resources"
 chmod 775 "./user_resources/meta"
 chmod 775 "./user_resources/meta/manifests"
+
+#copy GitHub pages files to staging area
+mv ./pages_resources/index.html ../pages/						#move index page that lists version number
+cp -rf ./pages_resources/* ../pages/app_resources/	#copy sprite preview pages
+ls -l ./app_resources | grep "^d" | grep -o "\S*$" | sed '/meta/d' > "../build/games.txt"	#get list of games
+cp -f ../build/games.txt ../pages/app_resources/meta/manifests/		#copy list of games
+# copy game manifests over
+for game in $(cat ../build/games.txt); \
+do mkdir -p ../pages/app_resources/$game/manifests/; \
+cp ./app_resources/$game/manifests/* $_; \
+mkdir -p ../pages/app_resources/$game/lang/; \
+cp ./app_resources/$game/lang/* $_; \
+done
+
+#nuke GitHub pages files from source code
+rm -rf ./pages_resources
 
 #if we're on windows, jot down a note of the files in the dir
 if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
