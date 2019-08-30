@@ -80,7 +80,8 @@ class AnimationEngineParent():
 
 		# Step: <step_number_label> / <step_total_label>
 		# Tiles: <tile_list>
-		step_panel = tk.Frame(parent, name="step_panel")
+		LABEL_HEIGHT = 16
+		step_panel = tk.Frame(parent, name="step_panel", height=LABEL_HEIGHT)
 		widgetlib.right_align_grid_in_frame(step_panel)
 		step_label = tk.Label(step_panel, text=fish.translate("meta","meta","step") + ':')
 		step_label.grid(row=0, column=1)

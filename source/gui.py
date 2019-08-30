@@ -308,13 +308,13 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def attach_left_panel(self):
 		#this same function can also be used to re-create the panel
-		MINSIZE = 25
+		BUTTON_HEIGHT = 26
 		vcr_controls = self.get_vcr_controls()  #have to do this early so that their values are available for other buttons
-		self.left_panel.add(self.get_reload_button(),minsize=MINSIZE)
+		self.left_panel.add(self.get_reload_button(),height=1 * BUTTON_HEIGHT)
 		self.attach_metadata_panel()
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
 		self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
-		self.left_panel.add(vcr_controls,minsize=MINSIZE)
+		self.left_panel.add(vcr_controls,height=5 * BUTTON_HEIGHT)
 		self.animation_engine.attach_tile_details_panel(self.left_panel,self.fish)
 		self.panes.add(self.left_panel)
 
