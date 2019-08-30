@@ -29,8 +29,21 @@ function init() {
   for(let game in games) {
     game = games[game];
     if(game != "") {
-      let li = document.createElement("li");
-      let a = document.createElement("a");
+      let game_li = document.createElement("li");
+      let sprites_ul = document.createElement("ul");
+      let sprite_li = document.createElement("li");
+      let sprite_a = document.createElement("a");
+      let game_name = game;
+      let en_lang = readTextFile(".\\app_resources\\" + game + "\\lang\\en.json");
+      en_lang = JSON.parse(en_lang);
+      if("game" in en_lang) {
+        if("name" in en_lang["game"]) {
+          game_name = en_lang["game"]["name"];
+        }
+      }
+
+      game_li.innerHTML = game_name;
+
       let manifest = readTextFile(".\\app_resources\\" + game + "\\manifests\\manifest.json");
       manifest = JSON.parse(manifest);
       for(let key in manifest) {
@@ -39,13 +52,17 @@ function init() {
           if("folder name" in value) {
             let name = value["name"];
             let sprite = value["folder name"];
-            a.href = "./app_resources/" + game + '/' + sprite + '/' + "sprites.html";
-            a.innerHTML = name;
-            li.appendChild(a);
-            document.getElementById("games-list").appendChild(li);
+            sprite_li = document.createElement("li");
+            sprite_a = document.createElement("a");
+            sprite_a.href = "./app_resources/" + game + '/' + sprite + '/' + "sprites.html";
+            sprite_a.innerHTML = name;
+            sprite_li.appendChild(sprite_a);
+            sprites_ul.appendChild(sprite_li);
           }
         }
       }
+      game_li.appendChild(sprites_ul);
+      document.getElementById("games-list").appendChild(game_li);
     }
   }
 }
