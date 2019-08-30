@@ -6,6 +6,7 @@ import re											#for regexes in hyperlinks in about box
 import traceback							#for error reporting
 import os, stat, sys					#for filesystem manipulation
 import time										#for timekeeping
+import urllib									#for getting latest version number from GitHub Pages
 import webbrowser							#for launching browser from about box
 from functools import partial	#for passing parameters to user-triggered function calls
 from PIL import Image,ImageTk    #for converting PNG to formats that tk can use
@@ -218,6 +219,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		help_menu = self.create_cascade(self.fish.translate("meta","menu","help"),"help_menu",
 											[
+													(self.fish.translate("meta","menu","help.check-for-updates"),None,self.check_for_updates),
 													(self.fish.translate("meta","menu","help.diagnostics"),"help-diagnostics",self.diagnostics),
 													(self.fish.translate("meta","menu","help.about"),"app",self.about),
 											])
@@ -737,6 +739,17 @@ class SpriteSomethingMainFrame(tk.Frame):
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
+
+	def check_for_updates(self):
+		this_version = CONST.APP_VERSION
+		version_url = "https://artheau.github.io/SpriteSomething/app_resources/meta/manifests/app_version.txt"
+		version_req = urllib.request.urlopen(version_url)
+		latest_version = version_req.readlines()[0].decode("utf-8").strip()
+
+		if latest_version > this_version:
+			get_update = messagebox.askyesno(self.app_title,"It seems that there is an update available. Would you like to go to the project page to get it?")
+			if get_update:
+				webbrowser.open_new("https://github.com/Artheau/SpriteSomething/releases/v" + latest_version)
 
 	def diagnostics(self):
 		# Debugging purposes
