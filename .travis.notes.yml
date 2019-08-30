@@ -55,6 +55,7 @@
 # OSX 10.14
 # Tests: 3: use python3; don't need pcregrep
 # Build: 3: use python3; don't need pcregrep
+# Build: 6: DEPLOY_PAGES=yes
 
 # Win10v1803
 # Tests: 3: get python
@@ -67,4 +68,3 @@
 #           get pip
 #           get more stuff for windows
 #           don't need pcregrep, using py clone
-# Build: 6: DEPLOY_PAGES=yes

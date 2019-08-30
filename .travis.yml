@@ -95,11 +95,6 @@ jobs:
             export TRAVIS_TAG=\"${APP_VERSION}.${TRAVIS_BUILD_NUMBER}\"; \
           fi; \
           echo \"${TRAVIS_TAG}\" > ./app_resources/meta/manifests/app_version.txt"
-        #Windows VM will deploy to GitHub Pages
-        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
-            export DEPLOY_PAGES=\"yes\"; \
-          fi; \
-          echo \"Deploy Pages: ${DEPLOY_PAGES}\";"
         #prepare files to upload
         - bash ./scripts/after_success.sh
 
@@ -243,6 +238,12 @@ jobs:
       before_install:
         #macosx uses python3
         - export PYTHON_EXECUTABLE=python3
+      # 6 Step
+      before_script:
+        #enable GHPages deploy
+        # print value for confirmation
+        - "export DEPLOY_PAGES=yes"
+        - "echo \"Deploy Pages: ${DEPLOY_PAGES}\""
 
     # 3.7 on Windows
     # Windows VMs currently are slow
@@ -284,11 +285,6 @@ jobs:
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - bash ./scripts/win-before_install.sh
-      before_script:
-        #enable GHPages deploy
-        # print value for confirmation
-        - "export DEPLOY_PAGES=yes"
-        - "echo \"Deploy Pages: ${DEPLOY_PAGES}\""
 
 #nobody wants emails
 notifications:
