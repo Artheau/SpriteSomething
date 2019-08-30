@@ -7,7 +7,7 @@ mkdir ../deploy
 #make dir to put some build metadata in
 mkdir ../build
 #make dir to put build version in
-mkdir --parents ../pages/app_resources/meta/manifests/
+mkdir -p ../pages/app_resources/meta/manifests/
 echo "${TRAVIS_TAG}" > "../pages/app_resources/meta/manifests/app_version.txt"
 
 #chmod user_resources to hopefully fix working_dirs.json issue
@@ -21,7 +21,7 @@ cp -rf ./pages_resources/* ../pages/app_resources/	#copy sprite preview pages
 ls -l ./app_resources | grep "^d" | grep -o "\S*$" | sed '/meta/d' > "../build/games.txt"	#get list of games
 # copy game manifests over
 for game in $(cat ../build/games.txt); \
-do mkdir --parents ../pages/app_resources/$game/manifests/; \
+do mkdir -p ../pages/app_resources/$game/manifests/; \
 cp ./app_resources/$game/manifests/* $_; \
 done
 
