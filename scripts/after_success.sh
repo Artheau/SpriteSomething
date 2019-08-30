@@ -7,16 +7,26 @@ mkdir ../deploy
 #make dir to put some build metadata in
 mkdir ../build
 #make dir to put build version in
-mkdir ../pages
-mkdir ../pages/app_resources
-mkdir ../pages/app_resources/meta
-mkdir ../pages/app_resources/meta/manifests
+mkdir --parents ../pages/app_resources/meta/manifests/
 echo "${TRAVIS_TAG}" > "../pages/app_resources/meta/manifests/app_version.txt"
 
 #chmod user_resources to hopefully fix working_dirs.json issue
 chmod 775 "./user_resources"
 chmod 775 "./user_resources/meta"
 chmod 775 "./user_resources/meta/manifests"
+
+#copy GitHub pages files to staging area
+mv ./pages_resources/index.html ../pages/						#move index page that lists version number
+cp -rf ./pages_resources/* ../pages/app_resources/	#copy sprite preview pages
+ls -l ./app_resources | grep "^d" | grep -o "\S*$" | sed '/meta/d' > "../build/games.txt"	#get list of games
+# copy game manifests over
+for game in $(cat ../build/games.txt); \
+do mkdir --parents ../pages/app_resources/$game/manifests/; \
+cp ./app_resources/$game/manifests/* $_; \
+done
+
+#nuke GitHub pages files from source code
+rm -rf ./pages_resources
 
 #if we're on windows, jot down a note of the files in the dir
 if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
@@ -61,11 +71,6 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 
 	#clean the git slate but don't clobber stuff if we're running this locally
 	git clean -dfx --exclude=.vscode --exclude=*.json
-
-	#copy GitHub pages files to staging area
-	cp -rf ./pages_resources/* ../pages/app_resources/
-	#nuke GitHub pages files from source code
-	rm -rf ./pages_resources
 
 	#move the binary back
 	mv ../build/$DEST_FILENAME ./$DEST_FILENAME
