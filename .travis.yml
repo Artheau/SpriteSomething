@@ -228,7 +228,7 @@ jobs:
         #macosx uses python3
         - export PYTHON_EXECUTABLE=python3
     - <<: *build-deploy
-      name: "3.7 on MacOSX: Build/Deploy"
+      name: "3.7 on MacOSX: Build/Deploy/Pages"
       os: osx
       osx_image: xcode10.2
       python: "3.7"
@@ -267,7 +267,7 @@ jobs:
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         - bash ./scripts/win-before_install.sh
     - <<: *build-deploy
-      name: "3.7 on Windows: Build/Deploy/Pages"
+      name: "3.7 on Windows: Build/Deploy"
       os: windows
       python: "3.7"
       services: xvfb #needs a screen for tkinter

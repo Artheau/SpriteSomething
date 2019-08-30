@@ -63,9 +63,9 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	git clean -dfx --exclude=.vscode --exclude=*.json
 
 	#copy GitHub pages files to staging area
-	#cp -rf ./pages_resources/* ../pages/app_resources/
+	cp -rf ./pages_resources/* ../pages/app_resources/
 	#nuke GitHub pages files from source code
-	#rm -rf ./pages_resources
+	rm -rf ./pages_resources
 
 	#move the binary back
 	mv ../build/$DEST_FILENAME ./$DEST_FILENAME
