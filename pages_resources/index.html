@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>SpriteSomething</title>
+<script>
+function readTextFile(file) {
+  let rawFile = new XMLHttpRequest();
+  let allText = "";
+  rawFile.open("GET", file, false);
+  rawFile.onreadystatechange = function () {
+    if(rawFile.readyState === 4) {
+      if(rawFile.status === 200 || rawFile.status == 0) {
+        allText = rawFile.responseText;
+      }
+    }
+  }
+  rawFile.send(null);
+
+  return allText;
+}
+
+function init() {
+  let VERSION = readTextFile(".\\app_resources\\meta\\manifests\\app_version.txt");
+  document.title += " v" + VERSION;
+  document.getElementById("version").href = "https://github.com/Artheau/SpriteSomething/releases/tag/v" + VERSION;
+  document.getElementById("version").innerHTML += " v" + VERSION;
+
+  let games = readTextFile(".\\app_resources\\meta\\manifests\\games.txt");
+  games = games.split("\n");
+  for(let game in games) {
+    game = games[game];
+    if(game != "") {
+      let game_li = document.createElement("li");
+      let sprites_ul = document.createElement("ul");
+      let sprite_li = document.createElement("li");
+      let sprite_a = document.createElement("a");
+      let game_name = game;
+      let en_lang = readTextFile(".\\app_resources\\" + game + "\\lang\\en.json");
+      en_lang = JSON.parse(en_lang);
+      if("game" in en_lang) {
+        if("name" in en_lang["game"]) {
+          game_name = en_lang["game"]["name"];
+        }
+      }
+
+      game_li.innerHTML = game_name;
+
+      let manifest = readTextFile(".\\app_resources\\" + game + "\\manifests\\manifest.json");
+      manifest = JSON.parse(manifest);
+      for(let key in manifest) {
+        let value = manifest[key];
+        if(key != "$schema") {
+          if("folder name" in value) {
+            let name = value["name"];
+            let sprite = value["folder name"];
+            sprite_li = document.createElement("li");
+            sprite_a = document.createElement("a");
+            sprite_a.href = "./app_resources/" + game + '/' + sprite + '/' + "sprites.html";
+            sprite_a.innerHTML = name;
+            sprite_li.appendChild(sprite_a);
+            sprites_ul.appendChild(sprite_li);
+          }
+        }
+      }
+      game_li.appendChild(sprites_ul);
+      document.getElementById("games-list").appendChild(game_li);
+    }
+  }
+}
+
+window.onload = function() {
+  init();
+}
+</script>
+</head>
+<body>
+  <h1>SpriteSomething</h1>
+  <h2><a id="version">Current Version:</a></h2>
+  <ul>
+    <li>
+      Custom Sprite Repositories
+      <ul id="games-list"></ul>
+    </li>
+  </ul>
+</body>
+</html>

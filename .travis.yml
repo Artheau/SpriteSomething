@@ -24,21 +24,10 @@ env:
     - DEPLOYMENT="travis"
 #    - DEPLOYMENT="github-releaser-cli"
 
-# cache
-# before_install
-# install
-### jobs ###
-# before_script
-# script
-# before_cache
-# after_success
-# before_deploy
-# deploy
-# after_deploy
-
 # upgrade pip
 # install pillow, numpy for app
 # install pyinstaller, regex for distilling
+# 4 Step
 install:
   - ${PYTHON_EXECUTABLE} --version
   #install python dependencies
@@ -55,7 +44,10 @@ install:
     fi"
   #default deployment is yes
   - export DEPLOY=yes
+  #default pages deployment is no
+  - export DEPLOY_PAGES=no
 
+# 5 Step
 jobs:
   include:
     # 3.7 on Bionic Test
@@ -65,18 +57,22 @@ jobs:
       dist: bionic
       python: "3.7"
       services: xvfb #needs a screen for tkinter
+      # 6 Step
       before_script: echo "#do nothing before script"
+      # 7 Step
       script: ${PYTHON_EXECUTABLE} tests.py
 
     # 3.7 on Bionic Build/Deploy
     - &build-deploy
-      stage: "Build & Deploy Binaries"
+      stage: "Build/Deploy Binaries; Deploy GitHub Pages"
       name: "3.7 on Bionic: Build/Deploy"
       dist: bionic
       python: "3.7"
       services: xvfb #needs a screen for tkinter
+      # 3 Step
       before_install: sudo apt-get install pcregrep #get special regex stuff
       skip_cleanup: true
+      # 7 Step
       script:
         #run upx script
         # upx still doesn't quite work with race conditions of downloading vs processing
@@ -90,6 +86,7 @@ jobs:
 #            ls; \
 #          fi"
         - ${PYTHON_EXECUTABLE} build.py
+      # 9 Step
       after_success:
         #if no tag was submitted, let's build one
         #current: <major>.<minor>.<build_number>
@@ -101,6 +98,7 @@ jobs:
         #prepare files to upload
         - bash ./scripts/after_success.sh
 
+      # 10 Step
       before_deploy:
         #set up stuff for both deployment routes
         #global var set at top to indicate which route to use
@@ -109,6 +107,7 @@ jobs:
         - export TRAVIS_TAG="v${TRAVIS_TAG}"
         - export RELEASE_NAME="SpriteSomething ${TRAVIS_TAG}"
         - export FILES=../deploy/* #deploy archive
+        - export PAGES=../pages #deploy pages
         - git tag $TRAVIS_TAG
         #if we're using GitHub Releaser CLI
         # download,install,setup app
@@ -133,25 +132,38 @@ jobs:
           fi;"
         #output actual deployment info
         - "echo \"Deploy:          ${DEPLOY}\"; \
+          echo \"Deploy Pages:    ${DEPLOY_PAGES}\"; \
           echo \"Files to Upload: ${FILES}\"; \
+          echo \"GHPages Staging: ${PAGES}\"; \
           echo \"Release Name:    ${RELEASE_NAME}\"; \
           echo \"Git tag:         ${TRAVIS_TAG}\""
 
 # Travis CI GitHub Releases provider
+      # 11 Step
       deploy:
-        provider: releases
-        api_key:
-          secure: ${GITHUB_DEPLOY_KEY}
-        name: ${RELEASE_NAME}
-        body: ${BODY}
-        file_glob: true
-        file: ${FILES}
-        skip_cleanup: true
-        draft: true
-        on:
-          repo: Artheau/SpriteSomething
-          condition: $DEPLOY == "yes"
-          branch: master
+        - provider: releases
+          api_key:
+            secure: ${GITHUB_DEPLOY_KEY}
+          name: ${RELEASE_NAME}
+          body: ${BODY}
+          file_glob: true
+          file: ${FILES}
+          skip_cleanup: true
+          draft: true
+          on:
+            repo: Artheau/SpriteSomething
+            condition: $DEPLOY == "yes"
+            branch: master
+# Travis CI GitHub Pages provider
+        - provider: pages
+          local_dir: ${PAGES}
+          skip_cleanup: true
+          github_token: ${GITHUB_DEPLOY_KEY}
+          keep_history: true
+          on:
+            repo: Artheau/SpriteSomething
+            condition: $DEPLOY_PAGES == "yes"
+            branch: master
 
 # GitHub Release CLI
 #  waiting on lindell/github-release-cli#3
@@ -178,8 +190,9 @@ jobs:
       dist: xenial
       python: "3.7"
       services: xvfb #needs a screen for tkinter
+      # 6 Step
       before_script:
-        #cancel deploy
+        #cancel GHReleases deploy
         # print value for confirmation
         - "export DEPLOY=no"
         - "echo \"Deploy: ${DEPLOY}\""
@@ -195,6 +208,7 @@ jobs:
       dist: xenial
       python: "3.6"
       services: xvfb #needs a screen for tkinter
+      # 6 Step
       before_script:
         #cancel deploy
         # print value for confirmation
@@ -209,19 +223,27 @@ jobs:
       python: "3.7"
       services: #cancel services
       language: shell #'language: python' breaks on Travis CI macOSX
+      # 3 Step
       before_install:
         #macosx uses python3
         - export PYTHON_EXECUTABLE=python3
     - <<: *build-deploy
-      name: "3.7 on MacOSX: Build/Deploy"
+      name: "3.7 on MacOSX: Build/Deploy/Pages"
       os: osx
       osx_image: xcode10.2
       python: "3.7"
       services: #cancel services
       language: shell #'language: python' breaks on Travis CI macOSX
+      # 3 Step
       before_install:
         #macosx uses python3
         - export PYTHON_EXECUTABLE=python3
+      # 6 Step
+      before_script:
+        #enable GHPages deploy
+        # print value for confirmation
+        - "export DEPLOY_PAGES=yes"
+        - "echo \"Deploy Pages: ${DEPLOY_PAGES}\""
 
     # 3.7 on Windows
     # Windows VMs currently are slow
@@ -231,6 +253,7 @@ jobs:
       python: "3.7"
       services: xvfb #needs a screen for tkinter
       language: shell #'language: python' breaks on Travis CI Windows
+      # 3 Step
       before_install:
         #install python
         #set python path
@@ -249,6 +272,7 @@ jobs:
       python: "3.7"
       services: xvfb #needs a screen for tkinter
       language: shell #'language: python' breaks on Travis CI Windows
+      # 3 Step
       before_install:
         #install python
         #set python path
