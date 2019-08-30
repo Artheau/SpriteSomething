@@ -160,6 +160,10 @@ class SpriteParent():
 		pose_list = self.get_pose_list(animation, direction)
 		tile_list = pose_list[pose_number]["tiles"][::-1]
 		tile_list += self.get_supplemental_tiles(animation,direction,pose_number,palettes,frame_number)
+		if "displacement" in pose_list[pose_number]:
+			global_displacement = pose_list[pose_number]["displacement"]
+		else:
+			global_displacement = [0,0]
 		full_tile_list = []
 		for tile_info in tile_list:
 			#some poses have extra palette information, e.g. use "bunny" or "crystal_flash" palettes
@@ -191,7 +195,9 @@ class SpriteParent():
 
 			base_image = common.apply_palette(base_image, this_palette)
 
-			full_tile_list.append((base_image,tile_info["pos"]))
+			position = [tile_info["pos"][i] + global_displacement[i] for i in range(2)]  #add the x and y coords
+
+			full_tile_list.append( (base_image,position) )
 
 		return full_tile_list
 
