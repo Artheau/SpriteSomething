@@ -24,6 +24,8 @@ cp -f ../build/games.txt ../pages/app_resources/meta/manifests/		#copy list of g
 for game in $(cat ../build/games.txt); \
 do mkdir -p ../pages/app_resources/$game/manifests/; \
 cp ./app_resources/$game/manifests/* $_; \
+mkdir -p ../pages/app_resources/$game/lang/; \
+cp ./app_resources/$game/lang/* $_; \
 done
 
 #nuke GitHub pages files from source code
