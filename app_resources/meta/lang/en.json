@@ -20,6 +20,7 @@
 		"plugins.game": "Game",
 		"plugins.sprite": "Sprite",
 		"help": "Help",
+		"help.check-for-updates": "Check for Updates",
 		"help.diagnostics": "Diagnostics",
 		"help.about": "About"
 	},
