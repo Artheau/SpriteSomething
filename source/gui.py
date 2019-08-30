@@ -750,6 +750,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 			get_update = messagebox.askyesno(self.app_title,"It seems that there is an update available. Would you like to go to the project page to get it?")
 			if get_update:
 				webbrowser.open_new("https://github.com/Artheau/SpriteSomething/releases/v" + latest_version)
+		else:
+			messagebox.showinfo(self.app_title,"It seems that you're up to date!")
 
 	def diagnostics(self):
 		# Debugging purposes
