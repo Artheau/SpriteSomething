@@ -257,6 +257,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	#  sprite_filename: Filename of sprite to load
 	def load_sprite(self, sprite_filename):
 		self.game, self.sprite, self.animation_engine = gamelib.autodetect(sprite_filename)
+		self.fish.add_translation_file(self.game.internal_name)
 		self.fish.add_translation_file(self.sprite.resource_subpath)
 		self.sprite_coord = (100,100)        #an arbitrary default
 		self.attach_both_panels()            #remake the GUI panels
@@ -354,7 +355,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if not hasattr(self, "status_bar"):
 			self.status_bar = StatusBar(self)
 			self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
-		self.status_bar.set(self.game.name + ': "' + self.sprite.classic_name + '"')
+		self.status_bar.set(self.fish.translate(self.game.internal_name,"game","name") + ': "' + self.sprite.classic_name + '"')
 
 	def attach_canvas(self):
 		def move_sprite(event):
