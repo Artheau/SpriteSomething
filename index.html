@@ -23,6 +23,31 @@ function init() {
   document.title += " v" + VERSION;
   document.getElementById("version").href = "https://github.com/Artheau/SpriteSomething/releases/tag/v" + VERSION;
   document.getElementById("version").innerHTML += " v" + VERSION;
+
+  let games = readTextFile(".\\app_resources\\meta\\manifests\\games.txt");
+  games = games.split("\n");
+  for(let game in games) {
+    game = games[game];
+    if(game != "") {
+      let li = document.createElement("li");
+      let a = document.createElement("a");
+      let manifest = readTextFile(".\\app_resources\\" + game + "\\manifests\\manifest.json");
+      manifest = JSON.parse(manifest);
+      for(let key in manifest) {
+        let value = manifest[key];
+        if(key != "$schema") {
+          if("folder name" in value) {
+            let name = value["name"];
+            let sprite = value["folder name"];
+            a.href = "./app_resources/" + game + '/' + sprite + '/' + "sprites.html";
+            a.innerHTML = name;
+            li.appendChild(a);
+            document.getElementById("games-list").appendChild(li);
+          }
+        }
+      }
+    }
+  }
 }
 
 window.onload = function() {
@@ -33,5 +58,11 @@ window.onload = function() {
 <body>
   <h1>SpriteSomething</h1>
   <h2><a id="version">Current Version:</a></h2>
+  <ul>
+    <li>
+      Custom Sprite Repositories
+      <ul id="games-list"></ul>
+    </li>
+  </ul>
 </body>
 </html>
