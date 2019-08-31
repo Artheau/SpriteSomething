@@ -1082,9 +1082,9 @@ def insert_file_select_graphics(samus,rom):
 	file_select_graphics_block.paste(cursor_array.crop((0,16,8,24)),(112,8))
 	file_select_graphics_block.paste(cursor_array.crop((0,8,8,16)),(120,0))
 	stray_missile_image = cursor_array.crop((0,0,8,8))
-	file_select_graphics_block.paste(cursor_array.crop((8,24,16,32)),(120,8))
+	file_select_graphics_block.paste(cursor_array.crop((8,8,16,16)),(120,8))
 	file_select_graphics_block.paste(cursor_array.crop((8,16,16,24)),(120,16))
-	stray_missilehead_image = cursor_array.crop((8,8,16,16))
+	stray_missilehead_image = cursor_array.crop((8,24,16,32))
 	file_select_piping = samus.images["file_select_piping"]
 	file_select_graphics_block.paste(file_select_piping.crop((0,0,24,8)),(72,16))  #top
 	file_select_graphics_block.paste(file_select_piping.crop((16,8,24,24)),(104,8))  #side
