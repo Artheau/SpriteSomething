@@ -457,6 +457,8 @@ class Sprite(SpriteParent):
 		#if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
 		if palette_timing_list[-1][0] == 0 and frame_number >= palette_timing_progression[-1]:
 			palette_number = -1    #use the last palette
+		elif palette_timing_progression[-1] == 0 and frame_number < 0:   #can happen if someone switches from a dynamic palette to a static palette, and then backsteps a lot
+			palette_number = 0     #use the first palette
 		else:
 			mod_frames = frame_number % palette_timing_progression[-1]
 			palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
