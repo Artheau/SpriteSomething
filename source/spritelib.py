@@ -148,11 +148,6 @@ class SpriteParent():
 	def import_cleanup(self):
 		pass
 
-	def update_pose_number(self):
-		if hasattr(self,"frame_getter") and hasattr(self, "frame_progression_table"):
-			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
-			self.pose_number = self.frame_progression_table.index(min([x for x in self.frame_progression_table if x > mod_frames]))
-
 	def get_alternate_tile(self, image_name):
 		raise AssertionError(f"Image called {image_name} not found!")
 
@@ -169,11 +164,11 @@ class SpriteParent():
 			#some poses have extra palette information, e.g. use "bunny" or "crystal_flash" palettes
 			# which can (whole or in part) override certain parts of the palette specified in the argument
 			new_palette = None
-			if "palette" in pose_list[pose_number]:
-				new_palette = pose_list[pose_number]["palette"]
-			if "palette" in tile_info:
-				new_palette = tile_info["palette"]
-
+			for possible_palette_info_location in [pose_list[pose_number], tile_info]:
+				if "palette" in possible_palette_info_location:
+					palette_info_location = possible_palette_info_location
+					new_palette = palette_info_location["palette"]
+			
 			if new_palette:
 				palettes.append(new_palette)
 
