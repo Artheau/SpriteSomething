@@ -103,7 +103,7 @@ def get_sprites(self,title,dir,url):
 					sprite["file"],
 					data=None,
 					headers={
-						"User-Agent": "Mozilla/5.0 AppleWebKit (KHTML, like Gecko) Chrome Safari"
+						"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
 					}
 				)
 				sprite_data_req = urllib.request.urlopen(sprite_data_req)
