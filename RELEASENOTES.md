@@ -36,6 +36,8 @@ This preview version of SpriteSomething includes many basic features of the main
 * Zoom controls
 * Playback controls
 * Download Official ALttPR Sprites
+* Download Link sprites as included by the SpriteSomething team
+* Download Samus sprites as included by the SpriteSomething team
 
 ### Lesser-documented features in this preview
 

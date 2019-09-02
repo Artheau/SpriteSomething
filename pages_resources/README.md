@@ -2,7 +2,7 @@
 
 ## Pages Resources
 
-The files in this folder and its subfolders are uploaded to our project's website located at: http://artheau.github.io/SpriteSomething
+The files in this folder and its subfolders are uploaded to our [project's website](http://artheau.github.io/SpriteSomething).
 
 The `metroid3` folder has resources related to the Super Metroid implementation of SpriteSomething.
 
