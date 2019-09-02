@@ -43,10 +43,6 @@ This preview version of SpriteSomething includes many basic features of the main
 
 * Command-line interface
 
-### Known Issues in this release
-
-* Samus does not have all her animations rendered to the correct center of gravity
-
 Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.14 xcode 10.2) and Windows (built on Windows 10 v1803) all built on python 3.7 are available.
 
 If you would prefer to run/build from source, you can download the source code for this release below.  See `BUILDING.md` for instructions.
