@@ -10,9 +10,7 @@ You can also import PNG files in this manner if they are formatted to have a pal
 
 ### The friendly thief in Lost Woods is a bit more of a pastel color than before.  Why is this?
 
-The injection tool also includes with it a patch that fixes some issues that occur when custom sprites have modified palettes.
-As part of this fix, the thief was moved to the closest available palette.
-We could have also changed him to be the same color of yellow that he is in the end credits... but where's the fun in that?
+The injection tool also includes with it a patch that fixes some issues that occur when custom sprites have modified palettes. As part of this fix, the thief was moved to the closest available palette. We could have also changed him to be the same color of yellow that he is in the end credits... but where's the fun in that?
 
 ### Can I make my own sprite to replace Link?
 

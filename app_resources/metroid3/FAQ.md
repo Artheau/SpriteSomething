@@ -32,6 +32,7 @@ We like to talk about such things -- this is what we do for fun!
 
 Take the `.png` file for your desired character, and look at the block of colors at the very top.
 At the bottom right corner, you will notice three colors, which for Samus are yellow, green, and magenta, but may be different if you are using a custom sprite sheet.
+
 These colors control the colors for the ship body, the ship window, and the glow effect on the underside of the ship, respectively.
 You can change these colors to whatever you like, and then inject the new sprite sheet into the game!  The program will automatically apply shading to construct the full palette.
 

@@ -14,7 +14,9 @@ If you would like to run it from source, you can do so by running `SpriteSomethi
 ### Building from source (optional)
 
 If you want to build an executable from source, you can use `build.py` and `SpriteSomething.spec` which should (in theory) be sufficient to build using `PyInstaller`.
+
 The resulting executable will still require the source code and will run in place of `SpriteSomething.py`.
+
 If UPX is present in a subdirectory named `upx`, then the builder will attempt to use it to compress the executable. UPX is not currently used in the released builds.
 
 ## General FAQ
