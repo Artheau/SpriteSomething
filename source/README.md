@@ -5,11 +5,12 @@
 The files in this folder and its subfolders are required by the program to run.
 
 The `metroid3` folder contains scripts describing how to interface with Super Metroid. `game.py` describes metadata of the game. `rom.py` has memory addresses for finding particular bits of data within the game.
+
 The `samus` folder contains scripts describing how to interface with the Player Character sprite data.
-`plugins.py` describes various plugins available for Samus-like sprites.
-`rdc_export.py` describes how to export as the Retro Data Container (RDC) format.
-`rom_export.py` applies several bits of code to massage the game into being able to accept the new format of the Samus sprite sheet.
-`sprite.py` drives a lot of the Samus-specific stuff for the user interface.
+* `plugins.py` describes various plugins available for Samus-like sprites.
+* `rdc_export.py` describes how to export as the Retro Data Container (RDC) format.
+* `rom_export.py` applies several bits of code to massage the game into being able to accept the new format of the Samus sprite sheet.
+* `sprite.py` drives a lot of the Samus-specific stuff for the user interface.
 
 The `zelda3` folder contains scripts describing how to interface with A Link to the Past. `game.py` describes metadata of the game. `rom.py` applies several bits of code to fix several inconsistencies and limitations of the Player Sprite animation engine.
 
@@ -17,6 +18,7 @@ The `link` folder contains scripts describing how to interface with the Player C
 * `plugins.py` describes various plugins available for Link-like sprites.
 * `sprite.py` drives a lot of the Link-specific stuff for the user interface.
 
+These scripts are in the main folder:
 * `animationlib.py` handles processing and pasting images together in a sequence to animate each defined animation.
 * `cli.py` handles processing the commandline interface.
 * `common.py` has many functions that are used in many places within the application.
