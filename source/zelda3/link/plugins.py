@@ -13,8 +13,7 @@ class Plugins(PluginsParent):
 		plugins = [
 			("Download ALttPR Official Sprites",None,self.get_alttpr_sprites),
 			("Download SpriteSomething Unofficial Sprites",None,self.get_spritesomething_sprites),
-			("Sheet Trawler",None,None),
-			("Pose as Tracker Images",None,None)#,
+			("Sheet Trawler",None,None)#
 			#("Equipment",None,self.equipment_test)
 		]
 		self.set_plugins(plugins)

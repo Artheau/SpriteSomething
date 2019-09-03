@@ -14,6 +14,8 @@ class Sprite(SpriteParent):
 		super().__init__(filename, manifest_dict, my_subpath)
 		self.load_plugins()
 
+		self.plugins.plugins.append(("Export Tracker Images",None,self.get_tracker_images))
+
 		self.link_globals = {}
 		self.link_globals["zap_palette"] = [
 #				(  0,  0,  0),
@@ -41,6 +43,45 @@ class Sprite(SpriteParent):
 			[(216, 72, 16),(248,160, 40),(104,160,248)], #tempered
 			[(248,200,  0),(248,248,200),(  0,144, 72)]  #golden
 		]
+
+	def get_tracker_images(self):
+		i = 1
+		#cycle through mail levels
+		for mail in ["green","blue","red"]:
+			#get a container for tile lists
+			tile_list = {}
+			#get Bunny tile list for Stand:down to grab the bunny head
+			tile_list["bunny"] = self.get_tiles_for_pose("Bunny stand","down",0,["bunny_mail"],0)
+			#get Link tile list for File select for base
+			tile_list["link"] = self.get_tiles_for_pose("File select","right",0,[mail + "_mail"],0)
+			#get the bunny head
+			bunny_head = tile_list["bunny"][2]
+			#copy Link over Bunny
+			tile_list["bunny"] = tile_list["link"] + []
+			#set the bunny head
+			tile_list["bunny"][1] = bunny_head
+
+			#cycle through tile lists
+			for tileset_id in tile_list:
+				#make src image from tile list
+				src_img,_ = self.assemble_tiles_to_completed_image(tile_list[tileset_id])
+				#crop out the actual pixels
+				src_img = src_img.crop((5,8,21,29))
+				#make a new 32x32 transparent image
+				dest_img = Image.new("RGBA",(32,32))
+				#paste the pixels to (7,7)
+				dest_img.paste(src_img,(7,7))
+				#resize using nearest neighbor to 400% because that's what Cross' tracker uses
+				dest_img = dest_img.resize((32*4,32*4),Image.NEAREST)
+				#save to disk
+				filename = "tunic"
+				if tileset_id == "bunny":
+					filename += "bunny"
+				filename += str(i)
+				filename += ".png"
+				dest_img.save("./user_resources/zelda3/link/sheets/" + filename)
+
+			i += 1
 
 	def get_alternate_tile(self, image_name, palettes):
 		slugs = {}
