@@ -1,6 +1,9 @@
 {
 	"default": [
-		[ "Stand", "down" ],
+		[ "Stand", "down" ]
+	],
+	"upgraded": [
 		[ "File select", "right", 0, [ "red_mail", "titan_gloves", "gold_sword", "mirror_shield" ] ]
-	]
+	],
+	"crossproduct": []
 }

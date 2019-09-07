@@ -211,7 +211,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 		menu_options.append(export_menu)
 
 		bundled_games = {}
-		bundled_sprites = []
 		root = "app_resources"
 		for gamedir in os.listdir(root):
 			if os.path.isdir(os.path.join(root,gamedir)):
@@ -250,9 +249,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.menu.add_cascade(label=self.fish.translate("meta","menu","bundle"), menu=bundle_menu)
 
 		#for future implementation
+		representative_images_menu = tk.Menu(self.menu, tearoff=0, name="representative_images_menu")
 		plugins_menu = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 		tools_menu = tk.Menu(self.menu, tearoff=0, name="tools_menu")
 		tools_menu.add_command(label=self.fish.translate("meta","menu","tools.palette-editor"),command=None,state="disabled")
+		tools_menu.add_cascade(label=self.fish.translate("meta","menu","tools.get-representative-image"), menu=representative_images_menu)
 		tools_menu.add_cascade(label=self.fish.translate("meta","menu","plugins"), menu=plugins_menu)
 		self.menu.add_cascade(label=self.fish.translate("meta","menu","tools"), menu=tools_menu)
 
@@ -267,13 +268,18 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#load plugins
 	def load_plugins(self):
-		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
+		self.menu.children["representative_images_menu"] = tk.Menu(self.menu, tearoff=0, name="representative_images_menu")
 
-		#somehow get a list of the different "styles" and make them different options?
-		self.sprite.has_plugins = True
-		s_plugins = self.sprite.plugins.get_plugins()
-		s_plugins.insert(0,(self.fish.translate("meta","menu","tools.get-representative-image"),None,self.get_representative_image))
-		self.sprite.plugins.set_plugins(s_plugins)
+		self.menu.children["representative_images_menu"].add_command(label="Default",command=partial(self.get_representative_image,"default"))
+		for manifest_file in common.get_all_resources([self.sprite.resource_subpath,"manifests"],"representative-images.json"):
+			with(open(manifest_file)) as manifest:
+				manifest_images = json.load(manifest)
+				manifest.close()
+				for key in manifest_images.keys():
+					if not key == "default":
+						self.menu.children["representative_images_menu"].add_command(label=key[0].upper() + key[1:],command=partial(self.get_representative_image,key))
+
+		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 
 		#if we've got Game plugins or Sprite plugins
 		if self.game.has_plugins or self.sprite.has_plugins:
@@ -429,8 +435,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		self.right_panel.add(self.overview_frame, text=self.fish.translate("meta","tab","overview"))
 
-	def get_representative_image(self):
-		self.sprite.get_representative_image("")
+	def get_representative_image(self, style):
+		self.sprite.get_representative_image(style)
 
 	############################ ANIMATION FUNCTIONS HERE ################################
 
