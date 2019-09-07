@@ -1,0 +1,6 @@
+{
+	"default": [
+		[ "Stand", "right" ],
+		[ "Elevator (Varia)", "neutral", 0, [ "gravity_suit" ] ]
+	]
+}

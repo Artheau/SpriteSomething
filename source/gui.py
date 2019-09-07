@@ -269,6 +269,12 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def load_plugins(self):
 		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 
+		#somehow get a list of the different "styles" and make them different options?
+		self.sprite.has_plugins = True
+		s_plugins = self.sprite.plugins.get_plugins()
+		s_plugins.insert(0,(self.fish.translate("meta","menu","tools.get-representative-image"),None,self.get_representative_image))
+		self.sprite.plugins.set_plugins(s_plugins)
+
 		#if we've got Game plugins or Sprite plugins
 		if self.game.has_plugins or self.sprite.has_plugins:
 			plugins_container = []
@@ -422,6 +428,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 		yscrollbar.config(command=self.overview_canvas.yview)
 
 		self.right_panel.add(self.overview_frame, text=self.fish.translate("meta","tab","overview"))
+
+	def get_representative_image(self):
+		self.sprite.get_representative_image("")
 
 	############################ ANIMATION FUNCTIONS HERE ################################
 

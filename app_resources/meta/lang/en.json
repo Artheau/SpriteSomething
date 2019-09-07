@@ -16,6 +16,7 @@
 		"export.animation-as-vcollage": "Animation as Vertical Collage",
 		"tools": "Tools",
 		"tools.palette-editor": "Palette Editor",
+		"tools.get-representative-image": "Get Representative Image",
 		"plugins": "Plugins",
 		"plugins.game": "Game",
 		"plugins.sprite": "Sprite",

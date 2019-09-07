@@ -14,8 +14,6 @@ class Sprite(SpriteParent):
 		super().__init__(filename, manifest_dict, my_subpath)
 		self.load_plugins()
 
-		self.plugins.plugins.append(("Export Tracker Images",None,self.get_tracker_images))
-
 		self.link_globals = {}
 		self.link_globals["zap_palette"] = [
 #				(  0,  0,  0),
@@ -44,7 +42,17 @@ class Sprite(SpriteParent):
 			[(248,200,  0),(248,248,200),(  0,144, 72)]  #golden
 		]
 
+	def get_representative_image(self, style):
+		super().get_representative_image(style)
+
+		if style == "crossproduct":
+			self.get_tracker_images()
+
 	def get_tracker_images(self):
+		tracker_images_filepath = os.path.join('.',"user_resources",self.resource_subpath,"sheets","tracker-images",self.classic_name.lower())
+		if not os.path.isdir(tracker_images_filepath):
+			os.makedirs(tracker_images_filepath)
+
 		i = 1
 		#cycle through mail levels
 		for mail in ["green","blue","red"]:
@@ -79,7 +87,7 @@ class Sprite(SpriteParent):
 					filename += "bunny"
 				filename += str(i)
 				filename += ".png"
-				dest_img.save("./user_resources/zelda3/link/sheets/" + filename)
+				dest_img.save(os.path.join(tracker_images_filepath,filename))
 
 			i += 1
 

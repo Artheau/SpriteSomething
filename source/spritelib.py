@@ -168,7 +168,7 @@ class SpriteParent():
 				if "palette" in possible_palette_info_location:
 					palette_info_location = possible_palette_info_location
 					new_palette = palette_info_location["palette"]
-			
+
 			if new_palette:
 				palettes.append(new_palette)
 
@@ -229,6 +229,54 @@ class SpriteParent():
 		tile_list = self.get_tiles_for_pose(animation, direction, pose, palettes, frame_number)
 		assembled_image, offset = self.assemble_tiles_to_completed_image(tile_list)
 		return assembled_image, offset
+
+	def get_representative_image(self,style="default"):
+		save_path = os.path.join('.',"user_resources",self.resource_subpath,"sheets","representative-image")
+		if "sprite.name" in self.metadata:
+			if not self.metadata["sprite.name"] == "":
+				save_path = os.path.join(save_path,self.metadata["sprite.name"].lower())
+			else:
+				save_path = os.path.join(save_path,"unknown")
+		else:
+			save_path = os.path.join(save_path,"unknown")
+		if not os.path.isdir(save_path):
+			os.makedirs(save_path)
+		manifest_file = common.get_resource([self.resource_subpath,"manifests"],"representative-images.json")
+		manifest_images = {}
+		if manifest_file:
+			with(open(manifest_file)) as manifest:
+				manifest_images = json.load(manifest)
+				manifest.close()
+		if not style in manifest_images:
+			#try to have sane defaults
+			# selected animation, first animation
+			# selected direction, first direction
+			# selected pose, pose 0
+			# selected palettes, default palettes
+			# selected frame, frame 0
+			style = "default"
+		if style in manifest_images:
+			images = manifest_images[style]
+			for image in images:
+				animation = image[0]
+				direction = image[1] if len(image) > 1 else "down"
+				pose = image[2] if len(image) > 2 else 0
+				palette = image[3] if len(image) > 3 else []
+				frame = image[4] if len(image) > 4 else 0
+				filename = image[5] if len(image) > 5 else ""
+				image_to_save = self.get_image(animation,direction,pose,palette,frame)[0]
+
+				if filename == "":
+					filename += animation.replace(' ','_') + '-'
+					filename += direction + '-'
+					filename += str(pose) + '-'
+					if len(palette) > 0:
+						filename += '.'.join(palette) + '-'
+					filename += str(frame)
+					filename += ".png"
+
+				filename = os.path.join(save_path,filename)
+				image_to_save.save(filename)
 
 	def save_as(self, filename):
 		_,file_extension = os.path.splitext(filename)
