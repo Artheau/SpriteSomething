@@ -48,7 +48,7 @@ jobs:
         python -m pip install --upgrade pip
         pip --version
         pip install -r app_resources/meta/manifests/pip_requirements.txt
-        apt-get install archiver
+        sudo apt-get install archiver
 
   # Unit Tests
   #  Checkout commit, run tests.py
