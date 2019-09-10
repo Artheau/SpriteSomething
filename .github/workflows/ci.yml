@@ -59,10 +59,10 @@ jobs:
     needs: [ install ]
     steps:
     - name: Run Unit Test Package
-    # checkout commit
-    - uses: actions/checkout@v1
-    run: |
-      ${PYTHON_EXECUTABLE} tests.py
+      # checkout commit
+      uses: actions/checkout@v1
+      run: |
+        ${PYTHON_EXECUTABLE} tests.py
 
   # Build Binary
   #  Run build.py
@@ -73,8 +73,8 @@ jobs:
     needs: [ test ]
     steps:
     - name: Build Binary
-    run: |
-      ${PYTHON_EXECUTABLE} build.py
+      run: |
+        ${PYTHON_EXECUTABLE} build.py
 
   # Prepare for Deployment to GitHub Releases
   #  Run custom action
