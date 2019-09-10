@@ -4,6 +4,11 @@ import struct
 import numpy as np
 from PIL import Image
 
+def filename_scrub(filename):
+	#prevents untowards things like spaces in filenames, to improve compatibility
+	new_filename = str(filename).replace(" ", "_")
+	return new_filename
+
 def get_all_resources(subdir=None,desired_filename=None):
 	file_list = []
 

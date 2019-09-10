@@ -270,14 +270,14 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def load_plugins(self):
 		self.menu.children["representative_images_menu"] = tk.Menu(self.menu, tearoff=0, name="representative_images_menu")
 
-		self.menu.children["representative_images_menu"].add_command(label="Default",command=partial(self.get_representative_image,"default"))
+		self.menu.children["representative_images_menu"].add_command(label="Default",command=partial(self.get_representative_images,"default"))
 		for manifest_file in common.get_all_resources([self.sprite.resource_subpath,"manifests"],"representative-images.json"):
 			with(open(manifest_file)) as manifest:
 				manifest_images = json.load(manifest)
 				manifest.close()
 				for key in manifest_images.keys():
 					if not key == "default":
-						self.menu.children["representative_images_menu"].add_command(label=key[0].upper() + key[1:],command=partial(self.get_representative_image,key))
+						self.menu.children["representative_images_menu"].add_command(label=key[0].upper() + key[1:],command=partial(self.get_representative_images,key))
 
 		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 
@@ -435,8 +435,14 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		self.right_panel.add(self.overview_frame, text=self.fish.translate("meta","tab","overview"))
 
-	def get_representative_image(self, style):
-		self.sprite.get_representative_image(style)
+	def get_representative_images(self, style):
+		image_list = self.sprite.get_representative_images(style)
+		base_folder = "."   #TODO: Prompt the user for a folder to put the images in
+		for filename, image in image_list:
+			image.save(os.path.join(base_folder, filename))
+		#TODO: give user feedback on success or failure of the save
+
+
 
 	############################ ANIMATION FUNCTIONS HERE ################################
 

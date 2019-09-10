@@ -230,53 +230,48 @@ class SpriteParent():
 		assembled_image, offset = self.assemble_tiles_to_completed_image(tile_list)
 		return assembled_image, offset
 
-	def get_representative_image(self,style="default"):
-		save_path = os.path.join('.',"user_resources",self.resource_subpath,"sheets","representative-image")
-		if "sprite.name" in self.metadata:
-			if not self.metadata["sprite.name"] == "":
-				save_path = os.path.join(save_path,self.metadata["sprite.name"].lower())
-			else:
-				save_path = os.path.join(save_path,"unknown")
+	def get_representative_images(self,style="default"):
+		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
+			sprite_save_name = self.metadata["sprite.name"].lower()
 		else:
-			save_path = os.path.join(save_path,"unknown")
-		if not os.path.isdir(save_path):
-			os.makedirs(save_path)
+			sprite_save_name = "unknown"
+		
 		manifest_file = common.get_resource([self.resource_subpath,"manifests"],"representative-images.json")
-		manifest_images = {}
 		if manifest_file:
-			with(open(manifest_file)) as manifest:
+			with open(manifest_file) as manifest:
 				manifest_images = json.load(manifest)
-				manifest.close()
-		if not style in manifest_images:
+		else:
+			manifest_images = {}
+
+		if "default" not in manifest_images:
 			#try to have sane defaults
-			# selected animation, first animation
-			# selected direction, first direction
-			# selected pose, pose 0
-			# selected palettes, default palettes
-			# selected frame, frame 0
-			style = "default"
+			animation = self.animations[0]    #default to first image here
+			direction = self.animations[animation].keys()[0]  #first direction
+			pose = 0    #first pose
+			#by default, will use default palettes, without having any info supplied
+			frame = 0    #probably won't matter, but just in case, use the first frame of palette
+
+
 		if style in manifest_images:
 			images = manifest_images[style]
-			for image in images:
-				animation = image[0]
-				direction = image[1] if len(image) > 1 else "down"
-				pose = image[2] if len(image) > 2 else 0
-				palette = image[3] if len(image) > 3 else []
-				frame = image[4] if len(image) > 4 else 0
-				filename = image[5] if len(image) > 5 else ""
-				image_to_save = self.get_image(animation,direction,pose,palette,frame)[0]
+		elif style == "default":
+			images = [[]]  #use defaults
+		else:
+			raise AssertionError(f"received call to get_representative_image() with unknown style {style}")
 
-				if filename == "":
-					filename += animation.replace(' ','_') + '-'
-					filename += direction + '-'
-					filename += str(pose) + '-'
-					if len(palette) > 0:
-						filename += '.'.join(palette) + '-'
-					filename += str(frame)
-					filename += ".png"
+		return_images = []
+		for image in images:
+			animation = image[0] if image else self.animations[0] #default to first image here
+			direction = image[1] if len(image) > 1 else self.animations[animation].keys()[0] #default: first direction
+			pose = image[2] if len(image) > 2 else 0 #default: #first pose
+			palette = image[3] if len(image) > 3 else [] #defaults to the defaults determined by get_image
+			frame = image[4] if len(image) > 4 else 0 #default to the first frame of timed palette
+			filename = image[5] if len(image) > 5 else \
+				common.filename_scrub("-".join([sprite_save_name,style]) + ".png") #default to the sprite name and style
+			return_images.append(    ( filename, self.get_image(animation,direction,pose,palette,frame)[0] )    )
 
-				filename = os.path.join(save_path,filename)
-				image_to_save.save(filename)
+		#should return a list of tuples of the form (filename, PIL Image)
+		return return_images
 
 	def save_as(self, filename):
 		_,file_extension = os.path.splitext(filename)
