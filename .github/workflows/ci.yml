@@ -76,7 +76,7 @@ jobs:
 #        python --version
     # install python
     - name: Install Python
-      run: apt-get install python3-tk
+      run: sudo apt-get install python3-tk
       shell: bash
     # install dependencies via pip
     - name: Install Dependencies via pip
