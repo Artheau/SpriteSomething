@@ -28,14 +28,17 @@ jobs:
     strategy:
       matrix:
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-        python-version: [ "3.6", "3.7" ]
+        python-version: "3.7"
+        include:
+          - os-name: ubuntu-16.04
+            python-version: [ "3.6", "3.7" ]
 
     steps:
     # install python
-    - name: Install Python ${{ matrix.python-version }}
-      env:
-        PYTHON_EXECUTABLE: python
-        PIP_EXECUTABLE: pip
+    - env:
+      PYTHON_EXECUTABLE: python
+      PIP_EXECUTABLE: pip
+    - name: Install Python
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
