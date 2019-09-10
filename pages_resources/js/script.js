@@ -149,10 +149,31 @@ function init(mode = "index") {
 							link_text = "Source Code";
 							break;
 					}
+					if(meta_text.indexOf("alttpr") > -1) {
+						switch(meta) {
+							case "0":
+								link_text = "Machine-readable Endpoint";
+								break;
+							case "1":
+								link_text = "Sprite Previews";
+								break;
+						}
+					}
 					layerfile_meta_a.innerHTML = link_text;
 					layerfile_meta_a.href = meta_text;
 					layerfile_meta_li.appendChild(layerfile_meta_a);
 					layerfile_meta_ul.appendChild(layerfile_meta_li);
+
+					if(link_text == "Sprite Previews") {
+						link_text = "Downloadable Sprite Previews";
+						meta_text = "http://alttp.mymm1.com/sprites";
+						layerfile_meta_li = document.createElement("li");
+						layerfile_meta_a = document.createElement("a");
+						layerfile_meta_a.innerHTML = link_text;
+						layerfile_meta_a.href = meta_text;
+						layerfile_meta_li.appendChild(layerfile_meta_a);
+						layerfile_meta_ul.appendChild(layerfile_meta_li);
+					}
 				}
 			}
 			layerfile_li.appendChild(layerfile_meta_ul);
