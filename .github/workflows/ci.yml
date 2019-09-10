@@ -28,37 +28,7 @@ jobs:
     strategy:
       matrix:
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-        include:
-          # Bionic/MacOSX/Windows gets Python 3.7
-          - os-name: ubuntu-latest
-            python-version: [ 3.7 ]
-          - os-name:  macOS-latest
-            python-version: [ 3.7 ]
-          - os-name: windows-latest
-            python-version: [ 3.7 ]
-          # Xenial gets Python 3.6 & 3.7
-          - os-name: ubuntu-16.04
-            python-version: [ 3.6, 3.7 ]
-          # Linux/Windows uses python (not python3)
-          - os-name: ubuntu-latest
-            PYTHON_EXECUTABLE: python
-          - os-name: ubuntu-16.04
-            PYTHON_EXECUTABLE: python
-          - os-name: windows-latest
-            PYTHON_EXECUTABLE: python
-          # MacOSX uses python3 (not python)
-          - os-name: macOS-latest
-            PYTHON_EXECUTABLE: python3
-          # Linux/MacOSX uses pip3 (not pip)
-          - os-name: ubuntu-latest
-            PIP_EXECUTABLE: pip3
-          - os-name: ubuntu-16.04
-            PIP_EXECUTABLE: pip3
-          - os-name: macOS-latest
-            PIP_EXECUTABLE: pip3
-          # Windows uses pip (not pip3)
-          - os-name: windows-latest
-            PIP_EXECUTABLE: pip
+        python-version: [ 3.7 ]
 
     steps:
     # install python
@@ -74,6 +44,9 @@ jobs:
         ${PYTHON_EXECUTABLE} --version
     # install dependencies via pip
     - name: Install Dependencies via pip
+      env:
+        PYTHON_EXECUTABLE: python
+        PIP_EXECUTABLE: pip3
       run: |
         ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
         ${PIP_EXECUTABLE} --version
@@ -91,6 +64,9 @@ jobs:
     - name: Checkout commit
       uses: actions/checkout@v1
     - name: Run Unit Test Package
+      env:
+        PYTHON_EXECUTABLE: python
+        PIP_EXECUTABLE: pip3
       run: |
         ${PYTHON_EXECUTABLE} tests.py
 
@@ -103,6 +79,9 @@ jobs:
     needs: [ test ]
     steps:
     - name: Build Binary
+      env:
+        PYTHON_EXECUTABLE: python
+        PIP_EXECUTABLE: pip3
       run: |
         ${PYTHON_EXECUTABLE} build.py
 
@@ -118,10 +97,9 @@ jobs:
       matrix:
         # don't build on python 3.6 or xenial
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-        python-version: [ "3.6", "3.7" ]
+        python-version: [ 3.7 ]
         exclude:
           - os-name: ubuntu-16.04
-          - python-version: "3.6"
 
     needs: [ build ]
     steps:
@@ -143,10 +121,9 @@ jobs:
 #      matrix:
         # don't build on python 3.6 or xenial
 #        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-#        python-version: [ "3.6", "3.7" ]
+#        python-version: [ 3.7 ]
 #        exclude:
 #          - os-name: ubuntu-16.04
-#          - python-version: "3.6"
 
 #    needs: [ prepare-release ]
 #    steps:
