@@ -1,3 +1,5 @@
+FROM alpine:3.10.2
+
 LABEL com.github.actions.name="Prepare for GitHub Pages"
 LABEL com.github.actions.description="Prepare SpriteSomething for GitHub Pages"
 
