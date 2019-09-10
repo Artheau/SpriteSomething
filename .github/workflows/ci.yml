@@ -4,6 +4,11 @@ name: Test, Build, Deploy Release, Deploy Pages
 # fire on
 on: [ push, pull_request ]
 
+# global environment variables
+env:
+  PYTHON_EXECUTABLE: python
+  PIP_EXECUTABLE: pip3
+
 ########################
 # Non-GitHub providers #
 ########################
@@ -28,9 +33,6 @@ jobs:
     strategy:
       matrix:
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-        env:
-          - PYTHON_EXECUTABLE: python
-          - PIP_EXECUTABLE: pip3
         include:
           # Default to 3.7 only
           - os-name: ubuntu-latest
