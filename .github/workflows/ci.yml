@@ -10,15 +10,15 @@ on: [ push, pull_request ]
 # deploy-release: docker://softprops/action-gh-release
 # deploy-pages:   peaceiris/actions-gh-pages@v1.1.0
 
-# VM settings
-#  os & python versions
-strategy:
-  matrix:
-    os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-    python-version: [ "3.6", "3.7" ]
-
 # stuff to do
 jobs:
+  # VM settings
+  #  os & python versions
+  strategy:
+    matrix:
+      os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
+      python-version: [ "3.6", "3.7" ]
+
   # Installation
   #  Set up environment
   #   Windows uses pip
