@@ -31,6 +31,9 @@ jobs:
         python-version: [ 3.7 ]
 
     steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
     # install python
     - name: Install Python
       uses: actions/setup-python@v1
