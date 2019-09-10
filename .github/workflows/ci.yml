@@ -4,11 +4,6 @@ name: Test, Build, Deploy Release, Deploy Pages
 # fire on
 on: [ push, pull_request ]
 
-# global environment variables
-env:
-  PYTHON_EXECUTABLE: python
-  PIP_EXECUTABLE: pip3
-
 ########################
 # Non-GitHub providers #
 ########################
@@ -55,6 +50,9 @@ jobs:
     # install python
     - name: Install Python
       uses: actions/setup-python@v1
+      env:
+        PYTHON_EXECUTABLE: python
+        PIP_EXECUTABLE: pip3
       with:
         python-version: ${{ matrix.python-version }}
         architecture: "x64"
