@@ -54,11 +54,21 @@ jobs:
   test:
     name: Unit Tests
     runs-on: ${{ matrix.os-name }}
+
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
+        python-version: [ 3.7 ]
+
     # runs after install job
     needs: [ install ]
     steps:
+    # checkout commit
     - name: Checkout commit
       uses: actions/checkout@v1
+    # run tests.py
     - name: Run Unit Test Package
       run: |
         python tests.py
@@ -71,6 +81,7 @@ jobs:
     # runs after test job
     needs: [ test ]
     steps:
+    # run build.py
     - name: Build Binary
       run: |
         python build.py
