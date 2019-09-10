@@ -81,66 +81,78 @@ jobs:
   prepare-release:
     name: Prepare for GitHub Releases
     runs-on: ${{ matrix.os-name }}
+
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        # don't build on python 3.6 or xenial
+        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
+        python-version: [ "3.6", "3.7" ]
+        exclude:
+          - os-name: ubuntu-16.04
+          - python-version: "3.6"
+
     needs: [ build ]
     steps:
     - name: Local Prepare GitHub Release Action
       uses: ./.github/actions/prepare-release
-    on:
-      python-version: 3.7
-      os: "!ubuntu-16.04"
 
   # Deploy to GitHub Releases
   #  Release Name:  SpriteSomethin v${GITHUB_TAG}
   #  Release Body:  Inline content of RELEASENOTES.md
   #  Release Body:  Fallback to URL to RELEASENOTES.md
   #  Release Files: ${FILES}
-  deploy-release:
-    name: Deploy to GitHub Releases
-    runs-on: ${{ matrix.os-name }}
-    needs: [ prepare-release ]
-    steps:
-    - name: Create a Release
-      uses: docker://softprops/action-gh-release
-      with:
-        name: ${RELEASE_NAME}
-        draft: true
-        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blog/${GITHUB_TAG}/RELEASENOTES.md) for description."
-        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
-        files: ${FILES}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    on:
-      python-version: 3.7
-      os: "!ubuntu-16.04"
+#  deploy-release:
+#    name: Deploy to GitHub Releases
+#    runs-on: ${{ matrix.os-name }}
+
+    # VM settings
+    #  os & python versions
+#    strategy:
+#      matrix:
+        # don't build on python 3.6 or xenial
+#        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
+#        python-version: [ "3.6", "3.7" ]
+#        exclude:
+#          - os-name: ubuntu-16.04
+#          - python-version: "3.6"
+
+#    needs: [ prepare-release ]
+#    steps:
+#    - name: Create a Release
+#      uses: docker://softprops/action-gh-release
+#      with:
+#        name: ${RELEASE_NAME}
+#        draft: true
+#        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blog/${GITHUB_TAG}/RELEASENOTES.md) for description."
+#        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
+#        files: ${FILES}
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Prepare for Deployment to GitHub Pages
   #  run custom action
-  prepare-pages:
-    name: Prepare for GitHub Pages
-    runs-on: windows-latest
-    needs: [ deploy-release ]
-    steps:
-    - name: Local Prepare GitHub Pages Action
-      uses: ./.github/actions/prepare-pages
-    on:
-      python-version: 3.7
-      os: windows-latest
-      branch: master
+#  prepare-pages:
+#    name: Prepare for GitHub Pages
+#    runs-on: windows-latest
+#    python-version: "3.7"
+#    needs: [ deploy-release ]
+#    steps:
+#    - name: Local Prepare GitHub Pages Action
+#      uses: ./.github/actions/prepare-pages
 
   # Deploy to GitHub Pages
   #
-  deploy-pages:
-    name: Deploy to GitHub Pages
-    runs-on: windows-latest
-    needs: [ prepare-pages ]
-    steps:
-      - name: Post to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v1.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: ${PAGES}
-    on:
-      python-version: 3.7
-      os: windows-latest
-      branch: master
+#  deploy-pages:
+#    name: Deploy to GitHub Pages
+#    runs-on: windows-latest
+#    python-version: "3.7"
+#    needs: [ prepare-pages ]
+#    steps:
+#      - name: Post to GitHub Pages
+#        uses: peaceiris/actions-gh-pages@v1.1.0
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          PUBLISH_BRANCH: gh-pages
+#          PUBLISH_DIR: ${PAGES}
