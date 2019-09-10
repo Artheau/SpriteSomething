@@ -28,10 +28,10 @@ jobs:
     strategy:
       matrix:
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-        python-version: "3.7"
+        python-version: 3.7
         include:
           - os-name: ubuntu-16.04
-            python-version: [ "3.6", "3.7" ]
+            python-version: [ 3.6, 3.7 ]
 
     steps:
     # install python
