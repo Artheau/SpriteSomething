@@ -58,9 +58,9 @@ jobs:
     # runs after install job
     needs: [ install ]
     steps:
-    - name: Run Unit Test Package
-      # checkout commit
+    - name: Checkout commit
       uses: actions/checkout@v1
+    - name: Run Unit Test Package
       run: |
         ${PYTHON_EXECUTABLE} tests.py
 
