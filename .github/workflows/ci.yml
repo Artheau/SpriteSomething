@@ -34,23 +34,17 @@ jobs:
     # install python
     - name: Install Python
       uses: actions/setup-python@v1
-      env:
-        PYTHON_EXECUTABLE: python
-        PIP_EXECUTABLE: pip3
       with:
         python-version: ${{ matrix.python-version }}
         architecture: "x64"
     - run: |
-        ${PYTHON_EXECUTABLE} --version
+        python --version
     # install dependencies via pip
     - name: Install Dependencies via pip
-      env:
-        PYTHON_EXECUTABLE: python
-        PIP_EXECUTABLE: pip3
       run: |
-        ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        ${PIP_EXECUTABLE} --version
-        ${PIP_EXECUTABLE} install -r app_resources/meta/manifests/pip_requirements.txt
+        python -m pip install --upgrade pip
+        pip --version
+        pip install -r app_resources/meta/manifests/pip_requirements.txt
         apt-get install archiver
 
   # Unit Tests
@@ -64,11 +58,8 @@ jobs:
     - name: Checkout commit
       uses: actions/checkout@v1
     - name: Run Unit Test Package
-      env:
-        PYTHON_EXECUTABLE: python
-        PIP_EXECUTABLE: pip3
       run: |
-        ${PYTHON_EXECUTABLE} tests.py
+        python tests.py
 
   # Build Binary
   #  Run build.py
@@ -79,11 +70,8 @@ jobs:
     needs: [ test ]
     steps:
     - name: Build Binary
-      env:
-        PYTHON_EXECUTABLE: python
-        PIP_EXECUTABLE: pip3
       run: |
-        ${PYTHON_EXECUTABLE} build.py
+        python build.py
 
   # Prepare for Deployment to GitHub Releases
   #  Run custom action
