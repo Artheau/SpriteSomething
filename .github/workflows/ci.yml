@@ -128,12 +128,6 @@ jobs:
       run: |
         python build.py
 
-  # Prepare for Deployment to GitHub Releases
-  #  Run custom action
-  prepare-release:
-    name: Prepare for GitHub Releases
-    runs-on: ${{ matrix.os-name }}
-
   # Installation & Tests
   #  Set up environment
   #   Windows uses pip
