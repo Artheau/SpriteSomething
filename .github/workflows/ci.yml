@@ -74,6 +74,7 @@ jobs:
         architecture: "x64"
     - run: |
         python --version
+        docker ps
     # install dependencies via pip
     - name: Install Dependencies via pip
       run: |
