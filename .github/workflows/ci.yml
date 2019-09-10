@@ -93,7 +93,7 @@ jobs:
   #   Mac uses python3
   # Build
   #  Run build.py
-  build-test:
+  install-build:
     name: Installation & Build
     # cycle through os list
     runs-on: ${{ matrix.os-name }}
@@ -143,8 +143,7 @@ jobs:
         python-version: [ 3.7 ]
         exclude:
           - os-name: ubuntu-16.04
-
-    needs: [ build ]
+    needs: [ install-build ]
     steps:
     - name: Local Prepare GitHub Release Action
       uses: ./.github/actions/prepare-release
