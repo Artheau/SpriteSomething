@@ -10,16 +10,48 @@ on: [ push, pull_request ]
 # deploy-release: docker://softprops/action-gh-release
 # deploy-pages:   peaceiris/actions-gh-pages@v1.1.0
 
+# What I *should* be able to do:
+#  Define Installation Job
+#   Checkout commit
+#   Halt if fail
+#  Define Tests Job
+#   Calls Installation Job
+#   Run tests.py
+#   Halt if fail
+#  Define Build Job
+#   Calls Installation Job
+#   Run build.py
+#   Halt if fail
+#  Define Prepare-Release Job
+#   Calls Installation Job
+#   Prepare workspace for release files
+#   Halt if fail
+#  Define Deploy Release Job
+#   Calls Prepare Release Job
+#   Deploys release files
+#   Halt if fail
+#  Define Prepare-Pages Job
+#   Calls Installation Job
+#   Calls Prepare Release Job
+#   Prepare workspace for releasing pages files
+#   Halt if fail
+#  Define Deploy Pages Job
+#   Calls Installation Job
+#   Deploys pages files
+#   Halt if fail
+
 # stuff to do
 jobs:
-  # Installation
+  # Installation & Tests
   #  Set up environment
   #   Windows uses pip
   #   Linux/Mac uses pip3
   #   Windows/Linux uses python
   #   Mac uses python3
-  install:
-    name: Installation
+  # Test
+  #  Run tests.py
+  install-test:
+    name: Installation & Tests
     # cycle through os list
     runs-on: ${{ matrix.os-name }}
 
@@ -48,11 +80,22 @@ jobs:
         python -m pip install --upgrade pip
         pip --version
         pip install -r app_resources/meta/manifests/pip_requirements.txt
+    # run tests.py
+    - name: Run Unit Test Package
+      run: |
+        python tests.py
 
-  # Unit Tests
-  #  Checkout commit, run tests.py
-  test:
-    name: Unit Tests
+  # Installation & Build
+  #  Set up environment
+  #   Windows uses pip
+  #   Linux/Mac uses pip3
+  #   Windows/Linux uses python
+  #   Mac uses python3
+  # Build
+  #  Run build.py
+  build-test:
+    name: Installation & Build
+    # cycle through os list
     runs-on: ${{ matrix.os-name }}
 
     # VM settings
@@ -62,25 +105,24 @@ jobs:
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
         python-version: [ 3.7 ]
 
-    # runs after install job
-    needs: [ install ]
     steps:
     # checkout commit
     - name: Checkout commit
       uses: actions/checkout@v1
-    # run tests.py
-    - name: Run Unit Test Package
+    # install python
+    - name: Install Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+        architecture: "x64"
+    - run: |
+        python --version
+    # install dependencies via pip
+    - name: Install Dependencies via pip
       run: |
-        python tests.py
-
-  # Build Binary
-  #  Run build.py
-  build:
-    name: Build Binaries
-    runs-on: ${{ matrix.os-name }}
-    # runs after test job
-    needs: [ test ]
-    steps:
+        python -m pip install --upgrade pip
+        pip --version
+        pip install -r app_resources/meta/manifests/pip_requirements.txt
     # run build.py
     - name: Build Binary
       run: |
