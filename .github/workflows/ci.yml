@@ -2,7 +2,7 @@
 name: Test, Build, Deploy Release, Deploy Pages
 
 # fire on
-on: [ push, pull-request ]
+on: [ push, pull_request ]
 
 ########################
 # Non-GitHub providers #
@@ -124,6 +124,7 @@ jobs:
     on:
       python-version: 3.7
       os: windows-latest
+      branch: master
 
   # Deploy to GitHub Pages
   #
@@ -141,3 +142,4 @@ jobs:
     on:
       python-version: 3.7
       os: windows-latest
+      branch: master
