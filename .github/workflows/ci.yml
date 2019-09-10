@@ -12,13 +12,6 @@ on: [ push, pull_request ]
 
 # stuff to do
 jobs:
-  # VM settings
-  #  os & python versions
-  strategy:
-    matrix:
-      os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-      python-version: [ "3.6", "3.7" ]
-
   # Installation
   #  Set up environment
   #   Windows uses pip
@@ -29,6 +22,14 @@ jobs:
     name: Installation
     # cycle through os list
     runs-on: ${{ matrix.os-name }}
+
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
+        python-version: [ "3.6", "3.7" ]
+
     steps:
     # install python
     - name: Install Python ${{ matrix.python-version }}
