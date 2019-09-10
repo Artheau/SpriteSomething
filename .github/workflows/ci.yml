@@ -30,8 +30,8 @@ jobs:
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
         python-version: [ 3.7 ]
         env:
-          PYTHON_EXECUTABLE: python
-          PIP_EXECUTABLE: pip3
+          - PYTHON_EXECUTABLE: python
+          - PIP_EXECUTABLE: pip3
         include:
           # Xenial tests on Python 3.6 & 3.7
           - os-name: ubuntu-16.04
