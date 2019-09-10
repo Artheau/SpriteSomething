@@ -28,14 +28,8 @@ jobs:
     strategy:
       matrix:
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
+        python-version: 3.7
         include:
-          # Default to 3.7 only
-          - os-name: ubuntu-latest
-            python-version: [ 3.7 ]
-          - os-name: macOS-latest
-            python-version: [ 3.7 ]
-          - os-name: windows-latest
-            python-version: [ 3.7 ]
           # Xenial also gets 3.6
           - os-name: ubuntu-16.04
             python-version: [ 3.6, 3.7 ]
