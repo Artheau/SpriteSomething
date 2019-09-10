@@ -216,6 +216,7 @@ class RomHandler(RomHandlerParent):
 
 	def get_file_select_tilemaps(self, item):
 		#For now, I have just coded these up by hand because it does not seem worth it to extract this information dynamically
+		#8/31/2019: Maybe I should have extracted them dynamically because I coded it wrong by hand the first time *facepalm*
 		palette = 0x22                              #this is more for convenience -- they are not actually on this palette
 		if item in [0,1,2]:   #the Samus heads
 			return [[0x08*i,
@@ -238,9 +239,9 @@ class RomHandler(RomHandlerParent):
 					[0x00,0x00,0x10,0xEE,palette],
 					[0x00,0x00,0x08,0xDF,palette],
 					[0x00,0x00,0x00,0xC8,palette],
-					[0x08,0x00,0x18,0xEF,palette],
+					[0x08,0x00,0x18,0xCC,palette],
 					[0x08,0x00,0x10,0xFF,palette],
-					[0x08,0x00,0x08,0xCC,palette]]
+					[0x08,0x00,0x08,0xEF,palette]]
 		elif item in [9]: #pipe framework
 			return [[0x00,0x00,0x00,0xF9,palette],
 					[0x08,0x00,0x00,0xFA,palette],

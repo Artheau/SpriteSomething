@@ -6,6 +6,10 @@ set -ev
 mkdir ../deploy
 #make dir to put some build metadata in
 mkdir ../build
+#make dir to put app icon in
+mkdir -p ../pages/app_resources/meta/icons/
+# copy icon over
+cp ./app_resources/meta/icons/app.gif ../pages/app_resources/meta/icons/
 #make dir to put build version in
 mkdir -p ../pages/app_resources/meta/manifests/
 echo "${TRAVIS_TAG}" > "../pages/app_resources/meta/manifests/app_version.txt"

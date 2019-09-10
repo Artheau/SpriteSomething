@@ -36,14 +36,12 @@ This preview version of SpriteSomething includes many basic features of the main
 * Zoom controls
 * Playback controls
 * Download Official ALttPR Sprites
+* Download Link sprites as included by the SpriteSomething team
+* Download Samus sprites as included by the SpriteSomething team
 
 ### Lesser-documented features in this preview
 
 * Command-line interface
-
-### Known Issues in this release
-
-* Samus does not have all her animations rendered to the correct center of gravity
 
 Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.14 xcode 10.2) and Windows (built on Windows 10 v1803) all built on python 3.7 are available.
 

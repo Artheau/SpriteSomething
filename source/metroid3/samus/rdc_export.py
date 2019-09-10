@@ -48,7 +48,7 @@ def file_select(sprite):
 		("file_select_cursor_array",( 0,24, 8,32),(112,16)),
 		("file_select_cursor_array",( 0,16, 8,24),(112, 8)),
 		("file_select_cursor_array",( 0, 8, 8,16),(120, 0)),
-		("file_select_cursor_array",( 8,24,16,32),(120, 8)),
+		("file_select_cursor_array",( 8, 8,16,16),(120, 8)),
 		("file_select_cursor_array",( 8,16,16,24),(120,16)),
 		("file_select_piping",      ( 0, 0,24, 8),( 72,16)),   # Top
 		("file_select_piping",      (16, 8,24,24),(104, 8)),   # Side
@@ -59,8 +59,8 @@ def file_select(sprite):
 		file_select_sprites.paste(source_image,dest)
 
 	cursor_array = sprite.images["file_select_cursor_array"]
-	file_select_missile = cursor_array.crop((0,0,8,8))
-	file_select_missile_head = cursor_array.crop((8,8,16,16))
+	file_select_missile = cursor_array.crop(( 0, 0, 8, 8))
+	file_select_missile_head = cursor_array.crop(( 8,24,16,32))
 
 	data = bytearray()
 	# Due to how convert_to_4bpp package the data we must first get a whole sheet row, then extract the third row (first 0x200 bytes)

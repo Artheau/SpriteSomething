@@ -11,8 +11,8 @@ class Plugins(PluginsParent):
 	def __init__(self):
 		super().__init__()
 		plugins = [
-			("Download SpriteSomething Unofficial Sprites",None,self.get_spritesomething_sprites),
-			("Equipment",None,partial(self.equipment_test,True))
+			("Download SpriteSomething Unofficial Sprites",None,self.get_spritesomething_sprites)
+#			("Equipment",None,partial(self.equipment_test,True))
 		]
 		self.set_plugins(plugins)
 

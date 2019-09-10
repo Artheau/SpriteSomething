@@ -80,7 +80,8 @@ class AnimationEngineParent():
 
 		# Step: <step_number_label> / <step_total_label>
 		# Tiles: <tile_list>
-		step_panel = tk.Frame(parent, name="step_panel")
+		LABEL_HEIGHT = 16
+		step_panel = tk.Frame(parent, name="step_panel", height=LABEL_HEIGHT)
 		widgetlib.right_align_grid_in_frame(step_panel)
 		step_label = tk.Label(step_panel, text=fish.translate("meta","meta","step") + ':')
 		step_label.grid(row=0, column=1)
@@ -152,12 +153,18 @@ class AnimationEngineParent():
 				self.pose_number = 0
 
 			current_frame = self.frame_getter()
-			#this block is attempting to get mixed palette animations to work correctly with button switches
-			# at the time of writing this comment, this only seems to work well for speed boost palette
-			if current_frame > 0:     #TODO: is this check needed?  Not sure.  Maybe someone can do weird things by being creative with the VCR buttons
+			
+			if "palette_reference_frame" in pose_list[self.pose_number]:  #for animations that switch palettes in the middle
+				self.palette_last_transition_frame = \
+					current_frame - (
+						(current_frame % self.frame_progression_table[-1])   #modular progress
+						- self.frame_progression_table[self.pose_number-1]   #modular pose start
+						+ pose_list[self.pose_number]["palette_reference_frame"]  #modular reference number
+					)
+			elif current_frame > 0:    #for when the user switches palettes by pushing buttons mid-animation
 				if palette_info != self.prev_palette_info:
-					self.palette_last_transition_frame = current_frame   #TODO: Can we hook up some kind of "palette timer reset" command here from animations.json to fix Samus death palette?
-			else:
+					self.palette_last_transition_frame = current_frame
+			else:   #catch to make sure the user has not been abusing the backstep buttons to go backwards before a palette switch
 				self.palette_last_transition_frame = 0
 			self.prev_palette_info = palette_info.copy()
 			current_frame -= self.palette_last_transition_frame
