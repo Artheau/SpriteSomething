@@ -35,5 +35,11 @@
 		"file": "https://cdn.discordapp.com/attachments/364871890185224193/593986602083155987/link_sheet.xcf",
 		"site": "https://www.gimp.org/",
 		"repo": "https://gitlab.gnome.org/GNOME/gimp/"
+	},
+	"vt": {
+		"app": "A Link to the Past Randomizer 'Official' Sprites",
+		"file": "http://alttpr.com/sprites",
+		"site": "http://alttpr.com/sprite_preview",
+		"repo": "http://github.com/sporchia/alttp_vt_randomizer/"
 	}
 }
