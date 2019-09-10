@@ -28,14 +28,22 @@ jobs:
     strategy:
       matrix:
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-        python-version: [ 3.7 ]
         include:
-          # Xenial also gets 3.6
+          # Bionic/MacOSX/Windows gets Python 3.7
+          - os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
+            python-version: [ 3.7 ]
+          # Xenial gets Python 3.6 & 3.7
           - os-name: ubuntu-16.04
             python-version: [ 3.6, 3.7 ]
+          # Linux/Windows uses python (not python3)
+          - os-name: [ ubuntu-latest, ubuntu-16.04, windows-latest ]
+            PYTHON_EXECUTABLE: python
           # MacOSX uses python3 (not python)
           - os-name: macOS-latest
             PYTHON_EXECUTABLE: python3
+          # Linux/MacOSX uses pip3 (not pip)
+          - os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest ]
+            PIP_EXECUTABLE: pip3
           # Windows uses pip (not pip3)
           - os-name: windows-latest
             PIP_EXECUTABLE: pip
