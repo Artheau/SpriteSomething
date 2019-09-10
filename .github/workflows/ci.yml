@@ -33,7 +33,11 @@ jobs:
           - PIP_EXECUTABLE: pip3
         include:
           # Default to 3.7 only
-          - os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
+          - os-name: ubuntu-latest
+            python-version: [ 3.7 ]
+          - os-name: macOS-latest
+            python-version: [ 3.7 ]
+          - os-name: windows-latest
             python-version: [ 3.7 ]
           # Xenial also gets 3.6
           - os-name: ubuntu-16.04
