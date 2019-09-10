@@ -29,15 +29,22 @@ jobs:
       matrix:
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
         python-version: [ 3.7 ]
+        env:
+          PYTHON_EXECUTABLE: python
+          PIP_EXECUTABLE: pip3
         include:
+          # Xenial tests on Python 3.6 & 3.7
           - os-name: ubuntu-16.04
             python-version: [ 3.6, 3.7 ]
+          # MacOSX uses python3 (not python)
+          - os-name: macOS-latest
+            PYTHON_EXECUTABLE: python3
+          # Windows uses pip (not pip3)
+          - os-name: windows-latest
+            PIP_EXECUTABLE: pip
 
     steps:
     # install python
-    - env:
-      PYTHON_EXECUTABLE: python
-      PIP_EXECUTABLE: pip
     - name: Install Python
       uses: actions/setup-python@v1
       with:
