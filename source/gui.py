@@ -204,7 +204,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 													(self.fish.translate("meta","menu","export.inject-bulk"),"inject-bulk",self.inject_into_ROM_bulk),
 													(None,None,None),
 													(self.fish.translate("meta","menu","export.frame-as-png"),"frame-as-png",self.export_frame_as_png),
-													(self.fish.translate("meta","menu","export.animation-as-gif"),"animation-as-gif",None),#self.export_animation_as_gif),
+													(self.fish.translate("meta","menu","export.animation-as-gif"),"animation-as-gif",self.export_animation_as_gif),
 													(self.fish.translate("meta","menu","export.animation-as-hcollage"),"animation-as-hcollage",partial(self.export_animation_as_collage,"horizontal")),
 													#(self.fish.translate("meta","menu","export.animation-as-vcollage"),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
 											])
@@ -805,7 +805,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#export current animation as GIF
 	def export_animation_as_gif(self):
-		raise NotImplementedError()
+		filetypes = ((self.fish.translate("meta","dialogue","file.save.gif"),"*.gif"),)
+		filename = filedialog.asksaveasfilename(defaultextension=(".gif"), initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.animation-as-gif"), filetypes=filetypes)
+		if filename:
+			returnvalue = self.animation_engine.export_animation_as_gif(filename)
+			if returnvalue:
+				messagebox.showinfo("Save Complete", f"Saved as {filename}")
+			return returnvalue
+		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+			return False
 
 	#export current animation as collage PNG
 	def export_animation_as_collage(self,orientation="horizontal"):
