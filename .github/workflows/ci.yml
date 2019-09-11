@@ -70,7 +70,6 @@ jobs:
         architecture: "x64"
     - run: |
         python --version
-        docker ps
     # install dependencies via pip
     - name: Install Dependencies via pip
       run: |
@@ -119,6 +118,7 @@ jobs:
     # Prepare Release
     - name: Local Prepare GitHub Release Action
 #      uses: ./.github/actions/prepare-release
+      shell: bash
       run: |
         cp ./.github/actions/prepare-release/entrypoint.sh ./prepare-release.sh
         chmod +x ./prepare-release.sh
