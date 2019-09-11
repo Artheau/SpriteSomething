@@ -2,7 +2,9 @@
 
 set -ev
 
-ls -p
+# move filename note from artifact download
+mkdir "../build"
+mv "filename.txt" "../build/filename.txt"
 
 # update app version with build number
 APP_VERSION=$(head -n 1 "./app_resources/meta/manifests/app_version.txt")
@@ -37,6 +39,17 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	#build the filename
 	#current: <build_filename>-<git_tag>-<os_name>-<linux_distro><file_extension>
 	DEST_SLUG="${DEST_SLUG}-${GITHUB_TAG}-${OS_NAME}"
+	DIST_NAME="notset"
+	#extrapolate ubuntu distribution name
+	if [ "${OS_NAME}" == *"ubuntu"* ]; then
+		if [ "${OS_NAME}" == *"latest"* ]; then
+			DIST_NAME="bionic"
+		fi
+		if [ "${OS_NAME}" == *"16.04"* ]; then
+			DIST_NAME="xenial"
+		fi
+	fi
+
 	if [ "${DIST_NAME}" != ""] && [ "${DIST_NAME}" != "notset" ]; then
 		DEST_SLUG="${DEST_SLUG}-${DIST_NAME}"
 	fi
