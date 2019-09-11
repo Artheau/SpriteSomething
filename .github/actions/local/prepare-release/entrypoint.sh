@@ -46,17 +46,17 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 		VER_TEST="latest"
 		if [[ "$OS_NAME" =~ "$VER_TEST" ]]; then
 			DIST_NAME="bionic"
-			OS_NAME="${OS_NAME/-$VER_TEST/}"
+			OS_NAME="${OS_NAME/\-$VER_TEST/}"
 		fi
 
 		VER_TEST="16.04"
 		if [[ "$OS_NAME" =~ "$VER_TEST" ]]; then
 			DIST_NAME="xenial"
-			OS_NAME="${OS_NAME/-$VER_TEST/}"
+			OS_NAME="${OS_NAME/\-$VER_TEST/}"
 		fi
 		OS_NAME="ubuntu"
 	fi
-	OS_NAME="${OS_NAME/-latest/}"
+	OS_NAME="${OS_NAME/\-latest/}"
 
 	if [ "${DIST_NAME}" != "" ] && [ "${DIST_NAME}" != "notset" ]; then
 		DEST_SLUG="${DEST_SLUG}-${DIST_NAME}"
