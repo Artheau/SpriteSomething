@@ -158,7 +158,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: appversion-${{ matrix.os-name }}.txt
-        path: ../build/app_version.txt
+        path: ./app_resources/meta/manifests/app_version.txt
 
   # Deploy to GitHub Releases
   #  Release Name:  SpriteSomething v${GITHUB_TAG}
