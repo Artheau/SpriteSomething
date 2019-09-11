@@ -18,9 +18,9 @@ cp -f "../build/games.txt" "../pages/app_resources/meta/manifests/" #copy list o
 #copy game manifests over
 for game in $(cat "../build/games.txt"); \
   do mkdir -p "../pages/app_resources/$game/manifests/"; \
-	cp -rf "./app_resources/$game/manifests/" $_; \
+	cp -rf "./app_resources/$game/manifests/" "../pages/app_resources/$game/manifests/"; \
 	mkdir -p "../pages/app_resources/$game/lang/"; \
-	cp -rf "./app_resources/$game/lang/" $_; \
+	cp -rf "./app_resources/$game/lang/" "../pages/app_resources/$game/lang/"; \
 done
 
 #nuke GitHub pages files from source code
