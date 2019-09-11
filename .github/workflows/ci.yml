@@ -11,19 +11,19 @@ on: [ push, pull_request ]
 # deploy-pages:   peaceiris/actions-gh-pages@v1.1.0
 
 # What I *should* be able to do:
-#  Define Installation Job
+#  Define Install Job
 #   Checkout commit
 #   Halt if fail
 #  Define Tests Job
-#   Calls Installation Job
+#   Calls Install Job
 #   Run tests.py
 #   Halt if fail
 #  Define Build Job
-#   Calls Installation Job
+#   Calls Install Job
 #   Run build.py
 #   Halt if fail
 #  Define Prepare-Release Job
-#   Calls Installation Job
+#   Calls Install Job
 #   Prepare workspace for release files
 #   Halt if fail
 #  Define Deploy Release Job
@@ -31,23 +31,23 @@ on: [ push, pull_request ]
 #   Deploys release files
 #   Halt if fail
 #  Define Prepare-Pages Job
-#   Calls Installation Job
+#   Calls Install Job
 #   Calls Prepare Release Job
 #   Prepare workspace for releasing pages files
 #   Halt if fail
 #  Define Deploy Pages Job
-#   Calls Installation Job
+#   Calls Install Job
 #   Deploys pages files
 #   Halt if fail
 
 # stuff to do
 jobs:
-  # Installation & Build
+  # Install & Build
   #  Set up environment
   # Build
   #  Run build.py
   install-build:
-    name: Installation & Build
+    name: Install/Build
     # cycle through os list
     runs-on: ${{ matrix.os-name }}
 
@@ -81,11 +81,11 @@ jobs:
       run: |
         python build.py
 
-  # Installation & Preparing Release
+  # Install & Preparing Release
   #  Set up environment
   # Local Prepare Release action
   install-prepare-release:
-    name: Installation & Prepare Release
+    name: Install/Prepare Release
     # cycle through os list
     runs-on: ${{ matrix.os-name }}
 
