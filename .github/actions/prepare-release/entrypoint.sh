@@ -19,11 +19,16 @@ chmod 775 "./user_resources/meta/manifests"
 
 #jot down a note of the files in the dir
 ls -p > "../build/filename.txt"
+
+echo "Filename Listing"
+cat "../build/filename.txt"
+echo " "
+
 chmod 775 "../build/filename.txt"
 #use my pcregrep script to list binaries
 python ./source/fakepcregrep.py
 #get the first listing
-BUILD_FILENAME=$(head -n 1 ../build/filename.txt)
+BUILD_FILENAME=$(head -n 1 "../build/filename.txt")
 
 # if we've got a filename
 if [ "${BUILD_FILENAME}" != "" ]; then
