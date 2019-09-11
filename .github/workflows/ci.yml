@@ -80,12 +80,16 @@ jobs:
     - name: Build Binary
       run: |
         python build.py
-    # upload binary artifact for later step
-    - name: Upload Binary Artifact
+    # prepare binary artifact for later step
+    - name: Prepare Binary Artifact
+#      uses: ./.github/actions/prepare-binary
+      shell: bash
       run: |
         cp ./.github/actions/prepare-binary/entrypoint.sh ./prepare-binary.sh
         chmod +x ./prepare-binary.sh
         ./prepare-binary.sh
+    # upload binary artifact for later step
+    - name: Upload Binary Artifact
       uses: actions/upload-artifact@v1
       with:
         name: binary-${{ matrix.os-name }}
