@@ -186,7 +186,8 @@ jobs:
     - name: Debug Info
       shell: bash
       run: |
-        export RELEASE_NAME="SpriteSomething " + $(head -n 1 "./app_resources/meta/manifests/app_version.txt")
+        export RELEASE_NAME=$(head -n 1 "../deploy/app_resources/meta/manifests/app_version.txt")
+        export RELEASE_NAME="SpriteSomething " + ${RELEASE_NAME}
         echo "Release Name: ${RELEASE_NAME}"
     # create a release
 #    - name: Create a Release
