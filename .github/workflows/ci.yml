@@ -44,10 +44,6 @@ on: [ push, pull_request ]
 jobs:
   # Installation & Build
   #  Set up environment
-  #   Windows uses pip
-  #   Linux/Mac uses pip3
-  #   Windows/Linux uses python
-  #   Mac uses python3
   # Build
   #  Run build.py
   install-build:
@@ -86,14 +82,9 @@ jobs:
       run: |
         python build.py
 
-  # Installation & Tests
+  # Installation & Preparing Release
   #  Set up environment
-  #   Windows uses pip
-  #   Linux/Mac uses pip3
-  #   Windows/Linux uses python
-  #   Mac uses python3
-  # Test
-  #  Run tests.py
+  # Local Prepare Release action
   install-prepare-release:
     name: Installation & Prepare Release
     # cycle through os list
@@ -127,7 +118,11 @@ jobs:
         pip install -r app_resources/meta/manifests/pip_requirements.txt
     # Prepare Release
     - name: Local Prepare GitHub Release Action
-      uses: ./.github/actions/prepare-release
+#      uses: ./.github/actions/prepare-release
+      run: |
+        cp ./.github/actions/prepare-release/entrypoint.sh ./prepare-release.sh
+        chmod +x ./prepare-release.sh
+        ./prepare-release.sh
 
   # Deploy to GitHub Releases
   #  Release Name:  SpriteSomethin v${GITHUB_TAG}
