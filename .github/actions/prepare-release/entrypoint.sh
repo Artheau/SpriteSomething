@@ -72,7 +72,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	#move the binary back
 	mv "../build/${DEST_FILENAME}" "./${DEST_FILENAME}"
 
-	if [ "${OS_NAME}" == "windows" ]; then
+#	if [ "${OS_NAME}" == "windows" ]; then
 		#windows uses archiver
 		#jot down a note of what the filename is
 		#use my pcregrep script to list binaries
