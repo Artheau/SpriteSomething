@@ -114,8 +114,8 @@ fi
 #set release name
 #set files to upload
 #now that we have the tag sorted, set it in git
-GITHUB_TAG="v${GITHUB_TAG}"
-RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
+export GITHUB_TAG="v${GITHUB_TAG}"
+export RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
 FILES="../deploy/*"
 #git tag ${GITHUB_TAG}
 
