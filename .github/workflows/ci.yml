@@ -55,7 +55,7 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest ] #, windows-latest ]
+        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest ] #, windows-latest ] #FIXME
         python-version: [ 3.7 ]
 #    needs: [ install-test ]
     steps:
@@ -109,7 +109,7 @@ jobs:
     strategy:
       matrix:
         # install/release on not xenial
-        os-name: [ ubuntu-latest, macOS-latest ] #, windows-latest ]
+        os-name: [ ubuntu-latest, macOS-latest ] #, windows-latest ] #FIXME
         python-version: [ 3.7 ]
 
     needs: [ install-build ]
@@ -174,7 +174,7 @@ jobs:
     strategy:
       matrix:
         # release not on xenial
-        os-name: [ ubuntu-latest, macOS-latest ] #, windows-latest ]
+        os-name: [ ubuntu-latest, macOS-latest ] #, windows-latest ] #FIXME
         python-version: [ 3.7 ]
 
     needs: [ install-prepare-release ]
@@ -201,7 +201,7 @@ jobs:
         export RELEASE_NAME=$(head -n 1 "../build/app_version.txt")
         export RELEASE_NAME="SpriteSomething ${RELEASE_NAME}"
         echo "Release Name: ${RELEASE_NAME}"
-    # create a release
+    # create a release #FIXME: Test GHReleases
 #    - name: Create a Release
 #      uses: ./.github/actions/softprops/action-gh-release #@v1
 #      with:
@@ -224,7 +224,7 @@ jobs:
     strategy:
       matrix:
         # pages on one OS
-        os-name: [ macOS-latest ] #, windows-latest ]
+        os-name: [ macOS-latest ] #, windows-latest ] #FIXME
 
     needs: [ deploy-release ]
     steps:
@@ -246,36 +246,40 @@ jobs:
         chmod +x ./prepare-pages.sh
         ./prepare-pages.sh
     # upload pages artifact for later step
-#    - name: Upload Pages Artifact
-#      uses: actions/upload-artifact@v1
-#      with:
-#        name: pages-windows
-#        path: ../pages
+    - name: Upload Pages Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: pages-${{ matrix.os-name }}
+        path: ../pages
 
   # Deploy to GitHub Pages
   #
-#  deploy-pages:
-#    name: Deploy GHPages
-#    runs-on: ${{ matrix.os-name }}
+  deploy-pages:
+    name: Deploy GHPages
+    runs-on: ${{ matrix.os-name }}
 
     # VM settings
     #  os & python versions
-#    strategy:
-#      matrix:
+    strategy:
+      matrix:
         # pages on one OS
-#        os-name: [ macOS-latest ] #, windows-latest ]
+        os-name: [ macOS-latest ] #, windows-latest ] #FIXME
 
-#    needs: [ prepare-pages ]
-#    steps:
+    needs: [ prepare-pages ]
+    steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
     # download pages artifact
-#    - name: Download Pages Artifact
-#      uses: actions/download-artifact@v1
-#      with:
-#        name: pages-windows
-#        path: ./
+    - name: Download Pages Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: pages-${{ matrix.os-name }}
+        path: ../pages
+     # post to GHPages #FIXME: Test GHPages
 #    - name: Post to GitHub Pages
 #      uses: peaceiris/actions-gh-pages@v1.1.0
 #      env:
 #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #        PUBLISH_BRANCH: gh-pages
-#        PUBLISH_DIR: ${PAGES}
+#        PUBLISH_DIR: ../pages
