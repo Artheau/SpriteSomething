@@ -63,7 +63,7 @@ jobs:
     - name: Checkout commit
       uses: actions/checkout@v1
     # install python
-    - name: Install Python
+    - name: Install python
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
@@ -217,12 +217,18 @@ jobs:
   #  run custom action
   prepare-pages:
     name: Prepare GHPages
-    runs-on: windows-latest
+    runs-on: macOS-latest # windows-latest
     needs: [ deploy-release ]
     steps:
     # checkout commit
     - name: Checkout commit
       uses: actions/checkout@v1
+    # download appversion artifact
+    - name: Download AppVersion Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: appversion-${{ matrix.os-name }}.txt
+        path: ../build/app_version.txt
     # Prepare Pages
     - name: Local Prepare GitHub Pages Action
 #      uses: ./.github/actions/local/prepare-pages
@@ -242,7 +248,7 @@ jobs:
   #
 #  deploy-pages:
 #    name: Deploy GHPages
-#    runs-on: windows-latest
+#    runs-on: macOS-latest # windows-latest
 #    needs: [ prepare-pages ]
 #    steps:
     # download pages artifact
