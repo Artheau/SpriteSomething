@@ -82,13 +82,13 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 #		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
 #		echo "../deploy/${ZIP_FILENAME}" > "../build/filename.txt" #deploy archive
 #		python "./source/fakepcregrep.py"
-	else
+#	else
 		#we're using tar
 		#move the zip to the deployment folder
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
 		tar -czf "../${ZIP_FILENAME}" "./"
 		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
-	fi
+#	fi
 
 	#print summary of info
 	#filename of initial binary
