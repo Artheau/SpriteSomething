@@ -43,7 +43,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	DIST_NAME="notset"
 	#extrapolate ubuntu distribution name
 	if [[ "$OS_NAME" =~ "ubuntu" ]]; then
-		if [ "$OS_NAME" =~ "latest" ]]; then
+		if [[ "$OS_NAME" =~ "latest" ]]; then
 			DIST_NAME="bionic"
 		fi
 		if [[ "$OS_NAME" =~ "16.04" ]]; then
@@ -51,7 +51,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 		fi
 	fi
 
-	if [ "${DIST_NAME}" != ""] && [ "${DIST_NAME}" != "notset" ]; then
+	if [ "${DIST_NAME}" != "" ] && [ "${DIST_NAME}" != "notset" ]; then
 		DEST_SLUG="${DEST_SLUG}-${DIST_NAME}"
 	fi
 	DEST_FILENAME="${DEST_SLUG}${DEST_EXTENSION}"
