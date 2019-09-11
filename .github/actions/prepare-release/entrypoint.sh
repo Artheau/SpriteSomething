@@ -99,17 +99,16 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	echo "Build Filename: ${BUILD_FILENAME}"
 	echo "Dest Filename:  ${DEST_FILENAME}"
 	echo "Zip Filename:   ../deploy/${ZIP_FILENAME}"
-	if [ "${OS_NAME}" == "macOS" ]; then
-		#macosx does this weird, gotta use the native delimiter and capture it
-		FILESIZE=$(ls -lh ${DEST_FILENAME} | pcregrep -M o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
-		ZIPSIZE=$(ls -lh "../deploy/${ZIP_FILENAME}" | pcregrep -M o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
-	else
+
+	if [ "${OS_NAME}" != "macOS" ]; then
+		#macosx does this weird
 		#the rest are standardized
 		FILESIZE=$(ls -lh ${DEST_FILENAME} | cut -d " " -f 5)
 		ZIPSIZE=$(ls -lh "../deploy/${ZIP_FILENAME}" | cut -d " " -f 5)
+		echo "Build Filesize: ${FILESIZE}"
+		echo "Zip Filesize:   ${ZIPSIZE}"
 	fi
-	echo "Build Filesize: ${FILESIZE}"
-	echo "Zip Filesize:   ${ZIPSIZE}"
+
 fi
 
 #set release name
