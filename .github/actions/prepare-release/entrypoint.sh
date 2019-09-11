@@ -49,7 +49,9 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 		if [[ "$OS_NAME" =~ "16.04" ]]; then
 			DIST_NAME="xenial"
 		fi
+		OS_NAME="ubuntu"
 	fi
+	OS_NAME="${OS_NAME/-latest/}"
 
 	if [ "${DIST_NAME}" != "" ] && [ "${DIST_NAME}" != "notset" ]; then
 		DEST_SLUG="${DEST_SLUG}-${DIST_NAME}"
@@ -65,23 +67,23 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	#move the binary back
 	mv "../build/${DEST_FILENAME}" "./${DEST_FILENAME}"
 
-	if [ "${OS_NAME}" == "windows" ]; then
+#	if [ "${OS_NAME}" == "windows" ]; then
 		#windows uses archiver
 		#jot down a note of what the filename is
 		#use my pcregrep script to list binaries
 		#move the zip to the deployment folder
-		ZIP_FILENAME="${DEST_SLUG}.zip"
-		arc archive "../${ZIP_FILENAME}" "./"
-		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
-		echo "../deploy/${ZIP_FILENAME}" > "../build/filename.txt" #deploy archive
-		python "./source/fakepcregrep.py"
-	else
+#		ZIP_FILENAME="${DEST_SLUG}.zip"
+#		arc archive "../${ZIP_FILENAME}" "./"
+#		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
+#		echo "../deploy/${ZIP_FILENAME}" > "../build/filename.txt" #deploy archive
+#		python "./source/fakepcregrep.py"
+#	else
 		#we're using tar
 		#move the zip to the deployment folder
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
 		tar -czf "../${ZIP_FILENAME}" "./"
 		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
-	fi
+#	fi
 
 	#print summary of info
 	#filename of initial binary
