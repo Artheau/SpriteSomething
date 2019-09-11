@@ -42,11 +42,11 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	DEST_SLUG="${DEST_SLUG}-${GITHUB_TAG}-${OS_NAME}"
 	DIST_NAME="notset"
 	#extrapolate ubuntu distribution name
-	if [[ ${OS_NAME} == *ubuntu* ]]; then
-		if [[ ${OS_NAME} == *latest* ]]; then
+	if [[ "$OS_NAME" =~ "ubuntu" ]]; then
+		if [ "$OS_NAME" =~ "latest" ]]; then
 			DIST_NAME="bionic"
 		fi
-		if [[ ${OS_NAME} == *16.04* ]]; then
+		if [[ "$OS_NAME" =~ "16.04" ]]; then
 			DIST_NAME="xenial"
 		fi
 	fi
