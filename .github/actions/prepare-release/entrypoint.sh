@@ -2,6 +2,8 @@
 
 set -ev
 
+ls -p
+
 # update app version with build number
 APP_VERSION=$(head -n 1 "./app_resources/meta/manifests/app_version.txt")
 export GITHUB_TAG="${APP_VERSION}.${GITHUB_SHA:0:7}"
