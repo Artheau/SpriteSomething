@@ -153,6 +153,12 @@ jobs:
       with:
         name: archive-${{ matrix.os-name }}
         path: ../deploy
+    # upload appversion artifact for later step
+    - name: Upload AppVersion Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: appversion-${{ matrix.os-name }}.txt
+        path: ../build/app_version.txt
 
   # Deploy to GitHub Releases
   #  Release Name:  SpriteSomething v${GITHUB_TAG}
@@ -182,12 +188,17 @@ jobs:
       with:
         name: archive-${{ matrix.os-name }}
         path: ../deploy
+    # download appversion artifact
+    - name: Download AppVersion Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: appversion-${{ matrix.os-name }}.txt
+        path: ../build
     # debug info
     - name: Debug Info
       shell: bash
       run: |
-        export RELEASE_NAME=$(head -n 1 "../deploy/app_resources/meta/manifests/app_version.txt")
-        export RELEASE_NAME="SpriteSomething " + ${RELEASE_NAME}
+        export RELEASE_NAME="SpriteSomething " + $(head -n 1 "../build/app_version.txt")
         echo "Release Name: ${RELEASE_NAME}"
     # create a release
 #    - name: Create a Release
