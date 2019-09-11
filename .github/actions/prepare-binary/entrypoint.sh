@@ -17,5 +17,5 @@ python ./source/fakepcregrep.py
 BUILD_FILENAME=$(head -n 1 "../build/filename.txt")
 
 #copy binary filename & binary itself to artifact staging
-cp BUILD_FILENAME "../artifact"
+cp ${BUILD_FILENAME} "../artifact"
 cp "../build/filename.txt" "../artifact"
