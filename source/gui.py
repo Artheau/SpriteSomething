@@ -437,10 +437,32 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def get_representative_images(self, style):
 		image_list = self.sprite.get_representative_images(style)
-		base_folder = "."   #TODO: Prompt the user for a folder to put the images in
-		for filename, image in image_list:
-			image.save(os.path.join(base_folder, filename))
-		#TODO: give user feedback on success or failure of the save
+		if len(image_list) == 1:
+			filename, image = image_list[0]
+			filename = filedialog.asksaveasfilename(initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.representative-image-single"))
+			if filename:
+				try:
+					image.save(filename)
+					messagebox.showinfo("Save Complete", f"Saved as {filename}")
+					save_success_bool = True
+				except IOError:
+					save_success_bool = False
+			else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+				save_success_bool = False
+		elif len(image_list) > 1:
+			base_folder = filedialogue.askdirectory(initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.representative-images-multiple"))
+			if base_folder:
+				try:
+					for filename, image in image_list:
+						image.save(os.path.join(base_folder, filename))
+					messagebox.showinfo("Save Complete", f"Saved images to {base_folder}")
+				except IOError:
+					save_success_bool = False
+			else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+				save_success_bool = False
+		if not save_success_bool:
+			messagebox.showerror("ERROR", f"ERROR: Could not create image file(s)")
+		return save_success_bool
 
 
 
