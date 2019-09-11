@@ -17,16 +17,6 @@ chmod 775 "./user_resources"
 chmod 775 "./user_resources/meta"
 chmod 775 "./user_resources/meta/manifests"
 
-#jot down a note of the files in the dir
-ls -p > "../build/filename.txt"
-chmod 775 "../build/filename.txt"
-#use my pcregrep script to list binaries
-python ./source/fakepcregrep.py
-
-echo "Binary Listing"
-cat "../build/filename.txt"
-echo " "
-
 #get the first listing
 BUILD_FILENAME=$(head -n 1 "../build/filename.txt")
 
