@@ -168,7 +168,7 @@ jobs:
     strategy:
       matrix:
         # release not on xenial
-        os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
+        os-name: [ ubuntu-latest, macOS-latest] #, windows-latest ]
         python-version: [ 3.7 ]
 
     needs: [ install-prepare-release ]
