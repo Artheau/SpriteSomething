@@ -4,7 +4,7 @@ set -ev
 
 # update app version with build number
 APP_VERSION=$(head -n 1 "./app_resources/meta/manifests/app_version.txt")
-export GITHUB_TAG="${APP_VERSION}.${GITHUB_BUILD_NUMBER}"
+export GITHUB_TAG="${APP_VERSION}.${GITHUB_SHA:0:7}"
 echo "${GITHUB_TAG}" > "./app_resources/meta/manifests/app_version.txt"
 
 #make dir to put archive/binary in
@@ -102,7 +102,7 @@ fi
 GITHUB_TAG="v${GITHUB_TAG}"
 RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
 FILES="../deploy/*"
-git tag ${GITHUB_TAG}
+#git tag ${GITHUB_TAG}
 
 #echo "Deploy:         ${DEPLOY}"
 #echo "Deploy Pages:   ${DEPLOY_PAGES}"
