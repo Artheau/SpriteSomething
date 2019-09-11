@@ -146,6 +146,12 @@ jobs:
         chmod +x ./prepare-release.sh
         export OS_NAME=${{ matrix.os-name }}
         ./prepare-release.sh
+    # upload archive artifact for later step
+    - name: Upload Archive Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: archive-${{ matrix.os-name }}
+        path: ../deploy
 
   # Deploy to GitHub Releases
   #  Release Name:  SpriteSomethin v${GITHUB_TAG}
