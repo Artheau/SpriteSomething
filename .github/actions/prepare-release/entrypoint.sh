@@ -9,8 +9,6 @@ echo "${GITHUB_TAG}" > "./app_resources/meta/manifests/app_version.txt"
 
 #make dir to put archive/binary in
 mkdir "../deploy"
-#make dir to put metadata in
-mkdir "../build"
 
 #chmod user_resources for working_dirs.json
 chmod 775 "./user_resources"
