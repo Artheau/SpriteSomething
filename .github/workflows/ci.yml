@@ -83,10 +83,10 @@ jobs:
         python build.py
     # prepare binary artifact for later step
     - name: Prepare Binary Artifact
-#      uses: ./.github/actions/prepare-binary
+#      uses: ./.github/actions/local/prepare-binary
       shell: bash
       run: |
-        cp ./.github/actions/prepare-binary/entrypoint.sh ./prepare-binary.sh
+        cp ./.github/actions/local/prepare-binary/entrypoint.sh ./prepare-binary.sh
         chmod +x ./prepare-binary.sh
         ./prepare-binary.sh
     # upload binary artifact for later step
@@ -140,10 +140,10 @@ jobs:
         path: ./
     # Prepare Release
     - name: Local Prepare GitHub Release Action
-#      uses: ./.github/actions/prepare-release
+#      uses: ./.github/actions/local/prepare-release
       shell: bash
       run: |
-        cp ./.github/actions/prepare-release/entrypoint.sh ./prepare-release.sh
+        cp ./.github/actions/local/prepare-release/entrypoint.sh ./prepare-release.sh
         chmod +x ./prepare-release.sh
         export OS_NAME=${{ matrix.os-name }}
         ./prepare-release.sh
@@ -155,12 +155,12 @@ jobs:
         path: ../deploy
 
   # Deploy to GitHub Releases
-  #  Release Name:  SpriteSomethin v${GITHUB_TAG}
+  #  Release Name:  SpriteSomething v${GITHUB_TAG}
   #  Release Body:  Inline content of RELEASENOTES.md
   #  Release Body:  Fallback to URL to RELEASENOTES.md
-  #  Release Files: ${FILES}
+  #  Release Files: ../deploy
   deploy-release:
-    name: Deploy to GitHub Releases
+    name: Deploy/GHReleases
     runs-on: ${{ matrix.os-name }}
 
     # VM settings
@@ -182,12 +182,18 @@ jobs:
       with:
         name: archive-${{ matrix.os-name }}
         path: ../deploy
+    # debug info
+    - name: Debug Info
+      shell: bash
+      run: |
+        echo "Release Name: ${RELEASE_NAME}"
+    # create a release
 #    - name: Create a Release
-#      uses: docker://softprops/action-gh-release
+#      uses: ./.github/actions/softprops/action-gh-release #@v1
 #      with:
 #        name: ${RELEASE_NAME}
 #        draft: true
-#        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blog/${GITHUB_TAG}/RELEASENOTES.md) for description."
+#        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_TAG}/RELEASENOTES.md) for description."
 #        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
 #        files: ../deploy
 #      env:
@@ -196,7 +202,7 @@ jobs:
   # Prepare for Deployment to GitHub Pages
   #  run custom action
   prepare-pages:
-    name: Prepare for GitHub Pages
+    name: Prepare GHPages
     runs-on: windows-latest
     needs: [ deploy-release ]
     steps:
@@ -204,8 +210,13 @@ jobs:
     - name: Checkout commit
       uses: actions/checkout@v1
     # Prepare Pages
-#    - name: Local Prepare GitHub Pages Action
-#      uses: ./.github/actions/prepare-pages
+    - name: Local Prepare GitHub Pages Action
+#      uses: ./.github/actions/local/prepare-pages
+      shell: bash
+      run: |
+        cp ./.github/actions/local/prepare-pages/entrypoint.sh ./prepare-pages.sh
+        chmod +x ./prepare-pages.sh
+        ./prepare-pages.sh
     # upload pages artifact for later step
 #    - name: Upload Pages Artifact
 #      uses: actions/upload-artifact@v1
@@ -216,12 +227,11 @@ jobs:
   # Deploy to GitHub Pages
   #
 #  deploy-pages:
-#    name: Deploy to GitHub Pages
+#    name: Deploy GHPages
 #    runs-on: windows-latest
-#    python-version: "3.7"
 #    needs: [ prepare-pages ]
 #    steps:
-    # upload pages artifact for later step
+    # download pages artifact
 #    - name: Download Pages Artifact
 #      uses: actions/download-artifact@v1
 #      with:
