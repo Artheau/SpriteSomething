@@ -8,6 +8,9 @@ filename_notes = os.path.join("..","build","filename.txt")
 with open(filename_notes) as f:
 	s = f.read()
 	f.close()
+
+print(s)
+
 y = regex.findall(REGEX, s, regex.MULTILINE)
 
 with open(filename_notes,"w+") as f:
