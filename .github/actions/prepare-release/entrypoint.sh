@@ -43,11 +43,16 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	DIST_NAME="notset"
 	#extrapolate ubuntu distribution name
 	if [[ "$OS_NAME" =~ "ubuntu" ]]; then
-		if [[ "$OS_NAME" =~ "latest" ]]; then
+		VER_TEST="latest"
+		if [[ "$OS_NAME" =~ "$VER_TEST" ]]; then
 			DIST_NAME="bionic"
+			OS_NAME="${OS_NAME/-$VER_TEST/}"
 		fi
-		if [[ "$OS_NAME" =~ "16.04" ]]; then
+
+		VER_TEST="16.04"
+		if [[ "$OS_NAME" =~ "$VER_TEST" ]]; then
 			DIST_NAME="xenial"
+			OS_NAME="${OS_NAME/-$VER_TEST/}"
 		fi
 		OS_NAME="ubuntu"
 	fi
@@ -67,7 +72,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	#move the binary back
 	mv "../build/${DEST_FILENAME}" "./${DEST_FILENAME}"
 
-#	if [ "${OS_NAME}" == "windows" ]; then
+	if [ "${OS_NAME}" == "windows" ]; then
 		#windows uses archiver
 		#jot down a note of what the filename is
 		#use my pcregrep script to list binaries
@@ -77,13 +82,13 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 #		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
 #		echo "../deploy/${ZIP_FILENAME}" > "../build/filename.txt" #deploy archive
 #		python "./source/fakepcregrep.py"
-#	else
+	else
 		#we're using tar
 		#move the zip to the deployment folder
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
 		tar -czf "../${ZIP_FILENAME}" "./"
 		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
-#	fi
+	fi
 
 	#print summary of info
 	#filename of initial binary
@@ -94,7 +99,7 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	echo "Build Filename: ${BUILD_FILENAME}"
 	echo "Dest Filename:  ${DEST_FILENAME}"
 	echo "Zip Filename:   ../deploy/${ZIP_FILENAME}"
-	if [ "${OS_NAME}" == "osx" ]; then
+	if [ "${OS_NAME}" == "macOS" ]; then
 		#macosx does this weird, gotta use the native delimiter and capture it
 		FILESIZE=$(ls -lh ${DEST_FILENAME} | pcregrep -M o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
 		ZIPSIZE=$(ls -lh "../deploy/${ZIP_FILENAME}" | pcregrep -M o4 "^([-[:alpha:]\s]*)(\d*)([[:alpha:]\s]*)(\S*)(.*)$")
