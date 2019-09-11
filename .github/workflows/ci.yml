@@ -131,6 +131,12 @@ jobs:
         pip --version
         pip install -r app_resources/meta/manifests/pip_requirements.txt
         pip install regex
+    # download binary artifact
+    - name: Download Binary Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: binary-${{ matrix.os-name }}
+        path: ./
     # Prepare Release
     - name: Local Prepare GitHub Release Action
 #      uses: ./.github/actions/prepare-release
