@@ -12,7 +12,7 @@ mv "../build/app_version.txt" "../pages/app_resources/meta/manifests/app_version
 
 #copy GitHub pages files to staging area
 mv "./pages_resources/index.html" "../pages/"						#move index page that lists version number
-cp -rf "./pages_resources" "../pages/app_resources/"	#copy sprite preview pages
+cp -rf "./pages_resources/" "../pages/app_resources/"	#copy sprite preview pages
 ls -l "./app_resources" | grep "^d" | grep -o "\S*$" | sed "/meta/ d" > "../build/games.txt" #get list of games
 cp -f "../build/games.txt" "../pages/app_resources/meta/manifests/" #copy list of games
 #copy game manifests over
