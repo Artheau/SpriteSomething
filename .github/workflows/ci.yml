@@ -123,6 +123,7 @@ jobs:
       run: |
         cp ./.github/actions/prepare-release/entrypoint.sh ./prepare-release.sh
         chmod +x ./prepare-release.sh
+        export OS_NAME=${{ matrix.os-name }}
         ./prepare-release.sh
 
   # Deploy to GitHub Releases
