@@ -236,7 +236,7 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: appversion-${{ matrix.os-name }}.txt
-        path: ../build/app_version.txt
+        path: ../build
     # Prepare Pages
     - name: Local Prepare GitHub Pages Action
 #      uses: ./.github/actions/local/prepare-pages
