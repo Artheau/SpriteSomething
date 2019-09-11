@@ -55,7 +55,6 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        # install/build on not xenial
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest ] #, windows-latest ]
         python-version: [ 3.7 ]
 #    needs: [ install-test ]
@@ -160,22 +159,29 @@ jobs:
   #  Release Body:  Inline content of RELEASENOTES.md
   #  Release Body:  Fallback to URL to RELEASENOTES.md
   #  Release Files: ${FILES}
-#  deploy-release:
-#    name: Deploy to GitHub Releases
-#    runs-on: ${{ matrix.os-name }}
+  deploy-release:
+    name: Deploy to GitHub Releases
+    runs-on: ${{ matrix.os-name }}
 
     # VM settings
     #  os & python versions
-#    strategy:
-#      matrix:
+    strategy:
+      matrix:
         # release not on xenial
-#        os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
-#        python-version: [ 3.7 ]
-#        exclude:
-#          - os-name: ubuntu-16.04
+        os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
+        python-version: [ 3.7 ]
 
-#    needs: [ prepare-release ]
-#    steps:
+    needs: [ install-prepare-release ]
+    steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
+    # download archive artifact
+    - name: Download Archive Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: archive-${{ matrix.os-name }}
+        path: ../deploy
 #    - name: Create a Release
 #      uses: docker://softprops/action-gh-release
 #      with:
@@ -183,20 +189,30 @@ jobs:
 #        draft: true
 #        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blog/${GITHUB_TAG}/RELEASENOTES.md) for description."
 #        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
-#        files: ${FILES}
+#        files: ../deploy
 #      env:
 #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Prepare for Deployment to GitHub Pages
   #  run custom action
-#  prepare-pages:
-#    name: Prepare for GitHub Pages
-#    runs-on: windows-latest
-#    python-version: "3.7"
-#    needs: [ deploy-release ]
-#    steps:
+  prepare-pages:
+    name: Prepare for GitHub Pages
+    runs-on: windows-latest
+    python-version: "3.7"
+    needs: [ deploy-release ]
+    steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
+    # Prepare Pages
 #    - name: Local Prepare GitHub Pages Action
 #      uses: ./.github/actions/prepare-pages
+    # upload pages artifact for later step
+#    - name: Upload Pages Artifact
+#      uses: actions/upload-artifact@v1
+#      with:
+#        name: pages-windows
+#        path: ../pages
 
   # Deploy to GitHub Pages
   #
@@ -206,9 +222,15 @@ jobs:
 #    python-version: "3.7"
 #    needs: [ prepare-pages ]
 #    steps:
-#      - name: Post to GitHub Pages
-#        uses: peaceiris/actions-gh-pages@v1.1.0
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          PUBLISH_BRANCH: gh-pages
-#          PUBLISH_DIR: ${PAGES}
+    # upload pages artifact for later step
+#    - name: Download Pages Artifact
+#      uses: actions/download-artifact@v1
+#      with:
+#        name: pages-windows
+#        path: ./
+#    - name: Post to GitHub Pages
+#      uses: peaceiris/actions-gh-pages@v1.1.0
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        PUBLISH_BRANCH: gh-pages
+#        PUBLISH_DIR: ${PAGES}
