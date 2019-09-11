@@ -55,6 +55,7 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
+        # install/build on not xenial
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest ] #, windows-latest ]
         python-version: [ 3.7 ]
 #    needs: [ install-test ]
@@ -108,7 +109,8 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest ] #, windows-latest ]
+        # install/release on not xenial
+        os-name: [ ubuntu-latest, macOS-latest ] #, windows-latest ]
         python-version: [ 3.7 ]
 
     needs: [ install-build ]
@@ -166,8 +168,8 @@ jobs:
     #  os & python versions
 #    strategy:
 #      matrix:
-        # don't build on python 3.6 or xenial
-#        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
+        # release not on xenial
+#        os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
 #        python-version: [ 3.7 ]
 #        exclude:
 #          - os-name: ubuntu-16.04
