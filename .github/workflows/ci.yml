@@ -198,7 +198,6 @@ jobs:
   prepare-pages:
     name: Prepare for GitHub Pages
     runs-on: windows-latest
-    python-version: "3.7"
     needs: [ deploy-release ]
     steps:
     # checkout commit
