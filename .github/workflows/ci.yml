@@ -208,11 +208,11 @@ jobs:
         export RELEASE_NAME=$(head -n 1 "../build/app_version.txt")
         export RELEASE_NAME="SpriteSomething ${RELEASE_NAME}"
         echo "Release Name: ${RELEASE_NAME}"
-    # npm glob is broken, install it #FIXME
-    - name: Fix npm glob
+    # npm is missing some stuff #FIXME
+    - name: Install Dependencies via npm
       shell: bash
       run: |
-        npm install --save glob
+        npm install --save glob mime
     # create a release
     - name: Create a Release
       uses: ./.github/actions/softprops/action-gh-release
