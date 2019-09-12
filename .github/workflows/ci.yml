@@ -164,7 +164,7 @@ jobs:
     - name: Upload AppVersion Artifact
       uses: actions/upload-artifact@v1
       with:
-        name: appversion-${{ matrix.os-name }}.txt
+        name: appversion-${{ matrix.os-name }}
         path: ./app_resources/meta/manifests/app_version.txt
 
   # Deploy to GitHub Releases
@@ -199,15 +199,18 @@ jobs:
     - name: Download AppVersion Artifact
       uses: actions/download-artifact@v1
       with:
-        name: appversion-${{ matrix.os-name }}.txt
+        name: appversion-${{ matrix.os-name }}
         path: ../build
     # debug info
     - name: Debug Info
       shell: bash
       run: |
-        export RELEASE_NAME=$(head -n 1 "../build/app_version.txt")
-        export RELEASE_NAME="SpriteSomething ${RELEASE_NAME}"
+        GITHUB_TAG=$(head -n 1 "../build/app_version.txt")
+        GITHUB_TAG="v${GITHUB_TAG}"
+        RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
+        git tag "${GITHUB_TAG}"
         echo "Release Name: ${RELEASE_NAME}"
+        echo "Git Tag:      ${GITHUB_TAG}"
     # npm is missing some stuff #FIXME
     - name: Install Dependencies via npm
       shell: bash
