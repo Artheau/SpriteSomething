@@ -68,6 +68,9 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 
 	#clean the git slate but don't clobber stuff if we're running this locally
 	git clean -dfx --exclude=.vscode --exclude=.idea --exclude=*.json
+	if [[ "${OS_NAME}" != "" ]]; then
+		rm -rf ./.git
+	fi
 
 	#move the binary back
 	mv "../build/${DEST_FILENAME}" "./${DEST_FILENAME}"
