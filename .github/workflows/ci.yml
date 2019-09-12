@@ -209,16 +209,16 @@ jobs:
         export RELEASE_NAME="SpriteSomething ${RELEASE_NAME}"
         echo "Release Name: ${RELEASE_NAME}"
     # create a release #FIXME: Test GHReleases
-#    - name: Create a Release
-#      uses: ./.github/actions/softprops/action-gh-release #@v1
-#      with:
-#        name: ${RELEASE_NAME}
-#        draft: true
-#        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_TAG}/RELEASENOTES.md) for description."
-#        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
-#        files: ../deploy
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create a Release
+      uses: ./.github/actions/softprops/action-gh-release
+      with:
+        name: ${RELEASE_NAME}
+        draft: true
+        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_TAG}/RELEASENOTES.md) for description."
+        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
+        files: ../deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Prepare for Deployment to GitHub Pages
   #  run custom action
@@ -231,7 +231,7 @@ jobs:
     strategy:
       matrix:
         # pages on one OS
-        os-name: [ ubuntu-latest ] #, windows-latest ] #FIXME
+        os-name: [ windows-latest ]
 
     needs: [ deploy-release ]
     steps:
@@ -270,7 +270,7 @@ jobs:
     strategy:
       matrix:
         # pages on one OS
-        os-name: [ ubuntu-latest ] #, windows-latest ] #FIXME
+        os-name: [ windows-latest ]
 
     needs: [ prepare-pages ]
     steps:
