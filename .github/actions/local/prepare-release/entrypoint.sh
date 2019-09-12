@@ -68,12 +68,21 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 
 	#clean the git slate but don't clobber stuff if we're running this locally
 	git clean -dfx --exclude=.vscode --exclude=.idea --exclude=*.json
-	if [[ "${OS_NAME}" != "" ]]; then
-		rm -rf ./.git
-	fi
 
 	#move the binary back
 	mv "../build/${DEST_FILENAME}" "./${DEST_FILENAME}"
+
+	#set release name
+	#set files to upload
+	#now that we have the tag sorted, set it in git
+	export GITHUB_TAG="v${GITHUB_TAG}"
+	export RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
+	FILES="../deploy/*"
+	git tag ${GITHUB_TAG}
+
+	if [[ "${OS_NAME}" != "" ]]; then
+		rm -rf ./.git
+	fi
 
 	if [ "${OS_NAME}" == "windows" ]; then
 		#windows uses archiver
@@ -113,14 +122,6 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	fi
 
 fi
-
-#set release name
-#set files to upload
-#now that we have the tag sorted, set it in git
-export GITHUB_TAG="v${GITHUB_TAG}"
-export RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
-FILES="../deploy/*"
-git tag ${GITHUB_TAG}
 
 #echo "Deploy:         ${DEPLOY}"
 #echo "Deploy Pages:   ${DEPLOY_PAGES}"
