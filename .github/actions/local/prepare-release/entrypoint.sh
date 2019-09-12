@@ -39,24 +39,24 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 
 	#build the filename
 	#current: <build_filename>-<git_tag>-<os_name>-<linux_distro><file_extension>
-	DEST_SLUG="${DEST_SLUG}-${GITHUB_TAG}-${OS_NAME}"
 	DIST_NAME="notset"
 	#extrapolate ubuntu distribution name
 	if [[ "$OS_NAME" =~ "ubuntu" ]]; then
 		VER_TEST="latest"
 		if [[ "$OS_NAME" =~ "$VER_TEST" ]]; then
 			DIST_NAME="bionic"
-			OS_NAME="${OS_NAME/\-$VER_TEST/}"
+			OS_NAME="${OS_NAME/-$VER_TEST/}"
 		fi
 
 		VER_TEST="16.04"
 		if [[ "$OS_NAME" =~ "$VER_TEST" ]]; then
 			DIST_NAME="xenial"
-			OS_NAME="${OS_NAME/\-$VER_TEST/}"
+			OS_NAME="${OS_NAME/-$VER_TEST/}"
 		fi
 		OS_NAME="ubuntu"
 	fi
-	OS_NAME="${OS_NAME/\-latest/}"
+	OS_NAME="${OS_NAME/-latest/}"
+	DEST_SLUG="${DEST_SLUG}-${GITHUB_TAG}-${OS_NAME}"
 
 	if [ "${DIST_NAME}" != "" ] && [ "${DIST_NAME}" != "notset" ]; then
 		DEST_SLUG="${DEST_SLUG}-${DIST_NAME}"
@@ -72,23 +72,23 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	#move the binary back
 	mv "../build/${DEST_FILENAME}" "./${DEST_FILENAME}"
 
-#	if [ "${OS_NAME}" == "windows" ]; then
-		#windows uses archiver
+	if [ "${OS_NAME}" == "windows" ]; then
+		#windows uses 7zip
 		#jot down a note of what the filename is
 		#use my pcregrep script to list binaries
 		#move the zip to the deployment folder
-#		ZIP_FILENAME="${DEST_SLUG}.zip"
-#		arc archive "../${ZIP_FILENAME}" "./"
-#		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
-#		echo "../deploy/${ZIP_FILENAME}" > "../build/filename.txt" #deploy archive
-#		python "./source/fakepcregrep.py"
-#	else
+		ZIP_FILENAME="${DEST_SLUG}.zip"
+		7z a -r "../${ZIP_FILENAME}" "./*"
+		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
+		echo "../deploy/${ZIP_FILENAME}" > "../build/filename.txt" #deploy archive
+		python "./source/fakepcregrep.py"
+	else
 		#we're using tar
 		#move the zip to the deployment folder
 		ZIP_FILENAME="${DEST_SLUG}.tar.gz"
 		tar -czf "../${ZIP_FILENAME}" "./"
 		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
-#	fi
+	fi
 
 	#print summary of info
 	#filename of initial binary
