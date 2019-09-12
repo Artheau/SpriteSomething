@@ -109,7 +109,7 @@ jobs:
     strategy:
       matrix:
         # install/release on not xenial
-        os-name: [ windows-latest ] # [ ubuntu-latest, macOS-latest, windows-latest ]
+        os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
         python-version: [ 3.7 ]
 
     needs: [ install-build ]
@@ -142,8 +142,9 @@ jobs:
     - name: Get Archiver
       shell: bash
       run: |
-        echo ${OS_NAME}
-        choco install archiver
+        if [[ "${{ matrix.os-name }}" =~ "windows" ]]; then \
+          choco install archiver; \
+        fi
     # Prepare Release
     - name: Local Prepare GitHub Release Action
 #      uses: ./.github/actions/local/prepare-release
