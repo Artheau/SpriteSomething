@@ -436,27 +436,40 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.right_panel.add(self.overview_frame, text=self.fish.translate("meta","tab","overview"))
 
 	def get_representative_images(self, style):
+		#list representative images
 		image_list = self.sprite.get_representative_images(style)
+		#did we save successfully? assume no
+		save_success_bool = False
+		#if we've only got one representative image
 		if len(image_list) == 1:
+			#get the data
 			filename, image = image_list[0]
-			filename = filedialog.asksaveasfilename(initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.representative-image-single"))
+			#ask for destination
+			filename = filedialog.asksaveasfilename(initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.representative-image-single"), filetypes=((self.fish.translate("meta","dialogue","file.save.types.label"),"*.png *.gif"),))
 			if filename:
 				try:
+					#try to save it
 					image.save(filename)
 					messagebox.showinfo("Save Complete", f"Saved as {filename}")
 					save_success_bool = True
 				except IOError:
+					#something went oops
 					save_success_bool = False
 			else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 				save_success_bool = False
+		#if we've got many representative images
 		elif len(image_list) > 1:
-			base_folder = filedialogue.askdirectory(initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.representative-images-multiple"))
+			#ask for destination folder
+			base_folder = filedialog.askdirectory(initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.representative-images-multiple"))
 			if base_folder:
 				try:
+					#try to save each one
 					for filename, image in image_list:
 						image.save(os.path.join(base_folder, filename))
 					messagebox.showinfo("Save Complete", f"Saved images to {base_folder}")
+					save_success_bool = True
 				except IOError:
+					#something went oops
 					save_success_bool = False
 			else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 				save_success_bool = False

@@ -28,10 +28,13 @@
 	"dialogue": {
 		"file.open.title": "Select Sprite",
 		"file.open.types.label": "Supported Types",
+		"file.save.types.label": "Supported Types",
 		"file.save.title": "Save Sprite As...",
 		"file.save.png": "Portable Network Graphics",
 		"file.save.zspr": "ZSPR Sprite",
 		"file.save.rdc": "Retro Data Container",
+		"file.save.representative-image-single": "Save Single Representative Image",
+		"file.save.representative-images-multiple": "Save Multiple Representative Images to folder",
 		"export.inject.title": "Select ROM to Modify...",
 		"export.inject.types": "Game Files",
 		"export.source.title": "Select Source ROM",

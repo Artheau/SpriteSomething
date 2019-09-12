@@ -42,13 +42,17 @@ class Sprite(SpriteParent):
 			[(248,200,  0),(248,248,200),(  0,144, 72)]  #golden
 		]
 
-	def get_representative_image(self, style):
-		super().get_representative_image(style)
+	def get_representative_images(self, style):
+		return_images = []
+		return_images += super().get_representative_images(style)
 
 		if style == "crossproduct":
-			self.get_tracker_images()
+			return_images += self.get_tracker_images()
+
+		return return_images
 
 	def get_tracker_images(self):
+		return_images = []
 		tracker_images_filepath = os.path.join('.',"user_resources",self.resource_subpath,"sheets","tracker-images",self.classic_name.lower())
 		if not os.path.isdir(tracker_images_filepath):
 			os.makedirs(tracker_images_filepath)
@@ -87,9 +91,10 @@ class Sprite(SpriteParent):
 					filename += "bunny"
 				filename += str(i)
 				filename += ".png"
-				dest_img.save(os.path.join(tracker_images_filepath,filename))
+				return_images.append((filename,dest_img))
 
 			i += 1
+		return return_images
 
 	def get_alternate_tile(self, image_name, palettes):
 		slugs = {}
