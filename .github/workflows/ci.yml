@@ -173,7 +173,7 @@ jobs:
   #  Release Body:  Fallback to URL to RELEASENOTES.md
   #  Release Files: ../deploy
   deploy-release:
-    name: Deploy/GHReleases
+    name: Deploy GHReleases
     runs-on: ${{ matrix.os-name }}
 
     # VM settings
@@ -181,7 +181,7 @@ jobs:
     strategy:
       matrix:
         # release not on xenial
-        os-name: [ ubuntu-latest, macOS-latest ] #, windows-latest ] #FIXME
+        os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
         python-version: [ 3.7 ]
 
     needs: [ install-prepare-release ]
