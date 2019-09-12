@@ -120,7 +120,7 @@ fi
 export GITHUB_TAG="v${GITHUB_TAG}"
 export RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
 FILES="../deploy/*"
-#git tag ${GITHUB_TAG}
+git tag ${GITHUB_TAG}
 
 #echo "Deploy:         ${DEPLOY}"
 #echo "Deploy Pages:   ${DEPLOY_PAGES}"
