@@ -208,7 +208,7 @@ jobs:
         GITHUB_TAG=$(head -n 1 "../build/app_version.txt")
         GITHUB_TAG="v${GITHUB_TAG}"
         RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
-        git tag "${GITHUB_TAG}"
+        git tag ${GITHUB_TAG}
         echo "Release Name: ${RELEASE_NAME}"
         echo "Git Tag:      ${GITHUB_TAG}"
     # npm is missing some stuff #FIXME
@@ -219,7 +219,6 @@ jobs:
     # create a release
     - name: Create a Release
       uses: ./.github/actions/softprops/action-gh-release
-      if: startsWith(github.ref, 'refs/tags/')
       with:
         name: ${RELEASE_NAME}
         draft: true
@@ -251,7 +250,7 @@ jobs:
     - name: Download AppVersion Artifact
       uses: actions/download-artifact@v1
       with:
-        name: appversion-${{ matrix.os-name }}.txt
+        name: appversion-${{ matrix.os-name }}
         path: ../build
     # Prepare Pages
     - name: Local Prepare GitHub Pages Action
