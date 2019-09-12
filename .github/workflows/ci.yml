@@ -138,6 +138,13 @@ jobs:
       with:
         name: binary-${{ matrix.os-name }}
         path: ./
+    # Windows needs archiver
+    - name: Get Archiver
+      shell: bash
+      run: |
+        if [[ "${OS_NAME}" =~ "windows" ]]; then \
+          choco install archiver; \
+        fi
     # Prepare Release
     - name: Local Prepare GitHub Release Action
 #      uses: ./.github/actions/local/prepare-release
