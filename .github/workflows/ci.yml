@@ -55,7 +55,7 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest ] #, windows-latest ] #FIXME
+        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
         python-version: [ 3.7 ]
 #    needs: [ install-test ]
     steps:
