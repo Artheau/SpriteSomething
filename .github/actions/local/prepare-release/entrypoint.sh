@@ -73,12 +73,12 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	mv "../build/${DEST_FILENAME}" "./${DEST_FILENAME}"
 
 	if [ "${OS_NAME}" == "windows" ]; then
-		#windows uses 7zip
+		#windows uses archiver
 		#jot down a note of what the filename is
 		#use my pcregrep script to list binaries
 		#move the zip to the deployment folder
 		ZIP_FILENAME="${DEST_SLUG}.zip"
-		7z a -r "../${ZIP_FILENAME}" "./*"
+		arc archive "../${ZIP_FILENAME}" "./"
 		mv "../${ZIP_FILENAME}" "../deploy/${ZIP_FILENAME}"
 		echo "../deploy/${ZIP_FILENAME}" > "../build/filename.txt" #deploy archive
 		python "./source/fakepcregrep.py"
