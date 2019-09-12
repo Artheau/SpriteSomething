@@ -219,6 +219,7 @@ jobs:
     # create a release
     - name: Create a Release
       uses: ./.github/actions/softprops/action-gh-release
+      if: startsWith(github.ref, 'refs/tags/')
       with:
         name: ${RELEASE_NAME}
         draft: true
