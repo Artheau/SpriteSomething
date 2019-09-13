@@ -78,7 +78,6 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	export GITHUB_TAG="v${GITHUB_TAG}"
 	export RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
 	FILES="../deploy/*"
-	git tag ${GITHUB_TAG}
 
 	#move git metadata away
 	if [[ "${OS_NAME}" != "" ]]; then
