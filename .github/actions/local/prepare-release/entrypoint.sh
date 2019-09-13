@@ -72,11 +72,6 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	#move the binary back
 	mv "../build/${DEST_FILENAME}" "./${DEST_FILENAME}"
 
-	#move git metadata away
-	if [[ "${OS_NAME}" != "" ]]; then
-		mv "./.git" "../build/.git"
-	fi
-
 	#set release name
 	#set files to upload
 	#now that we have the tag sorted, set it in git
@@ -84,6 +79,11 @@ if [ "${BUILD_FILENAME}" != "" ]; then
 	export RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
 	FILES="../deploy/*"
 	git tag ${GITHUB_TAG}
+
+	#move git metadata away
+	if [[ "${OS_NAME}" != "" ]]; then
+		mv "./.git" "../build/.git"
+	fi
 
 	if [ "${OS_NAME}" == "windows" ]; then
 		#windows uses archiver
