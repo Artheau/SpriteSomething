@@ -24,7 +24,7 @@ with open("./app_resources/meta/manifests/app_version.txt","r+") as f:
 	f.close()
 
 # get travis tag
-TRAVIS_TAG = os.environ.get("TRAVIS_TAG") or "TRAVIS_TAG"
+TRAVIS_TAG = os.environ.get("TRAVIS_TAG") or ""
 # get travis build number
 TRAVIS_BUILD_NUMBER = os.environ.get("TRAVIS_BUILD_NUMBER") or "TRAVIS_BUILD_NUMBER"
 # get travis os
