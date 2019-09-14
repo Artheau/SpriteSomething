@@ -380,8 +380,18 @@ class AnimationEngineParent():
 
 		frames = []
 		for image, origin in image_list:
-			this_frame = Image.new("RGB", (gif_x_size,gif_y_size))
-			this_frame.paste(image, (origin[0]-x_min, origin[1]-y_min))
+			this_frame = Image.new("RGBA", (gif_x_size,gif_y_size))
+			this_frame.paste(image, (origin[0]-x_min, origin[1]-y_min), image)
+			
+			#PIL makes transparency so difficult...
+			alpha = this_frame.split()[3]
+			#reserve color number 255
+			this_frame = this_frame.convert('P', palette=Image.ADAPTIVE, colors=255)
+
+			mask = Image.eval(alpha, lambda a: 255 if a == 0 else 0)
+			#apply color number 255
+			this_frame.paste(255, mask)
+
 			frames.append(this_frame)
 
 		durations = [
@@ -393,9 +403,12 @@ class AnimationEngineParent():
 			for pose in pose_list
 		]
 
-		if frames:
+		if len(frames) > 1:
 			frames[0].save(filename, format='GIF', append_images=frames[1:],
-				save_all=True, transparency=0, disposal=2, duration=durations, loop=0)
+				save_all=True, transparency=255, disposal=2, duration=durations, loop=0,
+				optimize=False)
 			return True
+		elif len(frames) == 1:
+			frames[0].save(filename)
 		else:
 			return False
