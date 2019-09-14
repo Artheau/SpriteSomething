@@ -138,7 +138,14 @@ move(
 )
 
 # clean the git slate
-subprocess.check_call("git clean -dfx --exclude=.vscode --exclude=.idea --exclude=scripts/travis --exclude=*.json")
+subprocess.check_call([
+	"git",
+	"clean",
+	"-dfx",
+	"--exclude=.vscode",
+	"--exclude=.idea",
+	"--exclude=scripts/travis",
+	"--exclude=*.json"])
 
 if os.path.isdir("./.git"):
 	# move .git to a temp folder

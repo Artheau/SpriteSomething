@@ -33,15 +33,7 @@ install:
   #install python dependencies
   #default deployment is yes
   #default pages deployment is no
-  - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
-      pip --version; \
-      pip install -r \"./app_resources/meta/manifests/pip_requirements.txt\"; \
-      pip install regex; \
-    else \
-      pip3 --version; \
-      pip3 install -U wheel; \
-      pip3 install -r \"./app_resources/meta/manifests/pip_requirements.txt\"; \
-    fi"
+  - ${PYTHON_EXECUTABLE} ./scripts/travis/install.py
   - export DEPLOY_BINARY=yes
   - export DEPLOY_PAGES=no
 

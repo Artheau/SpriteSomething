@@ -6,7 +6,7 @@ PIP_EXECUTABLE = "pip3"
 if TRAVIS_OS_NAME == "windows":
 	PIP_EXECUTABLE = "pip"
 
-subprocess.check_call(PIP_EXECUTABLE + " --version")
+subprocess.check_call([PIP_EXECUTABLE,"--version"])
 if PIP_EXECUTABLE == "pip3":
-	subprocess.check_call(PIP_EXECUTABLE + " install -U wheel")
-subprocess.check_call(PIP_EXECUTABLE + " install -r ./app_resources/meta/manifests/pip_requirements.txt")
+	subprocess.check_call([PIP_EXECUTABLE,"install","-U","wheel"])
+subprocess.check_call([PIP_EXECUTABLE,"install","-r","./app_resources/meta/manifests/pip_requirements.txt"])
