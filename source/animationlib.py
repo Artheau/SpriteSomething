@@ -317,7 +317,6 @@ class AnimationEngineParent():
 		img_to_save.save(filename)
 
 	def export_animation_as_collage(self, filename, orientation="horizontal"):
-		#TODO: should this be factored out to the sprite class as some kind of export_as_collage(animation, direction, ..., filename) call?
 		#TODO: use the displayed palette
 		image_list = []
 
@@ -354,9 +353,11 @@ class AnimationEngineParent():
 	def export_animation_as_gif(self, filename):
 		#TODO: This is not fully implemented -- need to get it to play nicely with timed poses and timed palettes
 		#TODO: Fix timing
-		#TODO: Fix the position offset, e.g. from layout.json?
 		#TODO: Use the displayed palette
 		#TODO: factor out common code with the collage function
+		GIF_MAX_FRAMERATE = 50.0  #GIF format cannot handle any faster than 50FPS
+		ACTUAL_FRAMERATE = 60.0
+
 		image_list = []
 
 		displayed_direction = self.get_current_direction()
@@ -369,23 +370,32 @@ class AnimationEngineParent():
 			image_list.append(self.sprite.get_image(self.current_animation, displayed_direction, pose_number, [], 0))
 
 		#TODO: Factor this and the corresponding code in layoutlib.py out to common.py
-		x_min = min([-origin[0] for image,origin in image_list])
-		x_max = max([image.size[0]-origin[0] for image,origin in image_list])
-		y_min = min([-origin[1] for image,origin in image_list])
-		y_max = max([image.size[1]-origin[1] for image,origin in image_list])
+		x_min = min([origin[0] for image,origin in image_list])
+		x_max = max([image.size[0]+origin[0] for image,origin in image_list])
+		y_min = min([origin[1] for image,origin in image_list])
+		y_max = max([image.size[1]+origin[1] for image,origin in image_list])
 
 		gif_x_size = x_max-x_min
 		gif_y_size = y_max-y_min
 
 		frames = []
 		for image, origin in image_list:
-			this_frame = Image.new("RGBA", (gif_x_size,gif_y_size), 0)
-			this_frame.paste(image, (-origin[0]-x_min,-origin[1]-y_min))
+			this_frame = Image.new("RGB", (gif_x_size,gif_y_size))
+			this_frame.paste(image, (origin[0]-x_min, origin[1]-y_min))
 			frames.append(this_frame)
+
+		durations = [
+			1000.0 *   #millisecond conversion
+			max(
+				1.0/GIF_MAX_FRAMERATE,
+				round(pose["frames"]/ACTUAL_FRAMERATE, 2)
+			)
+			for pose in pose_list
+		]
 
 		if frames:
 			frames[0].save(filename, format='GIF', append_images=frames[1:],
-				save_all=True, duration=100, loop=0)
+				save_all=True, transparency=0, disposal=2, duration=durations, loop=0)
 			return True
 		else:
 			return False
