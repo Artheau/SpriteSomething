@@ -163,7 +163,7 @@ move(
 # .zip if windows
 # .tar.gz otherwise
 ZIP_FILENAME = "../deploy/" + DEST_SLUG
-if TRAVIS_OS_NAME == "windows" or True:
+if TRAVIS_OS_NAME == "windows":
 	make_archive(ZIP_FILENAME,"zip")
 	ZIP_FILENAME += ".zip"
 else:
