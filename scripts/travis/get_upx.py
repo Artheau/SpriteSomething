@@ -15,7 +15,7 @@ UPX_URL = "https://github.com/upx/upx/releases/download/v" + UPX_VERSION + '/' +
 os.makedirs("../upx")
 os.makedirs("./upx")
 
-with open("./" + UPX_FILE) as upx:
+with open("./" + UPX_FILE,"w+") as upx:
 	UPX_REQ = urllib.request.urlopen(UPX_URL)
 	UPX_DATA = UPX_REQ.read()
 	upx.write(UPX_DATA)
