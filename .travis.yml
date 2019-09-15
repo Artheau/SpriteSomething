@@ -89,6 +89,7 @@ jobs:
         - export FILES=../deploy/* #deploy archive
         - export PAGES=../pages #deploy pages
         - git tag $TRAVIS_TAG
+#        - git push origin $TRAVIS_TAG # probably need this for gh-actions interface to work
         #set body as a hyperlink to RELEASENOTES.md
         - export BODY=\"Please see [RELEASENOTES.md](https://github.com/${TRAVIS_REPO_SLUG}/blob/${TRAVIS_TAG}/RELEASENOTES.md) for description.\"; \
 
@@ -192,12 +193,6 @@ jobs:
       before_install:
         #macosx uses python3
         - export PYTHON_EXECUTABLE=python3
-      # 6 Step
-      before_script:
-        #enable GHPages deploy
-        # print value for confirmation
-        - "export DEPLOY_PAGES=yes"
-        - "echo \"Deploy Pages: ${DEPLOY_PAGES}\""
 
     # 3.7 on Windows
     # Windows VMs currently are slow
@@ -237,6 +232,12 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
+      # 6 Step
+      before_script:
+        #enable GHPages deploy
+        # print value for confirmation
+        - "export DEPLOY_PAGES=yes"
+        - "echo \"Deploy Pages: ${DEPLOY_PAGES}\""
 
 #nobody wants emails
 notifications:
