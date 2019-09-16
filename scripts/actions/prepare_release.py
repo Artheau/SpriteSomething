@@ -2,6 +2,7 @@ import distutils.dir_util			# for copying trees
 import os											# for env vars
 import stat										# for file stats
 import subprocess							# do stuff at the shell level
+from scripts.actions import common
 from shutil import copy, make_archive, move, rmtree	# file manipulation
 
 def convert_bytes(num):
@@ -15,32 +16,7 @@ def file_size(file_path):
 		file_info = os.stat(file_path)
 		return convert_bytes(file_info.st_size)
 
-# get travis os
-TRAVIS_OS_NAME = os.getenv("TRAVIS_OS_NAME","")
-# get GHActions os
-GHACTIONS_OS_NAME = os.getenv("OS_NAME","")
-
-OS_NAME = TRAVIS_OS_NAME + GHACTIONS_OS_NAME
-OS_DIST = TRAVIS_DIST
-OS_VERSION = ""
-GITHUB_TAG = TRAVIS_TAG
-
-OS_NAME = OS_NAME.replace("macOS","osx")
-
-if '-' in OS_NAME:
-	OS_VERSION = OS_NAME[OS_NAME.find('-')+1:]
-	OS_NAME = OS_NAME[:OS_NAME.find('-')]
-	if OS_NAME == "linux" or OS_NAME == "ubuntu":
-		if OS_VERSION == "latest":
-			OS_VERSION = "bionic"
-		elif OS_VERSION == "16.04":
-			OS_VERSION = "xenial"
-		OS_DIST = OS_VERSION
-
-# if no tag
-if GITHUB_TAG == "":
-	# set to <app_version>.<build_number>
-	GITHUB_TAG = APP_VERSION + '.' + BUILD_NUMBER
+env = common.prepare_env()
 
 # make temp dir to put binary in
 if not os.path.isdir("../build"):
@@ -63,15 +39,7 @@ BUILD_FILENAME = ""
 ZIP_FILENAME = ""
 
 # list executables
-executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH
-for filename in os.listdir('.'):
-	if os.path.isfile(filename):
-		st = os.stat(filename)
-		mode = st.st_mode
-		big = st.st_size > (10 * 1024 * 1024) # 10MB
-		if (mode & executable) or big:
-			if "SpriteSomething" in filename:
-				BUILD_FILENAME = filename
+BUILD_FILENAME = common.find_binary('.')
 
 if not BUILD_FILENAME == "":
 	# move the binary to temp folder
@@ -106,7 +74,7 @@ if not BUILD_FILENAME == "":
 	# .zip if windows
 	# .tar.gz otherwise
 	ZIP_FILENAME = "../deploy/" + os.path.splitext(BUILD_FILENAME)[0]
-	if OS_NAME == "windows":
+	if env["OS_NAME"] == "windows":
 		make_archive(ZIP_FILENAME,"zip")
 		ZIP_FILENAME += ".zip"
 	else:
