@@ -22,6 +22,10 @@ GHACTIONS_OS_NAME = os.getenv("OS_NAME","")
 
 OS_NAME = TRAVIS_OS_NAME + GHACTIONS_OS_NAME
 
+# make temp dir to put binary in
+if not os.path.isdir("../build"):
+	os.mkdir("../build")
+
 # make dir to put the archive in
 if not os.path.isdir("../deploy"):
 	os.mkdir("../deploy")
@@ -45,10 +49,8 @@ for filename in os.listdir('.'):
 		st = os.stat(filename)
 		mode = st.st_mode
 		big = st.st_size > (10 * 1024 * 1024) # 10MB
-		print(filename,st.st_size,(10 * 1024 * 1024))
 		if (mode & executable) or big:
 			if "SpriteSomething" in filename:
-				print("Binary Found: " + filename)
 				BUILD_FILENAME = filename
 
 if not BUILD_FILENAME == "":
