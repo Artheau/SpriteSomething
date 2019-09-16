@@ -1,0 +1,22 @@
+[
+	{
+		"title": "Latest Release Version",
+		"keyword": "github/v/release",
+		"query": "?include_prereleases"
+	},
+	{
+		"title": "Master Build Status",
+		"keyword": "travis",
+		"query": "master"
+	},
+	{
+		"title": "Stable Build Status",
+		"keyword": "travis",
+		"query": "stable"
+	},
+	{
+		"title": "Commits to Stable since last release",
+		"keyword": "github/commits-since",
+		"query": "<LATEST_TAG>/stable"
+	}
+]
