@@ -50,6 +50,7 @@ def prepare_env():
 		GITHUB_TAG = APP_VERSION + '.' + BUILD_NUMBER
 
 	env["BUILD_NUMBER"] = BUILD_NUMBER
+	env["GITHUB_TAG"] = GITHUB_TAG
 	env["OS_NAME"] = OS_NAME
 	env["OS_DIST"] = OS_DIST
 	env["OS_VERSION"] = OS_VERSION

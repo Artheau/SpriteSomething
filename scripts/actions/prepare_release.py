@@ -94,3 +94,4 @@ if not BUILD_FILENAME == "":
 	print("Build Filesize: " + file_size(BUILD_FILENAME))
 if not ZIP_FILENAME == "":
 	print("Zip Filesize:   " + file_size(ZIP_FILENAME))
+print("Git tag:        " + env["GITHUB_TAG"])
