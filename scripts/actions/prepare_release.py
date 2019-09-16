@@ -21,6 +21,26 @@ TRAVIS_OS_NAME = os.getenv("TRAVIS_OS_NAME","")
 GHACTIONS_OS_NAME = os.getenv("OS_NAME","")
 
 OS_NAME = TRAVIS_OS_NAME + GHACTIONS_OS_NAME
+OS_DIST = TRAVIS_DIST
+OS_VERSION = ""
+GITHUB_TAG = TRAVIS_TAG
+
+OS_NAME = OS_NAME.replace("macOS","osx")
+
+if '-' in OS_NAME:
+	OS_VERSION = OS_NAME[OS_NAME.find('-')+1:]
+	OS_NAME = OS_NAME[:OS_NAME.find('-')]
+	if OS_NAME == "linux" or OS_NAME == "ubuntu":
+		if OS_VERSION == "latest":
+			OS_VERSION = "bionic"
+		elif OS_VERSION == "16.04":
+			OS_VERSION = "xenial"
+		OS_DIST = OS_VERSION
+
+# if no tag
+if GITHUB_TAG == "":
+	# set to <app_version>.<build_number>
+	GITHUB_TAG = APP_VERSION + '.' + BUILD_NUMBER
 
 # make temp dir to put binary in
 if not os.path.isdir("../build"):
