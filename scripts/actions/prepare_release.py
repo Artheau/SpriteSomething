@@ -37,7 +37,9 @@ for dirname in ["user_resources","meta","manifests"]:
 
 # list executables
 executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH
-for filename in os.listdir('.'):
+files = os.listdir('.')
+print(files)
+for filename in files:
 	if os.path.isfile(filename):
 		st = os.stat(filename)
 		mode = st.st_mode
