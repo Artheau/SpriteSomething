@@ -80,6 +80,8 @@ jobs:
         python build.py
     # prepare binary artifact for later step
     - name: Prepare Binary Artifact
+      env:
+        OS_NAME: ${{ matrix.os-name }}
       run: |
         python ./scripts/actions/prepare_binary.py
     # upload binary artifact for later step
@@ -130,6 +132,8 @@ jobs:
         path: ./
     # Prepare App Version & Release
     - name: Prepare App Version & Release
+      env:
+        OS_NAME: ${{ matrix.os-name }}
       run: |
         python ./scripts/actions/prepare_appversion.py
         python ./scripts/actions/prepare_release.py
