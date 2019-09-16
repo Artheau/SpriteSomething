@@ -44,6 +44,7 @@ for filename in os.listdir('.'):
 		big = st.st_size > (10 * 1024 * 1024) # 10MB
 		if mode & executable or mode & big:
 			if "SpriteSomething" in filename:
+				print("Binary Found: " + filename)
 				BUILD_FILENAME = filename
 
 # move the binary to temp folder
