@@ -73,22 +73,15 @@ jobs:
     # install dependencies via pip
     - name: Install Dependencies via pip
       run: |
-        python -m pip install --upgrade pip
-        pip --version
-        pip install -r app_resources/meta/manifests/pip_requirements.txt
-        pip install regex
+        python ./scripts/travis/install.py
     # run build.py
     - name: Build Binary
       run: |
         python build.py
     # prepare binary artifact for later step
     - name: Prepare Binary Artifact
-#      uses: ./.github/actions/local/prepare-binary
-      shell: bash
       run: |
-        cp ./.github/actions/local/prepare-binary/entrypoint.sh ./prepare-binary.sh
-        chmod +x ./prepare-binary.sh
-        ./prepare-binary.sh
+        python ./scripts/actions/prepare_binary.py
     # upload binary artifact for later step
     - name: Upload Binary Artifact
       uses: actions/upload-artifact@v1
@@ -128,44 +121,30 @@ jobs:
     # install dependencies via pip
     - name: Install Dependencies via pip
       run: |
-        python -m pip install --upgrade pip
-        pip --version
-        pip install -r app_resources/meta/manifests/pip_requirements.txt
-        pip install regex
+        python ./scripts/travis/install.py
     # download binary artifact
     - name: Download Binary Artifact
       uses: actions/download-artifact@v1
       with:
         name: binary-${{ matrix.os-name }}
         path: ./
-    # Windows needs archiver
-    - name: Get Archiver (Windows-only)
-      shell: bash
+    # Prepare App Version & Release
+    - name: Prepare App Version & Release
       run: |
-        if [[ "${{ matrix.os-name }}" =~ "windows" ]]; then \
-          choco install archiver; \
-        fi
-    # Prepare Release
-    - name: Local Prepare GitHub Release Action
-#      uses: ./.github/actions/local/prepare-release
-      shell: bash
-      run: |
-        cp ./.github/actions/local/prepare-release/entrypoint.sh ./prepare-release.sh
-        chmod +x ./prepare-release.sh
-        export OS_NAME=${{ matrix.os-name }}
-        ./prepare-release.sh
-    # upload archive artifact for later step
-    - name: Upload Archive Artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: archive-${{ matrix.os-name }}
-        path: ../deploy
+        python ./scripts/actions/prepare_appversion.py
+        python ./scripts/actions/prepare_release.py
     # upload appversion artifact for later step
     - name: Upload AppVersion Artifact
       uses: actions/upload-artifact@v1
       with:
         name: appversion-${{ matrix.os-name }}
         path: ./app_resources/meta/manifests/app_version.txt
+    # upload archive artifact for later step
+    - name: Upload Archive Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: archive-${{ matrix.os-name }}
+        path: ../deploy
 
   # Deploy to GitHub Releases
   #  Release Name:  SpriteSomething v${GITHUB_TAG}
@@ -189,18 +168,18 @@ jobs:
     # checkout commit
     - name: Checkout commit
       uses: actions/checkout@v1
-    # download archive artifact
-    - name: Download Archive Artifact
-      uses: actions/download-artifact@v1
-      with:
-        name: archive-${{ matrix.os-name }}
-        path: ../deploy
     # download appversion artifact
     - name: Download AppVersion Artifact
       uses: actions/download-artifact@v1
       with:
         name: appversion-${{ matrix.os-name }}
         path: ../build
+    # download archive artifact
+    - name: Download Archive Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: archive-${{ matrix.os-name }}
+        path: ../deploy
     # debug info
     - name: Debug Info
       shell: bash
@@ -209,6 +188,7 @@ jobs:
         GITHUB_TAG="v${GITHUB_TAG}"
         RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
         git tag ${GITHUB_TAG}
+#        git push origin ${GITHUB_TAG}
         echo "Release Name: ${RELEASE_NAME}"
         echo "Git Tag:      ${GITHUB_TAG}"
     # npm is missing some stuff #FIXME
@@ -253,13 +233,9 @@ jobs:
         name: appversion-${{ matrix.os-name }}
         path: ../build
     # Prepare Pages
-    - name: Local Prepare GitHub Pages Action
-#      uses: ./.github/actions/local/prepare-pages
-      shell: bash
+    - name: Prepare GitHub Pages
       run: |
-        cp ./.github/actions/local/prepare-pages/entrypoint.sh ./prepare-pages.sh
-        chmod +x ./prepare-pages.sh
-        ./prepare-pages.sh
+        python ./scripts/actions/prepare_pages.py
     # upload pages artifact for later step
     - name: Upload Pages Artifact
       uses: actions/upload-artifact@v1
