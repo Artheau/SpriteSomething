@@ -24,24 +24,44 @@ with open("./app_resources/meta/manifests/app_version.txt","r+") as f:
 	f.close()
 
 # get travis tag
-TRAVIS_TAG = os.environ.get("TRAVIS_TAG") or ""
+TRAVIS_TAG = os.getenv("TRAVIS_TAG","")
 # get travis build number
-TRAVIS_BUILD_NUMBER = os.environ.get("TRAVIS_BUILD_NUMBER") or "TRAVIS_BUILD_NUMBER"
+TRAVIS_BUILD_NUMBER = os.getenv("TRAVIS_BUILD_NUMBER","")
 # get travis os
-TRAVIS_OS_NAME = os.environ.get("TRAVIS_OS_NAME") or "TRAVIS_OS_NAME"
+TRAVIS_OS_NAME = os.getenv("TRAVIS_OS_NAME","")
+# get GHActions os
+GHACTIONS_OS_NAME = os.getenv("OS_NAME","")
 # get linux distro if applicable
-TRAVIS_DIST = os.environ.get("TRAVIS_DIST") or "notset"
+TRAVIS_DIST = os.getenv("TRAVIS_DIST","notset")
+# get short github sha
+GITHUB_SHA_SHORT = os.getenv("GITHUB_SHA","")
+
+if not GITHUB_SHA_SHORT == "":
+	GITHUB_SHA_SHORT = GITHUB_SHA_SHORT[:7]
+
+BUILD_NUMBER = TRAVIS_BUILD_NUMBER + GITHUB_SHA_SHORT
+OS_NAME = TRAVIS_OS_NAME + GHACTIONS_OS_NAME
+OS_DIST = TRAVIS_DIST
+OS_VERSION = ""
+GITHUB_TAG = TRAVIS_TAG
+
+if '-' in OS_NAME:
+	OS_VERSION = OS_NAME[OS_NAME.find('-'):]
+	OS_NAME = OS_NAME[:OS_NAME.find('-')]
+	if OS_NAME == "linux" and OS_VERSION == "latest":
+		OS_VERSION = "bionic"
+		OS_DIST = OS_VERSION
 
 # if no tag
-if TRAVIS_TAG == "":
+if GITHUB_TAG == "":
 	# set to <app_version>.<build_number>
-	TRAVIS_TAG = APP_VERSION + '.' + TRAVIS_BUILD_NUMBER
+	GITHUB_TAG = APP_VERSION + '.' + BUILD_NUMBER
 
 # set tag to app_version.txt
 with open("./app_resources/meta/manifests/app_version.txt","r+") as f:
 	_ = f.read()
 	f.seek(0)
-	f.write(TRAVIS_TAG)
+	f.write(GITHUB_TAG)
 	f.truncate()
 
 # make dir to put the archive/binary in
@@ -126,9 +146,9 @@ if not BUILD_FILENAME == "":
 	fileparts = os.path.splitext(BUILD_FILENAME)
 	DEST_SLUG = fileparts[0]
 	DEST_EXTENSION = fileparts[1]
-	DEST_SLUG = DEST_SLUG + '-' + TRAVIS_TAG + '-' + TRAVIS_OS_NAME
-	if not TRAVIS_DIST == "" and not TRAVIS_DIST == "notset":
-		DEST_SLUG += '-' + TRAVIS_DIST
+	DEST_SLUG = DEST_SLUG + '-' + GITHUB_TAG + '-' + OS_NAME
+	if not OS_DIST == "" and not OS_DIST == "notset":
+		DEST_SLUG += '-' + OS_DIST
 	DEST_FILENAME = DEST_SLUG + DEST_EXTENSION
 
 # move the binary to temp folder

@@ -16,13 +16,13 @@ def file_size(file_path):
 		return convert_bytes(file_info.st_size)
 
 # get travis tag
-TRAVIS_TAG = os.environ.get("TRAVIS_TAG") or ""
+TRAVIS_TAG = os.getenv("TRAVIS_TAG","")
 # get travis os
-TRAVIS_OS_NAME = os.environ.get("TRAVIS_OS_NAME") or ""
+TRAVIS_OS_NAME = os.getenv("TRAVIS_OS_NAME","")
 # get GHActions os
-GHACTIONS_OS_NAME = os.environ.get("OS_NAME") or ""
+GHACTIONS_OS_NAME = os.getenv("OS_NAME","")
 # get linux distro if applicable
-TRAVIS_DIST = os.environ.get("TRAVIS_DIST") or "notset"
+TRAVIS_DIST = os.getenv("TRAVIS_DIST","notset")
 
 OS_NAME = TRAVIS_OS_NAME + GHACTIONS_OS_NAME
 OS_DIST = TRAVIS_DIST

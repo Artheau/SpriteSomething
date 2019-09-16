@@ -16,9 +16,9 @@ def file_size(file_path):
 		return convert_bytes(file_info.st_size)
 
 # get travis os
-TRAVIS_OS_NAME = os.environ.get("TRAVIS_OS_NAME") or ""
+TRAVIS_OS_NAME = os.getenv("TRAVIS_OS_NAME","")
 # get GHActions os
-GHACTIONS_OS_NAME = os.environ.get("OS_NAME") or ""
+GHACTIONS_OS_NAME = os.getenv("OS_NAME","")
 
 OS_NAME = TRAVIS_OS_NAME + GHACTIONS_OS_NAME
 

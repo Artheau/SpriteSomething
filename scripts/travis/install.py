@@ -2,7 +2,7 @@ import os
 import subprocess
 
 # get os name
-TRAVIS_OS_NAME = os.environ.get("TRAVIS_OS_NAME") or "TRAVIS_OS_NAME"
+TRAVIS_OS_NAME = os.getenv("TRAVIS_OS_NAME") or "TRAVIS_OS_NAME"
 
 # get executables
 #  python

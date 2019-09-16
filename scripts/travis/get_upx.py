@@ -3,10 +3,10 @@ import urllib	# for downloads
 from shutil import move
 import tarfile
 
-TRAVIS_OS_NAME = os.environ.get("TRAVIS_OS_NAME") or "TRAVIS_OS_NAME"
+TRAVIS_OS_NAME = os.getenv("TRAVIS_OS_NAME") or "TRAVIS_OS_NAME"
 
 # set up download url
-UPX_VERSION = os.environ.get("UPX_VERSION") or "3.95"
+UPX_VERSION = os.getenv("UPX_VERSION") or "3.95"
 UPX_SLUG = "upx-" + UPX_VERSION + "-amd64_linux"
 UPX_FILE = UPX_SLUG + ".tar.xz"
 UPX_URL = "https://github.com/upx/upx/releases/download/v" + UPX_VERSION + '/' + UPX_FILE
