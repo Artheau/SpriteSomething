@@ -130,8 +130,8 @@ jobs:
       with:
         name: binary-${{ matrix.os-name }}
         path: ./
-    # Prepare App Version & Release
-    - name: Prepare App Version & Release
+    # Prepare AppVersion & Release
+    - name: Prepare AppVersion & Release
       env:
         OS_NAME: ${{ matrix.os-name }}
       run: |
@@ -209,6 +209,8 @@ jobs:
         body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_TAG}/RELEASENOTES.md) for description."
         body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
         files: ../deploy
+      on:
+        branch: master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
