@@ -29,8 +29,8 @@ BUILD_FILENAME = common.find_binary('.')
 
 DEST_FILENAME = common.prepare_filename(BUILD_FILENAME)
 
-print("OS Name:        " + ["OS_NAME"])
-print("OS Version:     " + ["OS_VERSION"])
+print("OS Name:        " + env["OS_NAME"])
+print("OS Version:     " + env["OS_VERSION"])
 print("Build Filename: " + BUILD_FILENAME)
 print("Dest Filename:  " + DEST_FILENAME)
 if not BUILD_FILENAME == "":
