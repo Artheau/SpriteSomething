@@ -38,11 +38,11 @@ for dirname in ["user_resources","meta","manifests"]:
 # list executables
 executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH
 files = os.listdir('.')
-print(files)
 for filename in files:
 	if os.path.isfile(filename):
 		st = os.stat(filename)
 		mode = st.st_mode
+		print(filename,mode,executable)
 		if mode & executable:
 			if "SpriteSomething" in filename:
 				BUILD_FILENAME = filename

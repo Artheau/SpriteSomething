@@ -48,7 +48,7 @@ OS_NAME = OS_NAME.replace("macOS","osx")
 if '-' in OS_NAME:
 	OS_VERSION = OS_NAME[OS_NAME.find('-')+1:]
 	OS_NAME = OS_NAME[:OS_NAME.find('-')]
-	if OS_NAME == "linux":
+	if OS_NAME == "linux" or OS_NAME == "ubuntu":
 		if OS_VERSION == "latest":
 			OS_VERSION = "bionic"
 		elif OS_VERSION == "16.04":
