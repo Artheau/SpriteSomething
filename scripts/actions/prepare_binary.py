@@ -15,30 +15,50 @@ def file_size(file_path):
 		file_info = os.stat(file_path)
 		return convert_bytes(file_info.st_size)
 
-#FIXME: DEBUG ENVIRONMENT LISTING
-for a in os.environ:
-    print('Var: ', a, 'Value: ', os.getenv(a))
+# get app version
+APP_VERSION = ""
+with open("./app_resources/meta/manifests/app_version.txt","r+") as f:
+	APP_VERSION = f.readlines()[0].strip()
+	f.close()
 
 # get travis tag
 TRAVIS_TAG = os.getenv("TRAVIS_TAG","")
+# get travis build number
+TRAVIS_BUILD_NUMBER = os.getenv("TRAVIS_BUILD_NUMBER","")
 # get travis os
 TRAVIS_OS_NAME = os.getenv("TRAVIS_OS_NAME","")
 # get GHActions os
 GHACTIONS_OS_NAME = os.getenv("OS_NAME","")
 # get linux distro if applicable
 TRAVIS_DIST = os.getenv("TRAVIS_DIST","notset")
+# get short github sha
+GITHUB_SHA_SHORT = os.getenv("GITHUB_SHA","")
 
+if not GITHUB_SHA_SHORT == "":
+	GITHUB_SHA_SHORT = GITHUB_SHA_SHORT[:7]
+
+BUILD_NUMBER = TRAVIS_BUILD_NUMBER + GITHUB_SHA_SHORT
 OS_NAME = TRAVIS_OS_NAME + GHACTIONS_OS_NAME
 OS_DIST = TRAVIS_DIST
 OS_VERSION = ""
 GITHUB_TAG = TRAVIS_TAG
 
+OS_NAME = OS_NAME.replace("macOS","osx")
+
 if '-' in OS_NAME:
-	OS_VERSION = OS_NAME[OS_NAME.find('-'):]
+	OS_VERSION = OS_NAME[OS_NAME.find('-')+1:]
 	OS_NAME = OS_NAME[:OS_NAME.find('-')]
-	if OS_NAME == "linux" and OS_VERSION == "latest":
-		OS_VERSION = "bionic"
+	if OS_NAME == "linux":
+		if OS_VERSION == "latest":
+			OS_VERSION = "bionic"
+		elif OS_VERSION == "16.04":
+			OS_VERSION = "xenial"
 		OS_DIST = OS_VERSION
+
+# if no tag
+if GITHUB_TAG == "":
+	# set to <app_version>.<build_number>
+	GITHUB_TAG = APP_VERSION + '.' + BUILD_NUMBER
 
 # make dir to put the binary in
 if not os.path.isdir("../artifact"):

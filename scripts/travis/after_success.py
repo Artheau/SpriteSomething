@@ -45,11 +45,16 @@ OS_DIST = TRAVIS_DIST
 OS_VERSION = ""
 GITHUB_TAG = TRAVIS_TAG
 
+OS_NAME = OS_NAME.replace("macOS","osx")
+
 if '-' in OS_NAME:
-	OS_VERSION = OS_NAME[OS_NAME.find('-'):]
+	OS_VERSION = OS_NAME[OS_NAME.find('-')+1:]
 	OS_NAME = OS_NAME[:OS_NAME.find('-')]
-	if OS_NAME == "linux" and OS_VERSION == "latest":
-		OS_VERSION = "bionic"
+	if OS_NAME == "linux":
+		if OS_VERSION == "latest":
+			OS_VERSION = "bionic"
+		elif OS_VERSION == "16.04":
+			OS_VERSION = "xenial"
 		OS_DIST = OS_VERSION
 
 # if no tag
