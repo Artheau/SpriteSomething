@@ -64,6 +64,8 @@ if GITHUB_TAG == "":
 if not os.path.isdir("../artifact"):
 	os.mkdir("../artifact")
 
+BUILD_FILENAME = ""
+
 # list executables
 executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH
 for filename in os.listdir('.'):
@@ -75,11 +77,9 @@ for filename in os.listdir('.'):
 			if "SpriteSomething" in filename:
 				BUILD_FILENAME = filename
 
-# make executable
-os.chmod(BUILD_FILENAME,0o755)
-
 # build the filename
 if not BUILD_FILENAME == "":
+	os.chmod(BUILD_FILENAME,0o755)
 	fileparts = os.path.splitext(BUILD_FILENAME)
 	DEST_SLUG = fileparts[0]
 	DEST_EXTENSION = fileparts[1]
@@ -92,9 +92,11 @@ print("OS Name:        " + OS_NAME)
 print("OS Version:     " + OS_VERSION)
 print("Build Filename: " + BUILD_FILENAME)
 print("Dest Filename:  " + DEST_FILENAME)
-print("Build Filesize: " + file_size(BUILD_FILENAME))
+if not BUILD_FILENAME == "":
+	print("Build Filesize: " + file_size(BUILD_FILENAME))
 
-move(
-	BUILD_FILENAME,
-	"../artifact/" + BUILD_FILENAME
-)
+if not BUILD_FILENAME == "":
+	move(
+		BUILD_FILENAME,
+		"../artifact/" + BUILD_FILENAME
+	)

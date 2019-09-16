@@ -35,6 +35,7 @@ for dirname in ["user_resources","meta","manifests"]:
 # nuke GitHub Pages files from source code
 #distutils.dir_util.remove_tree("./pages_resources")
 
+BUILD_FILENAME = ""
 # list executables
 executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH
 for filename in os.listdir('.'):
@@ -47,53 +48,56 @@ for filename in os.listdir('.'):
 				print("Binary Found: " + filename)
 				BUILD_FILENAME = filename
 
-# move the binary to temp folder
-move(
-	BUILD_FILENAME,
-	"../build/" + BUILD_FILENAME
-)
-
-# clean the git slate
-subprocess.check_call([
-	"git",
-	"clean",
-	"-dfx",
-	"--exclude=.vscode",
-	"--exclude=.idea",
-	"--exclude=scripts/travis",
-	"--exclude=*.json"])
-
-if os.path.isdir("./.git"):
-	# move .git to a temp folder
+if not BUILD_FILENAME == "":
+	# move the binary to temp folder
 	move(
-		"./.git",
-		"../build/.git"
+		BUILD_FILENAME,
+		"../build/" + BUILD_FILENAME
 	)
 
-# move the binary back
-move(
-	"../build/" + BUILD_FILENAME,
-	BUILD_FILENAME
-)
+	# clean the git slate
+	subprocess.check_call([
+		"git",
+		"clean",
+		"-dfx",
+		"--exclude=.vscode",
+		"--exclude=.idea",
+		"--exclude=scripts/travis",
+		"--exclude=*.json"])
 
-# .zip if windows
-# .tar.gz otherwise
-ZIP_FILENAME = "../deploy/" + os.path.splitext(BUILD_FILENAME)[0]
-if OS_NAME == "windows":
-	make_archive(ZIP_FILENAME,"zip")
-	ZIP_FILENAME += ".zip"
-else:
-	make_archive(ZIP_FILENAME,"gztar")
-	ZIP_FILENAME += ".tar.gz"
+	if os.path.isdir("./.git"):
+		# move .git to a temp folder
+		move(
+			"./.git",
+			"../build/.git"
+		)
 
-if os.path.isdir("../build/.git"):
-	# move .git back
+	# move the binary back
 	move(
-		"../build/.git",
-		"./.git"
+		"../build/" + BUILD_FILENAME,
+		BUILD_FILENAME
 	)
+
+	# .zip if windows
+	# .tar.gz otherwise
+	ZIP_FILENAME = "../deploy/" + os.path.splitext(BUILD_FILENAME)[0]
+	if OS_NAME == "windows":
+		make_archive(ZIP_FILENAME,"zip")
+		ZIP_FILENAME += ".zip"
+	else:
+		make_archive(ZIP_FILENAME,"gztar")
+		ZIP_FILENAME += ".tar.gz"
+
+	if os.path.isdir("../build/.git"):
+		# move .git back
+		move(
+			"../build/.git",
+			"./.git"
+		)
 
 print("Build Filename: " + BUILD_FILENAME)
 print("Zip Filename:   " + ZIP_FILENAME)
-print("Build Filesize: " + file_size(BUILD_FILENAME))
-print("Zip Filesize:   " + file_size(ZIP_FILENAME))
+if not BUILD_FILENAME == "":
+	print("Build Filesize: " + file_size(BUILD_FILENAME))
+if not ZIP_FILENAME == "":
+	print("Zip Filesize:   " + file_size(ZIP_FILENAME))
