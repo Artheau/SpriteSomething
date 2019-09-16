@@ -2,7 +2,7 @@ import distutils.dir_util			# for copying trees
 import os											# for env vars
 import stat										# for file stats
 import subprocess							# do stuff at the shell level
-from . import common
+import common
 from shutil import copy, make_archive, move, rmtree	# file manipulation
 
 def convert_bytes(num):
