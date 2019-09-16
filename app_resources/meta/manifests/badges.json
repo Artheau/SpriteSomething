@@ -2,21 +2,29 @@
 	{
 		"title": "Latest Release Version",
 		"keyword": "github/v/release",
-		"query": "?include_prereleases"
+		"query": "?include_prereleases",
+		"left": "latest release",
+		"url": "https://github.com/Artheau/SpriteSomething/releases/tag/<LATEST_TAG>"
 	},
 	{
 		"title": "Master Build Status",
 		"keyword": "travis",
-		"query": "master"
+		"query": "master",
+		"left": "master build",
+		"url": "https://github.com/Artheau/SpriteSomething/tree/master"
 	},
 	{
 		"title": "Stable Build Status",
 		"keyword": "travis",
-		"query": "stable"
+		"query": "stable",
+		"left": "stable build",
+		"url": "https://github.com/Artheau/SpriteSomething/tree/stable"
 	},
 	{
 		"title": "Commits to Stable since last release",
 		"keyword": "github/commits-since",
-		"query": "<LATEST_TAG>/stable"
+		"query": "<LATEST_TAG>/stable",
+		"left": "commits to stable since <LATEST_TAG>",
+		"url": "https://github.com/Artheau/SpriteSomething/compare/master..stable"
 	}
 ]
