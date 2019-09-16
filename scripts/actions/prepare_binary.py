@@ -73,7 +73,7 @@ for filename in os.listdir('.'):
 		st = os.stat(filename)
 		mode = st.st_mode
 		big = st.st_size > (10 * 1024 * 1024) # 10MB
-		if mode & executable or mode & big:
+		if (mode & executable) or big:
 			if "SpriteSomething" in filename:
 				BUILD_FILENAME = filename
 

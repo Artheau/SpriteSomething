@@ -36,6 +36,8 @@ for dirname in ["user_resources","meta","manifests"]:
 #distutils.dir_util.remove_tree("./pages_resources")
 
 BUILD_FILENAME = ""
+ZIP_FILENAME = ""
+
 # list executables
 executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH
 for filename in os.listdir('.'):
@@ -43,7 +45,8 @@ for filename in os.listdir('.'):
 		st = os.stat(filename)
 		mode = st.st_mode
 		big = st.st_size > (10 * 1024 * 1024) # 10MB
-		if mode & executable or mode & big:
+		print(filename,st.st_size,(10 * 1024 * 1024))
+		if (mode & executable) or big:
 			if "SpriteSomething" in filename:
 				print("Binary Found: " + filename)
 				BUILD_FILENAME = filename
