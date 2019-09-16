@@ -74,6 +74,9 @@ for filename in os.listdir('.'):
 			if "SpriteSomething" in filename:
 				BUILD_FILENAME = filename
 
+# make executable
+os.chmod(BUILD_FILENAME,0o755)
+
 # build the filename
 if not BUILD_FILENAME == "":
 	fileparts = os.path.splitext(BUILD_FILENAME)
