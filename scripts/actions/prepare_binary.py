@@ -15,6 +15,10 @@ def file_size(file_path):
 		file_info = os.stat(file_path)
 		return convert_bytes(file_info.st_size)
 
+#FIXME: DEBUG ENVIRONMENT LISTING
+for a in os.environ:
+    print('Var: ', a, 'Value: ', os.getenv(a))
+
 # get travis tag
 TRAVIS_TAG = os.getenv("TRAVIS_TAG","")
 # get travis os
