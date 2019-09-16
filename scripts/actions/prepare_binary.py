@@ -60,13 +60,13 @@ if not BUILD_FILENAME == "":
 		DEST_SLUG += '-' + OS_DIST
 	DEST_FILENAME = DEST_SLUG + DEST_EXTENSION
 
-move(
-	BUILD_FILENAME,
-	"../artifact/" + BUILD_FILENAME
-)
-
 print("OS Name:        " + OS_NAME)
 print("OS Version:     " + OS_VERSION)
 print("Build Filename: " + BUILD_FILENAME)
 print("Dest Filename:  " + DEST_FILENAME)
 print("Build Filesize: " + file_size(BUILD_FILENAME))
+
+move(
+	BUILD_FILENAME,
+	"../artifact/" + BUILD_FILENAME
+)
