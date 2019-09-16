@@ -15,12 +15,12 @@ def file_size(file_path):
 		file_info = os.stat(file_path)
 		return convert_bytes(file_info.st_size)
 
-# get travis tag
-TRAVIS_TAG = os.environ.get("TRAVIS_TAG") or ""
 # get travis os
-TRAVIS_OS_NAME = os.environ.get("TRAVIS_OS_NAME") or "TRAVIS_OS_NAME"
-# get linux distro if applicable
-TRAVIS_DIST = os.environ.get("TRAVIS_DIST") or "notset"
+TRAVIS_OS_NAME = os.environ.get("TRAVIS_OS_NAME") or ""
+# get GHActions os
+GHACTIONS_OS_NAME = os.environ.get("OS_NAME") or ""
+
+OS_NAME = TRAVIS_OS_NAME + GHACTIONS_OS_NAME
 
 # make dir to put the archive in
 if not os.path.isdir("../deploy"):
@@ -77,7 +77,7 @@ move(
 # .zip if windows
 # .tar.gz otherwise
 ZIP_FILENAME = "../deploy/" + os.path.splitext(BUILD_FILENAME)[0]
-if TRAVIS_OS_NAME == "windows":
+if OS_NAME == "windows":
 	make_archive(ZIP_FILENAME,"zip")
 	ZIP_FILENAME += ".zip"
 else:

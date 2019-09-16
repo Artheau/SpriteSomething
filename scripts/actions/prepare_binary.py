@@ -25,11 +25,16 @@ GHACTIONS_OS_NAME = os.environ.get("OS_NAME") or ""
 TRAVIS_DIST = os.environ.get("TRAVIS_DIST") or "notset"
 
 OS_NAME = TRAVIS_OS_NAME + GHACTIONS_OS_NAME
+OS_DIST = TRAVIS_DIST
 OS_VERSION = ""
+GITHUB_TAG = TRAVIS_TAG
 
 if '-' in OS_NAME:
 	OS_VERSION = OS_NAME[OS_NAME.find('-'):]
 	OS_NAME = OS_NAME[:OS_NAME.find('-')]
+	if OS_NAME == "linux" and OS_VERSION == "latest":
+		OS_VERSION = "bionic"
+		OS_DIST = OS_VERSION
 
 # make dir to put the binary in
 if not os.path.isdir("../artifact"):
@@ -50,9 +55,9 @@ if not BUILD_FILENAME == "":
 	fileparts = os.path.splitext(BUILD_FILENAME)
 	DEST_SLUG = fileparts[0]
 	DEST_EXTENSION = fileparts[1]
-	DEST_SLUG = DEST_SLUG + '-' + TRAVIS_TAG + '-' + TRAVIS_OS_NAME
-	if not TRAVIS_DIST == "" and not TRAVIS_DIST == "notset":
-		DEST_SLUG += '-' + TRAVIS_DIST
+	DEST_SLUG = DEST_SLUG + '-' + GITHUB_TAG + '-' + OS_NAME
+	if not OS_DIST == "" and not OS_DIST == "notset":
+		DEST_SLUG += '-' + OS_DIST
 	DEST_FILENAME = DEST_SLUG + DEST_EXTENSION
 
 move(
