@@ -780,13 +780,34 @@ class SpriteSomethingMainFrame(tk.Frame):
 			return False
 
 	def check_for_updates(self):
+		update_available = False
 		this_version = CONST.APP_VERSION
 		version_url = "https://artheau.github.io/SpriteSomething/app_resources/meta/manifests/app_version.txt"
 		version_req = urllib.request.urlopen(version_url)
 		latest_version = version_req.readlines()[0].decode("utf-8").strip()
 
-		if latest_version > this_version:
-			get_update = messagebox.askyesno(self.app_title,"It seems that there is an update available. Would you like to go to the project page to get it?")
+		this_version_type = "TRAVIS"
+		latest_version_type = "TRAVIS"
+
+		if len(this_version.split('.')) > 2:
+			if not this_version.split('.')[2].isnumeric():
+				this_version_type = "GHACTIONS"
+		if len(latest_version.split('.')) > 2:
+			if not latest_version.split('.')[2].isnumeric():
+				latest_version_type = "GHACTIONS"
+
+		if this_version_type == "TRAVIS" and latest_version_type == "TRAVIS":
+			update_available = latest_version > this_version
+		elif this_version_type == "GHACTIONS" or latest_version_type == "GHACTIONS":
+			this_version_split = this_version.split('.')
+			latest_version_split = latest_version.split('.')
+			update_available = float(latest_version_split[0] + '.' + latest_version_split[1]) > float(this_version_split[0] + '.' + this_version_split[1])
+			if not update_available:
+				if float(latest_version_split[0] + '.' + latest_version_split[1]) == float(this_version_split[0] + '.' + this_version_split[1]):
+					update_available = not latest_version_split[2] == this_version_split[2]
+
+		if update_available:
+			get_update = messagebox.askyesno(self.app_title,"It seems that there may be an update available. Would you like to go to the project page to get it?")
 			if get_update:
 				webbrowser.open_new("https://github.com/Artheau/SpriteSomething/releases/v" + latest_version)
 		else:
