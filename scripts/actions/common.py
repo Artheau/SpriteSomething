@@ -20,7 +20,9 @@ def prepare_env():
 	GHACTIONS_OS_NAME = os.getenv("OS_NAME","")
 	# get linux distro if applicable
 	TRAVIS_DIST = os.getenv("TRAVIS_DIST","notset")
-	# get short github sha
+	# get github tag
+	GITHUB_TAG = os.getenv("GITHUB_TAG","")
+	# get github sha
 	GITHUB_SHA_SHORT = os.getenv("GITHUB_SHA","")
 
 	if not GITHUB_SHA_SHORT == "":
