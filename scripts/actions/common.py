@@ -32,7 +32,6 @@ def prepare_env():
 	OS_NAME = TRAVIS_OS_NAME + GHACTIONS_OS_NAME
 	OS_DIST = TRAVIS_DIST
 	OS_VERSION = ""
-	GITHUB_TAG = TRAVIS_TAG
 
 	OS_NAME = OS_NAME.replace("macOS","osx")
 
@@ -48,8 +47,13 @@ def prepare_env():
 
 	# if no tag
 	if GITHUB_TAG == "":
-		# set to <app_version>.<build_number>
-		GITHUB_TAG = APP_VERSION + '.' + BUILD_NUMBER
+		# if we've got a Travis Tag
+		if not TRAVIS_TAG == "":
+			GITHUB_TAG = TRAVIS_TAG
+		# if we haven't appended the build number, do it
+		if not BUILD_NUMBER in GITHUB_TAG:
+			# set to <app_version>.<build_number>
+			GITHUB_TAG = APP_VERSION + '.' + BUILD_NUMBER
 
 	env["BUILD_NUMBER"] = BUILD_NUMBER
 	env["GITHUB_TAG"] = GITHUB_TAG
