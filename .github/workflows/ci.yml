@@ -218,6 +218,7 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       uses: ./.github/actions/ilshidur/action-discord
+      args: "SpriteSomething has been updated!"
       if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
 
   # Prepare for Deployment to GitHub Pages
