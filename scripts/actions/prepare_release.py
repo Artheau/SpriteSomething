@@ -33,7 +33,7 @@ for dirname in ["user_resources","meta","manifests"]:
 	os.chmod(dirpath,0o755)
 
 # nuke GitHub metadata from source code
-distutils.dir_util.remove_tree("./github")
+distutils.dir_util.remove_tree("./.github")
 # nuke GitHub Pages files from source code
 distutils.dir_util.remove_tree("./pages_resources")
 # nuke CI scripts from source code
