@@ -214,6 +214,10 @@ jobs:
 #        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_TAG}/RELEASENOTES.md) for description."
 #        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
 #        files: ../deploy
+    - name: Send Discord Notification
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      uses: ./.github/actions/ilshidur/action-discord
 
   # Prepare for Deployment to GitHub Pages
   #  run custom action
