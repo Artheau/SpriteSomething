@@ -218,7 +218,7 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       uses: ./.github/actions/ilshidur/action-discord
-      if: contains(matrix.os-name, 'windows')
+      if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
 
   # Prepare for Deployment to GitHub Pages
   #  run custom action
