@@ -187,12 +187,12 @@ jobs:
     # debug info
     - name: Debug Info
       shell: bash
-#        git push origin ${GITHUB_TAG}
       run: |
         GITHUB_TAG=$(head -n 1 "../build/app_version.txt")
         GITHUB_TAG="v${GITHUB_TAG}"
         RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
         git tag ${GITHUB_TAG}
+        git push origin ${GITHUB_TAG}
         echo "Release Name: ${RELEASE_NAME}"
         echo "Git Tag:      ${GITHUB_TAG}"
     # npm is missing some stuff #FIXME
@@ -201,16 +201,16 @@ jobs:
       run: |
         npm install --save @actions/core @actions/github glob mime
     # create a release
-#    - name: Create a Release
-#      uses: ./.github/actions/softprops/action-gh-release
-#      with:
-#        name: ${RELEASE_NAME}
-#        draft: true
-#        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_TAG}/RELEASENOTES.md) for description."
-#        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
-#        files: ../deploy
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Create a Release
+      uses: ./.github/actions/softprops/action-gh-release
+      with:
+        name: ${RELEASE_NAME}
+        draft: true
+        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_TAG}/RELEASENOTES.md) for description."
+        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
+        files: ../deploy
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # Prepare for Deployment to GitHub Pages
   #  run custom action
