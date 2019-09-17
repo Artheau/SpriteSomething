@@ -18,7 +18,7 @@ if not os.path.isdir(checkdir):
 	os.makedirs(checkdir)
 # copy app_version over
 copy(
-	"./app_resources/meta/manifests/app_version.txt",
+	"../build/app_version.txt",
 	"../pages/app_resources/meta/manifests"
 )
 # copy badges manifest over
