@@ -215,9 +215,18 @@ jobs:
 #        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
 #        files: ../deploy
     - name: Send Discord Notification
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-      uses: ./.github/actions/ilshidur/action-discord
+#      env:
+#        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+#      uses: ./.github/actions/ilshidur/action-discord
+      run: |
+        python ./scripts/actions/prepare_discord_notif.py
+      if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
+    # upload payload artifact
+    - name: Upload Payload Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: payload-${{ matrix.os-name }}
+        path: ../build/payload.json
       if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
 
   # Prepare for Deployment to GitHub Pages
