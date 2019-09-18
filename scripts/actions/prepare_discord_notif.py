@@ -128,18 +128,18 @@ embed = {
 	"timestamp": timestamp
 }
 
-data = {}											# get a var for output
-data["embed"] = embed					# add compiled embed objects
-data["content"] = "** **" 		# add a bold space
-datas = json.dumps(data)			# convert to string
-datas = datas[1:]							# shave char off the top
-datas = "** **\"," + datas		# prepend a bold space closure to the app
-datas = datas[:len(datas)-2]	# shave the last two chars off the end to fit inside the last bit
+data = {}																	# get a var for output
+data["embed"] = embed											# add compiled embed objects
+datas = json.dumps(data)									# convert to string
+datas = datas[1:]													# shave char off the top
+datas = "** **\"," + datas								# prepend a bold space closure to the app
+datas = datas[:len(datas)-1]							# shave the last char off the end to fit inside the last bit
+datas = datas + ", \"content\": \"** **"	# append a bold space closure to the app
 
 with open("../build/payload.json", "w") as outfile:
 	json.dump(data, outfile)
 	outfile.close()
 
-with open("../build/payload-modded.json", "w") as outfile:
+with open("../build/payload-modded.txt", "w") as outfile:
 	outfile.write(datas)
 	outfile.close()
