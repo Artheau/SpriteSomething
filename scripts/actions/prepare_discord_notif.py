@@ -135,6 +135,7 @@ datas = datas[1:]													# shave char off the top
 datas = "** **\"," + datas								# prepend a bold space closure to the app
 datas = datas[:len(datas)-1]							# shave the last char off the end to fit inside the last bit
 datas = datas + ", \"content\": \"** **"	# append a bold space closure to the app
+data["content"] = "** **"
 
 with open("../build/payload.json", "w") as outfile:
 	json.dump(data, outfile)
