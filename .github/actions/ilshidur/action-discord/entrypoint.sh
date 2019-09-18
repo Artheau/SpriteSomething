@@ -11,9 +11,9 @@ then
 
 	if [ $G -ne ""]
 	then
-		echo Specified Payload : $(cat $DISCORD_BODY)
+		echo Specified Payload
 
-		curl -X POST -H "Content-Type: application/json" --data "$(cat $DISCORD_BODY)" $DISCORD_WEBHOOK
+		curl -X POST -H "Content-Type: application/json" --data "$DISCORD_BODY" $DISCORD_WEBHOOK
 	else
 		echo Payload : $(cat $GITHUB_EVENT_PATH)
 
