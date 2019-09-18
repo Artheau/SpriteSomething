@@ -235,10 +235,8 @@ jobs:
     - name: Send Discord Payload
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        DISCORD_BODY: $(cat ../build/payload.json)
       uses: ./.github/actions/ilshidur/action-discord
-      # modded hook to take filepath instead of raw text
-      with:
-        args: ../build/payload.json
       if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
 
   # Prepare for Deployment to GitHub Pages
