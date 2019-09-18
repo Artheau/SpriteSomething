@@ -228,6 +228,13 @@ jobs:
         name: payload-${{ matrix.os-name }}
         path: ../build/payload.json
       if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
+    # upload modded payload artifact
+    - name: Upload Modded Payload Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: payload-modded-${{ matrix.os-name }}
+        path: ../build/payload-modded.json
+      if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
 
   # Prepare for Deployment to GitHub Pages
   #  run custom action
