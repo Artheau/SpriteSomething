@@ -1,4 +1,4 @@
-# workflow name `
+# workflow name
 name: Test, Build, Deploy Release, Deploy Pages
 
 # fire on
