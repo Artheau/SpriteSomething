@@ -20,6 +20,8 @@ def prepare_env():
 	GHACTIONS_OS_NAME = os.getenv("OS_NAME","")
 	# get linux distro if applicable
 	TRAVIS_DIST = os.getenv("TRAVIS_DIST","notset")
+	# get github actor
+	GITHUB_ACTOR = os.getenv("GITHUB_ACTOR","MegaMan.EXE")
 	# get github tag
 	GITHUB_TAG = os.getenv("GITHUB_TAG","")
 	# get github sha
@@ -56,6 +58,7 @@ def prepare_env():
 			GITHUB_TAG = APP_VERSION + '.' + BUILD_NUMBER
 
 	env["BUILD_NUMBER"] = BUILD_NUMBER
+	env["GITHUB_ACTOR"] = GITHUB_ACTOR
 	env["GITHUB_TAG"] = GITHUB_TAG
 	env["OS_NAME"] = OS_NAME
 	env["OS_DIST"] = OS_DIST
