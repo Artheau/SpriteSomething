@@ -5,26 +5,26 @@ set -eu
 # Check if arguments provided
 if [ $# -eq 0 ]
 then
+	# If argument NOT provided, let Discord show the event informations.
 
-# If argument NOT provided, let Discord show the event informations.
+	echo Sending event informations
 
-echo Sending event informations
+	if [ $G -ne ""]
+	then
+		echo Specified Payload : $(cat $DISCORD_BODY)
 
-echo Payload : $(cat $GITHUB_EVENT_PATH)
+		curl -X POST -H "Content-Type: application/json" --data "$(cat $DISCORD_BODY)" $DISCORD_WEBHOOK
+	else
+		echo Payload : $(cat $GITHUB_EVENT_PATH)
 
-curl -X POST -H "Content-Type: application/json" --data "$(cat $GITHUB_EVENT_PATH)" $DISCORD_WEBHOOK/github
+		curl -X POST -H "Content-Type: application/json" --data "$(cat $GITHUB_EVENT_PATH)" $DISCORD_WEBHOOK/github
+	fi
 
 else
+	# If argument provided, override the Discord message.
 
-# If argument provided, override the Discord message.
+	echo Sending : $*
 
-echo Sending : $*
-
-pwd
-
-ls -F
-
-#curl -X POST -H "Content-Type: application/json" --data "{ \"content\": \"$*\" }" $DISCORD_WEBHOOK
-curl -X POST -H "Content-Type: application/json" --data "$(cat $*)" $DISCORD_WEBHOOK
-
+	#curl -X POST -H "Content-Type: application/json" --data "{ \"content\": \"$*\" }" $DISCORD_WEBHOOK
+	curl -X POST -H "Content-Type: application/json" --data "$(cat $*)" $DISCORD_WEBHOOK
 fi
