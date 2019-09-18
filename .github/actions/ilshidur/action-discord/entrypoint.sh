@@ -20,6 +20,10 @@ else
 
 echo Sending : $*
 
+pwd
+
+ls -F
+
 #curl -X POST -H "Content-Type: application/json" --data "{ \"content\": \"$*\" }" $DISCORD_WEBHOOK
 curl -X POST -H "Content-Type: application/json" --data "$(cat $*)" $DISCORD_WEBHOOK
 
