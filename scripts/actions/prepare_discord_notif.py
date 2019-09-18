@@ -137,8 +137,11 @@ datas = datas[:len(datas)-1]							# shave the last char off the end to fit insi
 datas = datas + ", \"content\": \"** **"	# append a bold space closure to the app
 data["content"] = "** **"
 
+payload = json.dumps(data)
+payload = payload.replace('"','\"')
+
 with open("../build/payload.json", "w") as outfile:
-	json.dump(data, outfile)
+	outfile.write(payload)
 	outfile.close()
 
 with open("../build/payload-modded.txt", "w") as outfile:
