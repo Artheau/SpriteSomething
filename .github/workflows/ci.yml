@@ -214,27 +214,30 @@ jobs:
 #        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_TAG}/RELEASENOTES.md) for description."
 #        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
 #        files: ../deploy
-    - name: Send Discord Notification
-#      env:
-#        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-#      uses: ./.github/actions/ilshidur/action-discord
+    - name: Build Discord Notification Payload
       run: |
         python ./scripts/actions/prepare_discord_notif.py
       if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
-    # upload payload artifact
+    # upload discord payload artifact
     - name: Upload Payload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: payload-${{ matrix.os-name }}
         path: ../build/payload.json
       if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
-    # upload modded payload artifact
+    # upload modded discord payload artifact
     - name: Upload Modded Payload Artifact
       uses: actions/upload-artifact@v1
       with:
         name: payload-modded-${{ matrix.os-name }}
-        path: ../build/payload-modded.json
+        path: ../build/payload-modded.txt
       if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
+    - name: Send Discord Payload
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      uses: ./.github/actions/ilshidur/action-discord
+      with:
+        args: $(cat ../build/payload-modded.txt)
 
   # Prepare for Deployment to GitHub Pages
   #  run custom action
