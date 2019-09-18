@@ -2,7 +2,7 @@ import common
 import datetime
 import json
 import os
-import pytz
+#import pytz
 from urllib import request
 
 DEFAULT_EVENT = "event"
@@ -74,11 +74,11 @@ if timestamp == "":
 		if "updated_at" in event_manifest["repository"]:
 			timestamp = event_manifest["repository"]["updated_at"]
 
-if timestamp == "":
-	utc_now = pytz.utc.localize(datetime.datetime.utcnow())
-	pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
-	timestamp = pst_now.isoformat()
-	timestamp = timestamp[:timestamp.find('.')]
+#if timestamp == "":
+#	utc_now = pytz.utc.localize(datetime.datetime.utcnow())
+#	pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
+#	timestamp = pst_now.isoformat()
+#	timestamp = timestamp[:timestamp.find('.')]
 
 if not timestamp == "":
 	if '+' in timestamp:
