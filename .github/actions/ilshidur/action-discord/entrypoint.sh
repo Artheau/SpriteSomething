@@ -9,7 +9,7 @@ then
 
 	echo Sending event informations
 
-	if [ "$DISCORD_BODY" -ne "" ]
+	if [ "$DISCORD_BODY" != "" ]
 	then
 		echo Specified Payload
 
