@@ -3,7 +3,7 @@ import datetime
 import json
 import os
 #import pytz
-from urllib import request
+#from urllib import request
 
 DEFAULT_EVENT = "event"
 DEFAULT_REPO_SLUG = "Artheau/SpriteSomething"
