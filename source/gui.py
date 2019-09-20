@@ -733,7 +733,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def save_file_as(self):
 		# Save in one of the valid formats.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),(self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),(self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"))
-		filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
+
+		filename = ""
+		if "sprite.name" in self.sprite.metadata:
+			filename = self.sprite.metadata["sprite.name"]
+		else:
+			filename = "unknown"
+		filename = common.filename_scrub(filename)
+
+		filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
 		if filename:
 			save_success_bool = self.sprite.save_as(filename)
 			if save_success_bool:
@@ -763,7 +771,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 					default_extension = file_extension.lower()
 				else:
 					default_extension = ".sfc"
-				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
+				dest_filename = os.path.splitext(source_filename)[0] + "_modified"
+				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
 		if dest_filename:
 			rom = self.game.get_rom_from_filename(source_filename)
 			modified_rom = self.sprite.inject_into_ROM(rom)
@@ -806,7 +815,35 @@ class SpriteSomethingMainFrame(tk.Frame):
 	#export current frame as PNG
 	def export_frame_as_png(self):
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),)
-		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.frame-as-png"), filetypes=filetypes)
+
+		filename = ""
+		if "sprite.name" in self.sprite.metadata:
+			filename = self.sprite.metadata["sprite.name"]
+		else:
+			filename = "unknown"
+
+		if hasattr(self.animation_engine,"animation_selection"):
+			filename += '_' + self.animation_engine.animation_selection.get()
+		else:
+			filename += "unknown-animation"
+
+		if hasattr(self.animation_engine,"pose_number"):
+			filename += '_' + str(self.animation_engine.pose_number+1)
+		else:
+			filename += str(-1)
+
+		if hasattr(self.animation_engine,"frame_number"):
+			filename += '_' + str(self.animation_engine.frame_number)
+		else:
+			filename += str(-1)
+
+		if hasattr(self.animation_engine,"zoom_getter"):
+			filename += ('_' + "zoom-" + self.zoom_factor.get()).strip()
+		if hasattr(self,"current_speed"):
+			filename += ('_' + "speed-" + str(self.current_speed * 100) + '%').strip()
+		filename = common.filename_scrub(filename)
+
+		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialfile=filename, initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.frame-as-png"), filetypes=filetypes)
 		if filename:
 			returnvalue = self.animation_engine.export_frame_as_PNG(filename)
 			if returnvalue:
@@ -819,7 +856,24 @@ class SpriteSomethingMainFrame(tk.Frame):
 	#export current animation as GIF
 	def export_animation_as_gif(self):
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.gif"),"*.gif"),)
-		filename = filedialog.asksaveasfilename(defaultextension=(".gif"), initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.animation-as-gif"), filetypes=filetypes)
+
+		filename = ""
+		if "sprite.name" in self.sprite.metadata:
+			filename = self.sprite.metadata["sprite.name"]
+		else:
+			filename = "unknown"
+
+		if hasattr(self.animation_engine,"animation_selection"):
+			filename += '_' + self.animation_engine.animation_selection.get()
+
+		if hasattr(self.animation_engine,"zoom_getter"):
+			filename += ('_' + "zoom-" + self.zoom_factor.get()).strip()
+		if hasattr(self,"current_speed"):
+			filename += ('_' + "speed-" + str(self.current_speed * 100) + '%').strip()
+
+		filename = common.filename_scrub(filename)
+
+		filename = filedialog.asksaveasfilename(defaultextension=(".gif"), initialfile=filename, initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.animation-as-gif"), filetypes=filetypes)
 		if filename:
 			returnvalue = self.animation_engine.export_animation_as_gif(filename)
 			if returnvalue:
@@ -833,7 +887,25 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if orientation == "vertical":
 			raise NotImplementedError()
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),)
-		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.animation-as-" + orientation[:1] + "collage"], title=self.fish.translate("meta","dialogue","export.animation-as-" + orientation[:1] + "collage"), filetypes=filetypes)
+
+		filename = ""
+		if "sprite.name" in self.sprite.metadata:
+			filename = self.sprite.metadata["sprite.name"]
+		else:
+			filename = "unknown"
+
+		if hasattr(self.animation_engine,"animation_selection"):
+			filename += '_' + self.animation_engine.animation_selection.get()
+		filename = common.filename_scrub(filename)
+
+		if hasattr(self.animation_engine,"zoom_getter"):
+			filename += ('_' + "zoom-" + self.zoom_factor.get()).strip()
+		if hasattr(self,"current_speed"):
+			filename += ('_' + "speed-" + str(self.current_speed * 100) + '%').strip()
+
+		filename = common.filename_scrub(filename)
+
+		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialfile=filename, initialdir=self.working_dirs["export.animation-as-" + orientation[:1] + "collage"], title=self.fish.translate("meta","dialogue","export.animation-as-" + orientation[:1] + "collage"), filetypes=filetypes)
 		if filename:
 			returnvalue = self.animation_engine.export_animation_as_collage(filename,orientation)
 			if returnvalue:

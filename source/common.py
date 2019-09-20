@@ -13,7 +13,7 @@ def lcm(x, y):
 
 def filename_scrub(filename):
 	#prevents untowards things like spaces in filenames, to improve compatibility
-	new_filename = str(filename).replace(" ", "_")
+	new_filename = str(filename).lower().replace(" ", "-")
 	return new_filename
 
 def get_all_resources(subdir=None,desired_filename=None):

@@ -78,11 +78,11 @@ class Sprite(SpriteParent):
 				#make src image from tile list
 				src_img,_ = self.assemble_tiles_to_completed_image(tile_list[tileset_id])
 				#crop out the actual pixels
-				src_img = src_img.crop((5,8,21,29))
+				src_img = src_img.crop((5,7,21,29))
 				#make a new 32x32 transparent image
 				dest_img = Image.new("RGBA",(32,32))
 				#paste the pixels to (7,7)
-				dest_img.paste(src_img,(7,7))
+				dest_img.paste(src_img,(7,6))
 				#resize using nearest neighbor to 400% because that's what Cross' tracker uses
 				dest_img = dest_img.resize((32*4,32*4),Image.NEAREST)
 				#save to disk
