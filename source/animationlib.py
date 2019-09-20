@@ -359,9 +359,9 @@ class AnimationEngineParent():
 			raise NotImplementedError()
 		collage.save(filename)
 
-	def export_animation_as_gif(self, filename):
+	def export_animation_as_gif(self, filename, zoom=1, speed=1):
 		#TODO: factor out common code with the collage function
-		GIF_MAX_FRAMERATE = 50.0  #GIF format cannot reliably handle any faster than 50FPS
+		GIF_MAX_FRAMERATE = 100.0  #GIF format in theory supports 100 FPS, but some programs display at 50 FPS
 		ACTUAL_FRAMERATE = 60.0
 
 		image_list = []
@@ -405,6 +405,9 @@ class AnimationEngineParent():
 				#apply color number 255
 				this_frame.paste(255, mask)
 
+				new_size = tuple(int(dim*zoom) for dim in this_frame.size)
+				this_frame = this_frame.resize(new_size,resample=Image.NEAREST)
+
 				if frames and common.equal(this_frame, frames[-1]):
 					durations[-1] += 1
 				else:
@@ -415,7 +418,7 @@ class AnimationEngineParent():
 				1000.0 *   #millisecond conversion
 				max(
 					1.0/GIF_MAX_FRAMERATE,
-					round(duration/ACTUAL_FRAMERATE, 2)
+					round(duration/(speed*ACTUAL_FRAMERATE), 2)
 				)
 				for duration in durations
 			]

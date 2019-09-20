@@ -2,6 +2,7 @@ import os
 import itertools
 import struct
 import numpy as np
+import re
 import fractions #for gcd
 from PIL import Image, ImageChops
 
@@ -13,7 +14,11 @@ def lcm(x, y):
 
 def filename_scrub(filename):
 	#prevents untowards things like spaces in filenames, to improve compatibility
-	new_filename = str(filename).lower().replace(" ", "-")
+	new_filename = str(filename).lower()
+	new_filename = re.sub(r" ", "-", new_filename)        #no spaces
+	new_filename = re.sub(r"[\%\$\^]", "", new_filename)  #no weird things in the name
+	new_filename = re.sub(r"^[^A-Za-z0-9]+", "", new_filename)  #no weird things at beginning of name
+	
 	return new_filename
 
 def get_all_resources(subdir=None,desired_filename=None):

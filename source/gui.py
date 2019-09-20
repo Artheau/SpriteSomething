@@ -858,7 +858,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.gif"),"*.gif"),)
 
 		filename = ""
-		if "sprite.name" in self.sprite.metadata:
+		if "sprite.name" in self.sprite.metadata and self.sprite.metadata["sprite.name"]:
 			filename = self.sprite.metadata["sprite.name"]
 		else:
 			filename = "unknown"
@@ -875,7 +875,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		filename = filedialog.asksaveasfilename(defaultextension=(".gif"), initialfile=filename, initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.animation-as-gif"), filetypes=filetypes)
 		if filename:
-			returnvalue = self.animation_engine.export_animation_as_gif(filename)
+			returnvalue = self.animation_engine.export_animation_as_gif(filename, zoom=self.current_zoom, speed=self.current_speed)
 			if returnvalue:
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 			return returnvalue
