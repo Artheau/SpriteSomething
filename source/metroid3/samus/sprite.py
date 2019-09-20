@@ -468,6 +468,11 @@ class Sprite(SpriteParent):
 
 		return palette
 
+	def get_palette_duration(self, palettes):
+		palette_timing_list = self.get_timed_palette_converter(palettes)
+		palette_duration = sum([duration for (duration,_) in palette_timing_list])
+		return palette_duration
+
 	def get_timed_palette_converter(self, palette_list):
 		#used to interface the new palette string format with the older get_timed_palette function.
 		# could be refactored into the main code later, if coding time was not a valuable resource

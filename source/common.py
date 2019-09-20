@@ -2,7 +2,14 @@ import os
 import itertools
 import struct
 import numpy as np
-from PIL import Image
+import fractions #for gcd
+from PIL import Image, ImageChops
+
+def equal(image1, image2):
+    return ImageChops.difference(image1, image2).getbbox() is None
+
+def lcm(x, y):
+    return x * y // fractions.gcd(x, y)
 
 def filename_scrub(filename):
 	#prevents untowards things like spaces in filenames, to improve compatibility

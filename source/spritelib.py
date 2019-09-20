@@ -68,6 +68,10 @@ class SpriteParent():
 		#if the child class didn't tell us what to do, just go back to whatever palette it was on when it was imported
 		return self.master_palette[default_range[0]:default_range[1]]
 
+	def get_palette_duration(self, palettes):
+		#in most cases will be overriden by the child class to report duration of a palette
+		return 1
+
 	############################# END ABSTRACT CODE ##############################
 
 	#the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
@@ -195,6 +199,25 @@ class SpriteParent():
 			full_tile_list.append( (base_image,position) )
 
 		return full_tile_list
+
+	def get_palette_loop_timer(self, animation, direction, palettes):
+		pose_list = self.get_pose_list(animation, direction)
+		returnvalue = 1 #default
+		for pose_number in range(len(pose_list)):
+			tile_list = pose_list[pose_number]["tiles"][::-1]
+			tile_list += self.get_supplemental_tiles(animation,direction,pose_number,palettes,0)
+			for tile_info in tile_list:
+				new_palette = None
+				for possible_palette_info_location in [pose_list[pose_number], tile_info]:
+					if "palette" in possible_palette_info_location:
+						palette_info_location = possible_palette_info_location
+						new_palette = palette_info_location["palette"]
+				if new_palette:
+					palettes.append(new_palette)
+
+				this_palette_duration = max(1, self.get_palette_duration(palettes))
+				returnvalue = common.lcm(returnvalue, this_palette_duration)
+		return returnvalue
 
 	def get_pose_list(self, animation, direction):
 		direction_dict = self.animations[animation]
