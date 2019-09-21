@@ -32,12 +32,6 @@ for dirname in ["user_resources","meta","manifests"]:
 	dirpath += '/' + dirname
 	os.chmod(dirpath,0o755)
 
-# nuke GitHub metadata from source code
-distutils.dir_util.remove_tree("./.github")
-# nuke GitHub Pages files from source code
-distutils.dir_util.remove_tree("./pages_resources")
-# nuke CI scripts from source code
-distutils.dir_util.remove_tree("./scripts")
 os.remove("./.travis.yml")
 os.remove("./.travis.notes.yml")
 # nuke test suite
@@ -67,12 +61,14 @@ if not BUILD_FILENAME == "":
 		"--exclude=scripts/travis",
 		"--exclude=*.json"])
 
-	if os.path.isdir("./.git"):
-		# move .git to a temp folder
-		move(
-			"./.git",
-			"../build/.git"
-		)
+	# mv dirs from source code
+	dirs = ["./.git", "./.github","./pages_resources","./scripts"]
+	for dir in dirs:
+		if os.path.isdir(dir):
+			move(
+				dir,
+				"../build/" + dir
+			)
 
 	# move the binary back
 	move(
@@ -90,12 +86,13 @@ if not BUILD_FILENAME == "":
 		make_archive(ZIP_FILENAME,"gztar")
 		ZIP_FILENAME += ".tar.gz"
 
-	if os.path.isdir("../build/.git"):
-		# move .git back
-		move(
-			"../build/.git",
-			"./.git"
-		)
+	# mv dirs back
+	for dir in dirs:
+		if os.path.isdir("../build/" + dir):
+			move(
+				"../build/" + dir,
+				dir
+			)
 
 print("Build Filename: " + BUILD_FILENAME)
 print("Zip Filename:   " + ZIP_FILENAME)
