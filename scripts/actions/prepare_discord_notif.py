@@ -25,6 +25,7 @@ env["BRANCH"] = os.getenv("TRAVIS_BRANCH","")
 env["COMMIT_AUTHOR"] = "GitHub"
 env["COMMIT_AVATAR"] = "https://images.discordapp.net/avatars/565119394837954569/f145a84f608c1fb48180bb81a66cf048.png"
 env["COMMIT_ID"] = os.getenv("TRAVIS_COMMIT",os.getenv("GITHUB_SHA",""))
+env["COMMIT_IDS"] = os.getenv("TRAVIS_COMMIT_RANGE","")
 env["COMMIT_MESSAGE"] = os.getenv("TRAVIS_COMMIT_MESSAGE","")
 env["EVENT_LOG"] = os.getenv("GITHUB_EVENT_PATH","")
 env["EVENT_TYPE"] = os.getenv("TRAVIS_EVENT_TYPE",DEFAULT_EVENT)
