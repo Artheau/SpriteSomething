@@ -14,7 +14,8 @@ DEFAULT_REPO_SLUG = "Artheau/SpriteSomething"
 
 colors = {
 	"miketrethewey": 0xFFAF00,
-	"artheau": 0x344A44
+	"artheau": 0x344A44,
+	"github": 0xFFFFFF
 }
 
 env = common.prepare_env()
@@ -73,6 +74,7 @@ if env["COMMIT_MESSAGE"] == "":
 				commit["url"] = commit["url"].replace("***","Artheau")
 				commits.append("[`" + commit["id"][:7] + "`](" + commit["url"] + ')' + ' ' + commit_title)
 else:
+	commit = {}
 	commit_message = env["COMMIT_MESSAGE"]
 	commit["id"] = env["COMMIT_ID"]
 	if "\n\n" in commit_message:
