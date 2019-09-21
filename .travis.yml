@@ -74,12 +74,14 @@ jobs:
       # 9 Step
       after_success:
         #prepare files to upload
-        - mv "../artifact/*" '.'
         - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_binary.py
         - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_appversion.py
         - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_release.py
+        - mv "../artifact/*" '.'
         - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_pages.py
-        - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_discord_notif.py
+        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
+            ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_discord_notif.py; \
+          fi"
 
       # 10 Step
       before_deploy:
