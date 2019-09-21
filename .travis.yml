@@ -77,9 +77,9 @@ jobs:
         - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_binary.py
         - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_appversion.py
         - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_release.py
-        - mv "../artifact/*" '.'
         - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_pages.py
         - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
+            ${PYTHON_EXECUTABLE} -m pip install requests; \
             ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_discord_notif.py; \
           fi"
 
