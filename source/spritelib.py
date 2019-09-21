@@ -45,6 +45,7 @@ class SpriteParent():
 		except ModuleNotFoundError as err:
 			print(err)        #TODO: This will fail silently if run through the GUI
 
+	#FIXME: English
 	def import_from_ROM(self, rom):
 		#self.images, self.master_palette = ?, ?
 		raise AssertionError("called import_from_ROM() on Sprite base class")
@@ -106,6 +107,7 @@ class SpriteParent():
 			file.close()
 
 		if data[0:4] != bytes(ord(x) for x in 'ZSPR'):
+			#FIXME: English
 			raise AssertionError("This file does not have a valid ZSPR header")
 		if data[4] == 1:
 			pixel_data_offset = int.from_bytes(data[9:13], byteorder='little', signed=False)
@@ -144,6 +146,7 @@ class SpriteParent():
 			palette_data = data[palette_data_offset:palette_data_offset+palette_data_length]
 			self.import_from_binary_data(pixel_data,palette_data)
 		else:
+			#FIXME: English
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
 
 	def get_supplemental_tiles(self,animation,direction,pose_number,palettes,frame_number):
@@ -153,6 +156,7 @@ class SpriteParent():
 		pass
 
 	def get_alternate_tile(self, image_name):
+		#FIXME: English
 		raise AssertionError(f"Image called {image_name} not found!")
 
 	def get_tiles_for_pose(self, animation, direction, pose_number, palettes, frame_number):
@@ -257,8 +261,9 @@ class SpriteParent():
 		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
 			sprite_save_name = self.metadata["sprite.name"].lower()
 		else:
+			#FIXME: English
 			sprite_save_name = "unknown"
-		
+
 		manifest_file = common.get_resource([self.resource_subpath,"manifests"],"representative-images.json")
 		if manifest_file:
 			with open(manifest_file) as manifest:
@@ -280,6 +285,7 @@ class SpriteParent():
 		elif style == "default":
 			images = [[]]  #use defaults
 		else:
+			#FIXME: English
 			raise AssertionError(f"received call to get_representative_image() with unknown style {style}")
 
 		return_images = []

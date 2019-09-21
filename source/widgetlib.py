@@ -19,6 +19,7 @@ def right_align_grid_in_frame(frame):
 	frame.grid_columnconfigure(1000, weight=0)    #so I guess technically this just needs to be larger than the number of columns
 
 def left_align_grid_in_frame(frame):
+	#FIXME: English
 	raise AssertionError("Aligning left in frame is not yet implemented")
 
 def leakless_dropdown_trace(object, var_to_trace, fun_to_call):
@@ -157,6 +158,7 @@ class SpiffyGroup():
 		if icon_path is None:
 			icon_path = common.get_resource(["meta","icons"],image_filename)
 			if icon_path is None:
+				#FIXME: English
 				raise AssertionError(f"No image resource found with name {image_filename}")
 		img = ImageTk.PhotoImage(Image.open(icon_path))
 

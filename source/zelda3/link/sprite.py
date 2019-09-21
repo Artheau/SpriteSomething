@@ -109,6 +109,7 @@ class Sprite(SpriteParent):
 				else:
 					return Image.new("RGBA",(0,0),0)    #TODO: Track down why this function is being called without spiffy button info during sprite load
 		else:
+			#FIXME: English
 			raise AssertionError(f"Could not locate tile with name {image_name}")
 
 	def import_cleanup(self):

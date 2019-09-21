@@ -40,6 +40,7 @@ def make_GUI(command_line_args):
 	root.protocol("WM_DELETE_WINDOW", main_frame.exit)           #intercept when the user clicks the X
 
 	def show_error(self, exception, message, callstack):
+		#FIXME: English
 		if exception.__name__.upper() == "NOTIMPLEMENTEDERROR":
 			messagebox.showerror(   "Not Yet Implemented",
 									"This function is not yet implemented\n\n" + str(message)  )
@@ -270,6 +271,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def load_plugins(self):
 		self.menu.children["representative_images_menu"] = tk.Menu(self.menu, tearoff=0, name="representative_images_menu")
 
+		#FIXME: English
 		self.menu.children["representative_images_menu"].add_command(label="Default",command=partial(self.get_representative_images,"default"))
 		for manifest_file in common.get_all_resources([self.sprite.resource_subpath,"manifests"],"representative-images.json"):
 			with(open(manifest_file)) as manifest:
@@ -450,6 +452,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				try:
 					#try to save it
 					image.save(filename)
+					#FIXME: English
 					messagebox.showinfo("Save Complete", f"Saved as {filename}")
 					save_success_bool = True
 				except IOError:
@@ -466,6 +469,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 					#try to save each one
 					for filename, image in image_list:
 						image.save(os.path.join(base_folder, filename))
+					#FIXME: English
 					messagebox.showinfo("Save Complete", f"Saved images to {base_folder}")
 					save_success_bool = True
 				except IOError:
@@ -474,6 +478,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 				save_success_bool = False
 		if not save_success_bool:
+			#FIXME: English
 			messagebox.showerror("ERROR", f"ERROR: Could not create image file(s)")
 		return save_success_bool
 
@@ -738,6 +743,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if "sprite.name" in self.sprite.metadata:
 			filename = self.sprite.metadata["sprite.name"]
 		else:
+			#FIXME: English
 			filename = "unknown"
 		filename = common.filename_scrub(filename)
 
@@ -750,6 +756,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 				self.save_working_dirs()
 			else:
+				#FIXME: English
 				messagebox.showerror("Not Yet Implemented",os.path.splitext(filename)[1][1:].upper() + " format not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
 			return save_success_bool
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -779,6 +786,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			modified_rom.save(dest_filename, overwrite=True)
 			self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
 			self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
+			#FIXME: English
 			messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 
 	#query user for directory to inject sprite into
@@ -787,6 +795,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if inject:
 			source_filepath = filedialog.askdirectory()	#only injection is supported
 		else:
+			#FIXME: English
 			raise AssertionError("Unsure if making copies fits this purpose well")
 
 		source_filenames = []	#walk through the game files and inject the loaded sprite
@@ -800,6 +809,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			rom = self.game.get_rom_from_filename(source_filename)	#read ROM data
 			same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(source_filename)[0]	#the game file matches
 			is_zsm = "ZSM" in str(rom.get_name())	#this is a ZSM game file
+			#FIXME: English, need to get character name translations and compare against those
 			if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):	#if we've got a compatible game file, inject it!
 				modified_rom = self.sprite.inject_into_ROM(rom)
 				modified_rom.save(dest_filename, overwrite=True)
@@ -848,6 +858,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			returnvalue = self.animation_engine.export_frame_as_PNG(filename)
 			if returnvalue:
 				self.working_dirs["export.frame-as-png"] = filename[:filename.rfind('/')]
+				#FIXME: English
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -877,6 +888,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if filename:
 			returnvalue = self.animation_engine.export_animation_as_gif(filename, zoom=self.current_zoom, speed=self.current_speed)
 			if returnvalue:
+				#FIXME: English
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -910,6 +922,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			returnvalue = self.animation_engine.export_animation_as_collage(filename,orientation)
 			if returnvalue:
 				self.working_dirs["export.animation-as-collage"] = filename[:filename.rfind('/')]
+				#FIXME: English
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -922,10 +935,17 @@ class SpriteSomethingMainFrame(tk.Frame):
 		latest_version = version_req.readlines()[0].decode("utf-8").strip()
 
 		if latest_version > this_version:
-			get_update = messagebox.askyesno(self.app_title,"It seems that there is an update available. Would you like to go to the project page to get it?")
+			#FIXME: English
+			get_update = messagebox.askyesno(
+										self.app_title,
+										"Current Version: " + this_version + "\n" +
+										"Latest Version: " + latest_version + "\n" +
+										"It seems that there is an update available. Would you like to go to the project page to get it?"
+			)
 			if get_update:
 				webbrowser.open_new("https://github.com/Artheau/SpriteSomething/releases/v" + latest_version)
 		else:
+			#FIXME: English
 			messagebox.showinfo(self.app_title,"It seems that you're up to date!")
 
 	def diagnostics(self):
