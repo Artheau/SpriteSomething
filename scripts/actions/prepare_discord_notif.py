@@ -20,8 +20,8 @@ colors = {
 env = common.prepare_env()
 
 env["BRANCH"] = os.getenv("TRAVIS_BRANCH","")
-env["COMMIT_AUTHOR"] = ""
-env["COMMIT_AVATAR"] = ""
+env["COMMIT_AUTHOR"] = "GitHub"
+env["COMMIT_AVATAR"] = "https://images.discordapp.net/avatars/565119394837954569/f145a84f608c1fb48180bb81a66cf048.png"
 env["COMMIT_ID"] = os.getenv("TRAVIS_COMMIT",os.getenv("GITHUB_SHA",""))
 env["COMMIT_MESSAGE"] = os.getenv("TRAVIS_COMMIT_MESSAGE","")
 env["EVENT_LOG"] = os.getenv("GITHUB_EVENT_PATH","")
@@ -72,6 +72,17 @@ if env["COMMIT_MESSAGE"] == "":
 					commit_title = commit_message
 				commit["url"] = commit["url"].replace("***","Artheau")
 				commits.append("[`" + commit["id"][:7] + "`](" + commit["url"] + ')' + ' ' + commit_title)
+else:
+	commit_message = env["COMMIT_MESSAGE"]
+	commit["id"] = env["COMMIT_ID"]
+	if "\n\n" in commit_message:
+		commit_parts = commit_message.split("\n\n")
+		commit_title = commit_parts.pop(0)
+		commit_message = "\n\n".join(commit_parts)
+	else:
+		commit_title = commit_message
+	commit["url"] = commit["url"].replace("***","Artheau")
+	commits.append("[`" + commit["id"][:7] + "`](" + commit["url"] + ')' + ' ' + commit_title)
 
 if timestamp == "":
 	if "repository" in event_manifest:
