@@ -22,8 +22,8 @@ colors = {
 env = common.prepare_env()
 
 env["BRANCH"] = os.getenv("TRAVIS_BRANCH","")
-env["COMMIT_AUTHOR"] = "GitHub"
-env["COMMIT_AVATAR"] = "https://images.discordapp.net/avatars/565119394837954569/f145a84f608c1fb48180bb81a66cf048.png"
+env["COMMIT_AUTHOR"] = "Travis CI"
+env["COMMIT_AVATAR"] = "https://travis-ci.com/images/logos/TravisCI-Mascot-pride.png"
 env["COMMIT_ID"] = os.getenv("TRAVIS_COMMIT",os.getenv("GITHUB_SHA",""))
 env["COMMIT_COMPARE"] = os.getenv("TRAVIS_COMMIT_RANGE","")
 env["COMMIT_MESSAGE"] = os.getenv("TRAVIS_COMMIT_MESSAGE","")
@@ -151,12 +151,18 @@ if num_commits == 1:
 	if not env["COMMIT_COMPARE"] == "":
 		num_commits = "Many"
 
+embed_title = ""
+embed_title += '[' + env["REPO_NAME"] + ':' + env["BRANCH"] + "] "
+embed_title += num_commits + " new " + env["EVENT_TYPE"]
+if isinstance(num_commits,str) or (isinstance(num_commits,int) and (not num_commits == 1)):
+	embed_title += 's'
+
 payload = {
 	"embeds": [
 		{
 			"color": color,
 			"author": author,
-			"title": '[' + env["REPO_NAME"] + ':' + env["BRANCH"] + "] " + num_commits + " new " + env["EVENT_TYPE"] + ('s' if (isinstance(num_commits,str) or (not num_commits == 1)) else ''),
+			"title": embed_title,
 			"url": "http://github.com/" + env["REPO_SLUG"] + '/' + query,
 			"description": env["COMMIT_MESSAGE"],
 			"timestamp": timestamp
