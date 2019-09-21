@@ -59,9 +59,6 @@ jobs:
       dist: bionic
       python: "3.7"
       services: xvfb #needs a screen for tkinter
-      # 3 Step
-      before_install: sudo apt-get install pcregrep #get special regex stuff
-      skip_cleanup: true
       # 7 Step
       script:
         #run upx script
@@ -77,8 +74,12 @@ jobs:
       # 9 Step
       after_success:
         #prepare files to upload
-#        - bash ./scripts/after_success.sh
-        - ${PYTHON_EXECUTABLE} ./scripts/travis/after_success.py
+        - mv "../artifact/*" '.'
+        - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_binary.py
+        - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_appversion.py
+        - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_release.py
+        - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_pages.py
+        - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_discord_notif.py
 
       # 10 Step
       before_deploy:
@@ -88,7 +89,7 @@ jobs:
         - export RELEASE_NAME="SpriteSomething ${TRAVIS_TAG}"
         - export FILES=../deploy/* #deploy archive
         - export PAGES=../pages #deploy pages
-        - git tag $TRAVIS_TAG
+#        - git tag $TRAVIS_TAG
 #        - git push origin $TRAVIS_TAG # probably need this for gh-actions interface to work
         #set body as a hyperlink to RELEASENOTES.md
         - export BODY=\"Please see [RELEASENOTES.md](https://github.com/${TRAVIS_REPO_SLUG}/blob/${TRAVIS_TAG}/RELEASENOTES.md) for description.\"; \
