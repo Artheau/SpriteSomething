@@ -124,6 +124,7 @@ if env["COMMIT_AUTHOR"].lower() in colors:
 	color = colors[env["COMMIT_AUTHOR"].lower()]
 
 if len(commits) > 0:
+	env["COMMIT_MESSAGE"] = ""
 	for commit in commits:
 		env["COMMIT_MESSAGE"] += commit + "\n"
 
