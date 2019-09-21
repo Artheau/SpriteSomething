@@ -1,4 +1,5 @@
 import os # for env vars
+from shutil import copy	# file manipulation
 
 # get app version
 APP_VERSION = ""
@@ -32,3 +33,10 @@ with open("./app_resources/meta/manifests/app_version.txt","r+") as f:
 	f.seek(0)
 	f.write(GITHUB_TAG)
 	f.truncate()
+
+if not os.path.isdir("../build"):
+	os.mkdir("../build")
+copy(
+	"./app_resources/meta/manifests/app_version.txt",
+	"../build/app_version.txt"
+)
