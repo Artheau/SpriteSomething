@@ -174,7 +174,7 @@ jobs:
       uses: actions/checkout@v1
     - name: Install Dependencies via pip
       run: |
-        python -m pip install requests
+        python -m pip install pytz requests
     # download appversion artifact
     - name: Download AppVersion Artifact
       uses: actions/download-artifact@v1
