@@ -25,8 +25,7 @@ env["BRANCH"] = os.getenv("TRAVIS_BRANCH","")
 env["COMMIT_AUTHOR"] = "GitHub"
 env["COMMIT_AVATAR"] = "https://images.discordapp.net/avatars/565119394837954569/f145a84f608c1fb48180bb81a66cf048.png"
 env["COMMIT_ID"] = os.getenv("TRAVIS_COMMIT",os.getenv("GITHUB_SHA",""))
-env["COMMIT_IDS"] = os.getenv("TRAVIS_COMMIT_RANGE","")
-print(env["COMMIT_IDS"])
+env["COMMIT_COMPARE"] = os.getenv("TRAVIS_COMMIT_RANGE","")
 env["COMMIT_MESSAGE"] = os.getenv("TRAVIS_COMMIT_MESSAGE","")
 env["EVENT_LOG"] = os.getenv("GITHUB_EVENT_PATH","")
 env["EVENT_TYPE"] = os.getenv("TRAVIS_EVENT_TYPE",DEFAULT_EVENT)
@@ -62,11 +61,17 @@ if env["BRANCH"] == "":
 if not env["COMMIT_ID"] == "":
 	query = "commit/" + env["COMMIT_ID"]
 
+if not env["COMMIT_COMPARE"] == "":
+	query = "compare/" + env["COMMIT_COMPARE"]
+
 if "pull" in env["EVENT_TYPE"]:
 	env["PULL_ID"] = os.getenv("TRAVIS_PULL_REQUEST","")
 	env["PULL_BRANCH"] = os.getenv("TRAVIS_PULL_REQUEST_BRANCH","")
 	env["PULL_SHA"] = os.getenv("TRAVIS_PULL_REQUEST_SHA","")
 	query = "pull/" + env["PULL_ID"]
+
+if "push" in env["EVENT_TYPE"]:
+	env["EVENT_TYPE"] = "commit"
 
 if env["COMMIT_MESSAGE"] == "":
 	if "commits" in event_manifest:
@@ -141,12 +146,17 @@ if not env["COMMIT_AUTHOR"] == "":
 if not env["COMMIT_AVATAR"] == "":
 	author["icon_url"] = env["COMMIT_AVATAR"]
 
+num_commits = len(commits)
+if num_commits == 1:
+	if not env["COMMIT_COMPARE"] == "":
+		num_commits = "Many"
+
 payload = {
 	"embeds": [
 		{
 			"color": color,
 			"author": author,
-			"title": '[' + env["REPO_NAME"] + ':' + env["BRANCH"] + "] " + str(len(commits)) + " new " + env["EVENT_TYPE"] + ('' if len(commits) == 1 else 's'),
+			"title": '[' + env["REPO_NAME"] + ':' + env["BRANCH"] + "] " + num_commits + " new " + env["EVENT_TYPE"] + ('s' if (isinstance(num_commits,str) or (not num_commits == 1)) else ''),
 			"url": "http://github.com/" + env["REPO_SLUG"] + '/' + query,
 			"description": env["COMMIT_MESSAGE"],
 			"timestamp": timestamp
