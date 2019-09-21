@@ -153,7 +153,7 @@ if num_commits == 1:
 
 embed_title = ""
 embed_title += '[' + env["REPO_NAME"] + ':' + env["BRANCH"] + "] "
-embed_title += num_commits + " new " + env["EVENT_TYPE"]
+embed_title += str(num_commits) + " new " + env["EVENT_TYPE"]
 if isinstance(num_commits,str) or (isinstance(num_commits,int) and (not num_commits == 1)):
 	embed_title += 's'
 
