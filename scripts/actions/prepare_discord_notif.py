@@ -5,11 +5,6 @@ import json
 import os
 import requests
 
-parser = ArgumentParser()
-parser.add_argument("--DISCORD_WEBHOOK",dest="DISCORD_WEBHOOK",metavar="<DISCORD_WEBHOOK>")
-command_line_args = vars(parser.parse_args())
-DISCORD_WEBHOOK = command_line_args["DISCORD_WEBHOOK"]
-
 DEFAULT_EVENT = "event"
 DEFAULT_REPO_SLUG = "Artheau/SpriteSomething"
 
@@ -136,5 +131,7 @@ payload = {
 		}
 	]
 }
+
+DISCORD_WEBHOOK = os.environ.get("DISCORD_WEBHOOK")
 
 r = requests.post(DISCORD_WEBHOOK,data=json.dumps(payload),headers={"Content-type": "application/json"})
