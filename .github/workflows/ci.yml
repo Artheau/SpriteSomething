@@ -172,6 +172,9 @@ jobs:
     # checkout commit
     - name: Checkout commit
       uses: actions/checkout@v1
+    - name: Install Dependencies via pip
+      run: |
+        python -m pip install requests
     # download appversion artifact
     - name: Download AppVersion Artifact
       uses: actions/download-artifact@v1
