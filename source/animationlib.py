@@ -2,6 +2,8 @@
 #in particular, keeps track of information like which palette the sprite is using, etc.
 
 import tkinter as tk
+from apng import APNG, PNG
+import io
 import random
 import json
 import itertools
@@ -155,7 +157,7 @@ class AnimationEngineParent():
 			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
 			self.pose_number = self.get_pose_number_from_frames(current_frame)
-			
+
 			if "palette_reference_frame" in pose_list[self.pose_number]:  #for animations that switch palettes in the middle
 				self.palette_last_transition_frame = \
 					current_frame - (
@@ -387,7 +389,7 @@ class AnimationEngineParent():
 
 			frames = []
 			durations = []
-			
+
 			for frame_number in range(full_animation_duration):
 				_, _, _, palette_info, _, _ = self.get_image_arguments_from_frame_number(frame_number)
 				pose_number = self.get_pose_number_from_frames(frame_number)
@@ -395,7 +397,7 @@ class AnimationEngineParent():
 
 				this_frame = Image.new("RGBA", (gif_x_size,gif_y_size))
 				this_frame.paste(image, (origin[0]-x_min, origin[1]-y_min), image)
-				
+
 				#PIL makes transparency so difficult...
 				alpha = this_frame.split()[3]
 				#reserve color number 255
@@ -433,4 +435,21 @@ class AnimationEngineParent():
 			else:
 				return False
 		else:
-			return false
+			return False
+
+	def export_animation_as_apng(self, filename, zoom=1, speed=1):
+		current_animation, displayed_direction, _, palette_info, _, pose_list = self.get_image_arguments_from_frame_number(self.frame_getter())
+
+		image_list = []
+
+		if current_animation:
+			for pose_number in range(len(pose_list)):
+				image_list.append(self.sprite.get_image(current_animation, displayed_direction, pose_number, palette_info, 0))
+
+		im = APNG()
+		for img in image_list:
+			imgByteArr = io.BytesIO()
+			img[0].save(imgByteArr,format="PNG")
+			imgByteArr = imgByteArr.getvalue()
+			im.append(PNG.from_bytes(imgByteArr), delay=100)
+		im.save(filename)

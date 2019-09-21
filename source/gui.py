@@ -206,6 +206,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 													(None,None,None),
 													(self.fish.translate("meta","menu","export.frame-as-png"),"frame-as-png",self.export_frame_as_png),
 													(self.fish.translate("meta","menu","export.animation-as-gif"),"animation-as-gif",self.export_animation_as_gif),
+													(self.fish.translate("meta","menu","export.animation-as-apng"),None,self.export_animation_as_apng),
 													(self.fish.translate("meta","menu","export.animation-as-hcollage"),"animation-as-hcollage",partial(self.export_animation_as_collage,"horizontal")),
 													#(self.fish.translate("meta","menu","export.animation-as-vcollage"),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
 											])
@@ -887,6 +888,36 @@ class SpriteSomethingMainFrame(tk.Frame):
 		filename = filedialog.asksaveasfilename(defaultextension=(".gif"), initialfile=filename, initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.animation-as-gif"), filetypes=filetypes)
 		if filename:
 			returnvalue = self.animation_engine.export_animation_as_gif(filename, zoom=self.current_zoom, speed=self.current_speed)
+			if returnvalue:
+				#FIXME: English
+				messagebox.showinfo("Save Complete", f"Saved as {filename}")
+			return returnvalue
+		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+			return False
+
+	#export current animation as APNG
+	def export_animation_as_apng(self):
+		filetypes = ((self.fish.translate("meta","dialogue","file.save.apng"),"*.png"),)
+
+		filename = ""
+		if "sprite.name" in self.sprite.metadata and self.sprite.metadata["sprite.name"]:
+			filename = self.sprite.metadata["sprite.name"]
+		else:
+			filename = "unknown"
+
+		if hasattr(self.animation_engine,"animation_selection"):
+			filename += '_' + self.animation_engine.animation_selection.get()
+
+		if hasattr(self.animation_engine,"zoom_getter"):
+			filename += ('_' + "zoom-" + self.zoom_factor.get()).strip()
+		if hasattr(self,"current_speed"):
+			filename += ('_' + "speed-" + str(self.current_speed * 100) + '%').strip()
+
+		filename = common.filename_scrub(filename)
+
+		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialfile=filename, initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.animation-as-apng"), filetypes=filetypes)
+		if filename:
+			returnvalue = self.animation_engine.export_animation_as_apng(filename, zoom=self.current_zoom, speed=self.current_speed)
 			if returnvalue:
 				#FIXME: English
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
