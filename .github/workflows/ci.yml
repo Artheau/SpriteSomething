@@ -215,29 +215,11 @@ jobs:
 #        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
 #        files: ../deploy
     - name: Build Discord Notification Payload
-      run: |
-        python ./scripts/actions/prepare_discord_notif.py
-      if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
-    # upload discord payload artifact
-    - name: Upload Payload Artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: payload-${{ matrix.os-name }}
-        path: ../build/payload.json
-      if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
-    # upload modded discord payload artifact
-    - name: Upload Modded Payload Artifact
-      uses: actions/upload-artifact@v1
-      with:
-        name: payload-modded-${{ matrix.os-name }}
-        path: ../build/payload-modded.txt
-      if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
-    - name: Send Discord Payload
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        DISCORD_BODY: $(cat "../build/payload.json")
-      uses: ./.github/actions/ilshidur/action-discord
-      if: contains(matrix.os-name, 'linux') || contains(matrix.os-name, 'ubuntu')
+      run: |
+        python ./scripts/actions/prepare_discord_notif.py
+      if: contains(matrix.os-name, 'windows')
 
   # Prepare for Deployment to GitHub Pages
   #  run custom action
