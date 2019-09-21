@@ -13,6 +13,7 @@ def make_CLI(command_line_args):
 
 #make a class that's similar to the GUI class
 class CLIMainFrame():
+	#FIXME: Filled with English
 
   def __init__(self, command_line_args):
     print(self.create_random_title() + " (v" + CONST.APP_VERSION + ')')	#print title & version

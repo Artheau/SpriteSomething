@@ -40,6 +40,7 @@ def make_GUI(command_line_args):
 	root.protocol("WM_DELETE_WINDOW", main_frame.exit)           #intercept when the user clicks the X
 
 	def show_error(self, exception, message, callstack):
+		#FIXME: English
 		if exception.__name__.upper() == "NOTIMPLEMENTEDERROR":
 			messagebox.showerror(   "Not Yet Implemented",
 									"This function is not yet implemented\n\n" + str(message)  )
@@ -204,14 +205,13 @@ class SpriteSomethingMainFrame(tk.Frame):
 													(self.fish.translate("meta","menu","export.inject-bulk"),"inject-bulk",self.inject_into_ROM_bulk),
 													(None,None,None),
 													(self.fish.translate("meta","menu","export.frame-as-png"),"frame-as-png",self.export_frame_as_png),
-													(self.fish.translate("meta","menu","export.animation-as-gif"),"animation-as-gif",None),#self.export_animation_as_gif),
+													(self.fish.translate("meta","menu","export.animation-as-gif"),"animation-as-gif",self.export_animation_as_gif),
 													(self.fish.translate("meta","menu","export.animation-as-hcollage"),"animation-as-hcollage",partial(self.export_animation_as_collage,"horizontal")),
 													#(self.fish.translate("meta","menu","export.animation-as-vcollage"),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
 											])
 		menu_options.append(export_menu)
 
 		bundled_games = {}
-		bundled_sprites = []
 		root = "app_resources"
 		for gamedir in os.listdir(root):
 			if os.path.isdir(os.path.join(root,gamedir)):
@@ -250,9 +250,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.menu.add_cascade(label=self.fish.translate("meta","menu","bundle"), menu=bundle_menu)
 
 		#for future implementation
+		representative_images_menu = tk.Menu(self.menu, tearoff=0, name="representative_images_menu")
 		plugins_menu = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 		tools_menu = tk.Menu(self.menu, tearoff=0, name="tools_menu")
 		tools_menu.add_command(label=self.fish.translate("meta","menu","tools.palette-editor"),command=None,state="disabled")
+		tools_menu.add_cascade(label=self.fish.translate("meta","menu","tools.get-representative-image"), menu=representative_images_menu)
 		tools_menu.add_cascade(label=self.fish.translate("meta","menu","plugins"), menu=plugins_menu)
 		self.menu.add_cascade(label=self.fish.translate("meta","menu","tools"), menu=tools_menu)
 
@@ -267,6 +269,18 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#load plugins
 	def load_plugins(self):
+		self.menu.children["representative_images_menu"] = tk.Menu(self.menu, tearoff=0, name="representative_images_menu")
+
+		#FIXME: English
+		self.menu.children["representative_images_menu"].add_command(label="Default",command=partial(self.get_representative_images,"default"))
+		for manifest_file in common.get_all_resources([self.sprite.resource_subpath,"manifests"],"representative-images.json"):
+			with(open(manifest_file)) as manifest:
+				manifest_images = json.load(manifest)
+				manifest.close()
+				for key in manifest_images.keys():
+					if not key == "default":
+						self.menu.children["representative_images_menu"].add_command(label=key[0].upper() + key[1:],command=partial(self.get_representative_images,key))
+
 		self.menu.children["plugins_menu"] = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 
 		#if we've got Game plugins or Sprite plugins
@@ -422,6 +436,53 @@ class SpriteSomethingMainFrame(tk.Frame):
 		yscrollbar.config(command=self.overview_canvas.yview)
 
 		self.right_panel.add(self.overview_frame, text=self.fish.translate("meta","tab","overview"))
+
+	def get_representative_images(self, style):
+		#list representative images
+		image_list = self.sprite.get_representative_images(style)
+		#did we save successfully? assume no
+		save_success_bool = False
+		#if we've only got one representative image
+		if len(image_list) == 1:
+			#get the data
+			filename, image = image_list[0]
+			#ask for destination
+			filename = filedialog.asksaveasfilename(initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.representative-image-single"), filetypes=((self.fish.translate("meta","dialogue","file.save.types.label"),"*.png *.gif"),))
+			if filename:
+				try:
+					#try to save it
+					image.save(filename)
+					#FIXME: English
+					messagebox.showinfo("Save Complete", f"Saved as {filename}")
+					save_success_bool = True
+				except IOError:
+					#something went oops
+					save_success_bool = False
+			else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+				save_success_bool = False
+		#if we've got many representative images
+		elif len(image_list) > 1:
+			#ask for destination folder
+			base_folder = filedialog.askdirectory(initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.representative-images-multiple"))
+			if base_folder:
+				try:
+					#try to save each one
+					for filename, image in image_list:
+						image.save(os.path.join(base_folder, filename))
+					#FIXME: English
+					messagebox.showinfo("Save Complete", f"Saved images to {base_folder}")
+					save_success_bool = True
+				except IOError:
+					#something went oops
+					save_success_bool = False
+			else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+				save_success_bool = False
+		if not save_success_bool:
+			#FIXME: English
+			messagebox.showerror("ERROR", f"ERROR: Could not create image file(s)")
+		return save_success_bool
+
+
 
 	############################ ANIMATION FUNCTIONS HERE ################################
 
@@ -677,7 +738,16 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def save_file_as(self):
 		# Save in one of the valid formats.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),(self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),(self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"))
-		filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
+
+		filename = ""
+		if "sprite.name" in self.sprite.metadata:
+			filename = self.sprite.metadata["sprite.name"]
+		else:
+			#FIXME: English
+			filename = "unknown"
+		filename = common.filename_scrub(filename)
+
+		filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
 		if filename:
 			save_success_bool = self.sprite.save_as(filename)
 			if save_success_bool:
@@ -686,6 +756,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 				self.save_working_dirs()
 			else:
+				#FIXME: English
 				messagebox.showerror("Not Yet Implemented",os.path.splitext(filename)[1][1:].upper() + " format not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
 			return save_success_bool
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -707,13 +778,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 					default_extension = file_extension.lower()
 				else:
 					default_extension = ".sfc"
-				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
+				dest_filename = os.path.splitext(source_filename)[0] + "_modified"
+				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
 		if dest_filename:
 			rom = self.game.get_rom_from_filename(source_filename)
 			modified_rom = self.sprite.inject_into_ROM(rom)
 			modified_rom.save(dest_filename, overwrite=True)
 			self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
 			self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
+			#FIXME: English
 			messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 
 	#query user for directory to inject sprite into
@@ -722,6 +795,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if inject:
 			source_filepath = filedialog.askdirectory()	#only injection is supported
 		else:
+			#FIXME: English
 			raise AssertionError("Unsure if making copies fits this purpose well")
 
 		source_filenames = []	#walk through the game files and inject the loaded sprite
@@ -735,6 +809,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			rom = self.game.get_rom_from_filename(source_filename)	#read ROM data
 			same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(source_filename)[0]	#the game file matches
 			is_zsm = "ZSM" in str(rom.get_name())	#this is a ZSM game file
+			#FIXME: English, need to get character name translations and compare against those
 			if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):	#if we've got a compatible game file, inject it!
 				modified_rom = self.sprite.inject_into_ROM(rom)
 				modified_rom.save(dest_filename, overwrite=True)
@@ -750,11 +825,40 @@ class SpriteSomethingMainFrame(tk.Frame):
 	#export current frame as PNG
 	def export_frame_as_png(self):
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),)
-		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.frame-as-png"), filetypes=filetypes)
+
+		filename = ""
+		if "sprite.name" in self.sprite.metadata:
+			filename = self.sprite.metadata["sprite.name"]
+		else:
+			filename = "unknown"
+
+		if hasattr(self.animation_engine,"animation_selection"):
+			filename += '_' + self.animation_engine.animation_selection.get()
+		else:
+			filename += "unknown-animation"
+
+		if hasattr(self.animation_engine,"pose_number"):
+			filename += '_' + str(self.animation_engine.pose_number+1)
+		else:
+			filename += str(-1)
+
+		if hasattr(self.animation_engine,"frame_number"):
+			filename += '_' + str(self.animation_engine.frame_number)
+		else:
+			filename += str(-1)
+
+		if hasattr(self.animation_engine,"zoom_getter"):
+			filename += ('_' + "zoom-" + self.zoom_factor.get()).strip()
+		if hasattr(self,"current_speed"):
+			filename += ('_' + "speed-" + str(self.current_speed * 100) + '%').strip()
+		filename = common.filename_scrub(filename)
+
+		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialfile=filename, initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.frame-as-png"), filetypes=filetypes)
 		if filename:
 			returnvalue = self.animation_engine.export_frame_as_PNG(filename)
 			if returnvalue:
 				self.working_dirs["export.frame-as-png"] = filename[:filename.rfind('/')]
+				#FIXME: English
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -762,18 +866,63 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#export current animation as GIF
 	def export_animation_as_gif(self):
-		raise NotImplementedError()
+		filetypes = ((self.fish.translate("meta","dialogue","file.save.gif"),"*.gif"),)
+
+		filename = ""
+		if "sprite.name" in self.sprite.metadata and self.sprite.metadata["sprite.name"]:
+			filename = self.sprite.metadata["sprite.name"]
+		else:
+			filename = "unknown"
+
+		if hasattr(self.animation_engine,"animation_selection"):
+			filename += '_' + self.animation_engine.animation_selection.get()
+
+		if hasattr(self.animation_engine,"zoom_getter"):
+			filename += ('_' + "zoom-" + self.zoom_factor.get()).strip()
+		if hasattr(self,"current_speed"):
+			filename += ('_' + "speed-" + str(self.current_speed * 100) + '%').strip()
+
+		filename = common.filename_scrub(filename)
+
+		filename = filedialog.asksaveasfilename(defaultextension=(".gif"), initialfile=filename, initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.animation-as-gif"), filetypes=filetypes)
+		if filename:
+			returnvalue = self.animation_engine.export_animation_as_gif(filename, zoom=self.current_zoom, speed=self.current_speed)
+			if returnvalue:
+				#FIXME: English
+				messagebox.showinfo("Save Complete", f"Saved as {filename}")
+			return returnvalue
+		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+			return False
 
 	#export current animation as collage PNG
 	def export_animation_as_collage(self,orientation="horizontal"):
 		if orientation == "vertical":
 			raise NotImplementedError()
 		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),)
-		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialdir=self.working_dirs["export.animation-as-" + orientation[:1] + "collage"], title=self.fish.translate("meta","dialogue","export.animation-as-" + orientation[:1] + "collage"), filetypes=filetypes)
+
+		filename = ""
+		if "sprite.name" in self.sprite.metadata:
+			filename = self.sprite.metadata["sprite.name"]
+		else:
+			filename = "unknown"
+
+		if hasattr(self.animation_engine,"animation_selection"):
+			filename += '_' + self.animation_engine.animation_selection.get()
+		filename = common.filename_scrub(filename)
+
+		if hasattr(self.animation_engine,"zoom_getter"):
+			filename += ('_' + "zoom-" + self.zoom_factor.get()).strip()
+		if hasattr(self,"current_speed"):
+			filename += ('_' + "speed-" + str(self.current_speed * 100) + '%').strip()
+
+		filename = common.filename_scrub(filename)
+
+		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialfile=filename, initialdir=self.working_dirs["export.animation-as-" + orientation[:1] + "collage"], title=self.fish.translate("meta","dialogue","export.animation-as-" + orientation[:1] + "collage"), filetypes=filetypes)
 		if filename:
 			returnvalue = self.animation_engine.export_animation_as_collage(filename,orientation)
 			if returnvalue:
 				self.working_dirs["export.animation-as-collage"] = filename[:filename.rfind('/')]
+				#FIXME: English
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -807,10 +956,17 @@ class SpriteSomethingMainFrame(tk.Frame):
 					update_available = not latest_version_split[2] == this_version_split[2]
 
 		if update_available:
-			get_update = messagebox.askyesno(self.app_title,"It seems that there may be an update available. Would you like to go to the project page to get it?")
+			#FIXME: English
+			get_update = messagebox.askyesno(
+										self.app_title,
+										"Current Version: " + this_version + "\n" +
+										"Latest Version: " + latest_version + "\n" +
+										"It seems that there is an update available. Would you like to go to the project page to get it?"
+			)
 			if get_update:
 				webbrowser.open_new("https://github.com/Artheau/SpriteSomething/releases/v" + latest_version)
 		else:
+			#FIXME: English
 			messagebox.showinfo(self.app_title,"It seems that you're up to date!")
 
 	def diagnostics(self):

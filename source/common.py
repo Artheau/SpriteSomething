@@ -2,7 +2,24 @@ import os
 import itertools
 import struct
 import numpy as np
-from PIL import Image
+import re
+import fractions #for gcd
+from PIL import Image, ImageChops
+
+def equal(image1, image2):
+    return ImageChops.difference(image1, image2).getbbox() is None
+
+def lcm(x, y):
+    return x * y // fractions.gcd(x, y)
+
+def filename_scrub(filename):
+	#prevents untowards things like spaces in filenames, to improve compatibility
+	new_filename = str(filename).lower()
+	new_filename = re.sub(r" ", "-", new_filename)        #no spaces
+	new_filename = re.sub(r"[\%\$\^]", "", new_filename)  #no weird things in the name
+	new_filename = re.sub(r"^[^A-Za-z0-9]+", "", new_filename)  #no weird things at beginning of name
+
+	return new_filename
 
 def get_all_resources(subdir=None,desired_filename=None):
 	file_list = []
@@ -86,6 +103,7 @@ def convert_555_to_rgb(color, recurse=True):
 	if recurse:
 		return [convert_555_to_rgb(x,recurse=False) for x in color]
 	else:
+		#FIXME: English
 		raise AssertionError("convert_555_to_rgb() called with doubly-iterable argument")
 
 def convert_to_555(palette):   #expects (r,g,b) tuples in a list, returns big endian 2-byte colors in a list
@@ -226,6 +244,7 @@ def convert_to_4bpp(image, offset, dimensions, extra_area):
 				small_tiles.extend( get_single_raw_tile(image.crop((xmax-8,y  ,xmax,y+8 ))) )
 				small_tiles.extend( get_single_raw_tile(image.crop((xmax-8,y+8,xmax,y+16))) )
 			else:
+				#FIXME: English
 				raise AssertionError(f"received call to get_raw_pose() for image '{image.name}' but the dimensions for x ({xmin},{xmax}) are not divisible by 8")
 		#check to see if ymax-ymin has hanging chads
 		if y_chad_length == 0:
@@ -243,6 +262,7 @@ def convert_to_4bpp(image, offset, dimensions, extra_area):
 				#make the final chad
 				small_tiles.extend( get_single_raw_tile(image.crop((xmax-8,ymax-8,xmax,ymax))) )
 			else:
+				#FIXME: English
 				raise AssertionError(f"received call to get_raw_pose() for image '{image.name}' but the dimensions for x ({xmin},{xmax}) are not divisible by 8")
 		else:
 			raise AssertionError(f"received call to get_raw_pose() for image '{image.name}' but the dimensions for y ({xmin},{xmax}) are not divisible by 8")

@@ -42,6 +42,60 @@ class Sprite(SpriteParent):
 			[(248,200,  0),(248,248,200),(  0,144, 72)]  #golden
 		]
 
+	def get_representative_images(self, style):
+		return_images = []
+		return_images += super().get_representative_images(style)
+
+		if style == "crossproduct":
+			return_images += self.get_tracker_images()
+
+		return return_images
+
+	def get_tracker_images(self):
+		return_images = []
+		tracker_images_filepath = os.path.join('.',"user_resources",self.resource_subpath,"sheets","tracker-images",self.classic_name.lower())
+		if not os.path.isdir(tracker_images_filepath):
+			os.makedirs(tracker_images_filepath)
+
+		i = 1
+		#cycle through mail levels
+		for mail in ["green","blue","red"]:
+			#get a container for tile lists
+			tile_list = {}
+			#get Bunny tile list for Stand:down to grab the bunny head
+			tile_list["bunny"] = self.get_tiles_for_pose("Bunny stand","down",0,["bunny_mail"],0)
+			#get Link tile list for File select for base
+			tile_list["link"] = self.get_tiles_for_pose("File select","right",0,[mail + "_mail"],0)
+			#get the bunny head
+			bunny_head = tile_list["bunny"][2]
+			#copy Link over Bunny
+			tile_list["bunny"] = tile_list["link"] + []
+			#set the bunny head
+			tile_list["bunny"][1] = bunny_head
+
+			#cycle through tile lists
+			for tileset_id in tile_list:
+				#make src image from tile list
+				src_img,_ = self.assemble_tiles_to_completed_image(tile_list[tileset_id])
+				#crop out the actual pixels
+				src_img = src_img.crop((5,7,21,29))
+				#make a new 32x32 transparent image
+				dest_img = Image.new("RGBA",(32,32))
+				#paste the pixels to (7,7)
+				dest_img.paste(src_img,(7,6))
+				#resize using nearest neighbor to 400% because that's what Cross' tracker uses
+				dest_img = dest_img.resize((32*4,32*4),Image.NEAREST)
+				#save to disk
+				filename = "tunic"
+				if tileset_id == "bunny":
+					filename += "bunny"
+				filename += str(i)
+				filename += ".png"
+				return_images.append((filename,dest_img))
+
+			i += 1
+		return return_images
+
 	def get_alternate_tile(self, image_name, palettes):
 		slugs = {}
 		for palette in palettes:
@@ -55,6 +109,7 @@ class Sprite(SpriteParent):
 				else:
 					return Image.new("RGBA",(0,0),0)    #TODO: Track down why this function is being called without spiffy button info during sprite load
 		else:
+			#FIXME: English
 			raise AssertionError(f"Could not locate tile with name {image_name}")
 
 	def import_cleanup(self):

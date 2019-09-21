@@ -1,6 +1,8 @@
 import os
 import regex
 
+#FIXME: Will soon be obsolete when I get the rest of python scripts figured out and ported over from actions-test
+
 REGEX=r"^([-\w]*)([.]|$)([\d]|exe|$)([.]|$)([\d]+|$)([-[:alpha:].]+|$)"
 
 filename_notes = os.path.join("..","build","filename.txt")

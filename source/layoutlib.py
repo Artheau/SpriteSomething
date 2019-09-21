@@ -117,8 +117,10 @@ class Layout():
 				else:
 					return None
 			else:
+				#FIXME: English
 				raise AssertionError(f"Encountered infinite parental loop in layout.json while investigating {image_name}")
 		else:
+			#FIXME: English
 			#print(f"Key not found in layout.json while investigating {image_name}")
 			pass
 

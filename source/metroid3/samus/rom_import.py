@@ -18,6 +18,7 @@ def rom_import(sprite, rom):
 			elif force.lower() == "lower":
 			  image = get_sprite_pose(sprite, rom, animation, pose, bounding_box,upper=False)
 			else:
+				#FIXME: English
 			  raise AssertionError(f"received call to force something in pose {image_name}, but did not understand command '{force}'")
 		else:
 			image = get_sprite_pose(sprite, rom, animation, pose, bounding_box)
@@ -66,6 +67,7 @@ def get_sprite_pose(sprite, rom, animation_ID, pose, bounding_box, upper=True,lo
 			image.putdata(palette_block)
 			return image
 		else:
+			#FIXME: English
 			raise AssertionError(f"unknown command to get_sprite_pose(): {animation_ID}")
 	else:
 		tilemaps, DMA_writes, duration = rom.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation

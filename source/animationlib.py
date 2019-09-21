@@ -129,7 +129,16 @@ class AnimationEngineParent():
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_image, anchor = tk.NW))
 			self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
 
-	def get_current_image(self):
+	def get_pose_number_from_frames(self, frame_number):
+		mod_frames = frame_number % self.frame_progression_table[-1]
+		frame_number_pose_started_at = max((x for x in self.frame_progression_table if x <= mod_frames),default=None)
+		if frame_number_pose_started_at is not None:
+			self.pose_number = 1+self.frame_progression_table.index(frame_number_pose_started_at)
+		else:
+			self.pose_number = 0
+		return self.pose_number
+
+	def get_image_arguments_from_frame_number(self, current_frame):
 		displayed_direction = self.get_current_direction()
 		pose_list = self.get_current_pose_list(displayed_direction)
 		tile_list = []
@@ -145,14 +154,7 @@ class AnimationEngineParent():
 
 			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
-			mod_frames = self.frame_getter() % self.frame_progression_table[-1]
-			frame_number_pose_started_at = max((x for x in self.frame_progression_table if x <= mod_frames),default=None)
-			if frame_number_pose_started_at is not None:
-				self.pose_number = 1+self.frame_progression_table.index(frame_number_pose_started_at)
-			else:
-				self.pose_number = 0
-
-			current_frame = self.frame_getter()
+			self.pose_number = self.get_pose_number_from_frames(current_frame)
 			
 			if "palette_reference_frame" in pose_list[self.pose_number]:  #for animations that switch palettes in the middle
 				self.palette_last_transition_frame = \
@@ -169,18 +171,25 @@ class AnimationEngineParent():
 			self.prev_palette_info = palette_info.copy()
 			current_frame -= self.palette_last_transition_frame
 
-			pose_image,offset = self.sprite.get_image(self.current_animation, displayed_direction, self.pose_number, palette_info, current_frame)
-			tile_list = self.sprite.get_tiles_for_pose(self.current_animation, displayed_direction, self.pose_number, palette_info, current_frame)
+			return self.current_animation, displayed_direction, self.pose_number, palette_info, current_frame, pose_list
+		else:
+			return None, None, None, None, None, None
+
+	def get_current_image(self):
+		current_animation, displayed_direction, pose_number, palette_info, current_frame, pose_list = self.get_image_arguments_from_frame_number(self.frame_getter())
+		if current_animation:
+			pose_image,offset = self.sprite.get_image(current_animation, displayed_direction, pose_number, palette_info, current_frame)
+			tile_list = self.sprite.get_tiles_for_pose(current_animation, displayed_direction, pose_number, palette_info, current_frame)
 		else:
 			pose_image,offset = None,(0,0)
 
-		if self.pose_number is not None:
-			self.step_number_label.config(text=str(self.pose_number+1))
+		if pose_number is not None:
+			self.step_number_label.config(text=str(pose_number+1))
 		if pose_list:
 			self.step_total_label.config(text=str(len(pose_list)))
 			tile_list_text = ""
-		if self.pose_number is not None and pose_list:
-			pose = pose_list[self.pose_number]
+		if pose_number is not None and pose_list:
+			pose = pose_list[pose_number]
 			for tile in pose["tiles"]:
 				tile_list_text += tile["image"]
 				if "flip" in tile:
@@ -317,7 +326,7 @@ class AnimationEngineParent():
 		img_to_save.save(filename)
 
 	def export_animation_as_collage(self, filename, orientation="horizontal"):
-		#TODO: should this be factored out to the sprite class as some kind of export_as_collage(animation, direction, ..., filename) call?
+		#TODO: use the displayed palette
 		image_list = []
 
 		displayed_direction = self.get_current_direction()
@@ -349,3 +358,79 @@ class AnimationEngineParent():
 			# VERTICAL
 			raise NotImplementedError()
 		collage.save(filename)
+
+	def export_animation_as_gif(self, filename, zoom=1, speed=1):
+		#TODO: factor out common code with the collage function
+		GIF_MAX_FRAMERATE = 100.0  #GIF format in theory supports 100 FPS, but some programs display at 50 FPS
+		ACTUAL_FRAMERATE = 60.0
+
+		image_list = []
+
+		current_animation, displayed_direction, _, palette_info, _, pose_list = self.get_image_arguments_from_frame_number(self.frame_getter())
+
+		if current_animation:
+			for pose_number in range(len(pose_list)):
+				image_list.append(self.sprite.get_image(current_animation, displayed_direction, pose_number, palette_info, 0))
+
+			#TODO: Factor this and the corresponding code in layoutlib.py out to common.py
+			x_min = min([origin[0] for image,origin in image_list])
+			x_max = max([image.size[0]+origin[0] for image,origin in image_list])
+			y_min = min([origin[1] for image,origin in image_list])
+			y_max = max([image.size[1]+origin[1] for image,origin in image_list])
+
+			gif_x_size = x_max-x_min
+			gif_y_size = y_max-y_min
+
+			palette_duration = self.sprite.get_palette_loop_timer(current_animation, displayed_direction, palette_info)
+			animation_duration = sum([pose["frames"] for pose in pose_list])
+			full_animation_duration = common.lcm(palette_duration, animation_duration)
+
+			frames = []
+			durations = []
+			
+			for frame_number in range(full_animation_duration):
+				_, _, _, palette_info, _, _ = self.get_image_arguments_from_frame_number(frame_number)
+				pose_number = self.get_pose_number_from_frames(frame_number)
+				image, origin = self.sprite.get_image(current_animation, displayed_direction, pose_number, palette_info, frame_number)
+
+				this_frame = Image.new("RGBA", (gif_x_size,gif_y_size))
+				this_frame.paste(image, (origin[0]-x_min, origin[1]-y_min), image)
+				
+				#PIL makes transparency so difficult...
+				alpha = this_frame.split()[3]
+				#reserve color number 255
+				this_frame = this_frame.convert('P', palette=Image.ADAPTIVE, colors=255)
+
+				mask = Image.eval(alpha, lambda a: 255 if a == 0 else 0)
+				#apply color number 255
+				this_frame.paste(255, mask)
+
+				new_size = tuple(int(dim*zoom) for dim in this_frame.size)
+				this_frame = this_frame.resize(new_size,resample=Image.NEAREST)
+
+				if frames and common.equal(this_frame, frames[-1]):
+					durations[-1] += 1
+				else:
+					frames.append(this_frame)
+					durations.append(1)
+
+			gif_durations = [
+				1000.0 *   #millisecond conversion
+				max(
+					1.0/GIF_MAX_FRAMERATE,
+					round(duration/(speed*ACTUAL_FRAMERATE), 2)
+				)
+				for duration in durations
+			]
+
+			if len(frames) > 1:
+				frames[0].save(filename, format='GIF', append_images=frames[1:],
+					save_all=True, transparency=255, disposal=2, duration=gif_durations, loop=0,
+					optimize=False)
+				return True
+			elif len(frames) == 1:
+				frames[0].save(filename)
+			else:
+				return False
+		else:
+			return false

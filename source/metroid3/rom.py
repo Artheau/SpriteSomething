@@ -133,6 +133,7 @@ class RomHandler(RomHandlerParent):
 			gun_tile = None
 			gun_DMA = None
 		elif priority != 0x01:
+			#FIXME: English
 			raise AssertionError(f"get_gun_port() called for data that has non-one priority {priority}")
 		else:
 			direction = direction & 0x7F   #need to clear out that high bit for the rest of this
@@ -152,6 +153,7 @@ class RomHandler(RomHandlerParent):
 		return tilemap, gun_tile, gun_DMA
 
 	def get_minimal_gun_data(self, direction, level):
+		#FIXME: English
 		if level not in range(3):
 			raise AssertionError(f"get_minimal_gun_data() called with invalid level value {level}")
 		if direction not in range(10):
@@ -177,6 +179,7 @@ class RomHandler(RomHandlerParent):
 		elif facing[0] in ['r','R']:
 			tilemaps = self._get_pose_tilemaps_from_addr(0x92EDD0, 0, pose)
 		else:
+			#FIXME: English
 			raise AssertionError(f"received call to get_death_data() with invalid facing {facing}")
 
 		#get DMA data
@@ -196,6 +199,7 @@ class RomHandler(RomHandlerParent):
 				DMA_cue = DMA_cue+1 + search_array[DMA_cue+1:].index(0xB9)
 			DMA_loc_list = 0x9B0000 + search_array[DMA_cue+1] + search_array[DMA_cue+2]*0x100
 		else:
+			#FIXME: English
 			raise AssertionError("cannot find the DMA location of the death sequence tiles")
 
 		dest_tile_sequence_loc = 0x9B0000 + self.read_from_snes_address(0x9BB6F6, 2)
@@ -250,6 +254,7 @@ class RomHandler(RomHandlerParent):
 					[0x00,0x00,0x10,0xFC,palette],
 					[0x10,0x00,0x10,0xFD,palette]]
 		else:
+			#FIXME: English
 			raise AssertionError(f"get_file_select_tilemaps() called for unknown item number {item}")
 
 	def get_palette(self, base_type, suit_type):
@@ -273,6 +278,7 @@ class RomHandler(RomHandlerParent):
 			elif suit_type == SuitType.GRAVITY:
 				base_address = 0x9B9800
 			else:
+				#FIXME: English
 				raise AssertionError(f"function get_palette_from_enum() called for standard palette with unknown suit type: {suit_type}")
 			return [self._get_static_palette(base_address)]
 
@@ -313,6 +319,7 @@ class RomHandler(RomHandlerParent):
 			elif suit_type == SuitType.GRAVITY:
 				base_address = 0x8DE8B6
 			else:
+				#FIXME: English
 				raise AssertionError(f"function get_palette_from_enum() called for heat palette with unknown suit type: {suit_type}")
 
 			full_palette_set = []
@@ -340,6 +347,7 @@ class RomHandler(RomHandlerParent):
 			elif suit_type == SuitType.GRAVITY:
 				base_address = 0x9B9F20
 			else:
+				#FIXME: English
 				raise AssertionError(f"function get_palette_from_enum() called for speed boost palette with unknown suit type: {suit_type}")
 
 			#4 frames each during the warm up, then stay at last palette forever (determined by manual frame advance)
@@ -367,6 +375,7 @@ class RomHandler(RomHandlerParent):
 			elif suit_type == SuitType.GRAVITY:
 				base_address = 0x9BA020
 			else:
+				#FIXME: English
 				raise AssertionError(f"function get_palette_from_enum() called for shine spark palette with unknown suit type: {suit_type}")
 
 			#timing and order determined by manual frame advance.  1 frame each, goes 0 to 3 then resets
@@ -402,6 +411,7 @@ class RomHandler(RomHandlerParent):
 			elif suit_type == SuitType.GRAVITY:
 				palette_list_pointer = 0x9BB7FB
 			else:
+				#FIXME: English
 				raise AssertionError(f"function get_palette_from_enum() called for death suit palette with unknown suit type: {suit_type}")
 
 			#There are ten pointers in total, grab them all
@@ -483,6 +493,7 @@ class RomHandler(RomHandlerParent):
 			return self._get_sequence_of_timed_palettes(base_address, 16)
 
 		else:
+			#FIXME: English
 			raise AssertionError(f"function get_palette_from_enum() called with unknown palette type: {base_type}")
 
 	def get_nightvisor_colors(self):
