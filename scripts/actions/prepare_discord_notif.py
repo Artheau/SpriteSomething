@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 import datetime
 import json
 import os
+import pytz
 import requests
 
 '''
@@ -59,6 +60,12 @@ if env["BRANCH"] == "":
 if not env["COMMIT_ID"] == "":
 	query = "commit/" + env["COMMIT_ID"]
 
+if "pull" in env["EVENT_TYPE"]:
+	env["PULL_ID"] = os.getenv("TRAVIS_PULL_REQUEST","")
+	env["PULL_BRANCH"] = os.getenv("TRAVIS_PULL_REQUEST_BRANCH","")
+	env["PULL_SHA"] = os.getenv("TRAVIS_PULL_REQUEST_SHA","")
+	query = "pull/" + env["PULL_ID"]
+
 if env["COMMIT_MESSAGE"] == "":
 	if "commits" in event_manifest:
 		if len(event_manifest["commits"]) > 0:
@@ -83,6 +90,7 @@ else:
 		commit_message = "\n\n".join(commit_parts)
 	else:
 		commit_title = commit_message
+	commit["url"] = "http://github.com/" + env["REPO_SLUG"] + '/' + query
 	commit["url"] = commit["url"].replace("***","Artheau")
 	commits.append("[`" + commit["id"][:7] + "`](" + commit["url"] + ')' + ' ' + commit_title)
 
@@ -91,11 +99,11 @@ if timestamp == "":
 		if "updated_at" in event_manifest["repository"]:
 			timestamp = event_manifest["repository"]["updated_at"]
 
-#if timestamp == "":
-#	utc_now = pytz.utc.localize(datetime.datetime.utcnow())
-#	pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
-#	timestamp = pst_now.isoformat()
-#	timestamp = timestamp[:timestamp.find('.')]
+if timestamp == "":
+	utc_now = pytz.utc.localize(datetime.datetime.utcnow())
+	pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
+	timestamp = pst_now.isoformat()
+	timestamp = timestamp[:timestamp.find('.')]
 
 if not timestamp == "":
 	if '+' in timestamp:
@@ -118,12 +126,6 @@ if env["COMMIT_AUTHOR"].lower() in colors:
 if len(commits) > 0:
 	for commit in commits:
 		env["COMMIT_MESSAGE"] += commit + "\n"
-
-if "pull" in env["EVENT_TYPE"]:
-	env["PULL_ID"] = os.getenv("TRAVIS_PULL_REQUEST","")
-	env["PULL_BRANCH"] = os.getenv("TRAVIS_PULL_REQUEST_BRANCH","")
-	env["PULL_SHA"] = os.getenv("TRAVIS_PULL_REQUEST_SHA","")
-	query = "pull/" + env["PULL_ID"]
 
 if '/' in env["REPO_SLUG"]:
 	tmp = env["REPO_SLUG"].split('/')
