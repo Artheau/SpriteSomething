@@ -1,0 +1,9 @@
+.sprite {
+  border: 1px solid #ffffff;
+  float:  left;
+  width:  160px;
+  height: 150px;
+}
+.name, .author {
+  text-align: center;
+}
