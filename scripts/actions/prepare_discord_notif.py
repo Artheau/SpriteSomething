@@ -1,9 +1,14 @@
 import common
+from argparse import ArgumentParser
 import datetime
 import json
 import os
-#import pytz
-#from urllib import request
+import requests
+
+parser = ArgumentParser()
+parser.add_argument("--DISCORD_WEBHOOK",dest="DISCORD_WEBHOOK",metavar="<DISCORD_WEBHOOK>")
+command_line_args = vars(parser.parse_args())
+DISCORD_WEBHOOK = command_line_args["DISCORD_WEBHOOK"]
 
 DEFAULT_EVENT = "event"
 DEFAULT_REPO_SLUG = "Artheau/SpriteSomething"
@@ -119,31 +124,17 @@ if not env["COMMIT_AUTHOR"] == "":
 if not env["COMMIT_AVATAR"] == "":
 	author["icon_url"] = env["COMMIT_AVATAR"]
 
-embed = {
-	"color": color,
-	"author": author,
-	"title": '[' + env["REPO_NAME"] + ':' + env["BRANCH"] + "] " + str(len(commits)) + " new " + env["EVENT_TYPE"] + ('' if len(commits) == 1 else 's'),
-	"url": "http://github.com/" + env["REPO_SLUG"] + '/' + query,
-	"description": env["COMMIT_MESSAGE"],
-	"timestamp": timestamp
+payload = {
+	"embeds": [
+		{
+			"color": color,
+			"author": author,
+			"title": '[' + env["REPO_NAME"] + ':' + env["BRANCH"] + "] " + str(len(commits)) + " new " + env["EVENT_TYPE"] + ('' if len(commits) == 1 else 's'),
+			"url": "http://github.com/" + env["REPO_SLUG"] + '/' + query,
+			"description": env["COMMIT_MESSAGE"],
+			"timestamp": timestamp
+		}
+	]
 }
 
-data = {}																	# get a var for output
-data["embed"] = embed											# add compiled embed objects
-datas = json.dumps(data)									# convert to string
-datas = datas[1:]													# shave char off the top
-datas = "** **\"," + datas								# prepend a bold space closure to the app
-datas = datas[:len(datas)-1]							# shave the last char off the end to fit inside the last bit
-datas = datas + ", \"content\": \"** **"	# append a bold space closure to the app
-data["content"] = "** **"
-
-payload = json.dumps(data)
-payload = payload.replace('"','\"')
-
-with open("../build/payload.json", "w") as outfile:
-	outfile.write(payload)
-	outfile.close()
-
-with open("../build/payload-modded.txt", "w") as outfile:
-	outfile.write(datas)
-	outfile.close()
+r = requests.post(DISCORD_WEBHOOK,data=json.dumps(payload),headers={"Content-type": "application/json"})
