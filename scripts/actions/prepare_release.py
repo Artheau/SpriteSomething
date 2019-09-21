@@ -19,6 +19,10 @@ def file_size(file_path):
 env = common.prepare_env()
 
 # make temp dir to put binary in
+if not os.path.isdir("../artifact"):
+	os.mkdir("../artifact")
+
+# make temp dir for other stuff
 if not os.path.isdir("../build"):
 	os.mkdir("../build")
 
@@ -48,7 +52,7 @@ if not BUILD_FILENAME == "":
 	# move the binary to temp folder
 	move(
 		BUILD_FILENAME,
-		"../build/" + BUILD_FILENAME
+		"../artifact/" + BUILD_FILENAME
 	)
 
 	# clean the git slate
@@ -72,7 +76,7 @@ if not BUILD_FILENAME == "":
 
 	# move the binary back
 	move(
-		"../build/" + BUILD_FILENAME,
+		"../artifact/" + BUILD_FILENAME,
 		BUILD_FILENAME
 	)
 
