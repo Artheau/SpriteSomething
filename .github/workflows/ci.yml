@@ -123,7 +123,7 @@ jobs:
     # install dependencies via pip
     - name: Install Dependencies via pip
       run: |
-        python ./scripts/travis/install.py
+        python ./scripts/common/install.py
     # download binary artifact
     - name: Download Binary Artifact
       uses: actions/download-artifact@v1
