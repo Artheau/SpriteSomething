@@ -1,6 +1,6 @@
 #this file is mostly copied from https://docs.travis-ci.com/user/languages/python/
 #it contains the information for automated testing on Github
-
+#
 #this is a python project, designed to be compatible with 3.6+
 language: python
 
@@ -31,20 +31,10 @@ env:
 install:
   - ${PYTHON_EXECUTABLE} --version
   #install python dependencies
-  # windows uses pip
-  # linux & macosx use pip3
-  - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
-      pip --version; \
-      pip install -r \"./app_resources/meta/manifests/pip_requirements.txt\"; \
-      pip install regex; \
-    else \
- 	    pip3 --version; \
-	    pip3 install -U wheel; \
-      pip3 install -r \"./app_resources/meta/manifests/pip_requirements.txt\"; \
-    fi"
   #default deployment is yes
-  - export DEPLOY=yes
   #default pages deployment is no
+  - ${PYTHON_EXECUTABLE} ./scripts/common/install.py
+  - export DEPLOY_BINARY=yes
   - export DEPLOY_PAGES=no
 
 # 5 Step
@@ -69,9 +59,6 @@ jobs:
       dist: bionic
       python: "3.7"
       services: xvfb #needs a screen for tkinter
-      # 3 Step
-      before_install: sudo apt-get install pcregrep #get special regex stuff
-      skip_cleanup: true
       # 7 Step
       script:
         #run upx script
@@ -80,63 +67,34 @@ jobs:
         #run build script
 #        - "if [ true ]; then \
 #            if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
-#              bash ./scripts/get_upx.sh; \
+#              ${PYTHON_EXECUTABLE} ./scripts/travis/get_upx.py; \
 #            fi; \
-#            ${PYTHON_EXECUTABLE} build.py; \
-#            ls; \
 #          fi"
         - ${PYTHON_EXECUTABLE} build.py
       # 9 Step
       after_success:
-        #if no tag was submitted, let's build one
-        #current: <major>.<minor>.<build_number>
-        - "if [ \"${TRAVIS_TAG}\" == \"\" ]; then \
-            APP_VERSION=$(head -n 1 ./app_resources/meta/manifests/app_version.txt); \
-            export TRAVIS_TAG=\"${APP_VERSION}.${TRAVIS_BUILD_NUMBER}\"; \
-          fi; \
-          echo \"${TRAVIS_TAG}\" > ./app_resources/meta/manifests/app_version.txt"
         #prepare files to upload
-        - bash ./scripts/after_success.sh
+        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_binary.py
+        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_appversion.py
+        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_release.py
+        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_pages.py
+#        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
+#            ${PYTHON_EXECUTABLE} -m pip install pytz requests; \
+#            ${PYTHON_EXECUTABLE} ./scripts/common/prepare_discord_notif.py; \
+#          fi"
 
       # 10 Step
       before_deploy:
-        #set up stuff for both deployment routes
-        #global var set at top to indicate which route to use
-        #each route has dis/advantages
         #now that we have the tag sorted, set it in git
+        - export TRAVIS_TAG=$(head -n 1 "./app_resources/meta/manifests/app_version.txt")
         - export TRAVIS_TAG="v${TRAVIS_TAG}"
         - export RELEASE_NAME="SpriteSomething ${TRAVIS_TAG}"
         - export FILES=../deploy/* #deploy archive
         - export PAGES=../pages #deploy pages
-        - git tag $TRAVIS_TAG
-        #if we're using GitHub Releaser CLI
-        # download,install,setup app
-        # set oauth token properly
-        # set body for release since we can do that
-        #else, set body as a hyperlink to RELEASENOTES.md
-        - "if [ \"${DEPLOYMENT}\" == \"github-releaser-cli\" ]; then \
-            RFILE=\"github-releaser-travis\"; \
-            if [ \"${TRAVIS_OS_NAME}\" == \"osx\" ]; then \
-              RFILE=\"${RFILE}-mac\"; \
-            elif [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
-              RFILE=\"${RFILE}.exe\"; \
-            fi; \
-            RELEASER=${RFILE}; \
-            curl https://miketrethewey.github.io/github-release-cli/v${GR_CLI_VERSION}/${RELEASER} -L --output github-releaser && chmod +x github-releaser; \
-            export GITHUB_OAUTH_TOKEN=${GITHUB_DEPLOY_KEY}; \
-            export BODY=$(cat < ./RELEASENOTES.md); \
-          elif [ \"${DEPLOYMENT}\" == \"travis\" ]; then \
-            export BODY=\"Please see [RELEASENOTES.md](https://github.com/${TRAVIS_REPO_SLUG}/blob/${TRAVIS_TAG}/RELEASENOTES.md) for description.\"; \
-          else \
-            export BODY=\"\"; \
-          fi;"
-        #output actual deployment info
-        - "echo \"Deploy:          ${DEPLOY}\"; \
-          echo \"Deploy Pages:    ${DEPLOY_PAGES}\"; \
-          echo \"Files to Upload: ${FILES}\"; \
-          echo \"GHPages Staging: ${PAGES}\"; \
-          echo \"Release Name:    ${RELEASE_NAME}\"; \
-          echo \"Git tag:         ${TRAVIS_TAG}\""
+#        - git tag $TRAVIS_TAG
+#        - git push origin $TRAVIS_TAG # probably need this for gh-actions interface to work
+        #set body as a hyperlink to RELEASENOTES.md
+        - export BODY=\"Please see [RELEASENOTES.md](https://github.com/${TRAVIS_REPO_SLUG}/blob/${TRAVIS_TAG}/RELEASENOTES.md) for description.\"; \
 
 # Travis CI GitHub Releases provider
       # 11 Step
@@ -152,7 +110,7 @@ jobs:
           draft: true
           on:
             repo: Artheau/SpriteSomething
-            condition: $DEPLOY == "yes"
+            condition: $DEPLOY_BINARY == "yes"
             branch: master
 # Travis CI GitHub Pages provider
         - provider: pages
@@ -176,7 +134,7 @@ jobs:
 #        draft: true
 #        on:
 #          repo: Artheau/SpriteSomething
-#          condition: $DEPLOY == "yes"
+#          condition: $DEPLOY_BINARY == "yes"
 #          branch: master
 
     # 3.7 on Xenial
@@ -194,8 +152,8 @@ jobs:
       before_script:
         #cancel GHReleases deploy
         # print value for confirmation
-        - "export DEPLOY=no"
-        - "echo \"Deploy: ${DEPLOY}\""
+        - "export DEPLOY_BINARY=no"
+        - "echo \"Deploy Binary: ${DEPLOY_BINARY}\""
 
     # 3.6 on Xenial
     - <<: *tests
@@ -212,8 +170,8 @@ jobs:
       before_script:
         #cancel deploy
         # print value for confirmation
-        - "export DEPLOY=no"
-        - "echo \"Deploy: ${DEPLOY}\""
+        - "export DEPLOY_BINARY=no"
+        - "echo \"Deploy Binary: ${DEPLOY_BINARY}\""
 
     # 3.7 on macOS
     - <<: *tests
@@ -228,7 +186,7 @@ jobs:
         #macosx uses python3
         - export PYTHON_EXECUTABLE=python3
     - <<: *build-deploy
-      name: "3.7 on MacOSX: Build/Deploy/Pages"
+      name: "3.7 on MacOSX: Build/Deploy"
       os: osx
       osx_image: xcode10.2
       python: "3.7"
@@ -238,12 +196,6 @@ jobs:
       before_install:
         #macosx uses python3
         - export PYTHON_EXECUTABLE=python3
-      # 6 Step
-      before_script:
-        #enable GHPages deploy
-        # print value for confirmation
-        - "export DEPLOY_PAGES=yes"
-        - "echo \"Deploy Pages: ${DEPLOY_PAGES}\""
 
     # 3.7 on Windows
     # Windows VMs currently are slow
@@ -265,9 +217,8 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        - bash ./scripts/win-before_install.sh
     - <<: *build-deploy
-      name: "3.7 on Windows: Build/Deploy"
+      name: "3.7 on Windows: Build/Deploy/Pages"
       os: windows
       python: "3.7"
       services: xvfb #needs a screen for tkinter
@@ -284,7 +235,12 @@ jobs:
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
-        - bash ./scripts/win-before_install.sh
+      # 6 Step
+      before_script:
+        #enable GHPages deploy
+        # print value for confirmation
+        - "export DEPLOY_PAGES=yes"
+        - "echo \"Deploy Pages: ${DEPLOY_PAGES}\""
 
 #nobody wants emails
 notifications:

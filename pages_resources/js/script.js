@@ -16,7 +16,7 @@ function readTextFile(file) {
 
 function init(mode = "index") {
 	if(mode == "index") {
-	  let VERSION = readTextFile(".\\app_resources\\meta\\manifests\\app_version.txt");
+	  let VERSION = readTextFile(".\\app_resources\\meta\\manifests\\app_version.txt").trim();
 	  document.title += " v" + VERSION;
 
 		let title = document.createElement("h1");
@@ -81,6 +81,48 @@ function init(mode = "index") {
 	      game_li.appendChild(sprites_ul);
 	      games_list.appendChild(game_li);
 	    }
+	  }
+
+	  let manifest = readTextFile(".\\app_resources\\meta\\manifests\\badges.json");
+	  let badges = JSON.parse(manifest);
+	  for(badge in badges) {
+		  badge = badges[badge];
+		  let label = badge["title"];
+		  let query = badge["query"];
+		  let left = badge["left"];
+		  let logo = "logo" in badge ? badge["logo"] : "";
+		  let logo_color = "logo-color" in badge ? badge["logo-color"] : "";
+		  let repo = "Artheau/SpriteSomething";
+		  let url = "https://img.shields.io/";
+		  url += badge["keyword"];
+		  url += '/';
+		  url += repo;
+		  url += (query.indexOf('?') == -1) ? '/' : '';
+		  url += query;
+		  url += (query.indexOf('?') == -1) ? '?' : '&';
+		  url += "style=flat-square";
+		  if(left != "") {
+		    url += '&' + "label=" + left.replace(/ /g,"%20");
+		  }
+		  if(logo != "") {
+		    url += '&' + "logo=" + logo;
+		  }
+		  if(logo_color != "") {
+		    url += '&' + "logoColor=" + logo_color;
+		  }
+		  url = url.replace(/<LATEST_TAG>/g,'v'+VERSION);
+		  let shield = document.createElement("div");
+		  let img = document.createElement("img");
+		  img.src = url;
+		  if(badge["url"] != "") {
+		    let a = document.createElement("a");
+		    a.href = badge["url"].replace(/<LATEST_TAG>/g,'v'+VERSION);
+		    a.appendChild(img);
+		    shield.appendChild(a);
+		  } else {
+		    shield.appendChild(img);
+		  }
+		  document.body.appendChild(shield);
 	  }
 	} else {
 		mode = mode.split('/');

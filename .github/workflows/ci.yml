@@ -1,0 +1,292 @@
+# workflow name
+name: Test, Build, Deploy Release, Deploy Pages
+
+# fire on
+on: [ push, pull_request ]
+
+########################
+# Non-GitHub providers #
+########################
+# deploy-release: docker://softprops/action-gh-release
+# deploy-pages:   peaceiris/actions-gh-pages@v1.1.0
+
+# What I *should* be able to do:
+#  Define Install Job
+#   Checkout commit
+#   Halt if fail
+#  Define Tests Job
+#   Calls Install Job
+#   Run tests.py
+#   Halt if fail
+#  Define Build Job
+#   Calls Install Job
+#   Run build.py
+#   Halt if fail
+#  Define Prepare-Release Job
+#   Calls Install Job
+#   Prepare workspace for release files
+#   Halt if fail
+#  Define Deploy Release Job
+#   Calls Prepare Release Job
+#   Deploys release files
+#   Halt if fail
+#  Define Prepare-Pages Job
+#   Calls Install Job
+#   Calls Prepare Release Job
+#   Prepare workspace for releasing pages files
+#   Halt if fail
+#  Define Deploy Pages Job
+#   Calls Install Job
+#   Deploys pages files
+#   Halt if fail
+
+# stuff to do
+jobs:
+  # Install & Build
+  #  Set up environment
+  # Build
+  #  Run build.py
+  install-build:
+    name: Install/Build
+    # cycle through os list
+    runs-on: ${{ matrix.os-name }}
+
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
+        python-version: [ 3.7 ]
+#    needs: [ install-test ]
+    steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
+    # install python
+    - name: Install python
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+        architecture: "x64"
+    - run: |
+        python --version
+    # install dependencies via pip
+    - name: Install Dependencies via pip
+      run: |
+        python ./scripts/common/install.py
+    # run build.py
+    - name: Build Binary
+      run: |
+        python build.py
+    # prepare binary artifact for later step
+    - name: Prepare Binary Artifact
+      env:
+        OS_NAME: ${{ matrix.os-name }}
+      run: |
+        python ./scripts/common/prepare_binary.py
+    # upload binary artifact for later step
+    - name: Upload Binary Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: binary-${{ matrix.os-name }}
+        path: ../artifact
+
+  # Install & Preparing Release
+  #  Set up environment
+  # Local Prepare Release action
+  install-prepare-release:
+    name: Install/Prepare Release
+    # cycle through os list
+    runs-on: ${{ matrix.os-name }}
+
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        # install/release on not xenial
+        os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
+        python-version: [ 3.7 ]
+
+    needs: [ install-build ]
+    steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
+    # install python
+    - name: Install Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+        architecture: "x64"
+    - run: |
+        python --version
+    # install dependencies via pip
+    - name: Install Dependencies via pip
+      run: |
+        python ./scripts/common/install.py
+    # download binary artifact
+    - name: Download Binary Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: binary-${{ matrix.os-name }}
+        path: ./
+    # Prepare AppVersion & Release
+    - name: Prepare AppVersion & Release
+      env:
+        OS_NAME: ${{ matrix.os-name }}
+      run: |
+        python ./scripts/common/prepare_appversion.py
+        python ./scripts/common/prepare_release.py
+    # upload appversion artifact for later step
+    - name: Upload AppVersion Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: appversion-${{ matrix.os-name }}
+        path: ./app_resources/meta/manifests/app_version.txt
+    # upload archive artifact for later step
+    - name: Upload Archive Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: archive-${{ matrix.os-name }}
+        path: ../deploy
+
+  # Deploy to GitHub Releases
+  #  Release Name:  SpriteSomething v${GITHUB_TAG}
+  #  Release Body:  Inline content of RELEASENOTES.md
+  #  Release Body:  Fallback to URL to RELEASENOTES.md
+  #  Release Files: ../deploy
+  deploy-release:
+    name: Deploy GHReleases
+    runs-on: ${{ matrix.os-name }}
+
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        # release not on xenial
+        os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
+        python-version: [ 3.7 ]
+
+    needs: [ install-prepare-release ]
+    steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
+    - name: Install Dependencies via pip
+      run: |
+        python -m pip install pytz requests
+    # download appversion artifact
+    - name: Download AppVersion Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: appversion-${{ matrix.os-name }}
+        path: ../build
+    # download archive artifact
+    - name: Download Archive Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: archive-${{ matrix.os-name }}
+        path: ../deploy
+    # debug info
+    - name: Debug Info
+      shell: bash
+#        git tag ${GITHUB_TAG}
+#        git push origin ${GITHUB_TAG}
+      env:
+        GITHUB_ACTOR: ${{ github.actor }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        GITHUB_TAG=$(head -n 1 "../build/app_version.txt")
+        GITHUB_TAG="v${GITHUB_TAG}"
+        RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
+        echo "Release Name: ${RELEASE_NAME}"
+        echo "Git Tag:      ${GITHUB_TAG}"
+    # npm is missing some stuff #FIXME
+    - name: Install Dependencies via npm
+      shell: bash
+      run: |
+        npm install --save @actions/core @actions/github glob mime
+    # create a release
+#    - name: Create a Release
+#      uses: ./.github/actions/softprops/action-gh-release
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#      with:
+#        name: ${RELEASE_NAME}
+#        draft: true
+#        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_TAG}/RELEASENOTES.md) for description."
+#        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
+#        files: ../deploy
+    - name: Build Discord Notification Payload
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      run: |
+        python ./scripts/common/prepare_discord_notif.py
+      if: contains(matrix.os-name, 'windows')
+
+  # Prepare for Deployment to GitHub Pages
+  #  run custom action
+  prepare-pages:
+    name: Prepare GHPages
+    runs-on: ${{ matrix.os-name }}
+
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        # pages on one OS
+        os-name: [ windows-latest ]
+
+    needs: [ deploy-release ]
+    steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
+    # download appversion artifact
+    - name: Download AppVersion Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: appversion-${{ matrix.os-name }}
+        path: ../build
+    # Prepare Pages
+    - name: Prepare GitHub Pages
+      run: |
+        python ./scripts/common/prepare_pages.py
+    # upload pages artifact for later step
+    - name: Upload Pages Artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: pages-${{ matrix.os-name }}
+        path: ../pages
+
+  # Deploy to GitHub Pages
+  #
+  deploy-pages:
+    name: Deploy GHPages
+    runs-on: ${{ matrix.os-name }}
+
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        # pages on one OS
+        os-name: [ windows-latest ]
+
+    needs: [ prepare-pages ]
+    steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
+    # download pages artifact
+    - name: Download Pages Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: pages-${{ matrix.os-name }}
+        path: ../pages
+     # post to GHPages #FIXME: Test GHPages
+#    - name: Post to GitHub Pages
+#      uses: peaceiris/actions-gh-pages@v1.1.0
+#      env:
+#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        PUBLISH_BRANCH: gh-pages
+#        PUBLISH_DIR: ../pages
