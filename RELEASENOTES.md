@@ -1,6 +1,6 @@
 # SpriteSomething
 
-This preview version of SpriteSomething includes many basic features of the main design of the program.
+This first official release of SpriteSomething includes many basic features of the main design of the program.
 
 ## Features
 
@@ -18,7 +18,7 @@ This preview version of SpriteSomething includes many basic features of the main
   * Item Randomizer
 * Super Metroid/A Link to the Past Combo Randomizer
 
-### General Features included in this preview
+### General Features included in this version
 
 * Open sprite from flattened PNG, compiled ZSPR
 * Extract sprite from supported game file
@@ -26,9 +26,10 @@ This preview version of SpriteSomething includes many basic features of the main
 * Export sprite as flattened PNG, compiled ZSPR, compiled RDC
 * Inject sprite into supported game file; single or a directory (experimental)
 * Export current animation frame as PNG
+* Export current animation as GIF
 * Export current animation as horizontal collage
 
-### Animation Features included in this preview
+### Animation Features included in this version
 
 * Bundled backgrounds
 * Directional controls
@@ -39,7 +40,7 @@ This preview version of SpriteSomething includes many basic features of the main
 * Download Link sprites as included by the SpriteSomething team
 * Download Samus sprites as included by the SpriteSomething team
 
-### Lesser-documented features in this preview
+### Lesser-documented features in this version
 
 * Command-line interface
 

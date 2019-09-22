@@ -1,6 +1,7 @@
 # -*- mode: python -*-
 
 block_cipher = None
+console = False
 
 def recurse_for_py_files(names_so_far):
   returnvalue = []
@@ -56,4 +57,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=True )   #   <--- change this to True to enable command prompt when the app runs
+          console=console )   #   <--- change this to True to enable command prompt when the app runs
