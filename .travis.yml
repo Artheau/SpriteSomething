@@ -33,7 +33,7 @@ install:
   #install python dependencies
   #default deployment is yes
   #default pages deployment is no
-  - ${PYTHON_EXECUTABLE} ./scripts/travis/install.py
+  - ${PYTHON_EXECUTABLE} ./scripts/common/install.py
   - export DEPLOY_BINARY=yes
   - export DEPLOY_PAGES=no
 
@@ -74,13 +74,13 @@ jobs:
       # 9 Step
       after_success:
         #prepare files to upload
-        - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_binary.py
-        - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_appversion.py
-        - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_release.py
-        - ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_pages.py
+        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_binary.py
+        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_appversion.py
+        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_release.py
+        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_pages.py
 #        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
 #            ${PYTHON_EXECUTABLE} -m pip install pytz requests; \
-#            ${PYTHON_EXECUTABLE} ./scripts/actions/prepare_discord_notif.py; \
+#            ${PYTHON_EXECUTABLE} ./scripts/common/prepare_discord_notif.py; \
 #          fi"
 
       # 10 Step
