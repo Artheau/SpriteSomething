@@ -91,6 +91,7 @@ function init(mode = "index") {
 		  let query = badge["query"];
 		  let left = badge["left"];
 		  let logo = "logo" in badge ? badge["logo"] : "";
+		  let logo_color = "logo-color" in badge ? badge["logo-color"] : "";
 		  let repo = "Artheau/SpriteSomething";
 		  let url = "https://img.shields.io/";
 		  url += badge["keyword"];
@@ -105,6 +106,9 @@ function init(mode = "index") {
 		  }
 		  if(logo != "") {
 		    url += '&' + "logo=" + logo;
+		  }
+		  if(logo_color != "") {
+		    url += '&' + "logoColor=" + logo_color;
 		  }
 		  url = url.replace(/<LATEST_TAG>/g,'v'+VERSION);
 		  let shield = document.createElement("div");

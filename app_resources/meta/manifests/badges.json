@@ -13,6 +13,7 @@
 		"query": "master",
 		"left": "master build",
 		"logo": "travis-ci",
+		"logo-color": "cdb62c",
 		"url": "https://github.com/Artheau/SpriteSomething/tree/master"
 	},
 	{
@@ -21,6 +22,7 @@
 		"query": "stable",
 		"left": "stable build",
 		"logo": "travis-ci",
+		"logo-color": "cdb62c",
 		"url": "https://github.com/Artheau/SpriteSomething/tree/stable"
 	},
 	{
