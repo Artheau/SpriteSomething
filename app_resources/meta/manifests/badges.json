@@ -4,6 +4,7 @@
 		"keyword": "github/v/release",
 		"query": "?include_prereleases",
 		"left": "latest release",
+		"logo": "github",
 		"url": "https://github.com/Artheau/SpriteSomething/releases/tag/<LATEST_TAG>"
 	},
 	{
@@ -11,6 +12,7 @@
 		"keyword": "travis",
 		"query": "master",
 		"left": "master build",
+		"logo": "travis-ci",
 		"url": "https://github.com/Artheau/SpriteSomething/tree/master"
 	},
 	{
@@ -18,6 +20,7 @@
 		"keyword": "travis",
 		"query": "stable",
 		"left": "stable build",
+		"logo": "travis-ci",
 		"url": "https://github.com/Artheau/SpriteSomething/tree/stable"
 	},
 	{
@@ -25,6 +28,7 @@
 		"keyword": "github/commits-since",
 		"query": "<LATEST_TAG>/stable",
 		"left": "commits to stable since <LATEST_TAG>",
+		"logo": "github",
 		"url": "https://github.com/Artheau/SpriteSomething/compare/master..stable"
 	}
 ]

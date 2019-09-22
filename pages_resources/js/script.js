@@ -90,6 +90,7 @@ function init(mode = "index") {
 		  let label = badge["title"];
 		  let query = badge["query"];
 		  let left = badge["left"];
+		  let logo = "logo" in badge ? badge["logo"] : "";
 		  let repo = "Artheau/SpriteSomething";
 		  let url = "https://img.shields.io/";
 		  url += badge["keyword"];
@@ -100,19 +101,22 @@ function init(mode = "index") {
 		  url += (query.indexOf('?') == -1) ? '?' : '&';
 		  url += "style=flat-square";
 		  if(left != "") {
-			  url += '&' + "label=" + left.replace(/ /g,"%20");
+		    url += '&' + "label=" + left.replace(/ /g,"%20");
+		  }
+		  if(logo != "") {
+		    url += '&' + "logo=" + logo;
 		  }
 		  url = url.replace(/<LATEST_TAG>/g,'v'+VERSION);
 		  let shield = document.createElement("div");
 		  let img = document.createElement("img");
 		  img.src = url;
 		  if(badge["url"] != "") {
-			let a = document.createElement("a");
-			a.href = badge["url"].replace(/<LATEST_TAG>/g,'v'+VERSION);
-			a.appendChild(img);
-			shield.appendChild(a);
+		    let a = document.createElement("a");
+		    a.href = badge["url"].replace(/<LATEST_TAG>/g,'v'+VERSION);
+		    a.appendChild(img);
+		    shield.appendChild(a);
 		  } else {
-			shield.appendChild(img);
+		    shield.appendChild(img);
 		  }
 		  document.body.appendChild(shield);
 	  }
