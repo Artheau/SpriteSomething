@@ -55,6 +55,7 @@ def autodetect(sprite_filename):
 								sprite, animation_assist = game.make_player_sprite(sprite_filename)
 								game_found = True
 		if not game_found:
+			#FIXME: English
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
 	elif file_extension.lower() == ".zspr":
 		with open(sprite_filename,"rb") as file:
@@ -63,6 +64,7 @@ def autodetect(sprite_filename):
 		game = get_game_class_of_type(get_game_type_from_zspr_data(zspr_data))
 		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
 	else:
+		#FIXME: English
 		raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its filename")
 
 	return game, sprite, animation_assist
@@ -85,6 +87,7 @@ def autodetect_game_type_from_rom(rom):
 	if len(game_names) == 0:
 		game_names = None
 		#raise AssertionError(f"Could not identify the type of ROM from its header name: {rom_name}")
+		#FIXME: English
 		print(f"Could not identify the type of ROM from its header name: {rom_name}")
 
 	return game_names
@@ -209,6 +212,7 @@ class GameParent():
 
 			return sprite, animation_assist
 		else:
+			#FIXME: English
 			raise AssertionError(f"make_sprite_by_number() called for non-implemented sprite_number {sprite_number}")
 
 	def get_rom_from_filename(self, filename):

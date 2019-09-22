@@ -45,6 +45,7 @@ class SpriteParent():
 		except ModuleNotFoundError as err:
 			print(err)        #TODO: This will fail silently if run through the GUI
 
+	#FIXME: English
 	def import_from_ROM(self, rom):
 		#self.images, self.master_palette = ?, ?
 		raise AssertionError("called import_from_ROM() on Sprite base class")
@@ -67,6 +68,10 @@ class SpriteParent():
 
 		#if the child class didn't tell us what to do, just go back to whatever palette it was on when it was imported
 		return self.master_palette[default_range[0]:default_range[1]]
+
+	def get_palette_duration(self, palettes):
+		#in most cases will be overriden by the child class to report duration of a palette
+		return 1
 
 	############################# END ABSTRACT CODE ##############################
 
@@ -102,6 +107,7 @@ class SpriteParent():
 			file.close()
 
 		if data[0:4] != bytes(ord(x) for x in 'ZSPR'):
+			#FIXME: English
 			raise AssertionError("This file does not have a valid ZSPR header")
 		if data[4] == 1:
 			pixel_data_offset = int.from_bytes(data[9:13], byteorder='little', signed=False)
@@ -140,6 +146,7 @@ class SpriteParent():
 			palette_data = data[palette_data_offset:palette_data_offset+palette_data_length]
 			self.import_from_binary_data(pixel_data,palette_data)
 		else:
+			#FIXME: English
 			raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
 
 	def get_supplemental_tiles(self,animation,direction,pose_number,palettes,frame_number):
@@ -149,6 +156,7 @@ class SpriteParent():
 		pass
 
 	def get_alternate_tile(self, image_name):
+		#FIXME: English
 		raise AssertionError(f"Image called {image_name} not found!")
 
 	def get_tiles_for_pose(self, animation, direction, pose_number, palettes, frame_number):
@@ -168,7 +176,7 @@ class SpriteParent():
 				if "palette" in possible_palette_info_location:
 					palette_info_location = possible_palette_info_location
 					new_palette = palette_info_location["palette"]
-			
+
 			if new_palette:
 				palettes.append(new_palette)
 
@@ -195,6 +203,25 @@ class SpriteParent():
 			full_tile_list.append( (base_image,position) )
 
 		return full_tile_list
+
+	def get_palette_loop_timer(self, animation, direction, palettes):
+		pose_list = self.get_pose_list(animation, direction)
+		returnvalue = 1 #default
+		for pose_number in range(len(pose_list)):
+			tile_list = pose_list[pose_number]["tiles"][::-1]
+			tile_list += self.get_supplemental_tiles(animation,direction,pose_number,palettes,0)
+			for tile_info in tile_list:
+				new_palette = None
+				for possible_palette_info_location in [pose_list[pose_number], tile_info]:
+					if "palette" in possible_palette_info_location:
+						palette_info_location = possible_palette_info_location
+						new_palette = palette_info_location["palette"]
+				if new_palette:
+					palettes.append(new_palette)
+
+				this_palette_duration = max(1, self.get_palette_duration(palettes))
+				returnvalue = common.lcm(returnvalue, this_palette_duration)
+		return returnvalue
 
 	def get_pose_list(self, animation, direction):
 		direction_dict = self.animations[animation]
@@ -229,6 +256,51 @@ class SpriteParent():
 		tile_list = self.get_tiles_for_pose(animation, direction, pose, palettes, frame_number)
 		assembled_image, offset = self.assemble_tiles_to_completed_image(tile_list)
 		return assembled_image, offset
+
+	def get_representative_images(self,style="default"):
+		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
+			sprite_save_name = self.metadata["sprite.name"].lower()
+		else:
+			#FIXME: English
+			sprite_save_name = "unknown"
+
+		manifest_file = common.get_resource([self.resource_subpath,"manifests"],"representative-images.json")
+		if manifest_file:
+			with open(manifest_file) as manifest:
+				manifest_images = json.load(manifest)
+		else:
+			manifest_images = {}
+
+		if "default" not in manifest_images:
+			#try to have sane defaults
+			animation = self.animations[0]    #default to first image here
+			direction = self.animations[animation].keys()[0]  #first direction
+			pose = 0    #first pose
+			#by default, will use default palettes, without having any info supplied
+			frame = 0    #probably won't matter, but just in case, use the first frame of palette
+
+
+		if style in manifest_images:
+			images = manifest_images[style]
+		elif style == "default":
+			images = [[]]  #use defaults
+		else:
+			#FIXME: English
+			raise AssertionError(f"received call to get_representative_image() with unknown style {style}")
+
+		return_images = []
+		for image in images:
+			animation = image[0] if image else self.animations[0] #default to first image here
+			direction = image[1] if len(image) > 1 else self.animations[animation].keys()[0] #default: first direction
+			pose = image[2] if len(image) > 2 else 0 #default: #first pose
+			palette = image[3] if len(image) > 3 else [] #defaults to the defaults determined by get_image
+			frame = image[4] if len(image) > 4 else 0 #default to the first frame of timed palette
+			filename = image[5] if len(image) > 5 else \
+				common.filename_scrub("-".join([sprite_save_name,style]) + ".png") #default to the sprite name and style
+			return_images.append(    ( filename, self.get_image(animation,direction,pose,palette,frame)[0] )    )
+
+		#should return a list of tuples of the form (filename, PIL Image)
+		return return_images
 
 	def save_as(self, filename):
 		_,file_extension = os.path.splitext(filename)
