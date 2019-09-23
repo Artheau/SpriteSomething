@@ -27,10 +27,8 @@ for dirname in ["resources","user","meta","manifests"]:
 	os.chmod(dirpath,0o755)
 
 os.remove("./.travis.yml")
-os.remove("./.travis.notes.yml")
 # nuke test suite
-distutils.dir_util.remove_tree("./unittests")
-os.remove("./tests.py")
+distutils.dir_util.remove_tree("./tests")
 
 BUILD_FILENAME = ""
 ZIP_FILENAME = ""
@@ -49,7 +47,7 @@ if not BUILD_FILENAME == "":
 	git_clean()
 
 	# mv dirs from source code
-	dirs = ["./.git", "./.github","./html","./scripts"]
+	dirs = ["./.git", "./.github","./html","./resources/ci"]
 	for dir in dirs:
 		if os.path.isdir(dir):
 			move(
