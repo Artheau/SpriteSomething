@@ -158,11 +158,11 @@ class GUIRunTimeTests(unittest.TestCase):
 	def minitest_photoimage_does_not_accept_png_files(self):
 		#make sure the photoimage wrapper is not bypassed #TODO: move to its own test
 		try:
-			temp = tk.PhotoImage(file=os.path.join("app_resources","meta","icons","blank.png"))   #any PNG file can be used here
+			temp = tk.PhotoImage(file=os.path.join("resources","app","meta","icons","blank.png"))   #any PNG file can be used here
 			self.assertFalse("The wrapper in gui_common.py to prevent PNG files from going to PhotoImage has been disabled, maybe by a tk import?")
 		except AssertionError:
 			try:
-				temp = tk.PhotoImage(file=os.path.join("app_resources","meta","icons","app.gif"))   #any GIF file can be used here
+				temp = tk.PhotoImage(file=os.path.join("resources","app","meta","icons","app.gif"))   #any GIF file can be used here
 				self.assertTrue(True)
 			except AssertionError:
 				self.assertFalse("tk.PhotoImage is not accepting GIF files.  Has it been rerouted?")

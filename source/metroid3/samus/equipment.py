@@ -115,6 +115,6 @@ def equipment_test(save=False):
 		cropped_image = equipment_image.crop(icon_coords)
 		equipment[icon] = cropped_image
 		if save:
-			cropped_image.save("./user_resources/metroid3/samus/sheets/" + icon + ".png")
+			cropped_image.save(os.path.join(".","resources","user","metroid","samus","sheets") + icon + ".png")
 
 	return equipment

@@ -142,7 +142,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: appversion-${{ matrix.os-name }}
-        path: ./app_resources/meta/manifests/app_version.txt
+        path: ./resources/app/meta/manifests/app_version.txt
     # upload archive artifact for later step
     - name: Upload Archive Artifact
       uses: actions/upload-artifact@v1

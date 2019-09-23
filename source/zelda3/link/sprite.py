@@ -53,7 +53,7 @@ class Sprite(SpriteParent):
 
 	def get_tracker_images(self):
 		return_images = []
-		tracker_images_filepath = os.path.join('.',"user_resources",self.resource_subpath,"sheets","tracker-images",self.classic_name.lower())
+		tracker_images_filepath = os.path.join('.',"resources","user",self.resource_subpath,"sheets","tracker-images",self.classic_name.lower())
 		if not os.path.isdir(tracker_images_filepath):
 			os.makedirs(tracker_images_filepath)
 

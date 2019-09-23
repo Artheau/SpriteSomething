@@ -32,7 +32,7 @@ if not os.path.isdir("../deploy"):
 
 # sanity check permissions for working_dirs.json
 dirpath = "."
-for dirname in ["user_resources","meta","manifests"]:
+for dirname in ["resources","user","meta","manifests"]:
 	dirpath += '/' + dirname
 	os.chmod(dirpath,0o755)
 

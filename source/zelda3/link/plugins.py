@@ -37,6 +37,7 @@ class Plugins(PluginsParent):
 			self,
 			"Unofficial SpriteSomething Link",
 			"zelda3/link/sheets/unofficial",
+#			"https://raw.githubusercontent.com/Artheau/SpriteSomething/gh-pages/resources/app/zelda3/link/sprites.json"
 			"https://raw.githubusercontent.com/Artheau/SpriteSomething/gh-pages/app_resources/zelda3/link/sprites.json"
 		)
 		return success

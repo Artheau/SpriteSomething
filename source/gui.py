@@ -72,7 +72,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			"export.animation-as-vcollage": "./"
 		}
 		#read saved working dirs file if it exists and set these
-		working_dir_path = os.path.join(".","user_resources","meta","manifests","working_dirs.json")
+		working_dir_path = os.path.join(".","resources","user","meta","manifests","working_dirs.json")
 		if os.path.exists(working_dir_path):
 			with open(working_dir_path) as json_file:
 				data = json.load(json_file)
@@ -212,7 +212,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		menu_options.append(export_menu)
 
 		bundled_games = {}
-		root = "app_resources"
+		root = os.path.join("resources","app")
 		for gamedir in os.listdir(root):
 			if os.path.isdir(os.path.join(root,gamedir)):
 				if not gamedir == "meta":
@@ -931,7 +931,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def check_for_updates(self):
 		update_available = False
 		this_version = CONST.APP_VERSION
-		version_url = "https://artheau.github.io/SpriteSomething/app_resources/meta/manifests/app_version.txt"
+		version_url = "https://artheau.github.io/SpriteSomething/resources/app/meta/manifests/app_version.txt"
 		version_req = urllib.request.urlopen(version_url)
 		latest_version = version_req.readlines()[0].decode("utf-8").strip()
 
@@ -1027,7 +1027,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#write working dirs to file
 	def save_working_dirs(self):
-		user_resources_path = os.path.join(".","user_resources")
+		user_resources_path = os.path.join(".","resources","user")
 		working_dirs_path = os.path.join(user_resources_path,"meta","manifests")
 		f = open(os.path.join(working_dirs_path,"working_dirs.json"),"w+")
 		f.write(json.dumps(self.working_dirs,indent=2))

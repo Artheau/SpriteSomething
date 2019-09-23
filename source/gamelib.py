@@ -39,7 +39,7 @@ def autodetect(sprite_filename):
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
 		loaded_image = Image.open(sprite_filename)
 		game_found = False
-		search_path = "app_resources"
+		search_path = os.path.join("resources","app")
 		for item in os.listdir(search_path):
 			if os.path.isdir(os.path.join(search_path,item)) and not item == "meta":
 				game_name = item

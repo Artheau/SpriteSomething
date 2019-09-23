@@ -16,7 +16,7 @@ function readTextFile(file) {
 
 function init(mode = "index") {
 	if(mode == "index") {
-	  let VERSION = readTextFile(".\\app_resources\\meta\\manifests\\app_version.txt").trim();
+	  let VERSION = readTextFile(".\\resources\\app\\meta\\manifests\\app_version.txt").trim();
 	  document.title += " v" + VERSION;
 
 		let title = document.createElement("h1");
@@ -41,7 +41,7 @@ function init(mode = "index") {
 		list_ul.appendChild(list_li);
 		document.body.appendChild(list_ul);
 
-	  let games = readTextFile(".\\app_resources\\meta\\manifests\\games.txt");
+	  let games = readTextFile(".\\resources\\app\\meta\\manifests\\games.txt");
 	  games = games.split("\n");
 	  for(let game in games) {
 	    game = games[game];
@@ -51,7 +51,7 @@ function init(mode = "index") {
 	      let sprite_li = document.createElement("li");
 	      let sprite_a = document.createElement("a");
 	      let game_name = game;
-	      let en_lang = readTextFile(".\\app_resources\\" + game + "\\lang\\en.json");
+	      let en_lang = readTextFile(".\\resources\\app\\" + game + "\\lang\\en.json");
 	      en_lang = JSON.parse(en_lang);
 	      if("game" in en_lang) {
 	        if("name" in en_lang["game"]) {
@@ -61,7 +61,7 @@ function init(mode = "index") {
 
 	      game_li.innerHTML = game_name;
 
-	      let manifest = readTextFile(".\\app_resources\\" + game + "\\manifests\\manifest.json");
+	      let manifest = readTextFile(".\\resources\\app\\" + game + "\\manifests\\manifest.json");
 	      manifest = JSON.parse(manifest);
 	      for(let key in manifest) {
 	        let value = manifest[key];
@@ -83,7 +83,7 @@ function init(mode = "index") {
 	    }
 	  }
 
-	  let manifest = readTextFile(".\\app_resources\\meta\\manifests\\badges.json");
+	  let manifest = readTextFile(".\\resources\\app\\meta\\manifests\\badges.json");
 	  let badges = JSON.parse(manifest);
 	  for(badge in badges) {
 		  badge = badges[badge];
@@ -139,7 +139,7 @@ function init(mode = "index") {
 		link.type = "text/css";
 
 		let filepath = window.location.pathname;
-		filepath += "app_resources/";
+		filepath += "resources/app/";
 		filepath += game + '/';
 		filepath += sprite + '/';
 		link.href = filepath + "css.css";

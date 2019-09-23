@@ -18,7 +18,7 @@
 
 ## Python dependencies
 
-* `pip install -r "./app_resources/meta/manifests/pip_requirements.txt"`
+* `pip install -r "./resources/app/meta/manifests/pip_requirements.txt"`
   * pillow
   * numpy==1.16.4
   * pyinstaller

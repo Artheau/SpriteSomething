@@ -1,5 +1,5 @@
 {
-	"$schema": "../../../../app_resources/metroid3/samus/manifests/samus-language.schema.json",
+	"$schema": "../../../../resources/app/metroid3/samus/manifests/samus-language.schema.json",
 	"section": {
 		"aiming": "Aiming",
 		"facing": "Facing",

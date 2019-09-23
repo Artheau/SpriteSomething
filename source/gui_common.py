@@ -82,7 +82,7 @@ def create_chooser(game_names):
 
 def get_sprites(self,title,dir,url):
 	success = False	#report success
-	filepath = os.path.join('.',"user_resources",dir)	#save to user_resources/<game_dir>/<sprite_dir>/sheets/<dir>/*.zspr
+	filepath = os.path.join('.',"resources","user",dir)	#save to user_resources/<game_dir>/<sprite_dir>/sheets/<dir>/*.zspr
 	if not os.path.exists(filepath):
 		os.makedirs(filepath)	#make it if we don't have it
 

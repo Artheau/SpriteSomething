@@ -3,28 +3,28 @@ import os											# for env vars
 from shutil import copy, make_archive, move, rmtree	# file manipulation
 
 # make dir to put app icon in
-checkdir = "../pages/app_resources/meta/icons/"
+checkdir = "../pages/resources/app/meta/icons/"
 if not os.path.isdir(checkdir):
 	os.makedirs(checkdir)
 # copy icon over
 copy(
-	"./app_resources/meta/icons/app.gif",
-	"../pages/app_resources/meta/icons"
+	"./resources/app/meta/icons/app.gif",
+	"../pages/resources/app/meta/icons"
 )
 
 # make dir to put build version in
-checkdir = "../pages/app_resources/meta/manifests/"
+checkdir = "../pages/resources/app/meta/manifests/"
 if not os.path.isdir(checkdir):
 	os.makedirs(checkdir)
 # copy app_version over
 copy(
 	"../build/app_version.txt",
-	"../pages/app_resources/meta/manifests"
+	"../pages/resources/app/meta/manifests"
 )
 # copy badges manifest over
 copy(
-	"./app_resources/meta/manifests/badges.json",
-	"../pages/app_resources/meta/manifests"
+	"./resources/app/meta/manifests/badges.json",
+	"../pages/resources/app/meta/manifests"
 )
 
 # copy GitHub Pages files to staging area
@@ -37,22 +37,22 @@ copy(
 # copy sprite previews
 distutils.dir_util.copy_tree(
 	"./pages_resources",
-	"../pages/app_resources"
+	"../pages/resources/app"
 )
 
-checkdir = "./app_resources"
+checkdir = "./resources/app"
 for item in os.listdir(checkdir):
 	if os.path.isdir(os.path.join(checkdir,item)):
 		if not item == "meta":
 			game = item
-			gamedir = "../pages/app_resources/" + game
+			gamedir = "../pages/resources/app/" + game
 			if not os.path.isdir(gamedir + "/manifests/"):
 				os.makedirs(gamedir + "/manifests/")
 			distutils.dir_util.copy_tree(
-				"./app_resources/" + game + "/manifests/",
+				"./resources/app/" + game + "/manifests/",
 				gamedir + "/manifests/"
 			)
 			distutils.dir_util.copy_tree(
-				"./app_resources/" + game + "/lang/",
+				"./resources/app/" + game + "/lang/",
 				gamedir + "/lang/"
 			)

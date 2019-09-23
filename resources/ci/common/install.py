@@ -23,4 +23,4 @@ subprocess.check_call([PIP_EXECUTABLE,"--version"])
 if PIP_EXECUTABLE == "pip3":
 	subprocess.check_call([PIP_EXECUTABLE,"install","-U","wheel"])
 # install listed dependencies
-subprocess.check_call([PIP_EXECUTABLE,"install","-r","./app_resources/meta/manifests/pip_requirements.txt"])
+subprocess.check_call([PIP_EXECUTABLE,"install","-r","./resources/app/meta/manifests/pip_requirements.txt"])

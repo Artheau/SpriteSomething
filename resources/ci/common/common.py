@@ -6,7 +6,7 @@ def prepare_env():
 
 	# get app version
 	APP_VERSION = ""
-	with open("./app_resources/meta/manifests/app_version.txt","r+") as f:
+	with open("./resources/app/meta/manifests/app_version.txt","r+") as f:
 		APP_VERSION = f.readlines()[0].strip()
 		f.close()
 

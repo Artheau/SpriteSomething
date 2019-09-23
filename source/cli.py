@@ -34,8 +34,8 @@ class CLIMainFrame():
       elif "inject" in mode:	#we're injecting a [single|random] sprite into game file(s)
 				# SpriteSomething.[py|exe] --cli=1 --mode=inject --dest-filename=resources/zelda3/gamefiles/export/export.sfc \
 				#  --source-filename=resources/zelda3/gamefiles/source/zelda3.sfc
-        dest_default_path = os.path.join("user_resources",self.game.internal_name,"gamefiles","export")	#default export location | user_resources/zelda3/gamefiles/export/*.*
-        source_default_path = os.path.join("user_resources",self.game.internal_name,"gamefiles","source")	#default source location | user_resources/zelda3/gamefiles/source/*.*
+        dest_default_path = os.path.join("resources","user",self.game.internal_name,"gamefiles","export")	#default export location | user_resources/zelda3/gamefiles/export/*.*
+        source_default_path = os.path.join("resources","user",self.game.internal_name,"gamefiles","source")	#default source location | user_resources/zelda3/gamefiles/source/*.*
         dest_filename = os.path.join(dest_default_path,"export")	# user_resources/zelda3/gamefiles/export/export.*
         source_filename = os.path.join(source_default_path,self.game.internal_name)	# user_resources/zelda3/gamefiles/source/zelda3.*
 
@@ -50,7 +50,7 @@ class CLIMainFrame():
             source_filename = command_line_args["src-filename"]
         if "-bulk" in mode:	#if we're injecting into many game files
 					# SpriteSomething.[py|exe] --cli=1 --mode=inject-bulk --src-filepath=resources/zelda3/gamefiles/inject
-          source_filepath = os.path.join("user_resources",self.game.internal_name,"gamefiles","inject")	#default inject location | user_resources/zelda3/gamefiles/inject/*.*
+          source_filepath = os.path.join("resources","user",self.game.internal_name,"gamefiles","inject")	#default inject location | user_resources/zelda3/gamefiles/inject/*.*
           if "src-filepath" in command_line_args:	#if we've provided a source directory, set it
             if not command_line_args["src-filepath"] == None:
               source_filepath = command_line_args["src-filepath"]
@@ -84,7 +84,7 @@ class CLIMainFrame():
         print("  Downloading Sprites")	#get ALttPR sprites
         if mode == "get-alttpr-sprites":
 					# SpriteSomething.[py|exe] --cli=1 --mode=get-alttpr-sprites
-          self.load_sprite(os.path.join("app_resources","zelda3","link","sheets","link.zspr"))	#load Link
+          self.load_sprite(os.path.join("resources","app","zelda3","link","sheets","link.zspr"))	#load Link
           self.sprite.get_alttpr_sprites()	#get ALttPR sprites; #FIXME: Do we want this in the sprite class or somewhere else?
       else:
         print("No valid CLI Mode provided")
@@ -169,7 +169,7 @@ class CLIMainFrame():
       print("    Nuke it from orbit.")
 
     if not source_filepath:	#default source filepath | resources/zelda3/gamefiles/inject/*.*
-      source_filepath = os.path.join("user_resources",self.game.internal_name,"gamefiles","inject")
+      source_filepath = os.path.join("resources","user",self.game.internal_name,"gamefiles","inject")
       if not os.path.isdir(source_filepath):	#if directory doesn't exist, make it
         os.makedirs(source_filepath)
 

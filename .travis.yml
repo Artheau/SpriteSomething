@@ -86,7 +86,7 @@ jobs:
       # 10 Step
       before_deploy:
         #now that we have the tag sorted, set it in git
-        - export TRAVIS_TAG=$(head -n 1 "./app_resources/meta/manifests/app_version.txt")
+        - export TRAVIS_TAG=$(head -n 1 "./resources/app/meta/manifests/app_version.txt")
         - export TRAVIS_TAG="v${TRAVIS_TAG}"
         - export RELEASE_NAME="SpriteSomething ${TRAVIS_TAG}"
         - export FILES=../deploy/* #deploy archive
