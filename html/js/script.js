@@ -19,47 +19,43 @@ function init(mode = "index") {
 	  let VERSION = readTextFile(".\\resources\\app\\meta\\manifests\\app_version.txt").trim();
 	  document.title += " v" + VERSION;
 
-		let title = document.createElement("h1");
-		title.setAttribute("id","title");
-		title.innerHTML = "SpriteSomething";
-		document.body.appendChild(title);
+		let title = $("<h1></h1>")
+			.attr({"id": "title"})
+			.text("SpriteSomething");
+		$("body").append(title);
 
-		let subtitle = document.createElement("h2");
-		let version_a = document.createElement("a");
-		version_a.setAttribute("id","version");
-		version_a.innerHTML = "Current Version: v" + VERSION;
-	  version_a.href = "https://github.com/Artheau/SpriteSomething/releases/tag/v" + VERSION;
-		subtitle.appendChild(version_a);
-		document.body.appendChild(subtitle);
+		let subtitle = $("<h2><a>");
+		let version_a = $("<a>")
+			.attr("id","version")
+			.attr("href","https://github.com/Artheau/SpriteSomething/releases/tag/v" + VERSION)
+			.text("Current Version: v" + VERSION);
+		subtitle.append(version_a);
+		$("body").append(subtitle);
 
-		let list_ul = document.createElement("ul");
-		let list_li = document.createElement("li");
-		list_li.innerHTML = "Custom Sprite Repositories";
-		let games_list = document.createElement("ul");
-		games_list.setAttribute("id","games-list");
-		list_li.appendChild(games_list);
-		list_ul.appendChild(list_li);
-		document.body.appendChild(list_ul);
+		let list_li = $("<ul><li>")
+			.text("Custom Sprite Repositories");
+		let games_list = $("<ul>")
+			.attr("id","games-list");
+		list_li.append(games_list);
+		$("body").append(list_li);
 
 	  let games = readTextFile(".\\resources\\app\\meta\\manifests\\games.txt");
 	  games = games.split("\n");
 	  for(let game in games) {
 	    game = games[game];
 	    if(game != "") {
-	      let game_li = document.createElement("li");
-	      let sprites_ul = document.createElement("ul");
-	      let sprite_li = document.createElement("li");
-	      let sprite_a = document.createElement("a");
+	      let game_li = $("<li>");
+	      let sprites_ul = $("<ul>");
+	      let sprite_li = $("<li>");
+	      let sprite_a = $("<a>");
 	      let game_name = game;
 	      let en_lang = readTextFile(".\\resources\\app\\" + game + "\\lang\\en.json");
 	      en_lang = JSON.parse(en_lang);
 	      if("game" in en_lang) {
 	        if("name" in en_lang["game"]) {
-	          game_name = en_lang["game"]["name"];
+	          game_li.text(en_lang["game"]["name"]);
 	        }
 	      }
-
-	      game_li.innerHTML = game_name;
 
 	      let manifest = readTextFile(".\\resources\\app\\" + game + "\\manifests\\manifest.json");
 	      manifest = JSON.parse(manifest);
@@ -69,17 +65,17 @@ function init(mode = "index") {
 	          if("folder name" in value) {
 	            let name = value["name"];
 	            let sprite = value["folder name"];
-	            sprite_li = document.createElement("li");
-	            sprite_a = document.createElement("a");
-							sprite_a.href = "./?mode=" + game + '/' + sprite;
-	            sprite_a.innerHTML = name;
-	            sprite_li.appendChild(sprite_a);
-	            sprites_ul.appendChild(sprite_li);
+	            sprite_li = $("<li>");
+	            sprite_a = $("<a>")
+	            	.attr("href","./?mode=" + game + '/' + sprite)
+	            	.text(name);
+	            sprite_li.append(sprite_a);
+	            sprites_ul.append(sprite_li);
 	          }
 	        }
 	      }
-	      game_li.appendChild(sprites_ul);
-	      games_list.appendChild(game_li);
+	      game_li.append(sprites_ul);
+	      games_list.append(game_li);
 	    }
 	  }
 
@@ -111,40 +107,38 @@ function init(mode = "index") {
 		    url += '&' + "logoColor=" + logo_color;
 		  }
 		  url = url.replace(/<LATEST_TAG>/g,'v'+VERSION);
-		  let shield = document.createElement("div");
-		  let img = document.createElement("img");
-		  img.src = url;
+		  let shield = $("<div>");
+		  let img = $("<img>")
+		  	.attr("src",url);
 		  if(badge["url"] != "") {
-		    let a = document.createElement("a");
-		    a.href = badge["url"].replace(/<LATEST_TAG>/g,'v'+VERSION);
-		    a.appendChild(img);
-		    shield.appendChild(a);
+		    let a = $("<a>")
+		    	.attr("href",badge["url"].replace(/<LATEST_TAG>/g,'v'+VERSION));
+		    a.append(img);
+		    shield.append(a);
 		  } else {
-		    shield.appendChild(img);
+		    shield.append(img);
 		  }
-		  document.body.appendChild(shield);
+		  $("body").append(shield);
 	  }
 	} else {
 		mode = mode.split('/');
 		let game = mode[0];
 		let sprite = mode[1];
 
-		let title = document.createElement("h1");
-		title.setAttribute("id","title");
-		title.innerHTML = sprite.substring(0,1).toUpperCase() + sprite.substring(1) + " Sprites";
-		document.body.appendChild(title);
-
-		let link = document.createElement("link");
-		link.setAttribute("rel","stylesheet");
-		link.type = "text/css";
+		let title = $("<h1>")
+			.attr("id","title")
+			.text(sprite.substring(0,1).toUpperCase() + sprite.substring(1) + " Sprites");
+        $("body").append(title);
 
 		let filepath = window.location.pathname;
 		filepath += "resources/app/";
 		filepath += game + '/';
 		filepath += sprite + '/';
-		link.href = filepath + "css.css";
-
-		document.head.appendChild(link);
+		let link = $("<link>")
+			.attr("rel","stylesheet")
+			.attr("type","text/css")
+			.attr("href",filepath + "css.css");
+        $("head").append(link);
 
 		let filename = filepath + "sprites.json";
 	  let spritesManifest = readTextFile(filename);	// get sprites manifest
@@ -156,7 +150,7 @@ function init(mode = "index") {
 		filename = filepath + "layer-files.json";
 		let layerfilesManifest = readTextFile(filename);
 		let layerfiles = JSON.parse(layerfilesManifest);
-		let layerfiles_container = document.createElement("ul");
+		let layerfiles_container = $("<ul>");
 		for (let layerext in layerfiles) {
 			let layerfile = layerfiles[layerext];
 			let app = layerfile["app"];
@@ -170,15 +164,14 @@ function init(mode = "index") {
 												repo
 			);
 
-			let layerfile_li = document.createElement("li");
-			layerfile_li.innerHTML = app;
-			layerfile_meta_ul = document.createElement("ul");
+			let layerfile_li = $("<li>")
+				.text(app);
+			layerfile_meta_ul = $("<ul>");
 
 			for(let meta in metas) {
 				let meta_text = metas[meta];
 				if(meta_text) {
-					layerfile_meta_li = document.createElement("li");
-					let layerfile_meta_a = document.createElement("a");
+					layerfile_meta_li = $("<li>");
 					let link_text = "";
 					switch(meta) {
 						case "0":
@@ -201,65 +194,60 @@ function init(mode = "index") {
 								break;
 						}
 					}
-					layerfile_meta_a.innerHTML = link_text;
-					layerfile_meta_a.href = meta_text;
-					layerfile_meta_li.appendChild(layerfile_meta_a);
-					layerfile_meta_ul.appendChild(layerfile_meta_li);
+					let layerfile_meta_a = $("<a>")
+						.attr("href",meta_text)
+						.text(link_text);
+					layerfile_meta_li.append(layerfile_meta_a);
+					layerfile_meta_ul.append(layerfile_meta_li);
 
 					if(link_text == "Sprite Previews") {
 						link_text = "Downloadable Sprite Previews";
 						meta_text = "http://alttp.mymm1.com/sprites";
-						layerfile_meta_li = document.createElement("li");
-						layerfile_meta_a = document.createElement("a");
-						layerfile_meta_a.innerHTML = link_text;
-						layerfile_meta_a.href = meta_text;
-						layerfile_meta_li.appendChild(layerfile_meta_a);
-						layerfile_meta_ul.appendChild(layerfile_meta_li);
+						layerfile_meta_li = $("<li>");
+						layerfile_meta_a = $("<a>")
+							.attr("href",meta_text)
+							.text(link_text);
+						layerfile_meta_li.append(layerfile_meta_a);
+						layerfile_meta_ul.append(layerfile_meta_li);
 					}
 				}
 			}
-			layerfile_li.appendChild(layerfile_meta_ul);
-			layerfiles_container.appendChild(layerfile_li);
+			layerfile_li.append(layerfile_meta_ul);
+			layerfiles_container.append(layerfile_li);
 		}
 
-		sprites_container = document.createElement("div");
-		sprites_container.setAttribute("id","sprites_container")
+	  let sprites_container = $("<div>")
+			.attr("id","sprites_container");
 
 	  for (let sprite in sprites) {								// iterate through sprites
 	    sprite = sprites[sprite];								// get this sprite
 	    let name = sprite.name;									// sprite name
 	    let author = sprite.author;								// sprite author
 	    let file = sprite.file;									// sprite url
-	    let sprite_object = document.createElement("div");		// main container
-	    let name_line = document.createElement("div");			// name container
-	    let name_link = document.createElement("a");			// name link
-	    let author_line = document.createElement("div");		// author container
-	    let sprite_image = document.createElement("div");		// image container
-
-	    sprite_object.className = "sprite";
-
-	    name_link.innerHTML = name;
-	    name_link.href = file;
-	    name_line.className = "name";
-	    name_line.appendChild(name_link);
-
-	    author_line.innerHTML = author;
-	    author_line.className = "author";
-
-	    sprite_image.className = "sprite-preview";
-	    sprite_image.style.backgroundImage = "url(" + file + ')';
-
-	    sprite_object.appendChild(name_line);
-	    sprite_object.appendChild(author_line);
-	    sprite_object.appendChild(sprite_image);
-
-	    sprites_container.appendChild(sprite_object);
+	    let name_link = $("<a>")
+	    	.attr("href",file)
+	    	.text(name);			// name link
+	    let name_line = $("<div>")
+	    	.attr("class","name")
+	    	.append(name_link);			// name container
+	    let author_line = $("<div>")
+	    	.attr("class","author")
+	    	.text(author);		// author container
+	    let sprite_image = $("<div>")
+	    	.attr("class","sprite-preview")
+	    	.attr("style","background-image:url(" + file + ")");		// image container
+	    let sprite_object = $("<div>")
+	    	.attr("class","sprite")
+	    	.append(name_line)
+	    	.append(author_line)
+	    	.append(sprite_image);		// main container
+	    sprites_container.append(sprite_object);
 	  }
 
-		document.body.appendChild(sprites_container);
-		let spacer = document.createElement("div");
-		spacer.style.clear = "both";
-		document.body.appendChild(spacer);
-		document.body.appendChild(layerfiles_container);
+		$("body").append(sprites_container);
+		let spacer = $("<div>")
+			.attr("style","clear:both");
+		$("body").append(spacer);
+		$("body").append(layerfiles_container);
 	}
 }
