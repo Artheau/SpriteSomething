@@ -23,7 +23,7 @@ def recurse_for_py_files(names_so_far):
 
 hiddenimports = recurse_for_py_files(["source"])
 
-a = Analysis(['SpriteSomething.py'],
+a = Analysis(['../SpriteSomething.py'],
              pathex=[],
              binaries=[],
              datas=[],

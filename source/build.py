@@ -10,7 +10,7 @@ if os.path.isdir("upx"):
 else:
 	upx_string = ""
 
-subprocess.run(" ".join(["pyinstaller SpriteSomething.spec ",
+subprocess.run(" ".join(["pyinstaller ./source/SpriteSomething.spec ",
 						 upx_string,
 						 "-y ",                #overwrite dist directory if necessary
 						 "--onefile "          #compile everything into a single file, except for resources and whatnot

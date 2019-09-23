@@ -8,12 +8,12 @@ import sys           #for figuring out how python is called (e.g. python or pyth
 for test_file in ["test_asserts.py", "test_waterfalls.py", "test_gc.py"]:   #TODO: don't hardcode the file names
 	print('='*80)
 	print(f"Running tests from {test_file}")
-	error_code = subprocess.check_call([sys.executable, os.path.join(os.getcwd(), 'unittests', test_file)])
+	error_code = subprocess.check_call([sys.executable, os.path.join(os.getcwd(), 'tests', test_file)])
 	if error_code != 0:
 		exit(error_code)   #early exit
 	else:
 		print('='*80)
 		print("\n")
-	
+
 print('='*80)
 exit(error_code)   #standard exit, with error_code = 0
