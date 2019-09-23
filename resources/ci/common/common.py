@@ -63,7 +63,7 @@ def prepare_env():
 		if not TRAVIS_TAG == "":
 			GITHUB_TAG = TRAVIS_TAG
 		# if we haven't appended the build number, do it
-		if not BUILD_NUMBER in GITHUB_TAG:
+		if not BUILD_NUMBER in APP_VERSION:
 			# set to <app_version>.<build_number>
 			GITHUB_TAG = APP_VERSION + '.' + BUILD_NUMBER
 

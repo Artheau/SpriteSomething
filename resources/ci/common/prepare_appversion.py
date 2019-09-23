@@ -23,7 +23,7 @@ BUILD_NUMBER = TRAVIS_BUILD_NUMBER + GITHUB_SHA_SHORT
 if GITHUB_TAG == "":
 	# set to <app_version>.<build_number>
 	GITHUB_TAG = APP_VERSION
-	if not BUILD_NUMBER == "":
+	if not BUILD_NUMBER == "" and BUILD_NUMBER not in GITHUB_TAG:
 		GITHUB_TAG += '.' + BUILD_NUMBER
 
 # set tag to app_version.txt
