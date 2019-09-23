@@ -33,7 +33,7 @@ install:
   #install python dependencies
   #default deployment is yes
   #default pages deployment is no
-  - ${PYTHON_EXECUTABLE} ./scripts/common/install.py
+  - ${PYTHON_EXECUTABLE} ./resources/ci/common/install.py
   - export DEPLOY_BINARY=yes
   - export DEPLOY_PAGES=no
 
@@ -50,7 +50,7 @@ jobs:
       # 6 Step
       before_script: echo "#do nothing before script"
       # 7 Step
-      script: ${PYTHON_EXECUTABLE} tests.py
+      script: ${PYTHON_EXECUTABLE} ./tests/tests.py
 
     # 3.7 on Bionic Build/Deploy
     - &build-deploy
@@ -67,20 +67,20 @@ jobs:
         #run build script
 #        - "if [ true ]; then \
 #            if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
-#              ${PYTHON_EXECUTABLE} ./scripts/travis/get_upx.py; \
+#              ${PYTHON_EXECUTABLE} ./resources/ci/travis/get_upx.py; \
 #            fi; \
 #          fi"
-        - ${PYTHON_EXECUTABLE} build.py
+        - ${PYTHON_EXECUTABLE} ./source/meta/build.py
       # 9 Step
       after_success:
         #prepare files to upload
-        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_binary.py
-        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_appversion.py
-        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_release.py
-        - ${PYTHON_EXECUTABLE} ./scripts/common/prepare_pages.py
+        - ${PYTHON_EXECUTABLE} ./resources/ci/common/prepare_binary.py
+        - ${PYTHON_EXECUTABLE} ./resources/ci/common/prepare_appversion.py
+        - ${PYTHON_EXECUTABLE} ./resources/ci/common/prepare_release.py
+        - ${PYTHON_EXECUTABLE} ./resources/ci/common/prepare_pages.py
 #        - "if [ \"${TRAVIS_OS_NAME}\" == \"windows\" ]; then \
 #            ${PYTHON_EXECUTABLE} -m pip install pytz requests; \
-#            ${PYTHON_EXECUTABLE} ./scripts/common/prepare_discord_notif.py; \
+#            ${PYTHON_EXECUTABLE} ./resources/ci/common/prepare_discord_notif.py; \
 #          fi"
 
       # 10 Step

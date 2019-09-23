@@ -73,7 +73,7 @@ jobs:
     # install dependencies via pip
     - name: Install Dependencies via pip
       run: |
-        python ./scripts/common/install.py
+        python ./resources/ci/common/install.py
     # run build.py
     - name: Build Binary
       run: |
@@ -83,7 +83,7 @@ jobs:
       env:
         OS_NAME: ${{ matrix.os-name }}
       run: |
-        python ./scripts/common/prepare_binary.py
+        python ./resource/ci/common/prepare_binary.py
     # upload binary artifact for later step
     - name: Upload Binary Artifact
       uses: actions/upload-artifact@v1
@@ -123,7 +123,7 @@ jobs:
     # install dependencies via pip
     - name: Install Dependencies via pip
       run: |
-        python ./scripts/common/install.py
+        python ./resources/ci/common/install.py
     # download binary artifact
     - name: Download Binary Artifact
       uses: actions/download-artifact@v1
@@ -135,8 +135,8 @@ jobs:
       env:
         OS_NAME: ${{ matrix.os-name }}
       run: |
-        python ./scripts/common/prepare_appversion.py
-        python ./scripts/common/prepare_release.py
+        python ./resources/ci/common/prepare_appversion.py
+        python ./resources/ci/common/prepare_release.py
     # upload appversion artifact for later step
     - name: Upload AppVersion Artifact
       uses: actions/upload-artifact@v1
@@ -221,7 +221,7 @@ jobs:
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       run: |
-        python ./scripts/common/prepare_discord_notif.py
+        python ./resources/ci/common/prepare_discord_notif.py
       if: contains(matrix.os-name, 'windows')
 
   # Prepare for Deployment to GitHub Pages
@@ -251,7 +251,7 @@ jobs:
     # Prepare Pages
     - name: Prepare GitHub Pages
       run: |
-        python ./scripts/common/prepare_pages.py
+        python ./resources/ci/common/prepare_pages.py
     # upload pages artifact for later step
     - name: Upload Pages Artifact
       uses: actions/upload-artifact@v1
