@@ -1,14 +1,10 @@
-from . import common
+import common
 from argparse import ArgumentParser
 import datetime
 import json
 import os
 import pytz
 import requests
-
-'''
-Edit 2
-'''
 
 DEFAULT_EVENT = "event"
 DEFAULT_REPO_SLUG = "Artheau/SpriteSomething"
