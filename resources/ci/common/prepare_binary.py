@@ -5,17 +5,6 @@ import subprocess							# do stuff at the shell level
 import common
 from shutil import copy, make_archive, move, rmtree	# file manipulation
 
-def convert_bytes(num):
-	for x in ["bytes","KB","MB","GB","TB","PB"]:
-		if num < 1024.0:
-			return "%3.1f %s" % (num,x)
-		num /= 1024.0
-
-def file_size(file_path):
-	if os.path.isfile(file_path):
-		file_info = os.stat(file_path)
-		return convert_bytes(file_info.st_size)
-
 env = common.prepare_env()
 
 # make dir to put the binary in
@@ -34,7 +23,7 @@ print("OS Version:     " + env["OS_VERSION"])
 print("Build Filename: " + BUILD_FILENAME)
 print("Dest Filename:  " + DEST_FILENAME)
 if not BUILD_FILENAME == "":
-	print("Build Filesize: " + file_size(BUILD_FILENAME))
+	print("Build Filesize: " + common.file_size(BUILD_FILENAME))
 
 if not BUILD_FILENAME == "":
 	move(

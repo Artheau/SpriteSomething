@@ -101,7 +101,6 @@ class CLIMainFrame():
             name_dict[key].extend(item)
           else:
             name_dict[key] = item
-        name_file.close()
     app_name = []
     if random.choice([True,False]):
       app_name.append(random.choice(name_dict["pre"]))

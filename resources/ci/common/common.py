@@ -1,6 +1,17 @@
 import os
 import stat
 
+def convert_bytes(num):
+	for x in ["bytes","KB","MB","GB","TB","PB"]:
+		if num < 1024.0:
+			return "%3.1f %s" % (num,x)
+		num /= 1024.0
+
+def file_size(file_path):
+	if os.path.isfile(file_path):
+		file_info = os.stat(file_path)
+		return convert_bytes(file_info.st_size)
+
 def prepare_env():
 	env = {}
 
@@ -8,7 +19,6 @@ def prepare_env():
 	APP_VERSION = ""
 	with open("./resources/app/meta/manifests/app_version.txt","r+") as f:
 		APP_VERSION = f.readlines()[0].strip()
-		f.close()
 
 	# get travis tag
 	TRAVIS_TAG = os.getenv("TRAVIS_TAG","")

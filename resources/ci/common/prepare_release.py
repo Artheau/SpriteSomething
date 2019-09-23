@@ -6,17 +6,6 @@ import common
 from git_clean import git_clean
 from shutil import copy, make_archive, move, rmtree	# file manipulation
 
-def convert_bytes(num):
-	for x in ["bytes","KB","MB","GB","TB","PB"]:
-		if num < 1024.0:
-			return "%3.1f %s" % (num,x)
-		num /= 1024.0
-
-def file_size(file_path):
-	if os.path.isfile(file_path):
-		file_info = os.stat(file_path)
-		return convert_bytes(file_info.st_size)
-
 env = common.prepare_env()
 
 # make temp dir to put binary in
@@ -95,7 +84,7 @@ if not BUILD_FILENAME == "":
 print("Build Filename: " + BUILD_FILENAME)
 print("Zip Filename:   " + ZIP_FILENAME)
 if not BUILD_FILENAME == "":
-	print("Build Filesize: " + file_size(BUILD_FILENAME))
+	print("Build Filesize: " + common.file_size(BUILD_FILENAME))
 if not ZIP_FILENAME == "":
-	print("Zip Filesize:   " + file_size(ZIP_FILENAME))
+	print("Zip Filesize:   " + common.file_size(ZIP_FILENAME))
 print("Git tag:        " + env["GITHUB_TAG"])

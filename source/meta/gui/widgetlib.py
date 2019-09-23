@@ -187,7 +187,6 @@ class SpiffyGroup():
 		bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
 		with open(bindings_filename,encoding="utf-8") as f:
 			bindings = json.load(f)
-			f.close()
 		keypresses_switcher = bindings[self.label.lower()] if self.label.lower() in bindings else {}
 		keypresses = keypresses_switcher.get(internal_value_name.lower(),None)
 		if keypresses:

@@ -29,8 +29,6 @@ class ExportAudit(unittest.TestCase):
 		with open(LINK_FILENAME,"rb") as original_file_contents:
 			with open(temporary_zspr_filename,"rb") as temp_zspr:
 				self.assertTrue(self.same(original_file_contents,temp_zspr))
-				temp_zspr.close()
-			original_file_contents.close()
 
 	def test_link_rdc_export(self):
 		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH)
@@ -40,8 +38,6 @@ class ExportAudit(unittest.TestCase):
 		with open(LINK_RDC_FILENAME,"rb") as original_file_contents:
 			with open(temporary_rdc_filename,"rb") as temp_rdc:
 				self.assertTrue(self.same(original_file_contents,temp_rdc))
-				temp_rdc.close()
-			original_file_contents.close()
 
 	def test_samus_rdc_export(self):
 		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH)
@@ -51,8 +47,6 @@ class ExportAudit(unittest.TestCase):
 		with open(SAMUS_RDC_FILENAME,"rb") as original_file_contents:
 			with open(temporary_rdc_filename,"rb") as temp_rdc:
 				self.assertTrue(self.same(original_file_contents,temp_rdc))
-				temp_rdc.close()
-			original_file_contents.close()
 
 class SamusAnimationAudit(unittest.TestCase):
 	#TODO: these types of tests should be extended to all sprites
@@ -60,12 +54,10 @@ class SamusAnimationAudit(unittest.TestCase):
 		super().__init__(*args, **kwargs)
 		with open(os.path.join(SAMUS_RESOURCE_PATH,"manifests","animations.json")) as inFile:
 			self.samus_animations = json.load(inFile)
-			inFile.close()
 			if "$schema" in self.samus_animations: #skip schema definition as it's not an animation
 				del self.samus_animations["$schema"]
 		with open(os.path.join(SAMUS_RESOURCE_PATH,"manifests","layout.json")) as inFile:
 			self.samus_layout = json.load(inFile)
-			inFile.close()
 
 	def test_animations_use_valid_image_names(self):
 		#if this fails, it is because there is an animation in animations.json that references an image from layout.json that doesn't exist

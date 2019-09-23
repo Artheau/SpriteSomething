@@ -82,7 +82,6 @@ class SpriteParent():
 	def load_animations(self):
 		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
-			file.close()
 
 	def import_from_filename(self):
 		_,file_extension = os.path.splitext(self.filename)
@@ -104,7 +103,6 @@ class SpriteParent():
 	def import_from_ZSPR(self):
 		with open(self.filename,"rb") as file:
 			data = bytearray(file.read())
-			file.close()
 
 		if data[0:4] != bytes(ord(x) for x in 'ZSPR'):
 			#FIXME: English
@@ -362,7 +360,6 @@ class SpriteParent():
 
 			with open(filename, "wb") as zspr_file:
 				zspr_file.write(write_buffer)
-				zspr_file.close()
 
 			return True       #report success to caller
 		else:
@@ -395,7 +392,6 @@ class SpriteParent():
 
 			for _,block in blocks_with_type:
 				rdc_file.write(block)
-			rdc_file.close()
 
 		return True   #indicate success to caller
 

@@ -58,7 +58,6 @@ def create_chooser(game_names):
 			sprite_name = ""
 			with open(common.get_resource([game_name,"manifests"],"manifest.json")) as f:
 				manifest = json.load(f)
-				f.close()
 				sprite_name = manifest["1"]["name"]
 			game_button = tk.Button(
 				game_chooser,
@@ -91,15 +90,13 @@ def get_sprites(self,title,dir,url):
 	sprites_req = urllib.request.urlopen(sprites_filename)
 	sprites = json.loads(sprites_req.read().decode("utf-8"))
 	#get an iterator and a counter for a makeshift progress bar
-	i = 0
 	total = len(sprites)
 	#FIXME: English
 	print("   Downloading " + title + " Sprites")
 	messagebox.showwarning("Downloading " + title + " Sprites","Wait a little bit, dude, there's " + str(total) + " sprites.")
-	for sprite in sprites:
+	for i,sprite in enumerate(sprites):
 		sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
 		sprite_destination = os.path.join(filepath,sprite_filename)	#set the destination
-		i += 1	#iterate iterator
 		if not os.path.exists(sprite_destination):	#if we don't have it, download it
 			with open(sprite_destination, "wb") as g:
 				sprite_data_req = urllib.request.Request(
@@ -112,11 +109,10 @@ def get_sprites(self,title,dir,url):
 				sprite_data_req = urllib.request.urlopen(sprite_data_req)
 				sprite_data = sprite_data_req.read()
 				#FIXME: English
-				print("    Writing " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
+				print("    Writing " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 				g.write(sprite_data)
-				g.close()
 				success = True
 		else:	#if we do have it, next!
 			#FIXME: English
-			print("    Skipping " + str(i).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
+			print("    Skipping " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 	return success

@@ -57,9 +57,8 @@ class Sprite(SpriteParent):
 		if not os.path.isdir(tracker_images_filepath):
 			os.makedirs(tracker_images_filepath)
 
-		i = 1
 		#cycle through mail levels
-		for mail in ["green","blue","red"]:
+		for i,mail in enumerate(["green","blue","red"]):
 			#get a container for tile lists
 			tile_list = {}
 			#get Bunny tile list for Stand:down to grab the bunny head
@@ -89,11 +88,10 @@ class Sprite(SpriteParent):
 				filename = "tunic"
 				if tileset_id == "bunny":
 					filename += "bunny"
-				filename += str(i)
+				filename += str(i+1)
 				filename += ".png"
 				return_images.append((filename,dest_img))
 
-			i += 1
 		return return_images
 
 	def get_alternate_tile(self, image_name, palettes):

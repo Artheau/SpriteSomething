@@ -5,7 +5,6 @@ from shutil import copy	# file manipulation
 APP_VERSION = ""
 with open("./resources/app/meta/manifests/app_version.txt","r+") as f:
 	APP_VERSION = f.readlines()[0].strip()
-	f.close()
 
 # get travis tag
 TRAVIS_TAG = os.getenv("TRAVIS_TAG","")

@@ -40,7 +40,6 @@ class RomHandlerParent():
             if self._rom_is_headered:
                 self._header = bytearray(file.read(self._HEADER_SIZE))
             self._contents = bytearray(file.read())
-            file.close()
 
         #Determine the type of ROM (e.g. LoRom or HiRom)
         #by comparing against checksum complement
@@ -114,7 +113,6 @@ class RomHandlerParent():
             if self._rom_is_headered and not strip_header:
                 file.write(self._header)
             file.write(self._contents)
-            file.close()
 
     def get_size_in_MB(self):
         return self._rom_size/(8*self._MEGABIT)

@@ -75,7 +75,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if os.path.exists(working_dir_path):
 			with open(working_dir_path) as json_file:
 				data = json.load(json_file)
-				json_file.close()
 				for k,v in data.items():
 					self.working_dirs[k] = v
 
@@ -109,7 +108,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 							name_dict[key].extend(item)
 						else:
 							name_dict[key] = item
-				name_file.close()
 		app_name = []
 		if random.choice([True,False]):
 			app_name.append(random.choice(name_dict["pre"]))
@@ -237,7 +235,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 									if os.path.isfile(filepath):
 										filename = filepath
 								bundled_games[gamedir]["sprites"].append((name,partial(self.load_sprite,filename)))
-					game_manifest.close()
 		bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")
 		for bundled_game in bundled_games:
 			bundled_game = bundled_games[bundled_game]
@@ -273,9 +270,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		#FIXME: English
 		self.menu.children["representative_images_menu"].add_command(label="Default",command=partial(self.get_representative_images,"default"))
 		for manifest_file in common.get_all_resources([self.sprite.resource_subpath,"manifests"],"representative-images.json"):
-			with(open(manifest_file)) as manifest:
+			with open(manifest_file) as manifest:
 				manifest_images = json.load(manifest)
-				manifest.close()
 				for key in manifest_images.keys():
 					if not key == "default":
 						self.menu.children["representative_images_menu"].add_command(label=key[0].upper() + key[1:],command=partial(self.get_representative_images,key))
@@ -333,7 +329,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 					bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
 					with open(bindings_filename,encoding="utf-8") as f:
 						bindings = json.load(f)
-						f.close()
 					#cycle through all spiffy buttons
 					for subwidget in widget.winfo_children():
 						if "_button" in subwidget.winfo_name():
@@ -1029,10 +1024,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def save_working_dirs(self):
 		user_resources_path = os.path.join(".","resources","user")
 		working_dirs_path = os.path.join(user_resources_path,"meta","manifests")
-		f = open(os.path.join(working_dirs_path,"working_dirs.json"),"w+")
-		f.write(json.dumps(self.working_dirs,indent=2))
+		with open(os.path.join(working_dirs_path,"working_dirs.json"),"w+") as f:
+			f.write(json.dumps(self.working_dirs,indent=2))
 		os.chmod(os.path.join(working_dirs_path,"working_dirs.json"),0o775)
-		f.close()
 
 	#exit sequence
 	def exit(self):

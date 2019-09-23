@@ -23,7 +23,6 @@ with open("./" + UPX_FILE,"wb") as upx:
 	UPX_REQ = urllib.request.urlopen(UPX_REQ)
 	UPX_DATA = UPX_REQ.read()
 	upx.write(UPX_DATA)
-	upx.close()
 
 tar = tarfile.TarFile(UPX_FILE)
 tar.extractall("../upx")

@@ -38,7 +38,8 @@ timestamp = ""
 
 event_manifest = {}
 if not env["EVENT_LOG"] == "":
-	event_manifest = json.load(open(env["EVENT_LOG"]))
+	with open(env["EVENT_LOG"]) as f:
+		event_manifest = json.load(f)
 
 if env["BRANCH"] == "":
 	ref = os.getenv("GITHUB_REF","")
