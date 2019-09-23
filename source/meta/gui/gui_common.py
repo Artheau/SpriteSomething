@@ -94,6 +94,19 @@ def get_sprites(self,title,dir,url):
 	#FIXME: English
 	print("   Downloading " + title + " Sprites")
 	messagebox.showwarning("Downloading " + title + " Sprites","Wait a little bit, dude, there's " + str(total) + " sprites.")
+#	downloader = tk.Tk()
+#	downloader.title("Downloading " + title + " Sprites")
+#	dims = {
+#		"window": {
+#			"width": 300,
+#			"height": 200
+#		}
+#	}
+#	downloader.geometry(str(dims["window"]["width"]) + 'x' + str(dims["window"]["height"]))
+#	self.progressbar = ttk.Progressbar(downloader,orient=tk.HORIZONTAL,length=100,mode="determinate")
+#	self.progressbar.pack(side=tk.TOP,pady=10)
+#	self.progressbar["maximum"] = total
+
 	for i,sprite in enumerate(sprites):
 		sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
 		sprite_destination = os.path.join(filepath,sprite_filename)	#set the destination
@@ -115,4 +128,6 @@ def get_sprites(self,title,dir,url):
 		else:	#if we do have it, next!
 			#FIXME: English
 			print("    Skipping " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
+#		self.progressbar["value"] = (((i+1)/total)*100)
+#	downloader.destroy()
 	return success
