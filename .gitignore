@@ -41,5 +41,5 @@ working_dirs.json
 
 # no custom files
 custom/
-user_resources/metroid3/samus/sheets
-user_resources/zelda3/link/sheets
+resources/user/metroid3/samus/sheets
+resources/user/zelda3/link/sheets
