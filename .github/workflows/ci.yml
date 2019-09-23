@@ -83,7 +83,7 @@ jobs:
       env:
         OS_NAME: ${{ matrix.os-name }}
       run: |
-        python ./resource/ci/common/prepare_binary.py
+        python ./resources/ci/common/prepare_binary.py
     # upload binary artifact for later step
     - name: Upload Binary Artifact
       uses: actions/upload-artifact@v1
