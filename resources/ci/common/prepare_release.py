@@ -3,6 +3,7 @@ import os											# for env vars
 import stat										# for file stats
 import subprocess							# do stuff at the shell level
 import common
+from git_clean import git_clean
 from shutil import copy, make_archive, move, rmtree	# file manipulation
 
 def convert_bytes(num):
@@ -56,14 +57,7 @@ if not BUILD_FILENAME == "":
 	)
 
 	# clean the git slate
-	subprocess.check_call([
-		"git",
-		"clean",
-		"-dfx",
-		"--exclude=.vscode",
-		"--exclude=.idea",
-		"--exclude=scripts/travis",
-		"--exclude=*.json"])
+	git_clean()
 
 	# mv dirs from source code
 	dirs = ["./.git", "./.github","./pages_resources","./scripts"]
