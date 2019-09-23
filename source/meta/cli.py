@@ -1,11 +1,11 @@
 import json		#for reading JSON
 import os			#for filesystem manipulation
 import random	#for choosing random app titles, random game files & random sprites
-from source import common
-from source import constants as CONST
-from source import gamelib
-from source import spritelib
-from source import ssDiagnostics as diags
+from source.meta.common import common
+from source.meta.common import constants as CONST
+from source.meta.gui import gamelib
+from source.meta.classes import spritelib
+from source.meta import ssDiagnostics as diags
 
 #run CLI
 def make_CLI(command_line_args):

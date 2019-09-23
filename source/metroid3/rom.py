@@ -9,7 +9,7 @@ if __name__ == "__main__":
 	raise AssertionError(f"Called main() on utility library {__file__}")
 
 import enum
-from source.romhandler import RomHandlerParent
+from source.meta.romhandler import RomHandlerParent
 
 #enumeration for the suit types
 class SuitType(enum.Enum):

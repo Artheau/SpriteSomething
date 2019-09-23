@@ -9,8 +9,8 @@ import json
 import random
 import urllib
 from functools import partial    #for tk debugging
-from source.constants import DEBUG_MODE  #for tk debugging
-from source import common
+from source.meta.common.constants import DEBUG_MODE  #for tk debugging
+from source.meta.common import common
 
 
 if ("DEBUG_MODE" in vars() or "DEBUG_MODE" in globals()) and DEBUG_MODE:   #if DEBUG_MODE exists and is set to True

@@ -10,16 +10,15 @@ import urllib									#for getting latest version number from GitHub Pages
 import webbrowser							#for launching browser from about box
 from functools import partial	#for passing parameters to user-triggered function calls
 from PIL import Image,ImageTk    #for converting PNG to formats that tk can use
-from source import widgetlib
-from source import ssDiagnostics as diagnostics
-from source import ssTranslate as fish
-from source import gamelib
-from source import constants as CONST
-from source.ssTranslate import BabelFish
-from source.tkHyperlinkManager import HyperlinkManager
-from source.tkSimpleStatusBar import StatusBar
-from source import common, gui_common
-
+from source.meta.gui import widgetlib
+from source.meta import ssDiagnostics as diagnostics
+from source.meta.gui import gamelib
+from source.meta.common import constants as CONST
+from source.meta.ssTranslate import BabelFish
+from source.meta.tkHyperlinkManager import HyperlinkManager
+from source.meta.gui.tkSimpleStatusBar import StatusBar
+from source.meta.common import common
+from source.meta.gui import gui_common
 
 def make_GUI(command_line_args):
 	root = tk.Tk()
@@ -931,7 +930,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def check_for_updates(self):
 		update_available = False
 		this_version = CONST.APP_VERSION
-		version_url = "https://artheau.github.io/SpriteSomething/resources/app/meta/manifests/app_version.txt"
+#		version_url = "https://artheau.github.io/SpriteSomething/resources/app/meta/manifests/app_version.txt"
+		version_url = "https://artheau.github.io/SpriteSomething/app_resources/meta/manifests/app_version.txt"
 		version_req = urllib.request.urlopen(version_url)
 		latest_version = version_req.readlines()[0].decode("utf-8").strip()
 

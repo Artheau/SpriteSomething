@@ -1,6 +1,6 @@
 from argparse import ArgumentParser	#to read stuff from commandline
-from source.cli import make_CLI		#import commandline interface
-from source.gui import make_GUI		#import visual interface
+from source.meta.cli import make_CLI		#import commandline interface
+from source.meta.gui.gui import make_GUI		#import visual interface
 from tkinter import messagebox		#for the error box in case of fatal error
 import traceback					#for error box
 import os							#for default file to load

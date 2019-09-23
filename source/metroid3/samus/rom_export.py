@@ -4,7 +4,7 @@
 import itertools
 import copy
 from PIL import Image
-from source import common
+from source.meta.common import common
 
 #FIXME: English
 

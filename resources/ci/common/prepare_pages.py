@@ -30,21 +30,23 @@ copy(
 # copy GitHub Pages files to staging area
 # copy index page
 copy(
-	"./pages_resources/index.html",
+	"./html/index.html",
 	"../pages"
 )
 
 # copy sprite previews
 distutils.dir_util.copy_tree(
-	"./pages_resources",
+	"./html",
 	"../pages/resources/app"
 )
 
+games = []
 checkdir = "./resources/app"
 for item in os.listdir(checkdir):
 	if os.path.isdir(os.path.join(checkdir,item)):
 		if not item == "meta":
 			game = item
+			games.append(game)
 			gamedir = "../pages/resources/app/" + game
 			if not os.path.isdir(gamedir + "/manifests/"):
 				os.makedirs(gamedir + "/manifests/")
@@ -56,3 +58,7 @@ for item in os.listdir(checkdir):
 				"./resources/app/" + game + "/lang/",
 				gamedir + "/lang/"
 			)
+
+with open("../pages/resources/app/meta/manifests/games.txt","w") as f:
+	for item in games:
+		f.write("%s\n" % item)

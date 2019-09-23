@@ -1,4 +1,4 @@
-from source import common
+from source.meta.common import common
 
 class PluginsParent():
 	def __init__(self):

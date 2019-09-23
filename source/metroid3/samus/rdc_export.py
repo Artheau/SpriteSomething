@@ -1,7 +1,7 @@
 import itertools
 import io
 from PIL import Image
-from source import common
+from source.meta.common import common
 from . import rom_export
 
 def get_raw_rdc_samus_block(sprite):

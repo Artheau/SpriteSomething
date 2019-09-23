@@ -5,9 +5,9 @@ import os							#for filesystem manipulation
 import io							#for filesystem manipution
 import urllib.request	#for downloading stuff
 from PIL import Image
-from source import common
+from source.meta.common import common
 from string import ascii_uppercase
-from source.spritelib import SpriteParent
+from source.meta.classes.spritelib import SpriteParent
 
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):

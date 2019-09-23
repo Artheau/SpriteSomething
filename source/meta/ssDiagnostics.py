@@ -1,5 +1,5 @@
 import platform, sys, os, subprocess
-import source.constants as CONST
+import source.meta.common.constants as CONST
 import pkg_resources
 from datetime import datetime
 
@@ -39,7 +39,7 @@ def output():
   installed_packages = [str(d) for d in pkg_resources.working_set]   #this doesn't work from the .exe either, but it doesn't crash the program
   for pkg in installed_packages:
     lines.append(pkg)
-  
+
   return lines
 
 if __name__ == "__main__":

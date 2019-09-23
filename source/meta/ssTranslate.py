@@ -1,7 +1,7 @@
 import json
 import locale
 import os
-from source import common
+from source.meta.common import common
 
 class BabelFish():
 	def __init__(self,subpath=["meta"],lang=None):

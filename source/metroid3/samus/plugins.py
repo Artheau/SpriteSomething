@@ -2,9 +2,9 @@ import json
 import os
 import urllib
 from functools import partial
-from source import common
-from source import gui_common
-from source.pluginslib import PluginsParent
+from source.meta.common import common
+from source.meta.gui import gui_common
+from source.meta.classes.pluginslib import PluginsParent
 from . import equipment
 
 #FIXME: English

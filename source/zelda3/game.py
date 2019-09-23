@@ -1,4 +1,4 @@
-from source.gamelib import GameParent
+from source.meta.gui.gamelib import GameParent
 
 class Game(GameParent):
 	def __init__(self):

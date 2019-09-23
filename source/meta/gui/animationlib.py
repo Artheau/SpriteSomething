@@ -6,7 +6,9 @@ import random
 import json
 import itertools
 from PIL import Image, ImageTk
-from source import common, gui_common, widgetlib
+from source.meta.common import common
+from source.meta.gui import gui_common
+from source.meta.gui import widgetlib
 
 class AnimationEngineParent():
 	def __init__(self, my_subpath, sprite):
@@ -155,7 +157,7 @@ class AnimationEngineParent():
 			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
 			self.pose_number = self.get_pose_number_from_frames(current_frame)
-			
+
 			if "palette_reference_frame" in pose_list[self.pose_number]:  #for animations that switch palettes in the middle
 				self.palette_last_transition_frame = \
 					current_frame - (
@@ -387,7 +389,7 @@ class AnimationEngineParent():
 
 			frames = []
 			durations = []
-			
+
 			for frame_number in range(full_animation_duration):
 				_, _, _, palette_info, _, _ = self.get_image_arguments_from_frame_number(frame_number)
 				pose_number = self.get_pose_number_from_frames(frame_number)
@@ -395,7 +397,7 @@ class AnimationEngineParent():
 
 				this_frame = Image.new("RGBA", (gif_x_size,gif_y_size))
 				this_frame.paste(image, (origin[0]-x_min, origin[1]-y_min), image)
-				
+
 				#PIL makes transparency so difficult...
 				alpha = this_frame.split()[3]
 				#reserve color number 255

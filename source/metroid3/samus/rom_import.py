@@ -1,7 +1,7 @@
 #connects with the Samus sprite class
 
 from PIL import Image
-from source import common
+from source.meta.common import common
 
 def rom_import(sprite, rom):
 	all_images = {}

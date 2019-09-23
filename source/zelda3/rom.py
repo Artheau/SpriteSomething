@@ -1,7 +1,7 @@
 #includes routines that load the rom and apply bugfixes
 #inherits from the generic romhandler
 
-from source.romhandler import RomHandlerParent
+from source.meta.romhandler import RomHandlerParent
 
 class RomHandler(RomHandlerParent):
 	def __init__(self, filename):

@@ -7,7 +7,7 @@
 import json
 import itertools
 from PIL import Image, ImageOps, ImageDraw
-from source import common
+from source.meta.common import common
 
 class Layout():
 	def __init__(self, filename):

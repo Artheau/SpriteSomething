@@ -60,7 +60,7 @@ if not BUILD_FILENAME == "":
 	git_clean()
 
 	# mv dirs from source code
-	dirs = ["./.git", "./.github","./pages_resources","./scripts"]
+	dirs = ["./.git", "./.github","./html","./scripts"]
 	for dir in dirs:
 		if os.path.isdir(dir):
 			move(

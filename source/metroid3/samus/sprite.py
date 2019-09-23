@@ -2,8 +2,8 @@ import importlib
 import itertools
 import json
 from PIL import Image
-from source.spritelib import SpriteParent
-from source import common
+from source.meta.classes.spritelib import SpriteParent
+from source.meta.common import common
 from . import rom_import, rom_export, rdc_export
 
 class Sprite(SpriteParent):

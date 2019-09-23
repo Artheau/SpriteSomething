@@ -1,5 +1,5 @@
 from PIL import Image
-from source import common
+from source.meta.common import common
 
 def coord_calc(origin,dims):
 	x1, x2 = origin

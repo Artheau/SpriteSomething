@@ -14,9 +14,9 @@ class NoMemoryLeaks(unittest.TestCase):
 	def test_sprites_and_games_are_destroyed(self):
 		import tkinter as tk
 		import weakref       #we weakref something to see if it was garbage collected
-		from source import gui
+		from source.meta.gui import gui
 
-		
+
 		#make the GUI in skeleton form (no looping)
 		pseudo_command_line_args = {"sprite": LINK_FILENAME}
 		pseudo_root = tk.Tk()   #make a pseudo GUI environment

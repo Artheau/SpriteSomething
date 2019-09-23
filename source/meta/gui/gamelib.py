@@ -9,10 +9,10 @@ import tkinter as tk	#for GUI stuff
 import random					#for choosing background image to load on app startup
 from PIL import Image, ImageFile
 from functools import partial
-from source import widgetlib
-from source import romhandler
-from source import common
-from source import gui_common #TODO: Should not use GUI stuff in game class, need to move this elsewhere
+from source.meta.gui import widgetlib
+from source.meta import romhandler
+from source.meta.common import common
+from source.meta.gui import gui_common #TODO: Should not use GUI stuff in game class, need to move this elsewhere
 
 def autodetect(sprite_filename):
 	#need to autodetect which game, and which sprite
@@ -207,7 +207,7 @@ class GameParent():
 				animationlib = importlib.import_module(f"{source_subpath}.animation")
 				animation_assist = animationlib.AnimationEngine(resource_subpath, sprite)
 			except ImportError:    #there was no sprite-specific animation library, so import the parent
-				animationlib = importlib.import_module(f"source.animationlib")
+				animationlib = importlib.import_module(f"source.meta.gui.animationlib")
 				animation_assist = animationlib.AnimationEngineParent(resource_subpath, sprite)
 
 			return sprite, animation_assist
