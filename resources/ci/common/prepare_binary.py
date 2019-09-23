@@ -2,7 +2,7 @@ import distutils.dir_util			# for copying trees
 import os											# for env vars
 import stat										# for file stats
 import subprocess							# do stuff at the shell level
-from resources.ci.common import common
+from . import common
 from shutil import copy, make_archive, move, rmtree	# file manipulation
 
 env = common.prepare_env()

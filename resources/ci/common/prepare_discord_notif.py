@@ -1,4 +1,4 @@
-from resources.ci.common import common
+from . import common
 from argparse import ArgumentParser
 import datetime
 import json
