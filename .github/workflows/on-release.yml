@@ -3,7 +3,7 @@ name: On Release Deployment
 
 # fire on
 on:
-  release
+  release:
     types: [ published, created ]
 
 # stuff to do
