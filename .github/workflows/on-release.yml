@@ -1,0 +1,36 @@
+# workflow name
+name: On Release Deployment
+
+# fire on
+on:
+  release
+    types: [ published, created ]
+
+# stuff to do
+jobs:
+  # Get Release Info
+  # Send Discord notification
+  discord-notify:
+    name: Notify Discord of new Release
+    runs-on: macOS-latest
+    steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
+    # install python
+    - name: Install python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+        architecture: "x64"
+    - run: |
+        python --version
+    # install dependencies via pip
+    - name: Install Dependencies via pip
+      run: |
+        python ./resources/ci/common/install.py
+    - name: Build Discord Notification Payload
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      run: |
+        python ./resources/ci/common/prepare_discord_notif.py

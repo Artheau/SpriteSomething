@@ -22,9 +22,9 @@ env["COMMIT_AUTHOR"] = "Travis CI"
 env["COMMIT_AVATAR"] = "https://travis-ci.com/images/logos/TravisCI-Mascot-pride.png"
 env["COMMIT_ID"] = os.getenv("TRAVIS_COMMIT",os.getenv("GITHUB_SHA",""))
 env["COMMIT_COMPARE"] = os.getenv("TRAVIS_COMMIT_RANGE","")
-env["COMMIT_MESSAGE"] = os.getenv("TRAVIS_COMMIT_MESSAGE","")
+env["EVENT_MESSAGE"] = os.getenv("TRAVIS_COMMIT_MESSAGE","")
 env["EVENT_LOG"] = os.getenv("GITHUB_EVENT_PATH","")
-env["EVENT_TYPE"] = os.getenv("TRAVIS_EVENT_TYPE",DEFAULT_EVENT)
+env["EVENT_TYPE"] = os.getenv("TRAVIS_EVENT_TYPE",os.getenv("GITHUB_EVENT_NAME",DEFAULT_EVENT))
 env["REPO_SLUG"] = os.getenv("TRAVIS_REPO_SLUG",os.getenv("GITHUB_REPOSITORY",DEFAULT_REPO_SLUG))
 env["REPO_USERNAME"] = ""
 env["REPO_NAME"] = ""
@@ -32,11 +32,13 @@ commits = []
 query = ""
 timestamp = ""
 
+# event log
 event_manifest = {}
 if not env["EVENT_LOG"] == "":
 	with open(env["EVENT_LOG"]) as f:
 		event_manifest = json.load(f)
 
+# branch
 if env["BRANCH"] == "":
 	ref = os.getenv("GITHUB_REF","")
 	if not ref == "":
@@ -47,13 +49,30 @@ if env["BRANCH"] == "":
 		):
 			if ref[1] == check:
 				env[varname] = ref[2]
+if env["BRANCH"] == "":
+	env["BRANCH"] = "master"
 
+# author/avatar
+if "sender" in event_manifest:
+	if "avatar_url" in event_manifest["sender"]:
+		env["COMMIT_AVATAR"] = event_manifest["sender"]["avatar_url"]
+	if "login" in event_manifest["sender"]:
+		env["COMMIT_AUTHOR"] = event_manifest["sender"]["login"]
+
+color = 0x000000
+if env["COMMIT_AUTHOR"].lower() in colors:
+	color = colors[env["COMMIT_AUTHOR"].lower()]
+
+author = {}
+if not env["COMMIT_AUTHOR"] == "":
+	author["name"] = env["COMMIT_AUTHOR"]
+if not env["COMMIT_AVATAR"] == "":
+	author["icon_url"] = env["COMMIT_AVATAR"]
+
+# commit ID/message
 if "after" in event_manifest:
 	if env["COMMIT_ID"] == "":
 		env["COMMIT_ID"] = event_manifest["after"]
-
-if env["BRANCH"] == "":
-	env["BRANCH"] = "master"
 
 if not env["COMMIT_ID"] == "":
 	query = "commit/" + env["COMMIT_ID"]
@@ -61,16 +80,7 @@ if not env["COMMIT_ID"] == "":
 if not env["COMMIT_COMPARE"] == "":
 	query = "compare/" + env["COMMIT_COMPARE"]
 
-if "pull" in env["EVENT_TYPE"]:
-	env["PULL_ID"] = os.getenv("TRAVIS_PULL_REQUEST","")
-	env["PULL_BRANCH"] = os.getenv("TRAVIS_PULL_REQUEST_BRANCH","")
-	env["PULL_SHA"] = os.getenv("TRAVIS_PULL_REQUEST_SHA","")
-	query = "pull/" + env["PULL_ID"]
-
-if "push" in env["EVENT_TYPE"]:
-	env["EVENT_TYPE"] = "commit"
-
-if env["COMMIT_MESSAGE"] == "":
+if env["EVENT_MESSAGE"] == "":
 	if "commits" in event_manifest:
 		if len(event_manifest["commits"]) > 0:
 			for commit in event_manifest["commits"]:
@@ -86,7 +96,7 @@ if env["COMMIT_MESSAGE"] == "":
 				commits.append("[`" + commit["id"][:7] + "`](" + commit["url"] + ')' + ' ' + commit_title)
 else:
 	commit = {}
-	commit_message = env["COMMIT_MESSAGE"]
+	commit_message = env["EVENT_MESSAGE"]
 	commit["id"] = env["COMMIT_ID"]
 	if "\n\n" in commit_message:
 		commit_parts = commit_message.split("\n\n")
@@ -98,6 +108,42 @@ else:
 	commit["url"] = commit["url"].replace("***","Artheau")
 	commits.append("[`" + commit["id"][:7] + "`](" + commit["url"] + ')' + ' ' + commit_title)
 
+num_events = len(commits)
+if num_events > 0:
+	env["EVENT_MESSAGE"] = ""
+	if num_events == 1:
+		if not env["COMMIT_COMPARE"] == "":
+			num_events = "Many"
+	for commit in commits:
+		env["EVENT_MESSAGE"] += commit + "\n"
+
+# event type
+print(env["EVENT_TYPE"])
+if "pull" in env["EVENT_TYPE"]:
+	env["PULL_ID"] = os.getenv("TRAVIS_PULL_REQUEST","")
+	env["PULL_BRANCH"] = os.getenv("TRAVIS_PULL_REQUEST_BRANCH","")
+	env["PULL_SHA"] = os.getenv("TRAVIS_PULL_REQUEST_SHA","")
+	query = "pull/" + env["PULL_ID"]
+
+if "push" in env["EVENT_TYPE"]:
+	env["EVENT_TYPE"] = "commit"
+
+if "release" in env["EVENT_TYPE"]:
+  if "release" in event_manifest:
+    if "tag_name" in event_manifest["release"]:
+      num_events = 1
+      env["EVENT_MESSAGE"] = "SpriteSomething " + event_manifest["release"]["tag_name"]
+      query = "releases/tag/" + event_manifest["release"]["tag_name"]
+      if "assets" in event_manifest["release"]:
+        print(event_manifest["release"]["assets"])
+
+# repo slug
+if '/' in env["REPO_SLUG"]:
+	tmp = env["REPO_SLUG"].split('/')
+	env["REPO_USERNAME"] = tmp[0]
+	env["REPO_NAME"] = tmp[1]
+
+# timestamp
 if timestamp == "":
 	if "repository" in event_manifest:
 		if "updated_at" in event_manifest["repository"]:
@@ -117,41 +163,10 @@ if not timestamp == "":
 		_ = timestamp.pop()
 		timestamp = '-'.join(timestamp)
 
-if "sender" in event_manifest:
-	if "avatar_url" in event_manifest["sender"]:
-		env["COMMIT_AVATAR"] = event_manifest["sender"]["avatar_url"]
-	if "login" in event_manifest["sender"]:
-		env["COMMIT_AUTHOR"] = event_manifest["sender"]["login"]
-
-color = 0x000000
-if env["COMMIT_AUTHOR"].lower() in colors:
-	color = colors[env["COMMIT_AUTHOR"].lower()]
-
-if len(commits) > 0:
-	env["COMMIT_MESSAGE"] = ""
-	for commit in commits:
-		env["COMMIT_MESSAGE"] += commit + "\n"
-
-if '/' in env["REPO_SLUG"]:
-	tmp = env["REPO_SLUG"].split('/')
-	env["REPO_USERNAME"] = tmp[0]
-	env["REPO_NAME"] = tmp[1]
-
-author = {}
-if not env["COMMIT_AUTHOR"] == "":
-	author["name"] = env["COMMIT_AUTHOR"]
-if not env["COMMIT_AVATAR"] == "":
-	author["icon_url"] = env["COMMIT_AVATAR"]
-
-num_commits = len(commits)
-if num_commits == 1:
-	if not env["COMMIT_COMPARE"] == "":
-		num_commits = "Many"
-
 embed_title = ""
 embed_title += '[' + env["REPO_NAME"] + ':' + env["BRANCH"] + "] "
-embed_title += str(num_commits) + " new " + env["EVENT_TYPE"]
-if isinstance(num_commits,str) or (isinstance(num_commits,int) and (not num_commits == 1)):
+embed_title += str(num_events) + " new " + env["EVENT_TYPE"]
+if isinstance(num_events,str) or (isinstance(num_events,int) and (not num_events == 1)):
 	embed_title += 's'
 
 payload = {
@@ -161,7 +176,7 @@ payload = {
 			"author": author,
 			"title": embed_title,
 			"url": "http://github.com/" + env["REPO_SLUG"] + '/' + query,
-			"description": env["COMMIT_MESSAGE"],
+			"description": env["EVENT_MESSAGE"],
 			"timestamp": timestamp
 		}
 	]
