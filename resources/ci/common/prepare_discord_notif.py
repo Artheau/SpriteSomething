@@ -129,6 +129,8 @@ if "push" in env["EVENT_TYPE"]:
 	env["EVENT_TYPE"] = "commit"
 
 if "release" in env["EVENT_TYPE"]:
+  if "action" in event_manifest:
+    env["EVENT_TYPE"] = event_manifest["action"] + ' ' + env["EVENT_TYPE"]
   if "release" in event_manifest:
     if "tag_name" in event_manifest["release"]:
       num_events = 1
