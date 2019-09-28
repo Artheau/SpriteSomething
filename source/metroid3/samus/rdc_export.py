@@ -2,7 +2,7 @@ import itertools
 import io
 from PIL import Image
 from source.meta.common import common
-from . import rom_export
+from . import rom_inject
 
 def get_raw_rdc_samus_block(sprite):
 	block = io.BytesIO()
@@ -17,11 +17,11 @@ def get_raw_rdc_samus_block(sprite):
 	return block.getvalue()
 
 def dma_banks(sprite):
-	return bytes(itertools.chain.from_iterable(rom_export.get_raw_pose(sprite,name) for name in sprite.layout.data["dma_sequence"]))
+	return bytes(itertools.chain.from_iterable(rom_inject.get_raw_pose(sprite,name) for name in sprite.layout.data["dma_sequence"]))
 
 def death_bank(direction,sprite):
 	len = 0x3F60
-	image = rom_export.compile_death_image(direction,sprite)
+	image = rom_inject.compile_death_image(direction,sprite)
 	return bytes(itertools.chain.from_iterable(common.convert_to_4bpp(image,(0,0),(0,16*i,128,16*(i+1)),None) for i in range(16)))[:len]
 
 def gun_port(sprite):
@@ -30,7 +30,7 @@ def gun_port(sprite):
 	data = bytearray()
 	for n in range(30):
 		image_name = sprite.layout.get_image_name("gun",n)
-		data.extend(rom_export.get_raw_pose(sprite,image_name))
+		data.extend(rom_inject.get_raw_pose(sprite,image_name))
 	return data
 
 def file_select(sprite):

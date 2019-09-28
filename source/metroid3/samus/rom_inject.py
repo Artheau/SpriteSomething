@@ -8,7 +8,7 @@ from source.meta.common import common
 
 #FIXME: English
 
-def rom_export(player_sprite, old_rom, verbose=False):
+def rom_inject(player_sprite, old_rom, verbose=False):
 	rom = copy.deepcopy(old_rom)  #for safety we are going to deepcopy the ROM, in case we need to bail
 
 	#in case these were disabled in rom.py, we definitely need to do these before we convert to wizzywig

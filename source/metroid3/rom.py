@@ -271,25 +271,26 @@ class RomHandler(RomHandlerParent):
 		PALETTE_READ_SIZE = "2"*0x10 #FIXME: unused variable
 
 		if base_type == PaletteType.STANDARD:
-			if suit_type == SuitType.POWER:
-				base_address = 0x9B9400
-			elif suit_type == SuitType.VARIA:
-				base_address = 0x9B9520
-			elif suit_type == SuitType.GRAVITY:
-				base_address = 0x9B9800
-			else:
-				#FIXME: English
+			suit_type_switcher = {
+				SuitType.POWER: 0x9B9400,
+				SuitType.VARIA: 0x9B9520,
+				SuitType.GRAVITY: 0x9B9800
+			}
+			#FIXME: English
+			base_address = suit_type_switcher.get(suit_type)
+			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for standard palette with unknown suit type: {suit_type}")
 			return [self._get_static_palette(base_address)]
 
 		elif base_type == PaletteType.LOADER:
-			if suit_type == SuitType.POWER:
-				base_address = 0x8DDB62
-			elif suit_type == SuitType.VARIA:
-				base_address = 0x8DDCC8
-			elif suit_type == SuitType.GRAVITY:
-				base_address = 0x8DDE2E
-			else:
+			suit_type_switcher = {
+				SuitType.POWER: 0x8DDB62,
+				SuitType.VARIA: 0x8DDCC8,
+				SuitType.GRAVITY: 0x8DDE2E
+			}
+			#FIXME: English
+			base_address = suit_type_switcher.get(suit_type)
+			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for loader palette with unknown suit type: {suit_type}")
 
 			#this is a set of rotating palettes implemented in microcode (loader is the most complex case of these, thankfully)
@@ -312,14 +313,14 @@ class RomHandler(RomHandlerParent):
 			return full_palette_set
 
 		elif base_type == PaletteType.HEAT:
-			if suit_type == SuitType.POWER:
-				base_address = 0x8DE45E
-			elif suit_type == SuitType.VARIA:
-				base_address = 0x8DE68A
-			elif suit_type == SuitType.GRAVITY:
-				base_address = 0x8DE8B6
-			else:
-				#FIXME: English
+			suit_type_switcher = {
+				SuitType.POWER: 0x8DE45E,
+				SuitType.VARIA: 0x8DE68A,
+				SuitType.GRAVITY: 0x8DE8B6
+			}
+			#FIXME: English
+			base_address = suit_type_switcher.get(suit_type)
+			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for heat palette with unknown suit type: {suit_type}")
 
 			full_palette_set = []
@@ -327,27 +328,28 @@ class RomHandler(RomHandlerParent):
 			return self._get_sequence_of_timed_palettes(base_address, 16, add_transparency=True)  #heat is not coded with transparency
 
 		elif base_type == PaletteType.CHARGE:
-			if suit_type == SuitType.POWER:
-				base_address = 0x9B9820
-			elif suit_type == SuitType.VARIA:
-				base_address = 0x9B9920
-			elif suit_type == SuitType.GRAVITY:
-				base_address = 0x9B9A20
-			else:
+			suit_type_switcher = {
+				SuitType.POWER: 0x9B9820,
+				SuitType.VARIA: 0x9B9920,
+				SuitType.GRAVITY: 0x9B9A20
+			}
+			#FIXME: English
+			base_address = suit_type_switcher.get(suit_type)
+			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for charge palette with unknown suit type: {suit_type}")
 
 			#The charged shot palette advances every frame (determined by manual frame advance)
 			return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(8)]
 
 		elif base_type == PaletteType.SPEED_BOOST:
-			if suit_type == SuitType.POWER:
-				base_address = 0x9B9B20
-			elif suit_type == SuitType.VARIA:
-				base_address = 0x9B9D20
-			elif suit_type == SuitType.GRAVITY:
-				base_address = 0x9B9F20
-			else:
-				#FIXME: English
+			suit_type_switcher = {
+				SuitType.POWER: 0x9B9B20,
+				SuitType.VARIA: 0x9B9D20,
+				SuitType.GRAVITY: 0x9B9F20
+			}
+			#FIXME: English
+			base_address = suit_type_switcher.get(suit_type)
+			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for speed boost palette with unknown suit type: {suit_type}")
 
 			#4 frames each during the warm up, then stay at last palette forever (determined by manual frame advance)
@@ -355,40 +357,42 @@ class RomHandler(RomHandlerParent):
 						 [(0,self._get_raw_palette(base_address + 0x60))]
 
 		elif base_type == PaletteType.SPEED_SQUAT:
-			if suit_type == SuitType.POWER:
-				base_address = 0x9B9BA0
-			elif suit_type == SuitType.VARIA:
-				base_address = 0x9B9DA0
-			elif suit_type == SuitType.GRAVITY:
-				base_address = 0x9B9FA0
-			else:
+			suit_type_switcher = {
+				SuitType.POWER: 0x9B9BA0,
+				SuitType.VARIA: 0x9B9DA0,
+				SuitType.GRAVITY: 0x9B9FA0
+			}
+			#FIXME: English
+			base_address = suit_type_switcher.get(suit_type)
+			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for speed squat palette with unknown suit type: {suit_type}")
 
 			#timing and order determined by manual frame advance.  One frame each, oscillates between 0 and 3
 			return [(1,self._get_raw_palette(base_address + i*0x20)) for i in [0,1,2,3,2,1]]
 
 		elif base_type == PaletteType.SHINESPARK:
-			if suit_type == SuitType.POWER:
-				base_address = 0x9B9C20
-			elif suit_type == SuitType.VARIA:
-				base_address = 0x9B9E20
-			elif suit_type == SuitType.GRAVITY:
-				base_address = 0x9BA020
-			else:
-				#FIXME: English
+			suit_type_switcher = {
+				SuitType.POWER: 0x9B9C20,
+				SuitType.VARIA: 0x9B9E20,
+				SuitType.GRAVITY: 0x9BA020
+			}
+			#FIXME: English
+			base_address = suit_type_switcher.get(suit_type)
+			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for shine spark palette with unknown suit type: {suit_type}")
 
 			#timing and order determined by manual frame advance.  1 frame each, goes 0 to 3 then resets
 			return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
 
 		elif base_type == PaletteType.SCREW_ATTACK:
-			if suit_type == SuitType.POWER:
-				base_address = 0x9B9CA0
-			elif suit_type == SuitType.VARIA:
-				base_address = 0x9B9EA0
-			elif suit_type == SuitType.GRAVITY:
-				base_address = 0x9BA0A0
-			else:
+			suit_type_switcher = {
+				SuitType.POWER: 0x9B9CA0,
+				SuitType.VARIA: 0x9B9EA0,
+				SuitType.GRAVITY: 0x9BA0A0
+			}
+			#FIXME: English
+			base_address = suit_type_switcher.get(suit_type)
+			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for screw attack palette with unknown suit type: {suit_type}")
 
 			#timing and order determined by manual frame advance.  One frame each, oscillates between 0 and 3
@@ -404,14 +408,14 @@ class RomHandler(RomHandlerParent):
 			#the colors for the exploding suit pieces can be set to different palettes.
 
 			#To retrieve these palettes, first need to grab the pointers to the palettes
-			if suit_type == SuitType.POWER:
-				palette_list_pointer = 0x9BB7D3
-			elif suit_type == SuitType.VARIA:
-				palette_list_pointer = 0x9BB7E7
-			elif suit_type == SuitType.GRAVITY:
-				palette_list_pointer = 0x9BB7FB
-			else:
-				#FIXME: English
+			suit_type_switcher = {
+				SuitType.POWER: 0x9BB7D3,
+				SuitType.VARIA: 0x9BB7E7,
+				SuitType.GRAVITY: 0x9BB7FB
+			}
+			#FIXME: English
+			base_address = suit_type_switcher.get(suit_type)
+			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for death suit palette with unknown suit type: {suit_type}")
 
 			#There are ten pointers in total, grab them all

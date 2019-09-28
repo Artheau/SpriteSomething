@@ -4,7 +4,7 @@ import json
 from PIL import Image
 from source.meta.classes.spritelib import SpriteParent
 from source.meta.common import common
-from . import rom_import, rom_export, rdc_export
+from . import rom_extract, rom_inject, rdc_export
 
 class Sprite(SpriteParent):
 	def __init__(self, filename, manifest_dict, my_subpath):
@@ -27,12 +27,12 @@ class Sprite(SpriteParent):
 
 	def import_from_ROM(self, rom):
 		#The history of the Samus import code is a story I will tell to my children
-		self.images = rom_import.rom_import(self, rom)
+		self.images = rom_extract.rom_extract(self, rom)
 		self.master_palette = list(self.images["palette_block"].getdata())
 
 	def inject_into_ROM(self, rom):
 		#The history of the Samus export code is a story I will tell to my grandchildren
-		return rom_export.rom_export(self, rom)
+		return rom_inject.rom_inject(self, rom)
 
 	def get_rdc_export_blocks(self):
 		SAMUS_EXPORT_BLOCK_TYPE = 4
