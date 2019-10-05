@@ -6,7 +6,7 @@ import common
 from git_clean import git_clean
 from shutil import copy, make_archive, move, rmtree	# file manipulation
 
-env = common.prepare_env()
+env = common.prepare_env() # get env vars
 
 # make temp dir to put binary in
 if not os.path.isdir("../artifact"):

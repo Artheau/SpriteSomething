@@ -74,6 +74,10 @@ jobs:
     - name: Install Dependencies via pip
       run: |
         python ./resources/ci/common/install.py
+    # try to get UPX
+    - name: Get UPX
+      run: |
+        python ./resources/ci/travis/get_upx.py
     # run build.py
     - name: Build Binary
       run: |

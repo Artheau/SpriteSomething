@@ -1,8 +1,8 @@
-import os
-import subprocess
+import common
+import os         # for env vars
+import subprocess # do stuff at the shell level
 
-# get os name
-TRAVIS_OS_NAME = os.getenv("TRAVIS_OS_NAME") or "TRAVIS_OS_NAME"
+env = common.prepare_env()
 
 # get executables
 #  python
@@ -11,8 +11,8 @@ TRAVIS_OS_NAME = os.getenv("TRAVIS_OS_NAME") or "TRAVIS_OS_NAME"
 #  pip
 #   linux/macosx: pip3
 #   windows:      pip
-PYTHON_EXECUTABLE = "python3" if TRAVIS_OS_NAME == "osx" else "python"
-PIP_EXECUTABLE = "pip" if TRAVIS_OS_NAME == "windows" else "pip3"
+PYTHON_EXECUTABLE = "python3" if "osx" in env["OS_NAME"] else "python"
+PIP_EXECUTABLE = "pip" if "windows" in env["OS_NAME"] else "pip3"
 
 # upgrade pip
 subprocess.check_call([PYTHON_EXECUTABLE,"-m","pip","install","--upgrade","pip"])

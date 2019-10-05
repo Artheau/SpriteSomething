@@ -6,12 +6,15 @@ import re
 import fractions #for gcd
 from PIL import Image, ImageChops
 
+# are these images the same?
 def equal(image1, image2):
     return ImageChops.difference(image1, image2).getbbox() is None
 
+# least common multiple
 def lcm(x, y):
     return x * y // fractions.gcd(x, y)
 
+# clean filenames
 def filename_scrub(filename):
 	#prevents untowards things like spaces in filenames, to improve compatibility
 	new_filename = str(filename).lower()
@@ -21,6 +24,7 @@ def filename_scrub(filename):
 
 	return new_filename
 
+# get all resources from app folder & user folder
 def get_all_resources(subdir=None,desired_filename=None):
 	file_list = []
 
@@ -66,6 +70,7 @@ def gather_all_from_resource_subdirectory(subdir):
 					file_list.append(filename)    #just the filename, not the path, so that this overrrides correctly
 	return file_list
 
+# apply a palette to an image
 def apply_palette(image, palette):
 	if image.mode == "P":
 		flat_palette = [0 for _ in range(3*256)]
@@ -75,7 +80,6 @@ def apply_palette(image, palette):
 		image = image.convert('RGBA')
 		image.putalpha(alpha_mask)
 	return image
-
 
 def reduce_to_nearest_eighth(val):
 	#take a value, divide by 8, floor it
@@ -294,12 +298,15 @@ def convert_indexed_tile_to_bitplanes(indexed_tile):
 def pretty_hex(x,digits=2):                 #displays a hex number with a specified number of digits
 	return '0x' + hex(x)[2:].upper().zfill(digits)
 
+# pull palette colors toward specified color
 def palette_pull_towards_color(palette, pull_color, bias):
 	return [tuple(x*(1-bias)+(y*bias) for x,y in zip(color,pull_color)) for color in palette]
 
+# shift palette by number
 def palette_shift(palette, shift_delta):
 	return [tuple(x+y for x,y in zip(color,shift_delta)) for color in palette]
 
+# grayscale a palette
 def grayscale(palette):
 	gray_palette = []
 	for (r,g,b) in palette:
@@ -311,15 +318,19 @@ def grayscale(palette):
 	gray_palette[3] = (max_visor,max_visor,max_visor)  #visor should be essentially white (as bright as the brightest color)
 	return gray_palette
 
+# grayscale and sepia
 def sepia(palette):
 	return [(r,g,b*13.0/16.0) for (r,g,b) in grayscale(palette)]
 
+# return unsigned 8bit
 def as_u8(value):
 	return struct.pack('B',value)
 
+# return unsigned 16bit
 def as_u16(value):
 	return struct.pack('<H',value)
 
+# return unsigned 32bit
 def as_u32(value):
 	return struct.pack('<L',value)
 

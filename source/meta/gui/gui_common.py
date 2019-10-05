@@ -7,7 +7,7 @@ from tkinter import ttk, messagebox, filedialog	#for GUI stuff
 import base64            	#TODO: I don't know why we import this
 import json
 import random
-import urllib
+import urllib.request
 from functools import partial    #for tk debugging
 from source.meta.common.constants import DEBUG_MODE  #for tk debugging
 from source.meta.common import common
@@ -39,6 +39,7 @@ def get_tk_image(image):
 	img_str = base64.b64encode(buffered.getvalue())
 	return tk.PhotoImage(data=img_str)
 
+# create chooser for game files that have multiple sprite options for extraction
 def create_chooser(game_names):
 	def choose_game(game_name):
 		game_selector.set(game_name)
@@ -79,6 +80,7 @@ def create_chooser(game_names):
 		selected_game = random.choice(game_names)
 	return selected_game
 
+# download sprites for specified sprite manifest URL
 def get_sprites(self,title,dir,url):
 	success = False	#report success
 	filepath = os.path.join('.',"resources","user",dir)	#save to user_resources/<game_dir>/<sprite_dir>/sheets/<dir>/*.zspr

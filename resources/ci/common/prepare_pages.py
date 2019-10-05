@@ -40,6 +40,7 @@ distutils.dir_util.copy_tree(
 	"../pages/resources/app"
 )
 
+# copy over game data
 games = []
 checkdir = "./resources/app"
 for item in os.listdir(checkdir):
@@ -59,6 +60,7 @@ for item in os.listdir(checkdir):
 				gamedir + "/lang/"
 			)
 
+# write games dirs to file
 with open("../pages/resources/app/meta/manifests/games.txt","w") as f:
 	for item in games:
 		f.write("%s\n" % item)

@@ -20,9 +20,11 @@ from source.meta.gui.tkSimpleStatusBar import StatusBar
 from source.meta.common import common
 from source.meta.gui import gui_common
 
+# make base GUI window
 def make_GUI(command_line_args):
 	root = tk.Tk()
 
+  # get icon
 	try:
 		root.iconbitmap(default=common.get_resource(["meta","icons"],'app.ico')) #Windows
 	except Exception:
@@ -33,11 +35,13 @@ def make_GUI(command_line_args):
 				root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file=common.get_resource(["meta","icons"],'app.gif'))) #MacOSX?
 			except Exception:
 				pass #give up
+  # set window attributes
 	root.geometry("900x768")       #window size
 	root.configure(bg='#f0f0f0')   #background color
 	main_frame = SpriteSomethingMainFrame(root, command_line_args)
 	root.protocol("WM_DELETE_WINDOW", main_frame.exit)           #intercept when the user clicks the X
 
+  # generic error message
 	def show_error(self, exception, message, callstack):
 		#FIXME: English
 		if exception.__name__.upper() == "NOTIMPLEMENTEDERROR":
@@ -54,6 +58,7 @@ def make_GUI(command_line_args):
 
 	root.mainloop()
 
+# build main window
 class SpriteSomethingMainFrame(tk.Frame):
 	def __init__(self, master, command_line_args):
 		super().__init__(master)   #make the frame itself
@@ -88,11 +93,14 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		self.pack(fill=tk.BOTH, expand=1)    #main frame should take up the whole window
 
+    # add menu bar
 		self.create_menu_bar()
 
+    # add panes
 		self.panes = tk.PanedWindow(self, orient=tk.HORIZONTAL, name="two_columns")
 		self.panes.pack(fill=tk.BOTH, expand=1)
 
+    # load sprite and populate stuff
 		self.load_sprite(command_line_args["sprite"])
 
 		self.unsaved_changes = False   #used to determine if we need to badger the user when they change things and try to exit
@@ -208,6 +216,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 											])
 		menu_options.append(export_menu)
 
+    # try to get bundled sprites and add menu options to load them instead of requiring the user to hunt for them
 		bundled_games = {}
 		root = os.path.join("resources","app")
 		for gamedir in os.listdir(root):
@@ -371,6 +380,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.attach_overview()
 		self.panes.add(self.right_panel)
 
+  # metadata panel in left pane
 	def attach_metadata_panel(self):
 		PANEL_HEIGHT = 64
 		metadata_section = tk.Frame(self.left_panel, name="metadata_section")
@@ -406,6 +416,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 		self.status_bar.set(self.fish.translate(self.game.internal_name,"game","name") + ': "' + self.sprite.classic_name + '"')
 
+  # canvas panel in right pane
 	def attach_canvas(self):
 		def move_sprite(event):
 			self.sprite_coord = [event.x/self.current_zoom, event.y/self.current_zoom]
@@ -413,6 +424,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.canvas.bind("<Button-1>", move_sprite)   #hook this function to call when the canvas is left-clicked
 		self.right_panel.add(self.canvas, text=self.fish.translate("meta","tab","animations"))
 
+  # overview panel in right pane
 	def attach_overview(self):
 		self.overview_frame.grid_rowconfigure(0, weight=1)
 		self.overview_frame.grid_columnconfigure(0, weight=1)
@@ -431,6 +443,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		self.right_panel.add(self.overview_frame, text=self.fish.translate("meta","tab","overview"))
 
+  # do the saving work of representative images
 	def get_representative_images(self, style):
 		#list representative images
 		image_list = self.sprite.get_representative_images(style)
@@ -480,6 +493,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	############################ ANIMATION FUNCTIONS HERE ################################
 
+  # get sprite animation booted up and running
 	def initialize_sprite_animation(self):
 		self.frames_left_before_freeze = CONST.MAX_FRAMES
 		self.freeze_ray = True
@@ -487,9 +501,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.sprite_coord = (100,100)    #an arbitrary default
 		self.start_global_frame_timer()
 
+  # update animation imagery in case an option was changed
 	def update_sprite_animation(self):
 		self.animation_engine.update_animation()
 
+  # start up timer and play stuff
 	def start_global_frame_timer(self):
 		#called by play button
 		if self.freeze_ray:     #if we were frozen before
@@ -505,12 +521,14 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.reset_global_frame_timer()
 		self.update_sprite_animation()
 
+  # play through animation one time and stop
 	def play_once(self):
 		self.frames_left_before_freeze = self.animation_engine.frames_in_this_animation()
 		if self.freeze_ray:   #if we were frozen before
 			self.freeze_ray = False
 			self.time_marches_forward()
 
+  # reset timer and stop playback
 	def reset_global_frame_timer(self):
 		#called by radio reset button
 		self.frame_number = 0
@@ -519,7 +537,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def pause_global_frame_timer(self):
 		#called by pause button
 		self.frames_left_before_freeze = 0
-		self.freeze_ray = True
+		self.freeze_ray = True  # stops time, tell your friends
 		self.update_sprite_animation()
 
 	def rewind_global_frame_timer(self):
@@ -532,14 +550,17 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.pause_global_frame_timer()
 		self.advance_global_frame_timer()
 
+  # go to previous animation image set
 	def go_to_previous_pose(self):
 		self.frame_number = max(0,self.frame_number - self.animation_engine.frames_to_previous_pose())
 		self.pause_global_frame_timer()
 
+  # go to next animation image set
 	def go_to_next_pose(self):
 		self.frame_number = self.frame_number + self.animation_engine.frames_left_in_this_pose()
 		self.pause_global_frame_timer()
 
+  # start global timer
 	def time_marches_forward(self):
 		start_time = time.perf_counter()
 		MIN_WAIT = 5      #have to give the rest of the program time to work, and tkInter is not thread-safe
@@ -553,17 +574,21 @@ class SpriteSomethingMainFrame(tk.Frame):
 		else:
 			self.pause_global_frame_timer()
 
+  # get current zoom factor
 	def zoom_getter(self):
 		return self.current_zoom
 
+  # get current frame number
 	def frame_getter(self):
 		return self.frame_number
 
+  # get current coordinate location
 	def coord_getter(self):
 		return self.sprite_coord
 
 	########################### VCR CONTROLS HERE ######################################
 
+  # build vcr controls
 	def get_vcr_controls(self):
 		control_section = tk.Frame(self.left_panel, name="vcr_controls_section")
 		widgetlib.right_align_grid_in_frame(control_section)
@@ -689,6 +714,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		return control_section
 
+  # build reload button for refreshing currently-loaded sprite file without having to navigate open dialogues
 	def get_reload_button(self):
 		reload_section = tk.Frame(self.left_panel, name="reload_section")
 		widgetlib.center_align_grid_in_frame(reload_section)
@@ -812,7 +838,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def inject_into_ROM(self):
 		self.copy_into_ROM(inject=True)
 
-	#alias to inject into a directory of game filefs
+	#alias to inject into a directory of game files
 	def inject_into_ROM_bulk(self):
 		self.copy_into_ROM_bulk(inject=True)
 
@@ -924,30 +950,38 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def check_for_updates(self):
 		update_available = False
-		this_version = CONST.APP_VERSION
 #		version_url = "https://artheau.github.io/SpriteSomething/resources/app/meta/manifests/app_version.txt"
 		version_url = "https://artheau.github.io/SpriteSomething/app_resources/meta/manifests/app_version.txt"
-		version_req = urllib.request.urlopen(version_url)
-		latest_version = version_req.readlines()[0].decode("utf-8").strip()
+		this_version = CONST.APP_VERSION  # get current version
+		version_req = urllib.request.urlopen(version_url) # make request for online app version
+		latest_version = version_req.readlines()[0].decode("utf-8").strip() # get version from file
 
-		this_version_type = "TRAVIS"
+		this_version_type = "TRAVIS"    # assume this version & latest version are in Travis format (<major>.<minor>.<build>)
 		latest_version_type = "TRAVIS"
 
 		if len(this_version.split('.')) > 2:
+      # if it's alphanumeric, it's a hash ID and not a Travis build number
 			if not this_version.split('.')[2].isnumeric():
 				this_version_type = "GHACTIONS"
 		if len(latest_version.split('.')) > 2:
+      # if it's alphanumeric, it's a hash ID and not a Travis build number
 			if not latest_version.split('.')[2].isnumeric():
 				latest_version_type = "GHACTIONS"
 
 		if this_version_type == "TRAVIS" and latest_version_type == "TRAVIS":
+      # Travis && Travis is an arithmetical comparison
 			update_available = latest_version > this_version
 		elif this_version_type == "GHACTIONS" or latest_version_type == "GHACTIONS":
+      # GH Actions in either version becomes a little more complex
 			this_version_split = this_version.split('.')
 			latest_version_split = latest_version.split('.')
+      # check if <major>.<minor> is bigger
 			update_available = float(latest_version_split[0] + '.' + latest_version_split[1]) > float(this_version_split[0] + '.' + this_version_split[1])
 			if not update_available:
+        # still no update calculated
+        # check if <major>.<minor> is the same
 				if float(latest_version_split[0] + '.' + latest_version_split[1]) == float(this_version_split[0] + '.' + this_version_split[1]):
+          # if so, if the last part is different, there might be an update
 					update_available = not latest_version_split[2] == this_version_split[2]
 
 		if update_available:
