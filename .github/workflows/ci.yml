@@ -77,7 +77,7 @@ jobs:
     # try to get UPX
     - name: Get UPX
       run: |
-        python ./resources/ci/travis/get_upx.py
+        python ./resources/ci/common/get_upx.py
     # run build.py
     - name: Build Binary
       run: |
