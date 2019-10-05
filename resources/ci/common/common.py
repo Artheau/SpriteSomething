@@ -77,7 +77,7 @@ def prepare_env():
       # if the app version didn't have the build number, add it
       # set to <app_version>.<build_number>
       if env["BUILD_NUMBER"] not in GITHUB_TAG:
-        GITHUB_TAG += '.' + BUILD_NUMBER
+        GITHUB_TAG += '.' + env["BUILD_NUMBER"]
 
   env["GITHUB_TAG"] = GITHUB_TAG
   env["OS_NAME"] = OS_NAME
@@ -89,6 +89,8 @@ def prepare_env():
 # build filename based on metadata
 def prepare_filename(BUILD_FILENAME):
 	env = prepare_env()
+
+	DEST_FILENAME = ""
 
 	# build the filename
 	if not BUILD_FILENAME == "":
