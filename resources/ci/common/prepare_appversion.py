@@ -5,7 +5,7 @@ from shutil import copy	# file manipulation
 env = common.prepare_env()
 
 # set tag to app_version.txt
-with open("./resources/app/meta/manifests/app_version.txt","w") as f:
+with open("./resources/app/meta/manifests/app_version.txt","w+") as f:
 	_ = f.read()
 	f.seek(0)
 	f.write(env["GITHUB_TAG"])
