@@ -326,7 +326,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def attach_both_panels(self):
 		#this same function can also be used to re-create the panels
 		#have to make the canvas before the buttons so that the left panel buttons can manipulate it
-		self.freeze_ray = True    #do not update the sprite while doing this
+		self.freeze_ray = True # stops time, tell your friends; do not update the sprite while doing this
 		if hasattr(self, "timer_callback"):
 			self.master.after_cancel(self.timer_callback)
 		if hasattr(self, "left_panel"):
@@ -496,7 +496,7 @@ class SpriteSomethingMainFrame(tk.Frame):
   # get sprite animation booted up and running
 	def initialize_sprite_animation(self):
 		self.frames_left_before_freeze = CONST.MAX_FRAMES
-		self.freeze_ray = True
+		self.freeze_ray = True # stops time, tell your friends
 		self.frame_number = 0
 		self.sprite_coord = (100,100)    #an arbitrary default
 		self.start_global_frame_timer()
