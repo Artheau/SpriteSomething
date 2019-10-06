@@ -28,8 +28,6 @@ def prepare_env():
     with open(APP_VERSION_FILE,"r") as f:
       APP_VERSION = f.readlines()[0].strip()
 
-  # ci data
-  env["BUILD_NUMBER"] = os.getenv("TRAVIS_BUILD_NUMBER","")
   # git data
   env["BRANCH"] = os.getenv("TRAVIS_BRANCH","")
   env["GITHUB_ACTOR"] = os.getenv("GITHUB_ACTOR","MegaMan.EXE")
@@ -55,6 +53,9 @@ def prepare_env():
 
   if not env["GITHUB_SHA"] == "":
     env["GITHUB_SHA_SHORT"] = env["GITHUB_SHA"][:7]
+
+  # ci data
+  env["BUILD_NUMBER"] = os.getenv("TRAVIS_BUILD_NUMBER",env["GITHUB_SHA_SHORT"])
 
   GITHUB_TAG = os.getenv("TRAVIS_TAG",os.getenv("GITHUB_TAG",""))
   OS_NAME = os.getenv("TRAVIS_OS_NAME",os.getenv("OS_NAME","")).replace("macOS","osx")
@@ -120,3 +121,7 @@ def find_binary(listdir):
 				if "SpriteSomething" in filename:
 					BUILD_FILENAME = filename
 	return BUILD_FILENAME
+
+if __name__ == "__main__":
+  env = prepare_env()
+  print(env)
