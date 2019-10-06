@@ -65,12 +65,12 @@ jobs:
         # upx still doesn't quite work with race conditions of downloading vs processing
         # try to beat the race condition by having all this in one line
         #run build script
-#        - "if [ true ]; then \
-#            if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
-#              ${PYTHON_EXECUTABLE} ./resources/ci/travis/get_upx.py; \
-#            fi; \
-#          fi"
-        - ${PYTHON_EXECUTABLE} ./source/meta/build.py
+        - "if [ true ]; then \
+            if [ \"${TRAVIS_DIST}\" != \"xenial\" ]; then \
+              ${PYTHON_EXECUTABLE} ./resources/ci/common/get_upx.py; \
+            fi; \
+            ${PYTHON_EXECUTABLE} ./source/meta/build.py; \
+          fi"
       # 9 Step
       after_success:
         #prepare files to upload

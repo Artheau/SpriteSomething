@@ -23,8 +23,10 @@ def prepare_env():
 
 	# get app version
   APP_VERSION = ""
-  with open("./resources/app/meta/manifests/app_version.txt","r+") as f:
-    APP_VERSION = f.readlines()[0].strip()
+  APP_VERSION_FILE = "./resources/app/meta/manifests/app_version.txt"
+  if os.path.isfile(APP_VERSION_FILE):
+    with open(APP_VERSION_FILE,"r") as f:
+      APP_VERSION = f.readlines()[0].strip()
 
   # ci data
   env["BUILD_NUMBER"] = os.getenv("TRAVIS_BUILD_NUMBER","")
