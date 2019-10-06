@@ -18,7 +18,7 @@ def recurse_for_py_files(names_so_far):
             	returnvalue.append(new_name)
         returnvalue.extend(recurse_for_py_files(new_name_list))
   returnvalue.append("PIL._tkinter_finder") #Linux needs this
-  returnvalue.append("source.animationlib") #Windows missed this
+  returnvalue.append("source.meta.gui.animationlib") #Windows missed this
   return returnvalue
 
 hiddenimports = recurse_for_py_files(["source"])
