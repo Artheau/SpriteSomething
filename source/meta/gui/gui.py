@@ -1021,7 +1021,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		# Credit where credit's due
 		dims = {
 			"window": {
-				"width": 300,
+				"width": 350,
 				"height": 200
 			},
 			"textarea.characters": {
@@ -1037,6 +1037,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 				  "Created by:",
 				  "[Artheau](http://github.com/Artheau/PixelArt)",
 				  "[Mike Trethewey](http://github.com/miketrethewey)",
+				  "",
+				  "Thanks to:",
+				  "[Auximines](https://metroidfanon.fandom.com/wiki/Super_Justin_Bailey) for initial inspiration for custom Super Metroid sprites",
 				  "",
 				  "Based on:",
 				  "[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
