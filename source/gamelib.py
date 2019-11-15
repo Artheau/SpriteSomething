@@ -85,10 +85,8 @@ def autodetect_game_type_from_rom(rom):
 				game_names.append(game_name)
 
 	if len(game_names) == 0:
-		game_names = None
-		#raise AssertionError(f"Could not identify the type of ROM from its header name: {rom_name}")
-		#FIXME: English
-		print(f"Could not identify the type of ROM from its header name: {rom_name}")
+		game_names = []
+		raise AssertionError(f"Could not identify the type of ROM from its header name: {rom_name}")
 
 	return game_names
 
