@@ -207,6 +207,8 @@ jobs:
       language: shell #'language: python' breaks on Travis CI Windows
       # 3 Step
       before_install:
+        #windows uses py?
+        - export PYTHON_EXECUTABLE=py
         #install python
         #set python path
         #get pip
