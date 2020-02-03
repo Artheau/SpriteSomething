@@ -39,17 +39,16 @@ function init(mode = "index") {
 		list_li.append(games_list);
 		$("body").append(list_li);
 
-	  let games = readTextFile(".\\resources\\app\\meta\\manifests\\games.txt");
-	  games = games.split("\n");
-	  for(let game in games) {
-	    game = games[game];
-	    if(game != "") {
+	  let snesGames = readTextFile(".\\resources\\app\\meta\\manifests\\snes.txt");
+	  snesGames = snesGames.split("\n");
+	  for(let snesGame in snesGames) {
+	    snesGame = snesGames[snesGame];
+	    if(snesGame != "") {
 	      let game_li = $("<li>");
 	      let sprites_ul = $("<ul>");
 	      let sprite_li = $("<li>");
 	      let sprite_a = $("<a>");
-	      let game_name = game;
-	      let en_lang = readTextFile(".\\resources\\app\\" + game + "\\lang\\en.json");
+	      let en_lang = readTextFile(".\\resources\\app\\snes\\" + game + "\\lang\\en.json");
 	      en_lang = JSON.parse(en_lang);
 	      if("game" in en_lang) {
 	        if("name" in en_lang["game"]) {
@@ -57,7 +56,7 @@ function init(mode = "index") {
 	        }
 	      }
 
-	      let manifest = readTextFile(".\\resources\\app\\" + game + "\\manifests\\manifest.json");
+	      let manifest = readTextFile(".\\resources\\app\\snes\\" + game + "\\manifests\\manifest.json");
 	      manifest = JSON.parse(manifest);
 	      for(let key in manifest) {
 	        let value = manifest[key];
@@ -131,7 +130,7 @@ function init(mode = "index") {
         $("body").append(title);
 
 		let filepath = window.location.pathname;
-		filepath += "resources/app/";
+		filepath += "resources/app/snes/";
 		filepath += game + '/';
 		filepath += sprite + '/';
 		let link = $("<link>")
