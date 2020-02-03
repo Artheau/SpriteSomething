@@ -1,5 +1,5 @@
 {
-	"$schema": "../../../schema/backgrounds.schema.json",
+	"$schema": "../../../../schema/backgrounds.schema.json",
 	"backgrounds": [
 		{
 			"filename": "home.png",

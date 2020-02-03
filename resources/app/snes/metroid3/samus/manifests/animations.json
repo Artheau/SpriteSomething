@@ -1,5 +1,5 @@
 {
-	"$schema": "../../../../schema/animations.schema.json",
+	"$schema": "../../../../../schema/animations.schema.json",
 	"Stand": {
 		"right_aim_up": [
 			{ "frames": 2,	"displacement": [0,-6],	"tiles": [	{"image": "optional_gun_port_right_aim_diag_up2", "pos": [14,-22]}, {"image": "stand_right_aim_diag_up",	"pos": [-13,-29] } ] },

@@ -1,5 +1,5 @@
 {
-	"$schema": "../../../../schema/png-layout.schema.json",
+	"$schema": "../../../../../schema/png-layout.schema.json",
 	"comment":
 	[
 		"This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",

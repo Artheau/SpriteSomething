@@ -1,5 +1,5 @@
 {
-	"$schema": "../../../schema/game-sprite-manifest.schema.json",
+	"$schema": "../../../../schema/game-sprite-manifest.schema.json",
 	"1": {
 		"type": "Player Character Sprite",
 		"name": "Link",

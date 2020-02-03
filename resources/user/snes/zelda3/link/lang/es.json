@@ -1,5 +1,5 @@
 {
-	"$schema": "../../../../resources/app/zelda3/link/manifests/link-language.schema.json",
+	"$schema": "../../../../../../resources/app/snes/zelda3/link/manifests/link-language.schema.json",
   "comment" : "Cuando sea posible, se utilizan las traducciones de A Link Between Worlds en la versión de America Latina",
 	"section": {
 		"facing": "Facing",
