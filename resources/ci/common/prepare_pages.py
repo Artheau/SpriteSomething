@@ -41,26 +41,30 @@ distutils.dir_util.copy_tree(
 )
 
 # copy over game data
+consoles = {}
 games = []
 checkdir = "./resources/app"
-for item in os.listdir(checkdir):
-	if os.path.isdir(os.path.join(checkdir,item)):
-		if not item == "meta":
-			game = item
-			games.append(game)
-			gamedir = "../pages/resources/app/" + game
-			if not os.path.isdir(gamedir + "/manifests/"):
-				os.makedirs(gamedir + "/manifests/")
-			distutils.dir_util.copy_tree(
-				"./resources/app/" + game + "/manifests/",
-				gamedir + "/manifests/"
-			)
-			distutils.dir_util.copy_tree(
-				"./resources/app/" + game + "/lang/",
-				gamedir + "/lang/"
-			)
+for console in os.listdir(checkdir):
+	if os.path.isdir(os.path.join(checkdir,console)):
+		if not console == "meta":
+			consoles[console] = []
+			for game in os.listdir(os.path.isdir(os.path.join(checkdir,console))):
+			  if not game == "meta":
+			    consoles[console].append(game)
+			    gamedir = "../pages/resources/app/" + console + '/' + game
+			    if not os.path.isdir(gamedir + "/manifests/"):
+			      os.makedirs(gamedir + "/manifests/")
+			      distutils.dir_util.copy_tree(
+              "./resources/app/" + console + '/' + game + "/manifests/",
+			      gamedir + "/manifests/"
+			    )
+			    distutils.dir_util.copy_tree(
+			      "./resources/app/" + console + '/' + game + "/lang/",
+			      gamedir + "/lang/"
+			    )
 
 # write games dirs to file
-with open("../pages/resources/app/meta/manifests/games.txt","w") as f:
-	for item in games:
-		f.write("%s\n" % item)
+for console in consoles:
+  with open("../pages/resources/app/meta/manifests/" + console + ".txt","w") as f:
+  	for game in consoles[console]:
+  		f.write("%s\n" % game)
