@@ -15,8 +15,8 @@ import tempfile   #for mock-saving files, in order to check the validity of the 
 from PIL import ImageChops #for testing if images are same/different
 
 from source.meta.gui import gui #need to import the GUI to test it
-from source.zelda3.link import sprite as link_sprite_library
-from source.metroid3.samus import sprite as samus_sprite_library
+from source.snes.zelda3.link import sprite as link_sprite_library
+from source.snes.metroid3.samus import sprite as samus_sprite_library
 
 class ExportAudit(unittest.TestCase):
 	def same(self, file1, file2):   #not a test, just a helper function
