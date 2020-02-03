@@ -1,0 +1,13 @@
+{
+	"$schema": "../../../../schema/game-sprite-manifest.schema.json",
+	"1": {
+		"type": "Player Character Sprite",
+		"name": "Link",
+		"folder name": "link",
+		"input": {
+			"png": {
+				"dims": [128,448]
+			}
+		}
+	}
+}

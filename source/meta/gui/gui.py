@@ -219,39 +219,47 @@ class SpriteSomethingMainFrame(tk.Frame):
     # try to get bundled sprites and add menu options to load them instead of requiring the user to hunt for them
 		bundled_games = {}
 		root = os.path.join("resources","app")
-		for gamedir in os.listdir(root):
-			if os.path.isdir(os.path.join(root,gamedir)):
-				if not gamedir == "meta":
-					with open(os.path.join(root,gamedir,"lang","en.json")) as en_lang:
-						en = json.load(en_lang)
-						if "game" in en:
-							if "name" in en["game"]:
-								bundled_games[gamedir] = {}
-								bundled_games[gamedir]["game"] = {}
-								bundled_games[gamedir]["game"]["internal name"] = gamedir
-								bundled_games[gamedir]["game"]["name"] = en["game"]["name"]
-								bundled_games[gamedir]["sprites"] = []
-					with open(os.path.join(root,gamedir,"manifests","manifest.json")) as game_manifest:
-						sprites = json.load(game_manifest)
-						for id,sprite in sprites.items():
-							if not id == "$schema":
-								name = sprite["name"]
-								folder = sprite["folder name"]
-								path = os.path.join(root,gamedir,folder,"sheets")
-								filename = ""
-								for filetype in [".rdc",".zspr",".png"]:
-									filepath = os.path.join(path,folder+filetype)
-									if os.path.isfile(filepath):
-										filename = filepath
-								bundled_games[gamedir]["sprites"].append((name,partial(self.load_sprite,filename)))
+		for console in os.listdir(root):
+		  if not console == "meta":
+		    if os.path.isdir(os.path.join(root,console)):
+		      if not console in bundled_games:
+		        bundled_games[console] = {}
+		      for gamedir in os.listdir(os.path.join(root,console)):
+		        if os.path.isdir(os.path.join(root,console,gamedir)):
+		          with open(os.path.join(root,console,gamedir,"lang","en.json")) as en_lang:
+		            en = json.load(en_lang)
+		            if "game" in en:
+		              if "name" in en["game"]:
+		                bundled_games[console][gamedir] = {}
+		                bundled_games[console][gamedir]["game"] = {}
+		                bundled_games[console][gamedir]["game"]["internal name"] = gamedir
+		                bundled_games[console][gamedir]["game"]["name"] = en["game"]["name"]
+		                bundled_games[console][gamedir]["sprites"] = []
+		          with open(os.path.join(root,console,gamedir,"manifests","manifest.json")) as game_manifest:
+		            sprites = json.load(game_manifest)
+		            for id,sprite in sprites.items():
+		              if not id == "$schema":
+		                name = sprite["name"]
+		                folder = sprite["folder name"]
+		                path = os.path.join(root,console,gamedir,folder,"sheets")
+		                filename = ""
+		                for filetype in [".rdc",".zspr",".png"]:
+		                  filepath = os.path.join(path,folder+filetype)
+		                  if os.path.isfile(filepath):
+		                    filename = filepath
+		                bundled_games[console][gamedir]["sprites"].append((name,partial(self.load_sprite,filename)))
 		bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")
-		for bundled_game in bundled_games:
-			bundled_game = bundled_games[bundled_game]
-			bundled_game_menu = tk.Menu(self.menu, tearoff=0, name="bundled_" + bundled_game["game"]["internal name"] + "_menu")
-			for sprite in bundled_game["sprites"]:
-				label,command = sprite
-				bundled_game_menu.add_command(label=label,command=command)
-			bundle_menu.add_cascade(label=bundled_game["game"]["name"], menu=bundled_game_menu)
+		for console in bundled_games:
+		  bundled_console = bundled_games[console]
+		  bundled_console_menu = tk.Menu(bundle_menu, tearoff=0, name="bundled_" + console + "_menu")
+		  for bundled_game in bundled_console:
+  			bundled_game = bundled_games[console][bundled_game]
+  			bundled_game_menu = tk.Menu(bundled_console_menu, tearoff=0, name="bundled_" + bundled_game["game"]["internal name"] + "_menu")
+  			for sprite in bundled_game["sprites"]:
+  				label,command = sprite
+  				bundled_game_menu.add_command(label=label,command=command)
+  			bundled_console_menu.add_cascade(label=bundled_game["game"]["name"], menu=bundled_game_menu)
+		  bundle_menu.add_cascade(label=self.fish.translate("meta","consoles",console), menu=bundled_console_menu)
 		self.menu.add_cascade(label=self.fish.translate("meta","menu","bundle"), menu=bundle_menu)
 
 		#for future implementation
@@ -316,8 +324,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 	#  sprite_filename: Filename of sprite to load
 	def load_sprite(self, sprite_filename):
 		self.game, self.sprite, self.animation_engine = gamelib.autodetect(sprite_filename)
-		self.fish.add_translation_file(self.game.internal_name)
-		self.fish.add_translation_file(self.sprite.resource_subpath)
+		self.fish.add_translation_file(os.path.join(self.game.console_name,self.game.internal_name))
+		self.fish.add_translation_file(os.path.join(self.sprite.resource_subpath))
 		self.sprite_coord = (100,100)        #an arbitrary default
 		self.attach_both_panels()            #remake the GUI panels
 		self.load_plugins()
@@ -414,7 +422,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if not hasattr(self, "status_bar"):
 			self.status_bar = StatusBar(self)
 			self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
-		self.status_bar.set(self.fish.translate(self.game.internal_name,"game","name") + ': "' + self.sprite.classic_name + '"')
+		self.status_bar.set(self.fish.translate(self.game.console_name + '.' + self.game.internal_name,"game","name") + ': "' + self.sprite.classic_name + '"')
 
   # canvas panel in right pane
 	def attach_canvas(self):

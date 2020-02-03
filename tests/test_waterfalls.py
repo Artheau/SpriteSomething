@@ -11,8 +11,8 @@ import sys			#so that we can check to see which modules are imported at any give
 class DontGoChasingWaterfalls(unittest.TestCase):
 	def test_no_tk_in_sprite_class(self):
 		#there should be no references to tkinter in the sprite class, because sprites are supposed to work from the CLI also.
-		from source.metroid3.samus import sprite as samus_sprite
-		from source.zelda3.link import sprite as link_sprite
+		from source.snes.metroid3.samus import sprite as samus_sprite
+		from source.snes.zelda3.link import sprite as link_sprite
 		self.assertFalse('tkinter' in sys.modules)
 
 if __name__ == '__main__':

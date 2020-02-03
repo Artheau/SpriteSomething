@@ -38,7 +38,7 @@ class SpriteParent():
 	def load_plugins(self):
 		try:
 			plugins_path,_ = os.path.split(self.resource_subpath)
-			_,plugins_dir = os.path.split(plugins_path)
+			plugins_dir = plugins_path.replace(os.sep,'.')
 			plugins_module = importlib.import_module(f"source.{plugins_dir}.{self.classic_name.lower()}.plugins")
 			self.plugins = plugins_module.Plugins()
 			self.has_plugins = True
