@@ -27,7 +27,7 @@ class Plugins(PluginsParent):
 		success = gui_common.get_sprites(
 			self,
 			"Official ALttPR",
-			"zelda3/link/sheets/official",
+			"snes/zelda3/link/sheets/official",
 			"http://alttpr.com/sprites"
 		)
 		return success

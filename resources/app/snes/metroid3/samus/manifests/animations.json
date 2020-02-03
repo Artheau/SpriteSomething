@@ -2317,7 +2317,7 @@
 	},
 	"File Select": {
 		"right": [
-			{ "frames": 5, "tiles": [
+			{ "frames": 5, "background": "fileselect.png", "origin": [0,0], "tiles": [
 											{"image": "file_select_cursor_array", "pos": [  6, 44], "crop": [ 0,24,16,32] },
 											{"image": "file_select_head",         "pos": [ 88, 35] },
 											{"image": "file_select_head",         "pos": [ 88, 75] },

@@ -168,7 +168,11 @@ class GameParent():
 			if self.last_known_zoom == self.zoom_getter():
 				return   #there is nothing to do here, because nothing has changed
 		else:     #image name is different, so need to load a new image
-			image_filename = self.background_datas["title"][image_title]
+			image_filename = self.current_background_title
+			if image_title in self.background_datas["title"]:
+			  image_filename = self.background_datas["title"][image_title]
+			elif image_title in self.background_datas["filename"]:
+			  image_filename = image_title
 			self.raw_background = Image.open(common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename))
 
 		#now re-zoom the image
@@ -201,10 +205,10 @@ class GameParent():
 
 			try:
 				animationlib = importlib.import_module(f"{source_subpath}.animation")
-				animation_assist = animationlib.AnimationEngine(resource_subpath, sprite)
+				animation_assist = animationlib.AnimationEngine(resource_subpath, self, sprite)
 			except ImportError:    #there was no sprite-specific animation library, so import the parent
 				animationlib = importlib.import_module(f"source.meta.gui.animationlib")
-				animation_assist = animationlib.AnimationEngineParent(resource_subpath, sprite)
+				animation_assist = animationlib.AnimationEngineParent(resource_subpath, self, sprite)
 
 			return sprite, animation_assist
 		else:

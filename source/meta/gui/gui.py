@@ -326,7 +326,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.game, self.sprite, self.animation_engine = gamelib.autodetect(sprite_filename)
 		self.fish.add_translation_file(os.path.join(self.game.console_name,self.game.internal_name))
 		self.fish.add_translation_file(os.path.join(self.sprite.resource_subpath))
-		self.sprite_coord = (100,100)        #an arbitrary default
+		self.coord_setter((100,100))        #an arbitrary default
 		self.attach_both_panels()            #remake the GUI panels
 		self.load_plugins()
 		self.initialize_sprite_animation()
@@ -377,7 +377,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.left_panel.add(self.get_reload_button(),height=1 * BUTTON_HEIGHT)
 		self.attach_metadata_panel()
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
-		self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.fish)
+		self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.coord_setter,self.fish)
 		self.left_panel.add(vcr_controls,height=5 * BUTTON_HEIGHT)
 		self.animation_engine.attach_tile_details_panel(self.left_panel,self.fish)
 		self.panes.add(self.left_panel)
@@ -427,7 +427,7 @@ class SpriteSomethingMainFrame(tk.Frame):
   # canvas panel in right pane
 	def attach_canvas(self):
 		def move_sprite(event):
-			self.sprite_coord = [event.x/self.current_zoom, event.y/self.current_zoom]
+			self.coord_setter([event.x/self.current_zoom, event.y/self.current_zoom])
 			self.update_sprite_animation()
 		self.canvas.bind("<Button-1>", move_sprite)   #hook this function to call when the canvas is left-clicked
 		self.right_panel.add(self.canvas, text=self.fish.translate("meta","tab","animations"))
@@ -506,7 +506,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.frames_left_before_freeze = CONST.MAX_FRAMES
 		self.freeze_ray = True # stops time, tell your friends
 		self.frame_number = 0
-		self.sprite_coord = (100,100)    #an arbitrary default
+		self.coord_setter((100,100))    #an arbitrary default
 		self.start_global_frame_timer()
 
   # update animation imagery in case an option was changed
@@ -593,6 +593,10 @@ class SpriteSomethingMainFrame(tk.Frame):
   # get current coordinate location
 	def coord_getter(self):
 		return self.sprite_coord
+
+	# set coordinate location
+	def coord_setter(self,coords):
+		self.sprite_coord = coords
 
 	########################### VCR CONTROLS HERE ######################################
 

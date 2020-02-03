@@ -11,7 +11,8 @@ from source.meta.gui import gui_common
 from source.meta.gui import widgetlib
 
 class AnimationEngineParent():
-	def __init__(self, my_subpath, sprite):
+	def __init__(self, my_subpath, game, sprite):
+		self.game = game
 		self.sprite = sprite
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.spiffy_dict = {}						 #the variables created by the spiffy buttons will go here
@@ -31,7 +32,7 @@ class AnimationEngineParent():
 
 		self.current_animation = next(iter(self.animations.keys()))   #using a default value until the animation_panel attachment overrides this
 
-	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, fish):
+	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, coord_setter, fish):
 		ANIMATION_DROPDOWN_WIDTH = 25
 		PANEL_HEIGHT = 25
 		self.canvas = canvas
@@ -39,6 +40,7 @@ class AnimationEngineParent():
 		self.zoom_getter = zoom_getter
 		self.frame_getter = frame_getter
 		self.coord_getter = coord_getter
+		self.coord_setter = coord_setter
 		self.current_animation = None
 		self.pose_number = None
 		self.palette_number = None
@@ -109,6 +111,17 @@ class AnimationEngineParent():
 
 	def set_animation(self, animation_name):
 		self.current_animation = animation_name
+		if self.current_animation in self.animations:
+		  anims = self.animations
+		  current_anim = self.current_animation
+		  if self.sprite.get_alternative_direction(current_anim,self.get_current_direction()) in anims[current_anim]:
+		    current_dir = self.sprite.get_alternative_direction(current_anim,self.get_current_direction())
+		    if len(anims[current_anim][current_dir]) > 0:
+		      current_pose_num = 0
+		      if "background" in anims[current_anim][current_dir][current_pose_num]:
+		        self.game.set_background(anims[current_anim][current_dir][current_pose_num]["background"])
+		      if "origin" in anims[current_anim][current_dir][current_pose_num]:
+		        self.coord_setter(anims[current_anim][current_dir][current_pose_num]["origin"])
 		self.update_animation()
 
 	def update_animation(self):
@@ -126,7 +139,8 @@ class AnimationEngineParent():
 		if pose_image:
 			new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
 			scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
-			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(self.coord_getter(),offset))
+			coords = self.coord_getter()
+			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(coords,offset))
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_image, anchor = tk.NW))
 			self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
 

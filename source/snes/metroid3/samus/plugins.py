@@ -24,7 +24,7 @@ class Plugins(PluginsParent):
 		success = gui_common.get_sprites(
 			self,
 			"Unofficial SpriteSomething Samus",
-			"metroid3/samus/sheets/unofficial",
+			"snes/metroid3/samus/sheets/unofficial",
 #			"https://raw.githubusercontent.com/Artheau/SpriteSomething/gh-pages/resources/app/metroid3/samus/sprites.json"
 			"https://raw.githubusercontent.com/Artheau/SpriteSomething/gh-pages/app_resources/metroid3/samus/sprites.json"
 		)
