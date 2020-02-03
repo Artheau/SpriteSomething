@@ -48,7 +48,7 @@ for console in os.listdir(checkdir):
 	if os.path.isdir(os.path.join(checkdir,console)):
 		if not console == "meta":
 			consoles[console] = []
-			for game in os.listdir(os.path.isdir(os.path.join(checkdir,console))):
+			for game in os.listdir(os.path.join(checkdir,console)):
 			  if not game == "meta":
 			    consoles[console].append(game)
 			    gamedir = "../pages/resources/app/" + console + '/' + game
