@@ -2645,5 +2645,33 @@
 											{"image": "file_select_piping",       "pos": [ 72, 16], "crop": [16, 8,24,16], "note": "left" }
 										], "palette": "file_select_variant" }
 		]
+	},
+	"Ship Preview": {
+		"right": [
+			{ "frames": 15, "background": "landingsite.png", "origin": [35,100], "tiles": [
+				{ "image": "optional_ship_structure", "pos": [0,0] },
+				{ "image": "optional_ship_window", "pos": [0,0] },
+				{ "image": "optional_ship_thrusters", "pos": [0,0] },
+				{ "image": "optional_ship_body", "pos": [0,0] }
+			], "palette": "ship_variant" },
+			{ "frames": 15, "tiles": [
+				{ "image": "optional_ship_structure", "pos": [0,1] },
+				{ "image": "optional_ship_window", "pos": [0,1] },
+				{ "image": "optional_ship_thrusters", "pos": [0,1] },
+				{ "image": "optional_ship_body", "pos": [0,1] }
+			], "palette": "ship_variant" },
+			{ "frames": 15, "tiles": [
+				{ "image": "optional_ship_structure", "pos": [0,0] },
+				{ "image": "optional_ship_window", "pos": [0,0] },
+				{ "image": "optional_ship_thrusters", "pos": [0,0] },
+				{ "image": "optional_ship_body", "pos": [0,0] }
+			], "palette": "ship_variant" },
+			{ "frames": 15, "tiles": [
+				{ "image": "optional_ship_structure", "pos": [0,-1] },
+				{ "image": "optional_ship_window", "pos": [0,-1] },
+				{ "image": "optional_ship_thrusters", "pos": [0,-1] },
+				{ "image": "optional_ship_body", "pos": [0,-1] }
+			], "palette": "ship_variant" }
+		]
 	}
 }

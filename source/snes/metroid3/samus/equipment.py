@@ -118,4 +118,9 @@ def equipment_test(save=False):
 		if save:
 			cropped_image.save(os.path.join(".","resources","user","snes","metroid","samus","sheets") + icon + ".png")
 
+	ship_dir = os.path.join(".","resources","app","snes","metroid3","samus","sheets","ship")
+	for file in os.listdir(ship_dir):
+		icon = "optional_ship_" + file[:file.rfind('.')]
+		equipment[icon] = Image.open(os.path.join(ship_dir,file))
+
 	return equipment
