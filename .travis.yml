@@ -13,6 +13,7 @@ cache:
     - $HOME/upx #upx
 
 #default VM settings
+os: linux
 dist: bionic
 python: "3.7"
 env:
@@ -100,13 +101,12 @@ jobs:
       # 11 Step
       deploy:
         - provider: releases
-          api_key:
+          token:
             secure: ${GITHUB_DEPLOY_KEY}
           name: ${RELEASE_NAME}
-          body: ${BODY}
+          release_notes: ${BODY}
           file_glob: true
           file: ${FILES}
-          skip_cleanup: true
           draft: true
           on:
             repo: Artheau/SpriteSomething
@@ -115,8 +115,7 @@ jobs:
 # Travis CI GitHub Pages provider
         - provider: pages
           local_dir: ${PAGES}
-          skip_cleanup: true
-          github_token: ${GITHUB_DEPLOY_KEY}
+          token: ${GITHUB_DEPLOY_KEY}
           keep_history: true
           on:
             repo: Artheau/SpriteSomething
@@ -130,7 +129,6 @@ jobs:
 #      deploy:
 #        provider: script
 #        script: ./github-releaser -draft -verbose
-#        skip_cleanup: true
 #        draft: true
 #        on:
 #          repo: Artheau/SpriteSomething
@@ -218,7 +216,7 @@ jobs:
         - ${PYTHON_EXECUTABLE} --version
         - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-        - ${PYTHON_EXECUTABLE} -m pip uninstall pip setuptools
+        - ${PYTHON_EXECUTABLE} -m pip uninstall --yes pip setuptools
         - ${PYTHON_EXECUTABLE} get-pip.py
         - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
     - <<: *build-deploy
