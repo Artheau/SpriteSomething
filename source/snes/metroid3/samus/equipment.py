@@ -1,3 +1,4 @@
+import os
 from PIL import Image
 from source.meta.common import common
 
@@ -8,7 +9,7 @@ def coord_calc(origin,dims):
 
 def equipment_test(save=False):
 	#get equipment image
-	equipment_image = Image.open(common.get_resource(["metroid3","samus","sheets"],"equipment.png"))
+	equipment_image = Image.open(common.get_resource(["snes","metroid3","samus","sheets"],"equipment.png"))
 
 	equipment = {}
 
@@ -115,6 +116,6 @@ def equipment_test(save=False):
 		cropped_image = equipment_image.crop(icon_coords)
 		equipment[icon] = cropped_image
 		if save:
-			cropped_image.save(os.path.join(".","resources","user","metroid","samus","sheets") + icon + ".png")
+			cropped_image.save(os.path.join(".","resources","user","snes","metroid","samus","sheets") + icon + ".png")
 
 	return equipment

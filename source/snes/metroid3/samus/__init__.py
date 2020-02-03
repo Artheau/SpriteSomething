@@ -1,1 +1,1 @@
-#do nothing, just exist to make "source.metroid3.samus" package
+#do nothing, just exist to make "source.snes.metroid3.samus" package

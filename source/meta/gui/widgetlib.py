@@ -136,7 +136,8 @@ class SpiffyGroup():
 	def __init__(self, parent, row, label, var, sprite_resource_subpath, animation_engine_getter, fish):
 		#disable sprite object in widgetlib
 		self.sprite_resource_subpath = sprite_resource_subpath
-		label = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'),"section",label) #fish.translate(parent.animation_engine.resource_subpath,"section",label)
+		fish_key = self.sprite_resource_subpath.replace(os.sep,'.')
+		label = fish.translate(fish_key,"section",label) #fish.translate(parent.animation_engine.resource_subpath,"section",label)
 		self.label = label
 		self.default_exists = False
 		self.parent = parent
@@ -164,7 +165,8 @@ class SpiffyGroup():
 		img = ImageTk.PhotoImage(Image.open(icon_path))
 
 		#disable sprite object in widgetlib
-		display_text = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'), self.label, internal_value_name) #fish.translate(self.parent.animation_engine.resource_subpath, self.label, internal_value_name)
+		fish_key = self.sprite_resource_subpath.replace(os.sep,'.')
+		display_text = fish.translate(fish_key, self.label, internal_value_name) #fish.translate(self.parent.animation_engine.resource_subpath, self.label, internal_value_name)
 
 		button = tk.Radiobutton(
 		 		self.parent.spiffy_buttons_section,

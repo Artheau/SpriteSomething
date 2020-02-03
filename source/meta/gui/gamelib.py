@@ -30,7 +30,7 @@ def autodetect(sprite_filename):
 		if not selected_game:
 			selected_game = random.choice(game_names)
 
-		game = get_game_class_of_type(selected_game)
+		game = get_game_class_of_type("snes",selected_game)
 		#And by default, we will grab the player sprite from this game
 		sprite, animation_assist = game.make_player_sprite(sprite_filename)
 	elif file_extension.lower() == ".png":
@@ -40,26 +40,27 @@ def autodetect(sprite_filename):
 		loaded_image = Image.open(sprite_filename)
 		game_found = False
 		search_path = os.path.join("resources","app")
-		for item in os.listdir(search_path):
-			if os.path.isdir(os.path.join(search_path,item)) and not item == "meta":
-				game_name = item
-				sprite_manifest_filename = os.path.join(search_path,game_name,"manifests","manifest.json")
-				with open(sprite_manifest_filename) as f:
-					sprite_manifest = json.load(f)
-					for sprite_id in sprite_manifest:
-						if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"] and "dims" in sprite_manifest[sprite_id]["input"]["png"]:
-							check_size = sprite_manifest[sprite_id]["input"]["png"]["dims"]
-							if loaded_image.size == tuple(check_size):
-								game = get_game_class_of_type(game_name)
-								sprite, animation_assist = game.make_player_sprite(sprite_filename)
-								game_found = True
+		for console in os.listdir(search_path):
+			if os.path.isdir(os.path.join(search_path,console)) and not console == "meta":
+			  for item in os.listdir(os.path.join(search_path,console)):
+  				game_name = item
+  				sprite_manifest_filename = os.path.join(search_path,console,game_name,"manifests","manifest.json")
+  				with open(sprite_manifest_filename) as f:
+  					sprite_manifest = json.load(f)
+  					for sprite_id in sprite_manifest:
+  						if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"] and "dims" in sprite_manifest[sprite_id]["input"]["png"]:
+  							check_size = sprite_manifest[sprite_id]["input"]["png"]["dims"]
+  							if loaded_image.size == tuple(check_size):
+  								game = get_game_class_of_type(console,game_name)
+  								sprite, animation_assist = game.make_player_sprite(sprite_filename)
+  								game_found = True
 		if not game_found:
 			#FIXME: English
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
 	elif file_extension.lower() == ".zspr":
 		with open(sprite_filename,"rb") as file:
 			zspr_data = bytearray(file.read())
-		game = get_game_class_of_type(get_game_type_from_zspr_data(zspr_data))
+		game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
 		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
 	else:
 		#FIXME: English
@@ -96,9 +97,9 @@ def get_game_type_from_zspr_data(zspr_data):
 def get_sprite_number_from_zspr_data(zspr_data):
 	return int.from_bytes(zspr_data[21:23], byteorder='little')
 
-def get_game_class_of_type(game_name):
+def get_game_class_of_type(console_name,game_name):
 	#dynamic import
-	game_module = importlib.import_module(f"source.{game_name}.game")
+	game_module = importlib.import_module(f"source.{console_name}.{game_name}.game")
 	return game_module.Game()
 
 class GameParent():
@@ -112,7 +113,7 @@ class GameParent():
 		self.internal_name = "meta"        #to be replaced by the specific folder name that this app uses, e.g. "metroid3"
 		self.plugins = None
 		self.has_plugins = None
-		self.console = "snes" #to be replaced by the console that the game is native to, assuming SNES for now
+		self.console_name = "snes" #to be replaced by the console that the game is native to, assuming SNES for now
 
 	############################# END ABSTRACT CODE ##############################
 
@@ -120,7 +121,7 @@ class GameParent():
 
 	def load_plugins(self):
 		try:
-			plugins_module = importlib.import_module(f"source.{self.internal_name}.plugins")
+			plugins_module = importlib.import_module(f"source.{self.console_name}.{self.internal_name}.plugins")
 			self.plugins = plugins_module.Plugins()
 			self.has_plugins = True
 		except ModuleNotFoundError as err:
@@ -143,7 +144,7 @@ class GameParent():
 		background_label.grid(row=0, column=1)
 		self.background_selection = tk.StringVar(background_panel)
 
-		background_manifests = common.get_all_resources([self.internal_name,"backgrounds"],"backgrounds.json")
+		background_manifests = common.get_all_resources([self.console_name,self.internal_name,"backgrounds"],"backgrounds.json")
 		for background_manifest in background_manifests:
 			with open(background_manifest) as f:
 				background_data = json.load(f)
@@ -168,7 +169,7 @@ class GameParent():
 				return   #there is nothing to do here, because nothing has changed
 		else:     #image name is different, so need to load a new image
 			image_filename = self.background_datas["title"][image_title]
-			self.raw_background = Image.open(common.get_resource([self.internal_name,"backgrounds"],image_filename))
+			self.raw_background = Image.open(common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename))
 
 		#now re-zoom the image
 		new_size = tuple(int(dim*self.zoom_getter()) for dim in self.raw_background.size)
@@ -188,14 +189,14 @@ class GameParent():
 
 	def make_sprite_by_number(self, sprite_number, sprite_filename):
 		#go into the manifest and get the actual name of the sprite
-		with open(common.get_resource([self.internal_name,"manifests"],"manifest.json")) as file:
+		with open(common.get_resource([self.console_name,self.internal_name,"manifests"],"manifest.json")) as file:
 			manifest = json.load(file)
 		if str(sprite_number) in manifest:
 			folder_name = manifest[str(sprite_number)]["folder name"]
 			#dynamic imports to follow
-			source_subpath = f"source.{self.internal_name}.{folder_name}"
+			source_subpath = f"source.{self.console_name}.{self.internal_name}.{folder_name}"
 			sprite_module = importlib.import_module(f"{source_subpath}.sprite")
-			resource_subpath = os.path.join(self.internal_name,folder_name)
+			resource_subpath = os.path.join(self.console_name,self.internal_name,folder_name)
 			sprite = sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],resource_subpath)
 
 			try:
@@ -212,5 +213,5 @@ class GameParent():
 
 	def get_rom_from_filename(self, filename):
 		#dynamic import
-		rom_module = importlib.import_module(f"source.{self.internal_name}.rom")
+		rom_module = importlib.import_module(f"source.{self.console_name}.{self.internal_name}.rom")
 		return rom_module.RomHandler(filename)

@@ -79,5 +79,14 @@
 		"frame-forward": "Frame",
 		"pose-backward": "Pose",
 		"pose-forward": "Pose"
-	}
+	},
+  "consoles": {
+    "gb": "Game Boy",
+    "gba": "Game Boy Advance",
+    "gbc": "Game Boy Color",
+    "genesis": "Genesis",
+    "n64": "Nintendo 64",
+    "nes": "NES",
+    "snes": "SNES"
+  }
 }
