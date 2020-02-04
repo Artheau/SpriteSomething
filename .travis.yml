@@ -216,9 +216,7 @@ jobs:
         - ${PYTHON_EXECUTABLE} --version
         - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-        - ${PYTHON_EXECUTABLE} -m pip uninstall --yes pip setuptools
-        - ${PYTHON_EXECUTABLE} get-pip.py
-        - ${PYTHON_EXECUTABLE} -m pip install --upgrade pip
+        - ${PYTHON_EXECUTABLE} get-pip.py pip==19.2.3 wheel==0.33.6
     - <<: *build-deploy
       name: "3.7 on Windows: Build/Deploy/Pages"
       os: windows
