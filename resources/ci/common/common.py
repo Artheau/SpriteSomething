@@ -72,6 +72,9 @@ def prepare_env():
         OS_VERSION = "xenial"
       OS_DIST = OS_VERSION
 
+  if OS_VERSION == "" and not OS_DIST == "" and not OS_DIST == "notset":
+    OS_VERSION = OS_DIST
+
 	# if no tag
   if GITHUB_TAG == "":
     # if we haven't appended the build number, do it
