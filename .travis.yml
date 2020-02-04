@@ -228,7 +228,7 @@ jobs:
         #get pip
         #install pip
         #install more windows dependences
-        - choco install python
+        - choco install python --version 3.7.6
         - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
         - ${PYTHON_EXECUTABLE} get-pip.py
