@@ -40,7 +40,7 @@ def get_tk_image(image):
 	return tk.PhotoImage(data=img_str)
 
 # create chooser for game files that have multiple sprite options for extraction
-def create_chooser(game_names):
+def create_chooser(console_name,game_names):
 	def choose_game(game_name):
 		game_selector.set(game_name)
 		game_chooser.destroy()
@@ -57,7 +57,7 @@ def create_chooser(game_names):
 		i = 1
 		for game_name in game_names:
 			sprite_name = ""
-			with open(common.get_resource([game_name,"manifests"],"manifest.json")) as f:
+			with open(common.get_resource([console_name,game_name,"manifests"],"manifest.json")) as f:
 				manifest = json.load(f)
 				sprite_name = manifest["1"]["name"]
 			game_button = tk.Button(

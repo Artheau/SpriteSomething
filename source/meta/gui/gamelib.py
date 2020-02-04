@@ -9,8 +9,8 @@ import tkinter as tk	#for GUI stuff
 import random					#for choosing background image to load on app startup
 from PIL import Image, ImageFile
 from functools import partial
+from source.snes import romhandler as snes
 from source.meta.gui import widgetlib
-from source.meta import romhandler
 from source.meta.common import common
 from source.meta.gui import gui_common #TODO: Should not use GUI stuff in game class, need to move this elsewhere
 
@@ -25,7 +25,7 @@ def autodetect(sprite_filename):
 
 		#prompt user for input
 		#FIXME: Ugh, more tk
-		selected_game = gui_common.create_chooser(game_names)
+		selected_game = gui_common.create_chooser("snes",game_names)
 
 		if not selected_game:
 			selected_game = random.choice(game_names)
@@ -69,7 +69,7 @@ def autodetect(sprite_filename):
 	return game, sprite, animation_assist
 
 def autodetect_game_type_from_rom_filename(filename):
-	return autodetect_game_type_from_rom(romhandler.RomHandlerParent(filename))
+	return autodetect_game_type_from_rom(snes.RomHandlerParent(filename))
 
 def autodetect_game_type_from_rom(rom):
 	rom_name = rom.get_name()

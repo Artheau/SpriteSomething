@@ -9,7 +9,7 @@ if __name__ == "__main__":
 	raise AssertionError(f"Called main() on utility library {__file__}")
 
 import enum
-from source.meta.romhandler import RomHandlerParent
+from source.snes import romhandler as snes
 
 #enumeration for the suit types
 class SuitType(enum.Enum):
@@ -40,7 +40,7 @@ class PaletteType(enum.Enum):
 	INTRO_SHIP = enum.auto()         #ship while flying to planet Zebes
 	OUTRO_SHIP = enum.auto()         #ship while escaping from Zebes at the end
 
-class RomHandler(RomHandlerParent):
+class RomHandler(snes.RomHandlerParent):
 	def __init__(self, filename):
 		super().__init__(filename)      #do the usual stuff
 

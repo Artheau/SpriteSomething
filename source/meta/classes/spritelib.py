@@ -92,8 +92,8 @@ class SpriteParent():
 		elif file_extension.lower() in ['.sfc','.smc']:
 			#dynamic import
 			rom_path,_ = os.path.split(self.resource_subpath)
-			_,rom_dir = os.path.split(rom_path)
-			rom_module = importlib.import_module(f"source.{rom_dir}.rom")
+			rom_path = rom_path.replace(os.sep,'.')
+			rom_module = importlib.import_module(f"source.{rom_path}.rom")
 			self.import_from_ROM(rom_module.RomHandler(self.filename))
 		self.import_cleanup()
 

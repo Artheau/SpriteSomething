@@ -23,6 +23,8 @@ class RomHandlerParent():
         self._HEADER_SIZE = 0x200
         self._MEGABIT = 0x20000
 
+        self._patch = {}
+
         #figure out if it has a header by inferring from the overall file size
         file_size = os.path.getsize(filename)
         if file_size % 0x8000 == 0:
@@ -381,6 +383,13 @@ class RomHandlerParent():
             raise NotImplementedError(f"_write_single() called to write size {size}, but this is not implemented.")
 
         self._contents[addr:addr+size] = struct.pack('<'+pack_code,value)[0:size]  #the '<' forces it to write as little-endian
+        if isinstance(value,list):
+          for i in range(addr + size - addr):
+            val = struct.unpack('<'+pack_code,struct.pack('>'+pack_code,value[i]))[0]
+            self._patch[addr] = hex(val)
+        else:
+          val = struct.unpack('<'+pack_code,struct.pack('>'+pack_code,value))[0]
+          self._patch[addr] = hex(val)
 
     def _apply_single_fix_to_snes_address(self, snes_address, classic_values, fixed_values, encoding):
         #checks to see if, indeed, a value is still in the classic (bugged) value, and if so, fixes it
