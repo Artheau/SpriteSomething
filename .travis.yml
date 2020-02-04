@@ -205,14 +205,12 @@ jobs:
       language: shell #'language: python' breaks on Travis CI Windows
       # 3 Step
       before_install:
-        #windows uses py?
-        - export PYTHON_EXECUTABLE=py
         #install python
         #set python path
         #get pip
         #install pip
         #install more windows dependences
-        - choco install python
+        - choco install python --version 3.7.6
         - ${PYTHON_EXECUTABLE} --version
         - export PATH=/c/Python37:/c/Python37/Scripts:$PATH
         - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
