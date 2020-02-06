@@ -8,15 +8,15 @@ from shutil import copy, make_archive, move, rmtree	# file manipulation
 env = common.prepare_env()
 
 # make dir to put the binary in
-if not os.path.isdir(os.path.join(".","artifact")):
-	os.mkdir(os.path.join(".","artifact"))
+if not os.path.isdir(os.path.join("..","artifact")):
+	os.mkdir(os.path.join("..","artifact"))
 
 BUILD_FILENAME = ""
 
 # list executables
 BUILD_FILENAME = common.find_binary('.')
 if BUILD_FILENAME == "":
-  BUILD_FILENAME = common.find_binary(os.path.join(".","artifact"))
+  BUILD_FILENAME = common.find_binary(os.path.join("..","artifact"))
 
 DEST_FILENAME = common.prepare_filename(BUILD_FILENAME)
 
@@ -29,6 +29,6 @@ if not BUILD_FILENAME == "":
 
 if not BUILD_FILENAME == "":
 	move(
-		BUILD_FILENAME,
-		os.path.join(".","artifact") + BUILD_FILENAME
+		os.path.join(".",BUILD_FILENAME),
+		os.path.join("..","artifact",BUILD_FILENAME)
 	)

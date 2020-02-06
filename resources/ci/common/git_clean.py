@@ -8,9 +8,6 @@ def git_clean():
 		"-dfx",               # d: directories, f: files, x: ignored files
 		"--exclude=.vscode",  # keep vscode IDE files
 		"--exclude=.idea",    # keep idea IDE files
-		"--exclude=artifact", # keep artifact files
-		"--exclude=build",    # keep build files
-		"--exclude=deploy",   # keep deploy files
 		"--exclude=*.json"])  # keep JSON files for that one time I just nuked all that I was working on, oops
 
 if __name__ == "__main__":
