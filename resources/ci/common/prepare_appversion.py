@@ -16,5 +16,5 @@ if not os.path.isdir(os.path.join("..","build")):
 	os.mkdir(os.path.join("..","build"))
 copy(
 	os.path.join(".","resources","app","meta","manifests","app_version.txt"),
-	os.path.join("..","build","app_version.txt")
+	os.path.join(".","build","app_version.txt")
 )
