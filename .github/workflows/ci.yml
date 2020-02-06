@@ -97,7 +97,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: binary-${{ matrix.os-name }}
-        path: ../artifact
+        path: ./artifact
 
   # Install & Preparing Release
   #  Set up environment
@@ -158,13 +158,13 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: archive-${{ matrix.os-name }}
-        path: ../deploy
+        path: ./deploy
 
   # Deploy to GitHub Releases
   #  Release Name:  SpriteSomething v${GITHUB_TAG}
   #  Release Body:  Inline content of RELEASENOTES.md
   #  Release Body:  Fallback to URL to RELEASENOTES.md
-  #  Release Files: ../deploy
+  #  Release Files: ./deploy
   deploy-release:
     name: Deploy GHReleases
     runs-on: ${{ matrix.os-name }}
@@ -190,13 +190,13 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: appversion-${{ matrix.os-name }}
-        path: ../build
+        path: ./build
     # download archive artifact
     - name: Download Archive Artifact
       uses: actions/download-artifact@v1
       with:
         name: archive-${{ matrix.os-name }}
-        path: ../deploy
+        path: ./deploy
     # debug info
     - name: Debug Info
       shell: bash
@@ -257,7 +257,7 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: appversion-${{ matrix.os-name }}
-        path: ../build
+        path: ./build
     # Prepare Pages
     - name: Prepare GitHub Pages
       run: |
@@ -267,7 +267,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: pages-${{ matrix.os-name }}
-        path: ../pages
+        path: ./pages
 
   # Deploy to GitHub Pages
   #
@@ -292,11 +292,11 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: pages-${{ matrix.os-name }}
-        path: ../pages
+        path: ./pages
      # post to GHPages #FIXME: Test GHPages
 #    - name: Post to GitHub Pages
 #      uses: peaceiris/actions-gh-pages@v1.1.0
 #      env:
 #        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #        PUBLISH_BRANCH: gh-pages
-#        PUBLISH_DIR: ../pages
+#        PUBLISH_DIR: ./pages
