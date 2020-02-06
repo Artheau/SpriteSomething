@@ -815,7 +815,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if dest_filename:
 			rom = self.game.get_rom_from_filename(source_filename)
 			modified_rom = self.sprite.inject_into_ROM(rom)
-#			print(json.dumps(modified_rom._patch))
+			#print(modified_rom.get_patch())
 			modified_rom.save(dest_filename, overwrite=True)
 			self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
 			self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]

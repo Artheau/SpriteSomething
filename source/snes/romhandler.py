@@ -5,9 +5,10 @@
 #e.g. read/write/etc.
 #Note: it abstracts away little endian notation.  Just write into memory in big endian, and read out in big endian.
 
-import struct
-import os
 import enum
+import json
+import os
+import struct
 
 #enumeration for the rom types
 class RomType(enum.Enum):
@@ -345,6 +346,19 @@ class RomHandlerParent():
 
     def remove_header(self):
     	self._rom_is_headered = False
+
+    def get_patch(self):
+      patch = self._patch
+      patch_keys = list(patch.keys())
+      patch_keys.sort()
+      new_patch = {}
+      for patch_key in patch_keys:
+        patch_val = patch[patch_key].replace("0x","").rjust(4,'0')
+        byte_one = patch_val[:2]
+        byte_two = patch_val[2:]
+        new_patch[patch_key] = int(byte_one,16)
+        new_patch[patch_key + 1] = int(byte_two,16)
+      return json.dumps(new_patch)
 
     def _read_single(self, addr, size):
         if addr+size > self._rom_size:
