@@ -32,3 +32,13 @@ if not BUILD_FILENAME == "":
 		BUILD_FILENAME,
 		os.path.join("..","artifact") + BUILD_FILENAME
 	)
+	print("Files in cd:")
+	listdir = os.path.join(".")
+	for filename in os.listdir(listdir):
+		if os.path.isfile(filename):
+			print(filename)
+	print("Files in ../artifact:")
+	listdir = os.path.join("..","artifact")
+	for filename in os.listdir(listdir):
+		if os.path.isfile(filename):
+			print(filename)
