@@ -54,7 +54,7 @@ if not BUILD_FILENAME == "":
     if os.path.isdir(dir):
       move(
         dir,
-        os.path.join(".","build",dir)
+        os.path.join("..","build",dir)
       )
 
   if not "artifact" in BUILD_FILENAME:
@@ -66,7 +66,7 @@ if not BUILD_FILENAME == "":
 
 	# .zip if windows
 	# .tar.gz otherwise
-  ZIP_FILENAME = os.path.join(".","deploy",os.path.splitext(BUILD_FILENAME)[0])
+  ZIP_FILENAME = os.path.join("..","deploy",os.path.splitext(BUILD_FILENAME)[0])
   if env["OS_NAME"] == "windows":
     make_archive(ZIP_FILENAME,"zip")
     ZIP_FILENAME += ".zip"
