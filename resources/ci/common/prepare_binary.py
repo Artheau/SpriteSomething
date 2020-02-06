@@ -15,6 +15,8 @@ BUILD_FILENAME = ""
 
 # list executables
 BUILD_FILENAME = common.find_binary('.')
+if BUILD_FILENAME == "":
+  BUILD_FILENAME = common.find_binary(os.path.join("..","artifact"))
 
 DEST_FILENAME = common.prepare_filename(BUILD_FILENAME)
 
