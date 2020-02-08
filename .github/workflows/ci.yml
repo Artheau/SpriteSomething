@@ -79,7 +79,7 @@ jobs:
       run: |
         brew install tcl-tk
         brew uninstall python
-        brew install python --with-tcl-tk
+        brew install python
         python3 --version
       if: contains(matrix.os-name, 'macos')
     # install dependencies via pip
@@ -89,6 +89,7 @@ jobs:
       run: |
         python3 ./resources/ci/common/install.py
         pip install pytest pytest-cov
+    # start virtual display driver
     - name: Start virtual display driver
       run: |
         disp=:99

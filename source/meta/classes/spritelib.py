@@ -98,7 +98,8 @@ class SpriteParent():
 		self.import_cleanup()
 
 	def import_from_PNG(self):
-		self.images, self.master_palette = self.layout.extract_all_images_from_master(Image.open(self.filename))
+		with Image.open(self.filename) as master:
+			self.images, self.master_palette = self.layout.extract_all_images_from_master(master)
 
 	def import_from_ZSPR(self):
 		with open(self.filename,"rb") as file:

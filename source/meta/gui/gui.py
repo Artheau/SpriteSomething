@@ -179,7 +179,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 						image_path = os.path.join(self.game.resource_subpath,"icons")
 					if "sprite_plugins" in internal_name:
 						image_path = os.path.join(self.sprite.resource_subpath,"icons")
-					cascade.images[image_name] = ImageTk.PhotoImage(Image.open(common.get_resource(image_path,image_filename)))
+					with open(Image.open(common.get_resource(image_path,image_filename))) as img:
+						cascade.images[image_name] = ImageTk.PhotoImage(img)
 				else:
 					cascade.images[image_name] = None
 				cascade.add_command(label=display_name, image=cascade.images[image_name], compound=tk.LEFT, command=function_to_call, state="disabled" if function_to_call == None else "normal")
