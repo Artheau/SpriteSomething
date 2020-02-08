@@ -37,23 +37,23 @@ def autodetect(sprite_filename):
 		#the following line prevents a "cannot identify image" error from PIL
 		ImageFile.LOAD_TRUNCATED_IMAGES = True
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
-		loaded_image = Image.open(sprite_filename)
-		game_found = False
-		search_path = os.path.join("resources","app")
-		for console in os.listdir(search_path):
-			if os.path.isdir(os.path.join(search_path,console)) and not console == "meta":
-			  for item in os.listdir(os.path.join(search_path,console)):
-  				game_name = item
-  				sprite_manifest_filename = os.path.join(search_path,console,game_name,"manifests","manifest.json")
-  				with open(sprite_manifest_filename) as f:
-  					sprite_manifest = json.load(f)
-  					for sprite_id in sprite_manifest:
-  						if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"] and "dims" in sprite_manifest[sprite_id]["input"]["png"]:
-  							check_size = sprite_manifest[sprite_id]["input"]["png"]["dims"]
-  							if loaded_image.size == tuple(check_size):
-  								game = get_game_class_of_type(console,game_name)
-  								sprite, animation_assist = game.make_player_sprite(sprite_filename)
-  								game_found = True
+		with Image.open(sprite_filename) as loaded_image:
+		  game_found = False
+		  search_path = os.path.join("resources","app")
+		  for console in os.listdir(search_path):
+		    if os.path.isdir(os.path.join(search_path,console)) and not console == "meta":
+		      for item in os.listdir(os.path.join(search_path,console)):
+		        game_name = item
+		        sprite_manifest_filename = os.path.join(search_path,console,game_name,"manifests","manifest.json")
+		        with open(sprite_manifest_filename) as f:
+		          sprite_manifest = json.load(f)
+		          for sprite_id in sprite_manifest:
+		            if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"] and "dims" in sprite_manifest[sprite_id]["input"]["png"]:
+		              check_size = sprite_manifest[sprite_id]["input"]["png"]["dims"]
+		              if loaded_image.size == tuple(check_size):
+		                game = get_game_class_of_type(console,game_name)
+		                sprite, animation_assist = game.make_player_sprite(sprite_filename)
+		                game_found = True
 		if not game_found:
 			#FIXME: English
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
