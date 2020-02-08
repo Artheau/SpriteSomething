@@ -39,6 +39,7 @@ function init(mode = "index") {
 		list_li.append(games_list);
 		$("body").append(list_li);
 
+    // FIXME: Needs to not assume SNES
 	  let snesGames = readTextFile(".\\resources\\app\\meta\\manifests\\snes.txt");
 	  snesGames = snesGames.split("\n");
 	  for(let snesGame in snesGames) {

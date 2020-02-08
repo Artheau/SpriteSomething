@@ -25,11 +25,13 @@ def autodetect(sprite_filename):
 
 		#prompt user for input
 		#FIXME: Ugh, more tk
+    #FIXME: Needs to not assume SNES
 		selected_game = gui_common.create_chooser("snes",game_names)
 
 		if not selected_game:
 			selected_game = random.choice(game_names)
 
+    #FIXME: Needs to not assume SNES
 		game = get_game_class_of_type("snes",selected_game)
 		#And by default, we will grab the player sprite from this game
 		sprite, animation_assist = game.make_player_sprite(sprite_filename)
@@ -60,6 +62,7 @@ def autodetect(sprite_filename):
 	elif file_extension.lower() == ".zspr":
 		with open(sprite_filename,"rb") as file:
 			zspr_data = bytearray(file.read())
+    #FIXME: Needs to not assume SNES
 		game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
 		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
 	else:
@@ -69,6 +72,7 @@ def autodetect(sprite_filename):
 	return game, sprite, animation_assist
 
 def autodetect_game_type_from_rom_filename(filename):
+  #FIXME: Needs to not assume SNES
 	return autodetect_game_type_from_rom(snes.RomHandlerParent(filename))
 
 def autodetect_game_type_from_rom(rom):
