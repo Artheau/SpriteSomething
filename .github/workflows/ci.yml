@@ -86,9 +86,9 @@ jobs:
       env:
         OS_NAME: ${{ matrix.os-name }}
       run: |
-        sudo pip install --upgrade pip
-        sudo python ./resources/ci/common/install.py
-        sudo pip install pytest pytest-cov
+        sudo -H pip install --upgrade pip
+        sudo -H python ./resources/ci/common/install.py
+        sudo -H pip install pytest pytest-cov
       if: contains(matrix.os-name, 'ubuntu')
     # install dependencies via pip for macos
     - name: Install Dependencies via pip for MacOS
@@ -107,8 +107,14 @@ jobs:
         geom=640x480x24
         exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
         export DISPLAY=:99
-    # run tests
-    - name: Run Tests
+    # run tests for ubuntu
+    - name: Run Tests for Ubuntu
+      env:
+        DISPLAY: :99
+      run: |
+        python ./tests/tests.py
+    # run tests for macos
+    - name: Run Tests for MacOS
       env:
         DISPLAY: :99
       run: |
