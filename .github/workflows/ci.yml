@@ -144,6 +144,7 @@ jobs:
     # run build.py
     - name: Build Binary
       run: |
+        pip install pyinstaller
         python ./source/meta/build.py
     # prepare binary artifact for later step
     - name: Prepare Binary Artifact
