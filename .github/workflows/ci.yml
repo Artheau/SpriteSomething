@@ -96,6 +96,7 @@ jobs:
         CI_SYSTEM: actions
         OS_NAME: ${{ matrix.os-name }}
       run: |
+        ln -s /usr/bin/python3.7 /usr/bin/python
         python ./resources/ci/common/install.py
         pip install pytest pytest-cov
       if: contains(matrix.os-name, 'macos')
@@ -107,11 +108,12 @@ jobs:
         geom=640x480x24
         exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
         export DISPLAY=:99
+    # run tests
     - name: Run Tests
       env:
         DISPLAY: :99
       run: |
-        python tests/tests.py
+        python ./tests/tests.py
   # Install & Build
   #  Set up environment
   # Build
