@@ -96,8 +96,7 @@ jobs:
         CI_SYSTEM: actions
         OS_NAME: ${{ matrix.os-name }}
       run: |
-        ln -s /usr/bin/python3.7 /usr/bin/python
-        python ./resources/ci/common/install.py
+        python3 ./resources/ci/common/install.py
         pip install pytest pytest-cov
       if: contains(matrix.os-name, 'macos')
     # start virtual display driver
@@ -113,7 +112,7 @@ jobs:
       env:
         DISPLAY: :99
       run: |
-        python ./tests/tests.py
+        python3 ./tests/tests.py
   # Install & Build
   #  Set up environment
   # Build
