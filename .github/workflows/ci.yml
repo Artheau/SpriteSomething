@@ -81,15 +81,24 @@ jobs:
         brew install python
         python3 --version
       if: contains(matrix.os-name, 'macos')
-    # install dependencies via pip
-    - name: Install Dependencies via pip
+    # install dependencies via pip for ubuntu
+    - name: Install Dependencies via pip for Ubuntu
+      env:
+        OS_NAME: ${{ matrix.os-name }}
+      run: |
+        sudo pip install --upgrade pip
+        sudo python ./resources/ci/common/install.py
+        sudo pip install pytest pytest-cov
+      if: contains(matrix.os-name, 'ubuntu')
+    # install dependencies via pip for macos
+    - name: Install Dependencies via pip for MacOS
       env:
         CI_SYSTEM: actions
         OS_NAME: ${{ matrix.os-name }}
       run: |
-        pip install --upgrade pip
         python ./resources/ci/common/install.py
         pip install pytest pytest-cov
+      if: contains(matrix.os-name, 'macos')
     # start virtual display driver
     - name: Start virtual display driver
       run: |
