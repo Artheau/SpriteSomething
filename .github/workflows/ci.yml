@@ -318,10 +318,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.debug_info.outputs.github_tag }}
-        release_name: SpriteSomething ${{ steps.debug_info.outputs.github_tag }}
+        tag_name: v${{ steps.debug_info.outputs.github_tag }}
+        release_name: SpriteSomething v${{ steps.debug_info.outputs.github_tag }}
         body: ${{ steps.release_notes.outputs.body }}
         draft: true
+      if: contains(github.ref, 'master')
     # upload linux archive asset
     - name: Upload Linux Archive Asset
       id: upload-linux-asset
@@ -333,6 +334,7 @@ jobs:
         asset_path: ../deploy/linux/SpriteSomething.tar.gz
         asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-bionic.tar.gz
         asset_content_type: application/gzip
+      if: contains(github.ref, 'master')
     # upload macos archive asset
     - name: Upload MacOS Archive Asset
       id: upload-macos-asset
@@ -344,6 +346,7 @@ jobs:
         asset_path: ../deploy/macos/SpriteSomething.tar.gz
         asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
         asset_content_type: application/gzip
+      if: contains(github.ref, 'master')
     # upload windows archive asset
     - name: Upload Windows Archive Asset
       id: upload-windows-asset
@@ -355,6 +358,7 @@ jobs:
         asset_path: ../deploy/windows/SpriteSomething.zip
         asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-windows.zip
         asset_content_type: application/zip
+      if: contains(github.ref, 'master')
     - name: Build Discord Notification Payload
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -426,3 +430,4 @@ jobs:
 #      with:
 #        deploy_key: ${{ secrets.GITHUB_DEPLOY_KEY }}
 #        publish_dir: ../pages
+#      if: contains(github.ref, 'master')
