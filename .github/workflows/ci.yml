@@ -87,6 +87,7 @@ jobs:
         CI_SYSTEM: actions
         OS_NAME: ${{ matrix.os-name }}
       run: |
+        pip install --upgrade pip
         python ./resources/ci/common/install.py
         pip install pytest pytest-cov
     # start virtual display driver
