@@ -100,7 +100,7 @@ jobs:
         export DISPLAY=:99
     - name: Run Tests
       run: |
-        python3 tests/tests.py
+        python tests/tests.py
   # Install & Build
   #  Set up environment
   # Build
