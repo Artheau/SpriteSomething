@@ -296,13 +296,12 @@ jobs:
 #        git tag ${GITHUB_TAG}
 #        git push origin ${GITHUB_TAG}
       run: |
-        ls ../build
         GITHUB_TAG="$(head -n 1 ../build/app_version.txt)"
         GITHUB_TAG="v${GITHUB_TAG}"
         RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
         echo "Release Name: ${RELEASE_NAME}"
         echo "Git Tag:      ${GITHUB_TAG}"
-        echo "::set-ouput name=github_tag::$GITHUB_TAG"
+        echo "::set-output name=github_tag::$GITHUB_TAG"
     # read releasenotes
     - name: Read RELEASENOTES
       id: release_notes
