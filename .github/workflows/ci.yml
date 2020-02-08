@@ -282,7 +282,7 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: archive-macOS-latest
-        path: ../deploy/macOS
+        path: ../deploy/macos
     # download windows archive artifact
     - name: Download Windows Archive Artifact
       uses: actions/download-artifact@v1
@@ -291,6 +291,7 @@ jobs:
         path: ../deploy/windows
     # debug info
     - name: Debug Info
+      id: debug_info
       shell: bash
 #        git tag ${GITHUB_TAG}
 #        git push origin ${GITHUB_TAG}
@@ -300,6 +301,7 @@ jobs:
         RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
         echo "Release Name: ${RELEASE_NAME}"
         echo "Git Tag:      ${GITHUB_TAG}"
+        echo "::set-ouput name=github_tag::${GITHUB_TAG}"
     # npm is missing some stuff #FIXME
     - name: Install Dependencies via npm
       shell: bash
@@ -307,9 +309,13 @@ jobs:
         npm install --save @actions/core @actions/github glob mime
     # read releasenotes
     - name: Read RELEASENOTES
-      id: releasenotes
+      id: release_notes
       run: |
-        echo "::set-output name=body::$(cat ${GITHUB_WORKSPACE}/RELEASENOTES.md)"
+        body="$(cat RELEASENOTES.md)"
+        body="${body//'%'/'%25'}"
+        body="${body//$'\n'/'%0A'}"
+        body="${body//$'\r'/'%0D'}"
+        echo "::set-output name=body::$body"
     # create a release
     - name: Create a Release
       id: create_release
@@ -317,9 +323,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${GITHUB_TAG}
-        release_name: SpriteSomething ${GITHUB_TAG}
-        body: ${{ steps.releasenotes.outputs.body }}
+        tag_name: ${{ steps.debug_info.outputs.github_tag }}
+        release_name: SpriteSomething ${{ steps.debug_info.outputs.github_tag }}
+        body: ${{ steps.release_notes.outputs.body }}
         draft: true
     # upload linux archive asset
     - name: Upload Linux Archive Asset
@@ -330,7 +336,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ../deploy/linux/SpriteSomething.tar.gz
-        asset_name: SpriteSomething-${GITHUB_TAG}-linux-bionic.tar.gz
+        asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-bionic.tar.gz
         asset_content_type: application/gzip
     # upload macos archive asset
     - name: Upload MacOS Archive Asset
@@ -341,7 +347,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ../deploy/macos/SpriteSomething.tar.gz
-        asset_name: SpriteSomething-${GITHUB_TAG}-osx.tar.gz
+        asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
         asset_content_type: application/gzip
     # upload windows archive asset
     - name: Upload Windows Archive Asset
@@ -352,7 +358,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ../deploy/windows/SpriteSomething.zip
-        asset_name: SpriteSomething-${GITHUB_TAG}-windows.zip
+        asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-windows.zip
         asset_content_type: application/zip
 #    - name: Create a Release
 #      uses: ./.github/actions/softprops/action-gh-release
