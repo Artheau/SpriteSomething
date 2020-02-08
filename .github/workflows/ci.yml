@@ -42,6 +42,52 @@ on: [ push, pull_request ]
 
 # stuff to do
 jobs:
+  # Install & Test
+  #  Set up environment
+  # Test
+  #  Run tests/tests.py
+  install-test:
+    name: Install/Test
+    # cycle through os list
+    runs-on: ${{ matrix.os-name }}
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        # test on not windows since it can't test tkinter
+        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest ]
+        python-version: [ 3.7 ]
+    steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v1
+    # install python
+    - name: Install Python with tkinter
+      run: |
+        sudo apt-get update
+        sudo apt-get install tk-dev python3-tk python3 python3.7 python-pip python3-pip python3-pytest
+        sudo rm /usr/bin/python
+        sudo ln -s /usr/bin/python3.7 /usr/bin/python
+        sudo apt-get install xvfb
+    - run: |
+        python3 --version
+    # install dependencies via pip
+    - name: Install Dependencies via pip
+      env:
+        OS_NAME: ${{ matrix.os-name }}
+      run: |
+        python3 ./resources/ci/common/install.py
+        pip install pytest pytest-cov
+    - name: Start virtual display driver
+      run: |
+        disp=:99
+        screen=0
+        geom=640x480x24
+        exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
+        export DISPLAY=:99
+    - name: Run Tests
+      run: |
+        python3 tests/tests.py
   # Install & Build
   #  Set up environment
   # Build
@@ -57,7 +103,7 @@ jobs:
       matrix:
         os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
         python-version: [ 3.7 ]
-#    needs: [ install-test ]
+    needs: [ install-test ]
     steps:
     # checkout commit
     - name: Checkout commit
@@ -173,8 +219,8 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        # release not on xenial
-        os-name: [ ubuntu-latest, macOS-latest, windows-latest ]
+        # release only on bionic
+        os-name: [ ubuntu-latest ]
         python-version: [ 3.7 ]
 
     needs: [ install-prepare-release ]
@@ -191,20 +237,29 @@ jobs:
       with:
         name: appversion-${{ matrix.os-name }}
         path: ../build
-    # download archive artifact
-    - name: Download Archive Artifact
+    # download ubuntu archive artifact
+    - name: Download Ubuntu Archive Artifact
       uses: actions/download-artifact@v1
       with:
-        name: archive-${{ matrix.os-name }}
-        path: ../deploy
+        name: archive-ubuntu-latest
+        path: ../deploy/linux
+    # download macos archive artifact
+    - name: Download MacOS Archive Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: archive-macOS-latest
+        path: ../deploy/macOS
+    # download windows archive artifact
+    - name: Download Windows Archive Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: archive-windows-latest
+        path: ../deploy/windows
     # debug info
     - name: Debug Info
       shell: bash
 #        git tag ${GITHUB_TAG}
 #        git push origin ${GITHUB_TAG}
-      env:
-        GITHUB_ACTOR: ${{ github.actor }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         GITHUB_TAG=$(head -n 1 "../build/app_version.txt")
         GITHUB_TAG="v${GITHUB_TAG}"
@@ -216,7 +271,55 @@ jobs:
       shell: bash
       run: |
         npm install --save @actions/core @actions/github glob mime
+    # read releasenotes
+    - name: Read RELEASENOTES
+      id: releasenotes
+      run: |
+        echo "::set-output name=body::$(cat ${GITHUB_WORKSPACE}/RELEASENOTES.md)"
     # create a release
+    - name: Create a Release
+      id: create_release
+      uses: actions/create-release@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${GITHUB_TAG}
+        release_name: SpriteSomething ${GITHUB_TAG}
+        body: ${{ steps.releasenotes.outputs.body }}
+        draft: true
+    # upload linux archive asset
+    - name: Upload Linux Archive Asset
+      id: upload-linux-asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ../deploy/linux/SpriteSomething.tar.gz
+        asset_name: SpriteSomething-${GITHUB_TAG}-linux-bionic.tar.gz
+        asset_content_type: application/gzip
+    # upload macos archive asset
+    - name: Upload MacOS Archive Asset
+      id: upload-macos-asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ../deploy/macos/SpriteSomething.tar.gz
+        asset_name: SpriteSomething-${GITHUB_TAG}-osx.tar.gz
+        asset_content_type: application/gzip
+    # upload windows archive asset
+    - name: Upload Windows Archive Asset
+      id: upload-windows-asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ../deploy/windows/SpriteSomething.zip
+        asset_name: SpriteSomething-${GITHUB_TAG}-windows.zip
+        asset_content_type: application/zip
 #    - name: Create a Release
 #      uses: ./.github/actions/softprops/action-gh-release
 #      env:

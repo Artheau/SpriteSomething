@@ -20,6 +20,11 @@ if not os.path.isdir(os.path.join("..","build")):
 if not os.path.isdir(os.path.join("..","deploy")):
 	os.mkdir(os.path.join("..","deploy"))
 
+# make dirs for each os
+for dirname in ["linux","macos","windows"]:
+  if not os.path.isdir(os.path.join("..","deploy",dirname)):
+  	os.mkdir(os.path.join("..","deploy",dirname))
+
 # sanity check permissions for working_dirs.json
 dirpath = "."
 for dirname in ["resources","user","meta","manifests"]:
@@ -82,10 +87,16 @@ if not BUILD_FILENAME == "":
         os.path.join(".",dir)
       )
 
-print("Build Filename: " + BUILD_FILENAME)
-print("Zip Filename:   " + ZIP_FILENAME)
 if not BUILD_FILENAME == "":
-	print("Build Filesize: " + common.file_size(BUILD_FILENAME))
+  print("Build Filename: " + BUILD_FILENAME)
+  print("Build Filesize: " + common.file_size(BUILD_FILENAME))
+else:
+  print("No Build to prepare")
+
 if not ZIP_FILENAME == "":
-	print("Zip Filesize:   " + common.file_size(ZIP_FILENAME))
+  print("Zip Filename:   " + ZIP_FILENAME)
+  print("Zip Filesize:   " + common.file_size(ZIP_FILENAME))
+else:
+  print("No Zip to prepare")
+
 print("Git tag:        " + env["GITHUB_TAG"])
