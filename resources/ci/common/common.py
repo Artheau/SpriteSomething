@@ -27,7 +27,8 @@ def prepare_env():
   if os.path.isfile(APP_VERSION_FILE):
     with open(APP_VERSION_FILE,"r") as f:
       APP_VERSION = f.readlines()[0].strip()
-
+  # ci data
+  env["CI_SYSTEM"] = os.getenv("CI_SYSTEM","")
   # git data
   env["BRANCH"] = os.getenv("TRAVIS_BRANCH","")
   env["GITHUB_ACTOR"] = os.getenv("GITHUB_ACTOR","MegaMan.EXE")

@@ -85,8 +85,8 @@ jobs:
     # install dependencies via pip
     - name: Install Dependencies via pip
       env:
+        CI_SYSTEM: actions
         OS_NAME: ${{ matrix.os-name }}
-        PIP_EXECUTABLE: pip
       run: |
         python ./resources/ci/common/install.py
         pip install pytest pytest-cov
