@@ -68,10 +68,9 @@ jobs:
         sudo apt-get install software-properties-common
         sudo add-apt-repository ppa:deadsnakes/ppa
         sudo apt-get update
-        sudo apt-get install tk-dev python3-tk python3.7 python3-pytest python-setuptools
+        sudo apt-get install python3.7 python3.7-tk python3-pytest
         sudo rm /usr/bin/python
         sudo ln -s /usr/bin/python3.7 /usr/bin/python
-        sudo apt-get install xvfb
         python --version
       if: contains(matrix.os-name, 'ubuntu')
     # install python for macos
