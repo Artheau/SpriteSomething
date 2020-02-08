@@ -179,7 +179,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 						image_path = os.path.join(self.game.resource_subpath,"icons")
 					if "sprite_plugins" in internal_name:
 						image_path = os.path.join(self.sprite.resource_subpath,"icons")
-					with open(Image.open(common.get_resource(image_path,image_filename))) as img:
+					with Image.open(common.get_resource(image_path,image_filename)) as img:
 						cascade.images[image_name] = ImageTk.PhotoImage(img)
 				else:
 					cascade.images[image_name] = None

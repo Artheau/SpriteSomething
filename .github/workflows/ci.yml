@@ -72,7 +72,7 @@ jobs:
         sudo rm /usr/bin/python
         sudo ln -s /usr/bin/python3.7 /usr/bin/python
         sudo apt-get install xvfb
-        python3 --version
+        python --version
       if: contains(matrix.os-name, 'ubuntu')
     # install python for macos
     - name: Install Python with tkinter for MacOS
@@ -87,7 +87,7 @@ jobs:
       env:
         OS_NAME: ${{ matrix.os-name }}
       run: |
-        python3 ./resources/ci/common/install.py
+        python ./resources/ci/common/install.py
         pip install pytest pytest-cov
     # start virtual display driver
     - name: Start virtual display driver
