@@ -61,16 +61,28 @@ jobs:
     # checkout commit
     - name: Checkout commit
       uses: actions/checkout@v1
-    # install python
-    - name: Install Python with tkinter
+    # install python for ubuntu
+    - name: Install Python with tkinter for Ubuntu
       run: |
+        sudo apt-get update
+        sudo apt-get install software-properties-common
+        sudo add-apt-repository ppa:deadsnakes/ppa
         sudo apt-get update
         sudo apt-get install tk-dev python3-tk python3 python3.7 python-pip python3-pip python3-pytest
         sudo rm /usr/bin/python
         sudo ln -s /usr/bin/python3.7 /usr/bin/python
         sudo apt-get install xvfb
-    - run: |
         python3 --version
+      if: contains(matrix.os-name, 'ubuntu')
+    # install python for macos
+    - name: Install Python with tkinter for MacOS
+      run: |
+        xcode-select --install
+        brew install tcl-tk
+        brew uninstall python
+        brew install python --with-tcl-tk
+        python3 --version
+      if: contains(matrix.os-name, 'macos')
     # install dependencies via pip
     - name: Install Dependencies via pip
       env:
