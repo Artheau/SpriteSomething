@@ -63,8 +63,6 @@ jobs:
       uses: actions/checkout@v1
     # install python for ubuntu
     - name: Install Python with tkinter for Ubuntu
-      env:
-        PIP_EXECUTABLE: pip
       run: |
         sudo apt-get update
         sudo apt-get install software-properties-common
@@ -88,6 +86,7 @@ jobs:
     - name: Install Dependencies via pip
       env:
         OS_NAME: ${{ matrix.os-name }}
+        PIP_EXECUTABLE: pip
       run: |
         python ./resources/ci/common/install.py
         pip install pytest pytest-cov
