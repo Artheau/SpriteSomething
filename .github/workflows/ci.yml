@@ -297,11 +297,11 @@ jobs:
 #        git push origin ${GITHUB_TAG}
       run: |
         GITHUB_TAG="$(head -n 1 ../build/app_version.txt)"
+        echo "::set-output name=github_tag::$GITHUB_TAG"
         GITHUB_TAG="v${GITHUB_TAG}"
         RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
         echo "Release Name: ${RELEASE_NAME}"
         echo "Git Tag:      ${GITHUB_TAG}"
-        echo "::set-output name=github_tag::$GITHUB_TAG"
     # read releasenotes
     - name: Read RELEASENOTES
       id: release_notes
@@ -355,22 +355,11 @@ jobs:
         asset_path: ../deploy/windows/SpriteSomething.zip
         asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-windows.zip
         asset_content_type: application/zip
-#    - name: Create a Release
-#      uses: ./.github/actions/softprops/action-gh-release
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#      with:
-#        name: ${RELEASE_NAME}
-#        draft: true
-#        body: "Please see [RELEASENOTES.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_TAG}/RELEASENOTES.md) for description."
-#        body_path: ${GITHUB_WORKSPACE}/RELEASENOTES.md
-#        files: ../deploy
     - name: Build Discord Notification Payload
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       run: |
         python ./resources/ci/common/prepare_discord_notif.py
-      if: contains(matrix.os-name, 'windows')
 
   # Prepare for Deployment to GitHub Pages
   #  run custom action
@@ -383,7 +372,7 @@ jobs:
     strategy:
       matrix:
         # pages on one OS
-        os-name: [ windows-latest ]
+        os-name: [ ubuntu-latest ]
 
     needs: [ deploy-release ]
     steps:
@@ -418,7 +407,7 @@ jobs:
     strategy:
       matrix:
         # pages on one OS
-        os-name: [ windows-latest ]
+        os-name: [ ubuntu-latest ]
 
     needs: [ prepare-pages ]
     steps:
@@ -432,9 +421,8 @@ jobs:
         name: pages-${{ matrix.os-name }}
         path: ../pages
      # post to GHPages #FIXME: Test GHPages
-#    - name: Post to GitHub Pages
-#      uses: peaceiris/actions-gh-pages@v1.1.0
-#      env:
-#        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        PUBLISH_BRANCH: gh-pages
-#        PUBLISH_DIR: ../pages
+    - name: Post to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      env:
+        deploy_key: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ../pages
