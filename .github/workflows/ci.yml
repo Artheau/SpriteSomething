@@ -423,6 +423,6 @@ jobs:
      # post to GHPages #FIXME: Test GHPages
     - name: Post to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
-      env:
-        deploy_key: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        deploy_key: ${{ secrets.GITHUB_DEPLOY_KEY }}
         publish_dir: ../pages
