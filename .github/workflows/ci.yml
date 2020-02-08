@@ -296,7 +296,8 @@ jobs:
 #        git tag ${GITHUB_TAG}
 #        git push origin ${GITHUB_TAG}
       run: |
-        GITHUB_TAG=$(head -n 1 "../build/app_version.txt")
+        ls ../build
+        GITHUB_TAG="$(head -n 1 ../build/app_version.txt)"
         GITHUB_TAG="v${GITHUB_TAG}"
         RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
         echo "Release Name: ${RELEASE_NAME}"
