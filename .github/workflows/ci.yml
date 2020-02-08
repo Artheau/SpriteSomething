@@ -292,7 +292,7 @@ jobs:
     # debug info
     - name: Debug Info
       id: debug_info
-      shell: bash
+#      shell: bash
 #        git tag ${GITHUB_TAG}
 #        git push origin ${GITHUB_TAG}
       run: |
