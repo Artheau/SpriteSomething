@@ -77,7 +77,6 @@ jobs:
     # install python for macos
     - name: Install Python with tkinter for MacOS
       run: |
-        xcode-select --install
         brew install tcl-tk
         brew uninstall python
         brew install python --with-tcl-tk
