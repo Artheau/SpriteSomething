@@ -77,7 +77,7 @@ jobs:
     - name: Install Python with tkinter for MacOS
       run: |
         brew install tcl-tk
-        brew uninstall python
+        brew uninstall --ignore-dependencies python
         brew install python
         python3 --version
       if: contains(matrix.os-name, 'macos')
