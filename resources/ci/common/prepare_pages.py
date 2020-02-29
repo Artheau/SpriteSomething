@@ -64,7 +64,9 @@ for console in os.listdir(checkdir):
 			    )
 
 # write games dirs to file
-for console in consoles:
-  with open(os.path.join("..","pages","resources","app","meta","manifests",console + ".txt"),"w") as f:
-  	for game in consoles[console]:
-  		f.write("%s\n" % game)
+with open(os.path.join("..","pages","resources","app","meta","manifests","consoles.txt"),"w") as consoleList:
+  for console in consoles:
+    consoleList.write("%s\n" % console)
+    with open(os.path.join("..","pages","resources","app","meta","manifests",console,"games.txt"),"w") as gameList:
+    	for game in consoles[console]:
+    		gameList.write("%s\n" % game)

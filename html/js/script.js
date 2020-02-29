@@ -1,10 +1,16 @@
+// Read a text file
 function readTextFile(file) {
+  // Create a request
   let rawFile = new XMLHttpRequest();
   let allText = "";
+  // Get the thing
   rawFile.open("GET", file, false);
   rawFile.onreadystatechange = function () {
+    // If we're ready to read
     if(rawFile.readyState === 4) {
+      // If it's OK
       if(rawFile.status === 200 || rawFile.status == 0) {
+        // Return the thing
         allText = rawFile.responseText;
       }
     }
@@ -15,15 +21,19 @@ function readTextFile(file) {
 }
 
 function init(mode = "index") {
+  // Index
 	if(mode == "index") {
+    // Version
 	  let VERSION = readTextFile(".\\resources\\app\\meta\\manifests\\app_version.txt").trim();
 	  document.title += " v" + VERSION;
 
+    // SpriteSomething
 		let title = $("<h1></h1>")
 			.attr({"id": "title"})
 			.text("SpriteSomething");
 		$("body").append(title);
 
+    // Version hyperlink
 		let subtitle = $("<h2><a>");
 		let version_a = $("<a>")
 			.attr("id","version")
@@ -39,45 +49,51 @@ function init(mode = "index") {
 		list_li.append(games_list);
 		$("body").append(list_li);
 
-    // FIXME: Needs to not assume SNES
-	  let snesGames = readTextFile(".\\resources\\app\\meta\\manifests\\snes.txt");
-	  snesGames = snesGames.split("\n");
-	  for(let snesGame in snesGames) {
-	    snesGame = snesGames[snesGame];
-	    if(snesGame != "") {
-	      let game_li = $("<li>");
-	      let sprites_ul = $("<ul>");
-	      let sprite_li = $("<li>");
-	      let sprite_a = $("<a>");
-	      let en_lang = readTextFile(".\\resources\\app\\snes\\" + game + "\\lang\\en.json");
-	      en_lang = JSON.parse(en_lang);
-	      if("game" in en_lang) {
-	        if("name" in en_lang["game"]) {
-	          game_li.text(en_lang["game"]["name"]);
-	        }
-	      }
+    let consoles = readTextFile(".\\resources\\app\\meta\\manifests\\consoles.txt");
+    consoles = consoles.split("\n");
+    for(let console in consoles) {
+      console = consoles[console];
+      if(console != "") {
+        let consoleGames = readTextFile(".\\resources\\app\\meta\\manifests\\" + console + ".txt");
+        consoleGames = consoleGames.split("\n");
+        for(let game in consoleGames) {
+          game = consoleGames[game];
+          if(game != "") {
+    	      let game_li = $("<li>");
+    	      let sprites_ul = $("<ul>");
+    	      let sprite_li = $("<li>");
+    	      let sprite_a = $("<a>");
+    	      let en_lang = readTextFile(".\\resources\\app\\" + console + "\\" + game + "\\lang\\en.json");
+    	      en_lang = JSON.parse(en_lang);
+    	      if("game" in en_lang) {
+    	        if("name" in en_lang["game"]) {
+    	          game_li.text(en_lang["game"]["name"]);
+    	        }
+    	      }
 
-	      let manifest = readTextFile(".\\resources\\app\\snes\\" + game + "\\manifests\\manifest.json");
-	      manifest = JSON.parse(manifest);
-	      for(let key in manifest) {
-	        let value = manifest[key];
-	        if(key != "$schema") {
-	          if("folder name" in value) {
-	            let name = value["name"];
-	            let sprite = value["folder name"];
-	            sprite_li = $("<li>");
-	            sprite_a = $("<a>")
-	            	.attr("href","./?mode=" + game + '/' + sprite)
-	            	.text(name);
-	            sprite_li.append(sprite_a);
-	            sprites_ul.append(sprite_li);
-	          }
-	        }
-	      }
-	      game_li.append(sprites_ul);
-	      games_list.append(game_li);
-	    }
-	  }
+    	      let manifest = readTextFile(".\\resources\\app\\" + console + "\\" + game + "\\manifests\\manifest.json");
+    	      manifest = JSON.parse(manifest);
+    	      for(let key in manifest) {
+    	        let value = manifest[key];
+    	        if(key != "$schema") {
+    	          if("folder name" in value) {
+    	            let name = value["name"];
+    	            let sprite = value["folder name"];
+    	            sprite_li = $("<li>");
+    	            sprite_a = $("<a>")
+    	            	.attr("href","./?mode=" + game + '/' + sprite)
+    	            	.text(name);
+    	            sprite_li.append(sprite_a);
+    	            sprites_ul.append(sprite_li);
+    	          }
+    	        }
+    	      }
+    	      game_li.append(sprites_ul);
+    	      games_list.append(game_li);
+          }
+        }
+      }
+    }
 
 	  let manifest = readTextFile(".\\resources\\app\\meta\\manifests\\badges.json");
 	  let badges = JSON.parse(manifest);
@@ -122,8 +138,9 @@ function init(mode = "index") {
 	  }
 	} else {
 		mode = mode.split('/');
-		let game = mode[0];
-		let sprite = mode[1];
+    let console = mode[0];
+		let game = mode[1];
+		let sprite = mode[2];
 
 		let title = $("<h1>")
 			.attr("id","title")
@@ -131,7 +148,8 @@ function init(mode = "index") {
         $("body").append(title);
 
 		let filepath = window.location.pathname;
-		filepath += "resources/app/snes/";
+		filepath += "resources/app/";
+    filepath += console + '/';
 		filepath += game + '/';
 		filepath += sprite + '/';
 		let link = $("<link>")
