@@ -21,6 +21,12 @@ function readTextFile(file) {
 }
 
 function init(mode = "index") {
+  if(mode.indexOf('/') > -1) {
+    modepieces = mode.split('/');
+    if(mode.length < 3) {
+      mode = "index";
+    }
+  }
   // Index
 	if(mode == "index") {
     // Version
