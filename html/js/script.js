@@ -44,9 +44,9 @@ function init(mode = "index") {
 
 		let list_li = $("<ul><li>")
 			.text("Custom Sprite Repositories");
-		let games_list = $("<ul>")
-			.attr("id","games-list");
-		list_li.append(games_list);
+    let consoles_list = $("<ul>")
+      .attr("id","consoles-list");
+    list_li.append(consoles_list);
 		$("body").append(list_li);
 
     let consoles = readTextFile(".\\resources\\app\\meta\\manifests\\consoles.txt");
@@ -54,11 +54,13 @@ function init(mode = "index") {
     for(let console in consoles) {
       console = consoles[console];
       if(console != "") {
-        let consoleGames = readTextFile(".\\resources\\app\\meta\\manifests\\" + console + ".txt");
+        let console_li = $("<li>").text(console.toUpperCase());
+        let consoleGames = readTextFile(".\\resources\\app\\" + console + "\\games.txt");
         consoleGames = consoleGames.split("\n");
         for(let game in consoleGames) {
           game = consoleGames[game];
           if(game != "") {
+            let games_ul = $("<ul>");
     	      let game_li = $("<li>");
     	      let sprites_ul = $("<ul>");
     	      let sprite_li = $("<li>");
@@ -81,7 +83,7 @@ function init(mode = "index") {
     	            let sprite = value["folder name"];
     	            sprite_li = $("<li>");
     	            sprite_a = $("<a>")
-    	            	.attr("href","./?mode=" + game + '/' + sprite)
+    	            	.attr("href","./?mode=" + console + '/' + game + '/' + sprite)
     	            	.text(name);
     	            sprite_li.append(sprite_a);
     	            sprites_ul.append(sprite_li);
@@ -89,7 +91,9 @@ function init(mode = "index") {
     	        }
     	      }
     	      game_li.append(sprites_ul);
-    	      games_list.append(game_li);
+            games_ul.append(game_li);
+            console_li.append(games_ul);
+    	      consoles_list.append(console_li);
           }
         }
       }
