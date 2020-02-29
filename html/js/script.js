@@ -146,16 +146,20 @@ function init(mode = "index") {
 		let game = mode[1];
 		let sprite = mode[2];
 
-		let title = $("<h1>")
-			.attr("id","title")
-			.text(sprite.substring(0,1).toUpperCase() + sprite.substring(1) + " Sprites");
-        $("body").append(title);
-
 		let filepath = window.location.pathname;
 		filepath += "resources/app/";
     filepath += console + '/';
 		filepath += game + '/';
 		filepath += sprite + '/';
+
+    let title_a = $("<a>")
+      .attr("href",filepath + "sprites.html")
+      .text(sprite.substring(0,1).toUpperCase() + sprite.substring(1) + " Sprites");
+    let title = $("<h1>")
+      .attr("id","title");
+      title.append(title_a);
+      $("body").append(title);
+
 		let link = $("<link>")
 			.attr("rel","stylesheet")
 			.attr("type","text/css")
