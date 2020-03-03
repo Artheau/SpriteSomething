@@ -30,7 +30,10 @@ dirpath = "."
 for dirname in ["resources","user","meta","manifests"]:
 	dirpath += '/' + dirname
 	os.chmod(dirpath,0o755)
-os.remove(os.path.join(".",".travis.yml"))
+if os.path.isfile(os.path.join(".",".travis.yml")):
+  os.remove(os.path.join(".",".travis.yml"))
+if os.path.isfile(os.path.join(".",".travis.off")):
+  os.remove(os.path.join(".",".travis.off"))
 # nuke test suite
 distutils.dir_util.remove_tree(os.path.join(".","tests"))
 
