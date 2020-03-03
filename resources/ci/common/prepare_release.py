@@ -76,6 +76,7 @@ if not BUILD_FILENAME == "":
     make_archive(ZIP_FILENAME,"zip")
     ZIP_FILENAME += ".zip"
   else:
+    os.chmod(BUILD_FILENAME,0o755)
     make_archive(ZIP_FILENAME,"gztar")
     ZIP_FILENAME += ".tar.gz"
 
