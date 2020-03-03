@@ -144,7 +144,8 @@ class AnimationEngineParent():
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_image, anchor = tk.NW))
 			self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
 		else:
-			print("Pose image not found to update animation!")
+			pass
+#			print("Pose image not found to update animation!")
 
 	def get_pose_number_from_frames(self, frame_number):
 		mod_frames = frame_number % self.frame_progression_table[-1]
@@ -190,7 +191,7 @@ class AnimationEngineParent():
 
 			return self.current_animation, displayed_direction, self.pose_number, palette_info, current_frame, pose_list
 		else:
-			print("No pose list for displayed direction (%s)!" % displayed_direction)
+#			print("No pose list for displayed direction (%s)!" % displayed_direction)
 			return None, None, None, None, None, None
 
 	def get_current_image(self):
@@ -198,10 +199,11 @@ class AnimationEngineParent():
 		if current_animation:
 			pose_image,offset = self.sprite.get_image(current_animation, displayed_direction, pose_number, palette_info, current_frame)
 			if pose_image == None:
-				print("Pose image (%s %s %d %d) not found!" % current_animation, displayed_direction, pose_number, current_frame)
+				pass
+#				print("Pose image (%s %s %d %d) not found!" % current_animation, displayed_direction, pose_number, current_frame)
 			tile_list = self.sprite.get_tiles_for_pose(current_animation, displayed_direction, pose_number, palette_info, current_frame)
 		else:
-			print("Current animation (%s) not found!" % current_animation)
+#			print("Current animation (%s) not found!" % current_animation)
 			pose_image,offset = None,(0,0)
 
 		if pose_number is not None:
@@ -246,7 +248,7 @@ class AnimationEngineParent():
 		if self.spiffy_dict:     #see if we have any spiffy variables, which will indicate if the direction buttons exist
 			return self.sprite.get_pose_list(self.current_animation, direction)
 		#if there is no spiffy dict to determine directions, just don't do anything
-		print("No spiffy dict!")
+#		print("No spiffy dict!")
 		return []
 
 	def get_current_direction(self):
