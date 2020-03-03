@@ -143,6 +143,9 @@ class AnimationEngineParent():
 			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(coords,offset))
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_image, anchor = tk.NW))
 			self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
+		else:
+			pass
+#			print("Pose image not found to update animation!")
 
 	def get_pose_number_from_frames(self, frame_number):
 		mod_frames = frame_number % self.frame_progression_table[-1]
@@ -194,6 +197,8 @@ class AnimationEngineParent():
 		current_animation, displayed_direction, pose_number, palette_info, current_frame, pose_list = self.get_image_arguments_from_frame_number(self.frame_getter())
 		if current_animation:
 			pose_image,offset = self.sprite.get_image(current_animation, displayed_direction, pose_number, palette_info, current_frame)
+			if pose_image == None:
+  				print("Pose image (%s %s %d %d) not found!" % current_animation, displayed_direction, pose_number, current_frame)
 			tile_list = self.sprite.get_tiles_for_pose(current_animation, displayed_direction, pose_number, palette_info, current_frame)
 		else:
 			pose_image,offset = None,(0,0)

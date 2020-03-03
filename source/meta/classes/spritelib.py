@@ -154,7 +154,7 @@ class SpriteParent():
 	def import_cleanup(self):
 		pass
 
-	def get_alternate_tile(self, image_name):
+	def get_alternate_tile(self, image_name, _):
 		#FIXME: English
 		raise AssertionError(f"Image called {image_name} not found!")
 
@@ -180,6 +180,8 @@ class SpriteParent():
 				palettes.append(new_palette)
 
 			base_image = self.images[tile_info["image"]] if tile_info["image"] in self.images else self.get_alternate_tile(tile_info["image"], palettes)
+			if base_image == None:
+				print("Base image not found!")
 			if "crop" in tile_info:
 				base_image = base_image.crop(tuple(tile_info["crop"]))
 			if "flip" in tile_info:
