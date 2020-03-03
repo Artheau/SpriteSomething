@@ -1,1 +1,1 @@
-#do nothing, just exist to make "unittests" package
+#do nothing, just exist to make "tests" package

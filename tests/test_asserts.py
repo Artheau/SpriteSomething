@@ -40,8 +40,8 @@ class ExportAudit(unittest.TestCase):
 				self.assertTrue(self.same(original_file_contents,temp_rdc))
 
 	def test_samus_rdc_export(self):
-		pass
-		return
+#		pass
+#		return
 		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH)
 		_, temporary_rdc_filename = tempfile.mkstemp()
 		self.assertTrue(samus_sprite.save_as_RDC(temporary_rdc_filename))
