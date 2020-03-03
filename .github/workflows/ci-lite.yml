@@ -34,7 +34,7 @@ jobs:
       env:
         OS_NAME: ${{ matrix.os-name }}
       run: |
-        ./resources/ci/common/install.py
+        python ./resources/ci/common/install.py
     # run tests
     - name: Run Tests
       run: |
