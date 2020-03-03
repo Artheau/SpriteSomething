@@ -71,14 +71,6 @@ jobs:
         OS_NAME: ${{ matrix.os-name }}
       run: |
         python ./resources/ci/common/install.py
-    # start virtual display driver
-    - name: Start virtual display driver
-      run: |
-        disp=:99
-        screen=0
-        geom=640x480x24
-        exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
-        export DISPLAY=:99
     # start virtual display driver & run tests
     - name: Start virtual display driver & Test (!windows)
       env:
