@@ -89,7 +89,10 @@ class SpriteParent():
 			self.import_from_PNG()
 		elif file_extension.lower() == '.zspr':
 			self.import_from_ZSPR()
-		elif file_extension.lower() in ['.sfc','.smc']:
+		elif file_extension.lower() in [
+        '.sfc','.smc', # SNES RomHandler
+#        '.nes' # NES RomHandler
+      ]:
 			#dynamic import
 			rom_path,_ = os.path.split(self.resource_subpath)
 			rom_path = rom_path.replace(os.sep,'.')

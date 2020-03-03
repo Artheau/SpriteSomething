@@ -758,7 +758,11 @@ class SpriteSomethingMainFrame(tk.Frame):
 				else:      #chose not to save before opening
 					self.unsaved_changes = False
 
-		filename = filedialog.askopenfilename(initialdir=self.working_dirs["file.open"], title=self.fish.translate("meta","dialogue","file.open.title"), filetypes=((self.fish.translate("meta","dialogue","file.open.types.label"),"*.zspr *.png *.sfc *.smc"),))
+		filetypes = ".zspr " # FIXME: Assuming Z3Link-only
+		filetypes += ".png "
+#		filetypes += ".nes " # NES RomHandler
+		filetypes += ".smc .sfc " # SNES RomHandler
+		filename = filedialog.askopenfilename(initialdir=self.working_dirs["file.open"], title=self.fish.translate("meta","dialogue","file.open.title"), filetypes=((self.fish.translate("meta","dialogue","file.open.types.label"),filetypes),))
 		if filename:
 			#if we've got a filename, set the working dir and load the sprite
 			self.working_dirs["file.open"] = filename[:filename.rfind('/')]
@@ -800,8 +804,13 @@ class SpriteSomethingMainFrame(tk.Frame):
 	#  inject: Are we injecting directly or making a copy?
 	def copy_into_ROM(self, inject=False):
 		dest_filename = None
+		default_ext = ""
+		if self.game.console_name == "nes":
+			default_ext = ".nes"
+		elif self.game.console_name == "snes":
+			default_ext = ".sfc"
 		if inject:
-			dest_filename = filedialog.asksaveasfilename(defaultextension=".sfc", initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),"*.sfc *.smc"),))
+			dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),"*.sfc *.smc"),))
 			source_filename = dest_filename
 		else:
 			source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),"*.sfc *.smc"),))
@@ -810,7 +819,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				if file_extension.lower() in ['.sfc','.smc']:
 					default_extension = file_extension.lower()
 				else:
-					default_extension = ".sfc"
+					default_extension = default_ext
 				dest_filename = os.path.splitext(source_filename)[0] + "_modified"
 				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
 		if dest_filename:
@@ -833,15 +842,22 @@ class SpriteSomethingMainFrame(tk.Frame):
 			raise AssertionError("Unsure if making copies fits this purpose well")
 
 		source_filenames = []	#walk through the game files and inject the loaded sprite
+
+		default_exts = ""
+		if self.game.console_name == "nes":
+			default_exts = [ ".nes" ]
+		elif self.game.console_name == "snes":
+			default_exts = [ ".smc", ".sfc" ]
+
 		for r,d,f in os.walk(source_filepath):
 			for file in f:
 				_,file_extension = os.path.splitext(file)
-				if file_extension.lower() in ['.sfc','.smc']:
+				if file_extension.lower() in default_exts:
 					source_filenames.append(os.path.join(r,file))
 		for source_filename in source_filenames:
 			dest_filename = source_filename
 			rom = self.game.get_rom_from_filename(source_filename)	#read ROM data
-			same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(source_filename)[0]	#the game file matches
+			same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(self.game.console_name,source_filename)[0]	#the game file matches
 			is_zsm = "ZSM" in str(rom.get_name())	#this is a ZSM game file
 			#FIXME: English, need to get character name translations and compare against those
 			if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):	#if we've got a compatible game file, inject it!

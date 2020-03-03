@@ -18,23 +18,38 @@ def autodetect(sprite_filename):
 	#need to autodetect which game, and which sprite
 	#then return an instance of THAT game's class, and an instance of THAT sprite
 	_,file_extension = os.path.splitext(sprite_filename)
+  #If this is a SNES filetype
 	if file_extension.lower() in [".sfc",".smc"]:
 		#If the file is a rom, then we can go into the internal header and get the name of the game
-		game_names = autodetect_game_type_from_rom_filename(sprite_filename)
+		game_names = autodetect_game_type_from_rom_filename("snes",sprite_filename)
 		selected_game = None
 
 		#prompt user for input
 		#FIXME: Ugh, more tk
-    #FIXME: Needs to not assume SNES
 		selected_game = gui_common.create_chooser("snes",game_names)
 
 		if not selected_game:
 			selected_game = random.choice(game_names)
 
-    #FIXME: Needs to not assume SNES
 		game = get_game_class_of_type("snes",selected_game)
 		#And by default, we will grab the player sprite from this game
 		sprite, animation_assist = game.make_player_sprite(sprite_filename)
+	elif file_extension.lower() == ".nes":
+		#If the file is a rom, then we can go into the internal header and get the name of the game
+		game_names = autodetect_game_type_from_rom_filename("nes",sprite_filename)
+		selected_game = None
+
+		#prompt user for input
+		#FIXME: Ugh, more tk
+		selected_game = gui_common.create_chooser("nes",game_names)
+
+		if not selected_game:
+			selected_game = random.choice(game_names)
+
+		game = get_game_class_of_type("nes",selected_game)
+		#And by default, we will grab the player sprite from this game
+		sprite, animation_assist = game.make_player_sprite(sprite_filename)
+  #If it's not a known filetype but a PNG, cycle through and find one that matches
 	elif file_extension.lower() == ".png":
 		#the following line prevents a "cannot identify image" error from PIL
 		ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -59,10 +74,10 @@ def autodetect(sprite_filename):
 		if not game_found:
 			#FIXME: English
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
+  #FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
 	elif file_extension.lower() == ".zspr":
 		with open(sprite_filename,"rb") as file:
 			zspr_data = bytearray(file.read())
-    #FIXME: Needs to not assume SNES
 		game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
 		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
 	else:
@@ -71,9 +86,11 @@ def autodetect(sprite_filename):
 
 	return game, sprite, animation_assist
 
-def autodetect_game_type_from_rom_filename(filename):
-  #FIXME: Needs to not assume SNES
-	return autodetect_game_type_from_rom(snes.RomHandlerParent(filename))
+def autodetect_game_type_from_rom_filename(console,filename):
+  if console == "snes":
+  	return autodetect_game_type_from_rom(snes.RomHandlerParent(filename))
+  else:
+    raise AssertionError(f"Cannot recognize {console} as a supported console")
 
 def autodetect_game_type_from_rom(rom):
 	rom_name = rom.get_name()
@@ -88,9 +105,9 @@ def autodetect_game_type_from_rom(rom):
 
 	if len(game_names) == 0:
 		game_names = None
-		#raise AssertionError(f"Could not identify the type of ROM from its header name: {rom_name}")
-		#FIXME: English
-		print(f"Could not identify the type of ROM from its header name: {rom_name}")
+		raise AssertionError(f"Could not identify the type of ROM from its header name: {rom_name}")
+		#FIXME: English; CLI Errors
+		#print(f"Could not identify the type of ROM from its header name: {rom_name}")
 
 	return game_names
 
