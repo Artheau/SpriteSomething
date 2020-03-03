@@ -54,51 +54,23 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        # test on not windows since it can't test tkinter
-        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest ]
+        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
         python-version: [ 3.7 ]
     steps:
     # checkout commit
     - name: Checkout commit
       uses: actions/checkout@v1
-    # install python for ubuntu
-    - name: Install Python with tkinter for Ubuntu
-      run: |
-        sudo apt-get update
-        sudo apt-get install software-properties-common
-        sudo add-apt-repository ppa:deadsnakes/ppa
-        sudo apt-get update
-        sudo apt-get install python3.7 python3.7-tk python3-pytest
-        sudo rm /usr/bin/python
-        sudo ln -s /usr/bin/python3.7 /usr/bin/python
-        python --version
-      if: contains(matrix.os-name, 'ubuntu')
-    # install python for macos
-    - name: Install Python with tkinter for MacOS
-      run: |
-        brew install tcl-tk
-        brew uninstall --ignore-dependencies python
-        brew install python
-        python3 --version
-      if: contains(matrix.os-name, 'macos')
-    # install dependencies via pip for ubuntu
-    - name: Install Dependencies via pip for Ubuntu
+    # install python
+    - name: Install Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    # install dependencies via pip
+    - name: Install Dependencies via pip
       env:
         OS_NAME: ${{ matrix.os-name }}
       run: |
-        sudo -H pip install --upgrade pip
-        sudo -H python ./resources/ci/common/install.py
-        sudo -H pip install pytest pytest-cov
-      if: contains(matrix.os-name, 'ubuntu')
-    # install dependencies via pip for macos
-    - name: Install Dependencies via pip for MacOS
-      env:
-        CI_SYSTEM: actions
-        OS_NAME: ${{ matrix.os-name }}
-      run: |
-        python3 ./resources/ci/common/install.py
-        pip install pytest pytest-cov
-      if: contains(matrix.os-name, 'macos')
+        python ./resources/ci/common/install.py
     # start virtual display driver
     - name: Start virtual display driver
       run: |
@@ -107,20 +79,23 @@ jobs:
         geom=640x480x24
         exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
         export DISPLAY=:99
-    # run tests for ubuntu
-    - name: Run Tests for Ubuntu
+    # start virtual display driver & run tests
+    - name: Start virtual display driver & Test (!windows)
       env:
         DISPLAY: :99
       run: |
+        disp=:99
+        screen=0
+        geom=640x480x24
+        exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
+        export DISPLAY=:99
         python ./tests/tests.py
-      if: contains(matrix.os-name, 'ubuntu')
-    # run tests for macos
-    - name: Run Tests for MacOS
-      env:
-        DISPLAY: :99
-      run: |
-        python3 ./tests/tests.py
-      if: contains(matrix.os-name, 'macos')
+      if: contains(matrix.os-name, 'windows') != true
+    - name: Start virtual display driver & Test (windows)
+      uses: GabrielBB/xvfb-action@v1
+      with:
+        run: python ./tests/tests.py
+      if: contains(matrix.os-name, 'windows')
   # Install & Build
   #  Set up environment
   # Build
