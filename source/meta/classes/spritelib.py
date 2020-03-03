@@ -184,15 +184,23 @@ class SpriteParent():
 				print("Base image not found!")
 			if "crop" in tile_info:
 				base_image = base_image.crop(tuple(tile_info["crop"]))
+				if base_image == None:
+					print("Cropped image broken!")
 			if "flip" in tile_info:
 				hflip = "h" in tile_info["flip"].lower()
 				vflip = "v" in tile_info["flip"].lower()
 				if (hflip and vflip) or "both" in tile_info["flip"].lower():
 					base_image = base_image.transpose(Image.ROTATE_180)
+					if base_image == None:
+						print("180ed image broken!")
 				elif hflip:
 					base_image = base_image.transpose(Image.FLIP_LEFT_RIGHT)
+					if base_image == None:
+						print("H-flipped image broken!")
 				elif vflip:
 					base_image = base_image.transpose(Image.FLIP_TOP_BOTTOM)
+					if base_image == None:
+						print("V-flipped image broken!")
 
 			default_range = self.layout.get_property("import palette interval", tile_info["image"])
 			this_palette = self.get_palette(palettes, default_range, frame_number)
