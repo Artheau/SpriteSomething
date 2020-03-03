@@ -7,8 +7,7 @@ on: [ push, pull_request ]
 ########################
 # Non-GitHub providers #
 ########################
-# deploy-release: docker://softprops/action-gh-release
-# deploy-pages:   peaceiris/actions-gh-pages@v1.1.0
+# deploy-pages:   malept/github-action-gh-pages@v1.0.1 (hosted by miketrethewey)
 
 # What I *should* be able to do:
 #  Define Install Job
@@ -391,10 +390,11 @@ jobs:
       with:
         name: pages-${{ matrix.os-name }}
         path: ../pages
-     # post to GHPages #FIXME: Test GHPages
-#    - name: Post to GitHub Pages
-#      uses: peaceiris/actions-gh-pages@v3
-#      with:
-#        deploy_key: ${{ secrets.GITHUB_DEPLOY_KEY }}
-#        publish_dir: ../pages
-#      if: contains(github.ref, 'master')
+    # post to GHPages #FIXME: Test GHPages
+    - name: Post to GitHub Pages
+      uses: miketrethewey/github-action-gh-pages@v1.0.1
+      with:
+        docsPath: ../pages
+      env:
+        DOCS_SSH_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
+      if: contains(github.ref, 'master')
