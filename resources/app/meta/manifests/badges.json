@@ -7,6 +7,22 @@
 		"logo": "github",
 		"url": "https://github.com/Artheau/SpriteSomething/releases/tag/<LATEST_TAG>"
 	},
+  {
+    "title": "Master Build Status",
+    "keyword": "github/workflow/status",
+    "query": "Artheau/SpriteSomething/Test,%20Build,%20Deploy%20Release,%20Deploy%20Pages/master",
+    "left": "master build",
+    "logo": "github",
+    "url": "https://github.com/Artheau/SpriteSomething/tree/master"
+  },
+  {
+    "title": "Stable Build Status",
+    "keyword": "github/workflow/status",
+    "query": "Artheau/SpriteSomething/Test,%20Build,%20Deploy%20Release,%20Deploy%20Pages/stable",
+    "left": "stable build",
+    "logo": "github",
+    "url": "https://github.com/Artheau/SpriteSomething/tree/stable"
+  },
 	{
 		"title": "Master Build Status",
 		"keyword": "travis",
