@@ -7,7 +7,7 @@ from tkinter import ttk, messagebox, filedialog	#for GUI stuff
 import base64            	#TODO: I don't know why we import this
 import json
 import random
-import urllib.request
+import urllib.request, ssl
 from functools import partial    #for tk debugging
 from source.meta.common.constants import DEBUG_MODE  #for tk debugging
 from source.meta.common import common
@@ -89,7 +89,8 @@ def get_sprites(self,title,dir,url):
 
 	#make the request!
 	sprites_filename = url
-	sprites_req = urllib.request.urlopen(sprites_filename)
+	context = ssl._create_unverified_context()
+	sprites_req = urllib.request.urlopen(sprites_filename, context=context)
 	sprites = json.loads(sprites_req.read().decode("utf-8"))
 	#get an iterator and a counter for a makeshift progress bar
 	total = len(sprites)
@@ -121,7 +122,7 @@ def get_sprites(self,title,dir,url):
 						"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
 					}
 				)
-				sprite_data_req = urllib.request.urlopen(sprite_data_req)
+				sprite_data_req = urllib.request.urlopen(sprite_data_req, context=context)
 				sprite_data = sprite_data_req.read()
 				#FIXME: English
 				print("    Writing " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)

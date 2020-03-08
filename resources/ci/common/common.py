@@ -33,6 +33,7 @@ def prepare_env():
   env["BRANCH"] = os.getenv("TRAVIS_BRANCH","")
   env["GITHUB_ACTOR"] = os.getenv("GITHUB_ACTOR","MegaMan.EXE")
   env["GITHUB_SHA"] = os.getenv("GITHUB_SHA","")
+  env["GITHUB_RUN_ID"] = os.getenv("GITHUB_RUN_ID","")
   env["GITHUB_SHA_SHORT"] = env["GITHUB_SHA"]
   # commit data
   env["COMMIT_ID"] = os.getenv("TRAVIS_COMMIT",os.getenv("GITHUB_SHA",""))
@@ -56,7 +57,7 @@ def prepare_env():
     env["GITHUB_SHA_SHORT"] = env["GITHUB_SHA"][:7]
 
   # ci data
-  env["BUILD_NUMBER"] = os.getenv("TRAVIS_BUILD_NUMBER",env["GITHUB_SHA_SHORT"])
+  env["BUILD_NUMBER"] = os.getenv("TRAVIS_BUILD_NUMBER",env["GITHUB_RUN_ID"])
 
   GITHUB_TAG = os.getenv("TRAVIS_TAG",os.getenv("GITHUB_TAG",""))
   OS_NAME = os.getenv("TRAVIS_OS_NAME",os.getenv("OS_NAME","")).replace("macOS","osx")
@@ -114,17 +115,22 @@ def prepare_filename(BUILD_FILENAME):
 # find a binary file if it's executable
 #  failing that, assume it's over 10MB
 def find_binary(listdir):
-	BUILD_FILENAME = ""
-	executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH
-	for filename in os.listdir(listdir):
-		if os.path.isfile(filename):
-			st = os.stat(filename)
-			mode = st.st_mode
-			big = st.st_size > (10 * 1024 * 1024) # 10MB
-			if (mode & executable) or big:
-				if "SpriteSomething" in filename:
-					BUILD_FILENAME = filename
-	return BUILD_FILENAME
+  FILENAME_CHECKS = [ "SpriteSomething" ]
+  FILESIZE_CHECK = (10 * 1024 * 1024) # 10MB
+
+  BUILD_FILENAMES = []
+  executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH
+  for filename in os.listdir(listdir):
+    if os.path.isfile(filename):
+      if os.path.splitext(filename)[1] != ".py":
+        st = os.stat(filename)
+        mode = st.st_mode
+        big = st.st_size > FILESIZE_CHECK
+        if (mode & executable) or big:
+          for check in FILENAME_CHECKS:
+            if check in filename:
+              BUILD_FILENAMES.append(filename)
+  return BUILD_FILENAMES
 
 if __name__ == "__main__":
   env = prepare_env()

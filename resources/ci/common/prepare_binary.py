@@ -18,17 +18,23 @@ BUILD_FILENAME = common.find_binary('.')
 if BUILD_FILENAME == "":
   BUILD_FILENAME = common.find_binary(os.path.join("..","artifact"))
 
-DEST_FILENAME = common.prepare_filename(BUILD_FILENAME)
+if isinstance(BUILD_FILENAME,str):
+  BUILD_FILENAME = list(BUILD_FILENAME)
 
-print("OS Name:        " + env["OS_NAME"])
-print("OS Version:     " + env["OS_VERSION"])
-print("Build Filename: " + BUILD_FILENAME)
-print("Dest Filename:  " + DEST_FILENAME)
-if not BUILD_FILENAME == "":
-	print("Build Filesize: " + common.file_size(BUILD_FILENAME))
+BUILD_FILENAMES = BUILD_FILENAME
 
-if not BUILD_FILENAME == "":
-	move(
-		os.path.join(".",BUILD_FILENAME),
-		os.path.join("..","artifact",BUILD_FILENAME)
-	)
+for BUILD_FILENAME in BUILD_FILENAMES:
+  DEST_FILENAME = common.prepare_filename(BUILD_FILENAME)
+
+  print("OS Name:        " + env["OS_NAME"])
+  print("OS Version:     " + env["OS_VERSION"])
+  print("Build Filename: " + BUILD_FILENAME)
+  print("Dest Filename:  " + DEST_FILENAME)
+  if not BUILD_FILENAME == "":
+  	print("Build Filesize: " + common.file_size(BUILD_FILENAME))
+
+  if not BUILD_FILENAME == "":
+  	move(
+  		os.path.join(".",BUILD_FILENAME),
+  		os.path.join("..","artifact",BUILD_FILENAME)
+  	)

@@ -10,7 +10,7 @@ if not os.path.isdir("./upx"):
   # get env vars
   env = common.prepare_env()
   # set up download url
-  UPX_VERSION = os.getenv("UPX_VERSION") or "3.95"
+  UPX_VERSION = os.getenv("UPX_VERSION") or "3.96"
   UPX_SLUG = ""
   UPX_FILE = ""
   if "windows" in env["OS_NAME"]:
