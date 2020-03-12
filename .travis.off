@@ -51,7 +51,7 @@ jobs:
       # 6 Step
       before_script: echo "#do nothing before script"
       # 7 Step
-      script: ${PYTHON_EXECUTABLE} ./tests/tests.py
+      script: ${PYTHON_EXECUTABLE} -m unittest
 
     # 3.7 on Bionic Build/Deploy
     - &build-deploy
