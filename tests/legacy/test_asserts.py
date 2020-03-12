@@ -5,7 +5,7 @@
 #The intention is that most unit tests will go here, excepting the ones that do not play well with the others,
 # which at the time of writing this comment, are the tests for memory leaks and stray imports (test_gc.py and test_waterfalls.py)
 
-from test_common import *  #contains utilities common to all tests.  Should come first before the other imports.
+from tests.legacy.common_vars import *  #contains utilities common to all tests.  Should come first before the other imports.
 
 import unittest     #for unit testing, har har
 import json         #need to audit our json files
