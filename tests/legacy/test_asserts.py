@@ -145,6 +145,7 @@ class GUIRunTimeTests(unittest.TestCase):
 		super().__init__(*args, **kwargs)
 		#make the GUI in skeleton form (no looping)
 		pseudo_command_line_args = {"sprite": LINK_FILENAME}
+		print("Emulated DISPLAY: %s" % os.getenv("DISPLAY","None"))
 		pseudo_root = tk.Tk()   #make a pseudo GUI environment
 		pseudo_root.withdraw()  #make the pseudo GUI invisible
 		self.GUI_skeleton = gui.SpriteSomethingMainFrame(pseudo_root, pseudo_command_line_args)
