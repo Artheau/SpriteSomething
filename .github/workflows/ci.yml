@@ -54,8 +54,8 @@ jobs:
     strategy:
       matrix:
 #        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-        os-name: [ ubuntu-latest ]
-#        os-name: [ ubuntu-16.04 ]
+#        os-name: [ ubuntu-latest ]
+        os-name: [ ubuntu-16.04 ]
 #        os-name: [ macOS-latest ]
 #        os-name: [ windows-latest ]
         python-version: [ 3.7 ]
