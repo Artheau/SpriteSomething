@@ -15,7 +15,7 @@ on: [ push, pull_request ]
 #   Halt if fail
 #  Define Tests Job
 #   Calls Install Job
-#   Run tests
+#   Run tests.py
 #   Halt if fail
 #  Define Build Job
 #   Calls Install Job
@@ -44,7 +44,7 @@ jobs:
   # Install & Test
   #  Set up environment
   # Test
-  #  Run "python -m unittest"
+  #  Run tests/tests.py
   install-test:
     name: Install/Test
     # cycle through os list
@@ -80,12 +80,12 @@ jobs:
         geom=640x480x24
         exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
         export DISPLAY=:99
-        python -m unittest
+        python ./tests/tests.py
       if: contains(matrix.os-name, 'windows') != true
     - name: Start virtual display driver & Test (windows)
       uses: GabrielBB/xvfb-action@v1
       with:
-        run: python -m unittest
+        run: python ./tests/tests.py
       if: contains(matrix.os-name, 'windows')
   # Install & Build
   #  Set up environment
