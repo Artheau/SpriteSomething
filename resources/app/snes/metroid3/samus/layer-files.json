@@ -1,7 +1,7 @@
 {
 	"png": {
 		"app": "Various",
-		"file": "https://raw.githubusercontent.com/Artheau/SpriteSomething/stable/app_resources/metroid3/samus/sheets/samus.png"
+		"file": "https://raw.githubusercontent.com/Artheau/SpriteSomething/stable/resources/app/metroid3/samus/sheets/samus.png"
 	},
 	"xcf": {
 		"app": "GIMP",
