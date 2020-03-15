@@ -1,6 +1,8 @@
 # SpriteSomething
 
-This first official release of SpriteSomething includes many basic features of the main design of the program.
+This release of SpriteSomething includes many basic features of the main design of the program.
+
+The file structure has been wildly changed up and your custom sprite sheets will need to be moved accordingly to `./resources/user/*`.
 
 ## Features
 
@@ -44,6 +46,12 @@ This first official release of SpriteSomething includes many basic features of t
 
 * Command-line interface
 
-Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.14 xcode 10.2) and Windows (built on Windows 10 v1803) all built on python 3.7 are available.
+## Executable Builds
 
-If you would prefer to run/build from source, you can download the source code for this release below.  See `BUILDING.md` for instructions.
+* We currently use GitHub Actions to build the bundled executables with each release. Travis CI was used initially and does most of what we want. GitHub Actions has since matured and is able to produce all that we need now.
+
+* Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.15 xcode 11.2.1) and Windows (built on Windows Server 2019) all built on python 3.7 are available.
+
+### Build from source
+
+If you would prefer to run/build from source, you can download the source code for this release below.  See `docs/BUILDING.md` for instructions.

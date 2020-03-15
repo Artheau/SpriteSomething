@@ -1,0 +1,21 @@
+{
+	"$schema": "../../../../schema/backgrounds.schema.json",
+	"backgrounds": [
+		{
+			"filename": "colony.png",
+			"title": "Space Colony"
+		},
+    {
+      "filename": "fileselect.png",
+      "title": "File Select"
+    },
+		{
+			"filename": "landingsite.png",
+			"title": "Landing Site"
+		},
+		{
+			"filename": "title.png",
+			"title": "Title Screen"
+		}
+	]
+}
