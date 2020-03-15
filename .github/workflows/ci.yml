@@ -392,9 +392,10 @@ jobs:
         path: ../pages
     # post to GHPages #FIXME: Test GHPages
     - name: Post to GitHub Pages
-      uses: miketrethewey/github-action-gh-pages@v1.0.1
+      uses: miketrethewey/github-pages-deploy-action@3.4.1
       with:
-        docsPath: ../pages
+        FOLDER: ../pages
+        BRANCH: gh-pages
       env:
-        DOCS_SSH_DEPLOY_KEY: ${{ secrets.GITHUB_DEPLOY_KEY }}
+        ACCESS_TOKEN: ${{ secrets.GITHUB_DEPLOY_KEY }}
       if: contains(github.ref, 'master')
