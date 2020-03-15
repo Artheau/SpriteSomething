@@ -23,32 +23,6 @@
     "logo": "github",
     "url": "https://github.com/Artheau/SpriteSomething/tree/stable"
   },
-  {
-    "title": "Move-Everything Build Status",
-    "keyword": "github/workflow/status",
-    "query": "Test,%20Build,%20Deploy%20Release,%20Deploy%20Pages/move-everything",
-    "left": "move-everything build",
-    "logo": "github",
-    "url": "https://github.com/Artheau/SpriteSomething/tree/move-everything"
-  },
-	{
-		"title": "Master Build Status",
-		"keyword": "travis",
-		"query": "master",
-		"left": "master build",
-		"logo": "travis-ci",
-		"logo-color": "cdb62c",
-		"url": "https://github.com/Artheau/SpriteSomething/tree/master"
-	},
-	{
-		"title": "Stable Build Status",
-		"keyword": "travis",
-		"query": "stable",
-		"left": "stable build",
-		"logo": "travis-ci",
-		"logo-color": "cdb62c",
-		"url": "https://github.com/Artheau/SpriteSomething/tree/stable"
-	},
 	{
 		"title": "Commits to Stable since last release",
 		"keyword": "github/commits-since",
