@@ -2,6 +2,8 @@
 
 This release of SpriteSomething includes many basic features of the main design of the program.
 
+The file structure has been wildly changed up and your custom sprite sheets will need to be moved accordingly to `./resources/user/*`.
+
 ## Features
 
 ### Supported Games
