@@ -1,0 +1,63 @@
+├── .github/
+│   ├── actions/
+│   │   └── Local GitHub Actions scripts
+│   └── workflows/
+│       └── GitHub Actions workflows
+├── app_resources/          ├ app resources
+│   ├── meta/               ├ main app resources
+│   │   ├── icons/          ├ icons for main app
+│   │   ├── lang/           ├ language file for main app
+│   │   ├── manifests/      ├ manifests for main app
+│   ├── metroid3/           ├ game folder
+│   │   ├── backgrounds/    ├ bundled background images
+│   │   ├── lang/           ├ game translation files
+│   │   ├── manifests/      ├ game manifests
+│   │   └── samus/          ├ sprite folder
+│   │       ├── icons/      ├ icons for sprite
+│   │       ├── lang/       ├ sprite translation files
+│   │       ├── manifests/  ├ sprite manifests
+│   │       └── sheets/     ├ sprite sheets
+│   └── zelda3/
+│       ├── backgrounds/    ├ bundled background images
+│       ├── lang/           ├ game translation files
+│       ├── manifests/      ├ game manifests
+│       └── link/           ├ sprite folder
+│           ├── icons/      ├ icons for sprite
+│           ├── lang/       ├ sprite translation files
+│           ├── manifests/  ├ sprite manifests
+│           └── sheets/     ├ sprite sheets
+├── pages_resources/ ├ gh-pages resources
+│   ├── css/
+│   ├── js/
+│   ├── metroid3/
+│   │   └── samus/
+│   │       ├── css.css           ├ css for sprite files
+│   │       ├── layer─files.json  ├ layer files manifest
+│   │       ├── sprites.html      ├ junk redirect to ../index.html
+│   │       └── sprites.json      ├ sprites DB linking to various submissions
+│   ├── zelda3/
+│   │   └── link/
+│   │       ├── css.css           ├ css for sprite files
+│   │       ├── layer─files.json  ├ layer files manifest
+│   │       ├── sprites.html      ├ junk redirect to ../index.html
+│   │       └── sprites.json      ├ sprites DB linking to various submissions
+│   └── index.html  ├ index file that manages displaying root and sprite listings
+├── schema/   ├ JSON schema
+├── scripts/  ├ various CI scripting
+├── source/   ├ main source code
+│   ├── metroid3/   ├ game code
+│   │   └── samus/  ├ sprite code
+│   └── zelda3/     ├ game code
+│       └── link/   ├ sprite code
+├── unittests/  ├ Unit Tests
+├── user_resources/       ├ user resources
+│   ├── meta/
+│   │   └── manifests/    ├ user─added app names; working dirs
+│   ├── metroid3/         ├ game folder
+│   │   ├── backgrounds/  ├ user─added background images
+│   │   └── samus/        ├ user─added sprite resources
+│   │       └── lang/     ├ user─added translation files
+│   └── zelda3/           ├ game folder
+│       ├── backgrounds/  ├ user─added background images
+│       └── link/         ├ user─added sprite resources
+│           └── lang/     ├ user─added translation files

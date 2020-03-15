@@ -1,6 +1,6 @@
 from argparse import ArgumentParser	#to read stuff from commandline
-from source.cli import make_CLI		#import commandline interface
-from source.gui import make_GUI		#import visual interface
+from source.meta.cli import make_CLI		#import commandline interface
+from source.meta.gui.gui import make_GUI		#import visual interface
 from tkinter import messagebox		#for the error box in case of fatal error
 import traceback					#for error box
 import os							#for default file to load
@@ -87,8 +87,8 @@ def process_command_line_args():
 						dest="sprite",
 						help="A sprite file to load upon opening",
 						metavar="<sprite_filename>",
-#						default=os.path.join("app_resources","metroid3","samus","sheets","samus.png"))
-						default=os.path.join("app_resources","zelda3","link","sheets","link.zspr"))
+#						default=os.path.join("resources","app","snes","metroid3","samus","sheets","samus.png"))
+						default=os.path.join("resources","app","snes","zelda3","link","sheets","link.zspr"))
 
 	command_line_args = vars(parser.parse_args())
 	return command_line_args

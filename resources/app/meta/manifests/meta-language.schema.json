@@ -1,0 +1,70 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://raw.githubusercontent.om/Artheau/SpriteSomething/master/resources/app/meta/manifests/meta-language.schema.json",
+	"type": "object",
+	"title": "SpriteSomething Meta Translation File Schema",
+	"description": "Required strings for translation",
+	"required": ["menu", "dialogue", "meta", "tab", "vcr-controls"],
+	"properties": {
+		"menu": {
+			"$id": "#/properties/menu",
+			"type": "object",
+			"title": "The Menu Schema",
+			"required": ["file", "file.open", "file.save", "file.exit", "export", "export.inject", "export.inject-new", "export.inject-bulk", "export.frame-as-png", "export.animation-as-gif", "export.animation-as-hcollage", "export.animation-as-vcollage", "tools", "tools.palette-editor", "plugins", "plugins.game", "plugins.sprite", "help", "help.diagnostics", "help.about"],
+			"items": {
+				"$id": "#/properties/menu/items",
+				"type": "string",
+				"title": "The Menu Items Schema",
+				"pattern": "^(.*)$"
+			}
+		},
+		"dialogue": {
+			"$id": "#/properties/dialogue",
+			"type": "object",
+			"title": "The Dialogue Schema",
+			"required": ["file.open.title", "file.open.types.label", "file.save.title", "file.save.png", "file.save.zspr", "file.save.rdc", "export.inject.title", "export.inject.types", "export.source.title", "export.source.types", "export.inject-new.title", "export.inject-new.types", "export.frame-as-png", "export.animation-as-hcollage", "export.animation-as-vcollage", "open.save-before-open", "open.save-failed-during-open-attempt", "exit.save-before-exit", "exit.nosave-before-exit", "exit.save-failed-during-exit-attempt"],
+			"items": {
+				"$id": "#/properties/dialogue/items",
+				"type": "string",
+				"title": "The Dialogue Items Schema",
+				"pattern": "^(.*)$"
+			}
+		},
+		"meta": {
+			"$id": "#/properties/meta",
+			"type": "object",
+			"title": "The Meta Schema",
+			"required": ["none", "reload", "sprite.name", "author.name", "author.name-short", "background", "animations"],
+			"items": {
+				"$id": "#/properties/meta/items",
+				"type": "string",
+				"title": "The Meta Items Schema Schema",
+				"pattern": "^(.*)$"
+			}
+		},
+		"tab": {
+			"$id": "#/properties/tab",
+			"type": "object",
+			"title": "The Tab Schema",
+			"required": ["animations", "overview"],
+			"items": {
+				"$id": "#/properties/tab/items",
+				"type": "string",
+				"title": "The Tab Items Schema",
+				"pattern": "^(.*)$"
+			}
+		},
+		"vcr-controls": {
+			"$id": "#/properties/vcr-controls",
+			"type": "object",
+			"title": "The VCR Controls Schema",
+			"required": ["zoom-minus", "zoom-plus", "speed-minus", "speed-plus", "play", "play-one", "reset", "frame-backward", "pause", "frame-forward", "pose-backward", "pose-forward"],
+			"items": {
+				"$id": "#/properties/vcr-controls/items",
+				"type": "string",
+				"title": "The VCR Controls Items Schema",
+				"pattern": "^(.*)$"
+			}
+		}
+	}
+}

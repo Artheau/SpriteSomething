@@ -35,6 +35,6 @@ Yes, but please adhere to the following guidelines:
 
 Also, please share your work!  We are very interested in the art that others produce.
 
-## [Super Metroid FAQ](./app_resources/metroid3/FAQ.md)
+## [Super Metroid FAQ](./resources/app/metroid3/FAQ.md)
 
-## [A Link to the Past FAQ](./app_resources/zelda3/FAQ.md)
+## [A Link to the Past FAQ](./resources/app/zelda3/FAQ.md)
