@@ -23,7 +23,7 @@ class BabelFish():
 			if not lang in self.lang_defns:
 				self.lang_defns[lang] = {}
 			langs_filename = common.get_resource(subpath,lang + ".json") #get filename of translation file
-			if langs_filename: #if we've got a file
+			if langs_filename and os.path.isfile(langs_filename): #if we've got a file
 				with open(langs_filename,encoding="utf-8") as f: #open it
 					self.lang_defns[lang][subpath[:subpath.rfind(os.sep)].replace(os.sep,'.')] = json.load(f) #save translation definitions
 

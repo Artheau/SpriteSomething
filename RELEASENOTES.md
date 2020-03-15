@@ -1,6 +1,6 @@
 # SpriteSomething
 
-This first official release of SpriteSomething includes many basic features of the main design of the program.
+This release of SpriteSomething includes many basic features of the main design of the program.
 
 ## Features
 
@@ -46,15 +46,9 @@ This first official release of SpriteSomething includes many basic features of t
 
 ## Executable Builds
 
-We currently use two different interfaces to build the bundled executables with each release. Travis CI was used initially and does most of what we want. We are attempting to migrate to GitHub Actions and finding that it does not quite do all that we want with its functionality.
+* We currently use GitHub Actions to build the bundled executables with each release. Travis CI was used initially and does most of what we want. GitHub Actions has since matured and is able to produce all that we need now.
 
-### Travis CI
-
-Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.14.4 xcode 10.2.1) and Windows (built on Windows 10 v1809) all built on python 3.7 are available.
-
-### GitHub Actions
-
-Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.15 xcode 11.2.1) and Windows (built on Windows Server 2019) all built on python 3.7 are available.
+* Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.15 xcode 11.2.1) and Windows (built on Windows Server 2019) all built on python 3.7 are available.
 
 ### Build from source
 

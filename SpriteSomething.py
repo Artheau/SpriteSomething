@@ -53,6 +53,11 @@ def process_command_line_args():
 						metavar="<cli>",
 						default=None
 	)
+	parser.add_argument("--lang",
+						dest="lang",
+						help="Lanuage",
+						metavar="<lang>",
+						default=None)
 	parser.add_argument("--mode",
 						dest="mode",
 						help="CLI Mode",

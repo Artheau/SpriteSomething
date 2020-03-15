@@ -84,7 +84,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 					self.working_dirs[k] = v
 
 		#create a fish
-		self.fish = BabelFish()
+		self.fish = BabelFish(subpath=["meta"],lang=command_line_args["lang"] if "lang" in command_line_args else None)
 
 		self.create_random_title()
 

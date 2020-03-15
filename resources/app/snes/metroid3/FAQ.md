@@ -11,6 +11,7 @@ The new character should appear in the view area, and you can also click the Ove
 ### How can I keep Samus, but get the new animations, like screw attack without space jump, and the restored crystal flash?
 
 - File/Open.  Choose `samus.png`.
+- *Or*, using the Bundle menu, select SNES -> Super Metroid -> Samus.
 - Export/Inject into Game File.
 
 ### How can I get the new screw attack without space jump, but keep everything else exactly the way it was, even down to the broken walljump elbowpads and missing scanlines?

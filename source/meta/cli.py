@@ -143,7 +143,7 @@ class CLIMainFrame():
     else:	#else, make a copy
       action = "   Copying using data from: " + source_filename
     rom = self.game.get_rom_from_filename(source_filename)	#read ROM data
-    same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(source_filename)[0]	#the game file matches
+    same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename("snes",source_filename)[0]	#the game file matches
     is_zsm = "ZSM" in str(rom.get_name())	#this is a ZSM game file
     if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):	#if we've got a compatible game file, inject it!
       modified_rom = self.sprite.inject_into_ROM(rom)
