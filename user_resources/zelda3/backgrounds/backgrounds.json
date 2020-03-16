@@ -1,9 +1,0 @@
-{
-	"$schema": "../../../schema/backgrounds.schema.json",
-	"backgrounds": [
-		{
-			"filename": "home.png",
-			"title": "Link's House"
-		}
-	]
-}
