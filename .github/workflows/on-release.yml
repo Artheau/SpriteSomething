@@ -26,7 +26,7 @@ jobs:
     # install dependencies via pip
     - name: Install Dependencies via pip
       run: |
-        python ./resources/ci/common/install.py
+        python -m pip install pytz requests
     - name: Build Discord Notification Payload
       env:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
