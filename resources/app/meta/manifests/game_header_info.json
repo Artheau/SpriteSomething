@@ -1,0 +1,20 @@
+{
+	"$schema": "../../../schema/game-header-info.schema.json",
+	"metroid3": [
+		"ZSM",
+    "      SM RANDOMIZER  ",
+		"Super Metroid",
+		"Hyper Metroid",
+		"SMRv",
+		"M3 Y-Faster Hack",
+		"Metroid: Redesign"
+	],
+
+	"zelda3": [
+		"ZSM",
+		"ZELDANODENSETSU",
+		"VT ",
+		"ER ",
+		"THE LEGEND OF ZELDA"
+	]
+}

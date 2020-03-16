@@ -1,6 +1,8 @@
 # SpriteSomething
 
-This preview version of SpriteSomething includes many basic features of the main design of the program.
+This release of SpriteSomething includes many basic features of the main design of the program.
+
+The file structure has been wildly changed up and your custom sprite sheets will need to be moved accordingly to `./resources/user/*`.
 
 ## Features
 
@@ -18,7 +20,7 @@ This preview version of SpriteSomething includes many basic features of the main
   * Item Randomizer
 * Super Metroid/A Link to the Past Combo Randomizer
 
-### General Features included in this preview
+### General Features included in this version
 
 * Open sprite from flattened PNG, compiled ZSPR
 * Extract sprite from supported game file
@@ -26,9 +28,10 @@ This preview version of SpriteSomething includes many basic features of the main
 * Export sprite as flattened PNG, compiled ZSPR, compiled RDC
 * Inject sprite into supported game file; single or a directory (experimental)
 * Export current animation frame as PNG
+* Export current animation as GIF
 * Export current animation as horizontal collage
 
-### Animation Features included in this preview
+### Animation Features included in this version
 
 * Bundled backgrounds
 * Directional controls
@@ -39,10 +42,16 @@ This preview version of SpriteSomething includes many basic features of the main
 * Download Link sprites as included by the SpriteSomething team
 * Download Samus sprites as included by the SpriteSomething team
 
-### Lesser-documented features in this preview
+### Lesser-documented features in this version
 
 * Command-line interface
 
-Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.14 xcode 10.2) and Windows (built on Windows 10 v1803) all built on python 3.7 are available.
+## Executable Builds
 
-If you would prefer to run/build from source, you can download the source code for this release below.  See `BUILDING.md` for instructions.
+* We currently use GitHub Actions to build the bundled executables with each release. Travis CI was used initially and does most of what we want. GitHub Actions has since matured and is able to produce all that we need now.
+
+* Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.15 xcode 11.2.1) and Windows (built on Windows Server 2019) all built on python 3.7 are available.
+
+### Build from source
+
+If you would prefer to run/build from source, you can download the source code for this release below.  See `docs/BUILDING.md` for instructions.

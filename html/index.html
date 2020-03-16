@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>SpriteSomething</title>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
+<script src="resources/app/js/script.js"></script>
+<link rel="stylesheet" href="resources/app/css/global.css" type="text/css" />
+<script>
+window.onload = function() {
+	let load = "index";
+	if(window.location.search) {
+		load = window.location.search.substring(window.location.search.indexOf('=')+1);
+	}
+  init(load);
+}
+</script>
+</head>
+<body>
+</body>
+</html>

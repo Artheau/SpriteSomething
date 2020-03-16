@@ -1,0 +1,34 @@
+[
+	{
+		"title": "Latest Release Version",
+		"keyword": "github/v/release",
+		"query": "?include_prereleases",
+		"left": "latest release",
+		"logo": "github",
+		"url": "https://github.com/Artheau/SpriteSomething/releases/tag/<LATEST_TAG>"
+	},
+  {
+    "title": "Master Build Status",
+    "keyword": "github/workflow/status",
+    "query": "Test,%20Build,%20Deploy%20Release,%20Deploy%20Pages/master",
+    "left": "master build",
+    "logo": "github",
+    "url": "https://github.com/Artheau/SpriteSomething/tree/master"
+  },
+  {
+    "title": "Stable Build Status",
+    "keyword": "github/workflow/status",
+    "query": "Test,%20Build,%20Deploy%20Release,%20Deploy%20Pages/stable",
+    "left": "stable build",
+    "logo": "github",
+    "url": "https://github.com/Artheau/SpriteSomething/tree/stable"
+  },
+	{
+		"title": "Commits to Stable since last release",
+		"keyword": "github/commits-since",
+		"query": "<LATEST_TAG>/stable",
+		"left": "commits to stable since <LATEST_TAG>",
+		"logo": "github",
+		"url": "https://github.com/Artheau/SpriteSomething/compare/master..stable"
+	}
+]
