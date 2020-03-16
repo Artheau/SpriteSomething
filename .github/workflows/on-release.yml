@@ -2,8 +2,9 @@
 name: On Release Deployment
 
 # fire on
-on: [ release ]
-  types: [ publish ]
+on:
+  release:
+    types: [ published, prereleased ]
 
 # stuff to do
 jobs:
