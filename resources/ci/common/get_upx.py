@@ -38,7 +38,10 @@ if not os.path.isdir(os.path.join('.',"upx")):
   unpack_archive(UPX_FILE,os.path.join('.'))
 
   os.rename(os.path.join('.',UPX_SLUG),os.path.join('.',"upx"))
-  os.chmod(os.path.join('.',"upx","upx"),0o755)
+  UPX_EXE = os.path.join('.',"upx","upx")
+  if "windows" in env["OS_NAME"]:
+    UPX_EXE += ".exe"
+  os.chmod(UPX_EXE,0o755)
   os.remove(os.path.join('.',UPX_FILE))
 
 print("UPX should " + ("not " if not os.path.isdir(os.path.join('.',"upx")) else "") + "be available.")
