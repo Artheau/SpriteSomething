@@ -6,7 +6,7 @@ from shutil import unpack_archive
 
 # only do stuff if we don't have a UPX folder
 
-if not os.path.isdir("./upx"):
+if not os.path.isdir(os.path.join('.',"upx")):
   # get env vars
   env = common.prepare_env()
   # set up download url
@@ -26,7 +26,7 @@ if not os.path.isdir("./upx"):
 
   print("Getting UPX: " + UPX_FILE)
 
-  with open("./" + UPX_FILE,"wb") as upx:
+  with open(os.path.join('.',UPX_FILE),"wb") as upx:
     UPX_REQ = urllib.request.Request(
 	    UPX_URL,
 		  data=None
@@ -35,9 +35,10 @@ if not os.path.isdir("./upx"):
     UPX_DATA = UPX_REQ.read()
     upx.write(UPX_DATA)
 
-  unpack_archive(UPX_FILE,"./")
+  unpack_archive(UPX_FILE,os.path.join('.'))
 
-  os.rename("./" + UPX_SLUG,"./upx")
-  os.remove("./" + UPX_FILE)
+  os.rename(os.path.join('.',UPX_SLUG),os.path.join('.',"upx"))
+  os.chmod(os.path.join('.',"upx","upx"),0o755)
+  os.remove(os.path.join('.',UPX_FILE))
 
-print("UPX should " + ("not " if not os.path.isdir("./upx") else "") + "be available.")
+print("UPX should " + ("not " if not os.path.isdir(os.path.join('.',"upx")) else "") + "be available.")
