@@ -3,8 +3,6 @@ function readTextFile(file) {
   // Create a request
   let rawFile = new XMLHttpRequest();
   let allText = "";
-  // Get the thing
-  rawFile.open("GET", file, false);
   rawFile.onreadystatechange = function () {
     // If we're ready to read
     if(rawFile.readyState === 4) {
@@ -12,9 +10,16 @@ function readTextFile(file) {
       if(rawFile.status === 200 || rawFile.status == 0) {
         // Return the thing
         allText = rawFile.responseText;
+      // If it's not OK
+      } else if(rawFile.status == 404) {
+        // Return null
+        return null;
       }
     }
   }
+
+  // Get the thing
+  rawFile.open("GET", file, false);
   rawFile.send(null);
 
   return allText;
@@ -181,71 +186,73 @@ function init(mode = "index") {
 
 		filename = filepath + "layer-files.json";
 		let layerfilesManifest = readTextFile(filename);
-		let layerfiles = JSON.parse(layerfilesManifest);
-		let layerfiles_container = $("<ul>");
-		for (let layerext in layerfiles) {
-			let layerfile = layerfiles[layerext];
-			let app = layerfile["app"];
-			let file = layerfile["file"];
-			let site = layerfile["site"];
-			let repo = layerfile["repo"];
-			metas = new Array(
-//												layerext,
-												file,
-												site,
-												repo
-			);
+		if(layerfilesManifest) {
+			let layerfiles = JSON.parse(layerfilesManifest);
+			let layerfiles_container = $("<ul>");
+			for (let layerext in layerfiles) {
+				let layerfile = layerfiles[layerext];
+				let app = layerfile["app"];
+				let file = layerfile["file"];
+				let site = layerfile["site"];
+				let repo = layerfile["repo"];
+				metas = new Array(
+		//														layerext,
+														file,
+														site,
+														repo
+  			);
 
-			let layerfile_li = $("<li>")
-				.text(app);
-			layerfile_meta_ul = $("<ul>");
+				let layerfile_li = $("<li>")
+					.text(app);
+				layerfile_meta_ul = $("<ul>");
 
-			for(let meta in metas) {
-				let meta_text = metas[meta];
-				if(meta_text) {
-					layerfile_meta_li = $("<li>");
-					let link_text = "";
-					switch(meta) {
-						case "0":
-							link_text = layerext == "png" ? "PNG" : "Layer File";
-							break;
-						case "1":
-							link_text = "Website";
-							break;
-						case "2":
-							link_text = "Source Code";
-							break;
-					}
-					if(meta_text.indexOf("alttpr") > -1) {
+				for(let meta in metas) {
+					let meta_text = metas[meta];
+					if(meta_text) {
+						layerfile_meta_li = $("<li>");
+						let link_text = "";
 						switch(meta) {
 							case "0":
-								link_text = "Machine-readable Endpoint";
+								link_text = layerext == "png" ? "PNG" : "Layer File";
 								break;
 							case "1":
-								link_text = "Sprite Previews";
+								link_text = "Website";
+								break;
+							case "2":
+								link_text = "Source Code";
 								break;
 						}
-					}
-					let layerfile_meta_a = $("<a>")
-						.attr("href",meta_text)
-						.text(link_text);
-					layerfile_meta_li.append(layerfile_meta_a);
-					layerfile_meta_ul.append(layerfile_meta_li);
-
-					if(link_text == "Sprite Previews") {
-						link_text = "Downloadable Sprite Previews";
-						meta_text = "http://alttp.mymm1.com/sprites";
-						layerfile_meta_li = $("<li>");
-						layerfile_meta_a = $("<a>")
+						if(meta_text.indexOf("alttpr") > -1) {
+							switch(meta) {
+								case "0":
+									link_text = "Machine-readable Endpoint";
+									break;
+								case "1":
+									link_text = "Sprite Previews";
+									break;
+							}
+						}
+						let layerfile_meta_a = $("<a>")
 							.attr("href",meta_text)
 							.text(link_text);
 						layerfile_meta_li.append(layerfile_meta_a);
 						layerfile_meta_ul.append(layerfile_meta_li);
+
+						if(link_text == "Sprite Previews") {
+							link_text = "Downloadable Sprite Previews";
+							meta_text = "http://alttp.mymm1.com/sprites";
+							layerfile_meta_li = $("<li>");
+							layerfile_meta_a = $("<a>")
+								.attr("href",meta_text)
+								.text(link_text);
+							layerfile_meta_li.append(layerfile_meta_a);
+							layerfile_meta_ul.append(layerfile_meta_li);
+						}
 					}
 				}
+				layerfile_li.append(layerfile_meta_ul);
+				layerfiles_container.append(layerfile_li);
 			}
-			layerfile_li.append(layerfile_meta_ul);
-			layerfiles_container.append(layerfile_li);
 		}
 
 	  let sprites_container = $("<div>")
@@ -280,6 +287,8 @@ function init(mode = "index") {
 		let spacer = $("<div>")
 			.attr("style","clear:both");
 		$("body").append(spacer);
-		$("body").append(layerfiles_container);
+		if(typeof layerfiles_container !== "undefined") {
+			$("body").append(layerfiles_container);
+		}
 	}
 }
