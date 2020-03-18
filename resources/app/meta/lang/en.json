@@ -85,6 +85,7 @@
     "gba": "Game Boy Advance",
     "gbc": "Game Boy Color",
     "genesis": "Genesis",
+    "pc": "PC",
     "n64": "Nintendo 64",
     "nes": "NES",
     "snes": "SNES"
