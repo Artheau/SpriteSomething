@@ -24,6 +24,7 @@ if not os.path.isdir(os.path.join('.',"upx")):
     UPX_FILE = UPX_SLUG + ".zip"
   UPX_URL = "https://github.com/upx/upx/releases/download/v" + UPX_VERSION + '/' + UPX_FILE
 
+if "osx" not in env["OS_NAME"]:
   print("Getting UPX: " + UPX_FILE)
 
   with open(os.path.join('.',UPX_FILE),"wb") as upx:
