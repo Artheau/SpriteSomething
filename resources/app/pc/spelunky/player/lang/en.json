@@ -1,0 +1,9 @@
+{
+  "section": {
+    "facing": "Facing"
+  },
+  "Facing": {
+    "left": "Left",
+    "right": "Right"
+  }
+}

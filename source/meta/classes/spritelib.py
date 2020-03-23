@@ -67,7 +67,11 @@ class SpriteParent():
 		# and to implement dynamic palettes by leveraging the frame number
 
 		#if the child class didn't tell us what to do, just go back to whatever palette it was on when it was imported
-		return self.master_palette[default_range[0]:default_range[1]]
+		palette = []
+		if self.master_palette:
+			palette = self.master_palette[default_range[0]:default_range[1]]
+
+		return palette
 
 	def get_palette_duration(self, palettes):
 		#in most cases will be overriden by the child class to report duration of a palette

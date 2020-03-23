@@ -173,15 +173,16 @@ class GameParent():
 					self.background_datas["filename"][background["filename"]] = background["title"]
 					self.background_datas["title"][background["title"]] = background["filename"]
 		background_prettynames = list(self.background_datas["title"].keys())
-		self.background_selection.set(random.choice(background_prettynames))
+		if len(background_prettynames) > 0:
+			self.background_selection.set(random.choice(background_prettynames))
 
-		background_dropdown = tk.ttk.Combobox(background_panel, state="readonly", values=background_prettynames, name="background_dropdown")
-		background_dropdown.configure(width=BACKGROUND_DROPDOWN_WIDTH, exportselection=0, textvariable=self.background_selection)
-		background_dropdown.grid(row=0, column=2)
+			background_dropdown = tk.ttk.Combobox(background_panel, state="readonly", values=background_prettynames, name="background_dropdown")
+			background_dropdown.configure(width=BACKGROUND_DROPDOWN_WIDTH, exportselection=0, textvariable=self.background_selection)
+			background_dropdown.grid(row=0, column=2)
 
-		widgetlib.leakless_dropdown_trace(self, "background_selection", "set_background")
+			widgetlib.leakless_dropdown_trace(self, "background_selection", "set_background")
 
-		parent.add(background_panel,minsize=PANEL_HEIGHT)
+			parent.add(background_panel,minsize=PANEL_HEIGHT)
 		return background_panel
 
 	def set_background(self, image_title):
@@ -207,7 +208,8 @@ class GameParent():
 		self.current_background_title = image_title
 
 	def update_background_image(self):
-		self.set_background(self.current_background_title)
+		if len(list(self.background_datas["title"].keys())) > 0:
+			self.set_background(self.current_background_title)
 
 	def make_player_sprite(self, sprite_filename):
 		return self.make_sprite_by_number(0x01, sprite_filename)

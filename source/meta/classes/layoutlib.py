@@ -231,28 +231,30 @@ class Layout():
 
 		all_images["transparent"] = Image.new("RGBA",(0,0),0)
 
-		master_palettes = list(all_images["palette_block"].convert("RGB").getdata())
+		master_palettes = []
+		if "palette_block" in all_images:
+			master_palettes = list(all_images["palette_block"].convert("RGB").getdata())
 
-		for image_name, this_image in all_images.items():
-			if not image_name in ["transparent","palette_block"]:
-				import_palette = self.get_property("import palette interval", image_name)
-				palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]   #flatten the RGB values
-				palette = palette + palette[:3]*(256-(len(palette)//3))
-				palette_seed = Image.new("P", (1,1))
-				palette_seed.putpalette(palette)
+			for image_name, this_image in all_images.items():
+				if not image_name in ["transparent","palette_block"]:
+					import_palette = self.get_property("import palette interval", image_name)
+					palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]   #flatten the RGB values
+					palette = palette + palette[:3]*(256-(len(palette)//3))
+					palette_seed = Image.new("P", (1,1))
+					palette_seed.putpalette(palette)
 
-				#this is a workaround to quantize without dithering
-				paletted_image = this_image._new(this_image.im.convert("P",0,palette_seed.im))
+					#this is a workaround to quantize without dithering
+					paletted_image = this_image._new(this_image.im.convert("P",0,palette_seed.im))
 
-				#have to shift the palette over now to include the transparent pixels correctly
-				#did it this way so that color pixels would not accidentally be matched to transparency
-				original_image_L = [0 if alpha < 255 else 1 for _,_,_,alpha in this_image.getdata()]
-				new_image_indices = [L*(index+1) for (L,index) in zip(original_image_L,paletted_image.getdata())]
-				paletted_image.putdata(new_image_indices)
-				shifted_palette = [0,0,0] + palette[:-3]
-				paletted_image.putpalette(shifted_palette)
+					#have to shift the palette over now to include the transparent pixels correctly
+					#did it this way so that color pixels would not accidentally be matched to transparency
+					original_image_L = [0 if alpha < 255 else 1 for _,_,_,alpha in this_image.getdata()]
+					new_image_indices = [L*(index+1) for (L,index) in zip(original_image_L,paletted_image.getdata())]
+					paletted_image.putdata(new_image_indices)
+					shifted_palette = [0,0,0] + palette[:-3]
+					paletted_image.putpalette(shifted_palette)
 
-				all_images[image_name] = paletted_image
+					all_images[image_name] = paletted_image
 
 		return all_images, master_palettes
 
