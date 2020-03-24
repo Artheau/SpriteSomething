@@ -24,8 +24,11 @@ class SpriteParent():
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
 		self.overview_scale_factor = 2
+		self.view_only = False
 		if "input" in manifest_dict and "png" in manifest_dict["input"] and "overview-scale-factor" in manifest_dict["input"]["png"]:
 			self.overview_scale_factor = manifest_dict["input"]["png"]["overview-scale-factor"]
+		if "view-only" in manifest_dict:
+			self.view_only = True
 		self.plugins = None
 		self.has_plugins = False
 		self.load_layout()
@@ -276,6 +279,9 @@ class SpriteParent():
 		return assembled_image, offset
 
 	def get_representative_images(self,style="default"):
+		if self.view_only:
+			return []
+
 		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
 			sprite_save_name = self.metadata["sprite.name"].lower()
 		else:
@@ -334,7 +340,10 @@ class SpriteParent():
 
 	def save_as(self, filename):
 		_,file_extension = os.path.splitext(filename)
-		if file_extension.lower() == ".png":
+		if self.view_only:
+			return False
+			raise AssertionError(self.classic_name + " Sprites are set to View-Only.")
+		elif file_extension.lower() == ".png":
 			return self.save_as_PNG(filename)
 		elif file_extension.lower() == ".zspr":
 			return self.save_as_ZSPR(filename)

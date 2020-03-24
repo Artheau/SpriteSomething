@@ -805,41 +805,58 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def copy_into_ROM(self, inject=False):
 		dest_filename = None
 		default_ext = ""
+		filetypes = []
 		if self.game.console_name == "nes":
 			default_ext = ".nes"
+			filetypes = [ "*.nes" ]
 		elif self.game.console_name == "snes":
 			default_ext = ".sfc"
-		if inject:
-			dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),"*.sfc *.smc"),))
-			source_filename = dest_filename
+			filetypes = [ "*.sfc", "*.smc" ]
+		elif self.sprite.view_only:
+			filetypes = []
+
+		if len(filetypes) > 0:
+			if inject:
+			  dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),' '.join(filetypes)),))
+			  source_filename = dest_filename
+			else:
+			  source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),' '.join(filetypes)),))
+			  if source_filename:
+  				_,file_extension = os.path.splitext(source_filename)
+  				if file_extension.lower() in ['.sfc','.smc']:
+  					default_extension = file_extension.lower()
+  				else:
+  					default_extension = default_ext
+  				dest_filename = os.path.splitext(source_filename)[0] + "_modified"
+  				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),' '.join(filetypes)),))
+			if dest_filename:
+			  rom = self.game.get_rom_from_filename(source_filename)
+			  modified_rom = self.sprite.inject_into_ROM(rom)
+			  #print(modified_rom.get_patch())
+			  modified_rom.save(dest_filename, overwrite=True)
+			  self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
+			  self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
+			  #FIXME: English
+			  messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 		else:
-			source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),"*.sfc *.smc"),))
-			if source_filename:
-				_,file_extension = os.path.splitext(source_filename)
-				if file_extension.lower() in ['.sfc','.smc']:
-					default_extension = file_extension.lower()
-				else:
-					default_extension = default_ext
-				dest_filename = os.path.splitext(source_filename)[0] + "_modified"
-				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
-		if dest_filename:
-			rom = self.game.get_rom_from_filename(source_filename)
-			modified_rom = self.sprite.inject_into_ROM(rom)
-			#print(modified_rom.get_patch())
-			modified_rom.save(dest_filename, overwrite=True)
-			self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
-			self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
-			#FIXME: English
-			messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
+		  messagebox.showerror("Not Yet Implemented","Injection not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
 
 	#query user for directory to inject sprite into
 	def copy_into_ROM_bulk(self, inject=False):
 		source_filepath = None
-		if inject:
-			source_filepath = filedialog.askdirectory()	#only injection is supported
+		supported_consoles = [ "pc", "nes", "snes" ]
+		if self.sprite.view_only and self.game.console_name in supported_consoles:
+			supported_consoles.remove(self.game.console_name)
+
+		if self.game.console_name in supported_consoles:
+			if inject:
+				source_filepath = filedialog.askdirectory()	#only injection is supported
+			else:
+				#FIXME: English
+				raise AssertionError("Unsure if making copies fits this purpose well")
 		else:
-			#FIXME: English
-			raise AssertionError("Unsure if making copies fits this purpose well")
+		  messagebox.showerror("Not Yet Implemented","Injection not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+		  return
 
 		source_filenames = []	#walk through the game files and inject the loaded sprite
 
@@ -980,8 +997,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def check_for_updates(self):
 		update_available = False
-#		version_url = "https://artheau.github.io/SpriteSomething/resources/app/meta/manifests/app_version.txt"
-		version_url = "https://artheau.github.io/SpriteSomething/app_resources/meta/manifests/app_version.txt"
+		version_url = "https://artheau.github.io/SpriteSomething/resources/app/meta/manifests/app_version.txt"
 		this_version = CONST.APP_VERSION  # get current version
 		version_req = urllib.request.urlopen(version_url) # make request for online app version
 		latest_version = version_req.readlines()[0].decode("utf-8").strip() # get version from file
