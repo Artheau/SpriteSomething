@@ -36,14 +36,11 @@ class SpriteParent():
 	############################# BEGIN ABSTRACT CODE ##############################
 
 	def load_plugins(self):
-		try:
-			plugins_path,_ = os.path.split(self.resource_subpath)
-			plugins_dir = plugins_path.replace(os.sep,'.')
-			plugins_module = importlib.import_module(f"source.{plugins_dir}.{self.classic_name.lower()}.plugins")
-			self.plugins = plugins_module.Plugins()
-			self.has_plugins = True
-		except ModuleNotFoundError as err:
-			print(err)        #TODO: This will fail silently if run through the GUI
+		normalized_path = os.path.normpath(self.resource_subpath)
+		module_subname = normalized_path.replace(os.path.sep, '.')
+		plugins_module = self.import_module(f"source.{module_subname}.plugins")
+		self.plugins = plugins_module.Plugins()
+		self.has_plugins = True
 
 	#FIXME: English
 	def import_from_ROM(self, rom):
@@ -100,7 +97,7 @@ class SpriteParent():
 			#dynamic import
 			rom_path,_ = os.path.split(self.resource_subpath)
 			rom_path = rom_path.replace(os.sep,'.')
-			rom_module = importlib.import_module(f"source.{rom_path}.rom")
+			rom_module = self.import_module(f"source.{rom_path}.rom")
 			self.import_from_ROM(rom_module.RomHandler(self.filename))
 		self.import_cleanup()
 
@@ -440,3 +437,10 @@ class SpriteParent():
 
 	def get_master_PNG_image(self):
 		return self.layout.export_all_images_to_PNG(self.images,self.master_palette)
+
+	def import_module(self, module_name):
+		#TODO: factor this out to a common source file
+		try:
+			return importlib.import_module(module_name)
+		except ModuleNotFoundError as err:
+			raise AssertionError(f"ModuleNotFoundError in spritelib.py: {err}")
