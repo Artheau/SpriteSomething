@@ -25,7 +25,7 @@ class SpriteParent():
 		self.filename = filename
 		self.overview_scale_factor = 2
 		if "input" in manifest_dict and "png" in manifest_dict["input"] and "overview-scale-factor" in manifest_dict["input"]["png"]:
-			self.overview_scale_factor = manifest_dict["input"]["png"]["overview-scale-factor"]
+  			self.overview_scale_factor = manifest_dict["input"]["png"]["overview-scale-factor"]
 		self.plugins = None
 		self.has_plugins = False
 		self.load_layout()
@@ -272,7 +272,7 @@ class SpriteParent():
 		return assembled_image, offset
 
 	def get_representative_images(self,style="default"):
-  		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
+		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
 			sprite_save_name = self.metadata["sprite.name"].lower()
 		else:
 			#FIXME: English
