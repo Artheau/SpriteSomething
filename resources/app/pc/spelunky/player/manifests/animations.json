@@ -336,7 +336,13 @@
   },
   "Health": {
     "right": [
-      { "frames": 10, "tiles": [ {"image": "health_right", "pos": [0,0]} ] }
+      {
+        "frames": 10,
+        "tiles": [
+          {"image": "healthtop_right", "pos": [0,0]},
+          {"image": "healthbottom_right", "pos": [0,80]}
+        ]
+      }
     ]
   },
   "Co-op Pointer": {

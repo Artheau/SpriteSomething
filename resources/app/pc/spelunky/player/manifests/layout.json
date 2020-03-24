@@ -171,7 +171,7 @@
       "ghostattack_right1",
       "ghostattack_right2",
       "ghostattack_right3",
-      "health_right",
+      "healthtop_right",
       "null_block2"
     ],
     [
@@ -185,8 +185,7 @@
       "null_block",
       "null_block",
       "null_block",
-      "null_block",
-      "null_block",
+      "healthbottom_right",
       "null_block2"
     ]
 	],
@@ -326,18 +325,22 @@
 		"ghostattack_right1": { "parent": "standing_right", "used by": [["TODO",0]] },
 		"ghostattack_right2": { "parent": "standing_right", "used by": [["TODO",0]] },
 		"ghostattack_right3": { "parent": "standing_right", "used by": [["TODO",0]] },
-		"health_right": {
-			"dimensions": [0,0,160,160],
+		"healthtop_right": {
+			"dimensions": [0,0,160,80],
 			"used by": [["TODO",0]]
 		},
 
 		"cooppointer_right": { "parent": "standing_right", "used by": [["TODO",0]] },
-		"cooppointer_right1": { "parent": "cooppointer_right", "used by": [["TODO",0]] },
-		"cooppointer_right2": { "parent": "cooppointer_right", "used by": [["TODO",0]] },
-		"volcano_right": { "parent": "cooppointer_right", "used by": [["TODO",0]] },
-		"deadloot_right": { "parent": "cooppointer_right", "used by": [["TODO",0]] },
-		"wantedsign_right": { "parent": "cooppointer_right", "used by": [["TODO",0]] },
-		"blinded_right": { "parent": "cooppointer_right", "used by": [["TODO",0]] },
+		"cooppointer_right1": { "parent": "standing_right", "used by": [["TODO",0]] },
+		"cooppointer_right2": { "parent": "standing_right", "used by": [["TODO",0]] },
+		"volcano_right": { "parent": "standing_right", "used by": [["TODO",0]] },
+		"deadloot_right": { "parent": "standing_right", "used by": [["TODO",0]] },
+		"wantedsign_right": { "parent": "standing_right", "used by": [["TODO",0]] },
+		"blinded_right": { "parent": "standing_right", "used by": [["TODO",0]] },
+		"healthbottom_right": {
+			"dimensions": [0,0,160,80],
+			"used by": [["TODO",0]]
+		},
 
 		"null_block": {
 			"comment": "Simulates a blank tile",

@@ -294,8 +294,11 @@ class SpriteParent():
 
 		if "default" not in manifest_images:
 			#try to have sane defaults
-			animation = self.animations[0]    #default to first image here
-			direction = self.animations[animation].keys()[0]  #first direction
+			animationkeys = list(self.animations.keys())
+			if "$schema" in animationkeys:
+				animationkeys.remove("$schema")
+			animation = animationkeys[0]    #default to first image here
+			direction = list(self.animations[animation].keys())[0]  #first direction
 			pose = 0    #first pose
 			#by default, will use default palettes, without having any info supplied
 			frame = 0    #probably won't matter, but just in case, use the first frame of palette
@@ -311,8 +314,17 @@ class SpriteParent():
 
 		return_images = []
 		for image in images:
-			animation = image[0] if image else self.animations[0] #default to first image here
-			direction = image[1] if len(image) > 1 else self.animations[animation].keys()[0] #default: first direction
+			animationkeys = list(self.animations.keys())
+			if "$schema" in animationkeys:
+				animationkeys.remove("$schema")
+			animation = animationkeys[0] # default to first image here
+			if 0 in image:
+				animation = image[0]
+
+			direction = list(self.animations[animation].keys())[0] # default: first direction
+			if 1 in image:
+				direction = image[1]
+
 			pose = image[2] if len(image) > 2 else 0 #default: #first pose
 			palette = image[3] if len(image) > 3 else [] #defaults to the defaults determined by get_image
 			frame = image[4] if len(image) > 4 else 0 #default to the first frame of timed palette
