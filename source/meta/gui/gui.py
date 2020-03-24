@@ -980,8 +980,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	def check_for_updates(self):
 		update_available = False
-#		version_url = "https://artheau.github.io/SpriteSomething/resources/app/meta/manifests/app_version.txt"
-		version_url = "https://artheau.github.io/SpriteSomething/app_resources/meta/manifests/app_version.txt"
+		version_url = "https://artheau.github.io/SpriteSomething/resources/app/meta/manifests/app_version.txt"
 		this_version = CONST.APP_VERSION  # get current version
 		version_req = urllib.request.urlopen(version_url) # make request for online app version
 		latest_version = version_req.readlines()[0].decode("utf-8").strip() # get version from file
