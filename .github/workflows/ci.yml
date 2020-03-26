@@ -334,7 +334,11 @@ jobs:
   # Prepare for Deployment to GitHub Pages
   #  run custom action
   prepare-pages:
+    name: Prepare GHPages
+    runs-on: ${{ matrix.os-name }}
+
     # VM settings
+    #  os & python versions
     strategy:
       matrix:
         # pages on one OS
