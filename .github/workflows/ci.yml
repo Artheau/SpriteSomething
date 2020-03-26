@@ -46,7 +46,7 @@ jobs:
   # Test
   #  Run python -m unittest
   install-test:
-    name: ":floppy_disk:/:heavy_check_mark:"
+    name: Install/Test
     # cycle through os list
     runs-on: ${{ matrix.os-name }}
     # VM settings
@@ -92,7 +92,7 @@ jobs:
   # Build
   #  Run build.py
   install-build:
-    name: ":floppy_disk:/:hammer:"
+    name: Install/Build
     # cycle through os list
     runs-on: ${{ matrix.os-name }}
 
@@ -149,7 +149,7 @@ jobs:
   #  Set up environment
   # Local Prepare Release action
   install-prepare-release:
-    name: ":floppy_disk:/:file_folder::rocket:"
+    name: Install/Prepare Release
     # cycle through os list
     runs-on: ${{ matrix.os-name }}
 
@@ -212,7 +212,7 @@ jobs:
   #  Release Body:  Fallback to URL to RELEASENOTES.md
   #  Release Files: ../deploy
   deploy-release:
-    name: ":rocket::heavy_check_mark:"
+    name: Deploy GHReleases
     runs-on: ${{ matrix.os-name }}
 
     # VM settings
@@ -334,11 +334,7 @@ jobs:
   # Prepare for Deployment to GitHub Pages
   #  run custom action
   prepare-pages:
-    name: ":file_folder::earth_americas:"
-    runs-on: ${{ matrix.os-name }}
-
     # VM settings
-    #  os & python versions
     strategy:
       matrix:
         # pages on one OS
@@ -369,7 +365,7 @@ jobs:
   # Deploy to GitHub Pages
   #
   deploy-pages:
-    name: ":earth_americas::heavy_check_mark:"
+    name: Deploy GHPages
     runs-on: ${{ matrix.os-name }}
 
     # VM settings
