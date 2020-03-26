@@ -37,6 +37,7 @@ def output():
    lines.append(diagpad(pkg[0]) + pkg[1])
   '''
   installed_packages = [str(d) for d in pkg_resources.working_set]   #this doesn't work from the .exe either, but it doesn't crash the program
+  installed_packages.sort()
   for pkg in installed_packages:
     lines.append(pkg)
 
