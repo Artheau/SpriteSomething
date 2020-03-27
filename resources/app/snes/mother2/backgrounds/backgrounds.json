@@ -1,0 +1,29 @@
+{
+	"$schema": "../../../schema/backgrounds.schema.json",
+	"backgrounds": [
+		{
+			"filename": "onett-map.png",
+			"title": "Onett Town Map"
+		},
+		{
+			"filename": "twoson-map.png",
+			"title": "Twoson Town Map"
+		},
+		{
+			"filename": "threed-map.png",
+			"title": "Threed Town Map"
+		},
+		{
+			"filename": "fourside-map.png",
+			"title": "Fourside Town Map"
+		},
+		{
+			"filename": "scaraba-map.png",
+			"title": "Scaraba Town Map"
+		},
+		{
+			"filename": "summers-map.png",
+			"title": "Summers Town Map"
+		}
+	]
+}
