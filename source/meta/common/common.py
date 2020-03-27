@@ -26,6 +26,7 @@ def filename_scrub(filename):
 
 # get all resources from app folder & user folder
 def get_all_resources(subdir=None,desired_filename=None):
+  #gets the file from overrides AND resources (returns a list of filenames)
 	file_list = []
 
 	if not subdir == None and desired_filename == None:
@@ -35,7 +36,6 @@ def get_all_resources(subdir=None,desired_filename=None):
 	if isinstance(subdir,list):
 		subdir = os.path.join(*subdir)
 
-	#gets the file from user_resources AND app_resources (returns a list of filenames)
 	for directory in [os.path.join("resources","user"),os.path.join("resources","app")]:
 		if subdir: directory = os.path.join(directory,subdir)
 		if os.path.isdir(directory):
@@ -96,6 +96,9 @@ def round_to_nearest_eight(val):
 	#take a value, divide by 8, floor it, contrain it, mult by 8
 	return snescolor_eighth(val) * 8
 
+def convert_hex_to_rgb(color):
+	return tuple(int(color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+
 def convert_555_to_rgb(color, recurse=True):
 	#converts either a single color or a list of colors in 555 format to their RGB 3-tuple equivalents
 	try:
@@ -147,7 +150,7 @@ def image_from_raw_data(tilemaps, DMA_writes, bounding_box):
 		v_flip = tilemap[4] & 0x80
 		h_flip = tilemap[4] & 0x40
 		#priority = (tilemap[4] //0x10) % 0b100                   #TODO: implement a priority system
-		#palette = (tilemap[4] //2) % 0b1000					  #in theory, the palette index here could be used to render if we wanted a ROM-dependent implementation
+		#palette = (tilemap[4] //2) % 0b1000												#FIXME: unused variable
 
 		def draw_tile_to_canvas(new_x_offset, new_y_offset, new_index):
 			tile_to_write = convert_tile_from_bitplanes(DMA_writes[new_index])

@@ -268,7 +268,7 @@ class AnimationEngineParent():
 
 	#Mike likes spiffy buttons
 	def get_spiffy_buttons(self, parent, fish):
-		spiffy_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self)
+		spiffy_buttons = widgetlib.SpiffyButtons(self.sprite, self)
 
 		spiffy_manifest = common.get_resource([self.resource_subpath,"manifests"],"spiffy-buttons.json")
 		if spiffy_manifest:
@@ -294,7 +294,7 @@ class AnimationEngineParent():
 
 	#Mike likes palette buttons
 	def get_palette_buttons(self, parent, fish):
-		palette_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self, frame_name="palette_buttons")
+		palette_buttons = widgetlib.SpiffyButtons(self.sprite, self, frame_name="palette_buttons")
 
 		palette_manifest = common.get_resource([self.resource_subpath,"manifests"],"palette-buttons.json")
 		if palette_manifest:
@@ -315,7 +315,7 @@ class AnimationEngineParent():
 	#Art likes direction buttons
 	def get_direction_buttons(self, parent, fish):
 		#if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
-		direction_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self, frame_name="direction_buttons", align="center")
+		direction_buttons = widgetlib.SpiffyButtons(self.sprite, self, frame_name="direction_buttons")
 
 		direction_manifest = common.get_resource([self.resource_subpath,"manifests"],"direction-buttons.json")
 		if direction_manifest:
