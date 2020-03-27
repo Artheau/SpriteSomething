@@ -376,7 +376,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		BUTTON_HEIGHT = 26
 		vcr_controls = self.get_vcr_controls()  #have to do this early so that their values are available for other buttons
 		self.left_panel.add(self.get_reload_button(),height=1 * BUTTON_HEIGHT)
-		self.attach_metadata_panel()
+		if not self.sprite.view_only:
+			self.attach_metadata_panel()
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
 		self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.coord_setter,self.fish)
 		self.left_panel.add(vcr_controls,height=5 * BUTTON_HEIGHT)
@@ -493,6 +494,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 					save_success_bool = False
 			else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 				save_success_bool = False
+		elif len(image_list) == 0:
+			#FIXME: English
+			messagebox.showerror("Not Implemented", "Representative Images not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+			save_success_bool = True
 		if not save_success_bool:
 			#FIXME: English
 			messagebox.showerror("ERROR", f"ERROR: Could not create image file(s)")
@@ -773,31 +778,35 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 	#query user to export file; PNG/ZSPR/RDC
 	def save_file_as(self):
-		# Save in one of the valid formats.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
-		filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),(self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),(self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"))
+		if not self.sprite.view_only:
+			# Save in one of the valid formats.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
+			filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),(self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),(self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"))
 
-		filename = ""
-		if "sprite.name" in self.sprite.metadata:
-			filename = self.sprite.metadata["sprite.name"]
-		else:
-			#FIXME: English
-			filename = "unknown"
-		filename = common.filename_scrub(filename)
-
-		filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
-		if filename:
-			save_success_bool = self.sprite.save_as(filename)
-			if save_success_bool:
-				self.unsaved_changes = False
-				self.working_dirs["file.save"] = os.path.dirname(filename)
-				messagebox.showinfo("Save Complete", f"Saved as {filename}")
-				self.save_working_dirs()
+			filename = ""
+			if "sprite.name" in self.sprite.metadata:
+				filename = self.sprite.metadata["sprite.name"]
 			else:
 				#FIXME: English
-				messagebox.showerror("Not Yet Implemented",os.path.splitext(filename)[1][1:].upper() + " format not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
-			return save_success_bool
-		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
-			return False
+				filename = "unknown"
+			filename = common.filename_scrub(filename)
+
+			filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
+			if filename:
+				save_success_bool = self.sprite.save_as(filename)
+				if save_success_bool:
+					self.unsaved_changes = False
+					self.working_dirs["file.save"] = os.path.dirname(filename)
+					messagebox.showinfo("Save Complete", f"Saved as {filename}")
+					self.save_working_dirs()
+				else:
+					#FIXME: English
+					messagebox.showerror("Not Yet Implemented",os.path.splitext(filename)[1][1:].upper() + " format not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+				return save_success_bool
+			else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+				return False
+		else:
+		  #FIXME: English
+		  messagebox.showerror("Not Implemented","Saving not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
 
 	#query user to inject sprite into game file
 	# Inbound:
@@ -839,7 +848,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			  #FIXME: English
 			  messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 		else:
-		  messagebox.showerror("Not Yet Implemented","Injection not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+		  messagebox.showerror("Not Implemented","Injection not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
 
 	#query user for directory to inject sprite into
 	def copy_into_ROM_bulk(self, inject=False):
@@ -855,7 +864,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				#FIXME: English
 				raise AssertionError("Unsure if making copies fits this purpose well")
 		else:
-		  messagebox.showerror("Not Yet Implemented","Injection not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+		  messagebox.showerror("Not Implemented","Injection not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
 		  return
 
 		source_filenames = []	#walk through the game files and inject the loaded sprite
