@@ -24,6 +24,7 @@ class SpriteParent():
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
 		self.overview_scale_factor = 2
+		self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
 		if "input" in manifest_dict and "png" in manifest_dict["input"]:
 		  pngs = manifest_dict["input"]["png"]
 		  if not isinstance(pngs,list):
@@ -69,7 +70,11 @@ class SpriteParent():
 		# and to implement dynamic palettes by leveraging the frame number
 
 		#if the child class didn't tell us what to do, just go back to whatever palette it was on when it was imported
-		return self.master_palette[default_range[0]:default_range[1]]
+		palette = []
+		if self.master_palette:
+			palette = self.master_palette[default_range[0]:default_range[1]]
+
+		return palette
 
 	def get_palette_duration(self, palettes):
 		#in most cases will be overriden by the child class to report duration of a palette
@@ -277,6 +282,9 @@ class SpriteParent():
 		return assembled_image, offset
 
 	def get_representative_images(self,style="default"):
+		if self.view_only:
+			return []
+
 		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
 			sprite_save_name = self.metadata["sprite.name"].lower()
 		else:
