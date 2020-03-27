@@ -245,9 +245,14 @@ class SpriteSomethingMainFrame(tk.Frame):
 		                path = os.path.join(root,console,gamedir,folder,"sheets")
 		                filename = ""
 		                for filetype in [".rdc",".zspr",".png"]:
-		                  filepath = os.path.join(path,folder+filetype)
-		                  if os.path.isfile(filepath):
-		                    filename = filepath
+		                  if filename == "":
+		                    filepath = os.path.join(path,folder+filetype)
+		                    if os.path.isfile(filepath):
+		                      filename = filepath
+		                    else:
+		                      tmp = os.path.join(path,"001"+filetype)
+		                      if os.path.isfile(tmp):
+		                        filename = tmp
 		                bundled_games[console][gamedir]["sprites"].append((name,partial(self.load_sprite,filename),filename == ""))
 		bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")
 		for console in bundled_games:
