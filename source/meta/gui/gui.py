@@ -244,7 +244,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		                folder = sprite["folder name"]
 		                path = os.path.join(root,console,gamedir,folder,"sheets")
 		                filename = ""
-		                for filetype in [".rdc",".zspr",".png"]:
+		                for filetype in [".zspr",".png",".rdc"]:
 		                  if filename == "":
 		                    filepath = os.path.join(path,folder+filetype)
 		                    if os.path.isfile(filepath):
