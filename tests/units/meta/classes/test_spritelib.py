@@ -6,12 +6,12 @@ from source.meta.classes.spritelib import SpriteParent
 
 class SpriteParentTestVersion(SpriteParent):
 	#the unit test should not depend on the layout class
-	def load_layout(self):
+	def load_layout(self, sprite_name):
 		#TODO: Make a fake interface to test this
 		return None
 
 	#the unit test should not depend on the particular sprite data files
-	def load_animations(self):
+	def load_animations(self, sprite_name):
 		#TODO: Make a fake interface to test this
 		return None
 
@@ -98,7 +98,7 @@ class TestSpriteParent(unittest.TestCase):
 		filename = self.__FILENAME
 		manifest_dict = {"name": self.__TEST_NAME}
 		my_subpath = self.__SUBPATH
-		self.sprite = SpriteParentTestVersion(filename, manifest_dict, my_subpath, _)
+		self.sprite = SpriteParentTestVersion(filename, manifest_dict, my_subpath, "")
 
 	def test_name_assigned(self):
 		self.assertEqual(self.sprite.classic_name, self.__TEST_NAME)

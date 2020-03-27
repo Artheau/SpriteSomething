@@ -30,7 +30,7 @@ class SpriteParent():
 		  if not isinstance(pngs,list):
 		    pngs = [pngs]
 		  for png in pngs:
-		    if "name" in png and png["name"] == sprite_name and "overview-scale-factor" in png:
+		    if ((not sprite_name == "" and "name" in png and png["name"] == sprite_name) or sprite_name == "") and "overview-scale-factor" in png:
 		      self.overview_scale_factor = png["overview-scale-factor"]
 		self.plugins = None
 		self.has_plugins = False

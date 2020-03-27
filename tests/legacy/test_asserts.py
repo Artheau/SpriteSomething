@@ -23,7 +23,7 @@ class ExportAudit(unittest.TestCase):
 		return file1.read() == file2.read()
 
 	def test_link_zspr_export(self):
-		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH, _)
+		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH, "")
 		_, temporary_zspr_filename = tempfile.mkstemp()
 		self.assertTrue(link_sprite.save_as_ZSPR(temporary_zspr_filename))
 		with open(LINK_FILENAME,"rb") as original_file_contents:
@@ -31,7 +31,7 @@ class ExportAudit(unittest.TestCase):
 				self.assertTrue(self.same(original_file_contents,temp_zspr))
 
 	def test_link_rdc_export(self):
-		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH, _)
+		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH, "")
 		_, temporary_rdc_filename = tempfile.mkstemp()
 		self.assertTrue(link_sprite.save_as_RDC(temporary_rdc_filename))
 		LINK_RDC_FILENAME = os.path.join(LINK_RESOURCE_PATH,"sheets","link.rdc")
@@ -106,7 +106,7 @@ class SpiffyButtonAudit(unittest.TestCase):
 								["red_mail", "titan_gloves"],
 								["titan_gloves"],
 							]
-		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH, _)
+		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH, "")
 
 		old_image = None
 		for i in range(0,len(PALETTES_TO_CHECK)):
@@ -130,7 +130,7 @@ class SpiffyButtonAudit(unittest.TestCase):
 								["door_variant"],
 								[],
 							]
-		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH, _)
+		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH, "")
 
 		old_image = None
 		for i in range(0,len(PALETTES_TO_CHECK)):
