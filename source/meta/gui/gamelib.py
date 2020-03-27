@@ -65,12 +65,19 @@ def autodetect(sprite_filename):
 		        with open(sprite_manifest_filename) as f:
 		          sprite_manifest = json.load(f)
 		          for sprite_id in sprite_manifest:
-		            if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"] and "dims" in sprite_manifest[sprite_id]["input"]["png"]:
-		              check_size = sprite_manifest[sprite_id]["input"]["png"]["dims"]
-		              if loaded_image.size == tuple(check_size):
-		                game = get_game_class_of_type(console,game_name)
-		                sprite, animation_assist = game.make_player_sprite(sprite_filename)
-		                game_found = True
+		            if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"]:
+		              pngs = sprite_manifest[sprite_id]["input"]["png"]
+		              sprite_name = ""
+		              if not isinstance(pngs,list):
+		                pngs = [pngs]
+		              for png in pngs:
+		                if "dims" in png and not game_found:
+		                  check_size = png["dims"]
+		                  if loaded_image.size == tuple(check_size):
+		                    sprite_name = png["name"] if "name" in png else ""
+		                    game = get_game_class_of_type(console,game_name)
+		                    sprite, animation_assist = game.make_player_sprite(sprite_filename,sprite_name)
+		                    game_found = True
 		if not game_found:
 			#FIXME: English
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
@@ -79,7 +86,7 @@ def autodetect(sprite_filename):
 		with open(sprite_filename,"rb") as file:
 			zspr_data = bytearray(file.read())
 		game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
-		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
+		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename,"")
 	elif sprite_filename == "":
   		#FIXME: English
 		raise AssertionError("No filename given")
@@ -215,10 +222,10 @@ class GameParent():
 	def update_background_image(self):
 		self.set_background(self.current_background_title)
 
-	def make_player_sprite(self, sprite_filename):
-		return self.make_sprite_by_number(0x01, sprite_filename)
+	def make_player_sprite(self, sprite_filename, sprite_name):
+		return self.make_sprite_by_number(0x01, sprite_filename, sprite_name)
 
-	def make_sprite_by_number(self, sprite_number, sprite_filename):
+	def make_sprite_by_number(self, sprite_number, sprite_filename, sprite_name):
 		#go into the manifest and get the actual name of the sprite
 		with open(common.get_resource([self.console_name,self.internal_name,"manifests"],"manifest.json")) as file:
 			manifest = json.load(file)
@@ -228,7 +235,7 @@ class GameParent():
 			source_subpath = f"source.{self.console_name}.{self.internal_name}.{folder_name}"
 			sprite_module = importlib.import_module(f"{source_subpath}.sprite")
 			resource_subpath = os.path.join(self.console_name,self.internal_name,folder_name)
-			sprite = sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],resource_subpath)
+			sprite = sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],resource_subpath,sprite_name)
 
 			try:
 				animationlib = importlib.import_module(f"{source_subpath}.animation")

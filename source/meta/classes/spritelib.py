@@ -18,18 +18,23 @@ from source.meta.common import common
 
 class SpriteParent():
 	#parent class for sprites to inherit
-	def __init__(self, filename, manifest_dict, my_subpath):
+	def __init__(self, filename, manifest_dict, my_subpath, sprite_name=""):
 		self.classic_name = manifest_dict["name"]    #e.g. "Samus" or "Link"
 		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
 		self.overview_scale_factor = 2
-		if "input" in manifest_dict and "png" in manifest_dict["input"] and "overview-scale-factor" in manifest_dict["input"]["png"]:
-  			self.overview_scale_factor = manifest_dict["input"]["png"]["overview-scale-factor"]
+		if "input" in manifest_dict and "png" in manifest_dict["input"]:
+		  pngs = manifest_dict["input"]["png"]
+		  if not isinstance(pngs,list):
+		    pngs = [pngs]
+		  for png in pngs:
+		    if "name" in png and png["name"] == sprite_name and "overview-scale-factor" in png:
+		      self.overview_scale_factor = png["overview-scale-factor"]
 		self.plugins = None
 		self.has_plugins = False
-		self.load_layout()
-		self.load_animations()
+		self.load_layout(sprite_name)
+		self.load_animations(sprite_name)
 		self.import_from_filename()
 
 	#to make a new sprite class, you must write code for all of the functions in this section below.
@@ -74,9 +79,9 @@ class SpriteParent():
 
 	#the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
 
-	def load_layout(self):
+	def load_layout(self, _):
 		self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"))
-	def load_animations(self):
+	def load_animations(self, _):
 		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
 
