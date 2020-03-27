@@ -39,18 +39,6 @@ class SpriteParentTestVersion(SpriteParent):
 
 		return fake_module()
 
-	def get_supplemental_tiles(self,animation,direction,pose_number,palettes,frame_number):
-		#TODO
-		return None
-
-	def import_cleanup(self):
-		#TODO
-		return None
-
-	def get_alternate_tile(self, image_name, _):
-		#TODO
-		return None
-
 	def get_tiles_for_pose(self, animation, direction, pose_number, palettes, frame_number):
 		#TODO
 		return None
@@ -60,10 +48,6 @@ class SpriteParentTestVersion(SpriteParent):
 		return None
 
 	def get_pose_list(self, animation, direction):
-		#TODO
-		return None
-
-	def get_alternative_direction(self, animation, direction):
 		#TODO
 		return None
 
@@ -92,10 +76,6 @@ class SpriteParentTestVersion(SpriteParent):
 		return None
 
 	def save_as_RDC(self, filename):
-		#TODO
-		return None
-
-	def get_rdc_meta_data_block(self):
 		#TODO
 		return None
 
@@ -187,3 +167,50 @@ class TestSpriteParent(unittest.TestCase):
 	def test_default_get_palette_duration(self):
 		self.assertEqual(1, self.sprite.get_palette_duration(None))
 
+	###############################
+	# testing SpriteParent.get_supplemental_tiles()
+	###############################
+
+	def test_get_supplemental_tiles(self):
+		tiles = self.sprite.get_supplemental_tiles(None,None,None,None,None)
+		self.assertEqual(tiles, [])
+
+	###############################
+	# testing SpriteParent.import_cleanup()
+	###############################
+
+	def test_import_cleanup(self):
+		#at this time, this function has no whitebox functionality
+		self.sprite.import_cleanup()
+
+	###############################
+	# testing SpriteParent.get_alternative_direction()
+	###############################
+	
+	def test_get_alternative_direction(self):
+		dummy_animation = "DUMMY_KEY"
+		dummy_direction = "south by southwest"
+		self.sprite.animations = {dummy_animation: {dummy_direction: None}}
+		direction = self.sprite.get_alternative_direction(dummy_animation, None)
+		self.assertEqual(direction, dummy_direction)
+		
+	###############################
+	# testing SpriteParent.get_alternate_tile()
+	###############################
+
+	def test_get_alternate_tile(self):
+		with self.assertRaises(AssertionError):
+			self.sprite.get_alternate_tile("", None)
+
+	###############################
+	# testing SpriteParent.get_rdc_meta_data_block()
+	###############################
+
+	def test_get_rdc_meta_data_block(self):
+		#regression test.  I don't understand RDC format.
+		self.sprite.metadata = {
+			"sprite.name": "Baby Got Back",
+			"author.name": "Sir Mix-A-Lot",
+		}
+		intended_output = [(0, bytearray(b'2\x00\x00\x00{"title":"Baby Got Back","author":"Sir Mix-A-Lot"}'))]
+		self.assertEqual(intended_output, self.sprite.get_rdc_meta_data_block())
