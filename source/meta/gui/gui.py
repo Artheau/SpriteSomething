@@ -815,14 +815,14 @@ class SpriteSomethingMainFrame(tk.Frame):
 		dest_filename = None
 		default_ext = ""
 		filetypes = []
-		if self.game.console_name == "nes":
+		if self.sprite.view_only:
+  			filetypes = []
+		elif self.game.console_name == "nes":
 			default_ext = ".nes"
 			filetypes = [ "*.nes" ]
 		elif self.game.console_name == "snes":
 			default_ext = ".sfc"
 			filetypes = [ "*.sfc", "*.smc" ]
-		elif self.sprite.view_only:
-			filetypes = []
 
 		if len(filetypes) > 0:
 			if inject:
