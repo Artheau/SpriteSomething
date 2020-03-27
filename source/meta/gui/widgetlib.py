@@ -10,6 +10,8 @@ import locale
 from PIL import Image, ImageTk
 from functools import partial
 from source.meta.common import common
+from source.meta.gui import gui_common
+from source.meta import ssTranslate as fish
 
 def center_align_grid_in_frame(frame):
 	frame.grid_columnconfigure(0, weight=1)       #the 0th column will be the margin
@@ -107,6 +109,7 @@ class SpiffyButtons():
 		}
 		self.get_animation_engine = weakref.ref(animation_engine)   #TODO: check if this is needed via unit tests.  being very careful not to make a hard link to this, to avoid circular references
 		self.sprite_object = sprite_object
+		self.sprite_resource_subpath = sprite_object.resource_subpath
 		self.spiffy_buttons_section = tk.Frame(name=frame_name)
 		if align[0].lower() == 'r':   #align right
 			right_align_grid_in_frame(self.spiffy_buttons_section)
@@ -121,7 +124,7 @@ class SpiffyButtons():
 		#make a new variable in the sprite object called "<label>_var"
 		var_name = "_".join([label.lower(), "var"])
 		self.spiffy_dict[var_name] = tk.StringVar()
-		new_group = SpiffyGroup(self, self.max_row, label, self.spiffy_dict[var_name], self.sprite_object.resource_subpath, self.get_animation_engine, fish, independent)
+		new_group = SpiffyGroup(self, self.max_row, label, self.spiffy_dict[var_name], self.sprite_resource_subpath, fish, independent)
 		self.max_row += 1
 		return new_group
 
@@ -133,14 +136,15 @@ class SpiffyButtons():
 
 class SpiffyGroup():
 	#not meant to be used on its own, instead use class SpiffyButtons()
-	def __init__(self, parent, row, label, var, sprite_resource_subpath, animation_engine_getter, fish, independent=False):
+	def __init__(self, parent, row, label, var, sprite_resource_subpath, fish, independent=False):
 		label = fish.translate(sprite_resource_subpath.replace(os.sep,'.'),"section",label)
+		#disable sprite object in widgetlib
+		self.sprite_resource_subpath = sprite_resource_subpath
 		self.label = label
 		self.default_exists = False
 		self.parent = parent
 		self.independent = independent
-		self.parent.sprite_object.palette_buttons = []
-		self.palette_labels = common.get_resource(os.path.join(self.parent.sprite_object.resource_subpath,"manifests"),"palette-buttons.json")
+		self.palette_labels = common.get_resource(os.path.join(self.sprite_resource_subpath,"manifests"),"palette-buttons.json")
 		self.var = var
 		self.col = 0
 		self.row = row
@@ -158,9 +162,7 @@ class SpiffyGroup():
 		if image_filename == None:
 			image_filename == "blank.png"
 		#disable sprite object in widgetlib
-		icon_path = common.get_resource([self.parent.sprite_object.resource_subpath,"icons"],image_filename) #common.get_resource([self.parent.animation_engine.resource_subpath,"icons"],image_filename)
-		if icon_path is None:
-			icon_path = common.get_resource(os.path.join("meta","icons"),image_filename)
+		icon_path = common.get_resource([self.sprite_resource_subpath,"icons"],image_filename) #common.get_resource([self.parent.animation_engine.resource_subpath,"icons"],image_filename)
 		if icon_path is None:
   			icon_path = common.get_resource(["meta","icons"],image_filename)
 		if icon_path is None:
@@ -183,9 +185,9 @@ class SpiffyGroup():
 				command=partial(self.press_color_button,(self.row * 8) + self.col)
 			)
 			ToolTip(button,"_".join([self.label.lower(), internal_value_name, "button"]))
-			self.parent.sprite_object.palette_buttons.append(button)
+			self.parent.get_animation_engine().palette_buttons.append(button)
 		else:
-			display_text = fish.translate(self.parent.sprite_object.resource_subpath.replace(os.sep,'.'),self.label,internal_value_name)
+			display_text = fish.translate(self.sprite_resource_subpath.replace(os.sep,'.'),self.label,internal_value_name)
 			button = tk.Radiobutton(
 				self.parent.spiffy_buttons_section,
 				image=img,
@@ -242,36 +244,36 @@ class SpiffyGroup():
 		return amount_of_space
 
 	def press_spiffy_button(self, button):
-		self.parent.get_animation_engine().update_animation()
-		if len(self.parent.sprite_object.palette_buttons) >= 15:
-			pose_list = self.parent.sprite_object.get_current_pose_list()
+		aniengine = self.parent.get_animation_engine()
+		aniengine.update_animation()
+		if len(aniengine.palette_buttons) >= 15:
+			pose_list = aniengine.get_current_pose_list(aniengine.get_current_direction())
 			this_palette = []
-			if hasattr(self.parent.sprite_object,"suit_var"):
-				print("Getting Samus Suit Colors")
-				this_palette = self.parent.sprite_object.get_colors_from_master(self.parent.sprite_object.suit_var.get())
-			if hasattr(self.parent.sprite_object,"mail_var"):
-				print("Getting Link Mail Colors")
-				pose_list = self.parent.sprite_object.get_current_pose_list()
-				for tile_info in pose_list[self.parent.sprite_object.pose_number]["tiles"][::-1]:
-					default_range = self.parent.sprite_object.layout.get_property("import palette interval", tile_info["image"])
-					this_palette = self.parent.sprite_object.get_current_palette(self.parent.sprite_object.mail_var.get(),default_range)
+			if "mail_var" in aniengine.spiffy_dict:
+				pose_list = aniengine.get_current_pose_list(aniengine.get_current_direction())
+				if len(pose_list) > aniengine.pose_number:
+					for tile_info in pose_list[aniengine.pose_number]["tiles"][::-1]:
+						default_range = self.parent.sprite_object.layout.get_property("import palette interval", tile_info["image"])
+						this_palette = self.parent.sprite_object.get_palette(aniengine.spiffy_dict["mail_var"].get(),default_range,aniengine.frame_getter())
+			if "suit_var" in aniengine.spiffy_dict:
+				this_palette = self.parent.sprite_object.get_colors_from_master(aniengine.spiffy_dict["suit_var"].get())
 			if len(this_palette) >= 15:
 				for i in range(len(this_palette)):
-					if self.parent.sprite_object.classic_name in ["Link"] and i in [12]:
+					if "mail_var" in aniengine.spiffy_dict and i in [12]:
 						pass
 					else:
 						color = "#%02x%02x%02x" % this_palette[i]
-						self.parent.sprite_object.palette_buttons[i+1].configure(bg=color)
-						self.parent.sprite_object.palette_buttons[i+1].configure(relief=tk.RAISED)
-			if hasattr(self.parent.sprite_object,"gloves_var"):
-				print("Setting a Link Glove Color")
+						aniengine.palette_buttons[i+1].configure(bg=color)
+						aniengine.palette_buttons[i+1].configure(relief=tk.RAISED)
+			if "gloves_var" in aniengine.spiffy_dict:
 				for i in [16,17]:
-					self.parent.sprite_object.palette_buttons[i].configure(relief=tk.RAISED)
+					aniengine.palette_buttons[i].configure(relief=tk.RAISED)
 				if not button.winfo_name().find("gloves") == -1 and button.winfo_name().find("no") == -1:
 					button_id = 16 if not button.winfo_name().find("power") == -1 else 17
-					self.parent.sprite_object.palette_buttons[button_id].configure(relief=tk.SUNKEN)
+					aniengine.palette_buttons[button_id].configure(relief=tk.SUNKEN)
 
 	def press_color_button(self,index):
+		aniengine = self.parent.get_animation_engine()
 		color = str(colorchooser.askcolor())
 		if color.find("None") == -1:
 			matches = re.search(r'\(([^\)]*)\)([,\s\']*)([^\']*)(.*)',color)
@@ -281,14 +283,13 @@ class SpiffyGroup():
 				g = ("%x" % (int(int(color[3:5],16) / 8) * 8)).zfill(2)
 				b = ("%x" % (int(int(color[5:7],16) / 8) * 8)).zfill(2)
 				color = '#' + r + g + b
-				self.parent.sprite_object.palette_buttons[index-1].configure(bg=color)
-				if hasattr(self.parent.sprite_object,"mail_var"):
-					print("Saving a Link Mail Color")
-					color_set = self.parent.sprite_object.mail_var.get()
+				aniengine.palette_buttons[index-1].configure(bg=color)
+				if "mail_var" in aniengine.spiffy_dict:
+					color_set = aniengine.spiffy_dict["mail_var"].get()
+					print(color,color_set,index-1,0)
 					self.parent.sprite_object.set_current_palette_color(color,color_set,index-1,0)
-				elif hasattr(self.parent.sprite_object,"suit_var"):
-					print("Saving a Samus Suit Color")
-					color_set = self.parent.sprite_object.suit_var.get()
+				elif "suit_var" in aniengine.spiffy_dict:
+					color_set = aniengine.spiffy_dict["suit_var"].get()
 					self.parent.sprite_object.set_color_in_master(color,color_set,index-2)
 
 	def invoke_spiffy_button(self, button, event=None):

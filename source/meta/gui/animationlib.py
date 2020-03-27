@@ -345,7 +345,7 @@ class AnimationEngineParent():
 					(None,"",None,None), #a blank space, baby
 					(None,None,None,None)
 				],fish)
-			facing_group.add("left", "arrow-left.png", fish)
+			facing_group.add("left", "arrow-left.png", fish, False)
 			if self.overhead:
 				facing_group.add("down", "arrow-down.png", fish)
 			facing_group.add("right", "arrow-right.png", fish, default=True)
