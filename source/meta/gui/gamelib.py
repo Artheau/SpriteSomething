@@ -80,6 +80,12 @@ def autodetect(sprite_filename):
 			zspr_data = bytearray(file.read())
 		game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
 		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
+	elif sprite_filename == "":
+  		#FIXME: English
+		raise AssertionError("No filename given")
+	elif not os.path.isfile(sprite_filename):
+		#FIXME: English
+		raise AssertionError(f"Cannot open file: {sprite_filename}")
 	else:
 		#FIXME: English
 		raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its filename")

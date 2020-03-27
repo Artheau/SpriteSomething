@@ -248,7 +248,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		                  filepath = os.path.join(path,folder+filetype)
 		                  if os.path.isfile(filepath):
 		                    filename = filepath
-		                bundled_games[console][gamedir]["sprites"].append((name,partial(self.load_sprite,filename)))
+		                bundled_games[console][gamedir]["sprites"].append((name,partial(self.load_sprite,filename),filename == ""))
 		bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")
 		for console in bundled_games:
 		  bundled_console = bundled_games[console]
@@ -257,8 +257,8 @@ class SpriteSomethingMainFrame(tk.Frame):
   			bundled_game = bundled_games[console][bundled_game]
   			bundled_game_menu = tk.Menu(bundled_console_menu, tearoff=0, name="bundled_" + bundled_game["game"]["internal name"] + "_menu")
   			for sprite in bundled_game["sprites"]:
-  				label,command = sprite
-  				bundled_game_menu.add_command(label=label,command=command)
+  				label,command,disabled = sprite
+  				bundled_game_menu.add_command(label=label,command=command,state="disabled" if disabled else "normal")
   			bundled_console_menu.add_cascade(label=bundled_game["game"]["name"], menu=bundled_game_menu)
 		  bundle_menu.add_cascade(label=self.fish.translate("meta","consoles",console), menu=bundled_console_menu)
 		self.menu.add_cascade(label=self.fish.translate("meta","menu","bundle"), menu=bundle_menu)
