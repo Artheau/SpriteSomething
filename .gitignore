@@ -41,5 +41,4 @@ working_dirs.json
 
 # no custom files
 custom/
-resources/user/snes/metroid3/samus/sheets
-resources/user/snes/zelda3/link/sheets
+resources/user/*/*/*/sheets

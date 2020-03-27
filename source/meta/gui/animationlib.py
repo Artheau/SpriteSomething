@@ -27,10 +27,7 @@ class AnimationEngineParent():
 		self.plugins = []
 		self.prev_palette_info = []
 
-		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
-			self.animations = json.load(file)
-		if "$schema" in self.animations:
-			del self.animations["$schema"]
+		self.animations = self.sprite.animations
 
 		self.current_animation = next(iter(self.animations.keys()))   #using a default value until the animation_panel attachment overrides this
 
@@ -255,7 +252,7 @@ class AnimationEngineParent():
 
 	def get_current_direction(self):
 		if self.spiffy_dict:
-			direction = self.spiffy_dict["facing_var"].get().lower()   #grabbed from the direction buttons, which are named "facing"
+			direction = self.spiffy_dict["facing_var"].get().lower() if "facing_var" in self.spiffy_dict else "right"   #grabbed from the direction buttons, which are named "facing"
 			if "aiming_var" in self.spiffy_dict:
 				direction = "_aim_".join([direction, self.spiffy_dict["aiming_var"].get().lower()])
 			return direction
