@@ -89,6 +89,8 @@ class SpriteParent():
 	def load_animations(self, _):
 		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
+			if "$schema" in self.animations:
+			  del self.animations["$schema"]
 
 	def import_from_filename(self):
 		_,file_extension = os.path.splitext(self.filename)
