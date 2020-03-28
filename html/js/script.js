@@ -11,7 +11,7 @@ function readTextFile(file) {
         // Return the thing
         allText = rawFile.responseText;
       // If it's not OK
-      } else if(rawFile.status == 404) {
+      } else if(rawFile.status === 404) {
         // Return null
         return null;
       }
@@ -175,20 +175,26 @@ function init(mode = "index") {
 			.attr("rel","stylesheet")
 			.attr("type","text/css")
 			.attr("href",filepath + "css.css");
+    if(readTextFile(filepath + "css.css")) {
         $("head").append(link);
+    }
 
 		let filename = filepath + "sprites.json";
 	  let spritesManifest = readTextFile(filename);	// get sprites manifest
-	  let sprites = JSON.parse(spritesManifest);				// parse JSON
-	  sprites.sort(function(a,b) {								// sort by name
-	    return a.name.localeCompare(b.name);
-	  });
+    let sprites = null;
+    if(spritesManifest) {
+  	  sprites = JSON.parse(spritesManifest);				// parse JSON
+  	  sprites.sort(function(a,b) {								// sort by name
+  	    return a.name.localeCompare(b.name);
+  	  });
+    }
 
 		filename = filepath + "layer-files.json";
 		let layerfilesManifest = readTextFile(filename);
+		let layerfiles_container = undefined;
 		if(layerfilesManifest) {
 			let layerfiles = JSON.parse(layerfilesManifest);
-			let layerfiles_container = $("<ul>");
+			layerfiles_container = $("<ul>");
 			for (let layerext in layerfiles) {
 				let layerfile = layerfiles[layerext];
 				let app = layerfile["app"];
