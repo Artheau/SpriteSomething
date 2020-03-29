@@ -1,0 +1,12 @@
+.sprite-preview {
+/*
+  background-size:     calc(876px * 2) calc(2543px * 2);
+  background-position: calc(-490px * 2) calc(-259px * 2);
+*/
+  background-size:     calc(64px * 2) calc( 96px * 2);
+  background-position: calc( 0px * 2) calc(-24px * 2);
+  width:               calc(16px * 2);
+  height:              calc(24px * 2);
+  margin:              auto;
+  image-rendering:     pixelated;
+}
