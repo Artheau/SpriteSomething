@@ -3,6 +3,8 @@
 block_cipher = None
 console = False
 
+BINARY_SLUG = "SpriteSomething"
+
 def recurse_for_py_files(names_so_far):
   returnvalue = []
   for name in os.listdir(os.path.join(*names_so_far)):
@@ -23,7 +25,7 @@ def recurse_for_py_files(names_so_far):
 
 hiddenimports = recurse_for_py_files(["source"])
 
-a = Analysis(['../SpriteSomething.py'],
+a = Analysis([f"../{BINARY_SLUG}.py"],
              pathex=[],
              binaries=[],
              datas=[],
@@ -51,7 +53,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='SpriteSomething',
+          name=BINARY_SLUG,
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,

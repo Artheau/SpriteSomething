@@ -42,3 +42,4 @@ working_dirs.json
 # no custom files
 custom/
 resources/user/*/*/*/sheets
+resources/tmp/*

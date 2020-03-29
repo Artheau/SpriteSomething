@@ -40,7 +40,7 @@ def get_tk_image(image):
 	return tk.PhotoImage(data=img_str)
 
 # create chooser for game files that have multiple sprite options for extraction
-def create_chooser(console_name,game_names):
+def create_extraction_chooser(console_name,game_names):
 	def choose_game(game_name):
 		game_selector.set(game_name)
 		game_chooser.destroy()
@@ -79,6 +79,50 @@ def create_chooser(console_name,game_names):
 	else:
 		selected_game = random.choice(game_names)
 	return selected_game
+
+# create chooser for game files that have multiple sprite options for extraction
+def create_sheet_chooser(console_name,game_name,sheets):
+	def choose_sheet(sheet_name):
+		sheet_selector.set(sheet_name)
+		sheet_chooser.destroy()
+
+	selected_sheet = None
+
+	if len(sheets) > 1:
+		sheet_chooser = tk.Toplevel()
+		#FIXME: English
+		sheet_chooser.title("Choose Sheet to Open")
+		sheet_chooser.geometry("640x140")
+		sheet_selector = tk.StringVar(sheet_chooser)
+		sheet_buttons = []
+		i = 1
+		j = 1
+		cols = 5
+		for sheet_name in sheets:
+			label = os.path.basename(sheet_name)
+			sheet_button = tk.Button(
+				sheet_chooser,
+				width=16,
+				height=1,
+				text=label,
+				command=partial(choose_sheet,sheet_name)
+			)
+			sheet_button.grid(row=i,column=j,sticky=tk.NSEW)
+			sheet_buttons.append(sheet_button)
+			if j == cols:
+				i += 1
+				j  = 1
+			else:
+				j += 1
+		sheet_chooser.grid_rowconfigure(0,weight=1)
+		sheet_chooser.grid_rowconfigure(cols + 2,weight=1)
+		sheet_chooser.grid_columnconfigure(0,weight=1)
+		sheet_chooser.grid_columnconfigure(i + 1,weight=1)
+		sheet_chooser.wait_window()
+		selected_sheet = sheet_selector.get()
+	else:
+		selected_sheet = random.choice(sheets)
+	return selected_sheet
 
 # download sprites for specified sprite manifest URL
 def get_sprites(self,title,dir,url):

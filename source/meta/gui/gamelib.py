@@ -9,6 +9,8 @@ import tkinter as tk	#for GUI stuff
 import random					#for choosing background image to load on app startup
 from PIL import Image, ImageFile
 from functools import partial
+from shutil import unpack_archive
+import zipfile
 from source.snes import romhandler as snes
 from source.meta.gui import widgetlib
 from source.meta.common import common
@@ -17,7 +19,8 @@ from source.meta.gui import gui_common #TODO: Should not use GUI stuff in game c
 def autodetect(sprite_filename):
 	#need to autodetect which game, and which sprite
 	#then return an instance of THAT game's class, and an instance of THAT sprite
-	_,file_extension = os.path.splitext(sprite_filename)
+	file_slug,file_extension = os.path.splitext(sprite_filename)
+	file_slug = os.path.basename(file_slug)
   #If this is a SNES filetype
 	if file_extension.lower() in [".sfc",".smc"]:
 		#If the file is a rom, then we can go into the internal header and get the name of the game
@@ -26,7 +29,7 @@ def autodetect(sprite_filename):
 
 		#prompt user for input
 		#FIXME: Ugh, more tk
-		selected_game = gui_common.create_chooser("snes",game_names)
+		selected_game = gui_common.create_extraction_chooser("snes",game_names)
 
 		if not selected_game:
 			selected_game = random.choice(game_names)
@@ -41,7 +44,7 @@ def autodetect(sprite_filename):
 
 		#prompt user for input
 		#FIXME: Ugh, more tk
-		selected_game = gui_common.create_chooser("nes",game_names)
+		selected_game = gui_common.create_extraction_chooser("nes",game_names)
 
 		if not selected_game:
 			selected_game = random.choice(game_names)
@@ -87,6 +90,41 @@ def autodetect(sprite_filename):
 			zspr_data = bytearray(file.read())
 		game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
 		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename,"")
+	elif file_extension.lower() == ".zip":
+		thisData = {
+		  "likely": {
+		    "pc": {},
+		    "nes": {},
+		    "snes": { "mother2": False }
+		  },
+		  "lists": {
+		    "snes": {
+		      "mother2": [ 1,5,6,7,8,14,15,16,17,21,27,335,362,378,437,457 ]
+		    }
+		  },
+		  "filenames": {
+		    "snes": {
+		      "mother2": []
+		    }
+		  }
+		}
+		for i in range (0,len(thisData["lists"]["snes"]["mother2"])):
+			thisData["lists"]["snes"]["mother2"][i] = (f'{thisData["lists"]["snes"]["mother2"][i]:03}') + ".png"
+		scratch = os.path.join(".","resources","tmp","archive",file_slug)
+		if not os.path.isdir(scratch):
+  			os.makedirs(scratch)
+		with zipfile.ZipFile(sprite_filename,'r') as thisZip:
+			for file in thisZip.namelist():
+			  if os.path.basename(file) in thisData["lists"]["snes"]["mother2"]:
+			    thisData["likely"]["snes"]["mother2"] = True
+			    thisData["filenames"]["snes"]["mother2"].append(file)
+			if thisData["likely"]["snes"]["mother2"]:
+			  selected_sheet = gui_common.create_sheet_chooser("snes","mother2",thisData["filenames"]["snes"]["mother2"])
+			  game = get_game_class_of_type("snes","mother2")
+			  #And by default, we will grab the player sprite from this game
+			  sheet_slug,sheet_extension = os.path.splitext(os.path.basename(selected_sheet))
+			  thisZip.extract(selected_sheet,scratch)
+			  sprite, animation_assist = game.make_player_sprite(os.path.join(scratch,selected_sheet),sheet_slug)
 	elif sprite_filename == "":
   		#FIXME: English
 		raise AssertionError("No filename given")

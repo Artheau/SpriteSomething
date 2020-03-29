@@ -769,9 +769,10 @@ class SpriteSomethingMainFrame(tk.Frame):
 					self.unsaved_changes = False
 
 		filetypes = ".zspr " # FIXME: Assuming Z3Link-only
-		filetypes += ".png "
+		filetypes += ".png " # PNG sniffer
 #		filetypes += ".nes " # NES RomHandler
 		filetypes += ".smc .sfc " # SNES RomHandler
+		filetypes += ".zip " # snes/mother2 handler
 		filename = filedialog.askopenfilename(initialdir=self.working_dirs["file.open"], title=self.fish.translate("meta","dialogue","file.open.title"), filetypes=((self.fish.translate("meta","dialogue","file.open.types.label"),filetypes),))
 		if filename:
 			#if we've got a filename, set the working dir and load the sprite

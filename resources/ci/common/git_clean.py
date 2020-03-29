@@ -1,4 +1,5 @@
 import subprocess	# do stuff at the shell level
+import os
 
 def git_clean(clean_ignored=True, clean_user=False):
   excludes = [
@@ -9,7 +10,7 @@ def git_clean(clean_ignored=True, clean_user=False):
   ]
 
   if not clean_user:
-    excludes.append("resources/user*")  # keep user resources
+    excludes.append(os.path.join("resources","user*"))  # keep user resources
 
   excludes = ['--exclude={0}'.format(exclude) for exclude in excludes]
 
