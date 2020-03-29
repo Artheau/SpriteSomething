@@ -269,6 +269,10 @@ function init(mode = "index") {
 	    let name = sprite.name;									// sprite name
 	    let author = sprite.author;								// sprite author
 	    let file = sprite.file;									// sprite url
+	    let img = file;
+	    if(sprite.hasOwnProperty("preview")) {
+	    	img = sprite.preview;
+	    }
 	    let name_link = $("<a>")
 	    	.attr("href",file)
 	    	.text(name);			// name link
@@ -280,7 +284,7 @@ function init(mode = "index") {
 	    	.text(author);		// author container
 	    let sprite_image = $("<div>")
 	    	.attr("class","sprite-preview")
-	    	.attr("style","background-image:url(" + file + ")");		// image container
+	    	.attr("style","background-image:url(" + img + ")");		// image container
 	    let sprite_object = $("<div>")
 	    	.attr("class","sprite")
 	    	.append(name_line)
