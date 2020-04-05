@@ -104,7 +104,7 @@ class SpiffyButtonAudit(unittest.TestCase):
 								["red_mail"],
 								["red_mail", "power_gloves"],
 								["red_mail", "titan_gloves"],
-								["titan_gloves"],
+#								["titan_gloves"],
 							]
 		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH)
 
@@ -122,13 +122,13 @@ class SpiffyButtonAudit(unittest.TestCase):
 								["varia_suit","xray_variant"],
 								["gravity_suit","xray_variant"],
 								["gravity_suit"],
-								[],
+#								[],
 								["hyper_variant"],
 								["xray_variant"],
-								[],
+#								[],
 								["sepia_variant"],
 								["door_variant"],
-								[],
+#								[],
 							]
 		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH)
 
