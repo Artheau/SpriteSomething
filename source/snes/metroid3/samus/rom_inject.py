@@ -839,7 +839,7 @@ def disable_upper_bypass(samus,rom):
 
 def write_spinjump_config(rom):
 	# Use the new screw attack animations if enabled
-	rom.write_to_snes_address(0xB4F500, 0x0001, 2)
+	rom._apply_single_fix_to_snes_address(0xB4F500, 0xFFFF, 0x0001, 2)
 	return True
 
 def create_new_control_code(samus,rom):
