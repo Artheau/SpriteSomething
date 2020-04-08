@@ -92,7 +92,11 @@ class SpiffyButtonAudit(unittest.TestCase):
 	#added this test because our spiffy buttons kept breaking every tiem there was a typoe
 	def image_is_same(self, image1, image2):  #not a test; don't name this "test"
 		diff = ImageChops.difference(image1, image2)
-		return diff.getbbox() is None  #no bbox if they are the same
+		image1_colors = {color:count for (count,color) in image1.getcolors()}
+		image2_colors = {color:count for (count,color) in image2.getcolors()}
+		#no bbox if they are the same
+		return (diff.getbbox() is None) and \
+			(image1_colors == image2_colors) #AND they are drawing from the same palette (Pillow 7.0 made this line necessary)
 
 	def test_link_palette_audit(self):
 		PALETTES_TO_CHECK = [	[],
