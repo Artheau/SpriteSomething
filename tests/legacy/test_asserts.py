@@ -111,8 +111,8 @@ class SpiffyButtonAudit(unittest.TestCase):
 		old_image = None
 		for i in range(0,len(PALETTES_TO_CHECK)):
 			new_image = link_sprite.get_image("Stand", "right", 0, PALETTES_TO_CHECK[i], 0)[0]
-#			if old_image is not None:
-#				self.assertFalse(self.image_is_same(old_image,new_image))
+			if old_image is not None:
+				self.assertFalse(self.image_is_same(old_image,new_image))
 			old_image = new_image
 
 	def test_samus_palette_audit(self):
@@ -135,8 +135,8 @@ class SpiffyButtonAudit(unittest.TestCase):
 		old_image = None
 		for i in range(0,len(PALETTES_TO_CHECK)):
 			new_image = samus_sprite.get_image("Stand", "right", 0, PALETTES_TO_CHECK[i], 0)[0]
-#			if old_image is not None:
-#				self.assertFalse(self.image_is_same(old_image,new_image))
+			if old_image is not None:
+				self.assertFalse(self.image_is_same(old_image,new_image))
 			old_image = new_image
 
 
