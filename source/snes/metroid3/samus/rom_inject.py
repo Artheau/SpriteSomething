@@ -838,8 +838,8 @@ def disable_upper_bypass(samus,rom):
 	return success_code
 
 def write_spinjump_config(rom):
-	# Use the new screw attack animations if enabled
-	rom._apply_single_fix_to_snes_address(0xB4F500, 0xFFFF, 0x0001, 2)
+	# Use the new screw attack animations if enabled (set $9B93FE to $0000 to disable, $0001 to enable.  All other numbers also enable.)
+	rom._apply_single_fix_to_snes_address(0x9B93FE, 0x0090, 0x0001, 2)
 	return True
 
 def create_new_control_code(samus,rom):
@@ -865,8 +865,8 @@ def create_new_control_code(samus,rom):
 	'''
 
 	'''
-	;code modified by Total and HAR
-	AF 00 F5 B4 ;LDA config_screwattack
+	;code modified by Total and HAR (and then Artheau again)
+	AF FE 93 9B ;LDA config_screwattack
 	F0 11       ;BEQ eat_up_time    ; If config_screwattack is 0, use the vanilla screw attack code
 	;---
 	AD A2 09   ;LDA $09A2       ;get item equipped info
@@ -891,7 +891,7 @@ def create_new_control_code(samus,rom):
 	60         ;RTS             ;now GET OUT
 	'''
 
-	NEW_SUBROUTINE = [  0xAF, 0x00, 0xF5, 0xB4,
+	NEW_SUBROUTINE = [  0xAF, 0xFE, 0x93, 0x9B,
 						0xF0, 0x11,
 						0xAD, 0xA2, 0x09,
 						0x89, 0x00, 0x02,
