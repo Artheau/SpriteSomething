@@ -92,7 +92,11 @@ class SpiffyButtonAudit(unittest.TestCase):
 	#added this test because our spiffy buttons kept breaking every tiem there was a typoe
 	def image_is_same(self, image1, image2):  #not a test; don't name this "test"
 		diff = ImageChops.difference(image1, image2)
-		return diff.getbbox() is None  #no bbox if they are the same
+		image1_colors = {color:count for (count,color) in image1.getcolors()}
+		image2_colors = {color:count for (count,color) in image2.getcolors()}
+		#no bbox if they are the same
+		return (diff.getbbox() is None) and \
+			(image1_colors == image2_colors) #AND they are drawing from the same palette (Pillow 7.0 made this line necessary)
 
 	def test_link_palette_audit(self):
 		PALETTES_TO_CHECK = [	[],
@@ -111,8 +115,9 @@ class SpiffyButtonAudit(unittest.TestCase):
 		old_image = None
 		for i in range(0,len(PALETTES_TO_CHECK)):
 			new_image = link_sprite.get_image("Stand", "right", 0, PALETTES_TO_CHECK[i], 0)[0]
-#			if old_image is not None:
-#				self.assertFalse(self.image_is_same(old_image,new_image))
+			if old_image is not None:
+				with self.subTest(new_palette = PALETTES_TO_CHECK[i], old_palette = PALETTES_TO_CHECK[i-1]):
+					self.assertFalse(self.image_is_same(old_image,new_image))
 			old_image = new_image
 
 	def test_samus_palette_audit(self):
@@ -135,8 +140,9 @@ class SpiffyButtonAudit(unittest.TestCase):
 		old_image = None
 		for i in range(0,len(PALETTES_TO_CHECK)):
 			new_image = samus_sprite.get_image("Stand", "right", 0, PALETTES_TO_CHECK[i], 0)[0]
-#			if old_image is not None:
-#				self.assertFalse(self.image_is_same(old_image,new_image))
+			if old_image is not None:
+				with self.subTest(new_palette = PALETTES_TO_CHECK[i], old_palette = PALETTES_TO_CHECK[i-1]):
+					self.assertFalse(self.image_is_same(old_image,new_image))
 			old_image = new_image
 
 
