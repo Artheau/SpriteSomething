@@ -11,5 +11,17 @@
 				"overview-scale-factor": 1
 			}
 		}
+	},
+	"2": {
+		"type": "Damsel Character Sprite",
+		"name": "Damsel",
+		"folder name": "damsel",
+		"view-only": true,
+		"input": {
+			"png": {
+				"dims": [1024,1024],
+				"overview-scale-factor": 1
+			}
+		}
 	}
 }
