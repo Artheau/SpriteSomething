@@ -157,8 +157,8 @@ def move_gun_tiles(samus,rom):
 	# they point to DMA locations in bank $9A, e.g. DW $0000, $9A00, $9C00, $9E00
 	#I need a place with room, preferably in bank $90, for a few more pointers to accomodate all ten directions,
 	# so that I can have ten pointers to ten different DMA sets of this type
-	#It just so happens that I'm going to free up $9086AE-$9087BC with some other changes that I'm making, so hooray!
-	PLACE_TO_PUT_GUN_DMA_POINTERS = 0x9086AE      #otherwise, if this is a problem, can default to the end of the bank
+	#It just so happens that I'm going to free up $9086AF-$9087BC with some other changes that I'm making, so hooray!
+	PLACE_TO_PUT_GUN_DMA_POINTERS = 0x9086AF      #otherwise, if this is a problem, can default to the end of the bank
 	for direction in range(10):
 		gfx_pointer = PLACE_TO_PUT_GUN_DMA_POINTERS+8*direction
 		rom.write_to_snes_address(0x90C7A5+2*direction, gfx_pointer % 0x10000, 2)
@@ -843,16 +843,16 @@ def write_spin_attack_config(rom):
 	return True
 
 def create_new_control_code(samus,rom):
-	#new control code: place at $908688-$9086AD (0x26 bytes)
+	#new control code: place at $908688-$9086AE (0x27 bytes)
 	SUBROUTINE_LOCATION = 0x908688
 	'''
 	AD A2 09    ;LDA $09A2       ;get item equipped info
 	89 00 02    ;BIT #$0200      ;check for space jump equipped
-	D0 0F       ;BNE screw_attack  ;if space jump, branch to regular screw attack stuff
+	D0 10       ;BNE screw_attack  ;if space jump, branch to regular screw attack stuff
 	AF FE 93 9B ;LDA config_spinattack   ;see if spin attack is enabled
-	F0 09       ;BEQ screw_attack  ;if disabled, do regular screw attack animation
+	F0 0A       ;BEQ screw_attack  ;if disabled, do regular screw attack animation (if branch taken, uses one more clock cycle)
 	;:spin_attack
-	AD 96 0A    ;LDA $0A96       ;get the pose number
+	AF 96 0A 7E ;LDA.l $7E0A96   ;get the pose number (LDA.l here to add one more clock cycle to preserve timing)
 	18          ;CLC             ;prepare to do math
 	69 1B 00    ;ADC #$001B      ;skip past the old screw attack to the new stuff
 	80 09       ;BRA get_out     ;then prepare to end subroutine
@@ -871,10 +871,10 @@ def create_new_control_code(samus,rom):
 	#TODO: retype this
 	NEW_SUBROUTINE = [  0xAD, 0xA2, 0x09,
 						0x89, 0x00, 0x02,
-						0xD0, 0x0F,
+						0xD0, 0x10,
 						0xAF, 0xFE, 0x93, 0x9B,
-						0xF0, 0x09,
-						0xAD, 0x96, 0x0A,
+						0xF0, 0x0A,
+						0xAF, 0x96, 0x0A, 0x7E,
 						0x18,
 						0x69, 0x1B, 0x00,
 						0x80, 0x09,
@@ -887,7 +887,7 @@ def create_new_control_code(samus,rom):
 						0x38,
 						0x60]
 
-	rom.bulk_write_to_snes_address(SUBROUTINE_LOCATION, NEW_SUBROUTINE, 0x26)
+	rom.bulk_write_to_snes_address(SUBROUTINE_LOCATION, NEW_SUBROUTINE, 0x27)
 
 	#need to link up this subroutine to control code $F5
 	success_code = rom._apply_single_fix_to_snes_address(0x90832E, 0x8344, SUBROUTINE_LOCATION % 0x10000, 2)
@@ -1005,17 +1005,17 @@ def implement_spin_attack(samus,rom):
 	AD 7E 19    LDA $197E         ; get physics flag
 	89 04 00    BIT #$0004        ; If liquid physics are disabled, underwater status is not important
 	D0 0B       BNE equip_check
-	80 31       BRA underwater    ; ok, you're probably underwater at this point
+	80 32       BRA underwater    ; ok, you're probably underwater at this point
 	:;acid_check
 	AD 62 19    LDA $1962
 	30 04       BMI equip_check   ; If [lava/acid Y position] < 0, then there is no acid, so underwater status is not important
 	C5 14       CMP $14           ;
-	30 28       BMI underwater    ; If [lava/acid Y position] < Samus' top boundary position, then you are underwater
+	30 29       BMI underwater    ; If [lava/acid Y position] < Samus' top boundary position, then you are underwater
 
 	;:equip_check
 	AD A2 09        ;LDA $09A2        ;get equipped items
 	89 08 00        ;BIT #$0008       ;check for screw attack equipped
-	F0 19           ;BEQ just_one     ;if screw attack not equipped, just do normal advance
+	F0 1A           ;BEQ just_one     ;if screw attack not equipped, just do normal advance
 	89 00 02        ;BIT #$0200       ;check for space jump
 	F0 07           ;BEQ spin_attack  ;if space jump not equipped, branch out
 	;:screw_attack
@@ -1024,9 +1024,9 @@ def implement_spin_attack(samus,rom):
 	6B              ;RTL              ;GET OUT
 	;:spin_attack
 	AF FE 93 9B     ;LDA config_spinattack   ;see if spin attack is enabled
-	F0 F3           ;BEQ screw_attack  ;if disabled, do regular screw attack animation
+	F0 F3           ;BEQ screw_attack  ;if disabled, do regular screw attack animation (if branch taken, uses one more clock cycle)
 	A9 1C 00        ;LDA #001C        ;skip over to our new spin attack section
-	8D 9A 0A        ;STA $0A9A
+	8F 9A 0A 7E     ;STA.l $7E0A9A    ;(STA.l here to add one more clock cycle to preserve timing)
 	6B              ;RTL              ;GET OUT
 	;:just_one
 	A9 01 00        ;LDA #0001        ;default to first pose, as in classic
@@ -1038,8 +1038,9 @@ def implement_spin_attack(samus,rom):
 	AD 1C 0A        ;LDA $0A1C        ;get animation #
 	89 80 00        ;BIT #$0080       ;check for animations $81,$82
 	F0 F1           ;BEQ just_one     ;if not, then just do normal stuff
-	80 CE           ;BRA equip_check  ;but if so, we have to go through all the normal checks
+	80 CD           ;BRA equip_check  ;but if so, we have to go through all the normal checks
 	'''
+
 	NEW_CODE = [0xAD, 0xA2, 0x09,
 				0x89, 0x20, 0x00,
 				0xD0, 0x20,
@@ -1051,14 +1052,14 @@ def implement_spin_attack(samus,rom):
 				0xAD, 0x7E, 0x19,
 				0x89, 0x04, 0x00,
 				0xD0, 0x0B,
-				0x80, 0x31,
+				0x80, 0x32,
 				0xAD, 0x62, 0x19,
 				0x30, 0x04,
 				0xC5, 0x14,
-				0x30, 0x28,
+				0x30, 0x29,
 				0xAD, 0xA2, 0x09,
 				0x89, 0x08, 0x00,
-				0xF0, 0x19,
+				0xF0, 0x1A,
 				0x89, 0x00, 0x02,
 				0xF0, 0x07,
 				0xA9, 0x02, 0x00,
@@ -1067,7 +1068,7 @@ def implement_spin_attack(samus,rom):
 				0xAF, 0xFE, 0x93, 0x9B,
 				0xF0, 0xF3,
 				0xA9, 0x1C, 0x00,
-				0x8D, 0x9A, 0x0A,
+				0x8F, 0x9A, 0x0A, 0x7E,
 				0x6B,
 				0xA9, 0x01, 0x00,
 				0x8D, 0x9A, 0x0A,
@@ -1075,11 +1076,11 @@ def implement_spin_attack(samus,rom):
 				0xAD, 0x1C, 0x0A,
 				0x89, 0x80, 0x00,
 				0xF0, 0xF1,
-				0x80, 0xCE]
+				0x80, 0xCD]
 
 
 	#put the new code in the ROM
-	rom.bulk_write_to_snes_address(NEW_SUBROUTINE_LOCATION,NEW_CODE,90)
+	rom.bulk_write_to_snes_address(NEW_SUBROUTINE_LOCATION,NEW_CODE,91)
 
 	#loop in the new code
 	#previously: $91:F634 A9 01 00     LDA #$0001
