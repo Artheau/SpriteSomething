@@ -1,24 +1,24 @@
 {
-	"$schema": "../../../../../../resources/app/snes/metroid3/samus/manifests/samus-language.schema.json",
-	"section": {
-		"aiming": "Aiming",
-		"facing": "Facing",
-		"suit": "Suit",
-		"variant": "Variant",
-		"cannon-port": "Cannon Port"
-	},
-	"Aiming": {
-		"up": "Arriba",
-		"diag_up": "Diagonal hacia Arriba",
-		"neutral": "Neutral",
-		"shoot": "Disparar",
-		"diag_down": "Diagonal hacia Abajo",
-		"down": "Abajo"
-	},
-	"Facing": {
-		"left": "Izquierda",
-		"right": "Derecha"
-	},
+  "$schema": "../../../../../../resources/app/snes/metroid3/samus/manifests/samus-language.schema.json",
+  "section": {
+    "aiming": "Aiming",
+    "facing": "Facing",
+    "suit": "Suit",
+    "variant": "Variant",
+    "cannon-port": "Cannon Port"
+  },
+  "Aiming": {
+    "up": "Arriba",
+    "diag_up": "Diagonal hacia Arriba",
+    "neutral": "Neutral",
+    "shoot": "Disparar",
+    "diag_down": "Diagonal hacia Abajo",
+    "down": "Abajo"
+  },
+  "Facing": {
+    "left": "Izquierda",
+    "right": "Derecha"
+  },
   "Suit": {
     "power": "Traje Chozo",
     "varia": "Traje Climático",

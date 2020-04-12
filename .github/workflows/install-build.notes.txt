@@ -1,24 +1,24 @@
-  # Installation & Tests
-  #  Set up environment
-  #   Windows uses pip
-  #   Linux/Mac uses pip3
-  #   Windows/Linux uses python
-  #   Mac uses python3
-  # Test
-  #  Run tests.py
-  install-test:
-    name: Installation & Tests
-    # cycle through os list
-    runs-on: ${{ matrix.os-name }}
+# Installation & Tests
+#  Set up environment
+#   Windows uses pip
+#   Linux/Mac uses pip3
+#   Windows/Linux uses python
+#   Mac uses python3
+# Test
+#  Run tests.py
+install-test:
+  name: Installation & Tests
+  # cycle through os list
+  runs-on: ${{ matrix.os-name }}
 
-    # VM settings
-    #  os & python versions
-    strategy:
-      matrix:
-        os-name: [ ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest ]
-        python-version: [ 3.7 ]
+  # VM settings
+  #  os & python versions
+  strategy:
+    matrix:
+      os-name: [ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest]
+      python-version: [3.7]
 
-    steps:
+  steps:
     # checkout commit
     - name: Checkout commit
       uses: actions/checkout@v1
