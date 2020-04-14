@@ -1,7 +1,9 @@
 import platform, sys, os, subprocess
 import source.meta.common.constants as CONST
-import pkg_resources
 from datetime import datetime
+
+if "windows" in platform.system().lower():
+  import pkg_resources
 
 def diagpad(str):
   return str.ljust(len("SpriteSomething Version") + 5,'.')
@@ -25,21 +27,23 @@ def output():
     lines.append(diagpad("Filepath Separator") + os.sep)
   if hasattr(os, "pathsep"):
     lines.append(diagpad("Path Env Separator") + os.pathsep)
-  lines.append("")
-  lines.append("Packages")
-  lines.append("--------")
-  '''
-  #this breaks when run from the .exe
-  reqs = subprocess.check_output([sys.executable, '-m', 'pip', 'freeze'])
-  installed_packages = [r.decode() for r in reqs.split()]
-  for pkg in installed_packages:
-   pkg = pkg.split("==")
-   lines.append(diagpad(pkg[0]) + pkg[1])
-  '''
-  installed_packages = [str(d) for d in pkg_resources.working_set]   #this doesn't work from the .exe either, but it doesn't crash the program
-  installed_packages.sort()
-  for pkg in installed_packages:
-    lines.append(pkg)
+
+  if("windows" in platform.system().lower() and hasattr(pkg_resources,"working_set")):
+    lines.append("")
+    lines.append("Packages")
+    lines.append("--------")
+    pkgs = {}
+    longest_pkg = 0
+    filler = '.'
+    installed_packages = [str(d) for d in list(pkg_resources.working_set)]   #this doesn't work from the .exe either, but it doesn't crash the program
+    installed_packages.sort()
+    for pkg in installed_packages:
+      pkg = pkg.split(' ')
+      if len(pkg[0]) > longest_pkg:
+        longest_pkg = len(pkg[0])
+      pkgs[pkg[0]] = pkg[1]
+    for pkg_name,pkg_ver in pkgs.items():
+      lines.append(pkg_name.ljust(longest_pkg + 5).replace(' ', filler) + pkg_ver)
 
   return lines
 
