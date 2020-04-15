@@ -1,0 +1,20 @@
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.js text   # JavaScript
+*.md text   # Markdown
+*.sh text   # Shell script
+*.py text   # python script
+*.css text  # Cascading Style Sheets
+*.off text  # Disabled files
+*.txt text  # Plain-text
+*.yml text  # Yet Another Markup Language
+*.yaml text #
+*.html text # HyperText Markup Language
+*.json text # JavaScript Object Notation
+
+# Denote all files that are truly binary and should not be modified.
+*.ico binary  # Icon
+*.gif binary  # Graphics Interchange Format (Choosy Geeks Choose GIF!)
+*.png binary  # Portable Network Graphics
+*.rdc binary  # Retro Data Container
+*.zspr binary # Zarby Sprite
