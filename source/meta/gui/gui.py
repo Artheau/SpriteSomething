@@ -120,8 +120,8 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if "pre" in name_dict and random.choice([True,False]):
 			app_name.append(random.choice(name_dict["pre"]))
 		app_name.append("Sprite")         #Need to have "Sprite" in the name
-    if "noun" in name_dict:
-  		app_name.append(random.choice(name_dict["noun"]))
+		if "noun" in name_dict:
+			app_name.append(random.choice(name_dict["noun"]))
 		if "post" in name_dict and random.choice([True,False]):
 			app_name.append(random.choice(name_dict["post"]))
 		self.app_title = " ".join(app_name)
