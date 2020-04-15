@@ -32,6 +32,8 @@ for BUILD_FILENAME in BUILD_FILENAMES:
   print("Dest Filename:  " + DEST_FILENAME)
   if not BUILD_FILENAME == "":
   	print("Build Filesize: " + common.file_size(BUILD_FILENAME))
+  else:
+    exit(1)
 
   if not BUILD_FILENAME == "":
   	move(
