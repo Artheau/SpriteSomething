@@ -84,6 +84,7 @@ if len(BUILD_FILENAMES) > 0:
     dirs = [
         os.path.join(".", ".git"),
         os.path.join(".", ".github"),
+        os.path.join(".", ".gitattributes"),
         os.path.join(".", ".gitignore"),
         os.path.join(".", "html"),
         os.path.join(".", "resources", "ci")
@@ -119,7 +120,7 @@ if len(BUILD_FILENAMES) > 0:
             env["REPO_NAME"]
         )
     else:
-        os.path.join(
+        ZIP_FILENAME = os.path.join(
             "..",
             "deploy",
             os.path.splitext(BUILD_FILENAME)[0]
