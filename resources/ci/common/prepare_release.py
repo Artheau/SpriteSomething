@@ -155,5 +155,5 @@ else:
 
 print("Git tag:        " + env["GITHUB_TAG"])
 
-if len(BUILD_FILENAMES == 0) or ZIP_FILENAME == "":
+if (len(BUILD_FILENAMES) == 0) or (ZIP_FILENAME == ""):
     exit(1)
