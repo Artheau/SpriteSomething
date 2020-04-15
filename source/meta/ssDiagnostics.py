@@ -28,7 +28,7 @@ def output():
   if hasattr(os, "pathsep"):
     lines.append(diagpad("Path Env Separator") + os.pathsep)
 
-  if("windows" in platform.system().lower() and hasattr(pkg_resources,"working_set")):
+  if("windows" in platform.system().lower() and hasattr(pkg_resources,"working_set") and (len(list(pkg_resources.working_set)) > 0)):
     lines.append("")
     lines.append("Packages")
     lines.append("--------")
