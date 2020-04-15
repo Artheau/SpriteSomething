@@ -29,6 +29,11 @@ for dirname in ["resources", "user", "meta", "manifests"]:
     if os.path.isdir(dirpath):
         os.chmod(dirpath, 0o755)
 
+# nuke git files
+for git in [ os.path.join(".", ".gitattrubutes"), os.path.join(".", ".gitignore") ]:
+  if os.path.isfile(git):
+    os.remove(git)
+
 # nuke travis file if it exists
 for travis in [
     os.path.join(
