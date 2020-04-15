@@ -19,8 +19,8 @@ if not os.path.isdir("./upx"):
     else:
         UPX_SLUG = "upx-" + UPX_VERSION + "-amd64_linux"
         UPX_FILE = UPX_SLUG + ".tar.xz"
-        UPX_URL = "https://github.com/upx/upx/releases/download/v" + \
-            UPX_VERSION + '/' + UPX_FILE
+    UPX_URL = "https://github.com/upx/upx/releases/download/v" + \
+        UPX_VERSION + '/' + UPX_FILE
 
     if "osx" not in env["OS_NAME"]:
         print("Getting UPX: " + UPX_FILE)
