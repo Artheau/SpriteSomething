@@ -128,7 +128,7 @@ class TestSpriteParent(unittest.TestCase):
 			}
 		}
 		my_subpath = self.__SUBPATH
-		custom_scale_sprite = SpriteParentTestVersion(filename, custom_scale_manifest_dict, my_subpath)
+		custom_scale_sprite = SpriteParentTestVersion(filename, custom_scale_manifest_dict, my_subpath, "")
 		self.assertTrue(custom_scale_sprite.overview_scale_factor != self.sprite.overview_scale_factor)
 		self.assertEqual(custom_scale_sprite.overview_scale_factor, custom_scale)
 
