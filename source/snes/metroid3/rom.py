@@ -133,7 +133,7 @@ class RomHandler(snes.RomHandlerParent):
 			gun_tile = None
 			gun_DMA = None
 		elif priority != 0x01:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"get_gun_port() called for data that has non-one priority {priority}")
 		else:
 			direction = direction & 0x7F   #need to clear out that high bit for the rest of this
@@ -153,7 +153,7 @@ class RomHandler(snes.RomHandlerParent):
 		return tilemap, gun_tile, gun_DMA
 
 	def get_minimal_gun_data(self, direction, level):
-		#FIXME: English
+		# FIXME: English
 		if level not in range(3):
 			raise AssertionError(f"get_minimal_gun_data() called with invalid level value {level}")
 		if direction not in range(10):
@@ -179,7 +179,7 @@ class RomHandler(snes.RomHandlerParent):
 		elif facing[0] in ['r','R']:
 			tilemaps = self._get_pose_tilemaps_from_addr(0x92EDD0, 0, pose)
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"received call to get_death_data() with invalid facing {facing}")
 
 		#get DMA data
@@ -199,7 +199,7 @@ class RomHandler(snes.RomHandlerParent):
 				DMA_cue = DMA_cue+1 + search_array[DMA_cue+1:].index(0xB9)
 			DMA_loc_list = 0x9B0000 + search_array[DMA_cue+1] + search_array[DMA_cue+2]*0x100
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError("cannot find the DMA location of the death sequence tiles")
 
 		dest_tile_sequence_loc = 0x9B0000 + self.read_from_snes_address(0x9BB6F6, 2)
@@ -209,7 +209,7 @@ class RomHandler(snes.RomHandlerParent):
 			DMA_writes[dest_tile] = self.read_from_snes_address(source_data, "1"*write_size)
 
 		#how long to hold this pose, and an index to which palette to use
-		duration, palette_index = self.read_from_snes_address(0x9BB823 + 2*pose, "11") #FIXME: palette_index unused variable
+		duration, palette_index = self.read_from_snes_address(0x9BB823 + 2*pose, "11") # FIXME: palette_index unused variable
 
 		return tilemaps[::-1], DMA_writes, duration
 
@@ -254,7 +254,7 @@ class RomHandler(snes.RomHandlerParent):
 					[0x00,0x00,0x10,0xFC,palette],
 					[0x10,0x00,0x10,0xFD,palette]]
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"get_file_select_tilemaps() called for unknown item number {item}")
 
 	def get_palette(self, base_type, suit_type):
@@ -268,7 +268,7 @@ class RomHandler(snes.RomHandlerParent):
 		#returns a list.  Each element of the list is a tuple, where the first entry is the amount of time that the palette
 		# should display for (here $00 is a special case for static palettes).  The second entry is the 555 palette data.
 
-		PALETTE_READ_SIZE = "2"*0x10 #FIXME: unused variable
+		PALETTE_READ_SIZE = "2"*0x10 # FIXME: unused variable
 
 		if base_type == PaletteType.STANDARD:
 			suit_type_switcher = {
@@ -276,7 +276,7 @@ class RomHandler(snes.RomHandlerParent):
 				SuitType.VARIA: 0x9B9520,
 				SuitType.GRAVITY: 0x9B9800
 			}
-			#FIXME: English
+			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
 			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for standard palette with unknown suit type: {suit_type}")
@@ -288,7 +288,7 @@ class RomHandler(snes.RomHandlerParent):
 				SuitType.VARIA: 0x8DDCC8,
 				SuitType.GRAVITY: 0x8DDE2E
 			}
-			#FIXME: English
+			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
 			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for loader palette with unknown suit type: {suit_type}")
@@ -318,7 +318,7 @@ class RomHandler(snes.RomHandlerParent):
 				SuitType.VARIA: 0x8DE68A,
 				SuitType.GRAVITY: 0x8DE8B6
 			}
-			#FIXME: English
+			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
 			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for heat palette with unknown suit type: {suit_type}")
@@ -333,7 +333,7 @@ class RomHandler(snes.RomHandlerParent):
 				SuitType.VARIA: 0x9B9920,
 				SuitType.GRAVITY: 0x9B9A20
 			}
-			#FIXME: English
+			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
 			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for charge palette with unknown suit type: {suit_type}")
@@ -347,7 +347,7 @@ class RomHandler(snes.RomHandlerParent):
 				SuitType.VARIA: 0x9B9D20,
 				SuitType.GRAVITY: 0x9B9F20
 			}
-			#FIXME: English
+			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
 			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for speed boost palette with unknown suit type: {suit_type}")
@@ -362,7 +362,7 @@ class RomHandler(snes.RomHandlerParent):
 				SuitType.VARIA: 0x9B9DA0,
 				SuitType.GRAVITY: 0x9B9FA0
 			}
-			#FIXME: English
+			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
 			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for speed squat palette with unknown suit type: {suit_type}")
@@ -376,7 +376,7 @@ class RomHandler(snes.RomHandlerParent):
 				SuitType.VARIA: 0x9B9E20,
 				SuitType.GRAVITY: 0x9BA020
 			}
-			#FIXME: English
+			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
 			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for shine spark palette with unknown suit type: {suit_type}")
@@ -390,7 +390,7 @@ class RomHandler(snes.RomHandlerParent):
 				SuitType.VARIA: 0x9B9EA0,
 				SuitType.GRAVITY: 0x9BA0A0
 			}
-			#FIXME: English
+			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
 			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for screw attack palette with unknown suit type: {suit_type}")
@@ -413,7 +413,7 @@ class RomHandler(snes.RomHandlerParent):
 				SuitType.VARIA: 0x9BB7E7,
 				SuitType.GRAVITY: 0x9BB7FB
 			}
-			#FIXME: English
+			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
 			if base_address == None:
 				raise AssertionError(f"function get_palette_from_enum() called for death suit palette with unknown suit type: {suit_type}")
@@ -497,7 +497,7 @@ class RomHandler(snes.RomHandlerParent):
 			return self._get_sequence_of_timed_palettes(base_address, 16)
 
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"function get_palette_from_enum() called with unknown palette type: {base_type}")
 
 	def get_nightvisor_colors(self):

@@ -18,7 +18,7 @@ def rom_extract(sprite, rom):
 			elif force.lower() == "lower":
 			  image = get_sprite_pose(sprite, rom, animation, pose, bounding_box,upper=False)
 			else:
-				#FIXME: English
+				# FIXME: English
 			  raise AssertionError(f"received call to force something in pose {image_name}, but did not understand command '{force}'")
 		else:
 			image = get_sprite_pose(sprite, rom, animation, pose, bounding_box)
@@ -32,7 +32,7 @@ def get_sprite_pose(sprite, rom, animation_ID, pose, bounding_box, upper=True,lo
 		if animation_ID[:2] == "0x":   #it's a hex code
 			return get_sprite_pose(sprite, rom, int(animation_ID[2:],16), pose, bounding_box, upper=upper,lower=lower)
 		elif animation_ID == "death_left":
-			tilemaps, DMA_writes, duration = rom.get_death_data(pose, facing="left") #FIXME: duration unused variable
+			tilemaps, DMA_writes, duration = rom.get_death_data(pose, facing="left") # FIXME: duration unused variable
 			if not upper:   #trim out the suit pieces
 				tilemaps = [tilemap for tilemap in tilemaps if tilemap[4] & 0x1C != 0x08]
 			if not lower:   #trim out the body
@@ -67,7 +67,7 @@ def get_sprite_pose(sprite, rom, animation_ID, pose, bounding_box, upper=True,lo
 			image.putdata(palette_block)
 			return image
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"unknown command to get_sprite_pose(): {animation_ID}")
 	else:
 		tilemaps, DMA_writes, duration = rom.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation

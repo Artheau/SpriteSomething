@@ -8,7 +8,10 @@
               "desc": "Indicates that it's a ZSPR file",
               "length": 4,
               "example": [
-                "0x5A","0x53","0x50","0x52"
+                "0x5A",
+                "0x53",
+                "0x50",
+                "0x52"
               ],
               "value": "ZSPR"
             },
@@ -24,17 +27,22 @@
               "desc": "Checksum of game file (2 bytes), and its 0xFFFF complement (2 bytes)",
               "length": 4,
               "example": [
-                "0xF1BB","0x0E44"
+                "0xF1BB",
+                "0x0E44"
               ],
               "value": [
-                "0xF1BB","0x0E44"
+                "0xF1BB",
+                "0x0E44"
               ]
             },
             "pixel_data_offset": {
               "desc": "Byte address of beginning of pixel data",
               "length": 4,
               "example": [
-                "0x50","0x00","0x00","0x00"
+                "0x50",
+                "0x00",
+                "0x00",
+                "0x00"
               ],
               "value": "0x50"
             },
@@ -42,7 +50,8 @@
               "desc": "Length of pixel data",
               "length": 2,
               "example": [
-                "0x00","0x70"
+                "0x00",
+                "0x70"
               ],
               "value": [
                 "0x7000"
@@ -52,7 +61,10 @@
               "desc": "Byte address of beginning of pixel data",
               "length": 4,
               "example": [
-                "0x50","0x70","0x00","0x00"
+                "0x50",
+                "0x70",
+                "0x00",
+                "0x00"
               ],
               "value": "0x7050"
             },
@@ -60,7 +72,8 @@
               "desc": "Length of pixel data",
               "length": 2,
               "example": [
-                "0x7C","0x00"
+                "0x7C",
+                "0x00"
               ],
               "value": [
                 "0x007C"
@@ -70,7 +83,8 @@
               "desc": "Sprite Type ID",
               "length": 2,
               "example": [
-                "0x01","0x00"
+                "0x01",
+                "0x00"
               ],
               "value": 1
             },
@@ -86,7 +100,10 @@
               "desc": "Byte address of extended header, if present",
               "length": 4,
               "example": [
-                "0x00","0x71","0x00","0x00"
+                "0x00",
+                "0x71",
+                "0x00",
+                "0x00"
               ],
               "value": "0x7100"
             },
@@ -102,7 +119,11 @@
               "desc": "Sprite Name; unicode; null terminated [2 bytes]",
               "length": "variable",
               "example": [
-                "0x4C00","0x7500","0x6E00","0x6B00","0x0000"
+                "0x4C00",
+                "0x7500",
+                "0x6E00",
+                "0x6B00",
+                "0x0000"
               ],
               "value": "Lank"
             },
@@ -110,7 +131,19 @@
               "desc": "Author Name; unicode; null terminated [2 bytes]",
               "length": "variable",
               "example": [
-                "0x4800","0x6500","0x6C00","0x6C00","0x6F00","0x2000","0x5300","0x6F00","0x7300","0x7500","0x6B00","0x6500","0x0000"
+                "0x4800",
+                "0x6500",
+                "0x6C00",
+                "0x6C00",
+                "0x6F00",
+                "0x2000",
+                "0x5300",
+                "0x6F00",
+                "0x7300",
+                "0x7500",
+                "0x6B00",
+                "0x6500",
+                "0x0000"
               ],
               "value": "Hello Sosuke"
             },
@@ -118,7 +151,19 @@
               "desc": "Author Name (Short); ascii; intended for use in rom credits or similar; null terminated [1 byte]",
               "length": "variable",
               "example": [
-                "0x48","0x6F","0x77","0x20","0x61","0x72","0x65","0x20","0x79","0x6F","0x75","0x3F","0x00"
+                "0x48",
+                "0x6F",
+                "0x77",
+                "0x20",
+                "0x61",
+                "0x72",
+                "0x65",
+                "0x20",
+                "0x79",
+                "0x6F",
+                "0x75",
+                "0x3F",
+                "0x00"
               ],
               "value": "Did this work?"
             },
@@ -127,7 +172,27 @@
               "desc": "The 21-character internal header name of the game that this sprite is intended for, e.g. taken from 0x7FC0 of a lorom",
               "length": 21,
               "example": [
-                "0x5A","0x45","0x4C","0x44","0x41","0x4E","0x4F","0x44","0x45","0x4E","0x53","0x45","0x54","0x53","0x55","0x20","0x20","0x20","0x20","0x20","0x20"
+                "0x5A",
+                "0x45",
+                "0x4C",
+                "0x44",
+                "0x41",
+                "0x4E",
+                "0x4F",
+                "0x44",
+                "0x45",
+                "0x4E",
+                "0x53",
+                "0x45",
+                "0x54",
+                "0x53",
+                "0x55",
+                "0x20",
+                "0x20",
+                "0x20",
+                "0x20",
+                "0x20",
+                "0x20"
               ],
               "value": "ZELDANODENSETSU      "
             },

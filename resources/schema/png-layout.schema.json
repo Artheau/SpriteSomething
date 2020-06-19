@@ -1,176 +1,176 @@
 {
-	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://raw.githubusercontent.om/Artheau/SpriteSomething/master/schema/png-layout.schema.json",
-	"type": "object",
-	"title": "SpriteSomething PNG Layout Schema",
-	"required": [
-		"border_color",
-		"border_size",
-		"layout",
-		"images"
-	],
-	"properties": {
-		"border_color": {
-			"$id": "#/properties/border_color",
-			"type": "array",
-			"title": "The Border_color Schema",
-			"items": {
-				"$id": "#/properties/border_color/items",
-				"type": "integer",
-				"title": "The Items Schema",
-				"default": 0,
-				"examples": [0, 0, 0, 0]
-			}
-		},
-		"border_size": {
-			"$id": "#/properties/border_size",
-			"type": "integer",
-			"title": "The Border_size Schema",
-			"default": 0,
-			"examples": [0]
-		},
-		"layout": {
-			"$id": "#/properties/layout",
-			"type": "array",
-			"title": "The Layout Schema",
-			"items": {
-				"$id": "#/properties/layout/items",
-				"type": "array",
-				"title": "The Items Schema",
-				"items": {
-					"$id": "#/properties/layout/items/items",
-					"type": "string",
-					"title": "The Items Schema",
-					"default": "",
-					"pattern": "^(.*)$"
-				}
-			}
-		},
-		"images": {
-			"$id": "#/properties/images",
-			"type": "object",
-			"title": "The Images Schema",
-			"properties": {
-				"dimensions": {
-					"$id": "#/properties/images/properties/dimensions",
-					"type": "array",
-					"title": "The Dimensions Schema",
-					"items": {
-						"$id": "#/properties/images/properties/dimensions/items",
-						"type": "integer",
-						"title": "The Items Schema",
-						"default": 0,
-						"examples": [0, 0, 16, 16]
-					}
-				},
-				"palette": {
-					"$id": "#/properties/images/properties/palette",
-					"type": "string",
-					"title": "The Palette Schema",
-					"default": "",
-					"examples": ["0x2E"],
-					"pattern": "^(.*)$"
-				},
-				"import palette interval": {
-					"$id": "#/properties/images/properties/import palette interval",
-					"type": "array",
-					"title": "The Import palette interval Schema",
-					"items": {
-						"$id": "#/properties/images/properties/import palette interval/items",
-						"type": "integer",
-						"title": "The Items Schema",
-						"default": 0,
-						"examples": [1, 16]
-					}
-				},
-				"used by": {
-					"$id": "#/properties/images/properties/used by",
-					"type": "array",
-					"title": "The Used by Schema",
-					"items": {
-						"$id": "#/properties/images/properties/used by/items",
-						"type": "array",
-						"title": "The Items Schema",
-						"items": {
-							"$id": "#/properties/images/properties/used by/items/items",
-							"type": [
-								"string",
-								"integer"
-							],
-							"title": "The Items Schema",
-							"default": "",
-							"examples": ["TODO", 0],
-							"pattern": "^(.*)$"
-						}
-					}
-				}
-			}
-		},
-		"palette_block": {
-			"$id": "#/properties/images/properties/palette_block",
-			"type": "object",
-			"title": "The Palette_block Schema",
-			"required": ["comment", "description", "dimensions", "shift", "used by"],
-			"properties": {
-				"comment": {
-					"$id": "#/properties/images/properties/palette_block/properties/comment",
-					"type": "string",
-					"title": "The Comment Schema",
-					"default": "",
-					"examples": ["So technically the underlying tile here can be used, but by convention we just started putting the palette block here"],
-					"pattern": "^(.*)$"
-				},
-				"description": {
-					"$id": "#/properties/images/properties/palette_block/properties/description",
-					"type": "string",
-					"title": "The Description Schema",
-					"default": "",
-					"examples": ["First three sets of two rows are green, blue, and red mail, respectively, and then bunny is the last two.  Also glove colors in here at position 14, and transparency colors."],
-					"pattern": "^(.*)$"
-				},
-				"dimensions": {
-					"$id": "#/properties/images/properties/palette_block/properties/dimensions",
-					"type": "array",
-					"title": "The Dimensions Schema",
-					"items": {
-						"$id": "#/properties/images/properties/palette_block/properties/dimensions/items",
-						"type": "integer",
-						"title": "The Items Schema",
-						"default": 0,
-						"examples": [0, 0, 8, 8]
-					}
-				},
-				"shift": {
-					"$id": "#/properties/images/properties/palette_block/properties/shift",
-					"type": "array",
-					"title": "The Shift Schema",
-					"items": {
-						"$id": "#/properties/images/properties/palette_block/properties/shift/items",
-						"type": "integer",
-						"title": "The Items Schema",
-						"default": 0,
-						"examples": [0, 8]
-					}
-				},
-				"used by": {
-					"$id": "#/properties/images/properties/palette_block/properties/used by",
-					"type": "array",
-					"title": "The Used by Schema",
-					"items": {
-						"$id": "#/properties/images/properties/palette_block/properties/used by/items",
-						"type": "array",
-						"title": "The Items Schema",
-						"items": {
-							"$id": "#/properties/images/properties/palette_block/properties/used by/items/items",
-							"type": "string",
-							"title": "The Items Schema",
-							"default": "",
-							"examples": ["palette_block", 0],
-							"pattern": "^(.*)$"
-						}
-					}
-				}
-			}
-		}
-	}
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.om/Artheau/SpriteSomething/master/schema/png-layout.schema.json",
+  "type": "object",
+  "title": "SpriteSomething PNG Layout Schema",
+  "required": [
+    "border_color",
+    "border_size",
+    "layout",
+    "images"
+  ],
+  "properties": {
+    "border_color": {
+      "$id": "#/properties/border_color",
+      "type": "array",
+      "title": "The Border_color Schema",
+      "items": {
+        "$id": "#/properties/border_color/items",
+        "type": "integer",
+        "title": "The Items Schema",
+        "default": 0,
+        "examples": [0, 0, 0, 0]
+      }
+    },
+    "border_size": {
+      "$id": "#/properties/border_size",
+      "type": "integer",
+      "title": "The Border_size Schema",
+      "default": 0,
+      "examples": [0]
+    },
+    "layout": {
+      "$id": "#/properties/layout",
+      "type": "array",
+      "title": "The Layout Schema",
+      "items": {
+        "$id": "#/properties/layout/items",
+        "type": "array",
+        "title": "The Items Schema",
+        "items": {
+          "$id": "#/properties/layout/items/items",
+          "type": "string",
+          "title": "The Items Schema",
+          "default": "",
+          "pattern": "^(.*)$"
+        }
+      }
+    },
+    "images": {
+      "$id": "#/properties/images",
+      "type": "object",
+      "title": "The Images Schema",
+      "properties": {
+        "dimensions": {
+          "$id": "#/properties/images/properties/dimensions",
+          "type": "array",
+          "title": "The Dimensions Schema",
+          "items": {
+            "$id": "#/properties/images/properties/dimensions/items",
+            "type": "integer",
+            "title": "The Items Schema",
+            "default": 0,
+            "examples": [0, 0, 16, 16]
+          }
+        },
+        "palette": {
+          "$id": "#/properties/images/properties/palette",
+          "type": "string",
+          "title": "The Palette Schema",
+          "default": "",
+          "examples": ["0x2E"],
+          "pattern": "^(.*)$"
+        },
+        "import palette interval": {
+          "$id": "#/properties/images/properties/import palette interval",
+          "type": "array",
+          "title": "The Import palette interval Schema",
+          "items": {
+            "$id": "#/properties/images/properties/import palette interval/items",
+            "type": "integer",
+            "title": "The Items Schema",
+            "default": 0,
+            "examples": [1, 16]
+          }
+        },
+        "used by": {
+          "$id": "#/properties/images/properties/used by",
+          "type": "array",
+          "title": "The Used by Schema",
+          "items": {
+            "$id": "#/properties/images/properties/used by/items",
+            "type": "array",
+            "title": "The Items Schema",
+            "items": {
+              "$id": "#/properties/images/properties/used by/items/items",
+              "type": [
+                "string",
+                "integer"
+              ],
+              "title": "The Items Schema",
+              "default": "",
+              "examples": ["TODO", 0],
+              "pattern": "^(.*)$"
+            }
+          }
+        }
+      }
+    },
+    "palette_block": {
+      "$id": "#/properties/images/properties/palette_block",
+      "type": "object",
+      "title": "The Palette_block Schema",
+      "required": ["comment", "description", "dimensions", "shift", "used by"],
+      "properties": {
+        "comment": {
+          "$id": "#/properties/images/properties/palette_block/properties/comment",
+          "type": "string",
+          "title": "The Comment Schema",
+          "default": "",
+          "examples": ["So technically the underlying tile here can be used, but by convention we just started putting the palette block here"],
+          "pattern": "^(.*)$"
+        },
+        "description": {
+          "$id": "#/properties/images/properties/palette_block/properties/description",
+          "type": "string",
+          "title": "The Description Schema",
+          "default": "",
+          "examples": ["First three sets of two rows are green, blue, and red mail, respectively, and then bunny is the last two.  Also glove colors in here at position 14, and transparency colors."],
+          "pattern": "^(.*)$"
+        },
+        "dimensions": {
+          "$id": "#/properties/images/properties/palette_block/properties/dimensions",
+          "type": "array",
+          "title": "The Dimensions Schema",
+          "items": {
+            "$id": "#/properties/images/properties/palette_block/properties/dimensions/items",
+            "type": "integer",
+            "title": "The Items Schema",
+            "default": 0,
+            "examples": [0, 0, 8, 8]
+          }
+        },
+        "shift": {
+          "$id": "#/properties/images/properties/palette_block/properties/shift",
+          "type": "array",
+          "title": "The Shift Schema",
+          "items": {
+            "$id": "#/properties/images/properties/palette_block/properties/shift/items",
+            "type": "integer",
+            "title": "The Items Schema",
+            "default": 0,
+            "examples": [0, 8]
+          }
+        },
+        "used by": {
+          "$id": "#/properties/images/properties/palette_block/properties/used by",
+          "type": "array",
+          "title": "The Used by Schema",
+          "items": {
+            "$id": "#/properties/images/properties/palette_block/properties/used by/items",
+            "type": "array",
+            "title": "The Items Schema",
+            "items": {
+              "$id": "#/properties/images/properties/palette_block/properties/used by/items/items",
+              "type": "string",
+              "title": "The Items Schema",
+              "default": "",
+              "examples": ["palette_block", 0],
+              "pattern": "^(.*)$"
+            }
+          }
+        }
+      }
+    }
+  }
 }

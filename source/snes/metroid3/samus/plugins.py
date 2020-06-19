@@ -7,7 +7,7 @@ from source.meta.gui import gui_common
 from source.meta.classes.pluginslib import PluginsParent
 from . import equipment
 
-#FIXME: English
+# FIXME: English
 class Plugins(PluginsParent):
 	def __init__(self):
 		super().__init__()
