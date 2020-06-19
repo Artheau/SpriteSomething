@@ -29,16 +29,16 @@
     "author": "Plan",
     "file": "https://cdn.discordapp.com/attachments/560502198816210965/605866676919074856/margatroid.png"
   },
-	{
-		"name": "Super Controid",
-		"author": "Nintoaster",
-		"file": "https://cdn.discordapp.com/attachments/560502198816210965/623279834780532762/Super_Controid.png"
-	},
-	{
-		"name": "Super Controid (PG)",
-		"author": "Nintoaster",
-		"file": "https://cdn.discordapp.com/attachments/560502198816210965/623279861514895369/Super_Controid_PG.png"
-	},
+  {
+    "name": "Super Controid",
+    "author": "Nintoaster",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/623279834780532762/Super_Controid.png"
+  },
+  {
+    "name": "Super Controid (PG)",
+    "author": "Nintoaster",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/623279861514895369/Super_Controid_PG.png"
+  },
   {
     "name": "Alucard",
     "author": "Nintoaster",
@@ -58,5 +58,50 @@
     "name": "Mario (SMB1)",
     "author": "TarThoron",
     "file": "https://cdn.discordapp.com/attachments/560502198816210965/697763768775606302/8-Bit_Mario.png"
+  },
+  {
+    "name": "Mario (SMB1, Modern colors)",
+    "author": "TarThoron",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/698327987321307216/Modern_8-Bit_Mario.png"
+  },
+  {
+    "name": "Link (OoT)",
+    "author": "RonnSama",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/704665457302700052/Link_SpriteSomething.png"
+  },
+  {
+    "name": "Upside-Down Samus",
+    "author": "TarThoron",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/706792567726932020/Upside_Down_Samus.png"
+  },
+  {
+    "name": "180-Degree Samus",
+    "author": "TarThoron",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/707120773101518869/180_Degree_Samus.png"
+  },
+  {
+    "name": "Backwards Samus",
+    "author": "TarThoron",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/707121020120596540/Backwards_Samus.png"
+  },
+  {
+    "name": "Hitbox Helper (2)",
+    "author": "TarThoron",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/709583687855112212/hitboxes2.png"
+  },
+  {
+    "name": "Sprite Can",
+    "author": "TarThoron",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/717526542875492392/SpriteCan.png"
+  },
+  {
+    "name": "Dark Samus",
+    "author": "TarThoron",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/718373079662854254/Dark_Samus_2.png"
+  },
+  {
+    "name": "Metroid",
+    "author": "Fingers McGee",
+    "file": "https://cdn.discordapp.com/attachments/623369354649534465/686080084431732747/Metroid.png"
   }
 ]

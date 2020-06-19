@@ -25,7 +25,7 @@ def autodetect(sprite_filename):
 		selected_game = None
 
 		#prompt user for input
-		#FIXME: Ugh, more tk
+		# FIXME: Ugh, more tk
 		selected_game = gui_common.create_chooser("snes",game_names)
 
 		if not selected_game:
@@ -40,7 +40,7 @@ def autodetect(sprite_filename):
 		selected_game = None
 
 		#prompt user for input
-		#FIXME: Ugh, more tk
+		# FIXME: Ugh, more tk
 		selected_game = gui_common.create_chooser("nes",game_names)
 
 		if not selected_game:
@@ -79,9 +79,9 @@ def autodetect(sprite_filename):
 		                    sprite, animation_assist = game.make_player_sprite(sprite_filename,sprite_name)
 		                    game_found = True
 		if not game_found:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
-  #FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
+  # FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
 	elif file_extension.lower() == ".zspr":
 		with open(sprite_filename,"rb") as file:
 			zspr_data = bytearray(file.read())
@@ -94,7 +94,7 @@ def autodetect(sprite_filename):
 		#FIXME: English
 		raise AssertionError(f"Cannot open file: {sprite_filename}")
 	else:
-		#FIXME: English
+		# FIXME: English
 		raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its filename")
 
 	return game, sprite, animation_assist
@@ -119,7 +119,7 @@ def autodetect_game_type_from_rom(rom):
 	if len(game_names) == 0:
 		game_names = None
 		raise AssertionError(f"Could not identify the type of ROM from its header name: {rom_name}")
-		#FIXME: English; CLI Errors
+		# FIXME: English; CLI Errors
 		#print(f"Could not identify the type of ROM from its header name: {rom_name}")
 
 	return game_names
@@ -248,7 +248,7 @@ class GameParent():
 
 			return sprite, animation_assist
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"make_sprite_by_number() called for non-implemented sprite_number {sprite_number}")
 
 	def get_rom_from_filename(self, filename):

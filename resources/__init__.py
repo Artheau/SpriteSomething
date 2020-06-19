@@ -1,1 +1,1 @@
-#do nothing, just exist to make "resources" package
+# do nothing, just exist to make "resources" package

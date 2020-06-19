@@ -19,7 +19,7 @@
 ## Python dependencies
 
 * `pip install -r "./resources/app/meta/manifests/pip_requirements.txt"`
-  * pillow
+  * pillow==6.2.2
   * numpy==1.16.4
   * pyinstaller
 

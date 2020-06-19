@@ -1,7 +1,7 @@
 {
-	"$schema": "../../../schema/game-header-info.schema.json",
-	"metroid3": [
-		"ZSM",
+  "$schema": "../../../schema/game-header-info.schema.json",
+  "metroid3": [
+    "ZSM",
     "      SM RANDOMIZER  ",
 		"Super Metroid",
 		"Hyper Metroid",
