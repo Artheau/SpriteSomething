@@ -1,0 +1,20 @@
+{
+  "snes": {
+    "zelda3": {
+      "link": {
+        "animation_name": "Swim",
+        "background_name": "Throne Room",
+        "facing_var": "right",
+        "aiming_var": ""
+      }
+    },
+    "metroid3": {
+      "samus": {
+        "animation_name": "Ship Preview (WIP)",
+        "background_name": "Landing Site",
+        "facing_var": "right",
+        "aiming_var": "neutral"
+      }
+    }
+  }
+}

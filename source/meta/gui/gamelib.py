@@ -155,7 +155,7 @@ class GameParent():
 		self.canvas = canvas
 		self.zoom_getter = zoom_getter
 		self.frame_getter = frame_getter
-		self.background_datas = {"filename":{},"title":{}}
+		self.background_datas = {"filename":{},"title":{},"origin":{}}
 		self.current_background_title = None
 		self.last_known_zoom = None
 
@@ -172,6 +172,8 @@ class GameParent():
 				for background in background_data["backgrounds"]:
 					self.background_datas["filename"][background["filename"]] = background["title"]
 					self.background_datas["title"][background["title"]] = background["filename"]
+					if "origin" in background:
+						self.background_datas["origin"][background["title"]] = background["origin"]
 		background_prettynames = list(self.background_datas["title"].keys())
 		self.background_selection.set(random.choice(background_prettynames))
 
@@ -195,6 +197,10 @@ class GameParent():
 			elif image_title in self.background_datas["filename"]:
 			  image_filename = image_title
 			self.raw_background = Image.open(common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename))
+			#this doesn't work yet; not sure how to hook it
+			# if "origin" in self.background_datas:
+			# 	if image_title in self.background_datas["origin"]:
+			# 		self.parent.coord_setter(self.background_datas["origin"][image_title])
 
 		#now re-zoom the image
 		new_size = tuple(int(dim*self.zoom_getter()) for dim in self.raw_background.size)
@@ -223,6 +229,7 @@ class GameParent():
 			sprite_module = importlib.import_module(f"{source_subpath}.sprite")
 			resource_subpath = os.path.join(self.console_name,self.internal_name,folder_name)
 			sprite = sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],resource_subpath)
+			sprite.internal_name = folder_name
 
 			try:
 				animationlib = importlib.import_module(f"{source_subpath}.animation")
