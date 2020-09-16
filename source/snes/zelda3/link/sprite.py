@@ -163,9 +163,12 @@ class Sprite(SpriteParent):
 		return [(LINK_EXPORT_BLOCK_TYPE, block.getvalue())]
 
 	def inject_into_ROM(self, rom):
-		#should work for the combo rom, VT rando, and the (J) rom.	Not sure about the (U) rom...maybe?
+		#should work for the combo rom, VT rando
+		#should work for the (J) & (U) ROMs but won't automatically include the extra code needed to manage gloves, etc
 
+		#this'll check VT rando Tournament Flag
 		tournament_flag = rom.read(0x180213, 2) == 1
+		#combo Tournament Flag doesn't seem to be setting properly
 
 		if tournament_flag:
 			# FIXME: English
