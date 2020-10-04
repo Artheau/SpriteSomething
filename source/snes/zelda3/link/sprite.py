@@ -169,6 +169,27 @@ class Sprite(SpriteParent):
 		#this'll check VT rando Tournament Flag
 		tournament_flag = rom.read(0x180213, 2) == 1
 		#combo Tournament Flag doesn't seem to be setting properly
+		if rom.type() == "EXHIROM" and not tournament_flag:
+			config = rom.read_from_snes_address(0x80FF52, 2)
+			fieldvals = {}
+			fieldvals["gamemode"] = [ "singleworld", "multiworld" ]
+			fieldvals["z3logic"] = [ "normal", "hard" ]
+			fieldvals["m3logic"] = [ "normal", "hard" ]
+			field = {}
+			field["race"] = ((config & (1 << 15)) >> 15) > 0 # 1 bit
+			field["keysanity"] = ((config & (0b11 << 13)) >> 13) > 0 # 2 bits
+			field["gamemode"] = ((config & (1 << 12)) >> 12) # 1 bit
+			field["z3logic"] = ((config & (0b11 << 10)) >> 10) # 2 bits
+			field["m3logic"] = ((config & (0b11 << 8)) >> 8) # 2 bits
+			field["version"] = {}
+			field["version"]["major"] = ((config & (0b1111 << 4)) >> 4) # 4 bits
+			field["version"]["minor"] = ((config & (0b1111 << 0)) >> 0) # 4 bits
+
+			field["gamemode"] = fieldvals["gamemode"][field["gamemode"]]
+			field["z3logic"] = fieldvals["z3logic"][field["z3logic"]]
+			field["m3logic"] = fieldvals["m3logic"][field["m3logic"]]
+
+			tournament_flag = field["race"]
 
 		if tournament_flag:
 			# FIXME: English

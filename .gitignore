@@ -36,6 +36,9 @@ _test_macro.py
 # no gamefiles
 gamefiles/
 
+# no ani_settings file
+ani_settings.json
+
 # no working dirs file
 working_dirs.json
 
