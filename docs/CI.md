@@ -42,7 +42,7 @@
         * Download Pages
         * Post to Pages (inactive)
 1. [Pushes to master](https://github.com/Artheau/SpriteSomething/blob/master/.github/workflows/on-release.yml)
-    1. CI Step#4, if Release created (MacOS, 3.7)
+    1. CI Step#iv, if Release created (MacOS, 3.7)
         * Send Discord notification
 
 * [CI scripts](https://github.com/Artheau/SpriteSomething/tree/master/resources/ci/common)
