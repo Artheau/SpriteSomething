@@ -1,8 +1,8 @@
 {
-	"default": [
-		[ "Stand", "right" ]
-	],
-	"upgraded": [
-		[ "Elevator (Varia)", "neutral", 0, [ "gravity_suit" ] ]
-	]
+  "default": [
+    ["Stand", "right"]
+  ],
+  "upgraded": [
+    ["Elevator (Varia)", "neutral", 0, ["gravity_suit"]]
+  ]
 }

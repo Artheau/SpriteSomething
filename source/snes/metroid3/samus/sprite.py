@@ -58,7 +58,7 @@ class Sprite(SpriteParent):
 		elif len(master_palette_indexes) == 2:
 			return self.master_palette[master_palette_indexes[0]:master_palette_indexes[1]]
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"Unrecognized color set request: {color_set}")
 
 	def set_color_in_master(self, color_value, color_set, color_index):
@@ -290,7 +290,7 @@ class Sprite(SpriteParent):
 			timed_palette = [(0, self.get_colors_from_master("file select"))]
 
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"unrecognized palette request: {overall_type}, {variant_type}")
 
 		#now scrub the palette to get rid of floats and numbers that are too large/small
@@ -530,5 +530,5 @@ class Sprite(SpriteParent):
 			else:
 				return Image.new("RGBA",(0,0),0)
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"Could not locate tile with name {image_name}")

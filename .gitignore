@@ -27,6 +27,9 @@ get-pip.py
 # do not include the macro used to simulate the command line
 _test_macro.py
 
+# no get pip
+get-pip.py
+
 # no super nintendo files
 *.smc
 
@@ -36,8 +39,14 @@ _test_macro.py
 # no gamefiles
 gamefiles/
 
+# no ani_settings file
+ani_settings.json
+
 # no working dirs file
 working_dirs.json
+
+# no palette writers file
+palette_writers.json
 
 # no custom files
 custom/

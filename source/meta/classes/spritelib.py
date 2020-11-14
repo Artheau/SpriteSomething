@@ -1,20 +1,24 @@
-#common functions for all entities (i.e. "Sprites")
-#sprites are responsible for maintaining their widgets
-#they have to contain PIL images of all of their data, and the offset info, and how to assemble it
-#and they have to interpret the global frame timer, and communicate back when to next check in
+# common functions for all entities (i.e. "Sprites")
+# sprites are responsible for maintaining their widgets
+# they have to contain PIL images of all of their data, and the offset info,
+#  and how to assemble it
+# and they have to interpret the global frame timer, and communicate back
+#  when to next check in
 
-import random
-import os
-import json
 import itertools
 import importlib
 import io
+import json
+import os
+import random
 from functools import partial
 from PIL import Image
 from source.meta.classes import layoutlib
 from source.meta.common import common
 
-#TODO: make this an actual abstract class by importing 'abc' and doing the things
+# TODO: make this an actual abstract class by importing 'abc'
+#  and doing the things
+
 
 class SpriteParent():
 	#parent class for sprites to inherit

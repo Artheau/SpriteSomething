@@ -1,17 +1,19 @@
-#originally written by Artheau
-#with Darmok and Jalad at Tanagra
-#in April of 2019
+# originally written by Artheau
+# with Darmok and Jalad at Tanagra
+# in April of 2019
 
-#this file contains various helper functions which facilitate the construction of the PNG layout files
+# this file contains various helper functions which facilitate the
+# construction of the PNG layout files
 
-import json
 import itertools
+import json
 from PIL import Image, ImageOps, ImageDraw
 from source.meta.common import common
 
+
 class Layout():
 	def __init__(self, filename, sprite_name=""):
-		with open(filename) as inFile:
+  		with open(filename) as inFile:
 			self.data = json.load(inFile)
 		self.reverse_lookup = {}
 		if "layouts" in self.data:
@@ -282,6 +284,7 @@ class Layout():
 
 def main():
     print(f"Called main() on utility library {__file__}")
+
 
 if __name__ == "__main__":
     main()

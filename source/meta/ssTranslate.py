@@ -37,7 +37,7 @@ class BabelFish():
 		elif domain in en_lang and key in en_lang[domain] and subkey in en_lang[domain][key] and not en_lang[domain][key][subkey] == "": #gracefully degrade to English
 			display_text = en_lang[domain][key][subkey]
 		else:
-			#FIXME: English
+			# FIXME: English
 			print("Can't Translate: ",domain,key,subkey)
 			display_text = subkey.title() + ' ' + key #ungracefully degrade to requested keys
 		return display_text

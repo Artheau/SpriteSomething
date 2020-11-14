@@ -107,7 +107,7 @@ class Sprite(SpriteParent):
 				else:
 					return Image.new("RGBA",(0,0),0)    #TODO: Track down why this function is being called without spiffy button info during sprite load
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"Could not locate tile with name {image_name}")
 
 	def import_cleanup(self):
@@ -163,27 +163,57 @@ class Sprite(SpriteParent):
 		return [(LINK_EXPORT_BLOCK_TYPE, block.getvalue())]
 
 	def inject_into_ROM(self, rom):
-		#should work for the combo rom, VT rando, and the (J) rom.  Not sure about the (U) rom...maybe?
+		#should work for the combo rom, VT rando
+		#should work for the (J) & (U) ROMs but won't automatically include the extra code needed to manage gloves, etc
 
-		#the sheet needs to be placed directly into address $108000-$10F000
-		for i,row in enumerate(itertools.chain(ascii_uppercase, ["AA","AB"])):  #over all 28 rows of the sheet
-			for column in range(8):    #over all 8 columns
-				image_name = f"{row}{column}"
-				if image_name == "AB7":
-					#AB7 is special, because the palette block sits there in the PNG, so this can't be actually used
-					image_name = "null_block"
-				raw_image_data = common.convert_to_4bpp(self.images[image_name], (0,0), (0,0,16,16), None)
+		#this'll check VT rando Tournament Flag
+		tournament_flag = rom.read(0x180213, 2) == 1
+		#combo Tournament Flag doesn't seem to be setting properly
+		if rom.type() == "EXHIROM" and not tournament_flag:
+			config = rom.read_from_snes_address(0x80FF52, 2)
+			fieldvals = {}
+			fieldvals["gamemode"] = [ "singleworld", "multiworld" ]
+			fieldvals["z3logic"] = [ "normal", "hard" ]
+			fieldvals["m3logic"] = [ "normal", "hard" ]
+			field = {}
+			field["race"] = ((config & (1 << 15)) >> 15) > 0 # 1 bit
+			field["keysanity"] = ((config & (0b11 << 13)) >> 13) > 0 # 2 bits
+			field["gamemode"] = ((config & (1 << 12)) >> 12) # 1 bit
+			field["z3logic"] = ((config & (0b11 << 10)) >> 10) # 2 bits
+			field["m3logic"] = ((config & (0b11 << 8)) >> 8) # 2 bits
+			field["version"] = {}
+			field["version"]["major"] = ((config & (0b1111 << 4)) >> 4) # 4 bits
+			field["version"]["minor"] = ((config & (0b1111 << 0)) >> 0) # 4 bits
 
-				rom.bulk_write_to_snes_address(0x108000+0x400*i+0x40*column,raw_image_data[:0x40],0x40)
-				rom.bulk_write_to_snes_address(0x108200+0x400*i+0x40*column,raw_image_data[0x40:],0x40)
+			field["gamemode"] = fieldvals["gamemode"][field["gamemode"]]
+			field["z3logic"] = fieldvals["z3logic"][field["z3logic"]]
+			field["m3logic"] = fieldvals["m3logic"][field["m3logic"]]
 
-		#the palettes need to be placed directly into address $1BD308-$1BD380, not including the transparency or gloves colors
-		converted_palette = common.convert_to_555(self.master_palette)
-		for i in range(4):
-			rom.write_to_snes_address(0x1BD308+0x1E*i,converted_palette[0x10*i+1:0x10*i+0x10],0x0F*"2")
-		#the glove colors are placed into $1BEDF5-$1BEDF8
-		for i in range(2):
-			rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
+			tournament_flag = field["race"]
+
+		if tournament_flag:
+			# FIXME: English
+			raise AssertionError(f"Cannot inject into a Race/Tournament ROM!")
+		else:
+			#the sheet needs to be placed directly into address $108000-$10F000
+			for i,row in enumerate(itertools.chain(ascii_uppercase, ["AA","AB"])):	#over all 28 rows of the sheet
+				for column in range(8):		#over all 8 columns
+					image_name = f"{row}{column}"
+					if image_name == "AB7":
+						#AB7 is special, because the palette block sits there in the PNG, so this can't be actually used
+						image_name = "null_block"
+					raw_image_data = common.convert_to_4bpp(self.images[image_name], (0,0), (0,0,16,16), None)
+
+					rom.bulk_write_to_snes_address(0x108000+0x400*i+0x40*column,raw_image_data[:0x40],0x40)
+					rom.bulk_write_to_snes_address(0x108200+0x400*i+0x40*column,raw_image_data[0x40:],0x40)
+
+			#the palettes need to be placed directly into address $1BD308-$1BD380, not including the transparency or gloves colors
+			converted_palette = common.convert_to_555(self.master_palette)
+			for i in range(4):
+				rom.write_to_snes_address(0x1BD308+0x1E*i,converted_palette[0x10*i+1:0x10*i+0x10],0x0F*"2")
+			#the glove colors are placed into $1BEDF5-$1BEDF8
+			for i in range(2):
+				rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
 
 		return rom
 

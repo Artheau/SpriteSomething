@@ -25,7 +25,7 @@ def autodetect(sprite_filename):
 		selected_game = None
 
 		#prompt user for input
-		#FIXME: Ugh, more tk
+		# FIXME: Ugh, more tk
 		selected_game = gui_common.create_chooser("snes",game_names)
 
 		if not selected_game:
@@ -40,7 +40,7 @@ def autodetect(sprite_filename):
 		selected_game = None
 
 		#prompt user for input
-		#FIXME: Ugh, more tk
+		# FIXME: Ugh, more tk
 		selected_game = gui_common.create_chooser("nes",game_names)
 
 		if not selected_game:
@@ -79,9 +79,9 @@ def autodetect(sprite_filename):
 		                    sprite, animation_assist = game.make_player_sprite(sprite_filename,sprite_name)
 		                    game_found = True
 		if not game_found:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
-  #FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
+  # FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
 	elif file_extension.lower() == ".zspr":
 		with open(sprite_filename,"rb") as file:
 			zspr_data = bytearray(file.read())
@@ -94,7 +94,7 @@ def autodetect(sprite_filename):
 		#FIXME: English
 		raise AssertionError(f"Cannot open file: {sprite_filename}")
 	else:
-		#FIXME: English
+		# FIXME: English
 		raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its filename")
 
 	return game, sprite, animation_assist
@@ -119,7 +119,7 @@ def autodetect_game_type_from_rom(rom):
 	if len(game_names) == 0:
 		game_names = None
 		raise AssertionError(f"Could not identify the type of ROM from its header name: {rom_name}")
-		#FIXME: English; CLI Errors
+		# FIXME: English; CLI Errors
 		#print(f"Could not identify the type of ROM from its header name: {rom_name}")
 
 	return game_names
@@ -168,7 +168,7 @@ class GameParent():
 		self.canvas = canvas
 		self.zoom_getter = zoom_getter
 		self.frame_getter = frame_getter
-		self.background_datas = {"filename":{},"title":{}}
+		self.background_datas = {"filename":{},"title":{},"origin":{}}
 		self.current_background_title = None
 		self.last_known_zoom = None
 
@@ -185,6 +185,8 @@ class GameParent():
 				for background in background_data["backgrounds"]:
 					self.background_datas["filename"][background["filename"]] = background["title"]
 					self.background_datas["title"][background["title"]] = background["filename"]
+					if "origin" in background:
+						self.background_datas["origin"][background["title"]] = background["origin"]
 		background_prettynames = list(self.background_datas["title"].keys())
 		if len(background_prettynames) > 0:
 			self.background_selection.set(random.choice(background_prettynames))
@@ -209,6 +211,10 @@ class GameParent():
 			elif image_title in self.background_datas["filename"]:
 			  image_filename = image_title
 			self.raw_background = Image.open(common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename))
+			#this doesn't work yet; not sure how to hook it
+			# if "origin" in self.background_datas:
+			# 	if image_title in self.background_datas["origin"]:
+			# 		self.parent.coord_setter(self.background_datas["origin"][image_title])
 
 		#now re-zoom the image
 		new_size = tuple(int(dim*self.zoom_getter()) for dim in self.raw_background.size)
@@ -238,6 +244,7 @@ class GameParent():
 			sprite_module = importlib.import_module(f"{source_subpath}.sprite")
 			resource_subpath = os.path.join(self.console_name,self.internal_name,folder_name)
 			sprite = sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],resource_subpath,sprite_name)
+			sprite.internal_name = folder_name
 
 			try:
 				animationlib = importlib.import_module(f"{source_subpath}.animation")
@@ -248,7 +255,7 @@ class GameParent():
 
 			return sprite, animation_assist
 		else:
-			#FIXME: English
+			# FIXME: English
 			raise AssertionError(f"make_sprite_by_number() called for non-implemented sprite_number {sprite_number}")
 
 	def get_rom_from_filename(self, filename):
