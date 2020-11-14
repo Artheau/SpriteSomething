@@ -27,6 +27,9 @@ get-pip.py
 # do not include the macro used to simulate the command line
 _test_macro.py
 
+# no get pip
+get-pip.py
+
 # no super nintendo files
 *.smc
 
