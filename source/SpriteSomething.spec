@@ -22,6 +22,7 @@ def recurse_for_py_files(names_so_far):
   return returnvalue
 
 hiddenimports = recurse_for_py_files(["source"])
+hiddenimports.append("pkg_resources.py2_warn")
 
 a = Analysis(['../SpriteSomething.py'],
              pathex=[],
@@ -39,6 +40,7 @@ a = Analysis(['../SpriteSomething.py'],
 # https://stackoverflow.com/questions/17034434/how-to-remove-exclude-modules-and-files-from-pyinstaller
 excluded_binaries = [
         'VCRUNTIME140.dll',
+        'ucrtbase.dll',
         'msvcp140.dll',
         'mfc140u.dll']
 a.binaries = TOC([x for x in a.binaries if x[0] not in excluded_binaries])

@@ -4,7 +4,7 @@ This release of SpriteSomething includes many basic features of the main design 
 
 ## Updates Since Last Version
 
-* Sirkura requested ability for Metroid3 Samus injection to selectively ignore palette writing when injecting a sprite
+* Try to fix UCRT error. Fix hiddenimport error.
 
 ## Features
 
