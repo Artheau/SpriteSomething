@@ -13,7 +13,7 @@ from source.meta.common import common
 
 class Layout():
 	def __init__(self, filename, sprite_name=""):
-  		with open(filename) as inFile:
+		with open(filename) as inFile:
 			self.data = json.load(inFile)
 		self.reverse_lookup = {}
 		if "layouts" in self.data:
