@@ -326,6 +326,16 @@ class Layout():
             all_images["palette_block"].convert("RGB").getdata())
 
         for image_name, this_image in all_images.items():
+            # FIXME: somewhere in here we need to take note of the bunny tiles
+            #  and check for usage of Bunny colors or Green Mail colors
+            #  if we have just Green Mail colors, we're set
+            #  if we find that we have Bunny colors, we need to paint them
+            #  in Green Mail colors upon export
+            #  this setup doesn't currently support that but I believe this
+            #  is the entry point that we need to start from
+            #  Bunny tiles:
+            #                            Z 5,     Z 7
+            #   AA0, AA1, AA2, AA3, AA4, AA5, AA6
             if image_name not in ["transparent", "palette_block"]:
                 import_palette = self.get_property(
                     "import palette interval", image_name)

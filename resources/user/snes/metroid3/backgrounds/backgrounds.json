@@ -3,7 +3,8 @@
   "backgrounds": [
     {
       "filename": "ship.png",
-      "title": "Samus' Ship"
+      "title": "Samus' Ship",
+			"origin": [0,0]
     },
     {
       "filename": "zebes.png",
