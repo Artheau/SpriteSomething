@@ -4,8 +4,7 @@ This release of SpriteSomething includes many basic features of the main design 
 
 ## Updates Since Last Version
 
-* Attempt to crash if Tournament Flag is set
-* HalfARebel requested ability for animation & background selections to stick when loading a new sprite
+* Sirkura requested ability for Metroid3 Samus injection to selectively ignore palette writing when injecting a sprite
 
 ## Features
 
