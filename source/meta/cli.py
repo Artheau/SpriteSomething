@@ -13,7 +13,7 @@ def make_CLI(command_line_args):
 
 #make a class that's similar to the GUI class
 class CLIMainFrame():
-	#FIXME: Filled with English
+	# FIXME: Filled with English
 
   def __init__(self, command_line_args):
     print(self.create_random_title() + " (v" + CONST.APP_VERSION + ')')	#print title & version
@@ -85,7 +85,7 @@ class CLIMainFrame():
         if mode == "get-alttpr-sprites":
 					# SpriteSomething.[py|exe] --cli=1 --mode=get-alttpr-sprites
           self.load_sprite(os.path.join("resources","app","snes","zelda3","link","sheets","link.zspr"))	#load Link
-          self.sprite.get_alttpr_sprites()	#get ALttPR sprites; #FIXME: Do we want this in the sprite class or somewhere else?
+          self.sprite.get_alttpr_sprites()	#get ALttPR sprites; # FIXME: Do we want this in the sprite class or somewhere else?
       else:
         print("No valid CLI Mode provided")
     else:
@@ -97,7 +97,7 @@ class CLIMainFrame():
     for filename in common.get_all_resources(["meta","manifests"],"app_names.json"):
       with open(filename) as name_file:
         for key,item in json.load(name_file).items():
-          if key in name_dict:
+          if "$" not in key and key in name_dict:
             name_dict[key].extend(item)
           else:
             name_dict[key] = item
@@ -161,7 +161,7 @@ class CLIMainFrame():
     # Have a func that we send the filename to for injecting
     #  since the GUI has to ask where the dir with game files is
     inject = True
-    if inject:	#only injection is supported, and it's forced at this time #FIXME: Maybe don't force it?
+    if inject:	#only injection is supported, and it's forced at this time # FIXME: Maybe don't force it?
       pass
     else:
       print("   Unsure if making copies fits this purpose well.")

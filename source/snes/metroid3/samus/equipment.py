@@ -88,11 +88,11 @@ def equipment_test(save=False):
 
   	#spazer
   	icon_specs["spazer0"] = coord_calc((112,16),( 9,2)) #from blaster
-  	icon_specs["spazer1"] = coord_calc((112,19),(18,2)) #repeated; #FIXME: Get number of repeats
+  	icon_specs["spazer1"] = coord_calc((112,19),(18,2)) #repeated; # FIXME: Get number of repeats
 
   	#plasma
   	icon_specs["plasma0"] = coord_calc((128,16),(5,3)) #from blaster
-  	icon_specs["plasma1"] = coord_calc((134,16),(4,3)) #repeated; #FIXME: Get number of repeats
+  	icon_specs["plasma1"] = coord_calc((134,16),(4,3)) #repeated; # FIXME: Get number of repeats
 
   	#charged spazer
   	icon_specs["charge_spazer0"] = coord_calc((112,22),(5,2)) #from blaster
@@ -100,7 +100,7 @@ def equipment_test(save=False):
   	#charged plasma
 
   	#charged spazer/plasma (none/ice/wave)
-  	icon_specs["charge_special0"] = coord_calc((128,22),(8,7)) #repeated; #FIXME: Get number of repeats
+  	icon_specs["charge_special0"] = coord_calc((128,22),(8,7)) #repeated; # FIXME: Get number of repeats
 
   	#wave lemon
   	for i in range(5):

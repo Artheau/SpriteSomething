@@ -43,7 +43,7 @@ def make_GUI(command_line_args):
 
   # generic error message
 	def show_error(self, exception, message, callstack):
-		#FIXME: English
+		# FIXME: English
 		if exception.__name__.upper() == "NOTIMPLEMENTEDERROR":
 			messagebox.showerror(   "Not Yet Implemented",
 									"This function is not yet implemented\n\n" + str(message)  )
@@ -82,6 +82,24 @@ class SpriteSomethingMainFrame(tk.Frame):
 				data = json.load(json_file)
 				for k,v in data.items():
 					self.working_dirs[k] = v
+
+		#set default animation settings
+		self.ani_settings = {}
+		#read saved animation settings
+		ani_settings_path = os.path.join(".","resources","user","meta","manifests","ani_settings.json")
+		if os.path.exists(ani_settings_path):
+			with open(ani_settings_path) as json_file:
+				data = json.load(json_file)
+				for console in data.keys():
+					if console not in self.ani_settings:
+						self.ani_settings[console] = {}
+					for game in data[console]:
+						if game not in self.ani_settings[console]:
+							self.ani_settings[console][game] = {}
+						for sprite,animation in data[console][game].items():
+							if sprite not in self.ani_settings[console][game]:
+								self.ani_settings[console][game][sprite] = 0
+							self.ani_settings[console][game][sprite] = animation
 
 		#create a fish
 		self.fish = BabelFish(subpath=["meta"],lang=command_line_args["lang"] if "lang" in command_line_args else None)
@@ -291,7 +309,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def load_plugins(self):
 		self.menu.children["representative_images_menu"] = tk.Menu(self.menu, tearoff=0, name="representative_images_menu")
 
-		#FIXME: English
+		# FIXME: English
 		self.menu.children["representative_images_menu"].add_command(label="Default",command=partial(self.get_representative_images,"default"))
 		for manifest_file in common.get_all_resources([self.sprite.resource_subpath,"manifests"],"representative-images.json"):
 			with open(manifest_file) as manifest:
@@ -386,6 +404,39 @@ class SpriteSomethingMainFrame(tk.Frame):
 			self.attach_metadata_panel()
 		self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
 		self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.coord_setter,self.fish)
+		#get animation engine handle
+		ani_eng = self.animation_engine
+		#get console internal name
+		c = self.game.console_name
+		#get game internal name
+		g = self.game.internal_name
+		#get sprite internal name
+		s = self.sprite.internal_name
+		if c in self.ani_settings:
+			if g in self.ani_settings[c]:
+				if s in self.ani_settings[c][g]:
+					#get animation name
+					#get background name
+					#get facing direction name
+					#get aiming direction name
+					ani_name = self.ani_settings[c][g][s]["animation_name"] if "animation_name" in self.ani_settings[c][g][s] else "";
+					bg_name = self.ani_settings[c][g][s]["background_name"] if "background_name" in self.ani_settings[c][g][s] else "";
+					fac_dir = self.ani_settings[c][g][s]["facing_var"] if "facing_var" in self.ani_settings[c][g][s] else "";
+					aim_dir = self.ani_settings[c][g][s]["aiming_var"] if "aiming_var" in self.ani_settings[c][g][s] else "";
+					#set animation
+					if ani_name != "":
+						ani_eng.set_animation(ani_name)
+						ani_eng.animation_selection.set(ani_name)
+					#set background
+					if bg_name != "":
+						self.game.set_background(bg_name)
+						self.game.background_selection.set(bg_name)
+					#set facing direction
+					if fac_dir != "":
+						ani_eng.spiffy_dict["facing_var"].set(fac_dir)
+					#set aiming direction
+					if aim_dir != "":
+						ani_eng.spiffy_dict["aiming_var"].set(aim_dir)
 		self.left_panel.add(vcr_controls,height=5 * BUTTON_HEIGHT)
 		self.animation_engine.attach_tile_details_panel(self.left_panel,self.fish)
 		self.panes.add(self.left_panel)
@@ -475,7 +526,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				try:
 					#try to save it
 					image.save(filename)
-					#FIXME: English
+					# FIXME: English
 					messagebox.showinfo("Save Complete", f"Saved as {filename}")
 					save_success_bool = True
 				except IOError:
@@ -492,7 +543,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 					#try to save each one
 					for filename, image in image_list:
 						image.save(os.path.join(base_folder, filename))
-					#FIXME: English
+					# FIXME: English
 					messagebox.showinfo("Save Complete", f"Saved images to {base_folder}")
 					save_success_bool = True
 				except IOError:
@@ -505,7 +556,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			messagebox.showerror("Not Implemented", "Representative Images not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
 			save_success_bool = True
 		if not save_success_bool:
-			#FIXME: English
+			# FIXME: English
 			messagebox.showerror("ERROR", f"ERROR: Could not create image file(s)")
 		return save_success_bool
 
@@ -769,6 +820,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 				else:      #chose not to save before opening
 					self.unsaved_changes = False
 
+		#save current animation/bg/direction settings
+		self.save_ani_settings()
+
 		filetypes = ".zspr " # FIXME: Assuming Z3Link-only
 		filetypes += ".png " # PNG sniffer
 #		filetypes += ".nes " # NES RomHandler
@@ -892,7 +946,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			rom = self.game.get_rom_from_filename(source_filename)	#read ROM data
 			same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename(self.game.console_name,source_filename)[0]	#the game file matches
 			is_zsm = "ZSM" in str(rom.get_name())	#this is a ZSM game file
-			#FIXME: English, need to get character name translations and compare against those
+			# FIXME: English, need to get character name translations and compare against those
 			if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):	#if we've got a compatible game file, inject it!
 				modified_rom = self.sprite.inject_into_ROM(rom)
 				modified_rom.save(dest_filename, overwrite=True)
@@ -941,7 +995,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			returnvalue = self.animation_engine.export_frame_as_PNG(filename)
 			if returnvalue:
 				self.working_dirs["export.frame-as-png"] = filename[:filename.rfind('/')]
-				#FIXME: English
+				# FIXME: English
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -971,7 +1025,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if filename:
 			returnvalue = self.animation_engine.export_animation_as_gif(filename, zoom=self.current_zoom, speed=self.current_speed)
 			if returnvalue:
-				#FIXME: English
+				# FIXME: English
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -1005,7 +1059,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			returnvalue = self.animation_engine.export_animation_as_collage(filename,orientation)
 			if returnvalue:
 				self.working_dirs["export.animation-as-collage"] = filename[:filename.rfind('/')]
-				#FIXME: English
+				# FIXME: English
 				messagebox.showinfo("Save Complete", f"Saved as {filename}")
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
@@ -1047,7 +1101,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 					update_available = not latest_version_split[2] == this_version_split[2]
 
 		if update_available:
-			#FIXME: English
+			# FIXME: English
 			get_update = messagebox.askyesno(
 										self.app_title,
 										"Current Version: " + this_version + "\n" +
@@ -1057,7 +1111,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			if get_update:
 				webbrowser.open_new("https://github.com/Artheau/SpriteSomething/releases/v" + latest_version)
 		else:
-			#FIXME: English
+			# FIXME: English
 			messagebox.showinfo(self.app_title,"It seems that you're up to date!")
 
 	def diagnostics(self):
@@ -1123,9 +1177,39 @@ class SpriteSomethingMainFrame(tk.Frame):
 	def save_working_dirs(self):
 		user_resources_path = os.path.join(".","resources","user")
 		working_dirs_path = os.path.join(user_resources_path,"meta","manifests")
-		with open(os.path.join(working_dirs_path,"working_dirs.json"),"w+") as f:
+		working_dirs_filename = "working_dirs.json"
+		with open(os.path.join(working_dirs_path,working_dirs_filename),"w+") as f:
 			f.write(json.dumps(self.working_dirs,indent=2))
-		os.chmod(os.path.join(working_dirs_path,"working_dirs.json"),0o775)
+		os.chmod(os.path.join(working_dirs_path,working_dirs_filename),0o775)
+
+	#write current animation settings to file
+	def save_ani_settings(self):
+		c = self.game.console_name
+		g = self.game.internal_name
+		s = self.sprite.internal_name
+		ani_eng = self.animation_engine
+		ani_name = ani_eng.animation_selection.get()
+		bg_name = self.game.background_selection.get()
+		fac_dir = ani_eng.spiffy_dict["facing_var"].get() if "facing_var" in ani_eng.spiffy_dict else ""
+		aim_dir = ani_eng.spiffy_dict["aiming_var"].get() if "aiming_var" in ani_eng.spiffy_dict else ""
+		if c not in self.ani_settings:
+			self.ani_settings[c] = {}
+		if g not in self.ani_settings[c]:
+			self.ani_settings[c][g] = {}
+		if s not in self.ani_settings[c][g]:
+			self.ani_settings[c][g][s] = {}
+		self.ani_settings[c][g][s] = {
+			"animation_name": ani_name,
+			"background_name": bg_name,
+			"facing_var": fac_dir,
+			"aiming_var": aim_dir
+		}
+		user_resources_path = os.path.join(".","resources","user")
+		ani_settings_path = os.path.join(user_resources_path,"meta","manifests")
+		ani_settings_filename = "ani_settings.json"
+		with open(os.path.join(ani_settings_path,ani_settings_filename),"w+") as f:
+			f.write(json.dumps(self.ani_settings,indent=2))
+		os.chmod(os.path.join(ani_settings_path,ani_settings_filename),0o755)
 
 	#exit sequence
 	def exit(self):
@@ -1143,6 +1227,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 					messagebox.showwarning(self.app_title, self.fish.translate("meta","dialogue","exit.nosave-before-exit"))   #TODO: can we add this humor somehow without forcing the user to close another dialogue box?
 
 		self.save_working_dirs()
+		self.save_ani_settings()
 		sys.exit(0)
 
 	######################### HELPER FUNCTIONS ARE BELOW HERE ###############################

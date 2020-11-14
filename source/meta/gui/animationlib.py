@@ -115,10 +115,16 @@ class AnimationEngineParent():
 		    current_dir = self.sprite.get_alternative_direction(current_anim,self.get_current_direction())
 		    if len(anims[current_anim][current_dir]) > 0:
 		      current_pose_num = 0
-		      if "background" in anims[current_anim][current_dir][current_pose_num]:
-		        self.game.set_background(anims[current_anim][current_dir][current_pose_num]["background"])
-		      if "origin" in anims[current_anim][current_dir][current_pose_num]:
-		        self.coord_setter(anims[current_anim][current_dir][current_pose_num]["origin"])
+		      curr_pos = anims[current_anim][current_dir][current_pose_num]
+		      if "background" in curr_pos:
+		      	self.game.set_background(curr_pos["background"])
+		      	fnames = list(self.game.background_datas["filename"].keys())
+		      	pnames = list(self.game.background_datas["title"].keys())
+		      	fname = curr_pos["background"]
+		      	pname = pnames[fnames.index(fname)]
+		      	self.game.background_selection.set(pname)
+		      if "origin" in curr_pos:
+		      	self.coord_setter(curr_pos["origin"])
 		self.update_animation()
 
 	def update_animation(self):

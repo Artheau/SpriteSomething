@@ -1,88 +1,88 @@
 {
-	"$schema": "../../../../../schema/spiffy-buttons.schema.json",
-	"button-groups": [
-		{
-			"group-fish-key": "suit",
-			"buttons": [
-				{
-					"meta": "blank"
-				},
-				{
-					"fish-subkey": "power",
-					"img": "suit-power.png",
-					"default": true
-				},
-				{
-					"fish-subkey": "varia",
-					"img": "suit-varia.png"
-				},
-				{
-					"fish-subkey": "gravity",
-					"img": "suit-gravity.png"
-				}
-			]
-		},
-		{
-			"group-fish-key": "variant",
-			"buttons": [
-				{
-					"fish-subkey": "standard",
-					"img": "no-thing.png",
-					"default": true
-				},
-				{
-					"fish-subkey": "charge",
-					"img": "variant-charge.png"
-				},
-				{
-					"fish-subkey": "speed_boost",
-					"img": "variant-speed_boost.png"
-				},
-				{
-					"fish-subkey": "speed_squat",
-					"img": "variant-speed_squat.png"
-				},
-				{
-					"fish-subkey": "hyper",
-					"img": "variant-hyper.png"
-				},
-				{
-					"meta": "newline"
-				},
-				{
-					"meta": "blank"
-				},
-				{
-					"fish-subkey": "heat",
-					"img": "effect-heat.png"
-				},
-				{
-					"fish-subkey": "xray",
-					"img": "effect-xray.png"
-				},
-				{
-					"fish-subkey": "sepia",
-					"img": "effect-sepia.png"
-				},
-				{
-					"fish-subkey": "door",
-					"img": "effect-door.png"
-				}
-			]
-		},
-		{
-			"group-fish-key": "cannon-port",
-			"buttons": [
-				{
-					"fish-subkey": "no",
-					"img": "no-thing.png",
-					"default": true
-				},
-				{
-					"fish-subkey": "yes",
-					"img": "yes-thing.png"
-				}
-			]
-		}
-	]
+  "$schema": "../../../../../schema/spiffy-buttons.schema.json",
+  "button-groups": [
+    {
+      "group-fish-key": "suit",
+      "buttons": [
+        {
+          "meta": "blank"
+        },
+        {
+          "fish-subkey": "power",
+          "img": "suit-power.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "varia",
+          "img": "suit-varia.png"
+        },
+        {
+          "fish-subkey": "gravity",
+          "img": "suit-gravity.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "variant",
+      "buttons": [
+        {
+          "fish-subkey": "standard",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "charge",
+          "img": "variant-charge.png"
+        },
+        {
+          "fish-subkey": "speed_boost",
+          "img": "variant-speed_boost.png"
+        },
+        {
+          "fish-subkey": "speed_squat",
+          "img": "variant-speed_squat.png"
+        },
+        {
+          "fish-subkey": "hyper",
+          "img": "variant-hyper.png"
+        },
+        {
+          "meta": "newline"
+        },
+        {
+          "meta": "blank"
+        },
+        {
+          "fish-subkey": "heat",
+          "img": "effect-heat.png"
+        },
+        {
+          "fish-subkey": "xray",
+          "img": "effect-xray.png"
+        },
+        {
+          "fish-subkey": "sepia",
+          "img": "effect-sepia.png"
+        },
+        {
+          "fish-subkey": "door",
+          "img": "effect-door.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "cannon-port",
+      "buttons": [
+        {
+          "fish-subkey": "no",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "yes",
+          "img": "yes-thing.png"
+        }
+      ]
+    }
+  ]
 }

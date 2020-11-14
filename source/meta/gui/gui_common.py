@@ -23,7 +23,7 @@ if ("DEBUG_MODE" in vars() or "DEBUG_MODE" in globals()) and DEBUG_MODE:   #if D
 			file = kwargs["file"]
 			_, file_extension = os.path.splitext(file)
 			if file_extension.lower() == ".png":
-				#FIXME: English
+				# FIXME: English
 				raise AssertionError(f"tk.PhotoImage was sent a PNG file: {file}")
 		return old_function(args,kwargs)
 
@@ -49,7 +49,7 @@ def create_extraction_chooser(console_name,game_names):
 
 	if len(game_names) > 1:
 		game_chooser = tk.Toplevel()
-		#FIXME: English
+		# FIXME: English
 		game_chooser.title("Choose Sprite to Extract")
 		game_chooser.geometry("320x100")
 		game_selector = tk.StringVar(game_chooser)
@@ -138,7 +138,7 @@ def get_sprites(self,title,dir,url):
 	sprites = json.loads(sprites_req.read().decode("utf-8"))
 	#get an iterator and a counter for a makeshift progress bar
 	total = len(sprites)
-	#FIXME: English
+	# FIXME: English
 	print("   Downloading " + title + " Sprites")
 	messagebox.showwarning("Downloading " + title + " Sprites","Wait a little bit, dude, there's " + str(total) + " sprites.")
 #	downloader = tk.Tk()
@@ -168,12 +168,12 @@ def get_sprites(self,title,dir,url):
 				)
 				sprite_data_req = urllib.request.urlopen(sprite_data_req, context=context)
 				sprite_data = sprite_data_req.read()
-				#FIXME: English
+				# FIXME: English
 				print("    Writing " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 				g.write(sprite_data)
 				success = True
 		else:	#if we do have it, next!
-			#FIXME: English
+			# FIXME: English
 			print("    Skipping " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 #		self.progressbar["value"] = (((i+1)/total)*100)
 #	downloader.destroy()
