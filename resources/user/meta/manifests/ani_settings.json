@@ -10,7 +10,7 @@
     },
     "metroid3": {
       "samus": {
-        "animation_name": "Ship Preview (WIP)",
+        "animation_name": "Loading",
         "background_name": "Landing Site",
         "facing_var": "right",
         "aiming_var": "neutral"

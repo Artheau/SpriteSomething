@@ -45,6 +45,9 @@ ani_settings.json
 # no working dirs file
 working_dirs.json
 
+# no palette writers file
+palette_writers.json
+
 # no custom files
 custom/
 resources/user/*/*/*/sheets

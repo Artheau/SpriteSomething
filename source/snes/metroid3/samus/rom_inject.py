@@ -2,6 +2,8 @@
 #In total, this code takes a ROM and modifies it for wizzywig insertion
 
 import itertools
+import json
+import os
 import copy
 from PIL import Image
 from source.meta.common import common
@@ -1159,14 +1161,23 @@ def assign_palettes(samus,rom):
     "hyperbeam": True,
     "ship": True,
     "ship-intro": True,
-    "ship-outro": True
+    "ship-outro": True,
+    "fileselect": True
   }
 
-  print("Pallettes:")
+  #read saved palette writers file if it exists and set these
+  palette_writers_path = os.path.join(".","resources","user","snes","metroid3","samus","manifests","palette_writers.json")
+  if os.path.exists(palette_writers_path):
+    with open(palette_writers_path) as json_file:
+      data = json.load(json_file)
+      for k,v in data.items():
+        do_write[k] = v
+
+  # print("Pallettes:")
 
   key = "doors"
   if key in do_write and do_write[key]:
-    print(" Doors")
+    # print(" Doors")
     # doors
     _,door_palette = samus.get_timed_palette("power","door")[0]
     door_555 = common.convert_to_555(door_palette)
@@ -1174,7 +1185,7 @@ def assign_palettes(samus,rom):
 
   key = "loader"
   if key in do_write and do_write[key]:
-    print(" Loader")
+    # print(" Loader")
     # loader
     for suit, loader_base_addr in [("power", 0x8DDB62+2),("varia",0x8DDCC8+2),("gravity",0x8DDE2E+2)]:
     	loader_palettes = [pal for _,pal in samus.get_timed_palette(suit,"loader")]
@@ -1191,7 +1202,7 @@ def assign_palettes(samus,rom):
 
   key = "heat"
   if key in do_write and do_write[key]:
-    print(" Heat")
+    # print(" Heat")
     # heat
     for suit, heat_base_addr in [("power",0x8DE45E),("varia",0x8DE68A),("gravity",0x8DE8B6)]:
     	#these are stored as just fifteen colors, not sixteen.  The timer is in the spot normally taken by color 0
@@ -1202,7 +1213,7 @@ def assign_palettes(samus,rom):
 
   key = "sepia"
   if key in do_write and do_write[key]:
-    print(" Sepia")
+    # print(" Sepia")
     # sepia
     _,sepia_palette = samus.get_timed_palette("power","sepia")[0]
     sepia_555 = common.convert_to_555(sepia_palette)
@@ -1211,7 +1222,7 @@ def assign_palettes(samus,rom):
 
   key = "sepia-hurt"
   if key in do_write and do_write[key]:
-    print(" Sepia Hurt")
+    # print(" Sepia Hurt")
     # sepia hurt
     _,sepia_hurt_palette = samus.get_timed_palette("power","sepia hurt")[0]
     sepia_hurt_555 = common.convert_to_555(sepia_hurt_palette)
@@ -1220,7 +1231,7 @@ def assign_palettes(samus,rom):
 
   key = "standard"
   if key in do_write and do_write[key]:
-    print(" Standard")
+    # print(" Standard")
     # standard
     for suit, base_addr in [("power",0x9B9400),("varia",0x9B9520),("gravity",0x9B9800)]:
     	_,standard_palette = samus.get_timed_palette(suit,"standard")[0]
@@ -1229,7 +1240,7 @@ def assign_palettes(samus,rom):
 
   key = "death"
   if key in do_write and do_write[key]:
-    print(" Death")
+    # print(" Death")
     # death
     death_flesh_palettes = [pal for _,pal in samus.get_timed_palette("power","death")]
     death_flesh_555 = [common.convert_to_555(pal) for pal in death_flesh_palettes]
@@ -1238,7 +1249,7 @@ def assign_palettes(samus,rom):
 
   key = "crystalflash"
   if key in do_write and do_write[key]:
-    print(" Crystal Flash")
+    # print(" Crystal Flash")
     # crystal flash
     crystal_flash_palettes = [pal for _,pal in samus.get_timed_palette("power","flash")]
     crystal_flash_555 = [common.convert_to_555(pal) for pal in crystal_flash_palettes]
@@ -1247,7 +1258,7 @@ def assign_palettes(samus,rom):
 
   key = "charge"
   if key in do_write and do_write[key]:
-    print(" Charge")
+    # print(" Charge")
     # charge
     for suit, charge_base_addr in [("power",0x9B9820),("varia",0x9B9920),("gravity",0x9B9A20)]:
     	charge_palettes = [pal for _,pal in samus.get_timed_palette(suit,"charge")]
@@ -1257,7 +1268,7 @@ def assign_palettes(samus,rom):
 
   key = "speed-boost"
   if key in do_write and do_write[key]:
-    print(" Speed Boost")
+    # print(" Speed Boost")
     # speed boost
     for suit, speed_boost_base_addr in [("power",0x9B9B20),("varia",0x9B9D20),("gravity",0x9B9F20)]:
     	speed_boost_palettes = [pal for _,pal in samus.get_timed_palette(suit,"speed boost")]
@@ -1267,7 +1278,7 @@ def assign_palettes(samus,rom):
 
   key = "speed-squat"
   if key in do_write and do_write[key]:
-    print(" Speed Squat")
+    # print(" Speed Squat")
     # speed squat
     for suit, speed_squat_base_addr in [("power",0x9B9BA0),("varia",0x9B9DA0),("gravity",0x9B9FA0)]:
     	speed_squat_palettes = [pal for _,pal in samus.get_timed_palette(suit,"speed squat")]
@@ -1277,7 +1288,7 @@ def assign_palettes(samus,rom):
 
   key = "shinespark"
   if key in do_write and do_write[key]:
-    print(" Shinespark")
+    # print(" Shinespark")
     # shinespark
     for suit, shinespark_base_addr in [("power",0x9B9C20),("varia",0x9B9E20),("gravity",0x9BA020)]:
     	shinespark_palettes = [pal for _,pal in samus.get_timed_palette(suit,"shinespark")]
@@ -1287,7 +1298,7 @@ def assign_palettes(samus,rom):
 
   key = "screwattack"
   if key in do_write and do_write[key]:
-    print(" Screw Attack")
+    # print(" Screw Attack")
     # screw attack
     for suit, screw_attack_base_addr in [("power",0x9B9CA0),("varia",0x9B9EA0),("gravity",0x9BA0A0)]:
     	screw_attack_palettes = [pal for _,pal in samus.get_timed_palette(suit,"screw attack")]
@@ -1297,7 +1308,7 @@ def assign_palettes(samus,rom):
 
   key = "xray"
   if key in do_write and do_write[key]:
-    print(" XRay")
+    # print(" XRay")
     # xray
     xray_colors = [pal[3] for _,pal in samus.get_timed_palette("power","xray")]
     xray_555 = common.convert_to_555(xray_colors)
@@ -1306,7 +1317,7 @@ def assign_palettes(samus,rom):
 
   key = "hyperbeam"
   if key in do_write and do_write[key]:
-    print(" Hyper Beam")
+    # print(" Hyper Beam")
     # hyper beam
     hyper_beam_palettes = [pal for _,pal in samus.get_timed_palette("power","hyper")][::-1]
     hyper_beam_555 = [common.convert_to_555(pal) for pal in hyper_beam_palettes]
@@ -1315,7 +1326,7 @@ def assign_palettes(samus,rom):
 
   key = "ship"
   if key in do_write and do_write[key]:
-    print(" Ship")
+    # print(" Ship")
     # ship
     ship_palettes = [pal for _,pal in samus.get_timed_palette("ship","standard")]
     ship_555 = [common.convert_to_555(pal) for pal in ship_palettes]
@@ -1325,7 +1336,7 @@ def assign_palettes(samus,rom):
 
   key = "ship-intro"
   if key in do_write and do_write[key]:
-    print(" Ship Intro")
+    # print(" Ship Intro")
     # ship intro
     _,intro_ship_palette = samus.get_timed_palette("ship","intro")[0]
     intro_ship_555 = common.convert_to_555(intro_ship_palette)
@@ -1333,7 +1344,7 @@ def assign_palettes(samus,rom):
 
   key = "ship-outro"
   if key in do_write and do_write[key]:
-    print(" Ship Outro")
+    # print(" Ship Outro")
     # ship outro
     outro_ship_palettes = [pal for _,pal in samus.get_timed_palette("ship","outro")]
     outro_ship_555 = [common.convert_to_555(pal) for pal in outro_ship_palettes]
@@ -1342,7 +1353,7 @@ def assign_palettes(samus,rom):
 
   key = "fileselect"
   if key in do_write and do_write[key]:
-    print(" File Select")
+    # print(" File Select")
     # file select
     _,file_select_palette = samus.get_timed_palette( "power","file select")[0]
     file_select_555 = common.convert_to_555(file_select_palette)
