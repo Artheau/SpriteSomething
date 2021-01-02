@@ -38,7 +38,7 @@ Also, please share your work!  We are very interested in the art that others pro
 
 ## [Super Metroid FAQ](./resources/app/snes/metroid3/FAQ.md)
 
-## [A Link to the Past FAQ](./resources/snes/app/zelda3/FAQ.md)
+## [A Link to the Past FAQ](./resources/app/snes/zelda3/FAQ.md)
 
 ## Licensing
 
