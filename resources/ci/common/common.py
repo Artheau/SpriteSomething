@@ -36,7 +36,7 @@ def prepare_env():
     env["BRANCH"] = os.getenv("TRAVIS_BRANCH", "")
     env["GITHUB_ACTOR"] = os.getenv("GITHUB_ACTOR", "MegaMan.EXE")
     env["GITHUB_SHA"] = os.getenv("GITHUB_SHA", "")
-    env["GITHUB_RUN_ID"] = os.getenv("GITHUB_RUN_ID", "")
+    env["GITHUB_RUN_NUMBER"] = os.getenv("GITHUB_RUN_NUMBER", "")
     env["GITHUB_SHA_SHORT"] = env["GITHUB_SHA"]
     # commit data
     env["COMMIT_ID"] = os.getenv("TRAVIS_COMMIT", os.getenv("GITHUB_SHA", ""))
@@ -63,7 +63,7 @@ def prepare_env():
 
     # ci data
     env["BUILD_NUMBER"] = os.getenv(
-        "TRAVIS_BUILD_NUMBER", env["GITHUB_RUN_ID"])
+        "TRAVIS_BUILD_NUMBER", env["GITHUB_RUN_NUMBER"])
 
     GITHUB_TAG = os.getenv("TRAVIS_TAG", os.getenv("GITHUB_TAG", ""))
     OS_NAME = os.getenv("TRAVIS_OS_NAME",
