@@ -23,7 +23,7 @@ If UPX is present in a subdirectory named `upx`, then the builder will attempt t
 
 ### What do the script files in the root directory do?
 
-See that particular [README document](./README-files.md).
+See that particular [README document](./docs/README-files.md).
 
 ### Can I use this tool to make my own hack?
 

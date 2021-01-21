@@ -4,7 +4,9 @@ This release of SpriteSomething includes many basic features of the main design 
 
 ## Updates Since Last Version
 
-* Try to fix UCRT error. Fix hiddenimport error.
+* Update to Python 3.8 which is the last to support Pillow 6.2.2. A bug was introduced into Pillow 7.0+ that changes how colors are altered. This needs to be figured out before we can upgrade to Python 3.9.
+* Drop tested support for Ubuntu 16.04.
+* Prepare tested support for Ubuntu 20.04 when GitHub Actions [rolls it out for its virtual environments](https://github.com/actions/virtual-environments/issues/1816).
 
 ## Features
 

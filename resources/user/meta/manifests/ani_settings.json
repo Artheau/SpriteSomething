@@ -10,7 +10,7 @@
     },
     "metroid3": {
       "samus": {
-        "animation_name": "Loading",
+        "animation_name": "Stand",
         "background_name": "Landing Site",
         "facing_var": "right",
         "aiming_var": "neutral"

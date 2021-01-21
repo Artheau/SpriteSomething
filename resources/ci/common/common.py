@@ -1,6 +1,21 @@
 import os     # for env vars
 import stat   # file statistics
 
+global UBUNTU_VERSIONS
+global DEFAULT_EVENT
+global DEFAULT_REPO_SLUG
+global FILENAME_CHECKS
+global FILESIZE_CHECK
+UBUNTU_VERSIONS = {
+  "latest": "focal",
+  "20.04": "focal",
+  "18.04": "bionic",
+  "16.04": "xenial"
+}
+DEFAULT_EVENT = "event"
+DEFAULT_REPO_SLUG = "Artheau/SpriteSomething"
+FILENAME_CHECKS = [ "SpriteSomething" ]
+FILESIZE_CHECK = (10 * 1024 * 1024) # 10MB
 
 def convert_bytes(num):
     # take number of bytes and convert to string with units measure
@@ -19,14 +34,14 @@ def file_size(file_path):
 
 def prepare_env():
     # prepare environment variables
-    DEFAULT_EVENT = "event"
-    DEFAULT_REPO_SLUG = "Artheau/SpriteSomething"
+    global DEFAULT_EVENT
+    global DEFAULT_REPO_SLUG
 
     env = {}
 
     # get app version
     APP_VERSION = ""
-    APP_VERSION_FILE = "./resources/app/meta/manifests/app_version.txt"
+    APP_VERSION_FILE = os.path.join(".","resources","app","meta","manifests","app_version.txt")
     if os.path.isfile(APP_VERSION_FILE):
         with open(APP_VERSION_FILE, "r") as f:
             APP_VERSION = f.readlines()[0].strip()
@@ -36,7 +51,7 @@ def prepare_env():
     env["BRANCH"] = os.getenv("TRAVIS_BRANCH", "")
     env["GITHUB_ACTOR"] = os.getenv("GITHUB_ACTOR", "MegaMan.EXE")
     env["GITHUB_SHA"] = os.getenv("GITHUB_SHA", "")
-    env["GITHUB_RUN_ID"] = os.getenv("GITHUB_RUN_ID", "")
+    env["GITHUB_RUN_NUMBER"] = os.getenv("GITHUB_RUN_NUMBER", "")
     env["GITHUB_SHA_SHORT"] = env["GITHUB_SHA"]
     # commit data
     env["COMMIT_ID"] = os.getenv("TRAVIS_COMMIT", os.getenv("GITHUB_SHA", ""))
@@ -63,7 +78,7 @@ def prepare_env():
 
     # ci data
     env["BUILD_NUMBER"] = os.getenv(
-        "TRAVIS_BUILD_NUMBER", env["GITHUB_RUN_ID"])
+        "TRAVIS_BUILD_NUMBER", env["GITHUB_RUN_NUMBER"])
 
     GITHUB_TAG = os.getenv("TRAVIS_TAG", os.getenv("GITHUB_TAG", ""))
     OS_NAME = os.getenv("TRAVIS_OS_NAME",
@@ -75,10 +90,8 @@ def prepare_env():
         OS_VERSION = OS_NAME[OS_NAME.find('-')+1:]
         OS_NAME = OS_NAME[:OS_NAME.find('-')]
         if OS_NAME == "linux" or OS_NAME == "ubuntu":
-            if OS_VERSION == "latest":
-                OS_VERSION = "bionic"
-            elif OS_VERSION == "16.04":
-                OS_VERSION = "xenial"
+            if OS_VERSION in UBUNTU_VERSIONS:
+                OS_VERSION = UBUNTU_VERSIONS[OS_VERSION]
             OS_DIST = OS_VERSION
 
     if OS_VERSION == "" and not OS_DIST == "" and not OS_DIST == "notset":
@@ -124,8 +137,8 @@ def prepare_filename(BUILD_FILENAME):
 def find_binary(listdir):
     # find a binary file if it's executable
     #  failing that, assume it's over 10MB
-    FILENAME_CHECKS = ["SpriteSomething"]
-    FILESIZE_CHECK = (10 * 1024 * 1024)  # 10MB
+    global FILENAME_CHECKS
+    global FILESIZE_CHECK
 
     BUILD_FILENAMES = []
     executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH

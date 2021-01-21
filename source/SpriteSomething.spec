@@ -1,7 +1,14 @@
 # -*- mode: python -*-
 
+import sys
+
 block_cipher = None
-console = False
+console = False   #   <--- change this to True to enable command prompt when the app runs
+
+if sys.platform.find("mac") or sys.platform.find("osx"):
+  console = False
+
+BINARY_SLUG = "SpriteSomething"
 
 def recurse_for_py_files(names_so_far):
   returnvalue = []
@@ -24,7 +31,7 @@ def recurse_for_py_files(names_so_far):
 hiddenimports = recurse_for_py_files(["source"])
 hiddenimports.append("pkg_resources.py2_warn")
 
-a = Analysis(['../SpriteSomething.py'],
+a = Analysis([f"../{BINARY_SLUG}.py"],
              pathex=[],
              binaries=[],
              datas=[],
@@ -53,10 +60,10 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='SpriteSomething',
+          name=BINARY_SLUG,
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=console )   #   <--- change this to True to enable command prompt when the app runs
+          console=console )
