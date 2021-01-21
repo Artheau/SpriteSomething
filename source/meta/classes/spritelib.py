@@ -22,7 +22,7 @@ from source.meta.common import common
 
 class SpriteParent():
     # parent class for sprites to inherit
-    def __init__(self, filename, manifest_dict, my_subpath):
+    def __init__(self, filename, manifest_dict, my_subpath, _):
         self.classic_name = manifest_dict["name"]  # e.g. "Samus" or "Link"
         # the path to this sprite's subfolder in resources
         self.resource_subpath = my_subpath
@@ -39,9 +39,10 @@ class SpriteParent():
             self.overview_scale_factor = osf
         self.plugins = None
         self.has_plugins = False
-        self.load_layout()
-        self.load_animations()
+        self.load_layout("")
+        self.load_animations("")
         self.import_from_filename()
+        self.view_only = False
 
     # to make a new sprite class, you must write code for all
     #  of the functions in this section below.
@@ -92,11 +93,11 @@ class SpriteParent():
     # the functions below here are special to the parent class and do not need
     # to be overwritten, unless you see a reason
 
-    def load_layout(self):
+    def load_layout(self, _):
         self.layout = layoutlib.Layout(common.get_resource(
             [self.resource_subpath, "manifests"], "layout.json"))
 
-    def load_animations(self):
+    def load_animations(self, _):
         with open(common.get_resource(
             [
                 self.resource_subpath,

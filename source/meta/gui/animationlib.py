@@ -2,8 +2,11 @@
 #in particular, keeps track of information like which palette the sprite is using, etc.
 
 import tkinter as tk
+from apng import APNG, PNG
+import io
 import random
 import json
+import os
 import itertools
 from PIL import Image, ImageTk
 from source.meta.common import common
@@ -25,10 +28,7 @@ class AnimationEngineParent():
 		self.plugins = []
 		self.prev_palette_info = []
 
-		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
-			self.animations = json.load(file)
-		if "$schema" in self.animations:
-			del self.animations["$schema"]
+		self.animations = self.sprite.animations
 
 		self.current_animation = next(iter(self.animations.keys()))   #using a default value until the animation_panel attachment overrides this
 
@@ -259,7 +259,7 @@ class AnimationEngineParent():
 
 	def get_current_direction(self):
 		if self.spiffy_dict:
-			direction = self.spiffy_dict["facing_var"].get().lower()   #grabbed from the direction buttons, which are named "facing"
+			direction = self.spiffy_dict["facing_var"].get().lower() if "facing_var" in self.spiffy_dict else "right"   #grabbed from the direction buttons, which are named "facing"
 			if "aiming_var" in self.spiffy_dict:
 				direction = "_aim_".join([direction, self.spiffy_dict["aiming_var"].get().lower()])
 			return direction
@@ -462,3 +462,36 @@ class AnimationEngineParent():
 				return False
 		else:
 			return False
+
+	def export_animation_as_apng(self, filename, zoom=1, speed=1):
+		current_animation, displayed_direction, _, palette_info, _, pose_list = self.get_image_arguments_from_frame_number(self.frame_getter())
+
+		image_list = []
+		save_path = os.path.join("resources","user",self.sprite.resource_subpath,"sheets",current_animation,displayed_direction)
+		if not os.path.isdir(save_path):
+			os.makedirs(save_path)
+
+		if current_animation:
+			for pose_number in range(len(pose_list)):
+				pose_img = self.sprite.get_image(current_animation, displayed_direction, pose_number, palette_info, 0)
+				img_to_save = pose_img[0]
+				img_to_save.save(os.path.join(save_path,"raw-frame_%s_%s_%s_%s.png" % (current_animation,displayed_direction,pose_number,'-'.join(palette_info))))
+				image_list.append(img_to_save)
+
+		apng_build = APNG()
+		for png_frame in image_list:
+			imgBytes = io.BytesIO()
+			png_frame.save(imgBytes,format="PNG")
+			imgByteArr = imgBytes.getvalue()
+			png_frame = PNG.from_bytes(imgByteArr)
+			imgBytes.close()
+			imgByteArr = []
+			apng_build.append(png_frame, delay=100)
+
+		apng_build.save(filename)
+		apng_build.save(os.path.join(save_path,"compiled_%s_%s_%s_animated.png" % (current_animation,displayed_direction,'-'.join(palette_info))))
+
+		apng_extract = APNG.from_bytes(apng_build.to_bytes())
+		for i in range(0,len(apng_extract.frames)):
+			png_frame = apng_extract.frames[i][0]
+			png_frame.save(os.path.join(save_path,"extracted_%s_%s_%s_%s.png" % (current_animation,displayed_direction,i,'-'.join(palette_info))))

@@ -11,6 +11,7 @@
     "export.inject-new": "Copy to new Game File",
     "export.inject-bulk": "Inject into directory of Game Files",
     "export.frame-as-png": "Frame as PNG",
+    "export.animation-as-apng": "Animation As APNG",
     "export.animation-as-gif": "Animation as GIF",
     "export.animation-as-hcollage": "Animation as Horizontal Collage",
     "export.animation-as-vcollage": "Animation as Vertical Collage",
@@ -85,6 +86,7 @@
     "gba": "Game Boy Advance",
     "gbc": "Game Boy Color",
     "genesis": "Genesis",
+    "pc": "PC",
     "n64": "Nintendo 64",
     "nes": "NES",
     "snes": "SNES"

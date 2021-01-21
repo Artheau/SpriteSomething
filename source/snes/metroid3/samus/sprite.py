@@ -7,8 +7,8 @@ from source.meta.common import common
 from . import rom_extract, rom_inject, rdc_export
 
 class Sprite(SpriteParent):
-	def __init__(self, filename, manifest_dict, my_subpath):
-		super().__init__(filename, manifest_dict, my_subpath)
+	def __init__(self, filename, manifest_dict, my_subpath, _):
+		super().__init__(filename, manifest_dict, my_subpath, _)
 		self.load_plugins()
 
 		self.overhead = False   #Samus is sideview, so only left/right direction buttons should show

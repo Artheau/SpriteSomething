@@ -1,0 +1,52 @@
+{
+	"$schema": "../../../../schema/spiffy-buttons.schema.json",
+	"button-groups": [
+		{
+			"group-fish-key": "aiming",
+			"buttons": [
+				{
+					"fish-subkey": "diag_upleft",
+					"img": "arrow-upleft.png"
+				},
+				{
+					"fish-subkey": "up",
+					"img": "arrow-up.png"
+				},
+				{
+					"fish-subkey": "diag_upright",
+					"img": "arrow-upright.png"
+				},
+				{
+					"meta": "newline"
+				},
+				{
+					"fish-subkey": "left",
+					"img": "arrow-left.png"
+				},
+				{
+					"meta": "blank"
+				},
+				{
+					"fish-subkey": "right",
+					"img": "arrow-right.png",
+					"default": true
+				},
+				{
+					"meta": "newline"
+				},
+				{
+					"fish-subkey": "diag_downleft",
+					"img": "arrow-downleft.png"
+				},
+				{
+					"fish-subkey": "down",
+					"img": "arrow-down.png"
+				},
+				{
+					"fish-subkey": "diag_downright",
+					"img": "arrow-downright.png"
+				}
+			]
+		}
+	]
+}

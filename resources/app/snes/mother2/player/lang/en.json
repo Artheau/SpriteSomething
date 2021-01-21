@@ -1,0 +1,16 @@
+{
+  "$schema": "../manifests/samus-language.schema.json",
+  "section": {
+		"aiming": "Aiming"
+  },
+  "Aiming": {
+		"up": "North",
+		"down": "South",
+		"left": "West",
+		"right": "East",
+		"diag_upright": "Northeast",
+		"diag_downright": "Southeast",
+		"diag_upleft": "Northwest",
+		"diag_downleft": "Southwest"
+  }
+}
