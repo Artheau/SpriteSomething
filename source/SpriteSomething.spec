@@ -1,7 +1,14 @@
 # -*- mode: python -*-
 
+import sys
+
 block_cipher = None
-console = False
+console = False   #   <--- change this to True to enable command prompt when the app runs
+
+if sys.platform.find("mac") or sys.platform.find("osx"):
+  console = False
+
+BINARY_SLUG = "SpriteSomething"
 
 BINARY_SLUG = "SpriteSomething"
 
@@ -61,4 +68,4 @@ exe = EXE(pyz,
           strip=False,
           upx=True,
           runtime_tmpdir=None,
-          console=console )   #   <--- change this to True to enable command prompt when the app runs
+          console=console )
