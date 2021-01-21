@@ -12,7 +12,7 @@ jobs:
   # Send Discord notification
   discord-notify:
     name: Notify Discord of new Release
-    runs-on: macOS-latest
+    runs-on: macos-latest
     steps:
       # checkout commit
       - name: Checkout commit
@@ -21,7 +21,7 @@ jobs:
       - name: Install python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: 3.8
           architecture: "x64"
       - run: |
           python --version
