@@ -123,5 +123,15 @@
     "name": "Classic Samus",
     "author": "Plan",
     "file": "https://cdn.discordapp.com/attachments/560502198816210965/749663852081184859/samusclassic.png"
+  },
+  {
+    "name": "Trans Samus",
+    "author": "TarThoron",
+    "file": "https://cdn.discordapp.com/attachments/560502198816210965/793728209892016138/Trans.png"
+  },
+  {
+    "name": "Diddy Kong",
+    "author": "Di10",
+    "file": "http://randommetroidsolver.pythonanywhere.com/solver/static/images/sprite_sheets/diddy_kong.png"
   }
 ]

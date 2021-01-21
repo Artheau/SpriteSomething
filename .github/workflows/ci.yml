@@ -53,8 +53,8 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        os-name: [ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest]
-        python-version: [3.7]
+        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+        python-version: [3.8]
     steps:
       # checkout commit
       - name: Checkout commit
@@ -100,8 +100,8 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        os-name: [ubuntu-latest, ubuntu-16.04, macOS-latest, windows-latest]
-        python-version: [3.7]
+        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+        python-version: [3.8]
     needs: [install-test]
     steps:
       # checkout commit
@@ -158,8 +158,8 @@ jobs:
     strategy:
       matrix:
         # install/release on not xenial
-        os-name: [ubuntu-latest, macOS-latest, windows-latest]
-        python-version: [3.7]
+        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+        python-version: [3.8]
 
     needs: [install-build]
     steps:
@@ -219,9 +219,9 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        # release only on bionic
+        # release only on focal/bionic
         os-name: [ubuntu-latest]
-        python-version: [3.7]
+        python-version: [3.8]
 
     needs: [install-prepare-release]
     steps:
@@ -298,6 +298,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ../deploy/linux/SpriteSomething.tar.gz
+#          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
           asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-bionic.tar.gz
           asset_content_type: application/gzip
         if: contains(github.ref, 'master')
