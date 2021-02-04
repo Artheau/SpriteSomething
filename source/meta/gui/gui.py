@@ -293,6 +293,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		help_menu = self.create_cascade(self.fish.translate("meta","menu","help"),"help_menu",
 											[
+													(self.fish.translate("meta","menu","help.open-project-website"),None,self.open_project_website),
+													(self.fish.translate("meta","menu","help.open-project-repository"),None,self.open_project_repository),
+													(self.fish.translate("meta","menu","help.open-project-wiki"),None,self.open_project_wiki),
 													(self.fish.translate("meta","menu","help.check-for-updates"),None,self.check_for_updates),
 													(self.fish.translate("meta","menu","help.diagnostics"),"help-diagnostics",self.diagnostics),
 													(self.fish.translate("meta","menu","help.about"),"app",self.about),
@@ -1032,6 +1035,18 @@ class SpriteSomethingMainFrame(tk.Frame):
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
+
+	def open_project_website(self):
+		website_url = "https://artheau.github.io/SpriteSomething"
+		webbrowser.open_new(website_url)
+
+	def open_project_repository(self):
+		website_url = "https://github.com/Artheau/SpriteSomething"
+		webbrowser.open_new(website_url)
+
+	def open_project_wiki(self):
+		website_url = "https://github.com/Artheau/SpriteSomething/wiki"
+		webbrowser.open_new(website_url)
 
 	def check_for_updates(self):
 		update_available = False
