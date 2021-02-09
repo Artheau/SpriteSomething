@@ -162,7 +162,7 @@ class Sprite(SpriteParent):
 		block.write(self.get_binary_palettes())
 		return [(LINK_EXPORT_BLOCK_TYPE, block.getvalue())]
 
-	def inject_into_ROM(self, rom):
+	def inject_into_ROM(self, spiffy_dict, rom):
 		#should work for the combo rom, VT rando
 		#should work for the (J) & (U) ROMs but won't automatically include the extra code needed to manage gloves, etc
 

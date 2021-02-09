@@ -10,7 +10,7 @@ from source.meta.common import common
 
 # FIXME: English
 
-def rom_inject(player_sprite, old_rom, verbose=False):
+def rom_inject(player_sprite, spiffy_dict, old_rom, verbose=False):
 	rom = copy.deepcopy(old_rom)  #for safety we are going to deepcopy the ROM, in case we need to bail
 
 	#in case these were disabled in rom.py, we definitely need to do these before we convert to wizzywig
@@ -93,7 +93,7 @@ def rom_inject(player_sprite, old_rom, verbose=False):
 	#now we're going to get set up for screw attack without space jump
 	#apparently there was a riot over this not being a toggleable option, so HAR+Total proposed a control flag, which we now add
 	if verbose: print("Writing spin_attack config value", end="")
-	success_code = write_spin_attack_config(rom)
+	success_code = write_spin_attack_config(spiffy_dict,rom)
 	if verbose: print("done" if success_code else "FAIL")
 
 	#we need a new control code that checks for space jump, so that we can gate the animation appropriately
@@ -839,9 +839,13 @@ def disable_upper_bypass(samus,rom):
 	success_code = rom._apply_single_fix_to_snes_address(0x90864E, OLD_SUBROUTINES, NEW_SUBROUTINES, "2"*28)
 	return success_code
 
-def write_spin_attack_config(rom):
+def write_spin_attack_config(spiffy_dict,rom):
 	# Use the new screw attack animations if enabled (set $9B93FE to $0000 to disable, $0001 to enable.  All other numbers also enable.)
-	rom._apply_single_fix_to_snes_address(0x9B93FE, 0x0090, 0x0001, 2)
+	flag = 0x0001
+	if "split-screw-attack_var" in spiffy_dict:
+		if spiffy_dict["split-screw-attack_var"].get() == "no":
+			flag = 0x0000
+	rom.write_to_snes_address(0x9B93FE, flag, 2)
 	return True
 
 def create_new_control_code(samus,rom):

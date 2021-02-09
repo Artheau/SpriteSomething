@@ -64,7 +64,7 @@ class SpriteParent():
         raise AssertionError(
             "called import_from_binary_data() on Sprite base class")
 
-    def inject_into_ROM(self, rom):
+    def inject_into_ROM(self, spiffy_dict, rom):
         # return the injected ROM
         raise AssertionError("called export_to_ROM() on Sprite base class")
 

@@ -882,7 +882,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
 		if dest_filename:
 			rom = self.game.get_rom_from_filename(source_filename)
-			modified_rom = self.sprite.inject_into_ROM(rom)
+			modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
 			#print(modified_rom.get_patch())
 			modified_rom.save(dest_filename, overwrite=True)
 			self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
@@ -919,7 +919,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			is_zsm = "ZSM" in str(rom.get_name())	#this is a ZSM game file
 			# FIXME: English, need to get character name translations and compare against those
 			if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):	#if we've got a compatible game file, inject it!
-				modified_rom = self.sprite.inject_into_ROM(rom)
+				modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
 				modified_rom.save(dest_filename, overwrite=True)
 
 	#alias to inject into a game file
