@@ -6,7 +6,8 @@
     "suit": "Suit",
     "variant": "Variant",
     "effect": "Effect",
-    "cannon-port": "Cannon Port"
+    "cannon-port": "Cannon Port",
+    "split-screw-attack": "Split Screw Attack"
   },
   "Aiming": {
     "up": "Straight Up",
@@ -39,5 +40,9 @@
   "Cannon Port": {
     "no": "Closed",
     "yes": "Open"
+  },
+  "Split Screw Attack": {
+    "no": "Screw Attack always uses Space Jump animation",
+    "yes": "Screw Attack uses Spin Jump animation if Space Jump not equipped"
   }
 }
