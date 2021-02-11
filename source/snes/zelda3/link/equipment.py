@@ -9,7 +9,7 @@ def coord_calc(origin,dims):
 
 def equipment_test(save=False):
 	#get equipment image
-	equipment_image = Image.open(common.get_resource(["snes","zelda3","link","sheets"],"equipment2.png"))
+	equipment_image = Image.open(common.get_resource(["snes","zelda3","link","sheets"],"equipment.png"))
 
 	equipment = {}
 
