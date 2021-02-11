@@ -33486,6 +33486,622 @@
       }
     ]
   },
+  "Shallow water": {
+    "right": [
+      {
+        "frames": 3,
+        "tiles": [
+          {
+            "image": "shallow_water0",
+            "pos": [
+              -1,
+              15
+            ]
+          },
+          {
+            "image": "SHIELD1",
+            "pos": [
+              5,
+              2
+            ]
+          },
+          {
+            "image": "A0",
+            "pos": [
+              -2,
+              -1
+            ]
+          },
+          {
+            "image": "B0",
+            "pos": [
+              -1,
+              7
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 3,
+        "tiles": [
+          {
+            "image": "shallow_water1",
+            "pos": [
+              -1,
+              15
+            ]
+          },
+          {
+            "image": "SHIELD1",
+            "pos": [
+              5,
+              3
+            ]
+          },
+          {
+            "image": "A0",
+            "pos": [
+              -2,
+              0
+            ]
+          },
+          {
+            "image": "V1",
+            "pos": [
+              -1,
+              7
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 3,
+        "tiles": [
+          {
+            "image": "shallow_water2",
+            "pos": [
+              -1,
+              15
+            ]
+          },
+          {
+            "image": "SHIELD1",
+            "pos": [
+              5,
+              4
+            ]
+          },
+          {
+            "image": "A0",
+            "pos": [
+              -2,
+              1
+            ]
+          },
+          {
+            "image": "V2",
+            "pos": [
+              -1,
+              7
+            ]
+          }
+        ]
+      }
+    ],
+    "up": [
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water0",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "A2",
+            "pos": [
+              0,
+              0
+            ]
+          },
+          {
+            "image": "C1",
+            "pos": [
+              0,
+              8
+            ]
+          },
+          {
+            "image": "SHIELD2",
+            "pos": [
+              5,
+              2
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water1",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "A2",
+            "pos": [
+              0,
+              1
+            ]
+          },
+          {
+            "image": "V5",
+            "pos": [
+              0,
+              8
+            ]
+          },
+          {
+            "image": "SHIELD2",
+            "pos": [
+              5,
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water2",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "A2",
+            "pos": [
+              0,
+              2
+            ]
+          },
+          {
+            "image": "V6",
+            "pos": [
+              0,
+              8
+            ]
+          },
+          {
+            "image": "SHIELD2",
+            "pos": [
+              5,
+              4
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water0",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "A2",
+            "pos": [
+              0,
+              0
+            ]
+          },
+          {
+            "image": "C1",
+            "pos": [
+              0,
+              8
+            ]
+          },
+          {
+            "image": "SHIELD2",
+            "pos": [
+              5,
+              2
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water1",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "A2",
+            "pos": [
+              0,
+              1
+            ]
+          },
+          {
+            "image": "D4",
+            "pos": [
+              0,
+              8
+            ]
+          },
+          {
+            "image": "SHIELD2",
+            "pos": [
+              5,
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water2",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "A2",
+            "pos": [
+              0,
+              2
+            ]
+          },
+          {
+            "image": "M5",
+            "pos": [
+              0,
+              8
+            ],
+            "flip": "h"
+          },
+          {
+            "image": "SHIELD2",
+            "pos": [
+              5,
+              4
+            ]
+          }
+        ]
+      }
+    ],
+    "down": [
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water0",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "SHIELD0",
+            "pos": [
+              -4,
+              8
+            ]
+          },
+          {
+            "image": "A1",
+            "pos": [
+              0,
+              0
+            ]
+          },
+          {
+            "image": "B3",
+            "pos": [
+              0,
+              8
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water1",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "SHIELD0",
+            "pos": [
+              -4,
+              9
+            ]
+          },
+          {
+            "image": "A1",
+            "pos": [
+              0,
+              1
+            ]
+          },
+          {
+            "image": "V3",
+            "pos": [
+              0,
+              8
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water2",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "SHIELD0",
+            "pos": [
+              -4,
+              10
+            ]
+          },
+          {
+            "image": "A1",
+            "pos": [
+              0,
+              2
+            ]
+          },
+          {
+            "image": "V4",
+            "pos": [
+              0,
+              8
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water0",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "SHIELD0",
+            "pos": [
+              -4,
+              8
+            ]
+          },
+          {
+            "image": "A1",
+            "pos": [
+              0,
+              0
+            ]
+          },
+          {
+            "image": "B3",
+            "pos": [
+              0,
+              8
+            ]
+          }
+        ]
+      },
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water1",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "SHIELD0",
+            "pos": [
+              -4,
+              9
+            ]
+          },
+          {
+            "image": "A1",
+            "pos": [
+              0,
+              1
+            ]
+          },
+          {
+            "image": "V3",
+            "pos": [
+              0,
+              8
+            ],
+            "flip": "h"
+          }
+        ]
+      },
+      {
+        "frames": 4,
+        "tiles": [
+          {
+            "image": "shallow_water2",
+            "pos": [
+              0,
+              16
+            ]
+          },
+          {
+            "image": "SHIELD0",
+            "pos": [
+              -4,
+              10
+            ]
+          },
+          {
+            "image": "A1",
+            "pos": [
+              0,
+              2
+            ]
+          },
+          {
+            "image": "V4",
+            "pos": [
+              0,
+              8
+            ],
+            "flip": "h"
+          }
+        ]
+      }
+    ],
+    "left": [
+      {
+        "frames": 3,
+        "tiles": [
+          {
+            "image": "shallow_water0",
+            "pos": [
+              1,
+              15
+            ]
+          },
+          {
+            "image": "SHIELD1",
+            "pos": [
+              -5,
+              2
+            ],
+            "flip": "h"
+          },
+          {
+            "image": "A0",
+            "pos": [
+              2,
+              -1
+            ],
+            "flip": "h"
+          },
+          {
+            "image": "B0",
+            "pos": [
+              1,
+              7
+            ],
+            "flip": "h"
+          }
+        ]
+      },
+      {
+        "frames": 3,
+        "tiles": [
+          {
+            "image": "shallow_water1",
+            "pos": [
+              1,
+              15
+            ]
+          },
+          {
+            "image": "SHIELD1",
+            "pos": [
+              -5,
+              3
+            ],
+            "flip": "h"
+          },
+          {
+            "image": "A0",
+            "pos": [
+              2,
+              0
+            ],
+            "flip": "h"
+          },
+          {
+            "image": "V1",
+            "pos": [
+              1,
+              7
+            ],
+            "flip": "h"
+          }
+        ]
+      },
+      {
+        "frames": 3,
+        "tiles": [
+          {
+            "image": "shallow_water2",
+            "pos": [
+              1,
+              15
+            ]
+          },
+          {
+            "image": "SHIELD1",
+            "pos": [
+              -5,
+              4
+            ],
+            "flip": "H"
+          },
+          {
+            "image": "A0",
+            "pos": [
+              2,
+              1
+            ],
+            "flip": "h"
+          },
+          {
+            "image": "V2",
+            "pos": [
+              1,
+              7
+            ],
+            "flip": "h"
+          }
+        ]
+      }
+    ]
+  },
   "Dungeon map": {
     "right": [
       {
