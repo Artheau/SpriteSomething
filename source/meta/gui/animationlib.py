@@ -41,6 +41,7 @@ class AnimationEngineParent():
 		self.frame_getter = frame_getter
 		self.coord_getter = coord_getter
 		self.coord_setter = coord_setter
+		self.game.coord_setter = coord_setter
 		self.current_animation = None
 		self.pose_number = None
 		self.palette_number = None
@@ -120,6 +121,7 @@ class AnimationEngineParent():
 		      current_pose_num = 0
 		      curr_pos = anims[current_anim][current_dir][current_pose_num]
 		      if "background" in curr_pos:
+		      	# print("Setting Background because of animation (%s): %s" % (animation_name, curr_pos["background"]))
 		      	self.game.set_background(curr_pos["background"])
 		      	fnames = list(self.game.background_datas["filename"].keys())
 		      	pnames = list(self.game.background_datas["title"].keys())
@@ -127,6 +129,7 @@ class AnimationEngineParent():
 		      	pname = pnames[fnames.index(fname)]
 		      	self.game.background_selection.set(pname)
 		      if "origin" in curr_pos:
+		      	# print("Setting Coordinates because of animation (%s): %s" % (animation_name, curr_pos["origin"]))
 		      	self.coord_setter(curr_pos["origin"])
 		self.update_animation()
 
