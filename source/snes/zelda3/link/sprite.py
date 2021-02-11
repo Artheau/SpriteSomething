@@ -168,7 +168,7 @@ class Sprite(SpriteParent):
 
 		#this'll check VT rando Tournament Flag
 		tournament_flag = rom.read(0x180213, 2) == 1
-		#combo Tournament Flag doesn't seem to be setting properly
+		#this'll check combo Tournament Flag
 		if rom.type() == "EXHIROM" and not tournament_flag:
 			config = rom.read_from_snes_address(0x80FF52, 2)
 			fieldvals = {}

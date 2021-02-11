@@ -73,14 +73,16 @@ function init(mode = "index") {
     subtitle.append(version_a);
     $("body").append(subtitle);
 
-    let list_a = $("<a>")
+    let list_ul = $("<ul>");
+    let list_li_a = $("<a>")
       .attr({
         "href": "https://miketrethewey.github.io/SpriteSomething-collections/"
       })
       .text("Custom Sprite Repositories");
-    let list_li = $("<ul><li>")
-      .append(list_a);
-    $("body").append(list_li);
+    let list_li = $("<li>")
+      .append(list_li_a);
+    list_ul.append(list_li);
+    $("body").append(list_ul);
 
     let manifest = readTextFile(".\\resources\\app\\meta\\manifests\\badges.json");
     let badges = JSON.parse(manifest);
