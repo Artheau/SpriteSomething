@@ -205,6 +205,8 @@ class SpriteParent():
     def get_tiles_for_pose(self, animation, direction, pose_number,
                            palettes, frame_number):
         pose_list = self.get_pose_list(animation, direction)
+        if pose_number > len(pose_list):
+            print(animation,direction,pose_number,palettes)
         tile_list = pose_list[pose_number]["tiles"][::-1]
         tile_list += self.get_supplemental_tiles(
             animation, direction, pose_number, palettes, frame_number)
@@ -392,17 +394,18 @@ class SpriteParent():
             )
 
         return_images = []
+        i = 0
         for image in images:
             animationkeys = list(self.animations.keys())
             if "$schema" in animationkeys:
                 animationkeys.remove("$schema")
             animation = animationkeys[0]  # default to first image here
-            if 0 in image:
+            if len(image) > 0 and image[0] != "":
                 animation = image[0]
 
             direction = list(self.animations[animation].keys())[
                 0]  # default: first direction
-            if 1 in image:
+            if len(image) > 1 and image[1] != "":
                 direction = image[1]
 
             pose = image[2] if len(image) > 2 else 0  # default: #first pose
@@ -413,7 +416,8 @@ class SpriteParent():
             # default to the sprite name and style
             filename = image[5] if len(image) > 5 else \
                 common.filename_scrub(
-                    "-".join([sprite_save_name, style]) + ".png")
+                    "-".join([sprite_save_name, style, str(i)]) + ".png")
+            i = i + 1
             return_images.append((filename, self.get_image(
                 animation, direction, pose, palette, frame)[0]))
 
