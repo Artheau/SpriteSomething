@@ -94,7 +94,7 @@ class Sprite(SpriteParent):
 		return return_images
 
 	def get_spiffy_images(self, return_images):
-    # FIXME: somehow get these from representative-images.json
+		# FIXME: somehow get these from representative-images.json
 		pose_coords = [
 			(49,40),
 			(75,30),
@@ -112,8 +112,8 @@ class Sprite(SpriteParent):
 			(104,161),
 			(134,143)
 		]
-    # FIXME: somehow get this from representative-images.json
-    bgfilename = "titlecard.png"
+		# FIXME: somehow get this from representative-images.json
+		bgfilename = "titlecard.png"
 
 		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
 			sprite_save_name = self.metadata["sprite.name"].lower()
