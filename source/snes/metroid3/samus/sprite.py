@@ -30,9 +30,9 @@ class Sprite(SpriteParent):
 		self.images = rom_extract.rom_extract(self, rom)
 		self.master_palette = list(self.images["palette_block"].getdata())
 
-	def inject_into_ROM(self, rom):
+	def inject_into_ROM(self, spiffy_dict, rom):
 		#The history of the Samus export code is a story I will tell to my grandchildren
-		return rom_inject.rom_inject(self, rom)
+		return rom_inject.rom_inject(self, spiffy_dict, rom)
 
 	def get_rdc_export_blocks(self):
 		SAMUS_EXPORT_BLOCK_TYPE = 4

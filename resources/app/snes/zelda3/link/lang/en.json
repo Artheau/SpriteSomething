@@ -5,7 +5,8 @@
     "mail": "Mail",
     "sword": "Sword",
     "shield": "Shield",
-    "gloves": "Gloves"
+    "gloves": "Gloves",
+    "accessories": "Accessories"
   },
   "Facing": {
     "up": "Up",
@@ -36,5 +37,9 @@
     "none": "No Gloves",
     "power": "Power Glove",
     "titan": "Titan's Mitt"
+  },
+  "Accessories": {
+    "none": "No Accessories",
+    "yes": "Include Accessories"
   }
 }

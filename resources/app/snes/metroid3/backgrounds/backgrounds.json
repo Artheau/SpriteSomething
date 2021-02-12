@@ -3,19 +3,23 @@
   "backgrounds": [
     {
       "filename": "colony.png",
-      "title": "Space Colony"
+      "title": "Space Colony",
+      "origin": [124, 171]
     },
     {
       "filename": "fileselect.png",
-      "title": "File Select"
+      "title": "File Select",
+      "origin": [156, 67]
     },
     {
       "filename": "landingsite.png",
-      "title": "Landing Site"
+      "title": "Landing Site",
+      "origin": [114, 202]
     },
     {
       "filename": "title.png",
-      "title": "Title Screen"
+      "title": "Title Screen",
+      "origin": [74, 124]
     }
   ]
 }

@@ -83,6 +83,20 @@
           "img": "yes-thing.png"
         }
       ]
+    },
+    {
+      "group-fish-key": "split-screw-attack",
+      "buttons": [
+        {
+          "fish-subkey": "no",
+          "img": "no-thing.png"
+        },
+        {
+          "fish-subkey": "yes",
+          "img": "yes-thing.png",
+          "default": true
+        }
+      ]
     }
   ]
 }

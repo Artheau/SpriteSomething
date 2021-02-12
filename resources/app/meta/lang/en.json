@@ -21,6 +21,9 @@
     "plugins.game": "Game",
     "plugins.sprite": "Sprite",
     "help": "Help",
+    "help.open-project-website": "Open Project Website",
+    "help.open-project-repository": "Open Project Repository",
+    "help.open-project-wiki": "Open Project Wiki",
     "help.check-for-updates": "Check for Updates",
     "help.diagnostics": "Diagnostics",
     "help.about": "About"
