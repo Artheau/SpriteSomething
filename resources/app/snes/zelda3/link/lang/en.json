@@ -6,7 +6,8 @@
     "sword": "Sword",
     "shield": "Shield",
     "gloves": "Gloves",
-    "palette": "_"
+    "palette": "_",
+    "accessories": "Accessories"
   },
   "Facing": {
     "up": "Up",
@@ -37,5 +38,9 @@
     "none": "No Gloves",
     "power": "Power Glove",
     "titan": "Titan's Mitt"
+  },
+  "Accessories": {
+    "none": "No Accessories",
+    "yes": "Include Accessories"
   }
 }

@@ -1,3 +1,13 @@
+body {
+  background-color: #000000;
+  color:            #ffffff;
+  margin:           0;
+}
+
+a {
+  color: #8888ff;
+}
+
 .sprite {
   border: 1px solid #ffffff;
   float:  left;

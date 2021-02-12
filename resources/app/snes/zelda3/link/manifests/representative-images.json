@@ -5,5 +5,22 @@
   "upgraded": [
     ["File select", "right", 0, ["red_mail", "titan_gloves", "gold_sword", "mirror_shield"]]
   ],
+  "spiffy": [
+    ["Walk downstairs (1F)",  "middle", 4],
+    ["Walk",                  "left",   2,  ["red_mail",  "titan_gloves", "",               "mirror_shield"]],
+    ["Cane",                  "right",  0,  ["blue_mail", "titan_gloves", "",               "",               "yes_accessories"]],
+    ["Swim",                  "down",   0,  ["",          "power_gloves"]],
+    ["Walk",                  "down",   5,  ["",          "",             "",               "fighter_shield"]],
+    ["Lift",                  "right",  0,  ["",          "power_gloves", "",               "",               "none_accessories"]],
+    ["Crystal get",           "right",  0,  ["blue_mail", "titan_gloves", "",               "",               "yes_accessories"]],
+    ["Quake",                 "right",  42, ["blue_mail", "titan_gloves", "gold_sword"]],
+    ["Spin attack",           "right",  1,  ["",          "power_gloves", "master_sword"]],
+    ["Attack",                "down",   5,  ["red_mail",  "titan_gloves", "gold_sword",     "mirror_shield"]],
+    ["Item get",              "right",  0,  ["",          "power_gloves", "",               "fighter_shield", "yes_accessories"]],
+    ["Asleep",                "right",  0,  ["",          "power_gloves", "",               "",               "yes_accessories"]],
+    ["Bonk",                  "down",   0,  ["",          "",             "fighter_sword", "fighter_shield"]],
+    ["Walk",                  "up",     6,  ["blue_mail", "power_gloves", "",               "fire_shield"]],
+    ["Tree pull",             "right",  3,  ["",          "power_gloves"]]
+  ],
   "crossproduct": []
 }

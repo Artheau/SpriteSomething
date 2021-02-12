@@ -298,6 +298,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 
 		help_menu = self.create_cascade(self.fish.translate("meta","menu","help"),"help_menu",
 											[
+													(self.fish.translate("meta","menu","help.open-project-website"),None,self.open_project_website),
+													(self.fish.translate("meta","menu","help.open-project-repository"),None,self.open_project_repository),
+													(self.fish.translate("meta","menu","help.open-project-wiki"),None,self.open_project_wiki),
 													(self.fish.translate("meta","menu","help.check-for-updates"),None,self.check_for_updates),
 													(self.fish.translate("meta","menu","help.diagnostics"),"help-diagnostics",self.diagnostics),
 													(self.fish.translate("meta","menu","help.about"),"app",self.about),
@@ -351,6 +354,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.game, self.sprite, self.animation_engine = gamelib.autodetect(sprite_filename)
 		self.fish.add_translation_file(os.path.join(self.game.console_name,self.game.internal_name))
 		self.fish.add_translation_file(os.path.join(self.sprite.resource_subpath))
+		# print("Loading sprite, setting origin to [100,100]")
 		self.coord_setter((100,100))        #an arbitrary default
 		self.attach_both_panels()            #remake the GUI panels
 		self.load_plugins()
@@ -569,7 +573,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.frames_left_before_freeze = CONST.MAX_FRAMES
 		self.freeze_ray = True # stops time, tell your friends
 		self.frame_number = 0
-		self.coord_setter((100,100))    #an arbitrary default
 		self.start_global_frame_timer()
 
   # update animation imagery in case an option was changed
@@ -908,7 +911,24 @@ class SpriteSomethingMainFrame(tk.Frame):
 			  #FIXME: English
 			  messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 		else:
-		  messagebox.showerror("Not Implemented","Injection not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+			source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),"*.sfc *.smc"),))
+			if source_filename:
+				_,file_extension = os.path.splitext(source_filename)
+				if file_extension.lower() in ['.sfc','.smc']:
+					default_extension = file_extension.lower()
+				else:
+					default_extension = default_ext
+				dest_filename = os.path.splitext(source_filename)[0] + "_modified"
+				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
+		if dest_filename:
+			rom = self.game.get_rom_from_filename(source_filename)
+			modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
+			#print(modified_rom.get_patch())
+			modified_rom.save(dest_filename, overwrite=True)
+			self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
+			self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
+			# FIXME: English
+			messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 
 	#query user for directory to inject sprite into
 	def copy_into_ROM_bulk(self, inject=False):
@@ -947,7 +967,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 			is_zsm = "ZSM" in str(rom.get_name())	#this is a ZSM game file
 			# FIXME: English, need to get character name translations and compare against those
 			if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):	#if we've got a compatible game file, inject it!
-				modified_rom = self.sprite.inject_into_ROM(rom)
+				modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
 				modified_rom.save(dest_filename, overwrite=True)
 
 	#alias to inject into a game file
@@ -1063,6 +1083,18 @@ class SpriteSomethingMainFrame(tk.Frame):
 			return returnvalue
 		else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
 			return False
+
+	def open_project_website(self):
+		website_url = "https://artheau.github.io/SpriteSomething"
+		webbrowser.open_new(website_url)
+
+	def open_project_repository(self):
+		website_url = "https://github.com/Artheau/SpriteSomething"
+		webbrowser.open_new(website_url)
+
+	def open_project_wiki(self):
+		website_url = "https://github.com/Artheau/SpriteSomething/wiki"
+		webbrowser.open_new(website_url)
 
 	def check_for_updates(self):
 		update_available = False

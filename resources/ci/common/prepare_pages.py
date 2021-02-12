@@ -68,7 +68,7 @@ for console in os.listdir(checkdir):
                     )
 
 spriteTemplateFile = open(os.path.join(
-    ".", "html", "template", "sprites.html"))
+    ".", "html", "template", "sprites-index.html"))
 spriteTemplate = spriteTemplateFile.read()
 spriteTemplateFile.close()
 
@@ -112,9 +112,14 @@ with open(os.path.join(
                     spritedir = os.path.join(gamedir, sprite)
                     if not os.path.isdir(spritedir):
                         os.makedirs(spritedir)
+                    # Backwards compatibility
+                    copy(
+                        os.path.join(".", "html", "template", "sprites-redir.html"),
+                        os.path.join(spritedir, "sprites.html")
+                    )
                     with open(os.path.join(
                             spritedir,
-                            "sprites.html"
+                            "index.html"
                     ), "w+") as spriteFile:
                         thisSpriteTemplate = spriteTemplate.replace(
                             "<CONSOLE>", console)
