@@ -198,9 +198,11 @@ class GameParent():
 			  image_filename = image_title
 			self.raw_background = Image.open(common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename))
 			#this doesn't work yet; not sure how to hook it
-			# if "origin" in self.background_datas:
-			# 	if image_title in self.background_datas["origin"]:
-			# 		self.parent.coord_setter(self.background_datas["origin"][image_title])
+			if "origin" in self.background_datas:
+				if image_title in self.background_datas["origin"]:
+					# print("Setting Coordinates because of background (%s): %s" % (image_title, self.background_datas["origin"][image_title]))
+					if hasattr(self,"coord_setter"):
+						self.coord_setter(self.background_datas["origin"][image_title])
 
 		#now re-zoom the image
 		new_size = tuple(int(dim*self.zoom_getter()) for dim in self.raw_background.size)

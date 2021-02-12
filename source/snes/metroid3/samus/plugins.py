@@ -25,6 +25,7 @@ class Plugins(PluginsParent):
 			self,
 			"Unofficial SpriteSomething Samus",
 			"snes/metroid3/samus/sheets/unofficial",
-			"https://raw.githubusercontent.com/Artheau/SpriteSomething/gh-pages/resources/app/snes/metroid3/samus/sprites.json"
+			"https://raw.githubusercontent.com/miketrethewey/SpriteSomething-collections/gh-pages/snes/metroid3/samus/sprites.json"
+#			"https://raw.githubusercontent.com/Artheau/SpriteSomething/gh-pages/resources/app/snes/metroid3/samus/sprites.json"
 		)
 		return success

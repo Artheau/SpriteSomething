@@ -349,6 +349,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.game, self.sprite, self.animation_engine = gamelib.autodetect(sprite_filename)
 		self.fish.add_translation_file(os.path.join(self.game.console_name,self.game.internal_name))
 		self.fish.add_translation_file(os.path.join(self.sprite.resource_subpath))
+		# print("Loading sprite, setting origin to [100,100]")
 		self.coord_setter((100,100))        #an arbitrary default
 		self.attach_both_panels()            #remake the GUI panels
 		self.load_plugins()
@@ -562,7 +563,6 @@ class SpriteSomethingMainFrame(tk.Frame):
 		self.frames_left_before_freeze = CONST.MAX_FRAMES
 		self.freeze_ray = True # stops time, tell your friends
 		self.frame_number = 0
-		self.coord_setter((100,100))    #an arbitrary default
 		self.start_global_frame_timer()
 
   # update animation imagery in case an option was changed

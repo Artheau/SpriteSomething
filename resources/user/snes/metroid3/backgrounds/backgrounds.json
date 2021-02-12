@@ -4,11 +4,12 @@
     {
       "filename": "ship.png",
       "title": "Samus' Ship",
-			"origin": [0,0]
+      "origin": [126, 80]
     },
     {
       "filename": "zebes.png",
-      "title": "Planet Zebes"
+      "title": "Planet Zebes",
+      "origin": [132, 158]
     }
   ]
 }

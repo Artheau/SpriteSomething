@@ -87,6 +87,20 @@
           "img": "glove2.png"
         }
       ]
+    },
+    {
+      "group-fish-key": "accessories",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png"
+        },
+        {
+          "fish-subkey": "yes",
+          "img": "yes-thing.png",
+          "default": true
+        }
+      ]
     }
   ]
 }

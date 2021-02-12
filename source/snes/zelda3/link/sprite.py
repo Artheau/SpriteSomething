@@ -16,13 +16,13 @@ class Sprite(SpriteParent):
 
 		self.link_globals = {}
 		self.link_globals["zap_palette"] = [
-#				(  0,  0,  0),
-				(  0,  0,  0),
+#				(	0,	0,	0),
+				(	0,	0,	0),
 				(208,184, 24),
 				(136,112,248),
-				(  0,  0,  0),
+				(	0,	0,	0),
 				(208,192,248),
-				(  0,  0,  0),
+				(	0,	0,	0),
 				(208,192,248),
 
 				(112, 88,224),
@@ -39,7 +39,7 @@ class Sprite(SpriteParent):
 			[(248,248,248),(248,248, 72),(104,136,184)], #fighters
 			[(112,144,248),(160,248,216),(168, 56, 56)], #master
 			[(216, 72, 16),(248,160, 40),(104,160,248)], #tempered
-			[(248,200,  0),(248,248,200),(  0,144, 72)]  #golden
+			[(248,200,	0),(248,248,200),(	0,144, 72)]	#golden
 		]
 
 	def get_representative_images(self, style):
@@ -48,14 +48,13 @@ class Sprite(SpriteParent):
 
 		if style == "crossproduct":
 			return_images += self.get_tracker_images()
+		elif style == "spiffy":
+			return_images += self.get_spiffy_images(return_images)
 
 		return return_images
 
 	def get_tracker_images(self):
 		return_images = []
-		tracker_images_filepath = os.path.join('.',"resources","user",self.resource_subpath,"sheets","tracker-images",self.classic_name.lower())
-		if not os.path.isdir(tracker_images_filepath):
-			os.makedirs(tracker_images_filepath)
 
 		#cycle through mail levels
 		for i,mail in enumerate(["green","blue","red"]):
@@ -94,18 +93,88 @@ class Sprite(SpriteParent):
 
 		return return_images
 
+	def get_spiffy_images(self, return_images):
+		# FIXME: somehow get these from representative-images.json
+		pose_coords = [
+			(49,40),
+			(75,30),
+			(118,30),
+			(160,31),
+			(32,69),
+			(138,67),
+			(32,103),
+			(67,88),
+			(95,117),
+			(126,107),
+			(168,91),
+			(24,146),
+			(64,143),
+			(104,161),
+			(134,143)
+		]
+		# FIXME: somehow get this from representative-images.json
+		bgfilename = "titlecard.png"
+
+		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
+			sprite_save_name = self.metadata["sprite.name"].lower()
+		else:
+			# FIXME: English
+			sprite_save_name = "unknown"
+		bgimg = Image.open(os.path.join(".","resources","app",self.resource_subpath,"sheets",bgfilename)).convert("RGBA")
+		for i in range(0,len(return_images)):
+			img = return_images[i][1]
+			bgimg.paste(img,pose_coords[i],img)
+		bgimg = bgimg.resize((bgimg.size[0] * 2, bgimg.size[1] * 2), Image.NEAREST)
+		return_images.append(("-".join([sprite_save_name,bgfilename]),bgimg))
+
+		return return_images
+
 	def get_alternate_tile(self, image_name, palettes):
 		slugs = {}
+		found_alt = ""
 		for palette in palettes:
 			if '_' in palette:
 				slugs[palette[palette.rfind('_')+1:]] = palette[:palette.rfind('_')]
 		for item in ["SWORD","SHIELD"]:
 			if image_name.startswith(item):
 				if item.lower() in slugs:
+					found_alt = True
 					image_name = image_name.replace(item,slugs[item.lower()] + '_' + item.lower()) if not ("none_" + item.lower()) in palettes else "transparent"
-					return self.images[image_name]
-				else:
-					return Image.new("RGBA",(0,0),0)    #TODO: Track down why this function is being called without spiffy button info during sprite load
+		if "accessories" in slugs.keys():
+			for item in [
+				"BED",
+				"BOOMERANG",
+				"BOW",
+				"BUGNET",
+				"CANE",
+				"HAMMER",
+				"HOOK",
+				"POWDER",
+				"ROD",
+				"SHALLOW_WATER",
+				"SHOVEL",
+				"SWAGDUCK",
+				"TALL_GRASS"
+				]:
+				if image_name.startswith(item):
+					found_alt = True
+					image_name = image_name.lower() if (not "none_accessories" in palettes) else "transparent"
+			for item in ["BUSH","BOOK"]:
+				if image_name.startswith(item):
+					found_alt = True
+					image_name = item.lower() if (not "none_accessories" in palettes) else "transparent"
+			for item,default in [
+				("ITEM","pendant"),
+				("CRYSTAL","crystal"),
+				("BUSH_SHADOW","main_shadow")
+				]:
+				if image_name.startswith(item):
+					found_alt = True
+					image_name = default.lower() if (not "none_accessories" in palettes) else "transparent"
+		if found_alt:
+			return self.images[image_name]
+		elif True:
+			return Image.new("RGBA",(0,0),0)		#TODO: Track down why this function is being called without spiffy button info during sprite load
 		else:
 			# FIXME: English
 			raise AssertionError(f"Could not locate tile with name {image_name}")
@@ -117,13 +186,13 @@ class Sprite(SpriteParent):
 		self.images = dict(self.images,**self.equipment)
 
 	def import_from_ROM(self, rom):
-		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)    #the big Link sheet
-		palette_data = rom.bulk_read_from_snes_address(0x1BD308,120)     #the palettes
+		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)		#the big Link sheet
+		palette_data = rom.bulk_read_from_snes_address(0x1BD308,120)		 #the palettes
 		palette_data.extend(rom.bulk_read_from_snes_address(0x1BEDF5,4)) #the glove colors
 		self.import_from_binary_data(pixel_data,palette_data)
 
 	def import_from_binary_data(self,pixel_data,palette_data):
-		self.master_palette = [(0,0,0) for _ in range(0x40)]   #initialize the palette
+		self.master_palette = [(0,0,0) for _ in range(0x40)]	 #initialize the palette
 		#main palettes
 		converted_palette_data = [int.from_bytes(palette_data[i:i+2], byteorder='little') \
 															for i in range(0,len(palette_data),2)]
@@ -226,9 +295,9 @@ class Sprite(SpriteParent):
 		if "zap_mail" in palettes:
 			this_palette = self.link_globals["zap_palette"]
 		elif "bunny_mail" in palettes:
-			palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
+			palette_indices = range(0x31,0x40)	 #use the bunny colors, skipping the transparency color
 		else:
-			palette_indices = list(range(1,16))   #start with green mail and modify it as needed
+			palette_indices = list(range(1,16))	 #start with green mail and modify it as needed
 			for i in range(0,len(palette_indices)):
 
 				if palette_indices[i] == 0x0D:
@@ -262,7 +331,7 @@ class Sprite(SpriteParent):
 			bottom_half_of_rows += bytes(raw_image[0x40:])
 
 		return bytes(b for row_offset in range(0,len(top_half_of_rows),0x200) \
-					   for b in top_half_of_rows[row_offset:row_offset+0x200]+bottom_half_of_rows[row_offset:row_offset+0x200])
+						 for b in top_half_of_rows[row_offset:row_offset+0x200]+bottom_half_of_rows[row_offset:row_offset+0x200])
 
 	def get_binary_palettes(self):
 		raw_palette_data = bytearray()
