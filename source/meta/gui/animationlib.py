@@ -52,7 +52,11 @@ class AnimationEngineParent():
 		animation_label.grid(row=0, column=1)
 		self.animation_selection = tk.StringVar(animation_panel)
 
-		self.animation_selection.set(random.choice(list(self.animations.keys())))
+		# pick random animation
+		animation_key = "WIP"
+		while(animation_key.find("WIP") >= 0):
+			animation_key = random.choice(list(self.animations.keys()))
+		self.animation_selection.set(animation_key)
 
 		animation_dropdown = tk.ttk.Combobox(animation_panel, state="readonly", values=list(self.animations.keys()), name="animation_dropdown")
 		animation_dropdown.configure(width=ANIMATION_DROPDOWN_WIDTH, exportselection=0, textvariable=self.animation_selection)

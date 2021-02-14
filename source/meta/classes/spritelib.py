@@ -22,7 +22,7 @@ from source.meta.common import common
 
 class SpriteParent():
 	# parent class for sprites to inherit
-	def __init__(self, filename, manifest_dict, my_subpath):
+	def __init__(self, filename, manifest_dict, my_subpath, sprite_name = ""):
 		self.classic_name = manifest_dict["name"]	# e.g. "Samus" or "Link"
 		# the path to this sprite's subfolder in resources
 		self.resource_subpath = my_subpath
@@ -30,6 +30,7 @@ class SpriteParent():
 						 "author.name": "", "author.name-short": ""}
 		self.filename = filename
 		self.overview_scale_factor = 2
+		self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
 		if "input" in manifest_dict and \
 			"png" in manifest_dict["input"] and \
 				"overview-scale-factor" in manifest_dict["input"]["png"]:
@@ -39,8 +40,8 @@ class SpriteParent():
 			self.overview_scale_factor = osf
 		self.plugins = None
 		self.has_plugins = False
-		self.load_layout()
-		self.load_animations()
+		self.load_layout(sprite_name)
+		self.load_animations(sprite_name)
 		self.import_from_filename()
 
 	# to make a new sprite class, you must write code for all
@@ -80,7 +81,11 @@ class SpriteParent():
 
 		# if the child class didn't tell us what to do, just go back to
 		#	whatever palette it was on when it was imported
-		return self.master_palette[default_range[0]:default_range[1]]
+		palette = []
+		if self.master_palette:
+			palette = self.master_palette[default_range[0]:default_range[1]]
+
+		return palette
 
 	def get_palette_duration(self, palettes):
 		# in most cases will be overriden by the child class to
@@ -92,11 +97,11 @@ class SpriteParent():
 	# the functions below here are special to the parent class and do not need
 	# to be overwritten, unless you see a reason
 
-	def load_layout(self):
+	def load_layout(self, sprite_name):
 		self.layout = layoutlib.Layout(common.get_resource(
 			[self.resource_subpath, "manifests"], "layout.json"))
 
-	def load_animations(self):
+	def load_animations(self, sprite_name):
 		with open(common.get_resource(
 			[
 				self.resource_subpath,
@@ -105,6 +110,8 @@ class SpriteParent():
 			"animations.json"
 		)) as file:
 			self.animations = json.load(file)
+			if "$schema" in self.animations:
+			  del self.animations["$schema"]
 
 	def import_from_filename(self):
 		_, file_extension = os.path.splitext(self.filename)

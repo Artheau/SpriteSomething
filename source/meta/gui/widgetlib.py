@@ -273,6 +273,7 @@ class SpiffyGroup():
 					aniengine.palette_buttons[button_id].configure(relief=tk.SUNKEN)
 
 	def press_color_button(self,index):
+		# FIXME: Needs to set master.unsaved_changes to True
 		aniengine = self.parent.get_animation_engine()
 		color = str(colorchooser.askcolor())
 		if color.find("None") == -1:
