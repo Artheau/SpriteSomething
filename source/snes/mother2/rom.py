@@ -5,4 +5,4 @@ from source.snes import romhandler as snes
 
 class RomHandler(snes.RomHandlerParent):
 	def __init__(self, filename):
-		super().__init__(filename)      #do the usual stuff
+		super().__init__(filename)	#do the usual stuff
