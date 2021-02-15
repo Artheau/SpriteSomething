@@ -207,7 +207,7 @@ class TestSpriteParent(unittest.TestCase):
 	###############################
 
 	def test_get_rdc_meta_data_block(self):
-		#regression test.  I don't understand RDC format.
+		#regression test.	I don't understand RDC format.
 		self.sprite.metadata = {
 			"sprite.name": "Baby Got Back",
 			"author.name": "Sir Mix-A-Lot",
