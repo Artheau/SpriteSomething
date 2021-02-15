@@ -1,9 +1,9 @@
 # common functions for all entities (i.e. "Sprites")
 # sprites are responsible for maintaining their widgets
 # they have to contain PIL images of all of their data, and the offset info,
-#  and how to assemble it
+#	and how to assemble it
 # and they have to interpret the global frame timer, and communicate back
-#  when to next check in
+#	when to next check in
 
 import itertools
 import importlib
@@ -17,25 +17,25 @@ from source.meta.classes import layoutlib
 from source.meta.common import common
 
 # TODO: make this an actual abstract class by importing 'abc'
-#  and doing the things
+#	and doing the things
 
 
 class SpriteParent():
 	#parent class for sprites to inherit
 	def __init__(self, filename, manifest_dict, my_subpath, sprite_name=""):
-		self.classic_name = manifest_dict["name"]    #e.g. "Samus" or "Link"
-		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
+		self.classic_name = manifest_dict["name"]		#e.g. "Samus" or "Link"
+		self.resource_subpath = my_subpath					 #the path to this sprite's subfolder in resources
 		self.metadata = {"sprite.name": "","author.name":"","author.name-short":""}
 		self.filename = filename
 		self.overview_scale_factor = 2
 		self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
 		if "input" in manifest_dict and "png" in manifest_dict["input"]:
-		  pngs = manifest_dict["input"]["png"]
-		  if not isinstance(pngs,list):
-		    pngs = [pngs]
-		  for png in pngs:
-		    if ((not sprite_name == "" and "name" in png and png["name"] == sprite_name) or sprite_name == "") and "overview-scale-factor" in png:
-		      self.overview_scale_factor = png["overview-scale-factor"]
+			pngs = manifest_dict["input"]["png"]
+			if not isinstance(pngs,list):
+				pngs = [pngs]
+			for png in pngs:
+				if ((not sprite_name == "" and "name" in png and png["name"] == sprite_name) or sprite_name == "") and "overview-scale-factor" in png:
+					self.overview_scale_factor = png["overview-scale-factor"]
 		self.plugins = None
 		self.has_plugins = False
 		self.load_layout(sprite_name)
@@ -94,7 +94,7 @@ class SpriteParent():
 		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
 			if "$schema" in self.animations:
-			  del self.animations["$schema"]
+				del self.animations["$schema"]
 
 	def import_from_filename(self):
 		_,file_extension = os.path.splitext(self.filename)
@@ -103,9 +103,9 @@ class SpriteParent():
 		elif file_extension.lower() == '.zspr':
 			self.import_from_ZSPR()
 		elif file_extension.lower() in [
-        '.sfc','.smc', # SNES RomHandler
-#        '.nes' # NES RomHandler
-      ]:
+				'.sfc','.smc', # SNES RomHandler
+#				'.nes' # NES RomHandler
+			]:
 			#dynamic import
 			rom_path,_ = os.path.split(self.resource_subpath)
 			rom_path = rom_path.replace(os.sep,'.')
@@ -143,7 +143,7 @@ class SpriteParent():
 			==
 			29 (start of metadata)
 			'''
-			#I hate little endian so much.  So much.
+			#I hate little endian so much.	So much.
 			for key,byte_size in [("sprite.name",2),("author.name",2),("author.name-short",1)]:
 				i = 0
 				null_terminator = b"\x00"*byte_size
@@ -155,7 +155,7 @@ class SpriteParent():
 					self.metadata[key] = str(raw_string_slice,encoding="ascii")
 				else:
 					self.metadata[key] = str(raw_string_slice,encoding="utf-16-le")
-				offset += i+byte_size   #have to add another byte_size to go over the null terminator
+				offset += i+byte_size	 #have to add another byte_size to go over the null terminator
 
 			pixel_data = data[pixel_data_offset:pixel_data_offset+pixel_data_length]
 			palette_data = data[palette_data_offset:palette_data_offset+palette_data_length]
@@ -228,7 +228,7 @@ class SpriteParent():
 
 			base_image = common.apply_palette(base_image, this_palette)
 
-			position = [tile_info["pos"][i] + global_displacement[i] for i in range(2)]  #add the x and y coords
+			position = [tile_info["pos"][i] + global_displacement[i] for i in range(2)]	#add the x and y coords
 
 			full_tile_list.append( (base_image,position) )
 
@@ -265,18 +265,18 @@ class SpriteParent():
 		return next(iter(direction_dict.keys()))
 
 	def assemble_tiles_to_completed_image(self, tile_list):
-		if tile_list:   #have to check this because some animations include "empty" poses
+		if tile_list:	 #have to check this because some animations include "empty" poses
 			min_x = min([x for im,(x,y) in tile_list])
 			min_y = min([y for im,(x,y) in tile_list])
 			max_x = max([im.size[0]+x for im,(x,y) in tile_list])
 			max_y = max([im.size[1]+y for im,(x,y) in tile_list])
 
-			working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y),0)   #start out with a transparent image that is correctly sized
+			working_image = Image.new('RGBA',(max_x-min_x,max_y-min_y),0)	 #start out with a transparent image that is correctly sized
 			for new_image,(x,y) in tile_list:
-				working_image.paste(new_image,(x-min_x,y-min_y),new_image)   #the third argument is the transparency mask, so it is not redudant to use the same variable name twice
+				working_image.paste(new_image,(x-min_x,y-min_y),new_image)	 #the third argument is the transparency mask, so it is not redudant to use the same variable name twice
 			return working_image,(min_x,min_y)
 		else:
-			return Image.new('RGBA',(1,1),0), (0,0)   #blank image and dummy offset
+			return Image.new('RGBA',(1,1),0), (0,0)	 #blank image and dummy offset
 
 	def get_image(self, animation, direction, pose, palettes, frame_number):
 		#What I hope for this to do is to just retrieve a single PIL Image that corresponds to a particular pose in a particular animation using the specified list of palettes
@@ -309,17 +309,17 @@ class SpriteParent():
 			animationkeys = list(self.animations.keys())
 			if "$schema" in animationkeys:
 				animationkeys.remove("$schema")
-			animation = animationkeys[0]    #default to first image here
-			direction = list(self.animations[animation].keys())[0]  #first direction
-			pose = 0    #first pose
+			animation = animationkeys[0]		#default to first image here
+			direction = list(self.animations[animation].keys())[0]	#first direction
+			pose = 0		#first pose
 			#by default, will use default palettes, without having any info supplied
-			frame = 0    #probably won't matter, but just in case, use the first frame of palette
+			frame = 0		#probably won't matter, but just in case, use the first frame of palette
 
 
 		if style in manifest_images:
 			images = manifest_images[style]
 		elif style == "default":
-			images = [[]]  #use defaults
+			images = [[]]	#use defaults
 		else:
 			#FIXME: English
 			raise AssertionError(f"received call to get_representative_image() with unknown style {style}")
@@ -342,7 +342,7 @@ class SpriteParent():
 			frame = image[4] if len(image) > 4 else 0 #default to the first frame of timed palette
 			filename = image[5] if len(image) > 5 else \
 				common.filename_scrub("-".join([sprite_save_name,style]) + ".png") #default to the sprite name and style
-			return_images.append(    ( filename, self.get_image(animation,direction,pose,palette,frame)[0] )    )
+			return_images.append(		( filename, self.get_image(animation,direction,pose,palette,frame)[0] )		)
 
 		#should return a list of tuples of the form (filename, PIL Image)
 		return return_images
@@ -371,7 +371,7 @@ class SpriteParent():
 			palettes = self.get_binary_palettes()
 			HEADER_STRING = b"ZSPR"
 			VERSION = 0x01
-			SPRITE_TYPE = 0x01   #this format has "1" for the player sprite
+			SPRITE_TYPE = 0x01	 #this format has "1" for the player sprite
 			RESERVED_BYTES = b'\x00\x00\x00\x00\x00\x00'
 			QUAD_BYTE_NULL_CHAR = b'\x00\x00\x00\x00'
 			DOUBLE_BYTE_NULL_CHAR = b'\x00\x00'
@@ -408,9 +408,9 @@ class SpriteParent():
 			with open(filename, "wb") as zspr_file:
 				zspr_file.write(write_buffer)
 
-			return True       #report success to caller
+			return True			 #report success to caller
 		else:
-			return False      #report failure to caller
+			return False			#report failure to caller
 
 	def save_as_RDC(self, filename):
 		raw_author_name = self.metadata["author.name-short"]
@@ -440,7 +440,7 @@ class SpriteParent():
 			for _,block in blocks_with_type:
 				rdc_file.write(block)
 
-		return True   #indicate success to caller
+		return True	 #indicate success to caller
 
 	def get_rdc_meta_data_block(self):
 		title_name = self.metadata["sprite.name"]

@@ -17,9 +17,9 @@ class Layout():
 			self.data = json.load(inFile)
 		self.reverse_lookup = {}
 		if "layouts" in self.data:
-		  for layout in self.data["layouts"]:
-		    if "names" in layout and sprite_name in layout["names"]:
-		      self.data = layout
+			for layout in self.data["layouts"]:
+				if "names" in layout and sprite_name in layout["names"]:
+					self.data = layout
 		for image_name,image_info in self.data["images"].items():
 			for image_ref in image_info["used by"]:
 				if tuple(image_ref) in self.reverse_lookup:
@@ -74,20 +74,20 @@ class Layout():
 			origin = tuple(origin[i] + shift[i] for i in range(2))
 
 		dimensions = original_dimensions
-		if extra_area is not None:     #indicates that there's patches over the top of this pose to fill it out
+		if extra_area is not None:		 #indicates that there's patches over the top of this pose to fill it out
 			for x0,y0,x1,y1 in extra_area:
 				dimensions = (min(dimensions[0],x0),min(dimensions[1],y0),max(dimensions[2],x1),max(dimensions[3],y1))
 
-		border = ( \
-					-origin[0]-dimensions[0],   #left
-					-origin[1]-dimensions[1],   #top,
-					dimensions[2] - (image.size[0] - origin[0]), #right,
-					dimensions[3] - (image.size[1] - origin[1])  #bottom
-				)
+		border = (
+							-origin[0]-dimensions[0],											#left
+							-origin[1]-dimensions[1],											#top,
+							dimensions[2] - (image.size[0] - origin[0]),	#right,
+							dimensions[3] - (image.size[1] - origin[1])		#bottom
+		)
 
 		image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0,0))
 		origin = (origin[0] + border[0], origin[1] + border[1])
-		if extra_area is not None:   #we need to block off some areas that can't actually be used
+		if extra_area is not None:	 #we need to block off some areas that can't actually be used
 			mask = Image.new("RGBA", (dimensions[2]-dimensions[0],dimensions[3]-dimensions[1]), tuple(border_color))
 			x0,y0,x1,y1 = original_dimensions
 			ImageDraw.Draw(mask).rectangle((x0+origin[0],y0+origin[1],x1+origin[0]-1,y1+origin[1]-1), fill = 0)
@@ -98,12 +98,13 @@ class Layout():
 
 		spacer = self.data["images"][image_name]["spacer"] if "spacer" in self.data["images"][image_name] else 0
 		border_with_spacer = (
-								self.data["border_size"]-min(spacer,0),
-								self.data["border_size"],
-								self.data["border_size"]+max(spacer,0),
-								self.data["border_size"])
+													self.data["border_size"]-min(spacer,0),
+													self.data["border_size"],
+													self.data["border_size"]+max(spacer,0),
+													self.data["border_size"]
+		)
 
-		image_with_border = ImageOps.expand(image_with_border,border=border_with_spacer,fill=border_color)   #hard border around the actual draw space
+		image_with_border = ImageOps.expand(image_with_border,border=border_with_spacer,fill=border_color)	 #hard border around the actual draw space
 		origin = tuple(x+self.data["border_size"] for x in origin)
 
 		if shift is not None:
@@ -141,12 +142,12 @@ class Layout():
 
 		current_x_position = 0
 		for image, origin in image_list:
-			border =    ( \
-							0,                     #left
-							-origin[1]-y_min,     #top
-							0,                     #right
-							origin[1]+y_max-image.size[1]      #bottom
-						)
+			border = (
+								0,														#left
+								-origin[1]-y_min,							#top
+								0,														#right
+								origin[1]+y_max-image.size[1]	#bottom
+			)
 			bordered_image = ImageOps.expand(image,border=border,fill=tuple(self.data["border_color"]))
 			collage.paste(bordered_image, (current_x_position,0))
 
@@ -170,11 +171,11 @@ class Layout():
 		for row in self.get_rows():
 
 			this_row_images = []
-			for image_name in row:   #for every image referenced explicitly in the layout
+			for image_name in row:	 #for every image referenced explicitly in the layout
 				image = all_images[image_name]
 
 				xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
-				if not image:    #there was no image there to grab, so make a blank image
+				if not image:		#there was no image there to grab, so make a blank image
 					image = Image.new("RGBA", (xmax-xmin,ymax-ymin), 0)
 
 				palette = self.get_property("import palette interval", image_name)
@@ -197,7 +198,7 @@ class Layout():
 		for row in self.get_rows():
 			row_width = 0
 			row_y_min,row_y_max = float('Inf'),-float('Inf')
-			for image_name in row:   #for every image referenced explicitly in the layout
+			for image_name in row:	 #for every image referenced explicitly in the layout
 				spacer = self.data["images"][image_name]["spacer"] if "spacer" in self.data["images"][image_name] else 0
 				xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
 				row_width += (xmax-xmin)+2*self.data["border_size"]+abs(spacer)
@@ -210,7 +211,7 @@ class Layout():
 			#now that we have the actual row of images, with the appropriate margins,
 			# we can iterate over the row one more time to sweep through and extract the individual images
 			master_width = 0
-			for image_name in row:   #for every image referenced explicitly in the layout
+			for image_name in row:	 #for every image referenced explicitly in the layout
 				shift = self.get_property("shift", image_name)
 				vert_shift = shift[1] if shift else 0
 				scale = self.get_property("scale", image_name)
@@ -224,13 +225,14 @@ class Layout():
 													extra_area if extra_area else []):
 					if scale:
 						x0,y0,x1,y1 = scale*x0,scale*y0,scale*x1,scale*y1
-					cropped_image = row_of_images.crop((self.data["border_size"] + master_width+x0-xmin,
-														self.data["border_size"] + vert_shift  +y0-row_y_min,
+					cropped_image = row_of_images.crop((
+														self.data["border_size"] + master_width+x0-xmin,
+														self.data["border_size"] + vert_shift	+y0-row_y_min,
 														self.data["border_size"] + master_width+x1-xmin,
-														self.data["border_size"] + vert_shift  +y1-row_y_min))
+														self.data["border_size"] + vert_shift	+y1-row_y_min))
 					this_image.paste(cropped_image,(x0-xmin,y0-ymin+vert_shift))
 				if scale:
-					this_image = this_image.resize(  ((xmax-xmin)//scale,  (ymax-ymin)//scale)  )
+					this_image = this_image.resize(	((xmax-xmin)//scale,	(ymax-ymin)//scale)	)
 				master_width += xmax-xmin+2*self.data["border_size"] + max(spacer,0)
 
 				all_images[image_name] = this_image
@@ -240,26 +242,26 @@ class Layout():
 		master_palettes = list(all_images["palette_block"].convert("RGB").getdata()) if "palette_block" in all_images else []
 
 		if len(master_palettes):
-		  for image_name, this_image in all_images.items():
-		    if not image_name in ["transparent","palette_block"]:
-		      import_palette = self.get_property("import palette interval", image_name)
-		      palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]   #flatten the RGB values
-		      palette = palette + palette[:3]*(256-(len(palette)//3))
-		      palette_seed = Image.new("P", (1,1))
-		      palette_seed.putpalette(palette)
+			for image_name, this_image in all_images.items():
+				if not image_name in ["transparent","palette_block"]:
+					import_palette = self.get_property("import palette interval", image_name)
+					palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]	 #flatten the RGB values
+					palette = palette + palette[:3]*(256-(len(palette)//3))
+					palette_seed = Image.new("P", (1,1))
+					palette_seed.putpalette(palette)
 
-		      #this is a workaround to quantize without dithering
-		      paletted_image = this_image._new(this_image.im.convert("P",0,palette_seed.im))
+					#this is a workaround to quantize without dithering
+					paletted_image = this_image._new(this_image.im.convert("P",0,palette_seed.im))
 
-		      #have to shift the palette over now to include the transparent pixels correctly
-		      #did it this way so that color pixels would not accidentally be matched to transparency
-		      original_image_L = [0 if alpha < 255 else 1 for _,_,_,alpha in this_image.getdata()]
-		      new_image_indices = [L*(index+1) for (L,index) in zip(original_image_L,paletted_image.getdata())]
-		      paletted_image.putdata(new_image_indices)
-		      shifted_palette = [0,0,0] + palette[:-3]
-		      paletted_image.putpalette(shifted_palette)
+					#have to shift the palette over now to include the transparent pixels correctly
+					#did it this way so that color pixels would not accidentally be matched to transparency
+					original_image_L = [0 if alpha < 255 else 1 for _,_,_,alpha in this_image.getdata()]
+					new_image_indices = [L*(index+1) for (L,index) in zip(original_image_L,paletted_image.getdata())]
+					paletted_image.putdata(new_image_indices)
+					shifted_palette = [0,0,0] + palette[:-3]
+					paletted_image.putpalette(shifted_palette)
 
-		      all_images[image_name] = paletted_image
+					all_images[image_name] = paletted_image
 
 		return all_images, master_palettes
 
@@ -283,8 +285,8 @@ class Layout():
 		return xmin,ymin,xmax,ymax
 
 def main():
-    print(f"Called main() on utility library {__file__}")
+	print(f"Called main() on utility library {__file__}")
 
 
 if __name__ == "__main__":
-    main()
+	main()
