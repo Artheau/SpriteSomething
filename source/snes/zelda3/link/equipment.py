@@ -52,23 +52,23 @@ def equipment_test(save=False):
 
 	#next row is some inventory stuff
 	inventory = {
-		"main_shadow":  (( 0,112),(16,16)),
-		"small_shadow": ((16,112),(16,16)),
-		"book":	        ((32,112),(16,16)),
-		"bush":         ((48,112),(16,16)),
-		"pendant":      ((64,112),(16,16)),
-		"crystal":      ((80,112),(16,16))
+		"main_shadow":	(( 0,112),(16,16)),
+		"small_shadow":	((16,112),(16,16)),
+		"book":					((32,112),(16,16)),
+		"bush":					((48,112),(16,16)),
+		"pendant":			((64,112),(16,16)),
+		"crystal":			((80,112),(16,16))
 	}
 	#add some inventory stuff
 	for key in inventory:
 		origin,dims = inventory[key]
 		icon_specs[key] = coord_calc(origin,dims)
 
-  #shields
+	#shields
 	shields = [
-		("fighter",0),
-		("fire",16),
-		("mirror",32)
+		("fighter",	 0),
+		("fire",		16),
+		("mirror",	32)
 	]
 	#cycle through x-coordinates
 	for i in range(4):

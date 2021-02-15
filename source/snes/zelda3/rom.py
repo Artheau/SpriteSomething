@@ -5,7 +5,7 @@ from source.snes import romhandler as snes
 
 class RomHandler(snes.RomHandlerParent):
 	def __init__(self, filename):
-		super().__init__(filename)      #do the usual stuff
+		super().__init__(filename)			#do the usual stuff
 
 		self._apply_bugfixes()
 		self._apply_improvements()
@@ -23,7 +23,7 @@ class RomHandler(snes.RomHandlerParent):
 		return True
 
 	def shared_player_palette_fix(self):
-		#this only corrects errors in the J rom.  This could in theory be modified to fix errors in the U rom if the addresses
+		#this only corrects errors in the J rom.	This could in theory be modified to fix errors in the U rom if the addresses
 		# were changed
 
 		success_code = True
@@ -178,7 +178,7 @@ class RomHandler(snes.RomHandlerParent):
 		;
 		;
 		;Option C: Also change the other pendants so that they all
-		;ignore shadows.  This looks better because they appear to
+		;ignore shadows.	This looks better because they appear to
 		;glow even brighter
 		;BUT I had to compromise on the color of the blue pendant
 		org $058933		;28933 in ROM
@@ -243,7 +243,7 @@ class RomHandler(snes.RomHandlerParent):
 		;Cukeman (Everywhere)
 		;This guy is such a bugfest. Did you know that his body remains an enemy and if you try talking to him,
 		;you have to target the overlaid sprite that only has eyeballs and a mouth?
-		;This is why you can still be damaged by him. In any case, I digress.  Let's talk edits.
+		;This is why you can still be damaged by him. In any case, I digress.	Let's talk edits.
 		;
 		;These edits specifically target the color of his lips
 		;Bits 1-3 are XORed with his base ID palette (0b100)
