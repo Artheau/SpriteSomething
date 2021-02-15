@@ -875,17 +875,11 @@ def write_spin_attack_config(spiffy_dict,rom):
 
 	#this'll check VARIA tournament flag
 	isVaria = rom.read(0x175CA, 1) == 0x60 and rom.read(0x19E1, 1) == 0xEA and rom.read(0xF27, 1) == 0x20
-	print(rom.read(0x175CA, 1), 0x60)
-	print(rom.read(0x19E1,  1), 0xEA)
-	print(rom.read(0xF27,   1), 0x20)
 	if isVaria:
-		print("Is VARIA")
 		start = 0x1C0200
 		end = 0x1C0210
 		for byte in range(start, end):
-			print(rom.read(byte, 1), 0xFF)
 			if flag > 0x0000 and rom.read(byte, 1) != 0xFF:
-				print("Is Race VARIA; disabling Spin Attack")
 				flag = 0x0000
 	if flag > 0x0000 and "split-screw-attack_var" in spiffy_dict:
 		if spiffy_dict["split-screw-attack_var"].get() == "no":

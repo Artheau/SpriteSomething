@@ -37,22 +37,22 @@ def file_select(sprite):
 	file_select_sprites = Image.new("P",(128,24),0)
 
 	for image_name,src,dest in [
-		("file_select_head",        None,         (  0, 0)),
-		("file_select_head1",       None,         ( 24, 0)),
-		("file_select_head2",       None,         ( 48, 0)),
-		("file_select_visor",       None,         ( 72, 0)),
-		("file_select_visor1",      None,         ( 88, 0)),
-		("file_select_visor2",      None,         (104, 0)),
-		("file_select_visor3",      None,         ( 72, 8)),
-		("file_select_visor4",      None,         ( 88, 8)),
+		("file_select_head",				None,					(	0, 0)),
+		("file_select_head1",				None,					( 24, 0)),
+		("file_select_head2",				None,					( 48, 0)),
+		("file_select_visor",				None,					( 72, 0)),
+		("file_select_visor1",			None,					( 88, 0)),
+		("file_select_visor2",			None,					(104, 0)),
+		("file_select_visor3",			None,					( 72, 8)),
+		("file_select_visor4",			None,					( 88, 8)),
 		("file_select_cursor_array",( 0,24, 8,32),(112,16)),
 		("file_select_cursor_array",( 0,16, 8,24),(112, 8)),
 		("file_select_cursor_array",( 0, 8, 8,16),(120, 0)),
 		("file_select_cursor_array",( 8, 8,16,16),(120, 8)),
 		("file_select_cursor_array",( 8,16,16,24),(120,16)),
-		("file_select_piping",      ( 0, 0,24, 8),( 72,16)),   # Top
-		("file_select_piping",      (16, 8,24,24),(104, 8)),   # Side
-		("file_select_piping",      ( 0,16, 8,24),( 96,16)),   # Corner
+		("file_select_piping",			( 0, 0,24, 8),( 72,16)),	 # Top
+		("file_select_piping",			(16, 8,24,24),(104, 8)),	 # Side
+		("file_select_piping",			( 0,16, 8,24),( 96,16)),	 # Corner
 	]:
 		source_image = sprite.images[image_name]
 		source_image = source_image.crop(src) if src else source_image
@@ -64,10 +64,10 @@ def file_select(sprite):
 
 	data = bytearray()
 	# Due to how convert_to_4bpp package the data we must first get a whole sheet row, then extract the third row (first 0x200 bytes)
-	data.extend(common.convert_to_4bpp(file_select_sprites,     (0,0),(0, 0,128,16),None))
-	data.extend(common.convert_to_4bpp(file_select_sprites,     (0,0),(0,16,128,32),None)[:0x200])
-	data.extend(common.convert_to_4bpp(file_select_missile,     (0,0),(0, 0,  8, 8),None))
-	data.extend(common.convert_to_4bpp(file_select_missile_head,(0,0),(0, 0,  8, 8),None))
+	data.extend(common.convert_to_4bpp(file_select_sprites,			(0,0),(0, 0,128,16),None))
+	data.extend(common.convert_to_4bpp(file_select_sprites,			(0,0),(0,16,128,32),None)[:0x200])
+	data.extend(common.convert_to_4bpp(file_select_missile,			(0,0),(0, 0,	8, 8),None))
+	data.extend(common.convert_to_4bpp(file_select_missile_head,(0,0),(0, 0,	8, 8),None))
 	return data
 
 # Palettes are stored as just fifteen colors, not sixteen.
@@ -85,42 +85,42 @@ def palettes(sprite):
 	last_15 = lambda p: p[-15:]
 
 	palette_manifest = [
-		("power",  "standard",    first,  [(first_15,range(1))]),
-		("varia",  "standard",    first,  [(first_15,range(1))]),
-		("gravity","standard",    first,  [(first_15,range(1))]),
-		("power",  "loader",      all,    [(first_15,[0x00,0x01,0x48,0x49,0x4E,0x4F,0x54,0x55,0x58])]),
-		("varia",  "loader",      all,    [(first_15,[0x00,0x01,0x48,0x49,0x4E,0x4F,0x54,0x55,0x58])]),
-		("gravity","loader",      all,    [(first_15,[0x00,0x01,0x48,0x49,0x4E,0x4F,0x54,0x55,0x58])]),
-		("power",  "heat",        all,    [(last_15, range(16))]),
-		("varia",  "heat",        all,    [(last_15, range(16))]),
-		("gravity","heat",        all,    [(last_15, range(16))]),
-		("power",  "charge",      all,    [(first_15,range(8))]),
-		("varia",  "charge",      all,    [(first_15,range(8))]),
-		("gravity","charge",      all,    [(first_15,range(8))]),
-		("power",  "speed boost", all,    [(first_15,range(4))]),
-		("varia",  "speed boost", all,    [(first_15,range(4))]),
-		("gravity","speed boost", all,    [(first_15,range(4))]),
-		("power",  "speed squat", all,    [(first_15,range(4))]),
-		("varia",  "speed squat", all,    [(first_15,range(4))]),
-		("gravity","speed squat", all,    [(first_15,range(4))]),
-		("power",  "shinespark",  all,    [(first_15,range(4))]),
-		("varia",  "shinespark",  all,    [(first_15,range(4))]),
-		("gravity","shinespark",  all,    [(first_15,range(4))]),
-		("power",  "screw attack",all,    [(first_15,range(4))]),
-		("varia",  "screw attack",all,    [(first_15,range(4))]),
-		("gravity","screw attack",all,    [(first_15,range(4))]),
-		("power",  "flash",       all,    [(first_15,range(6))]),
-		("power",  "death",       all,    [(first_15,range(9))]),
-		("power",  "hyper",       all_rev,[(first_15,range(10))]),
-		("power",  "sepia",       first,  [(first_15,range(1))]),
-		("power",  "sepia hurt",  first,  [(first_15,range(1))]),
-		("power",  "xray",        all,    [(index_3, range(3))]),
-		("power",  "door",        first,  [(index_3, range(1))]),
-		("power",  "file select", first,  [(first_15,range(1))]),
-		("ship",   "intro",       first,  [(first_15,range(1))]),
-		("ship",   "outro",       all,    [(first_15,range(16))]),
-		("ship",   "standard",    all,    [(first_14,range(1)),      # first 14 colors
-		                                   (last,    range(14))]),   # 15th color is underglow
+		("power",	"standard",			first,	[(first_15,range(1))]),
+		("varia",	"standard",			first,	[(first_15,range(1))]),
+		("gravity","standard",		first,	[(first_15,range(1))]),
+		("power",	"loader",				all,		[(first_15,[0x00,0x01,0x48,0x49,0x4E,0x4F,0x54,0x55,0x58])]),
+		("varia",	"loader",				all,		[(first_15,[0x00,0x01,0x48,0x49,0x4E,0x4F,0x54,0x55,0x58])]),
+		("gravity","loader",			all,		[(first_15,[0x00,0x01,0x48,0x49,0x4E,0x4F,0x54,0x55,0x58])]),
+		("power",	"heat",					all,		[(last_15, range(16))]),
+		("varia",	"heat",					all,		[(last_15, range(16))]),
+		("gravity","heat",				all,		[(last_15, range(16))]),
+		("power",	"charge",				all,		[(first_15,range(8))]),
+		("varia",	"charge",				all,		[(first_15,range(8))]),
+		("gravity","charge",			all,		[(first_15,range(8))]),
+		("power",	"speed boost",	all,		[(first_15,range(4))]),
+		("varia",	"speed boost",	all,		[(first_15,range(4))]),
+		("gravity","speed boost",	all,		[(first_15,range(4))]),
+		("power",	"speed squat",	all,		[(first_15,range(4))]),
+		("varia",	"speed squat",	all,		[(first_15,range(4))]),
+		("gravity","speed squat", all,		[(first_15,range(4))]),
+		("power",	"shinespark",		all,		[(first_15,range(4))]),
+		("varia",	"shinespark",		all,		[(first_15,range(4))]),
+		("gravity","shinespark",	all,		[(first_15,range(4))]),
+		("power",	"screw attack",	all,		[(first_15,range(4))]),
+		("varia",	"screw attack",	all,		[(first_15,range(4))]),
+		("gravity","screw attack",all,		[(first_15,range(4))]),
+		("power",	"flash",				all,		[(first_15,range(6))]),
+		("power",	"death",				all,		[(first_15,range(9))]),
+		("power",	"hyper",				all_rev,[(first_15,range(10))]),
+		("power",	"sepia",				first,	[(first_15,range(1))]),
+		("power",	"sepia hurt",		first,	[(first_15,range(1))]),
+		("power",	"xray",					all,		[(index_3, range(3))]),
+		("power",	"door",					first,	[(index_3, range(1))]),
+		("power",	"file select",	first,	[(first_15,range(1))]),
+		("ship",	 "intro",				first,	[(first_15,range(1))]),
+		("ship",	 "outro",				all,		[(first_15,range(16))]),
+		("ship",	 "standard",		all,		[(first_14,range(1)),			# first 14 colors
+																			 (last,		range(14))]),	 # 15th color is underglow
 	]
 
 	for category,pose,palette_set,data_sets in palette_manifest:

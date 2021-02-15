@@ -904,7 +904,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 					dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),' '.join(filetypes)),))
 			if dest_filename:
 				rom = self.game.get_rom_from_filename(source_filename)
-				modified_rom = self.sprite.inject_into_ROM(rom)
+				modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
 				#print(modified_rom.get_patch())
 				modified_rom.save(dest_filename, overwrite=True)
 				self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
@@ -921,15 +921,15 @@ class SpriteSomethingMainFrame(tk.Frame):
 					default_extension = default_ext
 				dest_filename = os.path.splitext(source_filename)[0] + "_modified"
 				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
-		if dest_filename:
-			rom = self.game.get_rom_from_filename(source_filename)
-			modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
-			#print(modified_rom.get_patch())
-			modified_rom.save(dest_filename, overwrite=True)
-			self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
-			self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
-			# FIXME: English
-			messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
+			if dest_filename:
+				rom = self.game.get_rom_from_filename(source_filename)
+				modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
+				#print(modified_rom.get_patch())
+				modified_rom.save(dest_filename, overwrite=True)
+				self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
+				self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
+				# FIXME: English
+				messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 
 	#query user for directory to inject sprite into
 	def copy_into_ROM_bulk(self, inject=False):

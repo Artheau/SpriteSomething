@@ -11,7 +11,7 @@ class Sprite(SpriteParent):
 		super().__init__(filename, manifest_dict, my_subpath, _)
 		self.load_plugins()
 
-		self.overhead = False   #Samus is sideview, so only left/right direction buttons should show
+		self.overhead = False	 #Samus is sideview, so only left/right direction buttons should show
 
 		#TODO: Make file select and ship be animations in the big list, or tie to the ship background
 		# self.plugins += [
@@ -39,7 +39,7 @@ class Sprite(SpriteParent):
 		return [(SAMUS_EXPORT_BLOCK_TYPE,rdc_export.get_raw_rdc_samus_block(self))]
 
 	def get_colors_from_master(self, color_set):
-		#for internal class use.  For general use, call get_timed_palette()
+		#for internal class use.	For general use, call get_timed_palette()
 		color_set_switcher = {
 			"power": [0,15],
 			"base": [0,15],
@@ -86,11 +86,11 @@ class Sprite(SpriteParent):
 				ship_palette.extend([(48,48,72),(16,16,40),(0,0,0),(0,0,0)])
 				if variant_type.lower() == "intro":
 					timed_palette = [(0, ship_palette)]
-				else:   #outro
+				else:	 #outro
 					timed_palette = [(0x18, common.palette_pull_towards_color(ship_palette,(0xFF,0xFF,0xFF),(float(15-i)/15.0))) for i in range(15)]
 					timed_palette.append((0, ship_palette))
 
-			else:     #standard ship colors with underglow
+			else:		 #standard ship colors with underglow
 				#11 customizable colors
 				ship_palette = []
 				ship_palette.append(ship_color_body)
@@ -113,7 +113,7 @@ class Sprite(SpriteParent):
 			timed_palette = [(0, self.get_colors_from_master(overall_type))]
 
 		elif variant_type.lower() == "loader":
-			for _ in range(0x27):   #in the ROM, this is encoded as 0x24 + 0x03
+			for _ in range(0x27):	 #in the ROM, this is encoded as 0x24 + 0x03
 				timed_palette.append((3,base_palette))
 				timed_palette.append((3,common.palette_shift(base_palette,(0,80,120))))
 			for _ in range(3):
@@ -439,9 +439,9 @@ class Sprite(SpriteParent):
 		while(self.concatenate_facing_and_aiming(facing,aiming) not in direction_dict):
 			if aiming in ALTERNATIVES:
 				aiming = ALTERNATIVES[aiming]
-			elif facing in direction_dict:   #no aim was available, try the pure facing
+			elif facing in direction_dict:	 #no aim was available, try the pure facing
 				return facing
-			else:    #now we are really screwed, so just do anything
+			else:		#now we are really screwed, so just do anything
 				return next(iter(direction_dict.keys()))
 
 		#if things went well, we are here
@@ -458,9 +458,9 @@ class Sprite(SpriteParent):
 
 		#if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
 		if palette_timing_list[-1][0] == 0 and frame_number >= palette_timing_progression[-1]:
-			palette_number = -1    #use the last palette
-		elif palette_timing_progression[-1] == 0 and frame_number < 0:   #can happen if someone switches from a dynamic palette to a static palette, and then backsteps a lot
-			palette_number = 0     #use the first palette
+			palette_number = -1		#use the last palette
+		elif palette_timing_progression[-1] == 0 and frame_number < 0:	 #can happen if someone switches from a dynamic palette to a static palette, and then backsteps a lot
+			palette_number = 0		 #use the first palette
 		else:
 			mod_frames = frame_number % palette_timing_progression[-1]
 			palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
@@ -479,7 +479,7 @@ class Sprite(SpriteParent):
 		#used to interface the new palette string format with the older get_timed_palette function.
 		# could be refactored into the main code later, if coding time was not a valuable resource
 
-		overall_type, variant_type = "power", "standard"   #defaults unless we are told otherwise
+		overall_type, variant_type = "power", "standard"	 #defaults unless we are told otherwise
 		for palette_string in palette_list:
 			if palette_string.endswith("_suit"):
 				#if we've got a suit base
@@ -506,7 +506,7 @@ class Sprite(SpriteParent):
 			if '_' in palette:
 				slugs[palette[palette.rfind('_')+1:]] = palette[:palette.rfind('_')]
 		OPTIONAL_PORT_STRING = "optional_"
-		if image_name.startswith(OPTIONAL_PORT_STRING):    #as would be for the cannon ports, which are optionally present
+		if image_name.startswith(OPTIONAL_PORT_STRING):		#as would be for the cannon ports, which are optionally present
 			if "yes_cannon-port" in palettes:
 				image_name = image_name.replace(OPTIONAL_PORT_STRING,"")
 				return self.images[image_name]
