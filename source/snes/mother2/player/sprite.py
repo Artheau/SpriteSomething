@@ -19,6 +19,8 @@ class Sprite(SpriteParent):
 			    if "names" in thisSet and sprite_name in thisSet["names"] and not animations_found:
 			      animations_found = True
 			      self.animations = thisSet["animations"]
+			if "$schema" in self.animations:
+			  del self.animations["$schema"]
 
 	def import_from_ROM(self, rom):
 		pass

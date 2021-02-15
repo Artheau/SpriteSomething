@@ -1,0 +1,10 @@
+{
+	"$schema": "../../../../../schema/animations.schema.json",
+  "animations": {
+    "Dead": {
+      "right": [
+        { "frames": 10, "tiles": [ {"image": "dead", "pos": [0,0]} ] }
+      ]
+    }
+  }
+}

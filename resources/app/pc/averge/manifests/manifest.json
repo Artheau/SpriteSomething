@@ -6,6 +6,21 @@
 		"folder name": "trace",
 		"view-only": true,
 		"input": {
+			"png": [
+        {
+          "name": "trace",
+  				"dims": [512,512],
+  				"overview-scale-factor": 1
+  			}
+      ]
+		}
+	},
+	"2": {
+		"type": "Trace (Coat)",
+		"name": "Trace (Coat)",
+		"folder name": "tracecoat",
+		"view-only": true,
+		"input": {
 			"png": {
 				"dims": [512,512],
 				"overview-scale-factor": 1
