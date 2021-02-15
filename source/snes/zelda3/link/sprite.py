@@ -159,10 +159,6 @@ class Sprite(SpriteParent):
 				if image_name.startswith(item):
 					found_alt = True
 					image_name = image_name.lower() if (not "none_accessories" in palettes) else "transparent"
-			for item in ["BUSH","BOOK"]:
-				if image_name.startswith(item):
-					found_alt = True
-					image_name = item.lower() if (not "none_accessories" in palettes) else "transparent"
 			for item,default in [
 				("ITEM","pendant"),
 				("CRYSTAL","crystal"),
@@ -171,6 +167,10 @@ class Sprite(SpriteParent):
 				if image_name.startswith(item):
 					found_alt = True
 					image_name = default.lower() if (not "none_accessories" in palettes) else "transparent"
+			for item in ["BUSH","BOOK"]:
+				if image_name.startswith(item):
+					found_alt = True
+					image_name = item.lower() if (not "none_accessories" in palettes) else "transparent"
 		if found_alt:
 			return self.images[image_name]
 		elif True:
