@@ -21,7 +21,7 @@ def autodetect(sprite_filename):
 	#then return an instance of THAT game's class, and an instance of THAT sprite
 	file_slug,file_extension = os.path.splitext(sprite_filename)
 	file_slug = os.path.basename(file_slug)
-  #If this is a SNES filetype
+	#If this is a SNES filetype
 	if file_extension.lower() in [".sfc",".smc"]:
 		#If the file is a rom, then we can go into the internal header and get the name of the game
 		game_names = autodetect_game_type_from_rom_filename("snes",sprite_filename)
@@ -52,39 +52,39 @@ def autodetect(sprite_filename):
 		game = get_game_class_of_type("nes",selected_game)
 		#And by default, we will grab the player sprite from this game
 		sprite, animation_assist = game.make_player_sprite(sprite_filename)
-  #If it's not a known filetype but a PNG, cycle through and find one that matches
+	#If it's not a known filetype but a PNG, cycle through and find one that matches
 	elif file_extension.lower() == ".png":
 		#the following line prevents a "cannot identify image" error from PIL
 		ImageFile.LOAD_TRUNCATED_IMAGES = True
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
 		with Image.open(sprite_filename) as loaded_image:
-		  game_found = False
-		  search_path = os.path.join("resources","app")
-		  for console in os.listdir(search_path):
-		    if os.path.isdir(os.path.join(search_path,console)) and not console == "meta":
-		      for item in os.listdir(os.path.join(search_path,console)):
-		        game_name = item
-		        sprite_manifest_filename = os.path.join(search_path,console,game_name,"manifests","manifest.json")
-		        with open(sprite_manifest_filename) as f:
-		          sprite_manifest = json.load(f)
-		          for sprite_id in sprite_manifest:
-		            if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"]:
-		              pngs = sprite_manifest[sprite_id]["input"]["png"]
-		              sprite_name = ""
-		              if not isinstance(pngs,list):
-		                pngs = [pngs]
-		              for png in pngs:
-		                if "dims" in png and not game_found:
-		                  check_size = png["dims"]
-		                  if loaded_image.size == tuple(check_size):
-		                    sprite_name = png["name"] if "name" in png else ""
-		                    game = get_game_class_of_type(console,game_name)
-		                    sprite, animation_assist = game.make_player_sprite(sprite_filename,sprite_name)
-		                    game_found = True
+			game_found = False
+			search_path = os.path.join("resources","app")
+			for console in os.listdir(search_path):
+				if os.path.isdir(os.path.join(search_path,console)) and not console == "meta":
+					for item in os.listdir(os.path.join(search_path,console)):
+						game_name = item
+						sprite_manifest_filename = os.path.join(search_path,console,game_name,"manifests","manifest.json")
+						with open(sprite_manifest_filename) as f:
+							sprite_manifest = json.load(f)
+							for sprite_id in sprite_manifest:
+								if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"]:
+									pngs = sprite_manifest[sprite_id]["input"]["png"]
+									sprite_name = ""
+									if not isinstance(pngs,list):
+										pngs = [pngs]
+									for png in pngs:
+										if "dims" in png and not game_found:
+											check_size = png["dims"]
+											if loaded_image.size == tuple(check_size):
+												sprite_name = png["name"] if "name" in png else ""
+												game = get_game_class_of_type(console,game_name)
+												sprite, animation_assist = game.make_player_sprite(sprite_filename,sprite_name)
+												game_found = True
 		if not game_found:
 			# FIXME: English
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
-  # FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
+	# FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
 	elif file_extension.lower() == ".zspr":
 		with open(sprite_filename,"rb") as file:
 			zspr_data = bytearray(file.read())
@@ -92,41 +92,41 @@ def autodetect(sprite_filename):
 		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename,"")
 	elif file_extension.lower() == ".zip":
 		thisData = {
-		  "likely": {
-		    "pc": {},
-		    "nes": {},
-		    "snes": { "mother2": False }
-		  },
-		  "lists": {
-		    "snes": {
-		      "mother2": [ 1,5,6,7,8,14,15,16,17,21,27,335,362,378,437,457 ]
-		    }
-		  },
-		  "filenames": {
-		    "snes": {
-		      "mother2": []
-		    }
-		  }
+			"likely": {
+				"pc": {},
+				"nes": {},
+				"snes": { "mother2": False }
+			},
+			"lists": {
+				"snes": {
+					"mother2": [ 1,5,6,7,8,14,15,16,17,21,27,335,362,378,437,457 ]
+				}
+			},
+			"filenames": {
+				"snes": {
+					"mother2": []
+				}
+			}
 		}
 		for i in range (0,len(thisData["lists"]["snes"]["mother2"])):
 			thisData["lists"]["snes"]["mother2"][i] = (f'{thisData["lists"]["snes"]["mother2"][i]:03}') + ".png"
 		scratch = os.path.join(".","resources","tmp","archive",file_slug)
 		if not os.path.isdir(scratch):
-  			os.makedirs(scratch)
+				os.makedirs(scratch)
 		with zipfile.ZipFile(sprite_filename,'r') as thisZip:
 			for file in thisZip.namelist():
-			  if os.path.basename(file) in thisData["lists"]["snes"]["mother2"]:
-			    thisData["likely"]["snes"]["mother2"] = True
-			    thisData["filenames"]["snes"]["mother2"].append(file)
+				if os.path.basename(file) in thisData["lists"]["snes"]["mother2"]:
+					thisData["likely"]["snes"]["mother2"] = True
+					thisData["filenames"]["snes"]["mother2"].append(file)
 			if thisData["likely"]["snes"]["mother2"]:
-			  selected_sheet = gui_common.create_sheet_chooser("snes","mother2",thisData["filenames"]["snes"]["mother2"])
-			  game = get_game_class_of_type("snes","mother2")
-			  #And by default, we will grab the player sprite from this game
-			  sheet_slug,sheet_extension = os.path.splitext(os.path.basename(selected_sheet))
-			  thisZip.extract(selected_sheet,scratch)
-			  sprite, animation_assist = game.make_player_sprite(os.path.join(scratch,selected_sheet),sheet_slug)
+				selected_sheet = gui_common.create_sheet_chooser("snes","mother2",thisData["filenames"]["snes"]["mother2"])
+				game = get_game_class_of_type("snes","mother2")
+				#And by default, we will grab the player sprite from this game
+				sheet_slug,sheet_extension = os.path.splitext(os.path.basename(selected_sheet))
+				thisZip.extract(selected_sheet,scratch)
+				sprite, animation_assist = game.make_player_sprite(os.path.join(scratch,selected_sheet),sheet_slug)
 	elif sprite_filename == "":
-  		#FIXME: English
+			#FIXME: English
 		raise AssertionError("No filename given")
 	elif not os.path.isfile(sprite_filename):
 		#FIXME: English
@@ -138,10 +138,10 @@ def autodetect(sprite_filename):
 	return game, sprite, animation_assist
 
 def autodetect_game_type_from_rom_filename(console,filename):
-  if console == "snes":
-  	return autodetect_game_type_from_rom(snes.RomHandlerParent(filename))
-  else:
-    raise AssertionError(f"Cannot recognize {console} as a supported console")
+	if console == "snes":
+		return autodetect_game_type_from_rom(snes.RomHandlerParent(filename))
+	else:
+		raise AssertionError(f"Cannot recognize {console} as a supported console")
 
 def autodetect_game_type_from_rom(rom):
 	rom_name = rom.get_name()
@@ -181,8 +181,8 @@ class GameParent():
 	############################# BEGIN ABSTRACT CODE ##############################
 
 	def __init__(self):
-		self.name = "Game Parent Class"    #to be replaced by a name like "Super Metroid"
-		self.internal_name = "meta"        #to be replaced by the specific folder name that this app uses, e.g. "metroid3"
+		self.name = "Game Parent Class"		#to be replaced by a name like "Super Metroid"
+		self.internal_name = "meta"				#to be replaced by the specific folder name that this app uses, e.g. "metroid3"
 		self.plugins = None
 		self.has_plugins = None
 		self.console_name = "snes" #to be replaced by the console that the game is native to, assuming SNES for now
@@ -241,13 +241,13 @@ class GameParent():
 	def set_background(self, image_title):
 		if self.current_background_title == image_title:
 			if self.last_known_zoom == self.zoom_getter():
-				return   #there is nothing to do here, because nothing has changed
-		else:     #image name is different, so need to load a new image
+				return	 #there is nothing to do here, because nothing has changed
+		else:		 #image name is different, so need to load a new image
 			image_filename = self.current_background_title
 			if image_title in self.background_datas["title"]:
-			  image_filename = self.background_datas["title"][image_title]
+				image_filename = self.background_datas["title"][image_title]
 			elif image_title in self.background_datas["filename"]:
-			  image_filename = image_title
+				image_filename = image_title
 			self.raw_background = Image.open(common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename))
 			#this doesn't work yet; not sure how to hook it
 			if "origin" in self.background_datas:
@@ -260,7 +260,7 @@ class GameParent():
 		new_size = tuple(int(dim*self.zoom_getter()) for dim in self.raw_background.size)
 		self.background_image = gui_common.get_tk_image(self.raw_background.resize(new_size,resample=Image.NEAREST))
 		if self.current_background_title is None:
-			self.background_ID = self.canvas.create_image(0, 0, image=self.background_image, anchor=tk.NW)    #so that we can manipulate the object later
+			self.background_ID = self.canvas.create_image(0, 0, image=self.background_image, anchor=tk.NW)		#so that we can manipulate the object later
 		else:
 			self.canvas.itemconfig(self.background_ID, image=self.background_image)
 		self.last_known_zoom = self.zoom_getter()
@@ -289,7 +289,7 @@ class GameParent():
 			try:
 				animationlib = importlib.import_module(f"{source_subpath}.animation")
 				animation_assist = animationlib.AnimationEngine(resource_subpath, self, sprite)
-			except ImportError:    #there was no sprite-specific animation library, so import the parent
+			except ImportError:		#there was no sprite-specific animation library, so import the parent
 				animationlib = importlib.import_module(f"source.meta.gui.animationlib")
 				animation_assist = animationlib.AnimationEngineParent(resource_subpath, self, sprite)
 

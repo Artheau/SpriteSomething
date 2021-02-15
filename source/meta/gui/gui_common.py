@@ -1,25 +1,25 @@
 #functions that are utilities common to all GUI functionality were stored here
 #do not merge them with common.py, because common.py is imported by some classes that have no GUI awareness
 
-import io                	#for BytesIO() stream.  TODO: Could probably refactor this to use bytearray instead
-import tkinter as tk     	#for GUI stuff
+import io									#for BytesIO() stream.	TODO: Could probably refactor this to use bytearray instead
+import tkinter as tk		 	#for GUI stuff
 from tkinter import ttk, messagebox, filedialog	#for GUI stuff
-import base64            	#TODO: I don't know why we import this
+import base64							#TODO: I don't know why we import this
 import json
 import random
 import urllib.request, ssl
-from functools import partial    #for tk debugging
-from source.meta.common.constants import DEBUG_MODE  #for tk debugging
+from functools import partial		#for tk debugging
+from source.meta.common.constants import DEBUG_MODE	#for tk debugging
 from source.meta.common import common
 
 
-if ("DEBUG_MODE" in vars() or "DEBUG_MODE" in globals()) and DEBUG_MODE:   #if DEBUG_MODE exists and is set to True
+if ("DEBUG_MODE" in vars() or "DEBUG_MODE" in globals()) and DEBUG_MODE:	 #if DEBUG_MODE exists and is set to True
 	import os 					#Needed to make the tk_photo_image_wrapper
 
 	#added this function to stop the madness with MacOS errors
 	#now there should be an error generated if a PNG is sent through tk.PhotoImage
 	def tk_photoimage_wrapper(old_function, *args, **kwargs):
-		if "file" in kwargs and kwargs["file"]:   #if a string was passed as the file argument
+		if "file" in kwargs and kwargs["file"]:	 #if a string was passed as the file argument
 			file = kwargs["file"]
 			_, file_extension = os.path.splitext(file)
 			if file_extension.lower() == ".png":
@@ -32,7 +32,7 @@ if ("DEBUG_MODE" in vars() or "DEBUG_MODE" in globals()) and DEBUG_MODE:   #if D
 
 
 def get_tk_image(image):
-	#needed because the tkImage.PhotoImage conversion is SO slow for big images.  Like, you don't even know.
+	#needed because the tkImage.PhotoImage conversion is SO slow for big images.	Like, you don't even know.
 	#LET THE SHENANIGANS BEGIN
 	buffered = io.BytesIO()
 	image.save(buffered, format="GIF")
@@ -111,7 +111,7 @@ def create_sheet_chooser(console_name,game_name,sheets):
 			sheet_buttons.append(sheet_button)
 			if j == cols:
 				i += 1
-				j  = 1
+				j	= 1
 			else:
 				j += 1
 		sheet_chooser.grid_rowconfigure(0,weight=1)
@@ -139,7 +139,7 @@ def get_sprites(self,title,dir,url):
 	#get an iterator and a counter for a makeshift progress bar
 	total = len(sprites)
 	# FIXME: English
-	print("   Downloading " + title + " Sprites")
+	print("	 Downloading " + title + " Sprites")
 	messagebox.showwarning("Downloading " + title + " Sprites","Wait a little bit, dude, there's " + str(total) + " sprites.")
 #	downloader = tk.Tk()
 #	downloader.title("Downloading " + title + " Sprites")
@@ -169,12 +169,12 @@ def get_sprites(self,title,dir,url):
 				sprite_data_req = urllib.request.urlopen(sprite_data_req, context=context)
 				sprite_data = sprite_data_req.read()
 				# FIXME: English
-				print("    Writing " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
+				print("		Writing " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 				g.write(sprite_data)
 				success = True
 		else:	#if we do have it, next!
 			# FIXME: English
-			print("    Skipping " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
+			print("		Skipping " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
 #		self.progressbar["value"] = (((i+1)/total)*100)
 #	downloader.destroy()
 	return success

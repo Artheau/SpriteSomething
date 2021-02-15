@@ -14,9 +14,9 @@ class AnimationEngineParent():
 	def __init__(self, my_subpath, game, sprite):
 		self.game = game
 		self.sprite = sprite
-		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
-		self.spiffy_dict = {}						 #the variables created by the spiffy buttons will go here
-		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
+		self.resource_subpath = my_subpath	#the path to this sprite's subfolder in resources
+		self.spiffy_dict = {}								#the variables created by the spiffy buttons will go here
+		self.overhead = True								#by default, this will create NESW direction buttons.	If false, only left/right buttons
 		self.overview_scale_factor = sprite.overview_scale_factor #when the overview is made, it is scaled up by this amount
 		self.step_number_label = tk.Label()
 		self.step_total_label = tk.Label()
@@ -27,7 +27,7 @@ class AnimationEngineParent():
 
 		self.animations = self.sprite.animations
 
-		self.current_animation = next(iter(self.animations.keys()))   #using a default value until the animation_panel attachment overrides this
+		self.current_animation = next(iter(self.animations.keys()))	 #using a default value until the animation_panel attachment overrides this
 
 	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, coord_setter, fish):
 		ANIMATION_DROPDOWN_WIDTH = 25
@@ -61,13 +61,13 @@ class AnimationEngineParent():
 		parent.add(animation_panel,minsize=PANEL_HEIGHT)
 
 		direction_panel, height, new_spiffy_dict = self.get_direction_buttons(parent,fish).get_panel()
-		self.spiffy_dict = {**self.spiffy_dict, **new_spiffy_dict}   #merge all the stringvars into this dict
+		self.spiffy_dict = {**self.spiffy_dict, **new_spiffy_dict}	 #merge all the stringvars into this dict
 
 
 		parent.add(direction_panel, minsize=height)
 
 		spiffy_panel, height, new_spiffy_dict = self.get_spiffy_buttons(parent,fish).get_panel()
-		self.spiffy_dict = {**self.spiffy_dict, **new_spiffy_dict}   #merge all the stringvars into this dict
+		self.spiffy_dict = {**self.spiffy_dict, **new_spiffy_dict}	 #merge all the stringvars into this dict
 
 		parent.add(spiffy_panel,minsize=height)
 
@@ -110,33 +110,33 @@ class AnimationEngineParent():
 	def set_animation(self, animation_name):
 		self.current_animation = animation_name
 		if self.current_animation in self.animations:
-		  anims = self.animations
-		  current_anim = self.current_animation
-		  if self.sprite.get_alternative_direction(current_anim,self.get_current_direction()) in anims[current_anim]:
-		    current_dir = self.sprite.get_alternative_direction(current_anim,self.get_current_direction())
-		    if len(anims[current_anim][current_dir]) > 0:
-		      current_pose_num = 0
-		      curr_pos = anims[current_anim][current_dir][current_pose_num]
-		      if "background" in curr_pos:
-		      	# print("Setting Background because of animation (%s): %s" % (animation_name, curr_pos["background"]))
-		      	self.game.set_background(curr_pos["background"])
-		      	fnames = list(self.game.background_datas["filename"].keys())
-		      	pnames = list(self.game.background_datas["title"].keys())
-		      	fname = curr_pos["background"]
-		      	pname = pnames[fnames.index(fname)]
-		      	self.game.background_selection.set(pname)
-		      if "origin" in curr_pos:
-		      	# print("Setting Coordinates because of animation (%s): %s" % (animation_name, curr_pos["origin"]))
-		      	self.coord_setter(curr_pos["origin"])
+			anims = self.animations
+			current_anim = self.current_animation
+			if self.sprite.get_alternative_direction(current_anim,self.get_current_direction()) in anims[current_anim]:
+				current_dir = self.sprite.get_alternative_direction(current_anim,self.get_current_direction())
+				if len(anims[current_anim][current_dir]) > 0:
+					current_pose_num = 0
+					curr_pos = anims[current_anim][current_dir][current_pose_num]
+					if "background" in curr_pos:
+						# print("Setting Background because of animation (%s): %s" % (animation_name, curr_pos["background"]))
+						self.game.set_background(curr_pos["background"])
+						fnames = list(self.game.background_datas["filename"].keys())
+						pnames = list(self.game.background_datas["title"].keys())
+						fname = curr_pos["background"]
+						pname = pnames[fnames.index(fname)]
+						self.game.background_selection.set(pname)
+					if "origin" in curr_pos:
+						# print("Setting Coordinates because of animation (%s): %s" % (animation_name, curr_pos["origin"]))
+						self.coord_setter(curr_pos["origin"])
 		self.update_animation()
 
 	def update_animation(self):
 		if hasattr(self,"sprite_IDs"):
 			for ID in self.sprite_IDs:
-				self.canvas.delete(ID)       #remove the old images
+				self.canvas.delete(ID)			 #remove the old images
 		if hasattr(self,"active_images"):
 			for tile in self.active_images:
-				del tile                     #why this is not auto-destroyed is beyond me (memory leak otherwise)
+				del tile										 #why this is not auto-destroyed is beyond me (memory leak otherwise)
 		self.sprite_IDs = []
 		self.active_images = []
 
@@ -148,7 +148,7 @@ class AnimationEngineParent():
 			coords = self.coord_getter()
 			coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(coords,offset))
 			self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_image, anchor = tk.NW))
-			self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
+			self.active_images.append(scaled_image)		 #if you skip this part, then the auto-destructor will get rid of your picture!
 		else:
 			pass
 #			print("Pose image not found to update animation!")
@@ -171,26 +171,26 @@ class AnimationEngineParent():
 			pose_list = self.get_current_pose_list(displayed_direction)
 
 		if pose_list:
-			if "frames" not in pose_list[0]:      #might not be a frame entry for static poses
+			if "frames" not in pose_list[0]:			#might not be a frame entry for static poses
 				self.frame_progression_table = [1]
 			else:
 				self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
 
-			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
+			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]	#I'm not convinced that this is the best way to do this
 
 			self.pose_number = self.get_pose_number_from_frames(current_frame)
 
-			if "palette_reference_frame" in pose_list[self.pose_number]:  #for animations that switch palettes in the middle
+			if "palette_reference_frame" in pose_list[self.pose_number]:	#for animations that switch palettes in the middle
 				self.palette_last_transition_frame = \
 					current_frame - (
-						(current_frame % self.frame_progression_table[-1])   #modular progress
-						- self.frame_progression_table[self.pose_number-1]   #modular pose start
-						+ pose_list[self.pose_number]["palette_reference_frame"]  #modular reference number
+						(current_frame % self.frame_progression_table[-1])	 #modular progress
+						- self.frame_progression_table[self.pose_number-1]	 #modular pose start
+						+ pose_list[self.pose_number]["palette_reference_frame"]	#modular reference number
 					)
-			elif current_frame > 0:    #for when the user switches palettes by pushing buttons mid-animation
+			elif current_frame > 0:		#for when the user switches palettes by pushing buttons mid-animation
 				if palette_info != self.prev_palette_info:
 					self.palette_last_transition_frame = current_frame
-			else:   #catch to make sure the user has not been abusing the backstep buttons to go backwards before a palette switch
+			else:	 #catch to make sure the user has not been abusing the backstep buttons to go backwards before a palette switch
 				self.palette_last_transition_frame = 0
 			self.prev_palette_info = palette_info.copy()
 			current_frame -= self.palette_last_transition_frame
@@ -251,7 +251,7 @@ class AnimationEngineParent():
 		return mod_frames - prev_pose_at + 1
 
 	def get_current_pose_list(self, direction):
-		if self.spiffy_dict:     #see if we have any spiffy variables, which will indicate if the direction buttons exist
+		if self.spiffy_dict:		 #see if we have any spiffy variables, which will indicate if the direction buttons exist
 			return self.sprite.get_pose_list(self.current_animation, direction)
 		#if there is no spiffy dict to determine directions, just don't do anything
 #		print("No spiffy dict!")
@@ -259,12 +259,12 @@ class AnimationEngineParent():
 
 	def get_current_direction(self):
 		if self.spiffy_dict:
-			direction = self.spiffy_dict["facing_var"].get().lower() if "facing_var" in self.spiffy_dict else "right"   #grabbed from the direction buttons, which are named "facing"
+			direction = self.spiffy_dict["facing_var"].get().lower() if "facing_var" in self.spiffy_dict else "right"	 #grabbed from the direction buttons, which are named "facing"
 			if "aiming_var" in self.spiffy_dict:
 				direction = "_aim_".join([direction, self.spiffy_dict["aiming_var"].get().lower()])
 			return direction
 		else:
-			return "right"   #TODO: figure out a better way to handle the error case
+			return "right"	 #TODO: figure out a better way to handle the error case
 
 	#Mike likes spiffy buttons
 	def get_spiffy_buttons(self, parent, fish):
@@ -389,7 +389,7 @@ class AnimationEngineParent():
 
 	def export_animation_as_gif(self, filename, zoom=1, speed=1):
 		#TODO: factor out common code with the collage function
-		GIF_MAX_FRAMERATE = 100.0  #GIF format in theory supports 100 FPS, but some programs display at 50 FPS
+		GIF_MAX_FRAMERATE = 100.0	#GIF format in theory supports 100 FPS, but some programs display at 50 FPS
 		ACTUAL_FRAMERATE = 60.0
 
 		image_list = []
@@ -443,7 +443,7 @@ class AnimationEngineParent():
 					durations.append(1)
 
 			gif_durations = [
-				1000.0 *   #millisecond conversion
+				1000.0 *	 #millisecond conversion
 				max(
 					1.0/GIF_MAX_FRAMERATE,
 					round(duration/(speed*ACTUAL_FRAMERATE), 2)
