@@ -876,24 +876,44 @@ class SpriteSomethingMainFrame(tk.Frame):
 	# Inbound:
 	#	inject: Are we injecting directly or making a copy?
 	def copy_into_ROM(self, inject=False):
-		dest_filename = None
-		default_ext = ""
-		filetypes = []
-		if self.sprite.view_only:
-				filetypes = []
-		elif self.game.console_name == "nes":
-			default_ext = ".nes"
-			filetypes = [ "*.nes" ]
-		elif self.game.console_name == "snes":
-			default_ext = ".sfc"
-			filetypes = [ "*.sfc", "*.smc" ]
+		if not self.sprite.view_only:
+			dest_filename = None
+			default_ext = ""
+			filetypes = []
+			if self.sprite.view_only:
+					filetypes = []
+			elif self.game.console_name == "nes":
+				default_ext = ".nes"
+				filetypes = [ "*.nes" ]
+			elif self.game.console_name == "snes":
+				default_ext = ".sfc"
+				filetypes = [ "*.sfc", "*.smc" ]
 
-		if len(filetypes) > 0:
-			if inject:
-				dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),' '.join(filetypes)),))
-				source_filename = dest_filename
+			if len(filetypes) > 0:
+				if inject:
+					dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),' '.join(filetypes)),))
+					source_filename = dest_filename
+				else:
+					source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),' '.join(filetypes)),))
+					if source_filename:
+						_,file_extension = os.path.splitext(source_filename)
+						if file_extension.lower() in ['.sfc','.smc']:
+							default_extension = file_extension.lower()
+						else:
+							default_extension = default_ext
+						dest_filename = os.path.splitext(source_filename)[0] + "_modified"
+						dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),' '.join(filetypes)),))
+				if dest_filename:
+					rom = self.game.get_rom_from_filename(source_filename)
+					modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
+					#print(modified_rom.get_patch())
+					modified_rom.save(dest_filename, overwrite=True)
+					self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
+					self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
+					#FIXME: English
+					messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 			else:
-				source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),' '.join(filetypes)),))
+				source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),"*.sfc *.smc"),))
 				if source_filename:
 					_,file_extension = os.path.splitext(source_filename)
 					if file_extension.lower() in ['.sfc','.smc']:
@@ -901,35 +921,19 @@ class SpriteSomethingMainFrame(tk.Frame):
 					else:
 						default_extension = default_ext
 					dest_filename = os.path.splitext(source_filename)[0] + "_modified"
-					dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),' '.join(filetypes)),))
-			if dest_filename:
-				rom = self.game.get_rom_from_filename(source_filename)
-				modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
-				#print(modified_rom.get_patch())
-				modified_rom.save(dest_filename, overwrite=True)
-				self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
-				self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
-				#FIXME: English
-				messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
+					dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
+				if dest_filename:
+					rom = self.game.get_rom_from_filename(source_filename)
+					modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
+					#print(modified_rom.get_patch())
+					modified_rom.save(dest_filename, overwrite=True)
+					self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
+					self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
+					# FIXME: English
+					messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
 		else:
-			source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),"*.sfc *.smc"),))
-			if source_filename:
-				_,file_extension = os.path.splitext(source_filename)
-				if file_extension.lower() in ['.sfc','.smc']:
-					default_extension = file_extension.lower()
-				else:
-					default_extension = default_ext
-				dest_filename = os.path.splitext(source_filename)[0] + "_modified"
-				dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
-			if dest_filename:
-				rom = self.game.get_rom_from_filename(source_filename)
-				modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
-				#print(modified_rom.get_patch())
-				modified_rom.save(dest_filename, overwrite=True)
-				self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
-				self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
-				# FIXME: English
-				messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
+			#FIXME: English
+			messagebox.showerror("Not Implemented","Injecting not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
 
 	#query user for directory to inject sprite into
 	def copy_into_ROM_bulk(self, inject=False):
