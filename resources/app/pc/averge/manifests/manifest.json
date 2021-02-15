@@ -1,0 +1,15 @@
+{
+	"$schema": "../../../../schema/game-sprite-manifest.schema.json",
+	"1": {
+		"type": "Player Character Sprite",
+		"name": "Trace",
+		"folder name": "trace",
+		"view-only": true,
+		"input": {
+			"png": {
+				"dims": [512,512],
+				"overview-scale-factor": 1
+			}
+		}
+	}
+}
