@@ -8,6 +8,8 @@
 *.sh text filter=tabspace2
 # python script
 *.py text filter=tabspace2
+# python spec
+*.spec text filter=tabspace2
 # Cascading Style Sheets
 *.css text filter=tabspace2
 # Disabled files
@@ -33,3 +35,6 @@
 *.rdc binary
 # Zarby Sprite
 *.zspr binary
+
+# Make SPEC files highlight as Python files
+*.spec linguist-language=Python
