@@ -36,7 +36,7 @@ def autodetect(sprite_filename):
 
 		game = get_game_class_of_type("snes",selected_game)
 		#And by default, we will grab the player sprite from this game
-		sprite, animation_assist = game.make_player_sprite(sprite_filename)
+		sprite, animation_assist = game.make_player_sprite(sprite_filename,"")
 	elif file_extension.lower() == ".nes":
 		#If the file is a rom, then we can go into the internal header and get the name of the game
 		game_names = autodetect_game_type_from_rom_filename("nes",sprite_filename)
