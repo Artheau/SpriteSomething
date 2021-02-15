@@ -1,58 +1,58 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.om/Artheau/SpriteSomething/master/schema/animations.schema.json",
-  "type": "object",
-  "title": "SpriteSomething Sprite Animations Schema",
-  "items": {
-    "type": "object",
-    "title": "The Animations Schema",
-    "items": {
-      "$id": "#/items",
-      "type": "object",
-      "title": "The Animation Schema",
-      "required": ["frames", "tiles"],
-      "properties": {
-        "frames": {
-          "$id": "#/items/properties/frames",
-          "type": "integer",
-          "title": "The Frames Schema",
-          "default": 0,
-          "examples": [2]
-        },
-        "tiles": {
-          "$id": "#/items/properties/tiles",
-          "type": "array",
-          "title": "The Tiles Schema",
-          "items": {
-            "$id": "#/items/properties/tiles/items",
-            "type": "object",
-            "title": "The Items Schema",
-            "required": ["image", "pos"],
-            "properties": {
-              "image": {
-                "$id": "#/items/properties/tiles/items/properties/image",
-                "type": "string",
-                "title": "The Image Schema",
-                "default": "",
-                "examples": ["stand_right_aim_diag_up"],
-                "pattern": "^(.*)$"
-              },
-              "pos": {
-                "$id": "#/items/properties/tiles/items/properties/pos",
-                "type": "array",
-                "title": "The Pos Schema",
-                "items": {
-                  "$id": "#/items/properties/tiles/items/properties/pos/items",
-                  "type": "integer",
-                  "title": "The Items Schema",
-                  "default": 0,
-                  "examples": [-13, -29]
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://raw.githubusercontent.om/Artheau/SpriteSomething/master/schema/animations.schema.json",
+	"type": "object",
+	"title": "SpriteSomething Sprite Animations Schema",
+	"items": {
+		"type": "object",
+		"title": "The Animations Schema",
+		"items": {
+			"$id": "#/items",
+			"type": "object",
+			"title": "The Animation Schema",
+			"required": ["frames", "tiles"],
+			"properties": {
+				"frames": {
+					"$id": "#/items/properties/frames",
+					"type": "integer",
+					"title": "The Frames Schema",
+					"default": 0,
+					"examples": [2]
+				},
+				"tiles": {
+					"$id": "#/items/properties/tiles",
+					"type": "array",
+					"title": "The Tiles Schema",
+					"items": {
+						"$id": "#/items/properties/tiles/items",
+						"type": "object",
+						"title": "The Items Schema",
+						"required": ["image", "pos"],
+						"properties": {
+							"image": {
+								"$id": "#/items/properties/tiles/items/properties/image",
+								"type": "string",
+								"title": "The Image Schema",
+								"default": "",
+								"examples": ["stand_right_aim_diag_up"],
+								"pattern": "^(.*)$"
+							},
+							"pos": {
+								"$id": "#/items/properties/tiles/items/properties/pos",
+								"type": "array",
+								"title": "The Pos Schema",
+								"items": {
+									"$id": "#/items/properties/tiles/items/properties/pos/items",
+									"type": "integer",
+									"title": "The Items Schema",
+									"default": 0,
+									"examples": [-13, -29]
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 }

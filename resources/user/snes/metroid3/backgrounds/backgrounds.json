@@ -1,15 +1,15 @@
 {
-  "$schema": "../../../../schema/backgrounds.schema.json",
-  "backgrounds": [
-    {
-      "filename": "ship.png",
-      "title": "Samus' Ship",
-      "origin": [126, 80]
-    },
-    {
-      "filename": "zebes.png",
-      "title": "Planet Zebes",
-      "origin": [132, 158]
-    }
-  ]
+	"$schema": "../../../../schema/backgrounds.schema.json",
+	"backgrounds": [
+		{
+			"filename": "ship.png",
+			"title": "Samus' Ship",
+			"origin": [126, 80]
+		},
+		{
+			"filename": "zebes.png",
+			"title": "Planet Zebes",
+			"origin": [132, 158]
+		}
+	]
 }

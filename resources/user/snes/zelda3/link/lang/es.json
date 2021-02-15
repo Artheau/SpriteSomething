@@ -1,41 +1,41 @@
 {
-  "$schema": "../../../../../../resources/app/snes/zelda3/link/manifests/link-language.schema.json",
-  "comment": "Cuando sea posible, se utilizan las traducciones de A Link Between Worlds en la versión de America Latina",
-  "section": {
-    "facing": "Facing",
-    "mail": "Mail",
-    "sword": "Sword",
-    "shield": "Shield",
-    "gloves": "Gloves"
-  },
-  "Facing": {
-    "up": "Arriba",
-    "left": "Izquierda",
-    "right": "Derecha",
-    "down": "Abajo"
-  },
-  "Mail": {
-    "green": "Sayo Verde",
-    "blue": "Sayo Azul",
-    "red": "Sayo Rojo",
-    "bunny": "Paleta de Conejito"
-  },
-  "Sword": {
-    "none": "Sin Espada",
-    "fighter": "Espada Normal",
-    "master": "Espada Maestra",
-    "tempered": "Espada Templada",
-    "gold": "Espada Dorada"
-  },
-  "Shield": {
-    "none": "Sin Escudo",
-    "fighter": "Escudo Pequeño",
-    "fire": "Escudo de Fuego",
-    "mirror": "Escudo Espejo"
-  },
-  "Gloves": {
-    "none": "Sin Gauntes",
-    "power": "Guante de Fuerza",
-    "titan": "Guante del Titán"
-  }
+	"$schema": "../../../../../../resources/app/snes/zelda3/link/manifests/link-language.schema.json",
+	"comment": "Cuando sea posible, se utilizan las traducciones de A Link Between Worlds en la versión de America Latina",
+	"section": {
+		"facing": "Facing",
+		"mail": "Mail",
+		"sword": "Sword",
+		"shield": "Shield",
+		"gloves": "Gloves"
+	},
+	"Facing": {
+		"up": "Arriba",
+		"left": "Izquierda",
+		"right": "Derecha",
+		"down": "Abajo"
+	},
+	"Mail": {
+		"green": "Sayo Verde",
+		"blue": "Sayo Azul",
+		"red": "Sayo Rojo",
+		"bunny": "Paleta de Conejito"
+	},
+	"Sword": {
+		"none": "Sin Espada",
+		"fighter": "Espada Normal",
+		"master": "Espada Maestra",
+		"tempered": "Espada Templada",
+		"gold": "Espada Dorada"
+	},
+	"Shield": {
+		"none": "Sin Escudo",
+		"fighter": "Escudo Pequeño",
+		"fire": "Escudo de Fuego",
+		"mirror": "Escudo Espejo"
+	},
+	"Gloves": {
+		"none": "Sin Gauntes",
+		"power": "Guante de Fuerza",
+		"titan": "Guante del Titán"
+	}
 }
