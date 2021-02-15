@@ -1,6 +1,12 @@
 import os                   			# for env vars
 from shutil import copy, copytree	# file manipulation
 
+# copy GitHub Pages files to staging area
+copytree(
+    os.path.join(".", "html"),
+    os.path.join("..", "pages")
+)
+
 # make dir to put app icon in
 checkdir = os.path.join("..", "pages", "resources", "app", "meta", "icons")
 if not os.path.isdir(checkdir):
@@ -24,10 +30,4 @@ copy(
 copy(
     os.path.join(".", "resources", "app", "meta", "manifests", "badges.json"),
     os.path.join("..", "pages", "resources", "app", "meta", "manifests")
-)
-
-# copy GitHub Pages files to staging area
-copytree(
-    os.path.join(".", "html"),
-    os.path.join("..", "pages")
 )
