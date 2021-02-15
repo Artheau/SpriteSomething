@@ -1,5 +1,5 @@
 {
-	"$schema": "../../../../schema/png-layout.schema.json",
+	"$schema": "../../../../../schema/png-layout.schema.json",
 	"layouts": [
 		{
 			"names": [ "001","005","006" ],

@@ -38,6 +38,7 @@ class SpriteParent():
 					self.overview_scale_factor = png["overview-scale-factor"]
 		self.plugins = None
 		self.has_plugins = False
+		self.set_name = ""
 		self.load_layout(sprite_name)
 		self.load_animations(sprite_name)
 		self.import_from_filename()
@@ -88,11 +89,24 @@ class SpriteParent():
 
 	#the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
 
-	def load_layout(self, _):
-		self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"))
-	def load_animations(self, _):
+	def load_layout(self, sprite_name=""):
+		self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"), sprite_name)
+	def load_animations(self, sprite_name=""):
+		animations_found = False
 		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
 			self.animations = json.load(file)
+			print("Finding Animations!")
+			if "sets" in self.animations:
+				for thisSet in self.animations["sets"]:
+					if "names" in thisSet and sprite_name in thisSet["names"] and not animations_found:
+						animations_found = True
+						self.animations = thisSet["animations"]
+						self.set_name = sprite_name
+						print("Found " + sprite_name + "!")
+						print(self.animations)
+			else:
+				animations_found = True
+				print("Loading Animations!")
 			if "$schema" in self.animations:
 				del self.animations["$schema"]
 

@@ -17,6 +17,8 @@ from source.meta.common import common
 from source.meta.gui import gui_common #TODO: Should not use GUI stuff in game class, need to move this elsewhere
 
 def autodetect(sprite_filename):
+	print("---")
+	print("Autodetecting!")
 	#need to autodetect which game, and which sprite
 	#then return an instance of THAT game's class, and an instance of THAT sprite
 	file_slug,file_extension = os.path.splitext(sprite_filename)
@@ -37,6 +39,7 @@ def autodetect(sprite_filename):
 		game = get_game_class_of_type("snes",selected_game)
 		#And by default, we will grab the player sprite from this game
 		sprite, animation_assist = game.make_player_sprite(sprite_filename,"")
+		print("Detected SNES!")
 	elif file_extension.lower() == ".nes":
 		#If the file is a rom, then we can go into the internal header and get the name of the game
 		game_names = autodetect_game_type_from_rom_filename("nes",sprite_filename)
@@ -52,13 +55,16 @@ def autodetect(sprite_filename):
 		game = get_game_class_of_type("nes",selected_game)
 		#And by default, we will grab the player sprite from this game
 		sprite, animation_assist = game.make_player_sprite(sprite_filename)
+		print("Detected NES!")
 	#If it's not a known filetype but a PNG, cycle through and find one that matches
 	elif file_extension.lower() == ".png":
 		#the following line prevents a "cannot identify image" error from PIL
 		ImageFile.LOAD_TRUNCATED_IMAGES = True
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
+		print("Detected PNG!")
 		with Image.open(sprite_filename) as loaded_image:
 			game_found = False
+			sprite_found = False
 			search_path = os.path.join("resources","app")
 			for console in os.listdir(search_path):
 				if os.path.isdir(os.path.join(search_path,console)) and not console == "meta":
@@ -67,20 +73,32 @@ def autodetect(sprite_filename):
 						sprite_manifest_filename = os.path.join(search_path,console,game_name,"manifests","manifest.json")
 						with open(sprite_manifest_filename) as f:
 							sprite_manifest = json.load(f)
+							sprite_name = ""
 							for sprite_id in sprite_manifest:
 								if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"]:
 									pngs = sprite_manifest[sprite_id]["input"]["png"]
-									sprite_name = ""
 									if not isinstance(pngs,list):
 										pngs = [pngs]
 									for png in pngs:
-										if "dims" in png and not game_found:
+										if "dims" in png and not sprite_found:
 											check_size = png["dims"]
 											if loaded_image.size == tuple(check_size):
-												sprite_name = png["name"] if "name" in png else ""
-												game = get_game_class_of_type(console,game_name)
-												sprite, animation_assist = game.make_player_sprite(sprite_filename,sprite_name)
-												game_found = True
+												print("Detected PNG dimensions!" + " " + str(check_size))
+												if "name" in png:
+													check_names = png["name"]
+													print("Checking PNG name!")
+													if file_slug in check_names:
+														sprite_name = file_slug
+														sprite_found = True
+														print("Detected PNG name!" + " [" + sprite_name + "]")
+												elif not sprite_found:
+													sprite_name = sprite_manifest[sprite_id]["folder name"]
+													sprite_found = True
+													print("Defaulting name!" + " [" + sprite_name + "]")
+							if sprite_name != "":
+								game = get_game_class_of_type(console,game_name)
+								sprite, animation_assist = game.make_player_sprite(sprite_filename,sprite_name)
+								game_found = True
 		if not game_found:
 			# FIXME: English
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
@@ -90,6 +108,7 @@ def autodetect(sprite_filename):
 			zspr_data = bytearray(file.read())
 		game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
 		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename,"")
+		print("Detected ZSPR!")
 	elif file_extension.lower() == ".zip":
 		thisData = {
 			"likely": {

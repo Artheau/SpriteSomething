@@ -16,9 +16,11 @@ class Layout():
 		with open(filename) as inFile:
 			self.data = json.load(inFile)
 		self.reverse_lookup = {}
+		print("Finding Layouts!")
 		if "layouts" in self.data:
 			for layout in self.data["layouts"]:
 				if "names" in layout and sprite_name in layout["names"]:
+					print("Found " + sprite_name + "!")
 					self.data = layout
 		for image_name,image_info in self.data["images"].items():
 			for image_ref in image_info["used by"]:
