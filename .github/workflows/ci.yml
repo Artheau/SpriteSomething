@@ -329,6 +329,7 @@ jobs:
       - name: Build Discord Notification Payload
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          # DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_UPDATES }}
         run: |
           python ./resources/ci/common/prepare_discord_notif.py
 

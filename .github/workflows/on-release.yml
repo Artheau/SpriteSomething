@@ -31,6 +31,6 @@ jobs:
           python -m pip install pytz requests
       - name: Build Discord Notification Payload
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_RELEASES }}
         run: |
           python ./resources/ci/common/prepare_discord_notif.py
