@@ -1,8 +1,10 @@
 from tkinter import Tk, Button, Frame, OptionMenu, StringVar, Toplevel, messagebox, LEFT, Y, N
 from functools import partial
+import os
+from source.meta.common import common
 import source.meta.gui.widgets as widgets
 
-def show_trawler(frames_by_animation,animations_by_frame):
+def show_trawler(frames_by_animation,animations_by_frame,overhead):
 	def show_cell_data(itemID="A0", type="byFrame"):
 		title = ""
 		msg = ""
@@ -24,10 +26,27 @@ def show_trawler(frames_by_animation,animations_by_frame):
 		elif type == "byAnim":
 			animation = itemID.split(":")[0]
 			direction = itemID.split(":")[1]
-			if direction not in frames_by_animation[animation]:
-				direction = list(frames_by_animation[animation].keys())[0]
+			directions = frames_by_animation[animation]
+			if overhead:
+				if "_" in direction:
+					aim = direction.split("_")[0]
+					direction = direction.split("_")[1]
+					direction = direction + "_aim_diag_" + aim
+			if direction + "_aim_shoot" in directions:
+				direction = direction + "_aim_shoot"
+			if direction not in directions:
+				if direction == "neutral" and "right" in directions:
+					direction = "right"
+				elif direction == "up" and "right_aim_up" in directions:
+					direction = "right_aim_up"
+				elif direction == "down" and "right_aim_down" in directions:
+					direction = "right_aim_down"
+				elif "right" in directions:
+					direction = "right"
+				else:
+					direction = list(directions.keys())[0]
 			title = animation + " (" + direction + ")"
-			frames = frames_by_animation[animation][direction]
+			frames = directions[direction]
 			for frameID, frame in frames.items():
 				msg += "> Pose: " + str(frameID + 1) + "\n"
 				msg += ">> Cells: "
@@ -37,7 +56,7 @@ def show_trawler(frames_by_animation,animations_by_frame):
 						msg += " " + cell["flip"] + "-flipped"
 					msg += "; "
 				msg += "\n\n"
-		messagebox.showinfo(title,msg,parent=trawler)
+		widgets.make_messagebox("info",title,msg,parent=trawler)
 
 	def show_ani_data(direction):
 		animation = self.widgets["animation_display"].storageVar.get()
@@ -70,8 +89,14 @@ def show_trawler(frames_by_animation,animations_by_frame):
 		"AB5","AB6","AB7"
 	]
 	dims = {
-		"width": 4,
-		"height": 1
+		"text": {
+			"width": 4,
+			"height": 1
+		},
+		"image": {
+			"width": 20,
+			"height": 20
+		}
 	}
 
 	# Cell Grid, click a cell for animations that use that cell
@@ -84,8 +109,8 @@ def show_trawler(frames_by_animation,animations_by_frame):
 				cell_name,
 				partial(show_cell_data,cell_name),
 				{
-					"width": dims["width"],
-					"height": dims["height"],
+					"width": dims["text"]["width"],
+					"height": dims["text"]["height"],
 					"state": "disabled" if cell_name in disabled else "active"
 				}
 			)
@@ -101,14 +126,15 @@ def show_trawler(frames_by_animation,animations_by_frame):
 				cell_name,
 				partial(show_cell_data,cell_name),
 				{
-					"width": dims["width"],
-					"height": dims["height"],
+					"width": dims["text"]["width"],
+					"height": dims["text"]["height"],
 					"state": "disabled" if cell_name in disabled else "active"
 				}
 			)
 			cell_button.grid(row=letters.index(letter)+26,column=i)
 			cell_buttons.append(cell_button)
-	cell_grid.pack(side=LEFT, anchor=N)
+	if "A0" in animations_by_frame:
+		cell_grid.pack(side=LEFT, anchor=N)
 
 	# Display info about selected cell
 	self.frames["cell_display"] = widgets.make_frame(trawler)
@@ -127,7 +153,8 @@ def show_trawler(frames_by_animation,animations_by_frame):
 	for key in dict_widgets:
 		self.widgets[key] = dict_widgets[key]
 		self.widgets[key].pack()
-	self.frames["cell_display"].pack(side=LEFT, anchor=N)
+	if "A0" in animations_by_frame:
+		self.frames["cell_display"].pack(side=LEFT, anchor=N)
 
 	# Display info about selected animation
 	self.frames["animation_display"] = widgets.make_frame(trawler)
@@ -135,32 +162,33 @@ def show_trawler(frames_by_animation,animations_by_frame):
 		"animation_display": {
 			"type": "selectbox",
 			"options": {}
-		},
-		"left": {
-			"type": "button",
-			"label": {
-				"text": "Left"
-			}
-		},
-		"down": {
-			"type": "button",
-			"label": {
-				"text": "Down"
-			}
-		},
-		"up": {
-			"type": "button",
-			"label": {
-				"text": "Up"
-			}
-		},
-		"right": {
-			"type": "button",
-			"label": {
-				"text": "Right"
-			}
 		}
 	}
+
+	directions = ["down","left","up","right"]
+	if overhead:
+		directions = ["down","down_left","left","up_left","up","up_right","right","down_right","neutral"]
+
+	for direction in directions:
+		text = direction
+		img = "arrow-" + direction.replace("_","") + ".png"
+		if direction == "neutral":
+			img = "no-thing.png"
+		thiswidget[direction] = {
+			"type": "button",
+			"label": {
+				"text": text
+			},
+			"options": {
+				"image": common.get_resource(
+					["meta","icons"],
+					img
+				),
+				"width": dims["image"]["width"],
+				"height": dims["image"]["height"],
+				"compound": "none"
+			}
+		}
 	for ani in frames_by_animation.keys():
 		thiswidget["animation_display"]["options"][ani] = ani
 
@@ -171,7 +199,3 @@ def show_trawler(frames_by_animation,animations_by_frame):
 			self.widgets[key].config(command=partial(show_ani_data,key))
 		self.widgets[key].pack(side=LEFT)
 	self.frames["animation_display"].pack(side=LEFT, anchor=N)
-
-	# print(frames_by_animation)
-	# for i in sorted(animations_by_frame):
-	# 	print(i,animations_by_frame[i])

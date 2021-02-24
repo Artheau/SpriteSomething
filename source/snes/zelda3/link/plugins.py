@@ -5,7 +5,7 @@ from functools import partial
 from source.meta.common import common
 from source.meta.gui import gui_common
 from source.meta.classes.pluginslib import PluginsParent
-from source.snes.zelda3.link.plugin import trawler
+from source.meta.plugins import trawler
 from . import equipment
 
 # FIXME: English
@@ -80,4 +80,4 @@ class Plugins(PluginsParent):
 										frames_by_animation[ani][direction][poseID].append(cell)
 										animations_by_frame[cellID][ani][direction][poseID].append(cell)
 						poseID += 1
-		trawler.show_trawler(frames_by_animation,animations_by_frame)
+		trawler.show_trawler(frames_by_animation,animations_by_frame,False)

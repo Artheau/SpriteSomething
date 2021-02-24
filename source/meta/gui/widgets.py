@@ -1,5 +1,6 @@
 
 from tkinter import Tk, ttk, messagebox, Button, Checkbutton, Entry, Frame, IntVar, Label, OptionMenu, Spinbox, StringVar, LEFT, RIGHT
+from PIL import Image, ImageTk
 from source.meta.classes.Empty import Empty
 
 #################
@@ -39,18 +40,22 @@ def make_frame(parent):
     return ttk.Frame(parent)
 
 # Make a messagebox
-def make_messagebox(type="info", title="", body=""):
+def make_messagebox(type="info", title="", body="", parent=None):
     if type == "info":
-        return messagebox.showinfo(title, body)
+        return messagebox.showinfo(title, body, parent=parent, icon="question")
     elif type == "error":
-        return messagebox.showerror(title, body)
+        return messagebox.showerror(title, body, parent=parent)
     elif type == "yesnocancel":
-        return messagebox.askyesnocancel(title, body)
+        return messagebox.askyesnocancel(title, body, parent=parent)
 
 # Make a Button
 def make_button(parent, label, command, options={}):
 		button = Button(parent, text=label, command=command)
 		if options and len(options):
+				if "image" in options:
+						button.image = ImageTk.PhotoImage(Image.open(options["image"]))
+						button.configure(image=button.image)
+						del options["image"]
 				button.configure(**options)
 		return button
 
