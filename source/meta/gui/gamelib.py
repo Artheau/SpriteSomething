@@ -9,7 +9,6 @@ import tkinter as tk	#for GUI stuff
 import random					#for choosing background image to load on app startup
 from PIL import Image, ImageFile
 from functools import partial
-from source.snes import romhandler as snes
 from source.meta.gui import widgetlib
 from source.meta.common import common
 from source.meta.gui import gui_common #TODO: Should not use GUI stuff in game class, need to move this elsewhere
@@ -87,8 +86,12 @@ def autodetect(sprite_filename):
 	return game, sprite, animation_assist
 
 def autodetect_game_type_from_rom_filename(console,filename):
+  #dynamic import
+  rom_module = {}
+
   if console == "snes":
-  	return autodetect_game_type_from_rom(snes.RomHandlerParent(filename))
+    rom_module = importlib.import_module(f"source.{console}.romhandler")
+    return autodetect_game_type_from_rom(rom_module.RomHandlerParent(filename))
   else:
     raise AssertionError(f"Cannot recognize {console} as a supported console")
 
