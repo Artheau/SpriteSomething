@@ -67,7 +67,8 @@ class Plugins(PluginsParent):
 										"SHIELD" not in cellID:
 										cell = {
 											"id": cellID,
-											"flip": tile["flip"].lower() if "flip" in tile else ""
+											"flip": tile["flip"].lower() if "flip" in tile else "",
+											"crop": tile["crop"] if "crop" in tile else ""
 										}
 										if cellID not in animations_by_frame:
 											animations_by_frame[cellID] = {}
