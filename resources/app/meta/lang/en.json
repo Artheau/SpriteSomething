@@ -15,6 +15,7 @@
     "export.animation-as-hcollage": "Animation as Horizontal Collage",
     "export.animation-as-vcollage": "Animation as Vertical Collage",
     "tools": "Tools",
+    "tools.sheet-trawler": "Sheet Trawler",
     "tools.palette-editor": "Palette Editor",
     "tools.get-representative-image": "Get Representative Image",
     "plugins": "Plugins",

@@ -19,6 +19,7 @@ from source.meta.tkHyperlinkManager import HyperlinkManager
 from source.meta.gui.tkSimpleStatusBar import StatusBar
 from source.meta.common import common
 from source.meta.gui import gui_common
+from source.snes.zelda3.link.plugin.trawler import sheet_trawler
 
 # make base GUI window
 def make_GUI(command_line_args):
@@ -287,6 +288,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		plugins_menu = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
 		tools_menu = tk.Menu(self.menu, tearoff=0, name="tools_menu")
 		tools_menu.add_command(label=self.fish.translate("meta","menu","tools.palette-editor"),command=None,state="disabled")
+		tools_menu.add_command(label=self.fish.translate("meta","menu","tools.sheet-trawler"),command=sheet_trawler)
 		tools_menu.add_cascade(label=self.fish.translate("meta","menu","tools.get-representative-image"), menu=representative_images_menu)
 		tools_menu.add_cascade(label=self.fish.translate("meta","menu","plugins"), menu=plugins_menu)
 		self.menu.add_cascade(label=self.fish.translate("meta","menu","tools"), menu=tools_menu)
