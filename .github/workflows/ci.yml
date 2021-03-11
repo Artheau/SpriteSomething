@@ -268,15 +268,7 @@ jobs:
           RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
           echo "Release Name: ${RELEASE_NAME}"
           echo "Git Tag:      ${GITHUB_TAG}"
-      # read releasenotes
-      - name: Read RELEASENOTES
-        id: release_notes
-        run: |
-          body="$(cat RELEASENOTES.md)"
-          body="${body//'%'/'%25'}"
-          body="${body//$'\n'/'%0A'}"
-          body="${body//$'\r'/'%0D'}"
-          echo "::set-output name=body::$body"
+          git tag ${GITHUB_TAG}
       # create a release
       - name: Create a Release
         id: create_release
