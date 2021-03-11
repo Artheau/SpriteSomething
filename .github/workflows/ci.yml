@@ -268,22 +268,54 @@ jobs:
           RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
           echo "Release Name: ${RELEASE_NAME}"
           echo "Git Tag:      ${GITHUB_TAG}"
-          git tag ${GITHUB_TAG}
       # create a release
       - name: Create a Release
         id: create_release
-        uses: softprops/action-gh-release@v0.1.5
+        uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ steps.debug_info.outputs.github_tag }}
-          name: SpriteSomething v${{ steps.debug_info.outputs.github_tag }}
+          release_name: SpriteSomething v${{ steps.debug_info.outputs.github_tag }}
           body_path: RELEASENOTES.md
-          files: |
-            ../deploy/linux/SpriteSomething.tar.gz
-            ../deploy/macos/SpriteSomething.tar.gz
-            ../deploy/windows/SpriteSomething.zip
           draft: true
+        if: contains(github.ref, 'master')
+      # upload linux archive asset
+      - name: Upload Linux Archive Asset
+        id: upload-linux-asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ../deploy/linux/SpriteSomething.tar.gz
+#          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
+          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-bionic.tar.gz
+          asset_content_type: application/gzip
+        if: contains(github.ref, 'master')
+      # upload macos archive asset
+      - name: Upload MacOS Archive Asset
+        id: upload-macos-asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ../deploy/macos/SpriteSomething.tar.gz
+          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
+          asset_content_type: application/gzip
+        if: contains(github.ref, 'master')
+      # upload windows archive asset
+      - name: Upload Windows Archive Asset
+        id: upload-windows-asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ../deploy/windows/SpriteSomething.zip
+          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-windows.zip
+          asset_content_type: application/zip
         if: contains(github.ref, 'master')
 
       - name: Build Discord Notification Payload
