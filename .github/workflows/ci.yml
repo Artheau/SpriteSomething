@@ -140,7 +140,7 @@ jobs:
           python ./resources/ci/common/prepare_binary.py
       # upload binary artifact for later step
       - name: Upload Binary Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v1
         with:
           name: binary-${{ matrix.os-name }}
           path: ../artifact
@@ -195,13 +195,13 @@ jobs:
           python ./resources/ci/common/prepare_release.py
       # upload appversion artifact for later step
       - name: Upload AppVersion Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v1
         with:
           name: appversion-${{ matrix.os-name }}
           path: ./resources/app/meta/manifests/app_version.txt
       # upload archive artifact for later step
       - name: Upload Archive Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v1
         with:
           name: archive-${{ matrix.os-name }}
           path: ../deploy
@@ -331,7 +331,7 @@ jobs:
           python ./resources/ci/common/prepare_pages.py
       # upload pages artifact for later step
       - name: Upload Pages Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v1
         with:
           name: pages-${{ matrix.os-name }}
           path: ../pages
