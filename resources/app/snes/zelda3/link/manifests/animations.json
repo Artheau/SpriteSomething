@@ -1244,6 +1244,7 @@
     "right": [
       {
         "frames": 8,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "P0",
@@ -1363,6 +1364,7 @@
     "up": [
       {
         "frames": 8,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "A2",
@@ -1526,6 +1528,7 @@
     "down": [
       {
         "frames": 8,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "P0",
@@ -1687,6 +1690,7 @@
     "left": [
       {
         "frames": 8,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "P0",
@@ -1817,6 +1821,7 @@
     "right": [
       {
         "frames": 16,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "A0",
@@ -1858,6 +1863,7 @@
     "up": [
       {
         "frames": 16,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "A2",
@@ -1899,6 +1905,7 @@
     "down": [
       {
         "frames": 16,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "A1",
@@ -1940,6 +1947,7 @@
     "left": [
       {
         "frames": 16,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "A0",
@@ -9069,6 +9077,8 @@
     "right": [
       {
         "frames": 9,
+        "background": "cave.0.png",
+        "origin": [150,40],
         "tiles": [
           {
             "image": "G0",
@@ -9742,6 +9752,7 @@
     "right": [
       {
         "frames": 6,
+        "background": "gameover.png",
         "tiles": [
           {
             "image": "A1",
@@ -33490,6 +33501,7 @@
     "right": [
       {
         "frames": 3,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "SHALLOW_WATER0",
@@ -33591,6 +33603,7 @@
     "up": [
       {
         "frames": 4,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "SHALLOW_WATER0",
@@ -33792,6 +33805,7 @@
     "down": [
       {
         "frames": 4,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "SHALLOW_WATER0",
@@ -33994,6 +34008,7 @@
     "left": [
       {
         "frames": 3,
+        "background": "water.0.png",
         "tiles": [
           {
             "image": "SHALLOW_WATER0",
@@ -34122,6 +34137,7 @@
     "right": [
       {
         "frames": 17,
+        "background": "worldmap.png",
         "tiles": [
           {
             "image": "Y7",
@@ -34142,6 +34158,8 @@
     "right": [
       {
         "frames": 10000,
+        "background": "house.png",
+        "origin": [32,147],
         "tiles": [
           {
             "image": "A6",
@@ -34165,6 +34183,8 @@
     "right": [
       {
         "frames": 10000,
+        "background": "house.png",
+        "origin": [32,147],
         "tiles": [
           {
             "image": "BED1",

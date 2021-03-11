@@ -7,7 +7,7 @@ on: [push, pull_request]
 ########################
 # Non-GitHub providers #
 ########################
-# deploy-pages:   malept/github-action-gh-pages@v1.0.1 (hosted by miketrethewey)
+# deploy-pages:   softprops/action-gh-release@v0.1.5
 
 # What I *should* be able to do:
 #  Define Install Job
@@ -58,10 +58,10 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       # install python
       - name: Install Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
       # install dependencies via pip
@@ -83,7 +83,7 @@ jobs:
           python -m unittest
         if: contains(matrix.os-name, 'windows') != true
       - name: Start virtual display driver & Test (windows)
-        uses: GabrielBB/xvfb-action@v1
+        uses: GabrielBB/xvfb-action@v1.4
         with:
           run: python -m unittest
         if: contains(matrix.os-name, 'windows')
@@ -106,10 +106,10 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       # install python
       - name: Install python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
           architecture: "x64"
@@ -165,10 +165,10 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       # install python
       - name: Install Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
           architecture: "x64"
@@ -182,7 +182,7 @@ jobs:
           python ./resources/ci/common/install.py
       # download binary artifact
       - name: Download Binary Artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: binary-${{ matrix.os-name }}
           path: ./
@@ -227,31 +227,31 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Install Dependencies via pip
         run: |
           python -m pip install pytz requests
       # download appversion artifact
       - name: Download AppVersion Artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: appversion-${{ matrix.os-name }}
           path: ../build
       # download ubuntu archive artifact
       - name: Download Ubuntu Archive Artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: archive-ubuntu-latest
           path: ../deploy/linux
       # download macos archive artifact
       - name: Download MacOS Archive Artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: archive-macOS-latest
           path: ../deploy/macos
       # download windows archive artifact
       - name: Download Windows Archive Artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: archive-windows-latest
           path: ../deploy/windows
@@ -280,52 +280,20 @@ jobs:
       # create a release
       - name: Create a Release
         id: create_release
-        uses: actions/create-release@master
+        uses: softprops/action-gh-release@v0.1.5
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ steps.debug_info.outputs.github_tag }}
-          release_name: SpriteSomething v${{ steps.debug_info.outputs.github_tag }}
-          body: ${{ steps.release_notes.outputs.body }}
+          name: SpriteSomething v${{ steps.debug_info.outputs.github_tag }}
+          body_path: RELEASENOTES.md
+          files: |
+            ../deploy/linux/SpriteSomething.tar.gz
+            ../deploy/macos/SpriteSomething.tar.gz
+            ../deploy/windows/SpriteSomething.zip
           draft: true
         if: contains(github.ref, 'master')
-      # upload linux archive asset
-      - name: Upload Linux Archive Asset
-        id: upload-linux-asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ../deploy/linux/SpriteSomething.tar.gz
-#          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
-          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-bionic.tar.gz
-          asset_content_type: application/gzip
-        if: contains(github.ref, 'master')
-      # upload macos archive asset
-      - name: Upload MacOS Archive Asset
-        id: upload-macos-asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ../deploy/macos/SpriteSomething.tar.gz
-          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
-          asset_content_type: application/gzip
-        if: contains(github.ref, 'master')
-      # upload windows archive asset
-      - name: Upload Windows Archive Asset
-        id: upload-windows-asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ../deploy/windows/SpriteSomething.zip
-          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-windows.zip
-          asset_content_type: application/zip
-        if: contains(github.ref, 'master')
+
       - name: Build Discord Notification Payload
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
@@ -350,10 +318,10 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       # download appversion artifact
       - name: Download AppVersion Artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: appversion-${{ matrix.os-name }}
           path: ../build
@@ -385,18 +353,32 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+        with:
+          ref: gh-pages
       # download pages artifact
       - name: Download Pages Artifact
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v2
         with:
           name: pages-${{ matrix.os-name }}
-          path: ../pages
-    # post to GHPages # FIXME: Test GHPages
-#    - name: Post to GitHub Pages
-#      uses: miketrethewey/github-pages-deploy-action@3.4.1
-#      with:
-#        FOLDER: ../pages
-#        BRANCH: gh-pages
-#        ACCESS_TOKEN: ${{ secrets.GITHUB_DEPLOY_KEY }}
-#      if: contains(github.ref, 'master')
+          path: ./
+      # Prepare for GH-Pages
+      - name: Prepare for GH-Pages
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+      # List Differences
+      - name: List Differences
+        run: |
+          git diff --name-status --cached
+      # Set Commit
+      - name: Set Commit
+        run: |
+          git commit -q -F commit.txt
+          git log
+      # Push to GH-Pages
+      - name: Push to GH-Pages (MASTER)
+        run: |
+          git push
+        if: contains(github.ref, 'master')

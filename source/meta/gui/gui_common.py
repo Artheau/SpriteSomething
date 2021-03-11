@@ -96,7 +96,10 @@ def get_sprites(self,title,dir,url):
 	total = len(sprites)
 	# FIXME: English
 	print("   Downloading " + title + " Sprites")
-	messagebox.showwarning("Downloading " + title + " Sprites","Wait a little bit, dude, there's " + str(total) + " sprites.")
+	wintitle = "Downloading " + title + " Sprites"
+	winbody = "Wait a little bit, dude, there's " + str(total) + " sprites."
+	winquestion = "Are you a bad enough dude to get that many?"
+	dodownload = messagebox.askyesno(wintitle,winbody + "\n\n" + winquestion)
 #	downloader = tk.Tk()
 #	downloader.title("Downloading " + title + " Sprites")
 #	dims = {
@@ -110,27 +113,28 @@ def get_sprites(self,title,dir,url):
 #	self.progressbar.pack(side=tk.TOP,pady=10)
 #	self.progressbar["maximum"] = total
 
-	for i,sprite in enumerate(sprites):
-		sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
-		sprite_destination = os.path.join(filepath,sprite_filename)	#set the destination
-		if not os.path.exists(sprite_destination):	#if we don't have it, download it
-			with open(sprite_destination, "wb") as g:
-				sprite_data_req = urllib.request.Request(
-					sprite["file"],
-					data=None,
-					headers={
-						"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
-					}
-				)
-				sprite_data_req = urllib.request.urlopen(sprite_data_req, context=context)
-				sprite_data = sprite_data_req.read()
+	if dodownload:
+		for i,sprite in enumerate(sprites):
+			sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
+			sprite_destination = os.path.join(filepath,sprite_filename)	#set the destination
+			if not os.path.exists(sprite_destination):	#if we don't have it, download it
+				with open(sprite_destination, "wb") as g:
+					sprite_data_req = urllib.request.Request(
+						sprite["file"],
+						data=None,
+						headers={
+							"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+						}
+					)
+					sprite_data_req = urllib.request.urlopen(sprite_data_req, context=context)
+					sprite_data = sprite_data_req.read()
+					# FIXME: English
+					print("    Writing " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
+					g.write(sprite_data)
+					success = True
+			else:	#if we do have it, next!
 				# FIXME: English
-				print("    Writing " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
-				g.write(sprite_data)
-				success = True
-		else:	#if we do have it, next!
-			# FIXME: English
-			print("    Skipping " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
-#		self.progressbar["value"] = (((i+1)/total)*100)
-#	downloader.destroy()
+				print("    Skipping " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
+	#		self.progressbar["value"] = (((i+1)/total)*100)
+	#	downloader.destroy()
 	return success

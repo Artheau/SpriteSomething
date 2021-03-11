@@ -30,6 +30,7 @@ class SpriteParent():
                          "author.name": "", "author.name-short": ""}
         self.filename = filename
         self.overview_scale_factor = 2
+        self.overhead = True
         if "input" in manifest_dict and \
             "png" in manifest_dict["input"] and \
                 "overview-scale-factor" in manifest_dict["input"]["png"]:

@@ -35,6 +35,12 @@ copy(
     os.path.join("..", "build", "app_version.txt"),
     os.path.join("..", "pages", "resources", "app", "meta", "manifests")
 )
+
+with(open(os.path.join("..","build","app_version.txt"),"r")) as appversion:
+    VERSION = appversion.readline().strip()
+with(open(os.path.join("..","pages","commit.txt"),"w")) as commit:
+    commit.write("Update Site to v" + VERSION)
+
 # copy badges manifest over
 copy(
     os.path.join(".", "resources", "app", "meta", "manifests", "badges.json"),

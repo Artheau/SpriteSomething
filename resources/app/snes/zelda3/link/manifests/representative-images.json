@@ -22,5 +22,11 @@
     ["Walk",                  "up",     6,  ["blue_mail", "power_gloves", "",               "fire_shield"]],
     ["Tree pull",             "right",  3,  ["",          "power_gloves"]]
   ],
+	"hunk": [
+    [ "Stand", "up" ],
+    [ "Stand", "left" ],
+    [ "Stand", "down" ],
+    [ "Stand", "right" ]
+	],
   "crossproduct": []
 }

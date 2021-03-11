@@ -50,6 +50,8 @@ class Sprite(SpriteParent):
 			return_images += self.get_tracker_images()
 		elif style == "spiffy":
 			return_images += self.get_spiffy_images(return_images)
+		elif style == "hunk":
+			return_images += self.get_hunk_images(return_images)
 
 		return return_images
 
@@ -114,6 +116,31 @@ class Sprite(SpriteParent):
 		]
 		# FIXME: somehow get this from representative-images.json
 		bgfilename = "titlecard.png"
+
+		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
+			sprite_save_name = self.metadata["sprite.name"].lower()
+		else:
+			# FIXME: English
+			sprite_save_name = "unknown"
+		bgimg = Image.open(os.path.join(".","resources","app",self.resource_subpath,"sheets",bgfilename)).convert("RGBA")
+		for i in range(0,len(return_images)):
+			img = return_images[i][1]
+			bgimg.paste(img,pose_coords[i],img)
+		bgimg = bgimg.resize((bgimg.size[0] * 2, bgimg.size[1] * 2), Image.NEAREST)
+		return_images.append(("-".join([sprite_save_name,bgfilename]),bgimg))
+
+		return return_images
+
+	def get_hunk_images(self, return_images):
+		# FIXME: somehow get these from representative-images.json
+		pose_coords = [
+			(28,1),
+			(0,26),
+			(24,26),
+			(45,26)
+		]
+		# FIXME: somehow get this from representative-images.json
+		bgfilename = "hunk.png"
 
 		if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
 			sprite_save_name = self.metadata["sprite.name"].lower()
