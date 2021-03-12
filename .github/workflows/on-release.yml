@@ -4,7 +4,7 @@ name: On Release Deployment
 # fire on
 on:
   release:
-    types: [published, prereleased]
+    types: [published, prereleased, released]
 
 # stuff to do
 jobs:
