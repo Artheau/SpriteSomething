@@ -1,12 +1,12 @@
 [
-	{
-		"title": "Latest Release Version",
-		"keyword": "github/v/release",
-		"query": "?include_prereleases",
-		"left": "latest release",
-		"logo": "github",
-		"url": "https://github.com/Artheau/SpriteSomething/releases/tag/<LATEST_TAG>"
-	},
+  {
+    "title": "Latest Release Version",
+    "keyword": "github/v/release",
+    "query": "?include_prereleases",
+    "left": "latest release",
+    "logo": "github",
+    "url": "https://github.com/Artheau/SpriteSomething/releases/tag/<LATEST_TAG>"
+  },
   {
     "title": "Master Build Status",
     "keyword": "github/workflow/status",
@@ -23,12 +23,12 @@
     "logo": "github",
     "url": "https://github.com/Artheau/SpriteSomething/tree/stable"
   },
-	{
-		"title": "Commits to Stable since last release",
-		"keyword": "github/commits-since",
-		"query": "<LATEST_TAG>/stable",
-		"left": "commits to stable since <LATEST_TAG>",
-		"logo": "github",
-		"url": "https://github.com/Artheau/SpriteSomething/compare/master..stable"
-	}
+  {
+    "title": "Commits to Stable since last release",
+    "keyword": "github/commits-since",
+    "query": "<LATEST_TAG>/stable",
+    "left": "commits to stable since <LATEST_TAG>",
+    "logo": "github",
+    "url": "https://github.com/Artheau/SpriteSomething/compare/master..stable"
+  }
 ]
