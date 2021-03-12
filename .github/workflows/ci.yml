@@ -278,7 +278,7 @@ jobs:
           tag_name: v${{ steps.debug_info.outputs.github_tag }}
           release_name: SpriteSomething v${{ steps.debug_info.outputs.github_tag }}
           body_path: RELEASENOTES.md
-          draft: true
+          # draft: true
         if: contains(github.ref, 'master')
       # upload linux archive asset
       - name: Upload Linux Archive Asset
