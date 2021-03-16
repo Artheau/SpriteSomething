@@ -143,7 +143,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: binary-${{ matrix.os-name }}
-          path: ../artifact
+          path: ${{ github.workspace }}/../artifact
 
   # Install & Preparing Release
   #  Set up environment
@@ -204,7 +204,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: archive-${{ matrix.os-name }}
-          path: ../deploy
+          path: ${{ github.workspace }}/../deploy
 
   # Deploy to GitHub Releases
   #  Release Name:  SpriteSomething v${GITHUB_TAG}
@@ -236,25 +236,25 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: appversion-${{ matrix.os-name }}
-          path: ../build
+          path: ${{ github.workspace }}/../build
       # download ubuntu archive artifact
       - name: Download Ubuntu Archive Artifact
         uses: actions/download-artifact@v2
         with:
           name: archive-ubuntu-latest
-          path: ../deploy/linux
+          path: ${{ github.workspace }}/../deploy/linux
       # download macos archive artifact
       - name: Download MacOS Archive Artifact
         uses: actions/download-artifact@v2
         with:
           name: archive-macOS-latest
-          path: ../deploy/macos
+          path: ${{ github.workspace }}/../deploy/macos
       # download windows archive artifact
       - name: Download Windows Archive Artifact
         uses: actions/download-artifact@v2
         with:
           name: archive-windows-latest
-          path: ../deploy/windows
+          path: ${{ github.workspace }}/../deploy/windows
       # debug info
       - name: Debug Info
         id: debug_info
@@ -348,7 +348,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: appversion-${{ matrix.os-name }}
-          path: ../build
+          path: ${{ github.workspace }}/../build
       # Prepare Pages
       - name: Prepare GitHub Pages
         run: |
@@ -358,7 +358,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: pages-${{ matrix.os-name }}
-          path: ../pages
+          path: ${{ github.workspace }}/../pages
 
   # Deploy to GitHub Pages
   #
