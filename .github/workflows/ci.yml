@@ -117,20 +117,18 @@ jobs:
           replace: ''
       - name: Get Parent Directory Path (!Windows)
         uses: mad9000/actions-find-and-replace-string@1
-        id: parentDir
+        id: parentDirNotWin
         with:
           source: ${{ github.workspace }}
           find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
           replace: ${{ steps.repoName.outputs.value }}
-        if: contains(matrix.os-name, 'windows') != true
       - name: Get Parent Directory Path (Windows)
         uses: mad9000/actions-find-and-replace-string@1
         id: parentDir
         with:
-          source: ${{ github.workspace }}
+          source: ${{ steps.parentDirNotWin.outputs.value }}
           find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
           replace: ${{ steps.repoName.outputs.value }}
-        if: contains(matrix.os-name, 'windows') == true
       # install python
       - name: Install python
         uses: actions/setup-python@v2
@@ -200,20 +198,18 @@ jobs:
           replace: ''
       - name: Get Parent Directory Path (!Windows)
         uses: mad9000/actions-find-and-replace-string@1
-        id: parentDir
+        id: parentDirNotWin
         with:
           source: ${{ github.workspace }}
           find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
           replace: ${{ steps.repoName.outputs.value }}
-        if: contains(matrix.os-name, 'windows') != true
       - name: Get Parent Directory Path (Windows)
         uses: mad9000/actions-find-and-replace-string@1
         id: parentDir
         with:
-          source: ${{ github.workspace }}
+          source: ${{ steps.parentDirNotWin.outputs.value }}
           find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
           replace: ${{ steps.repoName.outputs.value }}
-        if: contains(matrix.os-name, 'windows') == true
       # install python
       - name: Install Python
         uses: actions/setup-python@v2
@@ -400,20 +396,18 @@ jobs:
           replace: ''
       - name: Get Parent Directory Path (!Windows)
         uses: mad9000/actions-find-and-replace-string@1
-        id: parentDir
+        id: parentDirNotWin
         with:
           source: ${{ github.workspace }}
           find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
           replace: ${{ steps.repoName.outputs.value }}
-        if: contains(matrix.os-name, 'windows') != true
       - name: Get Parent Directory Path (Windows)
         uses: mad9000/actions-find-and-replace-string@1
         id: parentDir
         with:
-          source: ${{ github.workspace }}
+          source: ${{ steps.parentDirNotWin.outputs.value }}
           find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
           replace: ${{ steps.repoName.outputs.value }}
-        if: contains(matrix.os-name, 'windows') == true
       # download appversion artifact
       - name: Download AppVersion Artifact
         uses: actions/download-artifact@v2
