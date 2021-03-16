@@ -71,7 +71,7 @@ jobs:
         run: |
           python ./resources/ci/common/install.py
       # start virtual display driver & run tests
-      - name: Start virtual display driver & Test (!windows)
+      - name: Start virtual display driver & Test (!Windows)
         env:
           DISPLAY: :99
         run: |
@@ -82,7 +82,7 @@ jobs:
           export DISPLAY=:99
           python -m unittest
         if: contains(matrix.os-name, 'windows') != true
-      - name: Start virtual display driver & Test (windows)
+      - name: Start virtual display driver & Test (Windows)
         uses: GabrielBB/xvfb-action@v1.4
         with:
           run: python -m unittest
@@ -115,13 +115,22 @@ jobs:
           source: ${{ github.repository }}
           find: '${{ github.repository_owner }}/'
           replace: ''
-      - name: Get Parent Directory Path
+      - name: Get Parent Directory Path (!Windows)
         uses: mad9000/actions-find-and-replace-string@1
         id: parentDir
         with:
           source: ${{ github.workspace }}
           find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
           replace: ${{ steps.repoName.outputs.value }}
+        if: contains(matrix.os-name, 'windows') != true
+      - name: Get Parent Directory Path (Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDir
+        with:
+          source: ${{ github.workspace }}
+          find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
+        if: contains(matrix.os-name, 'windows') == true
       # install python
       - name: Install python
         uses: actions/setup-python@v2
@@ -189,13 +198,22 @@ jobs:
           source: ${{ github.repository }}
           find: '${{ github.repository_owner }}/'
           replace: ''
-      - name: Get Parent Directory Path
+      - name: Get Parent Directory Path (!Windows)
         uses: mad9000/actions-find-and-replace-string@1
         id: parentDir
         with:
           source: ${{ github.workspace }}
           find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
           replace: ${{ steps.repoName.outputs.value }}
+        if: contains(matrix.os-name, 'windows') != true
+      - name: Get Parent Directory Path (Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDir
+        with:
+          source: ${{ github.workspace }}
+          find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
+        if: contains(matrix.os-name, 'windows') == true
       # install python
       - name: Install Python
         uses: actions/setup-python@v2
@@ -380,13 +398,22 @@ jobs:
           source: ${{ github.repository }}
           find: '${{ github.repository_owner }}/'
           replace: ''
-      - name: Get Parent Directory Path
+      - name: Get Parent Directory Path (!Windows)
         uses: mad9000/actions-find-and-replace-string@1
         id: parentDir
         with:
           source: ${{ github.workspace }}
           find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
           replace: ${{ steps.repoName.outputs.value }}
+        if: contains(matrix.os-name, 'windows') != true
+      - name: Get Parent Directory Path (Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDir
+        with:
+          source: ${{ github.workspace }}
+          find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
+        if: contains(matrix.os-name, 'windows') == true
       # download appversion artifact
       - name: Download AppVersion Artifact
         uses: actions/download-artifact@v2
