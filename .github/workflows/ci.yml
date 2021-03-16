@@ -7,7 +7,7 @@ on: [push, pull_request]
 ########################
 # Non-GitHub providers #
 ########################
-# deploy-pages:   softprops/action-gh-release@v0.1.5
+# *: mad9000/actions-find-and-replace-string@1
 
 # What I *should* be able to do:
 #  Define Install Job
@@ -181,6 +181,21 @@ jobs:
       # checkout commit
       - name: Checkout commit
         uses: actions/checkout@v2
+      # get parent directory
+      - name: Get Repo Name
+        uses: mad9000/actions-find-and-replace-string@1
+        id: repoName
+        with:
+          source: ${{ github.repository }}
+          find: '${{ github.repository_owner }}/'
+          replace: ''
+      - name: Get Parent Directory Path
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDir
+        with:
+          source: ${{ github.workspace }}
+          find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
       # install python
       - name: Install Python
         uses: actions/setup-python@v2
@@ -219,7 +234,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: archive-${{ matrix.os-name }}
-          path: ${{ github.workspace }}/../deploy
+          path: ${{ steps.parentDir.outputs.value }}/deploy
 
   # Deploy to GitHub Releases
   #  Release Name:  SpriteSomething v${GITHUB_TAG}
@@ -251,25 +266,25 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: appversion-${{ matrix.os-name }}
-          path: ${{ github.workspace }}/../build
+          path: ${{ steps.parentDir.outputs.value }}/build
       # download ubuntu archive artifact
       - name: Download Ubuntu Archive Artifact
         uses: actions/download-artifact@v2
         with:
           name: archive-ubuntu-latest
-          path: ${{ github.workspace }}/../deploy/linux
+          path: ${{ steps.parentDir.outputs.value }}/deploy/linux
       # download macos archive artifact
       - name: Download MacOS Archive Artifact
         uses: actions/download-artifact@v2
         with:
           name: archive-macOS-latest
-          path: ${{ github.workspace }}/../deploy/macos
+          path: ${{ steps.parentDir.outputs.value }}/deploy/macos
       # download windows archive artifact
       - name: Download Windows Archive Artifact
         uses: actions/download-artifact@v2
         with:
           name: archive-windows-latest
-          path: ${{ github.workspace }}/../deploy/windows
+          path: ${{ steps.parentDir.outputs.value }}/deploy/windows
       # debug info
       - name: Debug Info
         id: debug_info
@@ -304,8 +319,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ../deploy/linux/SpriteSomething.tar.gz
-#          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
-          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-bionic.tar.gz
+          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
           asset_content_type: application/gzip
         if: contains(github.ref, 'master')
       # upload macos archive asset
@@ -358,12 +372,27 @@ jobs:
       # checkout commit
       - name: Checkout commit
         uses: actions/checkout@v2
+      # get parent directory
+      - name: Get Repo Name
+        uses: mad9000/actions-find-and-replace-string@1
+        id: repoName
+        with:
+          source: ${{ github.repository }}
+          find: '${{ github.repository_owner }}/'
+          replace: ''
+      - name: Get Parent Directory Path
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDir
+        with:
+          source: ${{ github.workspace }}
+          find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
       # download appversion artifact
       - name: Download AppVersion Artifact
         uses: actions/download-artifact@v2
         with:
           name: appversion-${{ matrix.os-name }}
-          path: ${{ github.workspace }}/../build
+          path: ${{ steps.parentDir.outputs.value }}/build
       # Prepare Pages
       - name: Prepare GitHub Pages
         run: |
@@ -373,7 +402,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: pages-${{ matrix.os-name }}
-          path: ${{ github.workspace }}/../pages
+          path: ${{ steps.parentDir.outputs.value }}/pages
 
   # Deploy to GitHub Pages
   #
