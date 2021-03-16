@@ -107,6 +107,21 @@ jobs:
       # checkout commit
       - name: Checkout commit
         uses: actions/checkout@v2
+      # get parent directory
+      - name: Get Repo Name
+        uses: mad9000/actions-find-and-replace-string@1
+        id: repoName
+        with:
+          source: ${{ github.repository }}
+          find: '${{ github.repository_owner }}/'
+          replace: ''
+      - name: Get Parent Directory Path
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDir
+        with:
+          source: ${{ github.workspace }}
+          find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
       # install python
       - name: Install python
         uses: actions/setup-python@v2
@@ -143,7 +158,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: binary-${{ matrix.os-name }}
-          path: ${{ github.workspace }}/../artifact
+          path: ${{ steps.parentDir.outputs.value }}/artifact
 
   # Install & Preparing Release
   #  Set up environment
