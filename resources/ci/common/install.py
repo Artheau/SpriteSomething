@@ -1,41 +1,63 @@
 import common
-import os           # for env vars
-import subprocess   # do stuff at the shell level
+import argparse
+import os
+import urllib.request, ssl
+import subprocess # do stuff at the shell level
 
 env = common.prepare_env()
 
-def run_install():
-  # get executables
-  #  python
-  #   linux/windows: python
-  #   macosx:        python3
-  #  pip
-  #   linux/macosx: pip3
-  #   windows:      pip
-  PYTHON_EXECUTABLE = "python3" if "osx" in env["OS_NAME"] else "python"
-  PIP_EXECUTABLE = "pip" if "windows" in env["OS_NAME"] else "pip3"
-  PIP_EXECUTABLE = "pip" if "osx" in env["OS_NAME"] and \
-      "actions" in env["CI_SYSTEM"] else PIP_EXECUTABLE
+def get_get_pip(PY_VERSION):
+  try:
+    import pip
+  except ImportError:
+    print("Getting pip getter!")
+    #make the request!
+    url = "https://bootstrap.pypa.io/get-pip.py"
+    context = ssl._create_unverified_context()
+    req = urllib.request.urlopen(url, context=context)
+    got_pip = req.read().decode("utf-8")
 
-  # upgrade pip
-  subprocess.check_call([PYTHON_EXECUTABLE, "-m", "pip",
-                         "install", "--upgrade", "pip"])
+    with open("get-pip.py", "w") as g:
+      req = urllib.request.Request(
+        url,
+        data=None,
+        headers={
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+        }
+      )
+      req = urllib.request.urlopen(req, context=context)
+      data = req.read().decode("utf-8")
+      g.write(data)
 
-  # pip version
-  subprocess.check_call([PIP_EXECUTABLE, "--version"])
-  # if pip3, install wheel
-  if PIP_EXECUTABLE == "pip3":
-      subprocess.check_call([PIP_EXECUTABLE, "install", "-U", "wheel"])
-  # install listed dependencies
-  subprocess.check_call([PIP_EXECUTABLE, "install", "-r",
-                         os.path.join(
-                             ".",
-                             "resources",
-                             "app",
-                             "meta",
-                             "manifests",
-                             "pip_requirements.txt"
-                         )])
+    # get executables
+    #  python
+    #   linux/windows: python
+    #   macosx:        python3
+    PYTHON_EXECUTABLE = "python3" if "osx" in env["OS_NAME"] else "python"
+    if PY_VERSION == None:
+      PY_VERSION = 0
+
+    if float(PY_VERSION) > 0:
+      PYTHON_EXECUTABLE = "py"
+
+    print("Getting pip!")
+    args = [
+      env["PYTHON_EXE_PATH"] + PYTHON_EXECUTABLE,
+      '-' + str(PY_VERSION),
+      "get-pip.py"
+    ]
+    if PY_VERSION == 0:
+      del args[1]
+    subprocess.check_call(args)
 
 if __name__ == "__main__":
-  run_install()
+  parser = argparse.ArgumentParser(add_help=False)
+  parser.add_argument('--py', default=0)
+  command_line_args = parser.parse_args()
+  PY_VERSION = vars(command_line_args)["py"]
+
+  try:
+    import pip
+    print("pip is installed")
+  except ImportError:
+    get_get_pip(PY_VERSION)
