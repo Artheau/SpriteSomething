@@ -349,7 +349,7 @@ jobs:
       # upload linux archive asset
       - name: Upload Linux Archive Asset
         id: upload-linux-asset
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -361,7 +361,7 @@ jobs:
       # upload macos archive asset
       - name: Upload MacOS Archive Asset
         id: upload-macos-asset
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -373,7 +373,7 @@ jobs:
       # upload windows archive asset
       - name: Upload Windows Archive Asset
         id: upload-windows-asset
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
