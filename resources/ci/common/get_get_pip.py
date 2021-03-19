@@ -1,8 +1,9 @@
 import common
 import argparse
 import os
-import urllib.request, ssl
+import ssl
 import subprocess # do stuff at the shell level
+import urllib.request
 
 env = common.prepare_env()
 

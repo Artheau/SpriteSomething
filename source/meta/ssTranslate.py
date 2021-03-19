@@ -20,7 +20,7 @@ class BabelFish():
 		subpath.append("lang") #look in lang folder
 		subpath = os.path.join(*subpath) #put in path separators
 		for lang in self.langs:
-			if not lang in self.lang_defns:
+			if lang not in self.lang_defns:
 				self.lang_defns[lang] = {}
 			langs_filename = common.get_resource(subpath,lang + ".json") #get filename of translation file
 			if langs_filename and os.path.isfile(langs_filename): #if we've got a file

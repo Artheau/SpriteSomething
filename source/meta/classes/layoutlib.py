@@ -42,7 +42,7 @@ class Layout():
             return "null"
 
     def get_all_image_names(self, animation, pose):
-        if type(animation) is int:
+        if isinstance(animation,int):
             animation = common.pretty_hex(animation)
         # get the full list
         return self.reverse_lookup[(animation, pose)]
@@ -155,7 +155,7 @@ class Layout():
             for _ in range(FAILSAFE):
                 if this_property in self.data["images"][image_name]:
                     return self.data["images"][image_name][this_property]
-                elif "parent" in self.data["images"][image_name]:
+                if "parent" in self.data["images"][image_name]:
                     image_name = self.data["images"][image_name]["parent"]
                 else:
                     return None

@@ -42,9 +42,9 @@ def equipment_test(save=False):
 		((160,0),(16, 8))
 	]
 	#cycle through coordinate info
-	for i in range(len(coords)):
+	for i,_ in enumerate(coords):
 		#cycle through swords and y-offsets
-		for j in range(len(swords)):
+		for j,_ in enumerate(swords):
 			origin,dims = coords[i]
 			x,y = origin
 			level,y_offset = swords[j]
@@ -73,7 +73,7 @@ def equipment_test(save=False):
 	#cycle through x-coordinates
 	for i in range(4):
 		#cycle through shields and y-offsets
-		for j in range(len(shields)):
+		for j,_ in enumerate(shields):
 			level,y_offset = shields[j]
 			origin = (i*16,128+y_offset)
 			icon_specs[level + "_shield" + str(i)] = coord_calc(origin,(16,16))

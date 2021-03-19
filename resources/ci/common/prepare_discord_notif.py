@@ -147,7 +147,7 @@ if timestamp == "":
     timestamp = pst_now.isoformat()
     timestamp = timestamp[:timestamp.find('.')]
 
-if not timestamp == "":
+if timestamp != "":
     if '+' in timestamp:
         timestamp = timestamp[:timestamp.find('+')]
     elif '-' in timestamp:

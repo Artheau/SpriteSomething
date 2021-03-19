@@ -22,9 +22,9 @@ def run_install(PY_VERSION,USER):
   PIP_EXECUTABLE = "pip" if "windows" in env["OS_NAME"] else "pip3"
   PIP_EXECUTABLE = "pip" if "osx" in env["OS_NAME"] and "actions" in env["CI_SYSTEM"] else PIP_EXECUTABLE
 
-  if PY_VERSION == None:
+  if PY_VERSION is None:
     PY_VERSION = 0
-  if USER == None:
+  if USER is None:
     USER = False
 
   if float(PY_VERSION) > 0:

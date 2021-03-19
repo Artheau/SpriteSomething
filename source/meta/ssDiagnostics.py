@@ -1,12 +1,15 @@
-import platform, sys, os, subprocess
+import os
+import platform
+import subprocess
+import sys
 import source.meta.common.constants as CONST
 from datetime import datetime
 
 if "windows" in platform.system().lower():
   import pkg_resources
 
-def diagpad(str):
-  return str.ljust(len("SpriteSomething Version") + 5,'.')
+def diagpad(inbound):
+  return inbound.ljust(len("SpriteSomething Version") + 5,'.')
 
 def output():
   lines = [

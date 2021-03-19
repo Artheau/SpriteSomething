@@ -92,8 +92,7 @@ def autodetect_game_type_from_rom_filename(console,filename):
   if console == "snes":
     rom_module = importlib.import_module(f"source.{console}.romhandler")
     return autodetect_game_type_from_rom(rom_module.RomHandlerParent(filename))
-  else:
-    raise AssertionError(f"Cannot recognize {console} as a supported console")
+  raise AssertionError(f"Cannot recognize {console} as a supported console")
 
 def autodetect_game_type_from_rom(rom):
 	rom_name = rom.get_name()
@@ -244,9 +243,8 @@ class GameParent():
 				animation_assist = animationlib.AnimationEngineParent(resource_subpath, self, sprite)
 
 			return sprite, animation_assist
-		else:
-			# FIXME: English
-			raise AssertionError(f"make_sprite_by_number() called for non-implemented sprite_number {sprite_number}")
+		# FIXME: English
+		raise AssertionError(f"make_sprite_by_number() called for non-implemented sprite_number {sprite_number}")
 
 	def get_rom_from_filename(self, filename):
 		#dynamic import

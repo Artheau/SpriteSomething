@@ -3,11 +3,6 @@ import stat   # file statistics
 import sys    # default system info
 from my_path import get_py_path
 
-global UBUNTU_VERSIONS
-global DEFAULT_EVENT
-global DEFAULT_REPO_SLUG
-global FILENAME_CHECKS
-global FILESIZE_CHECK
 UBUNTU_VERSIONS = {
   "latest": "focal",
   "20.04": "focal",
@@ -97,7 +92,7 @@ def prepare_env():
                 OS_VERSION = UBUNTU_VERSIONS[OS_VERSION]
             OS_DIST = OS_VERSION
 
-    if OS_VERSION == "" and not OS_DIST == "" and not OS_DIST == "notset":
+    if OS_VERSION == "" and OS_DIST != "" and OS_DIST != "notset":
         OS_VERSION = OS_DIST
 
         # if no tag

@@ -16,4 +16,4 @@ subprocess.run(" ".join(["pyinstaller ./source/SpriteSomething.spec ",
 						 "--onefile "          #compile everything into a single file, except for resources and whatnot
 						 f"--distpath {DEST_DIRECTORY} ",      #place the executable in the specified directory
 						 ])
-				  , shell=True)
+						)

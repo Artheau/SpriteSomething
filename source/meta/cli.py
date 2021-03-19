@@ -43,20 +43,20 @@ class CLIMainFrame():
           os.makedirs(dest_default_path)
 
         if "dest-filename" in command_line_args:	#if we've provide a destination, set it
-          if not command_line_args["dest-filename"] == None:
+          if not command_line_args["dest-filename"] is None:
             dest_filename = command_line_args["dest-filename"]
         if "src-filename" in command_line_args:	#if we've provided a source, set it
-          if not command_line_args["src-filename"] == None:
+          if not command_line_args["src-filename"] is None:
             source_filename = command_line_args["src-filename"]
         if "-bulk" in mode:	#if we're injecting into many game files
 					# SpriteSomething.[py|exe] --cli=1 --mode=inject-bulk --src-filepath=resources/zelda3/gamefiles/inject
           source_filepath = os.path.join("resources","user",self.game.console_name,self.game.internal_name,"gamefiles","inject")	#default inject location | user_resources/snes/zelda3/gamefiles/inject/*.*
           if "src-filepath" in command_line_args:	#if we've provided a source directory, set it
-            if not command_line_args["src-filepath"] == None:
+            if not command_line_args["src-filepath"] is None:
               source_filepath = command_line_args["src-filepath"]
               if "-random" in mode:	#if we're injecting random sprites, get the directory
                 if "spr-filepath" in command_line_args:
-                  if not command_line_args["spr-filepath"] == None:
+                  if not command_line_args["spr-filepath"] is None:
 										# SpriteSomething.[py|exe] --cli=1 --mode=inject-bulk-random --src-filepath=user_resources/zelda3/gamefiles/inject \
 										#  --spr-filepath=resource/zelda3/link/official
                     sprite_filepath = command_line_args["spr-filepath"]	#if we've provide a sprite directory, set it
@@ -65,7 +65,7 @@ class CLIMainFrame():
                 self.copy_into_ROM_bulk(source_filepath=source_filepath)
         elif "-random" in mode:	#we're injecting a random sprite into one game file
           if "spr-filepath" in command_line_args:
-            if not command_line_args["spr-filepath"] == None:
+            if not command_line_args["spr-filepath"] is None:
               sprite_filepath = command_line_args["spr-filepath"]
               self.randomize_into_ROM(inject=True, source_filename=source_filename, dest_filename=dest_filename, sprite_filepath=sprite_filepath)
         else:	#we're injecting the loaded sprite into one game file
@@ -198,9 +198,8 @@ class CLIMainFrame():
       elif os.path.isfile(sprite_filepath):
         sprite_filenames.append(sprite_filepath)
       return random.choice(sprite_filenames)
-    else:
-      print("Sprite File not found")
-      return False
+    print("Sprite File not found")
+    return False
 
 	#try to randomize a sprite and inject it
 	# Inbound:
@@ -213,7 +212,6 @@ class CLIMainFrame():
 #    self.load_sprite(self.get_random_sprite(sprite_filepath=sprite_filepath))
 #    self.copy_into_ROM(inject=inject, dest_filename=dest_filename,source_filename=source_filename)
     print("If you got here, it's busted.")
-    pass
 
 	#try to randomize a sprite and inject it
 	#like above but for list of files

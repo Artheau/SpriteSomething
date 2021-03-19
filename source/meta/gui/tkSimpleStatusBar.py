@@ -7,7 +7,7 @@ class StatusBar(tk.Frame):
         self.label = tk.Label(self, bd=1, relief=tk.SUNKEN, anchor=tk.W)
         self.label.pack(fill=tk.X)
 
-    def set(self, format, *args):
+    def set(self, fmt, *args):
         self.label.config(text=format % args)
         self.label.update_idletasks()
 
