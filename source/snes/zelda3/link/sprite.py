@@ -123,7 +123,7 @@ class Sprite(SpriteParent):
 			# FIXME: English
 			sprite_save_name = "unknown"
 		bgimg = Image.open(os.path.join(".","resources","app",self.resource_subpath,"sheets",bgfilename)).convert("RGBA")
-		for i in range(0,len(return_images)):
+		for i,_ in enumerate(return_images):
 			img = return_images[i][1]
 			bgimg.paste(img,pose_coords[i],img)
 		bgimg = bgimg.resize((bgimg.size[0] * 2, bgimg.size[1] * 2), Image.NEAREST)
@@ -148,7 +148,7 @@ class Sprite(SpriteParent):
 			# FIXME: English
 			sprite_save_name = "unknown"
 		bgimg = Image.open(os.path.join(".","resources","app",self.resource_subpath,"sheets",bgfilename)).convert("RGBA")
-		for i in range(0,len(return_images)):
+		for i,_ in enumerate(return_images):
 			img = return_images[i][1]
 			bgimg.paste(img,pose_coords[i],img)
 		bgimg = bgimg.resize((bgimg.size[0] * 2, bgimg.size[1] * 2), Image.NEAREST)
@@ -200,11 +200,10 @@ class Sprite(SpriteParent):
 					image_name = item.lower() if (not "none_accessories" in palettes) else "transparent"
 		if found_alt:
 			return self.images[image_name]
-		elif True:
+		if True:
 			return Image.new("RGBA",(0,0),0)		#TODO: Track down why this function is being called without spiffy button info during sprite load
-		else:
-			# FIXME: English
-			raise AssertionError(f"Could not locate tile with name {image_name}")
+		# FIXME: English
+		raise AssertionError(f"Could not locate tile with name {image_name}")
 
 	def import_cleanup(self):
 		self.load_plugins()
@@ -287,10 +286,7 @@ class Sprite(SpriteParent):
 
 			tournament_flag = field["race"]
 
-		if tournament_flag:
-			# FIXME: English
-			raise AssertionError(f"Cannot inject into a Race/Tournament ROM!")
-		else:
+		if not tournament_flag:
 			#the sheet needs to be placed directly into address $108000-$10F000
 			for i,row in enumerate(itertools.chain(ascii_uppercase, ["AA","AB"])):	#over all 28 rows of the sheet
 				for column in range(8):		#over all 8 columns
@@ -311,6 +307,10 @@ class Sprite(SpriteParent):
 			for i in range(2):
 				rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
 
+		else:
+			# FIXME: English
+			raise AssertionError(f"Cannot inject into a Race/Tournament ROM!")
+
 		return rom
 
 	def get_palette(self, palettes, default_range, frame_number):
@@ -325,7 +325,7 @@ class Sprite(SpriteParent):
 			palette_indices = range(0x31,0x40)	 #use the bunny colors, skipping the transparency color
 		else:
 			palette_indices = list(range(1,16))	 #start with green mail and modify it as needed
-			for i in range(0,len(palette_indices)):
+			for i,_ in enumerate(palette_indices):
 
 				if palette_indices[i] == 0x0D:
 					if "power_gloves" in palettes:
@@ -340,7 +340,7 @@ class Sprite(SpriteParent):
 						palette_indices[i] += 32
 
 		if palette_indices:
-			for i in range(0,len(palette_indices)):
+			for i,_ in enumerate(palette_indices):
 				this_palette[i] = self.master_palette[palette_indices[i]]
 
 		return this_palette

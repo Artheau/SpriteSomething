@@ -38,11 +38,7 @@ def rom_inject(player_sprite, spiffy_dict, old_rom, verbose=False):
 
 		tournament_flag = field["race"]
 
-	if tournament_flag:
-		# FIXME: English
-		raise AssertionError(f"Cannot inject into a Race/Tournament ROM!")
-	else:
-
+	if not tournament_flag:
 		#in case these were disabled in rom.py, we definitely need to do these before we convert to wizzywig
 		rom._apply_bugfixes()
 		rom._apply_improvements()
@@ -56,18 +52,22 @@ def rom_inject(player_sprite, spiffy_dict, old_rom, verbose=False):
 		# the upper tiles.	This would not otherwise have caused problems, but the extent to which we are pushing this
 		# old engine requires that we sometimes use larger DMA writes that overwrite (and obviate the need for) DMAs
 
-		if verbose: print("Swapping DMA load order...", end="")
+		if verbose:
+			print("Swapping DMA load order...", end="")
 		success_code = swap_DMA_order(player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#to break symmetry, we will need to rearrange where the gun port tile data is,
 		# and correspondingly make sure that it is loaded correctly during DMA
 		#Thankfully, there's plenty of room in ROM because they were
 		# super super wasteful with the organization in this part.
 
-		if verbose: print("Moving gun tiles...", end="")
+		if verbose:
+			print("Moving gun tiles...", end="")
 		success_code = move_gun_tiles(player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#I can see how it was a good idea at the time to put the cannon port as tile $1F,
 		# but this is also limiting (because it limits us to 31 tiles instead of 32).
@@ -77,81 +77,111 @@ def rom_inject(player_sprite, spiffy_dict, old_rom, verbose=False):
 		#While we're in there, we should remove the mirroring effects on the tiles,
 		# since that is no longer necessary given the symmetry fix from move_gun_tiles()
 
-		if verbose: print("Re-assigning gun tilemaps...", end="")
+		if verbose:
+			print("Re-assigning gun tilemaps...", end="")
 		success_code = reassign_gun_tilemaps(player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#write all the new graphics data from base images and layout information
-		if verbose: print("Writing new image data...", end="")
+		if verbose:
+			print("Writing new image data...", end="")
 		DMA_dict, death_DMA_loc, success_code = write_dma_data(player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#maximally expand/relocate the existing DMA tables, and then add the new load data into them
-		if verbose: print("Writing new DMA tables...", end="")
+		if verbose:
+			print("Writing new DMA tables...", end="")
 		DMA_upper_table_indices, DMA_lower_table_indices, success_code = write_new_DMA_tables(DMA_dict,player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#update the table/index references to these new DMA tables
-		if verbose: print("Linking new tables to animations...", end="")
+		if verbose:
+			print("Linking new tables to animations...", end="")
 		success_code = link_tables_to_animations(DMA_upper_table_indices, DMA_lower_table_indices, player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#write and link all the new tilemaps (use a pointer to nullmap instead of $0000 since $0000 lags the game because reasons) using the layout info
-		if verbose: print("Assigning new tilemaps...", end="")
+		if verbose:
+			print("Assigning new tilemaps...", end="")
 		success_code = assign_new_tilemaps(player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#connect the death animation correctly
-		if verbose: print("Re-connecting death sequence...", end="")
+		if verbose:
+			print("Re-connecting death sequence...", end="")
 		success_code = connect_death_sequence(DMA_dict,death_DMA_loc,player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#get rid of the stupid tile
-		if verbose: print("Stupid tile...", end="")
+		if verbose:
+			print("Stupid tile...", end="")
 		success_code = no_more_stupid(player_sprite,rom)
-		if verbose: print("stupid" if success_code else "FAIL")
+		if verbose:
+			print("stupid" if success_code else "FAIL")
 
 		#because a DMA of zero bytes is essentially a guaranteed game crash, the designers had to make separate subroutines
 		# that made the upper tilemap not display in certain cases.	These subroutines are no longer necessary, because we
 		# fixed the issue in the DMA swap order code, and so now we need to get rid of the subroutines because they break
 		# a few animations in the form that they now exist
 
-		if verbose: print("Disabling upper half bypass routine...", end="")
+		if verbose:
+			print("Disabling upper half bypass routine...", end="")
 		success_code = disable_upper_bypass(player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#now we're going to get set up for screw attack without space jump
 		#apparently there was a riot over this not being a toggleable option, so HAR+Total proposed a control flag, which we now add
-		if verbose: print("Writing spin_attack config value", end="")
+		if verbose:
+			print("Writing spin_attack config value", end="")
 		success_code = write_spin_attack_config(spiffy_dict,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#we need a new control code that checks for space jump, so that we can gate the animation appropriately
 
-		if verbose: print("Creating new control code...", end="")
+		if verbose:
+			print("Creating new control code...", end="")
 		success_code = create_new_control_code(player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#now we need to insert this control code into the animation sequence for screw attack, and its counterpart in walljump
 
-		if verbose: print("Implementing spin attack...", end="")
+		if verbose:
+			print("Implementing spin attack...", end="")
 		success_code = implement_spin_attack(player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#insert file select graphics
-		if verbose: print("Injecting file select graphics...", end="")
+		if verbose:
+			print("Injecting file select graphics...", end="")
 		success_code = insert_file_select_graphics(player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#assign all the palettes
-		if verbose: print("Assigning palettes...", end="")
+		if verbose:
+			print("Assigning palettes...", end="")
 		success_code = assign_palettes(player_sprite,rom)
-		if verbose: print("done" if success_code else "FAIL")
+		if verbose:
+			print("done" if success_code else "FAIL")
 
 		#pee on the tree
 		SIGNATURE_ADDRESS = 0x92C500
 		SIGNATURE_MESSAGE = [ord(x) for x in "ART WAS HERE 000"]
 		rom.write_to_snes_address(SIGNATURE_ADDRESS,SIGNATURE_MESSAGE,"1"*len(SIGNATURE_MESSAGE))
+
+	else:
+		# FIXME: English
+		raise AssertionError(f"Cannot inject into a Race/Tournament ROM!")
 
 	#now GET OUT
 	return rom
@@ -237,13 +267,13 @@ class FreeSpace():
 			free_location = self.mem_blocks[self.current_block][0] + self.offset
 			self.offset += size
 			return free_location
-		else:	#go to the next block and try again
-			self.current_block += 1
-			if self.current_block < len(self.mem_blocks):
-				self.offset = 0
-				return self.get(size)
-			else:
-				raise AssertionError("ran out of memory to allocate")
+
+		#go to the next block and try again
+		self.current_block += 1
+		if self.current_block < len(self.mem_blocks):
+			self.offset = 0
+			return self.get(size)
+		raise AssertionError("ran out of memory to allocate")
 
 def write_dma_data(samus,rom):
 	if rom._type.name == "EXHIROM":		 #combo rom
@@ -766,7 +796,7 @@ def get_death_tilemap(direction, pose):
 def get_tilemap_from_dimensions(dimensions, extra_area, palette, start_index=0x00):
 	if palette is None:
 		palette = 0x28	 #default to normal Samus palette
-	elif type(palette) is str and palette[:2] == "0x":
+	elif isinstance(palette,str) and palette[:2] == "0x":
 		palette = int(palette[2:],16)
 	else:
 		raise AssertionError(f"Did not recognize palette hex code {palette} in get_tilemap_from_dimensions()")
@@ -876,8 +906,8 @@ def write_spin_attack_config(spiffy_dict,rom):
 	#this'll check VARIA tournament flag
 	isVaria = rom.read(0x175CA, 1) == 0x60 and rom.read(0x19E1, 1) == 0xEA and rom.read(0xF27, 1) == 0x20
 	print(rom.read(0x175CA, 1), 0x60)
-	print(rom.read(0x19E1,  1), 0xEA)
-	print(rom.read(0xF27,   1), 0x20)
+	print(rom.read(0x19E1,	1), 0xEA)
+	print(rom.read(0xF27,	 1), 0x20)
 	if isVaria:
 		print("Is VARIA")
 		start = 0x1C0200
@@ -920,7 +950,8 @@ def create_new_control_code(samus,rom):
 	'''
 
 	#TODO: retype this
-	NEW_SUBROUTINE = [	0xAD, 0xA2, 0x09,
+	NEW_SUBROUTINE = [
+						0xAD, 0xA2, 0x09,
 						0x89, 0x00, 0x02,
 						0xD0, 0x10,
 						0xAF, 0xFE, 0x93, 0x9B,

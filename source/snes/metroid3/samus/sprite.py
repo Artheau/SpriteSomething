@@ -213,13 +213,13 @@ class Sprite(SpriteParent):
 
 		elif variant_type.lower().replace("_"," ") == "death suit":
 			palette_indexes = [21,6,3,4,5,5,6,6,80]
-			for i in range(len(palette_indexes)):
+			for i,_ in enumerate(palette_indexes):
 				timed_palette.append((palette_indexes[i], common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(i)/8.0)))
 
 		elif variant_type.lower() == "death":
 			death_palette = self.get_colors_from_master("death")
 			palette_indexes = [21,6,3,4,5,5,6,6,80]
-			for i in range(len(palette_indexes)):
+			for i,_ in enumerate(palette_indexes):
 				timed_palette.append((palette_indexes[i], common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(i)/8.0)))
 
 		elif variant_type.lower() == "flash":
@@ -237,7 +237,7 @@ class Sprite(SpriteParent):
 				(56,56,56),
 				(24,24,24)
 			]
-			for i in range(len(palette_shifts)):
+			for i,_ in enumerate(palette_shifts):
 				color = palette_shifts[i]
 				str_index = len(palette_shifts) - i
 				timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,color) + flash_rotating_portion[str_index:] + flash_rotating_portion[:str_index]))
@@ -332,7 +332,6 @@ class Sprite(SpriteParent):
 		spazer:			starts 9 long, then 16 long
 		plasma:			starts 5 long, then 32 long
 		'''
-		pass
 
 	def get_projectile_palette(self, projectile="power_beam"):
 		# Ice:		Blue		ice_beam
@@ -510,8 +509,6 @@ class Sprite(SpriteParent):
 			if "yes_cannon-port" in palettes:
 				image_name = image_name.replace(OPTIONAL_PORT_STRING,"")
 				return self.images[image_name]
-			else:
-				return Image.new("RGBA",(0,0),0)
-		else:
-			# FIXME: English
-			raise AssertionError(f"Could not locate tile with name {image_name}")
+			return Image.new("RGBA",(0,0),0)
+		# FIXME: English
+		raise AssertionError(f"Could not locate tile with name {image_name}")
