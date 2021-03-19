@@ -35,7 +35,7 @@ def get_get_pip(PY_VERSION):
     #   linux/windows: python
     #   macosx:        python3
     PYTHON_EXECUTABLE = "python3" if "osx" in env["OS_NAME"] else "python"
-    if PY_VERSION == None:
+    if PY_VERSION is None:
       PY_VERSION = 0
 
     if float(PY_VERSION) > 0:

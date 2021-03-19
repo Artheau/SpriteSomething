@@ -106,8 +106,7 @@ class RomHandler(snes.RomHandlerParent):
 
 		if read_type:
 			return self.read_from_snes_address(duration_list_location+pose, read_type)
-		else:
-			return [control_code]
+		return [control_code]
 
 	def get_gun_data(self, animation, pose, frame=0x08):
 		#frame is used to tell the code how far the gun port is into the opening process

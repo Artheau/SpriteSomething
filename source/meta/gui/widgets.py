@@ -228,7 +228,7 @@ def make_textbox(self, parent, label, storageVar, manager, managerAttrs):
     return widget
 
 # Make a generic widget
-def make_widget(self, type, parent, label, storageVar=None, manager=None, managerAttrs=dict(),
+def make_widget(self, wtype, parent, label, storageVar=None, manager=None, managerAttrs=dict(),
                 options=None, config=None):
     widget = None
     if manager is None:
@@ -240,26 +240,26 @@ def make_widget(self, type, parent, label, storageVar=None, manager=None, manage
         elif storageVar == "str" or storageVar == "string":
             thisStorageVar = StringVar()
 
-    if type == "button":
+    if wtype == "button":
         command = {}
         widget = make_button(parent, label, command, options)
-    elif type == "checkbox":
+    elif wtype == "checkbox":
         if thisStorageVar is None:
             thisStorageVar = IntVar()
         widget = make_checkbox(self, parent, label, thisStorageVar, manager, managerAttrs)
-    elif type == "selectbox":
+    elif wtype == "selectbox":
         if thisStorageVar is None:
             thisStorageVar = StringVar()
         widget = make_selectbox(self, parent, label, options, thisStorageVar, manager, managerAttrs, config)
-    elif type == "spinbox":
+    elif wtype == "spinbox":
         if thisStorageVar is None:
             thisStorageVar = StringVar()
         widget = make_spinbox(self, parent, label, thisStorageVar, manager, managerAttrs)
-    elif type == "textbox":
+    elif wtype == "textbox":
         if thisStorageVar is None:
             thisStorageVar = StringVar()
         widget = make_textbox(self, parent, label, thisStorageVar, manager, managerAttrs)
-    widget.type = type
+    widget.type = wtype
     return widget
 
 # Make a generic widget from a dict

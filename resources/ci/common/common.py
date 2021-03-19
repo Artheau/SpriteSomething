@@ -31,9 +31,6 @@ def file_size(file_path):
 
 def prepare_env():
     # prepare environment variables
-    global DEFAULT_EVENT
-    global DEFAULT_REPO_SLUG
-
     env = {}
 
     # get app version

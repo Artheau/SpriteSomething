@@ -24,7 +24,7 @@ class Layout():
                     self.reverse_lookup[tuple(image_ref)] = [image_name]
 
     def get_image_name(self, animation, pose, force=None):
-        if type(animation) is int:
+        if isinstance(animation,int):
             animation = common.pretty_hex(animation)
 
         image_name_list = self.get_all_image_names(animation, pose)

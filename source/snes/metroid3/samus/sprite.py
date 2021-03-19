@@ -55,11 +55,10 @@ class Sprite(SpriteParent):
 		master_palette_indexes = color_set_switcher.get(color_set.lower().replace(' ',"").replace('-',"").replace('_',""))
 		if len(master_palette_indexes) == 1:
 			return self.master_palette[master_palette_indexes[0]]
-		elif len(master_palette_indexes) == 2:
+		if len(master_palette_indexes) == 2:
 			return self.master_palette[master_palette_indexes[0]:master_palette_indexes[1]]
-		else:
-			# FIXME: English
-			raise AssertionError(f"Unrecognized color set request: {color_set}")
+		# FIXME: English
+		raise AssertionError(f"Unrecognized color set request: {color_set}")
 
 	def get_timed_palette(self, overall_type="power", variant_type="standard"):
 		timed_palette = []
