@@ -475,7 +475,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 		if not hasattr(self, "status_bar"):
 			self.status_bar = StatusBar(self)
 			self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
-		self.status_bar.set(self.fish.translate(self.game.console_name + '.' + self.game.internal_name,"game","name") + ': "' + self.sprite.classic_name + '"')
+		fmt = "%s"
+		txt = self.fish.translate(self.game.console_name + '.' + self.game.internal_name,"game","name") + ': "' + self.sprite.classic_name + '"'
+		self.status_bar.set(fmt,txt)
 
 	# canvas panel in right pane
 	def attach_canvas(self):
