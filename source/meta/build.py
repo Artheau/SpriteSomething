@@ -19,8 +19,9 @@ def run_build(PY_VERSION):
   args = [
     "source/SpriteSomething.spec",
     upx_string,
-    "--onefile ",
-    f"--distpath {DEST_DIRECTORY}"
+    "-y",
+    "--onefile",
+    f"--distpath={DEST_DIRECTORY}"
   ]
   subprocess.check_call([PYINST_EXECUTABLE,*args])
 
