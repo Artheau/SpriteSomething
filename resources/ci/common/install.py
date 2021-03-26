@@ -1,12 +1,17 @@
 import common
 import argparse
+import json
 import os
 import platform
 import subprocess # do stuff at the shell level
 
 env = common.prepare_env()
 
-pip_requirements = os.path.join(".","resources","app","meta","manifests","pip_requirements.txt")
+CI_SETTINGS = {}
+with(open(os.path.join("resources","app","meta","manifests","ci.json"))) as ci_settings_file:
+  CI_SETTINGS = json.load(ci_settings_file)
+
+pip_requirements = os.path.join(".", *CI_SETTINGS["common"]["install"]["pip_requirements"])
 
 def run_install(PY_VERSION,USER):
   # get executables

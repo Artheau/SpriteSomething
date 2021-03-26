@@ -1,11 +1,16 @@
 import common
 import argparse
+import json
 import os
 import ssl
 import subprocess # do stuff at the shell level
 import urllib.request
 
 env = common.prepare_env()
+
+CI_SETTINGS = {}
+with(open(os.path.join("resources","app","meta","manifests","ci.json"))) as ci_settings_file:
+  CI_SETTINGS = json.load(ci_settings_file)
 
 def get_get_pip(PY_VERSION):
   try:
@@ -18,12 +23,12 @@ def get_get_pip(PY_VERSION):
     req = urllib.request.urlopen(url, context=context)
     got_pip = req.read().decode("utf-8")
 
-    with open("get-pip.py", "w") as g:
+    with(open("get-pip.py", "w")) as g:
       req = urllib.request.Request(
         url,
-        data=None,
-        headers={
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+        data = None,
+        headers = {
+          "User-Agent": CI_SETTINGS["common"]["get_get_pip"]["ua"]
         }
       )
       req = urllib.request.urlopen(req, context=context)

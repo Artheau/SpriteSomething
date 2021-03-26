@@ -6,21 +6,23 @@ import pytz                           # timezones
 import requests                       # http requests
 from argparse import ArgumentParser   # for argument variables
 
+CI_SETTINGS = {}
+with(open(os.path.join(".","resources","app","meta","manifests","ci.json"))) as ci_settings_file:
+  CI_SETTINGS = json.load(ci_settings_file)
+
 # default stuff
 DEFAULT_EVENT = "event"
-DEFAULT_REPO_SLUG = "Artheau/SpriteSomething"
+DEFAULT_REPO_SLUG = '/'.join(CI_SETTINGS["common"]["common"]["repo"])
 
 # spiffy colors for embed
-colors = {
-    "miketrethewey": 0xFFAF00,
-    "artheau": 0x344A44,
-    "github": 0xFFFFFF
-}
+colors = {}
+for name,color in CI_SETTINGS["common"]["prepare_discord_notif"]["colors"].items():
+  colors[name] = (int(color,16))
 
 env = common.prepare_env()  # get env vars
 
-env["COMMIT_AUTHOR"] = "Travis CI"
-env["COMMIT_AVATAR"] = "https://travis-ci.com/images/logos/TravisCI-Mascot-pride.png"
+env["COMMIT_AUTHOR"] = CI_SETTINGS["common"]["prepare_discord_notif"]["travis"]["author"]
+env["COMMIT_AVATAR"] = CI_SETTINGS["common"]["prepare_discord_notif"]["travis"]["avatar"]
 commits = []
 query = ""
 timestamp = ""
@@ -28,7 +30,7 @@ timestamp = ""
 # event log
 event_manifest = {}
 if not env["EVENT_LOG"] == "":
-    with open(env["EVENT_LOG"]) as f:
+    with(open(env["EVENT_LOG"],"r")) as f:
         event_manifest = json.load(f)
 
 # branch
@@ -85,7 +87,7 @@ if env["EVENT_MESSAGE"] == "":
                     commit_message = "\n\n".join(commit_parts)
                 else:
                     commit_title = commit_message
-                commit["url"] = commit["url"].replace("***", "Artheau")
+                commit["url"] = commit["url"].replace("***", CI_SETTINGS["common"]["common"]["repo"]["username"])
                 commits.append("[`" + commit["id"][:7] + "`](" +
                                commit["url"] + ')' + ' ' + commit_title)
 else:
@@ -99,7 +101,7 @@ else:
     else:
         commit_title = commit_message
     commit["url"] = "http://github.com/" + env["REPO_SLUG"] + '/' + query
-    commit["url"] = commit["url"].replace("***", "Artheau")
+    commit["url"] = commit["url"].replace("***", CI_SETTINGS["common"]["common"]["repo"]["username"])
     commits.append("[`" + commit["id"][:7] + "`](" +
                    commit["url"] + ')' + ' ' + commit_title)
 
@@ -129,7 +131,7 @@ if "release" in env["EVENT_TYPE"]:
     if "release" in event_manifest:
         if "tag_name" in event_manifest["release"]:
             num_events = 1
-            env["EVENT_MESSAGE"] = "SpriteSomething " + \
+            env["EVENT_MESSAGE"] = CI_SETTINGS["common"]["common"]["repo"]["title"] + ' ' + \
                 event_manifest["release"]["tag_name"]
             query = "releases/tag/" + event_manifest["release"]["tag_name"]
             if "assets" in event_manifest["release"]:
@@ -143,7 +145,7 @@ if timestamp == "":
 
 if timestamp == "":
     utc_now = pytz.utc.localize(datetime.datetime.utcnow())
-    pst_now = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
+    pst_now = utc_now.astimezone(pytz.timezone(CI_SETTINGS["common"]["prepare_discord_notif"]["timezone"]))
     timestamp = pst_now.isoformat()
     timestamp = timestamp[:timestamp.find('.')]
 

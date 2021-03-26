@@ -1,4 +1,5 @@
 import common
+import json
 import os               # for env vars
 import sys              # for path
 import urllib.request   # for downloads
@@ -6,11 +7,15 @@ from shutil import unpack_archive
 
 # only do stuff if we don't have a UPX folder
 
+CI_SETTINGS = {}
+with(open(os.path.join(".","resources","app","meta","manifests","ci.json"))) as ci_settings_file:
+  CI_SETTINGS = json.load(ci_settings_file)
+
 if not os.path.isdir("./upx"):
     # get env vars
     env = common.prepare_env()
     # set up download url
-    UPX_VERSION = os.getenv("UPX_VERSION") or "3.96"
+    UPX_VERSION = os.getenv("UPX_VERSION") or str(CI_SETTINGS["common"]["get_upx"]["version"])
     UPX_SLUG = ""
     UPX_FILE = ""
     if "windows" in env["OS_NAME"]:
