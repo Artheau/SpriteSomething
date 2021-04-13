@@ -337,20 +337,26 @@ class Sprite(SpriteParent):
 					author = self.metadata["author.name"]
 				if "author.name-short" in self.metadata:
 					author_short = self.metadata["author.name-short"]
-				pattern = r'^([a-zA-Z0-9\'\.\/\:\_ ]+)$'
-				if len(author) <= 28:
-					author = re.match(pattern,author)
-					if author:
-						author = author.groups(0)[0]
-				if len(author_short) <= 28:
-					author_short = re.match(pattern,author_short)
-					if author_short:
-						author_short = author_short.groups(0)[0]
+				char_class = "a-zA-Z0-9\'\.\/\:\_ "
+				pattern = r'^([' + char_class + ']+)$'
+				antipattern = r'([^' + char_class + '])'
+				linelen = 32
+				if len(author) <= linelen:
+					matches = re.match(pattern,author)
+					if matches:
+						author = matches.groups(0)[0]
+					else:
+						author = re.sub(antipattern, "", author)
+				if len(author_short) <= linelen:
+					matches = re.match(pattern,author_short)
+					if matches:
+						author_short = matches.groups(0)[0]
+					else:
+						author_short = re.sub(antipattern, "", author_short)
 				if len(author_short) > len(author):
 					author = author_short
 				author = author.upper()
-				linelen = 28
-				lpad = int((linelen - len(author)) / 2)
+				lpad = int((linelen - len(author)) / 2) - 2
 				author = author.rjust(lpad + len(author)).ljust(linelen)
 				for i,ltr in enumerate(itertools.chain(author)):
 					msg["hi"]["ascii"] += ltr
@@ -361,8 +367,8 @@ class Sprite(SpriteParent):
 					msg["lo"]["rom"]["dec"].append(int(letters["lo"][ltr],16))
 				# print(msg)
 
-				rom.bulk_write_to_snes_address(0x238002,msg["hi"]["rom"]["dec"],0x1C)
-				rom.bulk_write_to_snes_address(0x238020,msg["lo"]["rom"]["dec"],0x1C)
+				rom.bulk_write_to_snes_address(0x238002,msg["hi"]["rom"]["dec"],0x20)
+				rom.bulk_write_to_snes_address(0x238020,msg["lo"]["rom"]["dec"],0x20)
 
 		else:
 			# FIXME: English
