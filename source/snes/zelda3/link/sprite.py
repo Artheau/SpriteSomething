@@ -4,6 +4,7 @@ import json						#for reading JSON
 import os							#for filesystem manipulation
 import io							#for filesystem manipution
 import urllib.request	#for downloading stuff
+import re
 from PIL import Image
 from source.meta.common import common
 from string import ascii_uppercase
@@ -306,6 +307,62 @@ class Sprite(SpriteParent):
 			#the glove colors are placed into $1BEDF5-$1BEDF8
 			for i in range(2):
 				rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
+			if (hex(rom.read_from_snes_address(0x238000, 2)) == "0x3702") and (hex(rom.read_from_snes_address(0x23801E, 2)) == "0x3702"):
+				# print("v32-compatible credits")
+				contiguous = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'"
+				letters = {
+					"hi": {
+						" ": "0x9F",
+						'.': "0xA0",
+						'/': "0xA2",
+						':': "0xA3",
+						'_': "0xA6"
+					},
+					"lo": {
+						" ": "0x9F",
+						'.': "0xC0",
+						'/': "0xC2",
+						':': "0xC3",
+						'_': "0xC6"
+					}
+				}
+				for i,ltr in enumerate(itertools.chain(contiguous)):
+					letters["hi"][ltr] = hex(i + 83).upper().replace("0X","0x")
+					letters["lo"][ltr] = hex(i + 83 + 38).upper().replace("0X","0x")
+
+				msg = {"hi":{"ascii":"","rom":{"hex":[],"dec":[]}},"lo":{"ascii":"","rom":{"hex":[],"dec":[]}}}
+				author = ""
+				author_short = ""
+				if "author.name" in self.metadata:
+					author = self.metadata["author.name"]
+				if "author.name-short" in self.metadata:
+					author_short = self.metadata["author.name-short"]
+				pattern = r'^([a-zA-Z0-9\'\.\/\:\_ ]+)$'
+				if len(author) <= 28:
+					author = re.match(pattern,author)
+					if author:
+						author = author.groups(0)[0]
+				if len(author_short) <= 28:
+					author_short = re.match(pattern,author_short)
+					if author_short:
+						author_short = author_short.groups(0)[0]
+				if len(author_short) > len(author):
+					author = author_short
+				author = author.upper()
+				linelen = 28
+				lpad = int((linelen - len(author)) / 2)
+				author = author.rjust(lpad + len(author)).ljust(linelen)
+				for i,ltr in enumerate(itertools.chain(author)):
+					msg["hi"]["ascii"] += ltr
+					msg["lo"]["ascii"] += ltr
+					msg["hi"]["rom"]["hex"].append(letters["hi"][ltr])
+					msg["lo"]["rom"]["hex"].append(letters["lo"][ltr])
+					msg["hi"]["rom"]["dec"].append(int(letters["hi"][ltr],16))
+					msg["lo"]["rom"]["dec"].append(int(letters["lo"][ltr],16))
+				# print(msg)
+
+				rom.bulk_write_to_snes_address(0x238002,msg["hi"]["rom"]["dec"],0x1C)
+				rom.bulk_write_to_snes_address(0x238020,msg["lo"]["rom"]["dec"],0x1C)
 
 		else:
 			# FIXME: English
