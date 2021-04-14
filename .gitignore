@@ -50,5 +50,6 @@ palette_writers.json
 
 # no custom files
 custom/
-resources/user/*/*/*/sheets
+resources/user/**/sheets
 resources/tmp/*
+resources/**/stamped.png
