@@ -7,7 +7,7 @@ import urllib.request	#for downloading stuff
 import re
 from PIL import Image
 from source.meta.common import common
-from string import ascii_uppercase
+from string import ascii_uppercase, digits
 from source.meta.classes.spritelib import SpriteParent
 
 class Sprite(SpriteParent):
@@ -309,7 +309,7 @@ class Sprite(SpriteParent):
 				rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
 			if (hex(rom.read_from_snes_address(0x238000, 2)) == "0x3702") and (hex(rom.read_from_snes_address(0x23801E, 2)) == "0x3702"):
 				# print("v32-compatible credits")
-				contiguous = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'"
+				contiguous = digits + ascii_uppercase + "'"
 				letters = {
 					"hi": {
 						" ": "0x9F",
