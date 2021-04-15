@@ -5,7 +5,7 @@
 #The intention is that most unit tests will go here, excepting the ones that do not play well with the others,
 # which at the time of writing this comment, are the tests for memory leaks and stray imports (test_gc.py and test_waterfalls.py)
 
-from tests.legacy.common_vars import *  #contains utilities common to all tests.  Should come first before the other imports.
+from tests.legacy.common_vars import LINK_FILENAME,LINK_RESOURCE_PATH,LINK_RESOURCE_SUBPATH,SAMUS_FILENAME,SAMUS_RESOURCE_PATH,SAMUS_RESOURCE_SUBPATH  #contains utilities common to all tests.  Should come first before the other imports.
 
 import unittest     #for unit testing, har har
 import json         #need to audit our json files
@@ -40,7 +40,6 @@ class ExportAudit(unittest.TestCase):
 				self.assertTrue(self.same(original_file_contents,temp_rdc))
 
 	def test_samus_rdc_export(self):
-		pass
 		return
 		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH)
 		_, temporary_rdc_filename = tempfile.mkstemp()
@@ -113,7 +112,7 @@ class SpiffyButtonAudit(unittest.TestCase):
 		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH)
 
 		old_image = None
-		for i in range(0,len(PALETTES_TO_CHECK)):
+		for i,_ in enumerate(PALETTES_TO_CHECK):
 			new_image = link_sprite.get_image("Stand", "right", 0, PALETTES_TO_CHECK[i], 0)[0]
 			if old_image is not None:
 				with self.subTest(new_palette = PALETTES_TO_CHECK[i], old_palette = PALETTES_TO_CHECK[i-1]):
@@ -138,7 +137,7 @@ class SpiffyButtonAudit(unittest.TestCase):
 		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH)
 
 		old_image = None
-		for i in range(0,len(PALETTES_TO_CHECK)):
+		for i,_ in enumerate(PALETTES_TO_CHECK):
 			new_image = samus_sprite.get_image("Stand", "right", 0, PALETTES_TO_CHECK[i], 0)[0]
 			if old_image is not None:
 				with self.subTest(new_palette = PALETTES_TO_CHECK[i], old_palette = PALETTES_TO_CHECK[i-1]):

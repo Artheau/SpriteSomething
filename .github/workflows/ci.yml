@@ -7,7 +7,7 @@ on: [push, pull_request]
 ########################
 # Non-GitHub providers #
 ########################
-# deploy-pages:   softprops/action-gh-release@v0.1.5
+# *: mad9000/actions-find-and-replace-string@1
 
 # What I *should* be able to do:
 #  Define Install Job
@@ -71,7 +71,7 @@ jobs:
         run: |
           python ./resources/ci/common/install.py
       # start virtual display driver & run tests
-      - name: Start virtual display driver & Test (!windows)
+      - name: Start virtual display driver & Test (!Windows)
         env:
           DISPLAY: :99
         run: |
@@ -82,7 +82,7 @@ jobs:
           export DISPLAY=:99
           python -m unittest
         if: contains(matrix.os-name, 'windows') != true
-      - name: Start virtual display driver & Test (windows)
+      - name: Start virtual display driver & Test (Windows)
         uses: GabrielBB/xvfb-action@v1.4
         with:
           run: python -m unittest
@@ -107,6 +107,28 @@ jobs:
       # checkout commit
       - name: Checkout commit
         uses: actions/checkout@v2
+      # get parent directory
+      - name: Get Repo Name
+        uses: mad9000/actions-find-and-replace-string@1
+        id: repoName
+        with:
+          source: ${{ github.repository }}
+          find: '${{ github.repository_owner }}/'
+          replace: ''
+      - name: Get Parent Directory Path (!Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDirNotWin
+        with:
+          source: ${{ github.workspace }}
+          find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
+      - name: Get Parent Directory Path (Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDir
+        with:
+          source: ${{ steps.parentDirNotWin.outputs.value }}
+          find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
       # install python
       - name: Install python
         uses: actions/setup-python@v2
@@ -131,7 +153,7 @@ jobs:
       - name: Build Binary
         run: |
           pip install pyinstaller
-          python ./source/meta/build.py
+          python -m source.meta.build
       # prepare binary artifact for later step
       - name: Prepare Binary Artifact
         env:
@@ -140,10 +162,10 @@ jobs:
           python ./resources/ci/common/prepare_binary.py
       # upload binary artifact for later step
       - name: Upload Binary Artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: binary-${{ matrix.os-name }}
-          path: ../artifact
+          path: ${{ steps.parentDir.outputs.value }}/artifact
 
   # Install & Preparing Release
   #  Set up environment
@@ -166,6 +188,28 @@ jobs:
       # checkout commit
       - name: Checkout commit
         uses: actions/checkout@v2
+      # get parent directory
+      - name: Get Repo Name
+        uses: mad9000/actions-find-and-replace-string@1
+        id: repoName
+        with:
+          source: ${{ github.repository }}
+          find: '${{ github.repository_owner }}/'
+          replace: ''
+      - name: Get Parent Directory Path (!Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDirNotWin
+        with:
+          source: ${{ github.workspace }}
+          find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
+      - name: Get Parent Directory Path (Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDir
+        with:
+          source: ${{ steps.parentDirNotWin.outputs.value }}
+          find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
       # install python
       - name: Install Python
         uses: actions/setup-python@v2
@@ -195,16 +239,16 @@ jobs:
           python ./resources/ci/common/prepare_release.py
       # upload appversion artifact for later step
       - name: Upload AppVersion Artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: appversion-${{ matrix.os-name }}
           path: ./resources/app/meta/manifests/app_version.txt
       # upload archive artifact for later step
       - name: Upload Archive Artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: archive-${{ matrix.os-name }}
-          path: ../deploy
+          path: ${{ steps.parentDir.outputs.value }}/deploy
 
   # Deploy to GitHub Releases
   #  Release Name:  SpriteSomething v${GITHUB_TAG}
@@ -231,30 +275,52 @@ jobs:
       - name: Install Dependencies via pip
         run: |
           python -m pip install pytz requests
+      # get parent directory
+      - name: Get Repo Name
+        uses: mad9000/actions-find-and-replace-string@1
+        id: repoName
+        with:
+          source: ${{ github.repository }}
+          find: '${{ github.repository_owner }}/'
+          replace: ''
+      - name: Get Parent Directory Path (!Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDirNotWin
+        with:
+          source: ${{ github.workspace }}
+          find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
+      - name: Get Parent Directory Path (Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDir
+        with:
+          source: ${{ steps.parentDirNotWin.outputs.value }}
+          find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
       # download appversion artifact
       - name: Download AppVersion Artifact
         uses: actions/download-artifact@v2
         with:
           name: appversion-${{ matrix.os-name }}
-          path: ../build
+          path: ${{ steps.parentDir.outputs.value }}/build
       # download ubuntu archive artifact
       - name: Download Ubuntu Archive Artifact
         uses: actions/download-artifact@v2
         with:
           name: archive-ubuntu-latest
-          path: ../deploy/linux
+          path: ${{ steps.parentDir.outputs.value }}/deploy/linux
       # download macos archive artifact
       - name: Download MacOS Archive Artifact
         uses: actions/download-artifact@v2
         with:
           name: archive-macOS-latest
-          path: ../deploy/macos
+          path: ${{ steps.parentDir.outputs.value }}/deploy/macos
       # download windows archive artifact
       - name: Download Windows Archive Artifact
         uses: actions/download-artifact@v2
         with:
           name: archive-windows-latest
-          path: ../deploy/windows
+          path: ${{ steps.parentDir.outputs.value }}/deploy/windows
       # debug info
       - name: Debug Info
         id: debug_info
@@ -283,20 +349,19 @@ jobs:
       # upload linux archive asset
       - name: Upload Linux Archive Asset
         id: upload-linux-asset
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ../deploy/linux/SpriteSomething.tar.gz
-#          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
-          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-bionic.tar.gz
+          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
           asset_content_type: application/gzip
         if: contains(github.ref, 'master')
       # upload macos archive asset
       - name: Upload MacOS Archive Asset
         id: upload-macos-asset
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -308,7 +373,7 @@ jobs:
       # upload windows archive asset
       - name: Upload Windows Archive Asset
         id: upload-windows-asset
-        uses: actions/upload-release-asset@v1.0.1
+        uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -343,22 +408,44 @@ jobs:
       # checkout commit
       - name: Checkout commit
         uses: actions/checkout@v2
+      # get parent directory
+      - name: Get Repo Name
+        uses: mad9000/actions-find-and-replace-string@1
+        id: repoName
+        with:
+          source: ${{ github.repository }}
+          find: '${{ github.repository_owner }}/'
+          replace: ''
+      - name: Get Parent Directory Path (!Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDirNotWin
+        with:
+          source: ${{ github.workspace }}
+          find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
+      - name: Get Parent Directory Path (Windows)
+        uses: mad9000/actions-find-and-replace-string@1
+        id: parentDir
+        with:
+          source: ${{ steps.parentDirNotWin.outputs.value }}
+          find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
+          replace: ${{ steps.repoName.outputs.value }}
       # download appversion artifact
       - name: Download AppVersion Artifact
         uses: actions/download-artifact@v2
         with:
           name: appversion-${{ matrix.os-name }}
-          path: ../build
+          path: ${{ steps.parentDir.outputs.value }}/build
       # Prepare Pages
       - name: Prepare GitHub Pages
         run: |
           python ./resources/ci/common/prepare_pages.py
       # upload pages artifact for later step
       - name: Upload Pages Artifact
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: pages-${{ matrix.os-name }}
-          path: ../pages
+          path: ${{ steps.parentDir.outputs.value }}/pages
 
   # Deploy to GitHub Pages
   #

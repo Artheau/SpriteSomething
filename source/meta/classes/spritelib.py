@@ -281,7 +281,7 @@ class SpriteParent():
     def get_palette_loop_timer(self, animation, direction, palettes):
         pose_list = self.get_pose_list(animation, direction)
         returnvalue = 1  # default
-        for pose_number in range(len(pose_list)):
+        for pose_number,_ in enumerate(pose_list):
             tile_list = pose_list[pose_number]["tiles"][::-1]
             tile_list += self.get_supplemental_tiles(
                 animation, direction, pose_number, palettes, 0)
@@ -306,8 +306,7 @@ class SpriteParent():
         direction_dict = self.animations[animation]
         if direction in direction_dict:
             return direction_dict[direction]
-        else:
-            return []
+        return []
 
     def get_alternative_direction(self, animation, direction):
         direction_dict = self.animations[animation]
@@ -336,9 +335,8 @@ class SpriteParent():
                     new_image
                 )
             return working_image, (min_x, min_y)
-        else:
-            # blank image and dummy offset
-            return Image.new('RGBA', (1, 1), 0), (0, 0)
+        # blank image and dummy offset
+        return Image.new('RGBA', (1, 1), 0), (0, 0)
 
     def get_image(self, animation, direction, pose, palettes, frame_number):
         # What I hope for this to do is to just retrieve a single PIL Image
@@ -429,16 +427,15 @@ class SpriteParent():
         _, file_extension = os.path.splitext(filename)
         if file_extension.lower() == ".png":
             return self.save_as_PNG(filename)
-        elif file_extension.lower() == ".zspr":
+        if file_extension.lower() == ".zspr":
             return self.save_as_ZSPR(filename)
-        elif file_extension.lower() == ".rdc":
+        if file_extension.lower() == ".rdc":
             return self.save_as_RDC(filename)
-        else:
-            # tk.messagebox.showerror(
-            #     "ERROR",
-            #     f"Did not recognize file type \"{file_extension}\""
-            # )
-            return False
+        # tk.messagebox.showerror(
+        #     "ERROR",
+        #     f"Did not recognize file type \"{file_extension}\""
+        # )
+        return False
 
     def save_as_PNG(self, filename):
         master_image = self.get_master_PNG_image()
@@ -502,8 +499,7 @@ class SpriteParent():
                 zspr_file.write(write_buffer)
 
             return True  # report success to caller
-        else:
-            return False  # report failure to caller
+        return False  # report failure to caller
 
     def save_as_RDC(self, filename):
         raw_author_name = self.metadata["author.name-short"]

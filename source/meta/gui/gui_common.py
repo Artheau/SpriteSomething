@@ -7,7 +7,8 @@ from tkinter import ttk, messagebox, filedialog	#for GUI stuff
 import base64            	#TODO: I don't know why we import this
 import json
 import random
-import urllib.request, ssl
+import ssl
+import urllib.request
 from functools import partial    #for tk debugging
 from source.meta.common.constants import DEBUG_MODE  #for tk debugging
 from source.meta.common import common
@@ -81,9 +82,9 @@ def create_chooser(console_name,game_names):
 	return selected_game
 
 # download sprites for specified sprite manifest URL
-def get_sprites(self,title,dir,url):
+def get_sprites(self,title,destdir,url):
 	success = False	#report success
-	filepath = os.path.join('.',"resources","user",dir)	#save to user_resources/<console_dir>/<game_dir>/<sprite_dir>/sheets/<dir>/*.zspr
+	filepath = os.path.join('.',"resources","user",destdir)	#save to user_resources/<console_dir>/<game_dir>/<sprite_dir>/sheets/<dir>/*.zspr
 	if not os.path.exists(filepath):
 		os.makedirs(filepath)	#make it if we don't have it
 

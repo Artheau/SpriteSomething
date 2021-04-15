@@ -43,15 +43,15 @@ def make_frame(parent):
 def make_messagebox(type="info", title="", body="", parent=None):
     if type == "info":
         return messagebox.showinfo(title, body, parent=parent, icon="question")
-    elif type == "error":
+    if type == "error":
         return messagebox.showerror(title, body, parent=parent)
-    elif type == "yesnocancel":
+    if type == "yesnocancel":
         return messagebox.askyesnocancel(title, body, parent=parent)
 
 # Make a Button
 def make_button(parent, label, command, options={}):
 		button = Button(parent, text=label, command=command)
-		if options and len(options):
+		if options and len(options) > 0:
 				if "image" in options:
 						button.image = ImageTk.PhotoImage(Image.open(options["image"]))
 						button.configure(image=button.image)
@@ -82,9 +82,9 @@ def make_checkbox(self, parent, label, storageVar, manager, managerAttrs):
     self = make_frame(parent)
     self.storageVar = storageVar
     if managerAttrs is not None and "default" in managerAttrs:
-        if managerAttrs["default"] == "true" or managerAttrs["default"] == True:
+        if managerAttrs["default"] == "true" or managerAttrs["default"]:
             self.storageVar.set(True)
-        elif managerAttrs["default"] == "false" or managerAttrs["default"] == False:
+        elif managerAttrs["default"] == "false" or not managerAttrs["default"]:
             self.storageVar.set(False)
         del managerAttrs["default"]
     self.checkbox = Checkbutton(self, text=label, variable=self.storageVar)
@@ -151,7 +151,7 @@ def make_selectbox(self, parent, label, options, storageVar, manager, managerAtt
 
     self.storageVar.trace_add("write",change_selected)
     self.labelVar.trace_add("write",change_storage)
-    self.label = make_label(self, self, label) if label != None else Empty()
+    self.label = make_label(self, self, label) if label is not None else Empty()
 
     if managerAttrs is not None and "label" in managerAttrs:
         self.label.pack(managerAttrs["label"])
@@ -228,7 +228,7 @@ def make_textbox(self, parent, label, storageVar, manager, managerAttrs):
     return widget
 
 # Make a generic widget
-def make_widget(self, type, parent, label, storageVar=None, manager=None, managerAttrs=dict(),
+def make_widget(self, wtype, parent, label, storageVar=None, manager=None, managerAttrs=dict(),
                 options=None, config=None):
     widget = None
     if manager is None:
@@ -240,31 +240,31 @@ def make_widget(self, type, parent, label, storageVar=None, manager=None, manage
         elif storageVar == "str" or storageVar == "string":
             thisStorageVar = StringVar()
 
-    if type == "button":
+    if wtype == "button":
         command = {}
         widget = make_button(parent, label, command, options)
-    elif type == "checkbox":
+    elif wtype == "checkbox":
         if thisStorageVar is None:
             thisStorageVar = IntVar()
         widget = make_checkbox(self, parent, label, thisStorageVar, manager, managerAttrs)
-    elif type == "selectbox":
+    elif wtype == "selectbox":
         if thisStorageVar is None:
             thisStorageVar = StringVar()
         widget = make_selectbox(self, parent, label, options, thisStorageVar, manager, managerAttrs, config)
-    elif type == "spinbox":
+    elif wtype == "spinbox":
         if thisStorageVar is None:
             thisStorageVar = StringVar()
         widget = make_spinbox(self, parent, label, thisStorageVar, manager, managerAttrs)
-    elif type == "textbox":
+    elif wtype == "textbox":
         if thisStorageVar is None:
             thisStorageVar = StringVar()
         widget = make_textbox(self, parent, label, thisStorageVar, manager, managerAttrs)
-    widget.type = type
+    widget.type = wtype
     return widget
 
 # Make a generic widget from a dict
 def make_widget_from_dict(self, defn, parent):
-    type = defn["type"] if "type" in defn else None
+    wtype = defn["type"] if "type" in defn else None
     label = defn["label"]["text"] if "label" in defn and "text" in defn["label"] else ""
     manager = defn["manager"] if "manager" in defn else None
     managerAttrs = defn["managerAttrs"] if "managerAttrs" in defn else None
@@ -276,8 +276,8 @@ def make_widget_from_dict(self, defn, parent):
     if "default" in defn:
         managerAttrs["default"] = defn["default"]
 
-    widget = make_widget(self, type, parent, label, None, manager, managerAttrs, options, config)
-    widget.type = type
+    widget = make_widget(self, wtype, parent, label, None, manager, managerAttrs, options, config)
+    widget.type = wtype
     return widget
 
 # Make a set of generic widgets from a dict

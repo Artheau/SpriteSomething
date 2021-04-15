@@ -11,17 +11,24 @@ jobs:
   # Get Release Info
   # Send Discord notification
   discord-notify:
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        os-name: [ubuntu-latest]
+        python-version: [3.8]
+
     name: Notify Discord of new Release
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os-name }}
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       # install python
       - name: Install python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: ${{ matrix.python-version }}
           architecture: "x64"
       - run: |
           python --version

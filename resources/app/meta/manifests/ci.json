@@ -1,0 +1,60 @@
+{
+  "common": {
+    "cleanup": {
+      "nuke": [
+        ".git",
+        ".github",
+        "resources"
+      ]
+    },
+    "common": {
+      "ubuntu": {
+        "latest": "focal",
+        "20.04": "focal",
+        "18.04": "bionic",
+        "16.04": "xenial"
+      },
+      "repo": {
+        "title": "SpriteSomething",
+        "username": "Artheau",
+        "repository": "SpriteSomething"
+      },
+      "filenames": [ "SpriteSomething" ],
+      "filesize": 10,
+      "actor": "MegaMan.EXE"
+    },
+    "get_get_pip": {
+      "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+    },
+    "get_upx": {
+      "version": 3.96
+    },
+    "git_clean": {
+      "excludes": [
+        ".vscode",
+        ".idea",
+        "*.json",
+        "*app*version.*"
+      ],
+      "user_resources": "resources/user*"
+    },
+    "install": {
+      "pip_requirements": [ "resources", "app", "meta", "manifests", "pip_requirements.txt" ]
+    },
+    "prepare_appversion": {
+      "app_version": [ "resources", "app", "meta", "manifests", "app_version.txt" ]
+    },
+    "prepare_discord_notif": {
+      "colors": {
+        "miketrethewey": "0xFFAF00",
+        "artheau": "0x344A44",
+        "github": "0xFFFFFF"
+      },
+      "travis": {
+        "author": "Travis CI",
+        "avatar": "https://travis-ci.com/images/logos/TravisCI-Mascot-pride.png"
+      },
+      "timezone": "America/Los_Angeles"
+    }
+  }
+}

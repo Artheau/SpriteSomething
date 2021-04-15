@@ -1,3 +1,5 @@
+import argparse
+import platform
 import subprocess	#for executing scripts within scripts
 import os					#for checking for dirs
 
@@ -10,10 +12,20 @@ if os.path.isdir("upx"):
 else:
 	upx_string = ""
 
-subprocess.run(" ".join(["pyinstaller ./source/SpriteSomething.spec ",
-						 upx_string,
-						 "-y ",                #overwrite dist directory if necessary
-						 "--onefile "          #compile everything into a single file, except for resources and whatnot
-						 f"--distpath {DEST_DIRECTORY} ",      #place the executable in the specified directory
-						 ])
-				  , shell=True)
+def run_build(PY_VERSION):
+  print("Building via Python %s" % platform.python_version())
+
+  PYINST_EXECUTABLE = "pyinstaller"
+  args = [
+    "source/SpriteSomething.spec",
+    upx_string,
+    "-y",
+    "--onefile",
+    f"--distpath={DEST_DIRECTORY}"
+  ]
+  subprocess.check_call([PYINST_EXECUTABLE,*args])
+
+if __name__ == "__main__":
+  PY_VERSION = 0
+
+  run_build(PY_VERSION)

@@ -141,10 +141,9 @@ def convert_555_to_rgb(color, recurse=True):
     # else it is iterable
     if recurse:
         return [convert_555_to_rgb(x, recurse=False) for x in color]
-    else:
-        # FIXME: English
-        raise AssertionError(
-            "convert_555_to_rgb() called with doubly-iterable argument")
+    # FIXME: English
+    raise AssertionError(
+        "convert_555_to_rgb() called with doubly-iterable argument")
 
 
 # expects (r,g,b) tuples in a list, returns big endian 2-byte colors in a list
@@ -367,9 +366,9 @@ def convert_to_4bpp(image, offset, dimensions, extra_area):
                 f"({xmin},{xmax}) are not divisible by 8")
 
     # even out the small tiles into the rest of the space
-    for offset in range(0, len(small_tiles), 0x40):
-        top_row.extend(small_tiles[offset:offset + 0x20])
-        bottom_row.extend(small_tiles[offset + 0x20:offset + 0x40])
+    for pos in range(0, len(small_tiles), 0x40):
+        top_row.extend(small_tiles[pos:pos + 0x20])
+        bottom_row.extend(small_tiles[pos + 0x20:pos + 0x40])
 
     return top_row + bottom_row
 

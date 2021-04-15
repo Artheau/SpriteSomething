@@ -50,9 +50,9 @@ def equipment_test(save=False):
   			h = 32
   			x1 = 176 + (w * j)
   			x2 = 0 + (h * i)
-  			id = (i*2)+(j*1)
-  			if(id < 5):
-  				icon_specs["mbb_blast" + str(id)] = coord_calc((x1,x2),(w,h))
+  			itemID = (i*2)+(j*1)
+  			if(itemID < 5):
+  				icon_specs["mbb_blast" + str(itemID)] = coord_calc((x1,x2),(w,h))
 
   	#charg[ing|ed] lemon
   	for i in range(6):

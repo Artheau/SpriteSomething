@@ -133,11 +133,11 @@ if len(BUILD_FILENAMES) > 0:
         ZIP_FILENAME += ".tar.gz"
 
     # mv dirs back
-    for dir in dirs:
-        if os.path.isdir(os.path.join("..", "build", dir)):
+    for thisDir in dirs:
+        if os.path.isdir(os.path.join("..", "build", thisDir)):
             move(
-                os.path.join("..", "build", dir),
-                os.path.join(".", dir)
+                os.path.join("..", "build", thisDir),
+                os.path.join(".", thisDir)
             )
 
 for BUILD_FILENAME in BUILD_FILENAMES:

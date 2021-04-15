@@ -4,9 +4,10 @@ import json						#for reading JSON
 import os							#for filesystem manipulation
 import io							#for filesystem manipution
 import urllib.request	#for downloading stuff
+import re
 from PIL import Image
 from source.meta.common import common
-from string import ascii_uppercase
+from string import ascii_uppercase, digits
 from source.meta.classes.spritelib import SpriteParent
 
 class Sprite(SpriteParent):
@@ -123,7 +124,7 @@ class Sprite(SpriteParent):
 			# FIXME: English
 			sprite_save_name = "unknown"
 		bgimg = Image.open(os.path.join(".","resources","app",self.resource_subpath,"sheets",bgfilename)).convert("RGBA")
-		for i in range(0,len(return_images)):
+		for i,_ in enumerate(return_images):
 			img = return_images[i][1]
 			bgimg.paste(img,pose_coords[i],img)
 		bgimg = bgimg.resize((bgimg.size[0] * 2, bgimg.size[1] * 2), Image.NEAREST)
@@ -148,7 +149,7 @@ class Sprite(SpriteParent):
 			# FIXME: English
 			sprite_save_name = "unknown"
 		bgimg = Image.open(os.path.join(".","resources","app",self.resource_subpath,"sheets",bgfilename)).convert("RGBA")
-		for i in range(0,len(return_images)):
+		for i,_ in enumerate(return_images):
 			img = return_images[i][1]
 			bgimg.paste(img,pose_coords[i],img)
 		bgimg = bgimg.resize((bgimg.size[0] * 2, bgimg.size[1] * 2), Image.NEAREST)
@@ -200,11 +201,10 @@ class Sprite(SpriteParent):
 					image_name = item.lower() if (not "none_accessories" in palettes) else "transparent"
 		if found_alt:
 			return self.images[image_name]
-		elif True:
+		if True:
 			return Image.new("RGBA",(0,0),0)		#TODO: Track down why this function is being called without spiffy button info during sprite load
-		else:
-			# FIXME: English
-			raise AssertionError(f"Could not locate tile with name {image_name}")
+		# FIXME: English
+		raise AssertionError(f"Could not locate tile with name {image_name}")
 
 	def import_cleanup(self):
 		self.load_plugins()
@@ -287,10 +287,7 @@ class Sprite(SpriteParent):
 
 			tournament_flag = field["race"]
 
-		if tournament_flag:
-			# FIXME: English
-			raise AssertionError(f"Cannot inject into a Race/Tournament ROM!")
-		else:
+		if not tournament_flag:
 			#the sheet needs to be placed directly into address $108000-$10F000
 			for i,row in enumerate(itertools.chain(ascii_uppercase, ["AA","AB"])):	#over all 28 rows of the sheet
 				for column in range(8):		#over all 8 columns
@@ -310,6 +307,72 @@ class Sprite(SpriteParent):
 			#the glove colors are placed into $1BEDF5-$1BEDF8
 			for i in range(2):
 				rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
+			if (hex(rom.read_from_snes_address(0x238000, 2)) == "0x3702") and (hex(rom.read_from_snes_address(0x23801E, 2)) == "0x3702"):
+				# print("v32-compatible credits")
+				contiguous = digits + ascii_uppercase + "'"
+				letters = {
+					"hi": {
+						" ": "0x9F",
+						'.': "0xA0",
+						'/': "0xA2",
+						':': "0xA3",
+						'_': "0xA6"
+					},
+					"lo": {
+						" ": "0x9F",
+						'.': "0xC0",
+						'/': "0xC2",
+						':': "0xC3",
+						'_': "0xC6"
+					}
+				}
+				for i,ltr in enumerate(itertools.chain(contiguous)):
+					letters["hi"][ltr] = hex(i + 83).upper().replace("0X","0x")
+					letters["lo"][ltr] = hex(i + 83 + 38).upper().replace("0X","0x")
+
+				msg = {"hi":{"ascii":"","rom":{"hex":[],"dec":[]}},"lo":{"ascii":"","rom":{"hex":[],"dec":[]}}}
+				author = ""
+				author_short = ""
+				if "author.name" in self.metadata:
+					author = self.metadata["author.name"]
+				if "author.name-short" in self.metadata:
+					author_short = self.metadata["author.name-short"]
+				char_class = "a-zA-Z0-9\'\.\/\:\_ "
+				pattern = r'^([' + char_class + ']+)$'
+				antipattern = r'([^' + char_class + '])'
+				linelen = 32
+				if len(author) <= linelen:
+					matches = re.match(pattern,author)
+					if matches:
+						author = matches.groups(0)[0]
+					else:
+						author = re.sub(antipattern, "", author)
+				if len(author_short) <= linelen:
+					matches = re.match(pattern,author_short)
+					if matches:
+						author_short = matches.groups(0)[0]
+					else:
+						author_short = re.sub(antipattern, "", author_short)
+				if len(author_short) > len(author):
+					author = author_short
+				author = author.upper()
+				lpad = int((linelen - len(author)) / 2) - 2
+				author = author.rjust(lpad + len(author)).ljust(linelen)
+				for i,ltr in enumerate(itertools.chain(author)):
+					msg["hi"]["ascii"] += ltr
+					msg["lo"]["ascii"] += ltr
+					msg["hi"]["rom"]["hex"].append(letters["hi"][ltr])
+					msg["lo"]["rom"]["hex"].append(letters["lo"][ltr])
+					msg["hi"]["rom"]["dec"].append(int(letters["hi"][ltr],16))
+					msg["lo"]["rom"]["dec"].append(int(letters["lo"][ltr],16))
+				# print(msg)
+
+				rom.bulk_write_to_snes_address(0x238002,msg["hi"]["rom"]["dec"],0x20)
+				rom.bulk_write_to_snes_address(0x238020,msg["lo"]["rom"]["dec"],0x20)
+
+		else:
+			# FIXME: English
+			raise AssertionError(f"Cannot inject into a Race/Tournament ROM!")
 
 		return rom
 
@@ -325,7 +388,7 @@ class Sprite(SpriteParent):
 			palette_indices = range(0x31,0x40)	 #use the bunny colors, skipping the transparency color
 		else:
 			palette_indices = list(range(1,16))	 #start with green mail and modify it as needed
-			for i in range(0,len(palette_indices)):
+			for i,_ in enumerate(palette_indices):
 
 				if palette_indices[i] == 0x0D:
 					if "power_gloves" in palettes:
@@ -340,7 +403,7 @@ class Sprite(SpriteParent):
 						palette_indices[i] += 32
 
 		if palette_indices:
-			for i in range(0,len(palette_indices)):
+			for i,_ in enumerate(palette_indices):
 				this_palette[i] = self.master_palette[palette_indices[i]]
 
 		return this_palette

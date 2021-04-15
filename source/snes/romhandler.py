@@ -132,18 +132,17 @@ class RomHandlerParent():
         # converting them from little endian as it goes
         #example: .read(0x7FDC, "22") will read two words that start at 0x7FDC and return them in normal (big-endian) format as a list
 
-        if type(encoding) is int:
+        if isinstance(encoding,int):
             return self._read_single(addr,encoding)
-        elif type(encoding) is str:
+        if isinstance(encoding,str):
             returnvalue = []
             for code in encoding:
                 size = int(code)
                 returnvalue.append(self._read_single(addr, size))
                 addr += size
             return returnvalue
-        else:
-						# FIXME: English
-            raise AssertionError(f"received call to read() but the encoding was not recognized: {encoding}")
+				# FIXME: English
+        raise AssertionError(f"received call to read() but the encoding was not recognized: {encoding}")
 
     def bulk_read(self,addr,num_bytes):
         #for large reads, the read() function is too slow.  This returns the raw byte data.
@@ -159,14 +158,14 @@ class RomHandlerParent():
         # converting them to little endian and writing them in order.
         #example: .write(0x7FDC, [0x111f,0x222f], "22") will write $1f $11 $2f $22 to 0x7FDC-0x7FDF
 
-        if type(encoding) is int:
+        if isinstance(encoding,int):
 						# FIXME: English
-            if type(values) is int:
+            if isinstance(values,int):
                 self._write_single(values,addr,encoding)
             else:
                 raise AssertionError(f"received call to write() a single value, but {values} was not a single value")
-        elif type(encoding) is str:
-            if type(values) is int:
+        elif isinstance(encoding,str):
+            if isinstance(values,int):
                 raise AssertionError(f"received call to do multiple writes, but only one value was given.  Should encoding be an integer instead of a string?")
             if len(values) != len(encoding):
                 raise AssertionError(f"received call to write() but length of values and encoding did not match: i.e. {len(values)} vs. {len(encoding)}")
@@ -181,8 +180,7 @@ class RomHandlerParent():
         if len(values) != num_bytes:
 						# FIXME: English
             raise AssertionError("call to bulk_write() with data not of length specified")
-        else:
-            self._contents[addr:addr+num_bytes] = bytearray(values)
+        self._contents[addr:addr+num_bytes] = bytearray(values)
 
     def read_from_snes_address(self,addr,encoding):
         return self.read(self.convert_to_pc_address(addr),encoding)
@@ -254,14 +252,12 @@ class RomHandlerParent():
             if offset < 0x8000 or bank in [0x7E,0x7F]:
 								# FIXME: English
                 raise AssertionError(f"Function convert_to_pc_address() called on {hex(addr)}, but this does not map to ROM.")
-            else:
-                pc_address = (bank % 0x80)*0x8000 + (offset - 0x8000)
+            pc_address = (bank % 0x80)*0x8000 + (offset - 0x8000)
 
         elif self._type == RomType.HIROM:
             if bank in [0x7E, 0x7F] or (bank < 0xC0 and offset < 0x8000):
                 raise AssertionError(f"Function convert_to_pc_address() called on {hex(addr)}, but this does not map to ROM.")
-            else:
-                pc_address = (bank // 0x40)*0x10000 + offset
+            pc_address = (bank // 0x40)*0x10000 + offset
 
         elif self._type == RomType.EXLOROM:
             #This particular part of address space has something to do with MAD-1 or lack thereof
@@ -410,15 +406,14 @@ class RomHandlerParent():
         #returns True if the fix was affected and False otherwise
 
         #first make sure the input makes sense -- either all integers or matching length lists
-        if type(encoding) is not int and len(classic_values) != len(fixed_values):
+        if (not isinstance(encoding,int)) and len(classic_values) != len(fixed_values):
 						# FIXME: English
             raise AssertionError(f"function _apply_single_fix_to_snes_address() called with different length lists:\n{classic_values}\n{fixed_values}")
 
         if self.read_from_snes_address(snes_address, encoding) == classic_values:
             self.write_to_snes_address(snes_address, fixed_values, encoding)
             return True
-        else:
-            return False
+        return False
 
     def _read_from_internal_header(self, offset, size):
         return self.read_from_snes_address(offset + 0xFFC0, size)

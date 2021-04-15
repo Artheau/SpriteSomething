@@ -1,9 +1,12 @@
 import importlib
 import itertools
 import json
+import os
 from PIL import Image
+from PIL import ImageOps
 from source.meta.classes.spritelib import SpriteParent
 from source.meta.common import common
+from string import ascii_uppercase, digits
 from . import rom_extract, rom_inject, rdc_export
 
 class Sprite(SpriteParent):
@@ -11,7 +14,7 @@ class Sprite(SpriteParent):
 		super().__init__(filename, manifest_dict, my_subpath)
 		self.load_plugins()
 
-		self.overhead = False   #Samus is sideview, so only left/right direction buttons should show
+		self.overhead = False	 #Samus is sideview, so only left/right direction buttons should show
 
 		#TODO: Make file select and ship be animations in the big list, or tie to the ship background
 		# self.plugins += [
@@ -34,12 +37,97 @@ class Sprite(SpriteParent):
 		#The history of the Samus export code is a story I will tell to my grandchildren
 		return rom_inject.rom_inject(self, spiffy_dict, rom)
 
+	def get_stamp(self):
+		rowIMG = {
+			"name": Image.open(common.get_resource([self.resource_subpath,"sheets"],"uppercase.png")),
+			"author": Image.open(common.get_resource([self.resource_subpath,"sheets"],"lowercase.png")),
+		}
+		charmap = {
+			"name": [
+				ascii_uppercase,
+				".,?!_#%()+-/;:<=>[] "
+			],
+			"author": [
+				ascii_uppercase,
+				digits + " "
+			]
+		}
+
+		spritedata = {
+			"name": self.metadata["sprite.name"] if "sprite.name" in self.metadata else "Unknown Samus Sprite",
+			"author": self.metadata["author.name"] if "author.name" in self.metadata else "Unknown Author"
+		}
+
+		stamp = Image.new("RGBA", (332,142), (255,255,255))
+		dims = {
+			"name": {
+				"width": 8,
+				"height": 12
+			},
+			"author": {
+				"width": 7,
+				"height": 7
+			}
+		}
+		coords = {
+			"dest": {
+				"x": 0,
+				"y": 0
+			},
+			"src": {
+				"x": 0,
+				"y": 0
+			}
+		}
+		for row in ["name","author"]:
+			for i,ltr in enumerate(spritedata[row][:(26+15)]):
+				found = False
+				ltr = ltr.upper()
+				for ltrs in [row,"name","author"]:
+					for j,line in enumerate(charmap[ltrs]):
+						if not found and ltr in line:
+							found = True
+							# print(ltr,line.find(ltr),j)
+							coords["src"]["x"] = (line.find(ltr) * (dims[ltrs]["width"] + 1))
+							coords["src"]["y"] = j * dims[ltrs]["height"]
+							ltrIMG = rowIMG[ltrs].crop(
+								(
+									coords["src"]["x"],
+									coords["src"]["y"],
+									coords["src"]["x"] + dims[ltrs]["width"],
+									coords["src"]["y"] + dims[ltrs]["height"] + 1
+								)
+							)
+							(x,y) = (
+								coords["dest"]["x"],
+								coords["dest"]["y"]
+							)
+							if row == "name" and ltrs == "author":
+								y += 4
+							ltrIMG = Image.alpha_composite(Image.new("RGBA", ltrIMG.size, (255,255,255)), ltrIMG.convert("RGBA"))
+							stamp.paste(ltrIMG, (x,y))
+							coords["dest"]["x"] += dims[ltrs]["width"]
+							if ltrs == "author":
+								coords["dest"]["x"] += 1
+			coords["dest"]["x"] = 0
+			coords["dest"]["y"] += dims[row]["height"] + 1
+
+		stamp = ImageOps.invert(stamp.convert("RGB"))
+		return stamp
+
+	def save_as_PNG(self, filename):
+		master_image = self.get_master_PNG_image()
+		stamp = self.get_stamp()
+		master_image.paste(stamp, (0,0))
+		master_image.save(filename, "PNG")
+		return True
+
 	def get_rdc_export_blocks(self):
 		SAMUS_EXPORT_BLOCK_TYPE = 4
 		return [(SAMUS_EXPORT_BLOCK_TYPE,rdc_export.get_raw_rdc_samus_block(self))]
 
 	def get_colors_from_master(self, color_set):
-		#for internal class use.  For general use, call get_timed_palette()
+		#for internal class use.	For general use, call get_timed_palette()
 		color_set_switcher = {
 			"power": [0,15],
 			"base": [0,15],
@@ -55,11 +143,10 @@ class Sprite(SpriteParent):
 		master_palette_indexes = color_set_switcher.get(color_set.lower().replace(' ',"").replace('-',"").replace('_',""))
 		if len(master_palette_indexes) == 1:
 			return self.master_palette[master_palette_indexes[0]]
-		elif len(master_palette_indexes) == 2:
+		if len(master_palette_indexes) == 2:
 			return self.master_palette[master_palette_indexes[0]:master_palette_indexes[1]]
-		else:
-			# FIXME: English
-			raise AssertionError(f"Unrecognized color set request: {color_set}")
+		# FIXME: English
+		raise AssertionError(f"Unrecognized color set request: {color_set}")
 
 	def get_timed_palette(self, overall_type="power", variant_type="standard"):
 		timed_palette = []
@@ -86,11 +173,11 @@ class Sprite(SpriteParent):
 				ship_palette.extend([(48,48,72),(16,16,40),(0,0,0),(0,0,0)])
 				if variant_type.lower() == "intro":
 					timed_palette = [(0, ship_palette)]
-				else:   #outro
+				else:	 #outro
 					timed_palette = [(0x18, common.palette_pull_towards_color(ship_palette,(0xFF,0xFF,0xFF),(float(15-i)/15.0))) for i in range(15)]
 					timed_palette.append((0, ship_palette))
 
-			else:     #standard ship colors with underglow
+			else:		 #standard ship colors with underglow
 				#11 customizable colors
 				ship_palette = []
 				ship_palette.append(ship_color_body)
@@ -113,7 +200,7 @@ class Sprite(SpriteParent):
 			timed_palette = [(0, self.get_colors_from_master(overall_type))]
 
 		elif variant_type.lower() == "loader":
-			for _ in range(0x27):   #in the ROM, this is encoded as 0x24 + 0x03
+			for _ in range(0x27):	 #in the ROM, this is encoded as 0x24 + 0x03
 				timed_palette.append((3,base_palette))
 				timed_palette.append((3,common.palette_shift(base_palette,(0,80,120))))
 			for _ in range(3):
@@ -213,13 +300,13 @@ class Sprite(SpriteParent):
 
 		elif variant_type.lower().replace("_"," ") == "death suit":
 			palette_indexes = [21,6,3,4,5,5,6,6,80]
-			for i in range(len(palette_indexes)):
+			for i,_ in enumerate(palette_indexes):
 				timed_palette.append((palette_indexes[i], common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(i)/8.0)))
 
 		elif variant_type.lower() == "death":
 			death_palette = self.get_colors_from_master("death")
 			palette_indexes = [21,6,3,4,5,5,6,6,80]
-			for i in range(len(palette_indexes)):
+			for i,_ in enumerate(palette_indexes):
 				timed_palette.append((palette_indexes[i], common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(i)/8.0)))
 
 		elif variant_type.lower() == "flash":
@@ -237,7 +324,7 @@ class Sprite(SpriteParent):
 				(56,56,56),
 				(24,24,24)
 			]
-			for i in range(len(palette_shifts)):
+			for i,_ in enumerate(palette_shifts):
 				color = palette_shifts[i]
 				str_index = len(palette_shifts) - i
 				timed_palette.append((FLASH_TIMING,common.palette_shift(flash_bright_portion,color) + flash_rotating_portion[str_index:] + flash_rotating_portion[:str_index]))
@@ -332,7 +419,6 @@ class Sprite(SpriteParent):
 		spazer:			starts 9 long, then 16 long
 		plasma:			starts 5 long, then 32 long
 		'''
-		pass
 
 	def get_projectile_palette(self, projectile="power_beam"):
 		# Ice:		Blue		ice_beam
@@ -347,38 +433,38 @@ class Sprite(SpriteParent):
 				(107, 40, 33),
 				(173, 81, 57),
 				(255,121, 49),
-				(247,231,  0),
+				(247,231,	0),
 				(255,255,165),
 				(255,255,255)
 			],
 			"ice_beam": [
-				(  0, 56,173),
-				(  0,121,222),
-				(  0,182,255),
+				(	0, 56,173),
+				(	0,121,222),
+				(	0,182,255),
 				( 82,199,231),
 				(115,223,255),
 				(255,255,255)
 			],
 			"wave_beam": [
-				( 99,  0, 99),
-				(181,  0,181),
-				(255,  0,255),
+				( 99,	0, 99),
+				(181,	0,181),
+				(255,	0,255),
 				(255,113,255),
 				(255,182,255),
 				(255,255,255)
 			],
 			"spazer_beam": [
-				(115, 56,  0),
-				(181,134,  0),
-				(255,255,  0),
+				(115, 56,	0),
+				(181,134,	0),
+				(255,255,	0),
 				(255,255,148),
 				(255,255,214),
 				(255,255,255)
 			],
 			"plasma_beam": [
-				(  0, 97, 41),
-				(  0,166, 74),
-				(  0,255,115),
+				(	0, 97, 41),
+				(	0,166, 74),
+				(	0,255,115),
 				(148,255,148),
 				(214,255,214),
 				(255,255,255)
@@ -439,9 +525,9 @@ class Sprite(SpriteParent):
 		while(self.concatenate_facing_and_aiming(facing,aiming) not in direction_dict):
 			if aiming in ALTERNATIVES:
 				aiming = ALTERNATIVES[aiming]
-			elif facing in direction_dict:   #no aim was available, try the pure facing
+			elif facing in direction_dict:	 #no aim was available, try the pure facing
 				return facing
-			else:    #now we are really screwed, so just do anything
+			else:		#now we are really screwed, so just do anything
 				return next(iter(direction_dict.keys()))
 
 		#if things went well, we are here
@@ -458,9 +544,9 @@ class Sprite(SpriteParent):
 
 		#if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
 		if palette_timing_list[-1][0] == 0 and frame_number >= palette_timing_progression[-1]:
-			palette_number = -1    #use the last palette
-		elif palette_timing_progression[-1] == 0 and frame_number < 0:   #can happen if someone switches from a dynamic palette to a static palette, and then backsteps a lot
-			palette_number = 0     #use the first palette
+			palette_number = -1		#use the last palette
+		elif palette_timing_progression[-1] == 0 and frame_number < 0:	 #can happen if someone switches from a dynamic palette to a static palette, and then backsteps a lot
+			palette_number = 0		 #use the first palette
 		else:
 			mod_frames = frame_number % palette_timing_progression[-1]
 			palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
@@ -479,7 +565,7 @@ class Sprite(SpriteParent):
 		#used to interface the new palette string format with the older get_timed_palette function.
 		# could be refactored into the main code later, if coding time was not a valuable resource
 
-		overall_type, variant_type = "power", "standard"   #defaults unless we are told otherwise
+		overall_type, variant_type = "power", "standard"	 #defaults unless we are told otherwise
 		for palette_string in palette_list:
 			if palette_string.endswith("_suit"):
 				#if we've got a suit base
@@ -506,12 +592,10 @@ class Sprite(SpriteParent):
 			if '_' in palette:
 				slugs[palette[palette.rfind('_')+1:]] = palette[:palette.rfind('_')]
 		OPTIONAL_PORT_STRING = "optional_"
-		if image_name.startswith(OPTIONAL_PORT_STRING):    #as would be for the cannon ports, which are optionally present
+		if image_name.startswith(OPTIONAL_PORT_STRING):		#as would be for the cannon ports, which are optionally present
 			if "yes_cannon-port" in palettes:
 				image_name = image_name.replace(OPTIONAL_PORT_STRING,"")
 				return self.images[image_name]
-			else:
-				return Image.new("RGBA",(0,0),0)
-		else:
-			# FIXME: English
-			raise AssertionError(f"Could not locate tile with name {image_name}")
+			return Image.new("RGBA",(0,0),0)
+		# FIXME: English
+		raise AssertionError(f"Could not locate tile with name {image_name}")

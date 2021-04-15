@@ -83,7 +83,7 @@ def show_trawler(frames_by_animation,animations_by_frame,overhead):
 			title = animation + " (" + direction + ")"
 			frames = directions[direction]
 			if process_cells:
-				for id,button in cell_buttons.items():
+				for cellID,button in cell_buttons.items():
 					bg = button.cget("bg")
 					if bg != cyan:
 						button.configure(bg=default)
