@@ -3631,6 +3631,172 @@
       }
     ]
   },
+  "Sword charge strafe": {
+    "right": [
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD5", "pos": [10,11] },
+          { "image": "A0", "pos": [-2,-1] },
+          { "image": "M6", "pos": [-1,7] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD5", "pos": [10,11] },
+          { "image": "K3", "pos": [-2,0] },
+          { "image": "V1", "pos": [-1,7] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD5", "pos": [10,11] },
+          { "image": "K4", "pos": [-2,1] },
+          { "image": "M7", "pos": [-1,7] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      }
+    ],
+    "up": [
+      { "frames": 2, "tiles":
+        [
+          { "image": "SHIELD1", "pos": [7,3] },
+          { "image": "A2", "pos": [0,0] },
+          { "image": "M3", "pos": [0,8] },
+          { "image": "SWORD1", "pos": [0,-7] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SHIELD1", "pos": [7,3] },
+          { "image": "A2", "pos": [0,1] },
+          { "image": "M4", "pos": [0,8] },
+          { "image": "SWORD1", "pos": [0,-7] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SHIELD1", "pos": [7,3] },
+          { "image": "A2", "pos": [0,2] },
+          { "image": "M5", "pos": [0,8] },
+          { "image": "SWORD1", "pos": [0,-7] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SHIELD1", "pos": [7,3] },
+          { "image": "A2", "pos": [0,0] },
+          { "image": "M3", "pos": [0,8] },
+          { "image": "SWORD1", "pos": [0,-7] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SHIELD1", "pos": [7,3] },
+          { "image": "A2", "pos": [0,1] },
+          { "image": "M4", "pos": [0,8], "flip": "h" },
+          { "image": "SWORD1", "pos": [0,-7] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SHIELD1", "pos": [7,3] },
+          { "image": "A2", "pos": [0,2] },
+          { "image": "M5", "pos": [0,8], "flip": "h" },
+          { "image": "SWORD1", "pos": [0,-7] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      }
+    ],
+    "down": [
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD1", "pos": [7,18], "flip": "both" },
+          { "image": "SHIELD1", "pos": [-7,4], "flip": "h" },
+          { "image": "A1", "pos": [0,0] },
+          { "image": "M0", "pos": [0,8] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD1", "pos": [7,18], "flip": "both" },
+          { "image": "SHIELD1", "pos": [-7,4], "flip": "h" },
+          { "image": "A1", "pos": [0,1] },
+          { "image": "M1", "pos": [0,8] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD1", "pos": [7,18], "flip": "both" },
+          { "image": "SHIELD1", "pos": [-7,4], "flip": "h" },
+          { "image": "A1", "pos": [0,2] },
+          { "image": "M2", "pos": [0,8] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD1", "pos": [7,18], "flip": "both" },
+          { "image": "SHIELD1", "pos": [-7,4], "flip": "h" },
+          { "image": "A1", "pos": [0,0] },
+          { "image": "M0", "pos": [0,8] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD1", "pos": [7,18], "flip": "both" },
+          { "image": "SHIELD1", "pos": [-7,4], "flip": "h" },
+          { "image": "A1", "pos": [0,1] },
+          { "image": "AB2", "pos": [0,8] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD1", "pos": [7,18], "flip": "both" },
+          { "image": "SHIELD1", "pos": [-7,4], "flip": "h" },
+          { "image": "A1", "pos": [0,2] },
+          { "image": "AB3", "pos": [0,8] },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      }
+    ],
+    "left": [
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD5", "pos": [10,11] },
+          { "image": "A0", "pos": [0,-1], "flip": "h" },
+          { "image": "M6", "pos": [-1,7], "flip": "h" },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD5", "pos": [10,11] },
+          { "image": "K3", "pos": [0,0], "flip": "h" },
+          { "image": "V1", "pos": [-1,7], "flip": "h" },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      },
+      { "frames": 2, "tiles":
+        [
+          { "image": "SWORD5", "pos": [10,11] },
+          { "image": "K4", "pos": [0,1], "flip": "h" },
+          { "image": "M7", "pos": [-1,7], "flip": "h" },
+          { "image": "main_shadow", "pos": [0,7] }
+        ]
+      }
+    ]
+  },
   "Spin attack": {
     "right": [
       {
