@@ -1136,11 +1136,12 @@ class SpriteSomethingMainFrame(tk.Frame):
 					"",
 					"Thanks to:",
 					"[Auximines](https://metroidfanon.fandom.com/wiki/Super_Justin_Bailey) for initial inspiration for custom Super Metroid sprites",
+ 					"[Pneumatic](http://twitch.tv/pneumaticgaming) for datastamp for Super Metroid/Samus sprites",
 					"",
 					"Based on:",
 					"[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
 					"[ZSpriteTools](http://github.com/sosuke3/ZSpriteTools) by Sosuke3",
-					# Assets from ZSpriteTools used with permission
+					# Assets from SpriteAnimator & ZSpriteTools used with permission
 		]
 		about = tk.Tk()
 		about.title(f"About {self.app_title}")

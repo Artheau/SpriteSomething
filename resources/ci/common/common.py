@@ -46,6 +46,13 @@ def prepare_env():
   global DEFAULT_REPO_SLUG
   env = {}
 
+  # get app version
+  APP_VERSION = ""
+  APP_VERSION_FILE = os.path.join(".",*CI_SETTINGS["common"]["prepare_appversion"]["app_version"])
+  if os.path.isfile(APP_VERSION_FILE):
+      with open(APP_VERSION_FILE, "r") as f:
+          APP_VERSION = f.readlines()[0].strip()
+
   # ci data
   env["CI_SYSTEM"] = os.getenv("CI_SYSTEM","")
   # py data
@@ -109,7 +116,7 @@ def prepare_env():
   if GITHUB_TAG == "":
     # if we haven't appended the build number, do it
     if env["BUILD_NUMBER"] not in GITHUB_TAG:
-      # GITHUB_TAG = APP_VERSION
+      GITHUB_TAG = APP_VERSION
       # if the app version didn't have the build number, add it
       # set to <app_version>.<build_number>
       if env["BUILD_NUMBER"] not in GITHUB_TAG:
