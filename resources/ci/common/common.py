@@ -87,7 +87,7 @@ def prepare_env():
   # ci data
   env["BUILD_NUMBER"] = os.getenv("TRAVIS_BUILD_NUMBER",env["GITHUB_RUN_NUMBER"])
 
-  GITHUB_TAG = os.getenv("TRAVIS_TAG",os.getenv("GITHUB_TAG",APP_VERSION))
+  GITHUB_TAG = os.getenv("TRAVIS_TAG",os.getenv("GITHUB_TAG",""))
   OS_NAME = os.getenv("TRAVIS_OS_NAME",os.getenv("OS_NAME",sys.platform)).replace("macOS","osx")
   OS_DIST = os.getenv("TRAVIS_DIST","notset")
   OS_VERSION = ""
@@ -116,7 +116,7 @@ def prepare_env():
   if GITHUB_TAG == "":
     # if we haven't appended the build number, do it
     if env["BUILD_NUMBER"] not in GITHUB_TAG:
-      # GITHUB_TAG = APP_VERSION
+      GITHUB_TAG = APP_VERSION
       # if the app version didn't have the build number, add it
       # set to <app_version>.<build_number>
       if env["BUILD_NUMBER"] not in GITHUB_TAG:

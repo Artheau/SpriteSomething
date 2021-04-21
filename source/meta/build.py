@@ -7,7 +7,7 @@ DEST_DIRECTORY = "."
 
 #UPX greatly reduces the filesize.  You can get this utility from https://upx.github.io/
 #just place it in a subdirectory named "upx" and this script will find it
-if os.path.isdir("upx"):
+if os.path.isdir("./upx"):
 	upx_string = "--upx-dir=upx "
 else:
 	upx_string = ""
@@ -23,6 +23,7 @@ def run_build(PY_VERSION):
     "--onefile",
     f"--distpath={DEST_DIRECTORY}"
   ]
+  print("PyInstaller args: %s" % " ".join(args))
   subprocess.check_call([PYINST_EXECUTABLE,*args])
 
 if __name__ == "__main__":
