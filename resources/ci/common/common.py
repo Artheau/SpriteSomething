@@ -46,6 +46,13 @@ def prepare_env():
   global DEFAULT_REPO_SLUG
   env = {}
 
+  # get app version
+  APP_VERSION = ""
+  APP_VERSION_FILE = os.path.join(".",*CI_SETTINGS["common"]["prepare_appversion"]["app_version"])
+  if os.path.isfile(APP_VERSION_FILE):
+      with open(APP_VERSION_FILE, "r") as f:
+          APP_VERSION = f.readlines()[0].strip()
+
   # ci data
   env["CI_SYSTEM"] = os.getenv("CI_SYSTEM","")
   # py data

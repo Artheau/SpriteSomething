@@ -38,9 +38,34 @@ class Sprite(SpriteParent):
 		return rom_inject.rom_inject(self, spiffy_dict, rom)
 
 	def get_stamp(self):
+		dims = {
+			"bg": {
+				"width": 332,
+				"height": 142
+			},
+			"cb": {
+				"width": 0,
+				"height": 0,
+				"x": 148,
+				"y": 110
+			},
+			"name": {
+				"width": 8,
+				"height": 12,
+				"x": 0,
+				"y": 0
+			},
+			"author": {
+				"width": 7,
+				"height": 7,
+				"x": 0,
+				"y": 0
+			}
+		}
+		stamp = Image.open(common.get_resource([self.resource_subpath,"sheets","stamp"],"stamp.png")).convert("RGBA")
 		rowIMG = {
-			"name": Image.open(common.get_resource([self.resource_subpath,"sheets"],"uppercase.png")),
-			"author": Image.open(common.get_resource([self.resource_subpath,"sheets"],"lowercase.png")),
+			"name": Image.open(common.get_resource([self.resource_subpath,"sheets","stamp"],"uppercase.png")),
+			"author": Image.open(common.get_resource([self.resource_subpath,"sheets","stamp"],"lowercase.png")),
 		}
 		charmap = {
 			"name": [
@@ -54,25 +79,38 @@ class Sprite(SpriteParent):
 		}
 
 		spritedata = {
-			"name": self.metadata["sprite.name"] if "sprite.name" in self.metadata else "Unknown Samus Sprite",
-			"author": self.metadata["author.name"] if "author.name" in self.metadata else "Unknown Author"
+			"name": self.metadata["sprite.name"] if "sprite.name" in self.metadata and self.metadata["sprite.name"] != "" else "Unknown Samus Sprite",
+			"author": self.metadata["author.name"] if "author.name" in self.metadata and self.metadata["author.name"] != "" else "Unknown Author"
 		}
+		dims["fullName"] = {
+			"width": len(spritedata["name"]) * (dims["name"]["width"])
+		}
+		dims["fullAuthor"] = {
+			"width": len(spritedata["author"]) * (dims["author"]["width"] + 1)
+		}
+		ltrsIMG = Image.new(
+			"RGBA",
+			(
+				max(
+					dims["fullName"]["width"],
+					dims["fullAuthor"]["width"]
+				),
+				38
+			),
+			(255,255,255,0)
+		)
 
-		stamp = Image.new("RGBA", (332,142), (255,255,255))
-		dims = {
-			"name": {
-				"width": 8,
-				"height": 12
-			},
-			"author": {
-				"width": 7,
-				"height": 7
-			}
-		}
+		if spritedata["name"] != "" and spritedata["author"] != "":
+			createdby = Image.open(common.get_resource([self.resource_subpath,"sheets","stamp"],"createdby.png"))
+			x = dims["cb"]["x"]
+			y = dims["cb"]["y"]
+			stamp.paste(createdby, (x,y), createdby)
+			createdby.close()
+
 		coords = {
 			"dest": {
-				"x": 0,
-				"y": 0
+				"x": (int(ltrsIMG.size[0] / 2) - int(dims["fullName"]["width"] / 2)),
+				"y": dims["name"]["y"]
 			},
 			"src": {
 				"x": 0,
@@ -104,15 +142,25 @@ class Sprite(SpriteParent):
 							)
 							if row == "name" and ltrs == "author":
 								y += 4
-							ltrIMG = Image.alpha_composite(Image.new("RGBA", ltrIMG.size, (255,255,255)), ltrIMG.convert("RGBA"))
-							stamp.paste(ltrIMG, (x,y))
+							ltrIMG = Image.alpha_composite(Image.new("RGBA", ltrIMG.size, (255,255,255,0)), ltrIMG.convert("RGBA"))
+							ltrsIMG.paste(ltrIMG, (x,y))
+							ltrIMG.close()
 							coords["dest"]["x"] += dims[ltrs]["width"]
 							if ltrs == "author":
 								coords["dest"]["x"] += 1
-			coords["dest"]["x"] = 0
-			coords["dest"]["y"] += dims[row]["height"] + 1
+			coords["dest"]["x"] = (int(ltrsIMG.size[0] / 2) - int(dims["fullAuthor"]["width"] / 2))
+			coords["dest"]["y"] += dims[row]["height"] + 17
 
-		stamp = ImageOps.invert(stamp.convert("RGB"))
+		find = [0,0,0]
+		replace = (255,255,255)
+		data = common.np.array(ltrsIMG)
+		r,g,b,a = data.T
+		black_areas = (r == find[0]) & (g == find[1]) & (b == find[2])
+		data[..., :-1][black_areas.T] = replace
+		ltrsIMG = Image.fromarray(data)
+		# ltrsIMG.save(os.path.join(".","ltrs.png"))
+		stamp.paste(ltrsIMG, (int(stamp.size[0] / 2) - int(ltrsIMG.size[0] / 2),91), ltrsIMG)
+		rowIMG = {}
 		return stamp
 
 	def save_as_PNG(self, filename):
