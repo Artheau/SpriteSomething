@@ -6,15 +6,11 @@ This release of SpriteSomething includes many basic features of the main design 
 
 ### Core
 
-* Prepare tested support for Ubuntu 20.04 when GitHub Actions [rolls it out for its virtual environments](https://github.com/actions/virtual-environments/issues/1816).
+* Added Pneumatic to credits for M3Samus sheet stamp.
 
 ### Super Metroid
 
-* Add Spiffy Button for toggling Screw Attack animation split (new Spin Attack without Space Jump graphics) that is honored on-injection
-* Update Download URLs for SpriteSomething-collections
-* Check for VT Tournament flags
-* Check for Combo Tournament flags
-* Check for VARIA Tournament flags
+* Add custom SpriteSomething sheet stamp.
 
 ## Features
 
