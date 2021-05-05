@@ -135,14 +135,13 @@ def show_trawler(frames_by_animation,animations_by_frame,overhead):
 			"E0","E1",
 			"G5","G6",
 			"K5",
-			"P0", # right half
+			# "P0", # P0 right half
 			"Q2","Q3","Q4",
 			"R3","R4","R5",
-			"U3",
 			"V7",
 			"W0","W1","W2","W3","W4","W5","W6","W7",
 			"X0",
-			"Z1","Z6" # Z6: lower right quarter
+			"Z1", # "Z6" # Z6: lower right quarter
 			"AB5","AB6","AB7"
 		]
 
