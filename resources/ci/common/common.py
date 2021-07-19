@@ -5,7 +5,10 @@ import sys  # default system info
 from my_path import get_py_path
 
 CI_SETTINGS = {}
-with(open(os.path.join("resources","app","meta","manifests","ci.json"))) as ci_settings_file:
+manifest_path = os.path.join("resources","app","meta","manifests","ci.json")
+if (not os.path.isfile(manifest_path)):
+  raise AssertionError("Manifest not found: " + manifest_path)
+with(open(manifest_path)) as ci_settings_file:
   CI_SETTINGS = json.load(ci_settings_file)
 
 UBUNTU_VERSIONS = CI_SETTINGS["common"]["common"]["ubuntu"]

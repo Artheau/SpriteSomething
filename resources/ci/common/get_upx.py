@@ -8,7 +8,10 @@ from shutil import unpack_archive
 # only do stuff if we don't have a UPX folder
 
 CI_SETTINGS = {}
-with(open(os.path.join(".","resources","app","meta","manifests","ci.json"))) as ci_settings_file:
+manifest_path = os.path.join("resources","app","meta","manifests","ci.json")
+if (not os.path.isfile(manifest_path)):
+  raise AssertionError("Manifest not found: " + manifest_path)
+with(open(manifest_path)) as ci_settings_file:
   CI_SETTINGS = json.load(ci_settings_file)
 
 if not os.path.isdir("./upx"):
