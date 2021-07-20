@@ -312,11 +312,11 @@ jobs:
           name: archive-ubuntu-latest
           path: ${{ steps.parentDir.outputs.value }}/deploy/linux
       # download macos archive artifact
-      - name: Download MacOS Archive Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: archive-macOS-latest
-          path: ${{ steps.parentDir.outputs.value }}/deploy/macos
+      # - name: Download MacOS Archive Artifact
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: archive-macOS-latest
+      #     path: ${{ steps.parentDir.outputs.value }}/deploy/macos
       # download windows archive artifact
       - name: Download Windows Archive Artifact
         uses: actions/download-artifact@v2
@@ -361,17 +361,17 @@ jobs:
           asset_content_type: application/gzip
         if: contains(github.ref, 'master')
       # upload macos archive asset
-      - name: Upload MacOS Archive Asset
-        id: upload-macos-asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ../deploy/macos/SpriteSomething.tar.gz
-          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
-          asset_content_type: application/gzip
-        if: contains(github.ref, 'master')
+      # - name: Upload MacOS Archive Asset
+      #   id: upload-macos-asset
+      #   uses: actions/upload-release-asset@v1.0.2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ../deploy/macos/SpriteSomething.tar.gz
+      #     asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
+      #     asset_content_type: application/gzip
+      #   if: contains(github.ref, 'master')
       # upload windows archive asset
       - name: Upload Windows Archive Asset
         id: upload-windows-asset
