@@ -100,7 +100,8 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+#        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+        os-name: [ubuntu-latest, ubuntu-18.04, windows-latest]
         python-version: [3.8]
     needs: [install-test]
     steps:
@@ -152,7 +153,7 @@ jobs:
       # run build.py
       - name: Build Binary
         run: |
-          pip install https://github.com/pyinstaller/pyinstaller/tarball/develop
+          pip install pyinstaller
           python -m source.meta.build
       # prepare binary artifact for later step
       - name: Prepare Binary Artifact
