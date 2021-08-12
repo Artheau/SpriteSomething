@@ -230,3 +230,10 @@ class SpiffyGroup():
 	def invoke_spiffy_button(self, button, event=None):
 		button.config(relief = tk.SUNKEN)
 		button.invoke()
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

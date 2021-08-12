@@ -8,6 +8,7 @@ import base64            	#TODO: I don't know why we import this
 import json
 import random
 import ssl
+import sys
 import urllib.request
 from functools import partial    #for tk debugging
 from source.meta.common.constants import DEBUG_MODE  #for tk debugging
@@ -119,15 +120,22 @@ def get_sprites(self,title,destdir,url):
 			sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
 			sprite_destination = os.path.join(filepath,sprite_filename)	#set the destination
 			if not os.path.exists(sprite_destination):	#if we don't have it, download it
-				with open(sprite_destination, "wb") as g:
-					sprite_data_req = urllib.request.Request(
-						sprite["file"],
-						data=None,
-						headers={
-							"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
-						}
-					)
+				sprite_data_req = urllib.request.Request(
+					sprite["file"],
+					data=None,
+					headers={
+						"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
+					}
+				)
+				try:
 					sprite_data_req = urllib.request.urlopen(sprite_data_req, context=context)
+				except urllib.error.HTTPError as e:
+					if e.code == 404:
+						print("Sprite not found!")
+					elif e.code == 403:
+						print("Sprite not authorized!")
+					continue
+				with open(sprite_destination, "wb") as g:
 					sprite_data = sprite_data_req.read()
 					# FIXME: English
 					print("    Writing " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
@@ -139,3 +147,10 @@ def get_sprites(self,title,destdir,url):
 	#		self.progressbar["value"] = (((i+1)/total)*100)
 	#	downloader.destroy()
 	return success
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

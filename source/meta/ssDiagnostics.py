@@ -50,5 +50,9 @@ def output():
 
   return lines
 
-if __name__ == "__main__":
+
+def main():
     raise AssertionError(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

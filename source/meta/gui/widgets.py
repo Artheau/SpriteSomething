@@ -286,3 +286,10 @@ def make_widgets_from_dict(self, defns, parent):
     for key,defn in defns.items():
         widgets[key] = make_widget_from_dict(self, defn, parent)
     return widgets
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()
