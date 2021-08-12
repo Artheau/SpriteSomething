@@ -170,6 +170,7 @@ def find_binary(listdir):
               BUILD_FILENAMES.append(filename)
   return BUILD_FILENAMES
 
+
 if __name__ == "__main__":
   env = prepare_env()
   print(env)
