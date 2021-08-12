@@ -52,7 +52,10 @@ def get_upx():
       "be available.")
 
 
-if __name__ == "__main__":
+def main():
   get_upx()
+
+if __name__ == "__main__":
+  main()
 else:
   raise AssertionError("Script improperly used as import!")

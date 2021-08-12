@@ -60,7 +60,7 @@ def get_get_pip(PY_VERSION):
     subprocess.check_call(args)
 
 
-if __name__ == "__main__":
+def main():
   parser = argparse.ArgumentParser(add_help=False)
   parser.add_argument('--py', default=0)
   command_line_args = parser.parse_args()
@@ -71,3 +71,6 @@ if __name__ == "__main__":
     print("pip is installed")
   except ImportError:
     get_get_pip(PY_VERSION)
+
+if __name__ == "__main__":
+  main()

@@ -171,6 +171,9 @@ def find_binary(listdir):
   return BUILD_FILENAMES
 
 
-if __name__ == "__main__":
+def main():
   env = prepare_env()
   print(env)
+
+if __name__ == "__main__":
+  main()

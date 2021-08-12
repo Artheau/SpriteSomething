@@ -49,7 +49,10 @@ def prepare_pages():
   )
 
 
-if __name__ == "__main__":
+def main():
   prepare_pages()
+
+if __name__ == "__main__":
+  main()
 else:
   raise AssertionError("Script improperly used as import!")

@@ -18,5 +18,8 @@ def local_install():
   install.run_install(PY_VERSION,USER)
 
 
-if __name__ == "__main__":
+def main():
   local_install()
+
+if __name__ == "__main__":
+  main()

@@ -28,5 +28,8 @@ def git_clean(clean_ignored=True, clean_user=False):
         *excludes])
 
 
-if __name__ == "__main__":
+def main():
     git_clean()
+
+if __name__ == "__main__":
+    main()

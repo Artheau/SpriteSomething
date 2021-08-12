@@ -190,7 +190,10 @@ def prepare_discord_notif():
                     headers={"Content-type": "application/json"})
 
 
-if __name__ == "__main__":
+def main():
   prepare_discord_notif()
+
+if __name__ == "__main__":
+  main()
 else:
   raise AssertionError("Script improperly used as import!")

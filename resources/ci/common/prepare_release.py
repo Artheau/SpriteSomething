@@ -160,7 +160,10 @@ def prepare_release():
       exit(1)
 
 
-if __name__ == "__main__":
+def main():
   prepare_release()
+
+if __name__ == "__main__":
+  main()
 else:
   raise AssertionError("Script improperly used as import!")

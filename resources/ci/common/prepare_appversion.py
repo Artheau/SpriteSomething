@@ -29,7 +29,10 @@ def prepare_appversion():
   )
 
 
-if __name__ == "__main__":
+def main():
   prepare_appversion()
+
+if __name__ == "__main__":
+  main()
 else:
   raise AssertionError("Script improperly used as import!")
