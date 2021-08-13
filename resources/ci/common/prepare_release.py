@@ -143,18 +143,18 @@ def prepare_release():
 
   for BUILD_FILENAME in BUILD_FILENAMES:
       if not BUILD_FILENAME == "":
-          print("Build Filename: " + BUILD_FILENAME)
+          print(f"Build Filename: {BUILD_FILENAME}")
           print("Build Filesize: " + common.file_size(BUILD_FILENAME))
       else:
-          print("No Build to prepare: " + BUILD_FILENAME)
+          print(f"No Build to prepare: {BUILD_FILENAME}")
 
   if not ZIP_FILENAME == "":
-      print("Zip Filename:   " + ZIP_FILENAME)
+      print(f"Zip Filename:   {ZIP_FILENAME}")
       print("Zip Filesize:   " + common.file_size(ZIP_FILENAME))
   else:
-      print("No Zip to prepare: " + ZIP_FILENAME)
+      print(f"No Zip to prepare: {ZIP_FILENAME}")
 
-  print("Git tag:        " + env["GITHUB_TAG"])
+  print(f"Git tag:        {env['GITHUB_TAG']}")
 
   if (len(BUILD_FILENAMES) == 0) or (ZIP_FILENAME == ""):
       exit(1)

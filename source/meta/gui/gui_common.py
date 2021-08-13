@@ -83,7 +83,7 @@ def create_chooser(console_name,game_names):
 	return selected_game
 
 # download sprites for specified sprite manifest URL
-def get_sprites(self,title,destdir,url):
+def get_sprites(self,title,destdir,url,gui=True):
 	success = False	#report success
 	filepath = os.path.join('.',"resources","user",destdir)	#save to user_resources/<console_dir>/<game_dir>/<sprite_dir>/sheets/<dir>/*.zspr
 	if not os.path.exists(filepath):
@@ -101,7 +101,7 @@ def get_sprites(self,title,destdir,url):
 	wintitle = "Downloading " + title + " Sprites"
 	winbody = "Wait a little bit, dude, there's " + str(total) + " sprites."
 	winquestion = "Are you a bad enough dude to get that many?"
-	dodownload = messagebox.askyesno(wintitle,winbody + "\n\n" + winquestion)
+	dodownload = (gui == False) or messagebox.askyesno(wintitle,winbody + "\n\n" + winquestion)
 #	downloader = tk.Tk()
 #	downloader.title("Downloading " + title + " Sprites")
 #	dims = {
@@ -131,19 +131,23 @@ def get_sprites(self,title,destdir,url):
 					sprite_data_req = urllib.request.urlopen(sprite_data_req, context=context)
 				except urllib.error.HTTPError as e:
 					if e.code == 404:
-						print("Sprite not found!")
+						# print("Sprite not found!")
+						pass
 					elif e.code == 403:
-						print("Sprite not authorized!")
+						# print("Sprite not authorized!")
+						pass
+					# FIXME: English
+					print("    [%s] %s/%d: %s" % (str(e.code).ljust(len("Skipping") - 2), str(i+1).rjust(len(str(total))), total, sprite_filename))
 					continue
 				with open(sprite_destination, "wb") as g:
 					sprite_data = sprite_data_req.read()
 					# FIXME: English
-					print("    Writing " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
+					print("    Writing  %s/%d: %s" % (str(i+1).rjust(len(str(total))), total, sprite_filename))
 					g.write(sprite_data)
 					success = True
 			else:	#if we do have it, next!
 				# FIXME: English
-				print("    Skipping " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
+				print("    Skipping %s/%d: %s" % (str(i+1).rjust(len(str(total))), total, sprite_filename))
 	#		self.progressbar["value"] = (((i+1)/total)*100)
 	#	downloader.destroy()
 	return success

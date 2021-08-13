@@ -32,7 +32,7 @@ def get_upx():
           UPX_VERSION + '/' + UPX_FILE
 
       if "osx" not in env["OS_NAME"]:
-          print("Getting UPX: " + UPX_FILE)
+          print(f"Getting UPX: {UPX_FILE}")
           with open("./" + UPX_FILE, "wb") as upx:
               UPX_REQ = urllib.request.Request(
                   UPX_URL,

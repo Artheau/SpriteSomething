@@ -27,10 +27,10 @@ def prepare_binary():
   for BUILD_FILENAME in BUILD_FILENAMES:
       DEST_FILENAME = common.prepare_filename(BUILD_FILENAME)
 
-      print("OS Name:        " + env["OS_NAME"])
-      print("OS Version:     " + env["OS_VERSION"])
-      print("Build Filename: " + BUILD_FILENAME)
-      print("Dest Filename:  " + DEST_FILENAME)
+      print(f"OS Name:        {env['OS_NAME']}")
+      print(f"OS Version:     {env['OS_VERSION']}")
+      print(f"Build Filename: {BUILD_FILENAME}")
+      print(f"Dest Filename:  {DEST_FILENAME}")
       if not BUILD_FILENAME == "":
           print("Build Filesize: " + common.file_size(BUILD_FILENAME))
       else:
