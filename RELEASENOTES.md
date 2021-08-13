@@ -6,11 +6,15 @@ This release of SpriteSomething includes many basic features of the main design 
 
 ### Core
 
-* Added Pneumatic to credits for M3Samus sheet stamp.
+* Added better error messages.
+* Backend improvements.
+* Fixed sprite downloader for invalid sprite file URLs (specifically handles 403 for base Link sprite file)
 
-### Super Metroid
+## Known Issues
 
-* Add custom SpriteSomething sheet stamp.
+* Pillow versions including 7.0 and above are not yet supported (color processing errors)
+* Python versions including 3.9 and above are not yet supported (Pillow 6.2.2 does not build on Py3.9+)
+* MacOSX builds not provided at this time because `pyinstaller` complains about security-signing the executable and I'm not paying money to resolve that, kthx. Running from source should still work on MacOSX.
 
 ## Features
 
@@ -56,9 +60,7 @@ This release of SpriteSomething includes many basic features of the main design 
 
 ## Executable Builds
 
-* We currently use GitHub Actions to build the bundled executables with each release. Travis CI was used initially and does most of what we want. GitHub Actions has since matured and is able to produce all that we need now.
-
-* Executables for Linux (built on Ubuntu Bionic), MacOSX (built on 10.15 xcode 11.2.1) and Windows (built on Windows Server 2019) all built on python 3.7 are available.
+* Executables for Linux (built on Ubuntu Focal), ~~MacOSX (built on 10.15 xcode 11.2.1)~~ (*MacOSX builds are being difficult and are thusly discontinued until further notice*) and Windows (built on Windows Server 2019) all built on python 3.8 are available.
 
 ### Build from source
 
