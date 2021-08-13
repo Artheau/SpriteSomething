@@ -15,3 +15,10 @@ MAX_FRAMES = 1E9
 # adds some extra checks that are useful for development purposes
 #  (to unset this, just comment out this line, don't set to false)
 DEBUG_MODE = True
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

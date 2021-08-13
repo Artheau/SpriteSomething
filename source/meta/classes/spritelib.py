@@ -563,3 +563,10 @@ class SpriteParent():
             return importlib.import_module(module_name)
         except ModuleNotFoundError as err:
             raise AssertionError(f"ModuleNotFoundError in spritelib.py: {err}")
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

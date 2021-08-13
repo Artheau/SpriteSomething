@@ -8,7 +8,10 @@ import subprocess # do stuff at the shell level
 env = common.prepare_env()
 
 CI_SETTINGS = {}
-with(open(os.path.join("resources","app","meta","manifests","ci.json"))) as ci_settings_file:
+manifest_path = os.path.join("resources","app","meta","manifests","ci.json")
+if (not os.path.isfile(manifest_path)):
+  raise AssertionError("Manifest not found: " + manifest_path)
+with(open(manifest_path)) as ci_settings_file:
   CI_SETTINGS = json.load(ci_settings_file)
 
 pip_requirements = os.path.join(".", *CI_SETTINGS["common"]["install"]["pip_requirements"])
@@ -88,7 +91,8 @@ def run_install(PY_VERSION,USER):
     args.remove("--user")
   subprocess.check_call(args)
 
-if __name__ == "__main__":
+
+def main():
   parser = argparse.ArgumentParser(add_help=False)
   parser.add_argument('--py', default=0)
   parser.add_argument('--user', default=False, action="store_true")
@@ -97,3 +101,6 @@ if __name__ == "__main__":
   USER = vars(command_line_args)["user"]
 
   run_install(PY_VERSION,USER)
+
+if __name__ == "__main__":
+  main()

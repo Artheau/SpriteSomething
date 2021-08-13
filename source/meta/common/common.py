@@ -467,3 +467,10 @@ def from_u16(buffer):
 def from_u32(buffer):
     # returns a tuple with "quantity" number of elements
     return struct.unpack_from('<L', buffer)[0]
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

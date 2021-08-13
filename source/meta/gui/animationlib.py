@@ -14,9 +14,9 @@ class AnimationEngineParent():
 	def __init__(self, my_subpath, game, sprite):
 		self.game = game
 		self.sprite = sprite
-		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
-		self.spiffy_dict = {}						 #the variables created by the spiffy buttons will go here
-		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
+		self.resource_subpath = my_subpath  #the path to this sprite's subfolder in resources
+		self.spiffy_dict = {}               #the variables created by the spiffy buttons will go here
+		self.overhead = True                #by default, this will create NESW direction buttons.  If false, only left/right buttons
 		self.overview_scale_factor = sprite.overview_scale_factor #when the overview is made, it is scaled up by this amount
 		self.step_number_label = tk.Label()
 		self.step_total_label = tk.Label()
@@ -29,8 +29,8 @@ class AnimationEngineParent():
 			self.animations = json.load(file)
 		if "$schema" in self.animations:
 			del self.animations["$schema"]
-
-		self.current_animation = next(iter(self.animations.keys()))   #using a default value until the animation_panel attachment overrides this
+		#using a default value until the animation_panel attachment overrides this
+		self.current_animation = next(iter(self.animations.keys()))
 
 	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, coord_setter, fish):
 		ANIMATION_DROPDOWN_WIDTH = 25
@@ -463,3 +463,10 @@ class AnimationEngineParent():
 				return False
 		else:
 			return False
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

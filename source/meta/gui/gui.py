@@ -1190,7 +1190,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 		ani_settings_filename = "ani_settings.json"
 		with open(os.path.join(ani_settings_path,ani_settings_filename),"w+") as f:
 			f.write(json.dumps(self.ani_settings,indent=2))
-		os.chmod(os.path.join(ani_settings_path,ani_settings_filename),0o755)
+			os.chmod(os.path.join(ani_settings_path,ani_settings_filename),0o755)
 
 	#exit sequence
 	def exit(self):

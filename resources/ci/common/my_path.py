@@ -29,5 +29,9 @@ def get_py_path():
   # print(paths)
   return paths
 
-if __name__ == "__main__":
+
+def main():
   get_py_path()
+
+if __name__ == "__main__":
+  main()
