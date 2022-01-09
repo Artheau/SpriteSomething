@@ -33,7 +33,7 @@ class Sprite(SpriteParent):
 				( 56, 40,128),
 				( 72, 56,144),
 				(120, 48,160),
-				(192,128,240)
+				(248,248,248)
 		]
 		self.link_globals["sword_palette"] = [
 			#blade, border, hilt
