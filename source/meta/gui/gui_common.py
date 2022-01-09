@@ -96,6 +96,8 @@ def get_sprites(self,title,destdir,url,gui=True):
 	sprites = json.loads(sprites_req.read().decode("utf-8"))
 	#get an iterator and a counter for a makeshift progress bar
 	total = len(sprites)
+	if "file" not in sprites[0]:
+		total -= 1
 	# FIXME: English
 	print("   Downloading " + title + " Sprites")
 	wintitle = "Downloading " + title + " Sprites"
@@ -116,7 +118,10 @@ def get_sprites(self,title,destdir,url,gui=True):
 #	self.progressbar["maximum"] = total
 
 	if dodownload:
-		for i,sprite in enumerate(sprites):
+		i = 0
+		for _,sprite in enumerate(sprites):
+			if "file" not in sprite:
+				continue
 			sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
 			sprite_destination = os.path.join(filepath,sprite_filename)	#set the destination
 			if not os.path.exists(sprite_destination):	#if we don't have it, download it
@@ -138,6 +143,7 @@ def get_sprites(self,title,destdir,url,gui=True):
 						pass
 					# FIXME: English
 					print("    [%s] %s/%d: %s" % (str(e.code).ljust(len("Skipping") - 2), str(i+1).rjust(len(str(total))), total, sprite_filename))
+					i += 1
 					continue
 				with open(sprite_destination, "wb") as g:
 					sprite_data = sprite_data_req.read()
@@ -148,6 +154,7 @@ def get_sprites(self,title,destdir,url,gui=True):
 			else:	#if we do have it, next!
 				# FIXME: English
 				print("    Skipping %s/%d: %s" % (str(i+1).rjust(len(str(total))), total, sprite_filename))
+			i += 1
 	#		self.progressbar["value"] = (((i+1)/total)*100)
 	#	downloader.destroy()
 	return success

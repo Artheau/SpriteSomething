@@ -66,9 +66,11 @@ def get_sprite_pose(sprite, rom, animation_ID, pose, bounding_box, upper=True,lo
 			image = Image.new("RGB",(15,7),0)
 			image.putdata(palette_block)
 			return image
-		# FIXME: English
-		raise AssertionError(f"unknown command to get_sprite_pose(): {animation_ID}")
-	tilemaps, DMA_writes, duration = rom.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation
+		else:
+			# FIXME: English
+			raise AssertionError(f"unknown command to get_sprite_pose(): {animation_ID}")
+	else:
+		tilemaps, DMA_writes, duration = rom.get_pose_data(animation_ID, pose, upper=upper, lower=lower)   #TODO: do full port opening animation
 
 	#there is stuff in VRAM by default, so populate this and then overwrite with the DMA_writes
 	constructed_VRAM_data = {}

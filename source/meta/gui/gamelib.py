@@ -78,10 +78,10 @@ def autodetect(sprite_filename):
 	_,file_extension = os.path.splitext(sprite_filename)
   #If this is a SNES filetype
 	if file_extension.lower() in [".sfc",".smc"]:
-		game, sprite, animation_assist = autodetect_snes(sprite_filename)
+		game, (sprite, animation_assist) = autodetect_snes(sprite_filename)
 	#If this is a NES filetype
 	elif file_extension.lower() == ".nes":
-		game, sprite, animation_assist = autodetect_nes(sprite_filename)
+		game, (sprite, animation_assist) = autodetect_nes(sprite_filename)
   #If it's not a known filetype but a PNG, cycle through and find one that matches
 	elif file_extension.lower() == ".png":
 		game, sprite, animation_assist = autodetect_png(sprite_filename)
@@ -90,7 +90,7 @@ def autodetect(sprite_filename):
 		with open(sprite_filename,"rb") as file:
 			zspr_data = bytearray(file.read())
 		game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
-		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
+		(sprite, animation_assist) = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
 	else:
 		# FIXME: English
 		raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its filename")
@@ -253,7 +253,6 @@ class GameParent():
 			except ImportError:    #there was no sprite-specific animation library, so import the parent
 				animationlib = importlib.import_module(f"source.meta.gui.animationlib")
 				animation_assist = animationlib.AnimationEngineParent(resource_subpath, self, sprite)
-
 			return sprite, animation_assist
 		# FIXME: English
 		raise AssertionError(f"make_sprite_by_number() called for non-implemented sprite_number {sprite_number}")
