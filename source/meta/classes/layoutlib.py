@@ -7,6 +7,7 @@
 
 import itertools
 import json
+import os
 from PIL import Image, ImageOps, ImageDraw
 from source.meta.common import common
 
@@ -245,11 +246,11 @@ class Layout():
             all_collages.append(collage)
 
         full_layout_collage = self.make_vertical_collage(all_collages)
-               
-        # load the original PNG and use a mask to grab everything outside 
+
+        # load the original PNG and use a mask to grab everything outside
         # the frame and paste it back ontop of the collage
 
-        samus_mask = Image.open(r"resources\app\snes\metroid3\samus\sheets\samus_mask.png")
+        samus_mask = Image.open(common.get_resource(os.path.join("snes","metroid3","samus","sheets"),"samus_mask.png"))
         if samus_mask.width == full_layout_collage.width:
             original_image = Image.open(filename).convert("RGBA")
             full_layout = Image.composite(original_image, full_layout_collage, samus_mask)
