@@ -15,6 +15,9 @@ __pycache__/
 /.vscode
 /.idea
 
+# But do keep tasks file
+!/.vscode/tasks.json
+
 # no PowerShell scripts
 *.ps*
 
