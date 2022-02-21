@@ -1,0 +1,11 @@
+[
+  "logic/smbool.py",
+  "rom/compression.py",
+  "rom/ips.py",
+  "rom/leveldata.py",
+  "rom/rom.py",
+  "tools/ship/slopes.png",
+  "utils/log.py",
+  "utils/parameters.py",
+  "utils/utils.py"
+]

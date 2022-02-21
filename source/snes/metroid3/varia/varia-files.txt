@@ -1,0 +1,21 @@
+Copy from VARIA
+===============
+varia\logic\smbool.py       | Boolean logic
+varia\rom\compression.py    | De/compression
+varia\rom\ips.py            | IPS processing
+varia\rom\leveldata.py      | Level Data
+varia\rom\rom.py            | ROM management
+varia\tools\extract_ship.py | Extraction script
+varia\tools\inject_ship.py  | Injection script
+varia\tools\ship\slopes.png | Vanilla Ship slopes
+varia\utils\log.py          | Logger
+varia\utils\parameters.py   | Parameters
+varia\utils\utils.py        | Base utils
+
+Output from inject_ship.py
+==========================
+varia\slopes.png            | Output slopes from injection tool
+
+Output from extract_ship.py
+===========================
+varia\hack.sfc.ips          | Patch file between Vanilla and Hack
