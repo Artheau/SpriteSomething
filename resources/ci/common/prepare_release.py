@@ -105,6 +105,21 @@ def prepare_release():
                       os.path.join("..", "artifact", BUILD_FILENAME),
                       os.path.join(".", BUILD_FILENAME)
                   )
+
+                  # if lib folder
+                  if os.path.exists(os.path.join(".", "artifact", "lib")):
+                      move(
+                          os.path.join("..", "artifact", "lib"),
+                          os.path.join(".", "lib")
+                      )
+                  # if .dlls
+                  for f in glob(os.path.join(".", "artifact", "*.dll")):
+                      if os.path.exists(os.path.join(".", f)):
+                          move(
+                              os.path.join("..", "artifact", f),
+                              os.path.join(".", f)
+                          )
+
                   # Make Linux/Mac binary executable
                   if "linux" in env["OS_NAME"] or \
                       "ubuntu" in env["OS_NAME"] or \

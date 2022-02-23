@@ -43,7 +43,7 @@ def prepare_binary():
               os.path.join("..", "artifact", BUILD_FILENAME)
           )
           # if lib folder
-          if (os.path.exists(os.path.join(".", "lib"))):
+          if os.path.exists(os.path.join(".", "lib")):
               move(
                   os.path.join(".", "lib"),
                   os.path.join("..", "artifact", "lib")
