@@ -266,7 +266,7 @@ jobs:
     strategy:
       matrix:
         # release only on focal
-        os-name: [ubuntu-latest]
+        os-name: [ubuntu-20.04]
         python-version: [3.8]
 
     needs: [install-prepare-release]
@@ -403,7 +403,7 @@ jobs:
     strategy:
       matrix:
         # pages on one OS
-        os-name: [ubuntu-latest]
+        os-name: [ubuntu-20.04]
 
     needs: [deploy-release]
     steps:
@@ -460,7 +460,7 @@ jobs:
     strategy:
       matrix:
         # pages on one OS
-        os-name: [ubuntu-latest]
+        os-name: [ubuntu-20.04]
 
     needs: [prepare-pages]
     steps:
