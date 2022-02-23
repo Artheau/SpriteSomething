@@ -49,8 +49,8 @@ def prepare_binary():
                   os.path.join("..", "artifact", "lib")
               )
           # if .dlls
-          for (f in glob(os.path.join(".", "*.dll"))):
-              if (os.path.exists(os.path.join(".", f))):
+          for f in glob(os.path.join(".", "*.dll")):
+              if os.path.exists(os.path.join(".", f)):
                   move(
                       os.path.join(".", f),
                       os.path.join("..", "artifact", f)
