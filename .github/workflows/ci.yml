@@ -309,7 +309,7 @@ jobs:
       - name: Download Ubuntu Archive Artifact
         uses: actions/download-artifact@v2
         with:
-          name: archive-ubuntu-latest
+          name: archive-ubuntu-20.04
           path: ${{ steps.parentDir.outputs.value }}/deploy/linux
       # download macos archive artifact
       # - name: Download MacOS Archive Artifact
