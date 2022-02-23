@@ -1,5 +1,6 @@
 import common
 import distutils.dir_util     # for copying trees
+from glob import glob
 import os                     # for env vars
 import stat                   # for file stats
 import subprocess             # do stuff at the shell level
@@ -41,6 +42,19 @@ def prepare_binary():
               os.path.join(".", BUILD_FILENAME),
               os.path.join("..", "artifact", BUILD_FILENAME)
           )
+          # if lib folder
+          if (os.path.exists(os.path.join(".", "lib"))):
+              move(
+                  os.path.join(".", "lib"),
+                  os.path.join("..", "artifact", "lib")
+              )
+          # if .dlls
+          for (f in glob(os.path.join(".", "*.dll"))):
+              if (os.path.exists(os.path.join(".", f))):
+                  move(
+                      os.path.join(".", f),
+                      os.path.join("..", "artifact", f)
+                  )
 
 
 def main():
