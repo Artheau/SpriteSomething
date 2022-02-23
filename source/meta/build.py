@@ -28,13 +28,12 @@ def run_build(PY_VERSION):
   print("Distiller args: %s" % " ".join(args))
   subprocess.check_call([DISTILLER_EXECUTABLE,*args])
 
-  if "win32" in sys.platform:
-    for f in os.listdir(os.path.join(".","build")):
-      for g in os.listdir(os.path.join(".","build",f)):
-        move(
-          os.path.join(".","build",f,g),
-          os.path.join(".")
-        )
+  for f in os.listdir(os.path.join(".","build")):
+    for g in os.listdir(os.path.join(".","build",f)):
+      move(
+        os.path.join(".","build",f,g),
+        os.path.join(".")
+      )
 
 
 if __name__ == "__main__":
