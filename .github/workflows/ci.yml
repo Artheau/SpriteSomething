@@ -153,7 +153,7 @@ jobs:
       # run build.py
       - name: Build Binary
         run: |
-          pip install pyinstaller
+          pip install cx_freeze
           python -m source.meta.build
       # prepare binary artifact for later step
       - name: Prepare Binary Artifact
