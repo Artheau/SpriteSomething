@@ -287,7 +287,15 @@ class Sprite(SpriteParent):
 
 			tournament_flag = field["race"]
 
-		if not tournament_flag:
+		iddqd = False
+		app_overrides_path = os.path.join(".","resources","user","meta","manifests","overrides.json")
+		if os.path.exists(app_overrides_path):
+			with open(app_overrides_path) as json_file:
+				data = json.load(json_file)
+				if "iddqd" in data.keys():
+					iddqd = data["iddqd"]
+
+		if not tournament_flag or iddqd:
 			#the sheet needs to be placed directly into address $108000-$10F000
 			for i,row in enumerate(itertools.chain(ascii_uppercase, ["AA","AB"])):	#over all 28 rows of the sheet
 				for column in range(8):		#over all 8 columns
