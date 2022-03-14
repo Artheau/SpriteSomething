@@ -6,9 +6,7 @@ This release of SpriteSomething includes many basic features of the main design 
 
 ### Core
 
-* Added better error messages.
-* Backend improvements.
-* Fixed sprite downloader for invalid sprite file URLs (specifically handles 403 for base Link sprite file)
+* Prelim work on some new unit tests.
 
 ## Known Issues
 
