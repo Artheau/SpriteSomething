@@ -171,8 +171,7 @@ class ExportAudit(unittest.TestCase):
                 )
                 if not os.path.exists(os.path.join(".", "failures")):
                     os.makedirs(os.path.join(".", "failures"))
-                destFile = os.path.join(".", "failures", tempFile.replace("/tmp/",""))
-                print(tempFile,destFile)
+                destFile = os.path.join(".", "failures", os.path.basename(tempFile))
                 copy(
                     tempFile,
                     destFile
