@@ -49,6 +49,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
       - name: Call Test
+        run: |
+          python --version
         # uses: ./.github/actions/test
         # with:
         #   os-name: ${{ matrix.os-name }}
