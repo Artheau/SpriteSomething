@@ -38,6 +38,8 @@ runs:
     # upload failures
     - name: Upload Failures
       if: failure()
+      run: |
+        echo "::error file=file.file,line=1,col=1,endColumn=1::Tests failed"
       uses: actions/upload-artifact@v3
       with:
         name: failures-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
