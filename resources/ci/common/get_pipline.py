@@ -12,14 +12,20 @@ env = common.prepare_env()  # get environment variables
 WIDTH = 70  # width for labels
 
 args = []
+
 PIPEXE = ""
+PIP_EXECUTABLE = ""
+
 PYTHON_EXECUTABLE = os.path.splitext(sys.executable.split(os.path.sep).pop())[0]  # get command to run python
 # get python version
 PYTHON_VERSION = sys.version.split(" ")[0]
 # get python major.minor version
 PYTHON_MINOR_VERSION = '.'.join(PYTHON_VERSION.split(".")[:2])
+
 PIP_VERSION = ""
 PIP_FLOAT_VERSION = 0
+
+SUCCESS = False
 VERSIONS = {}
 
 
@@ -63,6 +69,9 @@ def get_module_version(module):
 
 
 def python_info():
+    global args
+    global PYTHON_VERSION
+
     # get python debug info
     ret = subprocess.run([*args, "--version"], capture_output=True, text=True)
     if ret.stdout.strip():
@@ -82,7 +91,11 @@ def python_info():
 
 
 def pip_info():
+    global args
+    global PIPEXE
+    global PIP_EXECUTABLE
     global VERSIONS
+
     # get pip debug info
     ret = subprocess.run([*args, "-m", PIPEXE, "--version"],
                          capture_output=True, text=True)
@@ -124,6 +137,9 @@ def pip_info():
 
 
 def pip_upgrade():
+    global args
+    global PIPEXE
+
     # upgrade pip
     ret = subprocess.run(
         [*args, "-m", PIPEXE, "install", "--upgrade", "pip"], capture_output=True, text=True)
@@ -136,6 +152,10 @@ def pip_upgrade():
 
 
 def install_modules():
+    global args
+    global PIPEXE
+    global SUCCESS
+
     # install modules from list
     ret = subprocess.run([*args, "-m", PIPEXE, "install", "-r", os.path.join(
         ".",
@@ -205,16 +225,18 @@ def install_modules():
             else:
                 print(line.strip())
         print("")
-        with open(os.path.join(".", "resources", "user", "manifests", "settings.json"), "w") as settings:
+        with open(os.path.join(".", "resources", "user", "meta", "manifests", "settings.json"), "w") as settings:
             settings.write(json.dumps(
                 {"py": args, "pip": PIPEXE, "pipline": " ".join(args) + " -m " + PIPEXE, "versions": VERSIONS}, indent=2))
-        with open(os.path.join(".", "resources", "user", "manifests", "pipline.txt"), "w") as settings:
+        with open(os.path.join(".", "resources", "user", "meta", "manifests", "pipline.txt"), "w") as settings:
             settings.write(" ".join(args) + " -m " + PIPEXE)
-        success = True
+        SUCCESS = True
 
 
 def main():
     global args
+    global PIPEXE
+    global SUCCESS
     # print python debug info
     heading = (
         "%s-%s-%s"
@@ -234,10 +256,10 @@ def main():
 
     PIP_VERSION = ""  # holder for pip's version
 
-    success = False
+    SUCCESS = False
     # foreach py executable
     for PYEXE in ["py", "python3", "python"]:
-        if success:
+        if SUCCESS:
             continue
 
         args = []
@@ -255,11 +277,11 @@ def main():
             args = [PYEXE]
 
         try:
-            python_info()  # print python debug data
+            python_info()
 
             # foreach py executable
             for PIPEXE in ["pip3", "pip"]:
-                pip_info()        # print pip debug data
+                pip_info()
                 pip_upgrade()
                 install_modules()
 
