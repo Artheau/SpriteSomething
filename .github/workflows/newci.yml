@@ -5,7 +5,8 @@ name: New CI
 on: [ push, pull_request ]
 
 # actions
-# Artheau/SpriteSomething/.github/workflows/install.yml
+# Artheau/SpriteSomething/.github/actions/install
+# Artheau/SpriteSomething/.github/actions/test
 
 jobs:
   install-test:
@@ -42,17 +43,15 @@ jobs:
       # checkout commit
       - name: Checkout commit
         uses: actions/checkout@v3
+      # install
       - name: Call Install
         uses: ./.github/actions/install
         with:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
+      # test
       - name: Call Test
-        run: |
-          python --version
-        # uses: ./.github/actions/test
-        # with:
-        #   os-name: ${{ matrix.os-name }}
-        #   python-version: ${{ matrix.python-version }}
-        #   pillow-version: ${{ matrix.pillow-version }}
+        uses: ./.github/actions/test
+        with:
+          os-name: ${{ matrix.os-name }}
