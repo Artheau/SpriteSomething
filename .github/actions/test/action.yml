@@ -6,6 +6,7 @@ inputs:
     description: OS to run on
 
 # actions
+# actions/download-artifact@v3
 # GabrielBB/xvfb-action@v1.6
 
 runs:
@@ -14,6 +15,13 @@ runs:
     # checkout commit
     - name: Checkout commit
       uses: actions/checkout@v3
+
+    # download pipline
+    - name: Download PipLine
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        path: ./resources/user/meta/manifests
 
     # my tests
     - name: New Tests
