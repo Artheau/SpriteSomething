@@ -176,6 +176,7 @@ class ExportAudit(unittest.TestCase):
                       importExt,
                       exportExt
                     )
+                    + "\n"
                 )
 
                 RESULTS["failures"].append(
@@ -223,3 +224,4 @@ if __name__ == "__main__":
 
     if "F" in RESULTS["pf"]:
         print(''.join(RESULTS["pf"]))
+        exit(1)
