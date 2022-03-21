@@ -4,6 +4,12 @@ inputs:
   os-name:
     required: true
     description: OS to run on
+  python-version:
+    required: true
+    description: Python version to install
+  pillow-version:
+    required: true
+    description: Pillow version to install
 
 # actions
 # actions/download-artifact@v3
