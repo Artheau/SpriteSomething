@@ -12,6 +12,8 @@ jobs:
   install-test:
     name: Install/Test
     runs-on: ubuntu-latest
+    continue-on-error: True
+
     strategy:
       matrix:
         os-name: [

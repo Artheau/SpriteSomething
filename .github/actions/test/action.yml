@@ -35,6 +35,13 @@ runs:
       run: |
         python ./tests/new/test-exports.py
 
+    # print temp dir
+    - name: Print Tmp
+      if: failure()
+      shell: bash
+      run: |
+        ls /tmp/
+
   # unittest works as expected, yay
 
   # start virtual display driver & run tests

@@ -177,3 +177,5 @@ if __name__ == "__main__":
                 export.test_exports()
 
     print(''.join(RESULTS))
+    if "F" in RESULTS:
+        exit(1)
