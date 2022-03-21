@@ -5,6 +5,9 @@ inputs:
     required: true
     description: OS to run on
 
+# actions
+# GabrielBB/xvfb-action@v1.6
+
 runs:
   using: "composite"
   steps:
@@ -26,8 +29,7 @@ runs:
       python -m ./tests/new/custom-tests.py
     if: contains(inputs.os-name, 'windows') != true
   - name: Start virtual display driver & Test (Windows)
-    shell: bash
-    uses: GabrielBB/xvfb-action@v1.4
+    uses: GabrielBB/xvfb-action@v1.6
     with:
       # run: python -m unittest
       run: python -m ./tests/new/custom-tests.py
