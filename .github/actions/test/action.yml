@@ -15,6 +15,12 @@ runs:
   - name: Checkout commit
     uses: actions/checkout@v3
 
+  # my tests
+  # - name: New Tests
+  #   shell: bash
+  #   run: |
+  #     python ./tests/new/custom-tests.py
+
   # start virtual display driver & run tests
   - name: Start virtual display driver & Test (!Windows)
     shell: bash
@@ -26,11 +32,10 @@ runs:
       geom=640x480x24
       exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
       export DISPLAY=:99
-      python -m ./tests/new/custom-tests.py
+      python -m unittest
     if: contains(inputs.os-name, 'windows') != true
   - name: Start virtual display driver & Test (Windows)
     uses: GabrielBB/xvfb-action@v1.6
     with:
-      # run: python -m unittest
-      run: python -m ./tests/new/custom-tests.py
+      run: python -m unittest
     if: contains(inputs.os-name, 'windows')
