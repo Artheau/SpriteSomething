@@ -40,7 +40,7 @@ runs:
       if: failure()
       shell: bash
       run: |
-        echo ::error ::`cat ./failures/errors.txt`
+        echo ::error ::"`cat ./failures/errors.txt`"
 
     # upload failures
     - name: Upload Failures

@@ -171,7 +171,7 @@ class ExportAudit(unittest.TestCase):
                     os.makedirs(os.path.join(".", "failures"))
 
                 with open(os.path.join(".","failures","errors.txt"), "a") as errorFile:
-                  errorFile.write(
+                  err = (
                     "%s/%s/%s/%s-%s"
                     %
                     (
@@ -183,6 +183,7 @@ class ExportAudit(unittest.TestCase):
                     )
                     + "\n"
                   )
+                  errorFile.write(err)
 
                 RESULTS["failures"].append(
                     {
