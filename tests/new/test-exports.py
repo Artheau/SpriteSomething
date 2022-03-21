@@ -32,7 +32,9 @@ except ModuleNotFoundError as e:
         print(e)
 
 
-def get_module_version(module):
+def get_module_version(module, mode):
+    if mode == None:
+        mode = "latest"
     # pip index versions [module]                             // >= 21.2
     # pip install [module]==                                  // >= 21.1
     # pip install --use-deprecated=legacy-resolver [module]== // >= 20.3
@@ -53,30 +55,32 @@ def get_module_version(module):
 
     ret = ""
     ver = ""
+    if mode == "latest":
+        if float(PIP_FLOAT_VERSION) >= 21.2:
+            ret = subprocess.run([*args, "-m", PIPEXE, "index", "versions", module], capture_output=True, text=True)
+            lines = ret.stdout.strip().split("\n")
+            lines = lines[2::]
+            vers = (list(map(lambda x: x.split(' ')[-1], lines)))
+            if len(vers) > 1:
+                ver = vers[1]
+        elif float(PIP_FLOAT_VERSION) >= 21.1:
+            ret = subprocess.run(
+                [*args, "-m", PIPEXE, "install", f"{module}=="], capture_output=True, text=True)
+        elif float(PIP_FLOAT_VERSION) >= 20.3:
+            ret = subprocess.run([*args, "-m", PIPEXE, "install", "--use-deprecated=legacy-resolver", f"{module}=="], capture_output=True, text=True)
+        elif float(PIP_FLOAT_VERSION) >= 9.0:
+            ret = subprocess.run(
+                [*args, "-m", PIPEXE, "install", f"{module}=="], capture_output=True, text=True)
+        elif float(PIP_FLOAT_VERSION) < 9.0:
+            ret = subprocess.run([*args, "-m", PIPEXE, "install", f"{module}==blork"], capture_output=True, text=True)
 
-    if float(PIP_FLOAT_VERSION) >= 21.2:
-        ret = subprocess.run([*args, "-m", PIPEXE, "index",
-                             "versions", module], capture_output=True, text=True)
-        lines = ret.stdout.strip().split("\n")
-        lines = lines[2::]
-        vers = (list(map(lambda x: x.split(' ')[-1], lines)))
-        if len(vers) > 1:
-            ver = vers[1]
-    elif float(PIP_FLOAT_VERSION) >= 21.1:
-        ret = subprocess.run(
-            [*args, "-m", PIPEXE, "install", f"{module}=="], capture_output=True, text=True)
-    elif float(PIP_FLOAT_VERSION) >= 20.3:
-        ret = subprocess.run([*args, "-m", PIPEXE, "install", "--use-deprecated=legacy-resolver",
-                             f"{module}=="], capture_output=True, text=True)
-    elif float(PIP_FLOAT_VERSION) >= 9.0:
-        ret = subprocess.run(
-            [*args, "-m", PIPEXE, "install", f"{module}=="], capture_output=True, text=True)
-    elif float(PIP_FLOAT_VERSION) < 9.0:
-        ret = subprocess.run([*args, "-m", PIPEXE, "install",
-                             f"{module}==blork"], capture_output=True, text=True)
+        # if ver == "" and ret.stderr.strip():
+        #     ver = (ret.stderr.strip().split("\n")[0].split(",")[-1].replace(')', '')).strip()
 
-    # if ver == "" and ret.stderr.strip():
-    #     ver = (ret.stderr.strip().split("\n")[0].split(",")[-1].replace(')', '')).strip()
+    elif mode == "installed":
+        summary = subprocess.run([*args, "-m", PIPEXE, "show", f"{module}" ], capture_output=True, text=True)
+        summary = summary.stdout.strip().split("\n")
+        ver = summary[1].split(":")[1].strip()
 
     return ver
 
@@ -181,7 +185,15 @@ class ExportAudit(unittest.TestCase):
 
 if __name__ == "__main__":
     module = "pillow"
-    print("%s\t%s" % (module, get_module_version("pillow")))
+    print(
+        "%s\t%s\t%s"
+        %
+        (
+            module,
+            get_module_version("pillow", "installed"),
+            get_module_version("pillow", "latest")
+        )
+    )
     if VERBOSE:
         print('.' * 70)
 
