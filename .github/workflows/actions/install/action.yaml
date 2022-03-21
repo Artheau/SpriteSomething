@@ -1,0 +1,35 @@
+name: Install
+description: Install app
+inputs:
+  os-name:
+    required: true
+    description: OS to run on
+  python-version:
+    required: true
+    description: Python version to install
+  pillow-version:
+    required: true
+    description: Pillow version to install
+
+runs:
+  using: "composite"
+  steps:
+  # checkout commit
+  - name: Checkout commit
+    uses: actions/checkout@v3
+  # install python
+  - name: Install Python
+    uses: actions/setup-python@v3
+    with:
+      python-version: ${{ inputs.python-version }}
+  # install dependencies via pip
+  - name: Install Dependencies via pip
+    shell: bash
+    env:
+      OS_NAME: ${{ inputs.os-name }}
+    run: |
+      python ./resources/ci/common/install.py
+  - name: Install Pillow
+    shell: bash
+    run: |
+      python -m pip install pillow==${{ inputs.pillow-version }}

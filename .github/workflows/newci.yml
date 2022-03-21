@@ -10,15 +10,13 @@ on: [ push, pull_request ]
 jobs:
   install-test:
     name: Install/Test
-    runs-on: ${{ matrix.os-name }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         os-name: [ ubuntu-latest ]
-        python-version: [ 3.8 ]
-        pillow-version: [ "6.2.2" ]
     steps:
       - name: Call Install
-        uses: Artheau/SpriteSomething/.github/workflows/install.yml@${GITHUB_REF##*/}
+        uses: ./.github/actions/install
         with:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
