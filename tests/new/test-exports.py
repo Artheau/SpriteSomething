@@ -172,21 +172,26 @@ class ExportAudit(unittest.TestCase):
                   (
                     '"::error ::%s/%s/%s/%s-%s"'
                     %
-                    self.platID,
-                    self.gameID,
-                    self.spriteID,
-                    importExt,
-                    exportExt
+                    (
+                      self.platID,
+                      self.gameID,
+                      self.spriteID,
+                      importExt,
+                      exportExt
+                    )
                   )
                 ])
+
                 RESULTS["failures"].append(
                     {
                         "input": spriteData["paths"]["resource"]["sheetexts"][filext],
                         "output": tempFile
                     }
                 )
+
                 if not os.path.exists(os.path.join(".", "failures")):
                     os.makedirs(os.path.join(".", "failures"))
+
                 destFile = os.path.join(".", "failures", os.path.basename(tempFile))
                 copy(
                     tempFile,
