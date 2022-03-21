@@ -57,8 +57,6 @@ def prepare_env():
 
   # ci data
   env["CI_SYSTEM"] = os.getenv("CI_SYSTEM","")
-  # py data
-  (env["PYTHON_EXE_PATH"],env["PY_EXE_PATH"],env["PIP_EXE_PATH"]) = get_py_path()
   # git data
   env["BRANCH"] = os.getenv("TRAVIS_BRANCH","")
   env["GITHUB_ACTOR"] = os.getenv("GITHUB_ACTOR",CI_SETTINGS["common"]["common"]["actor"])
