@@ -18,8 +18,8 @@ VERBOSE = True
 
 global RESULTS
 RESULTS = {
-  "pf": [],
-  "failures": []
+    "pf": [],
+    "failures": []
 }
 
 try:
@@ -164,12 +164,14 @@ class ExportAudit(unittest.TestCase):
 
             if not match:
                 RESULTS["failures"].append(
-                  {
-                    "input": spriteData["paths"]["resource"]["sheetexts"][filext],
-                    "output": tempFile
-                  }
+                    {
+                        "input": spriteData["paths"]["resource"]["sheetexts"][filext],
+                        "output": tempFile
+                    }
                 )
-                copy(tempFile, os.path.join(".","failures"))
+                if not os.path.exists(os.path.join(".", "failures")):
+                    os.makedirs(os.path.join(".", "failures"))
+                copy(tempFile, os.path.join(".", "failures", tempFile))
             RESULTS["pf"].append('.' if match else "F")
 
 
