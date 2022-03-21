@@ -167,7 +167,9 @@ class ExportAudit(unittest.TestCase):
                 ))
 
             if not match:
-                sys.stderr.write('"::set-output name=::error ::%s/%s/%s/%s-%s"'
+                with open(".","resources","user","meta","manifests","error.txt", "w+") as errorFile:
+                  errorFile.write(
+                    "%s/%s/%s/%s-%s"
                     %
                     (
                       self.platID,
@@ -177,7 +179,7 @@ class ExportAudit(unittest.TestCase):
                       exportExt
                     )
                     + "\n"
-                )
+                  )
 
                 RESULTS["failures"].append(
                     {
