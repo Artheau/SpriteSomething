@@ -18,14 +18,14 @@ jobs:
       matrix:
         os-name: [
             ubuntu-latest,
-            ubuntu-18.04,
-            macOS-latest,
-            windows-latest
+            # ubuntu-18.04,
+            # macOS-latest,
+            # windows-latest
           ]
         python-version: [
             3.8,
             # 3.9,
-            "3.10",
+            # "3.10",
           ]
         pillow-version: [
             "6.2.2",

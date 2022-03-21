@@ -40,7 +40,7 @@ runs:
       if: failure()
       shell: bash
       run: |
-        echo "::error file=file.file,line=1,col=1,endColumn=1::Tests failed"
+        echo "::error ::Tests failed"
 
     # upload failures
     - name: Upload Failures
