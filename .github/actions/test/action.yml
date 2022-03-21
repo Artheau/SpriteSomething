@@ -26,7 +26,7 @@ runs:
     - name: Download PipLine
       uses: actions/download-artifact@v3
       with:
-        name: ${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
 
     # my tests
@@ -35,12 +35,14 @@ runs:
       run: |
         python ./tests/new/test-exports.py
 
-    # print temp dir
-    - name: Print Tmp
+    # upload failures
+    - name: Upload Failures
       if: failure()
-      shell: bash
-      run: |
-        ls /tmp/
+      uses: actions/upload-artifact@v3
+      with:
+        name: failures-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        path: ./failures
+
 
   # unittest works as expected, yay
 

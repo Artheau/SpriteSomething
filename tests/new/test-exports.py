@@ -1,4 +1,7 @@
 from common import DATA  # get pathdata
+
+from shutil import copy
+
 import importlib        # dynamic sprite imports
 import unittest         # tests
 import json             # parsing JSON objects
@@ -14,7 +17,10 @@ VERBOSE = True
 # VERBOSE = False
 
 global RESULTS
-RESULTS = []
+RESULTS = {
+  "pf": [],
+  "failures": []
+}
 
 try:
     from PIL import ImageChops
@@ -156,7 +162,15 @@ class ExportAudit(unittest.TestCase):
                     "" if match else ("\t" + tempFile)
                 ))
 
-            RESULTS.append('.' if match else "F")
+            if not match:
+                RESULTS["failures"].append(
+                  {
+                    "input": spriteData["paths"]["resource"]["sheetexts"][filext],
+                    "output": tempFile
+                  }
+                )
+                copy(tempFile, os.path.join(".","failures"))
+            RESULTS["pf"].append('.' if match else "F")
 
 
 if __name__ == "__main__":
@@ -176,6 +190,6 @@ if __name__ == "__main__":
                 export = ExportAudit(platID, gameID, spriteID)
                 export.test_exports()
 
-    if "F" in RESULTS:
-        print(''.join(RESULTS))
+    if "F" in RESULTS["pf"]:
+        print(''.join(RESULTS["pf"]))
         exit(1)

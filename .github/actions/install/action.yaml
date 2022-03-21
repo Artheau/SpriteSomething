@@ -43,7 +43,7 @@ runs:
     - name: Upload PipLine
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
     # install pillow
     - name: Install Pillow
