@@ -170,7 +170,7 @@ class ExportAudit(unittest.TestCase):
                 if not os.path.exists(os.path.join(".", "failures")):
                     os.makedirs(os.path.join(".", "failures"))
 
-                with open(".","failures","error.txt", "w+") as errorFile:
+                with open(os.path.join(".","failures","error.txt"), "a") as errorFile:
                   errorFile.write(
                     "%s/%s/%s/%s-%s"
                     %
