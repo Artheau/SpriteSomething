@@ -14,22 +14,28 @@ inputs:
 runs:
   using: "composite"
   steps:
-  # checkout commit
-  - name: Checkout commit
-    uses: actions/checkout@v3
-  # install python
-  - name: Install Python
-    uses: actions/setup-python@v3
-    with:
-      python-version: ${{ inputs.python-version }}
-  # install modules via pip
-  - name: Install Modules
-    shell: bash
-    env:
-      OS_NAME: ${{ inputs.os-name }}
-    run: |
-      python ./resources/ci/common/get_pipline.py
-  - name: Install Pillow
-    shell: bash
-    run: |
-      python -m pip install pillow==${{ inputs.pillow-version }}
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v3
+    # install python
+    - name: Install Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ inputs.python-version }}
+    # install modules via pip
+    - name: Install Modules
+      shell: bash
+      env:
+        OS_NAME: ${{ inputs.os-name }}
+      run: |
+        python ./resources/ci/common/get_pipline.py
+    # print pipline
+    - name: PipLine
+      shell: bash
+      run: |
+        cat ./resources/user/manifests/pipline.txt
+    # install pillow
+    - name: Install Pillow
+      shell: bash
+      run: |
+        python -m pip install pillow==${{ inputs.pillow-version }}

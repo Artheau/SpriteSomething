@@ -224,9 +224,6 @@ class ExportAudit(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    PYTHON_PATH = env["PYTHON_EXE_PATH"]  # path to python
-    PIP_PATH = env["PIP_EXE_PATH"]        # path to pip
-
     # figure out pip executable
     PIP_EXECUTABLE = "pip" if "windows" in env["OS_NAME"] else "pip3"
     PIP_EXECUTABLE = "pip" if "osx" in env["OS_NAME"] and "actions" in env["CI_SYSTEM"] else PIP_EXECUTABLE
