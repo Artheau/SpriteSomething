@@ -167,7 +167,7 @@ class ExportAudit(unittest.TestCase):
                 ))
 
             if not match:
-                sys.stderr.write('"::error ::%s/%s/%s/%s-%s"'
+                sys.stderr.write('"::set-output name=::error ::%s/%s/%s/%s-%s"'
                     %
                     (
                       self.platID,
