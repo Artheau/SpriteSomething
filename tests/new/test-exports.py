@@ -1,4 +1,4 @@
-from common import DATA # get pathdata
+from common import DATA  # get pathdata
 import importlib        # dynamic sprite imports
 import unittest         # tests
 import json             # parsing JSON objects
@@ -10,7 +10,11 @@ import tempfile         # temp for objects
 import traceback
 
 global VERBOSE
-VERBOSE = False
+VERBOSE = True
+# VERBOSE = False
+
+global RESULTS
+RESULTS = []
 
 try:
     from PIL import ImageChops
@@ -20,6 +24,7 @@ except ModuleNotFoundError as e:
         from Pillow import ImageChops
     except ModuleNotFoundError as e:
         print(e)
+
 
 def get_module_version(module):
     # pip index versions [module]                             // >= 21.2
@@ -32,13 +37,13 @@ def get_module_version(module):
     PIP_FLOAT_VERSION = ""
 
     if args == "" or \
-      PIPEXE == "" or \
-      PIP_FLOAT_VERSION == "":
-      with open(os.path.join(".","resources","user","meta","manifests","settings.json"),"r") as settingsFile:
-        settings = json.load(settingsFile)
-        args = settings["py"]
-        PIPEXE = settings["pip"]
-        PIP_FLOAT_VERSION = settings["versions"]["pip"]["version"][1]
+            PIPEXE == "" or \
+            PIP_FLOAT_VERSION == "":
+        with open(os.path.join(".", "resources", "user", "meta", "manifests", "settings.json"), "r") as settingsFile:
+            settings = json.load(settingsFile)
+            args = settings["py"]
+            PIPEXE = settings["pip"]
+            PIP_FLOAT_VERSION = settings["versions"]["pip"]["version"][1]
 
     ret = ""
     ver = ""
@@ -69,6 +74,7 @@ def get_module_version(module):
 
     return ver
 
+
 class ExportAudit(unittest.TestCase):
     def __init__(self, platID, gameID, spriteID):
         self.platID = platID or "snes"
@@ -82,7 +88,7 @@ class ExportAudit(unittest.TestCase):
         if VERBOSE:
             heading = ("%s/%s/%s" % (self.platID, self.gameID, self.spriteID))
             print(heading)
-            print("-" * len(heading))
+            print("-" * 70)
         for filext in DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]["paths"]["resource"]["sheetexts"].keys():
             self.test_export(filext)
         if VERBOSE:
@@ -141,7 +147,7 @@ class ExportAudit(unittest.TestCase):
                 file["export"][exportExt]
             )
 
-            if VERBOSE or not match:
+            if VERBOSE:
                 print("%s -> %s : %s do%s match%s" % (
                     importExt.ljust(4),
                     exportExt.ljust(4),
@@ -149,20 +155,25 @@ class ExportAudit(unittest.TestCase):
                     "" if match else "n't",
                     "" if match else ("\t" + tempFile)
                 ))
-                if not VERBOSE and not match:
-                    exit(1)
+            else:
+                RESULTS.append('.' if match else "F")
 
 
 if __name__ == "__main__":
     module = "pillow"
     print("%s\t%s" % (module, get_module_version("pillow")))
-    print('.' * 70)
+    if VERBOSE:
+        print('.' * 70)
 
     for [platID, plat] in DATA.items():
         for [gameID, game] in plat["games"].items():
             for [spriteID, sprite] in game["sprites"].items():
                 libref = f"source.{platID}.{gameID}.{spriteID}.sprite"
-                DATA[platID]["games"][gameID]["sprites"][spriteID]["lib"] = importlib.import_module(
-                    libref)
+                DATA[platID]["games"][gameID]["sprites"][spriteID]["lib"] = importlib.import_module(libref)
+                if VERBOSE:
+                    print("EXPORTS")
+                    print("=" * 70)
                 export = ExportAudit(platID, gameID, spriteID)
                 export.test_exports()
+
+    print(''.join(RESULTS))

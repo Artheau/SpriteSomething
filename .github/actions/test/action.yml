@@ -30,10 +30,10 @@ runs:
         path: ./resources/user/meta/manifests
 
     # my tests
-    - name: New Tests
+    - name: New Export Tests
       shell: bash
       run: |
-        python ./tests/new/custom-tests.py
+        python ./tests/new/test-exports.py
 
   # unittest works as expected, yay
 
