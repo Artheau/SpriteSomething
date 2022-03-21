@@ -171,7 +171,12 @@ class ExportAudit(unittest.TestCase):
                 )
                 if not os.path.exists(os.path.join(".", "failures")):
                     os.makedirs(os.path.join(".", "failures"))
-                copy(tempFile, os.path.join(".", "failures", tempFile))
+                destFile = os.path.join(".", "failures", tempFile.replace("/tmp/",""))
+                print(tempFile,destFile)
+                copy(
+                    tempFile,
+                    destFile
+                )
             RESULTS["pf"].append('.' if match else "F")
 
 
