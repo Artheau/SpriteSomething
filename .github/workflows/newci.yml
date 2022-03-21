@@ -4,6 +4,9 @@ name: New CI
 # fire on
 on: [ push, pull_request ]
 
+# actions
+# Artheau/SpriteSomething/.github/workflows/install.yml
+
 jobs:
   install-test:
     name: Install/Test
@@ -15,7 +18,7 @@ jobs:
         pillow-version: [ "6.2.2" ]
     steps:
       - name: Call Install
-        uses: artheau/SpriteSomething/.github/workflows/install.yml
+        uses: Artheau/SpriteSomething/.github/workflows/install.yml@${GITHUB_REF##*/}
         with:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
