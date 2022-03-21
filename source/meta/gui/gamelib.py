@@ -85,6 +85,12 @@ def autodetect(sprite_filename):
   #If it's not a known filetype but a PNG, cycle through and find one that matches
 	elif file_extension.lower() == ".png":
 		game, sprite, animation_assist = autodetect_png(sprite_filename)
+	# # FIXME: For now, RDCs are M3Samus sprites and we're assuming SNES
+	# elif file_extension.lower() == ".rdc":
+	# 	with open(sprite_filename,"rb") as file:
+	# 		rdc_data = bytearray(file.read())
+	# 	game = get_game_class_of_type("snes",get_game_type_from_rdc_data(rdc_data))
+	# 	(sprite, animation_assist) = game.make_sprite_by_number(get_sprite_number_from_rdc_data(rdc_data),sprite_filename)
   # FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
 	elif file_extension.lower() == ".zspr":
 		with open(sprite_filename,"rb") as file:
@@ -124,6 +130,10 @@ def autodetect_game_type_from_rom(rom):
 		#print(f"Could not identify the type of ROM from its header name: {rom_name}")
 
 	return game_names
+
+def get_game_type_from_rdc_data(rdc_data):
+	#for now, until other types of RDC files exist, we will just assume that all RDC files are Metroid3 Samus files
+	return "metroid3"
 
 def get_game_type_from_zspr_data(zspr_data):
 	#for now, until other types of ZSPR files exist, we will just assume that all ZSPR files are Zelda3 Link files
