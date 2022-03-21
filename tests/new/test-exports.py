@@ -167,10 +167,7 @@ class ExportAudit(unittest.TestCase):
                 ))
 
             if not match:
-                subprocess.run([
-                  "echo",
-                  (
-                    '"::error ::%s/%s/%s/%s-%s"'
+                sys.stderr.write('"::error ::%s/%s/%s/%s-%s"'
                     %
                     (
                       self.platID,
@@ -179,8 +176,7 @@ class ExportAudit(unittest.TestCase):
                       importExt,
                       exportExt
                     )
-                  )
-                ])
+                )
 
                 RESULTS["failures"].append(
                     {
