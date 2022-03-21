@@ -167,7 +167,10 @@ class ExportAudit(unittest.TestCase):
                 ))
 
             if not match:
-                with open(".","resources","user","meta","manifests","error.txt", "w+") as errorFile:
+                if not os.path.exists(os.path.join(".", "failures")):
+                    os.makedirs(os.path.join(".", "failures"))
+
+                with open(".","failures","error.txt", "w+") as errorFile:
                   errorFile.write(
                     "%s/%s/%s/%s-%s"
                     %
@@ -187,9 +190,6 @@ class ExportAudit(unittest.TestCase):
                         "output": tempFile
                     }
                 )
-
-                if not os.path.exists(os.path.join(".", "failures")):
-                    os.makedirs(os.path.join(".", "failures"))
 
                 destFile = os.path.join(".", "failures", os.path.basename(tempFile))
                 copy(
