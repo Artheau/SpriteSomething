@@ -2,7 +2,7 @@ import json
 import os   # for env vars
 import stat # file statistics
 import sys  # default system info
-from .my_path import get_py_path
+from my_path import get_py_path
 
 CI_SETTINGS = {}
 manifest_path = os.path.join("resources","app","meta","manifests","ci.json")

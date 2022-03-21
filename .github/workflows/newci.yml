@@ -1,0 +1,22 @@
+# workflow name
+name: New CI
+
+# fire on
+on: [ push, pull_request ]
+
+jobs:
+  install-test:
+    name: Install/Test
+    runs-on: ${{ matrix.os-name }}
+    strategy:
+      matrix:
+        os-name: [ ubuntu-latest ]
+        python-version: [ 3.8 ]
+        pillow-version: [ "6.2.2" ]
+    steps:
+      - name: Call Install
+        uses: artheau/SpriteSomething/.github/workflows/install.yml
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
