@@ -155,8 +155,8 @@ class ExportAudit(unittest.TestCase):
                     "" if match else "n't",
                     "" if match else ("\t" + tempFile)
                 ))
-            else:
-                RESULTS.append('.' if match else "F")
+
+            RESULTS.append('.' if match else "F")
 
 
 if __name__ == "__main__":
@@ -176,6 +176,6 @@ if __name__ == "__main__":
                 export = ExportAudit(platID, gameID, spriteID)
                 export.test_exports()
 
-    print(''.join(RESULTS))
     if "F" in RESULTS:
+        print(''.join(RESULTS))
         exit(1)
