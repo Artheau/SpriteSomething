@@ -35,13 +35,6 @@ runs:
       run: |
         python ./tests/new/test-exports.py
 
-    # print failures
-    - name: Print Failures
-      if: failure()
-      shell: bash
-      run: |
-        echo "::error ::Tests failed"
-
     # upload failures
     - name: Upload Failures
       if: failure()

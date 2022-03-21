@@ -167,6 +167,18 @@ class ExportAudit(unittest.TestCase):
                 ))
 
             if not match:
+                subprocess.run([
+                  "echo",
+                  (
+                    '"::error ::%s/%s/%s/%s-%s"'
+                    %
+                    self.platID,
+                    self.gameID,
+                    self.spriteID,
+                    importExt,
+                    exportExt
+                  )
+                ])
                 RESULTS["failures"].append(
                     {
                         "input": spriteData["paths"]["resource"]["sheetexts"][filext],
@@ -210,4 +222,3 @@ if __name__ == "__main__":
 
     if "F" in RESULTS["pf"]:
         print(''.join(RESULTS["pf"]))
-        exit(1)
