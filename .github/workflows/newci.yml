@@ -57,6 +57,49 @@ jobs:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
+
+  install-build:
+    name: Install/Build
+    runs-on: ubuntu-latest
+    needs: [ install-test ]
+    continue-on-error: True
+
+    strategy:
+      matrix:
+        os-name: [
+            ubuntu-latest,
+            ubuntu-18.04,
+            macOS-latest,
+            windows-latest
+          ]
+        python-version: [
+            3.8,
+            3.9,
+            "3.10",
+          ]
+        pillow-version: [
+            "6.2.2",
+            # "7.0.0",
+            # "7.1.2",
+            # "7.2.0",
+            # "8.0.1",
+            # "8.1.2",
+            # "8.2.0",
+            # "8.3.2",
+            # "8.4.0",
+            # "9.0.1",
+          ]
+    steps:
+      # checkout commit
+      - name: Checkout commit
+        uses: actions/checkout@v3
+      # install
+      - name: Call Install
+        uses: ./.github/actions/install
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
       # build
       - name: Call Build
         uses: ./.github/actions/build
