@@ -57,3 +57,10 @@ jobs:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
+      # build
+      - name: Call Build
+        uses: ./.github/actions/build
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
