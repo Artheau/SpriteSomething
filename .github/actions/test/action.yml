@@ -40,10 +40,7 @@ runs:
       if: failure()
       shell: bash
       run: |
-        cat ./failures/errors.txt | while read line || [[ -n $line ]];
-        do
-          echo ::error ::$line
-        done
+        echo "::error ::$(cat ./failures/errors.txt)"
 
     # upload failures
     - name: Upload Failures
