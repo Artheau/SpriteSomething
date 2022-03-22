@@ -42,6 +42,8 @@ runs:
       run: |
         ERR_STRING="$(cat ./failures/errors.txt)"
         ERR_STRING="${ERR_STRING//'%'/'%25'}"
+        ERR_STRING="${ERR_STRING//$'\n'/'%A0%7C%A0'}"
+        ERR_STRING="${ERR_STRING//$'\r'/'%A0%7C%A0'}"
         ERR_STRING="${ERR_STRING//$'\n'/'%0A'}"
         ERR_STRING="${ERR_STRING//$'\r'/'%0D'}"
         echo "::error ::$ERR_STRING"
