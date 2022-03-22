@@ -40,7 +40,11 @@ runs:
       if: failure()
       shell: bash
       run: |
-        echo "::error ::$(cat ./failures/errors.txt)"
+        ERR_STRING=$(cat ./failures/errors.txt)
+        ERR_STRING="${ERR_STRING//'%'/'%25'}"
+        ERR_STRING="${ERR_STRING//$'\n'/'%0A'}"
+        ERR_STRING="${ERR_STRING//$'\r'/'%0D'}"
+        echo "::error ::$ERR_STRING"
 
     # upload failures
     - name: Upload Failures
