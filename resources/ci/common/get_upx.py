@@ -132,7 +132,7 @@ def get_upx():
                     [
                         "ls",
                         "-d",
-                        "upx*"
+                        '"upx*"'
                     ]
                 )
                 print(ret.decode("utf-8"))
@@ -145,7 +145,7 @@ def get_upx():
                     [
                         "ls",
                         "-d",
-                        "upx*"
+                        '"upx*"'
                     ]
                 )
                 print(ret.decode("utf-8"))
@@ -158,7 +158,7 @@ def get_upx():
                     [
                         "ls",
                         "-d",
-                        "upx*"
+                        '"upx*"'
                     ]
                 )
                 print(ret.decode("utf-8"))
