@@ -13,24 +13,20 @@ def prepare_binary():
     if not os.path.isdir(os.path.join("..", "artifact")):
         os.mkdir(os.path.join("..", "artifact"))
 
-    BUILD_FILENAME = ""
+    BUILD_FILENAME = []
 
     # list executables
     BUILD_FILENAME = common.find_binary('.')
-    if BUILD_FILENAME == "":
+    if len(BUILD_FILENAME) == 0:
         distdir = ""
         if "linux" in env["OS_NAME"] or "ubuntu" in env["OS_NAME"]:
             distdir = os.path.join(".", "dist", "linux")
         elif "windows" in env["OS_NAME"]:
             distdir = os.path.join(".", "dist", "windows")
-        print(os.listdir(distdir))
         if distdir != "":
             BUILD_FILENAME = common.find_binary(distdir)
-    if BUILD_FILENAME == "":
+    if len(BUILD_FILENAME) == 0:
         BUILD_FILENAME = common.find_binary(os.path.join("..", "artifact"))
-
-    if isinstance(BUILD_FILENAME, str):
-        BUILD_FILENAME = list(BUILD_FILENAME)
 
     BUILD_FILENAMES = BUILD_FILENAME
 
@@ -49,7 +45,7 @@ def prepare_binary():
         if not BUILD_FILENAME == "":
             move(
                 os.path.join(".", BUILD_FILENAME),
-                os.path.join("..", "artifact", BUILD_FILENAME)
+                os.path.join("..", "artifact", os.path.basename(BUILD_FILENAME))
             )
 
 

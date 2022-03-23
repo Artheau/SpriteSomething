@@ -156,15 +156,16 @@ def find_binary(listdir):
   BUILD_FILENAMES = []
   executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH
   for filename in os.listdir(listdir):
-    if os.path.isfile(filename):
+    filepath = os.path.join(listdir,filename)
+    if os.path.isfile(filepath):
       if os.path.splitext(filename)[1] != ".py":
-        st = os.stat(filename)
+        st = os.stat(filepath)
         mode = st.st_mode
         big = st.st_size > FILESIZE_CHECK
         if (mode & executable) or big:
           for check in FILENAME_CHECKS:
             if check in filename:
-              BUILD_FILENAMES.append(filename)
+              BUILD_FILENAMES.append(filepath)
   return BUILD_FILENAMES
 
 
