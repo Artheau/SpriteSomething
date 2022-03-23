@@ -1,7 +1,9 @@
 import common
 import json
 import os               # for env vars
+import platform
 import subprocess
+import ssl
 import sys              # for path
 import urllib.request   # for downloads
 from shutil import unpack_archive
@@ -28,11 +30,25 @@ def get_upx():
         UPX_SLUG = ""
         UPX_FILE = ""
 
+        print(
+          "%s\n" * 5
+          %
+          (
+            platform.architecture(),
+            sys.maxsize <= 2**32 and "x86" or "x64",
+            platform.machine(),
+            platform.platform(),
+            platform.processor()
+          )
+        )
+
         if "windows" in env["OS_NAME"]:
-            UPX_SLUG = "upx-" + UPX_VERSION + "-win64"
+            arch = sys.maxsize <= 2**32 and "32" or "64"
+            UPX_SLUG = "upx-" + UPX_VERSION + f"-win{arch}"
             UPX_FILE = UPX_SLUG + ".zip"
         else:
-            UPX_SLUG = "upx-" + UPX_VERSION + "-amd64_linux"
+            arch = platform.machine().lower()
+            UPX_SLUG = "upx-" + UPX_VERSION + f"-{arch}_linux"
             UPX_FILE = UPX_SLUG + ".tar.xz"
 
         UPX_URL = "https://github.com/upx/upx/releases/download/v" + \
@@ -41,17 +57,21 @@ def get_upx():
         if "osx" not in env["OS_NAME"]:
             print(f"Getting UPX: {UPX_FILE}")
             with open(os.path.join(".", UPX_FILE), "wb") as upx:
-                UPX_REQ = urllib.request.Request(
-                    UPX_URL,
-                    data=None
-                )
-                UPX_REQ = urllib.request.urlopen(UPX_REQ)
-                UPX_DATA = UPX_REQ.read()
-                upx.write(UPX_DATA)
+                print(f"Hitting URL: {UPX_URL}")
+                try:
+                    context = ssl._create_unverified_context()
+                    UPX_REQ = urllib.request.urlopen(
+                      UPX_URL,
+                      context=context
+                    )
+                    UPX_DATA = UPX_REQ.read()
+                    upx.write(UPX_DATA)
+                except urllib.error.HTTPError as e:
+                    print(f"UPX HTTP Code: {e.code}")
 
             if VERBOSE:
                 print("")
-                print("Unpack UPX")
+                print("Unpacking UPX")
             unpack_archive(UPX_FILE, os.path.join("."))
             if VERBOSE:
                 subprocess.run(
@@ -64,7 +84,7 @@ def get_upx():
                 print("")
 
             if VERBOSE:
-                print("Move UPX")
+                print("Moving UPX")
             os.rename(os.path.join(".", UPX_SLUG), os.path.join(".", "upx"))
             if VERBOSE:
                 subprocess.run(
@@ -77,7 +97,7 @@ def get_upx():
                 print("")
 
             if VERBOSE:
-                print("Delete UPX Archive")
+                print("Deleting UPX Archive")
             os.remove(os.path.join(".", UPX_FILE))
             if VERBOSE:
                 subprocess.run(
