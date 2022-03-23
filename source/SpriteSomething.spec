@@ -34,7 +34,7 @@ def recurse_for_py_files(names_so_far):
 
 
 hiddenimports = recurse_for_py_files(["source"])
-# hiddenimports.append("pkg_resources.py2_warn")
+hiddenimports.append("pkg_resources.py2_warn")
 
 a = Analysis(
     [f"../{BINARY_SLUG}.py"],
