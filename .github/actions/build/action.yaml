@@ -74,7 +74,7 @@ runs:
       with:
         path: .
         spec: ./source/SpriteSomething.spec
-      if: contains(inputs.os-name, 'linux') or contains(inputs.os-name, 'ubuntu')
+      if: contains(inputs.os-name, 'linux') || contains(inputs.os-name, 'ubuntu')
 
     - name: Build Binary (Windows)
       uses: JackMcKew/pyinstaller-action-windows@0.1.2
