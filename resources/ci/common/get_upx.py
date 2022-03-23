@@ -8,8 +8,6 @@ import sys              # for path
 import urllib.request   # for downloads
 from shutil import unpack_archive
 
-# only do stuff if we don't have a UPX folder
-
 
 def get_upx():
     VERBOSE = True
@@ -19,6 +17,8 @@ def get_upx():
         raise AssertionError("Manifest not found: " + manifest_path)
     with(open(manifest_path)) as ci_settings_file:
         CI_SETTINGS = json.load(ci_settings_file)
+
+    env = common.prepare_env()
 
     if "osx" not in env["OS_NAME"]:
         if not os.path.isdir(os.path.join(".", "upx")):
