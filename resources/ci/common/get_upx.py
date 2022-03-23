@@ -21,7 +21,8 @@ def get_upx():
     env = common.prepare_env()
 
     if "osx" not in env["OS_NAME"]:
-        if not os.path.isdir(os.path.join(".", "upx")):
+        UPX_DIR = os.path.join(".", "upx")
+        if not os.path.isdir(UPX_DIR):
             # get env vars
             env = common.prepare_env()
             # set up download url
@@ -29,17 +30,17 @@ def get_upx():
             UPX_SLUG = ""
             UPX_FILE = ""
 
-            print(
-              "%s\n" * 5
-              %
-              (
-                platform.architecture(),
-                sys.maxsize <= 2**32 and "x86" or "x64",
-                platform.machine(),
-                platform.platform(),
-                platform.processor()
-              )
-            )
+            # print(
+            #   "%s\n" * 5
+            #   %
+            #   (
+            #     platform.architecture(),
+            #     sys.maxsize <= 2**32 and "x86" or "x64",
+            #     platform.machine(),
+            #     platform.platform(),
+            #     platform.processor()
+            #   )
+            # )
 
             # LINUX
             # amd64:        AMD 64-bit
@@ -60,7 +61,7 @@ def get_upx():
                 UPX_SLUG = "upx-" + UPX_VERSION + f"-win{arch}"
                 UPX_FILE = UPX_SLUG + ".zip"
             else:
-                arch = "_64" in platform.machine().lower() and "i386" or "amd64"
+                arch = "_64" not in platform.machine() and "i386" or "amd64"
                 UPX_SLUG = "upx-" + UPX_VERSION + f"-{arch}_linux"
                 UPX_FILE = UPX_SLUG + ".tar.xz"
 
@@ -83,57 +84,65 @@ def get_upx():
                     )
                     UPX_DATA = UPX_REQ.read()
                     upx.write(UPX_DATA)
+                    print("")
                 except urllib.error.HTTPError as e:
                     print(f"UPX HTTP Code: {e.code}")
                     return
 
             if VERBOSE:
-                print("")
-                print("Unpacking UPX")
+                print("Unpacking UPX archive")
             unpack_archive(UPX_FILE, os.path.join("."))
             if VERBOSE:
-                subprocess.run(
+                ret = subprocess.run(
                     [
                         "ls",
                         "-d",
                         "upx*"
                     ],
-                    stdout=subprocess.PIPE
+                    capture_output=True,
+                    text=True
                 )
-                print("")
+                print(ret.stdout)
 
             if VERBOSE:
-                print("Moving UPX")
-            os.rename(os.path.join(".", UPX_SLUG), os.path.join(".", "upx"))
+                print("Renaming UPX folder")
+            os.rename(os.path.join(".", UPX_SLUG), UPX_DIR)
             if VERBOSE:
-                subprocess.run(
+                ret = subprocess.run(
                     [
                         "ls",
                         "-d",
                         "upx*"
                     ],
-                    stdout=subprocess.PIPE
+                    capture_output=True,
+                    text=True
                 )
-                print("")
+                print(ret.stdout)
 
             if VERBOSE:
-                print("Deleting UPX Archive")
+                print("Deleting UPX archive & keeping folder")
             os.remove(os.path.join(".", UPX_FILE))
             if VERBOSE:
-                subprocess.run(
+                ret = subprocess.run(
                     [
                         "ls",
                         "-d",
                         "upx*"
                     ],
-                    stdout=subprocess.PIPE
+                    capture_output=True,
+                    text=True
                 )
-                print("")
+                print(ret.stdout)
 
     print(
-        "UPX should " +
-        ("not " if not os.path.isdir(os.path.join(".", "upx")) else "") +
-        "be available."
+      "UPX should %sbe available."
+      %
+      (
+        "" if (
+                  os.path.isdir(UPX_DIR) and
+                  (len(os.listdir(UPX_DIR)) > 0)
+              ) else "not "
+      )
     )
 
 
