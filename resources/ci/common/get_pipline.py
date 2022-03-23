@@ -42,8 +42,18 @@ def get_module_version(module):
     ver = ""
 
     if float(PIP_FLOAT_VERSION) >= 21.2:
-        ret = subprocess.run([*args, "-m", PIPEXE, "index",
-                             "versions", module], capture_output=True, text=True)
+        ret = subprocess.run(
+            [
+                *args,
+                "-m",
+                PIPEXE,
+                "index",
+                "versions",
+                module
+            ],
+            capture_output=True,
+            text=True
+        )
         lines = ret.stdout.strip().split("\n")
         lines = lines[2::]
         vers = (list(map(lambda x: x.split(' ')[-1], lines)))
@@ -51,16 +61,53 @@ def get_module_version(module):
             ver = vers[1]
     elif float(PIP_FLOAT_VERSION) >= 21.1:
         ret = subprocess.run(
-            [*args, "-m", PIPEXE, "install", f"{module}=="], capture_output=True, text=True)
+            [
+                *args,
+                "-m",
+                PIPEXE,
+                "install",
+                f"{module}=="
+            ],
+            capture_output=True,
+            text=True
+        )
     elif float(PIP_FLOAT_VERSION) >= 20.3:
-        ret = subprocess.run([*args, "-m", PIPEXE, "install", "--use-deprecated=legacy-resolver",
-                             f"{module}=="], capture_output=True, text=True)
+        ret = subprocess.run(
+            [
+                *args,
+                "-m",
+                PIPEXE,
+                "install",
+                "--use-deprecated=legacy-resolver",
+                f"{module}=="
+            ],
+            capture_output=True,
+            text=True
+        )
     elif float(PIP_FLOAT_VERSION) >= 9.0:
         ret = subprocess.run(
-            [*args, "-m", PIPEXE, "install", f"{module}=="], capture_output=True, text=True)
+            [
+                *args,
+                "-m",
+                PIPEXE,
+                "install",
+                f"{module}=="
+            ],
+            capture_output=True,
+            text=True
+        )
     elif float(PIP_FLOAT_VERSION) < 9.0:
-        ret = subprocess.run([*args, "-m", PIPEXE, "install",
-                             f"{module}==blork"], capture_output=True, text=True)
+        ret = subprocess.run(
+            [
+                *args,
+                "-m",
+                PIPEXE,
+                "install",
+                f"{module}==blork"
+            ],
+            capture_output=True,
+            ext=True
+        )
 
     # if ver == "" and ret.stderr.strip():
     #     ver = (ret.stderr.strip().split("\n")[0].split(",")[-1].replace(')', '')).strip()
@@ -81,7 +128,7 @@ def python_info():
             %
             (
                 ((isinstance(args[0], list) and " ".join(
-                  args[0])) or args[0]).strip(),
+                    args[0])) or args[0]).strip(),
                 PYTHON_VERSION,
                 sys.platform
             )
@@ -97,20 +144,29 @@ def pip_info():
     global VERSIONS
 
     # get pip debug info
-    ret = subprocess.run([*args, "-m", PIPEXE, "--version"],
-                         capture_output=True, text=True)
+    ret = subprocess.run(
+        [
+            *args,
+            "-m",
+            PIPEXE,
+            "--version"
+        ],
+        capture_output=True,
+        text=True
+    )
     if ret.stdout.strip():
         if " from " in ret.stdout.strip():
-            PIP_VERSION = ret.stdout.strip().split(" from ")[
-                0].split(" ")[1]
+            PIP_VERSION = ret.stdout.strip().split(" from ")[0].split(" ")[1]
             if PIP_VERSION:
                 b, f, a = PIP_VERSION.partition('.')
                 global PIP_FLOAT_VERSION
                 PIP_FLOAT_VERSION = b+f+a.replace('.', '')
                 PIP_LATEST = get_module_version("pip")
 
-                VERSIONS["py"] = {"version": PYTHON_VERSION,
-                                  "platform": sys.platform}
+                VERSIONS["py"] = {
+                    "version": PYTHON_VERSION,
+                    "platform": sys.platform
+                }
                 VERSIONS["pip"] = {
                     "version": [
                         PIP_VERSION,
@@ -123,8 +179,7 @@ def pip_info():
                     "%s\t%s\t%s\t%s\t%s\t%s"
                     %
                     (
-                        ((isinstance(args[0], list) and " ".join(
-                            args[0])) or args[0]).strip(),
+                        ((isinstance(args[0], list) and " ".join(args[0])) or args[0]).strip(),
                         PYTHON_VERSION,
                         sys.platform,
                         PIP_EXECUTABLE,
@@ -142,7 +197,16 @@ def pip_upgrade():
 
     # upgrade pip
     ret = subprocess.run(
-        [*args, "-m", PIPEXE, "install", "--upgrade", "pip"], capture_output=True, text=True)
+        [
+            *args,
+            "-m",
+            PIPEXE,
+            "install",
+            "--upgrade", "pip"
+        ],
+        capture_output=True,
+        text=True
+    )
     # get output
     if ret.stdout.strip():
         # if it's not already satisfied, update it
@@ -157,14 +221,25 @@ def install_modules():
     global SUCCESS
 
     # install modules from list
-    ret = subprocess.run([*args, "-m", PIPEXE, "install", "-r", os.path.join(
-        ".",
-        "resources",
-        "app",
-        "meta",
-        "manifests",
-        "pip_requirements.txt"
-    )], capture_output=True, text=True)
+    ret = subprocess.run(
+        [
+            *args,
+            "-m",
+            PIPEXE,
+            "install",
+            "-r",
+            os.path.join(
+                ".",
+                "resources",
+                "app",
+                "meta",
+                "manifests",
+                "pip_requirements.txt"
+            )
+        ],
+        capture_output=True,
+        text=True
+    )
 
     # if there's output
     if ret.stdout.strip():
@@ -186,18 +261,18 @@ def install_modules():
                 "Building wheel" in line or \
                     "Created wheel" in line:
                 satisfied = line.strip().split(" in ")
-                sver = ((len(satisfied) > 1) and satisfied[1].split(
-                    "(").pop().replace(")", "")) or ""
+                sver = ((len(satisfied) > 1) and satisfied[1].split("(").pop().replace(")", "")) or ""
 
                 if "Created wheel" in line:
                     line = line.strip().split(':')
                     satisfied = [line[0]]
                     sver = line[1].split('-')[1]
 
-                modulename = satisfied[0].replace(
-                    "Requirement already satisfied: ", "")
-                VERSIONS[modulename] = {"installed": sver, "latest": (sver and get_module_version(
-                    satisfied[0].split(" ")[-1])).strip() or ""}
+                modulename = satisfied[0].replace("Requirement already satisfied: ", "")
+                VERSIONS[modulename] = {
+                    "installed": sver,
+                    "latest": (sver and get_module_version(satisfied[0].split(" ")[-1])).strip() or ""
+                }
 
                 print(
                     (
@@ -205,10 +280,8 @@ def install_modules():
                         %
                         (
                             "Building wheel" in line and '.' or "X",
-                            satisfied[0].ljust(
-                                len("Requirement already satisfied: ") + len("python-bps-continued")),
-                            VERSIONS[modulename
-                                     ]["installed"],
+                            satisfied[0].ljust(len("Requirement already satisfied: ") + len("python-bps-continued")),
+                            VERSIONS[modulename]["installed"],
                             VERSIONS[modulename]["latest"]
                         )
                     )
@@ -226,8 +299,17 @@ def install_modules():
                 print(line.strip())
         print("")
         with open(os.path.join(".", "resources", "user", "meta", "manifests", "settings.json"), "w") as settings:
-            settings.write(json.dumps(
-                {"py": args, "pip": PIPEXE, "pipline": " ".join(args) + " -m " + PIPEXE, "versions": VERSIONS}, indent=2))
+            settings.write(
+                json.dumps(
+                    {
+                        "py": args,
+                        "pip": PIPEXE,
+                        "pipline": " ".join(args) + " -m " + PIPEXE,
+                        "versions": VERSIONS
+                    },
+                    indent=2
+                )
+            )
         with open(os.path.join(".", "resources", "user", "meta", "manifests", "pipline.txt"), "w") as settings:
             settings.write(" ".join(args) + " -m " + PIPEXE)
         SUCCESS = True
