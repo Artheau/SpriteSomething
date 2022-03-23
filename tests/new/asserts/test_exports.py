@@ -1,4 +1,4 @@
-from common import DATA  # get pathdata
+from tests.new.common import DATA  # get pathdata
 
 from shutil import copy
 
@@ -86,25 +86,35 @@ def get_module_version(module, mode):
 
 
 class ExportAudit(unittest.TestCase):
-    def __init__(self, platID, gameID, spriteID):
-        self.platID = platID or "snes"
-        self.gameID = gameID or "zelda3"
-        self.spriteID = spriteID or "link"
+    def set_Up(self, *args):
+        self.platID = len(args) > 1 and args[1] or "snes"
+        self.gameID = len(args) > 2 and args[2] or "zelda3"
+        self.spriteID = len(args) > 3 and args[3] or "link"
+
+        libref = f"source.{self.platID}.{self.gameID}.{self.spriteID}.sprite"
+        DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]["lib"] = importlib.import_module(libref)
+
+        spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
+        spriteLibrary = spriteData["lib"]
 
     def same(self, file1, file2):
         return file1.read() == file2.read()
 
     def test_exports(self):
-        if VERBOSE:
-            heading = ("%s/%s/%s" % (self.platID, self.gameID, self.spriteID))
-            print(heading)
-            print("-" * 70)
-        for filext in DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]["paths"]["resource"]["sheetexts"].keys():
-            self.test_export(filext)
-        if VERBOSE:
-            print("")
+        for [platID, plat] in DATA.items():
+            for [gameID, game] in plat["games"].items():
+                for [spriteID, sprite] in game["sprites"].items():
+                    self.set_Up(self, platID, gameID, spriteID)
+                    if VERBOSE:
+                        heading = ("%s/%s/%s" % (self.platID, self.gameID, self.spriteID))
+                        print(heading)
+                        print("-" * 70)
+                    for filext in DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]["paths"]["resource"]["sheetexts"].keys():
+                        self.run_export(filext)
+                    if VERBOSE:
+                        print("")
 
-    def test_export(self, filext):
+    def run_export(self, filext):
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
         spriteLibrary = spriteData["lib"]
 
@@ -144,18 +154,20 @@ class ExportAudit(unittest.TestCase):
                     tempFile)
 
             file = {
-                "import": {
-                    importExt: open(
-                        spriteData["paths"]["resource"]["sheetexts"][filext], "rb")
-                },
-                "export": {
-                    exportExt: open(tempFile, "rb")
-                }
+                "import": { importExt: None },
+                "export": { exportExt: None }
             }
-            match = self.same(
-                file["import"][importExt],
-                file["export"][exportExt]
-            )
+
+            match = False
+
+            with open(spriteData["paths"]["resource"]["sheetexts"][filext], "rb") as importFile:
+                with open(tempFile, "rb") as exportFile:
+                    match = self.same(
+                        importFile,
+                        exportFile
+                    )
+
+            self.assertTrue(match)
 
             if VERBOSE:
                 print("%s -> %s : %s do%s match%s" % (
@@ -207,24 +219,12 @@ if __name__ == "__main__":
         %
         (
             module,
-            get_module_version("pillow", "installed"),
-            get_module_version("pillow", "latest")
+            get_module_version(module, "installed"),
+            get_module_version(module, "latest")
         )
     )
     if VERBOSE:
+        print("EXPORTS")
         print('.' * 70)
 
-    for [platID, plat] in DATA.items():
-        for [gameID, game] in plat["games"].items():
-            for [spriteID, sprite] in game["sprites"].items():
-                libref = f"source.{platID}.{gameID}.{spriteID}.sprite"
-                DATA[platID]["games"][gameID]["sprites"][spriteID]["lib"] = importlib.import_module(libref)
-                if VERBOSE:
-                    print("EXPORTS")
-                    print("=" * 70)
-                export = ExportAudit(platID, gameID, spriteID)
-                export.test_exports()
-
-    if "F" in RESULTS["pf"]:
-        print(''.join(RESULTS["pf"]))
-        exit(1)
+    unittest.main()

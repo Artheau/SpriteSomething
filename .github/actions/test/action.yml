@@ -29,11 +29,18 @@ runs:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
 
-    # my tests
     - name: New Export Tests
       shell: bash
       run: |
-        python ./tests/new/test-exports.py
+        python -m tests.new.asserts.test-exports
+    - name: New Animation Tests
+      shell: bash
+      run: |
+        python -m tests.new.asserts.test-animations
+    - name: New GUI Tests
+      shell: bash
+      run: |
+        python -m tests.new.asserts.test-gui
 
     # print failures
     - name: Print Failures
