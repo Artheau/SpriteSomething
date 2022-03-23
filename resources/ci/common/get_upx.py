@@ -9,6 +9,39 @@ import urllib.request   # for downloads
 from shutil import unpack_archive
 
 
+def runcmd(cmd, stdin=None, debug=False):
+    """
+    Run command specified by list `cmd` in a blocking fashion. If stdin is provided, feed it
+    to the process. Raise `RunCmdException` if the return code of the process is not 0. Return
+    a string with the combined stdout and stderr of the process.
+    """
+
+    if debug:
+        print(">")
+        if stdin is not None:
+            print("echo %r |" % str(stdin[:40] + "..." if len(stdin) > 40 else stdin))
+        print(" ".join(cmd))
+
+    proc = subprocess.Popen(
+        cmd,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT
+    )
+
+    # Doesn't work!
+    #o = proc.communicate(stdin)[0]
+    if stdin:
+        proc.stdin.write(stdin)
+    proc.stdin.close()
+    proc.wait()
+    o = proc.stdout.read()
+
+    if proc.returncode > 0:
+        raise RunCmdException("Command '%s' failed" % " ".join(cmd), proc.returncode, o)
+    return o
+
+
 def get_upx():
     VERBOSE = True
     CI_SETTINGS = {}
@@ -20,13 +53,14 @@ def get_upx():
 
     env = common.prepare_env()
 
+    UPX_DIR = os.path.join(".", "upx")
     if "osx" not in env["OS_NAME"]:
-        UPX_DIR = os.path.join(".", "upx")
         if not os.path.isdir(UPX_DIR):
             # get env vars
             env = common.prepare_env()
             # set up download url
-            UPX_VERSION = os.getenv("UPX_VERSION") or str(CI_SETTINGS["common"]["get_upx"]["version"])
+            UPX_VERSION = os.getenv("UPX_VERSION") or str(
+                CI_SETTINGS["common"]["get_upx"]["version"])
             UPX_SLUG = ""
             UPX_FILE = ""
 
@@ -79,8 +113,8 @@ def get_upx():
                 try:
                     context = ssl._create_unverified_context()
                     UPX_REQ = urllib.request.urlopen(
-                      UPX_URL,
-                      context=context
+                        UPX_URL,
+                        context=context
                     )
                     UPX_DATA = UPX_REQ.read()
                     upx.write(UPX_DATA)
@@ -93,56 +127,50 @@ def get_upx():
                 print("Unpacking UPX archive")
             unpack_archive(UPX_FILE, os.path.join("."))
             if VERBOSE:
-                ret = subprocess.run(
+                ret = runcmd(
                     [
                         "ls",
                         "-d",
                         "upx*"
-                    ],
-                    capture_output=True,
-                    text=True
+                    ]
                 )
-                print(ret.stdout)
+                print(ret.decode("utf-8"))
 
             if VERBOSE:
                 print("Renaming UPX folder")
             os.rename(os.path.join(".", UPX_SLUG), UPX_DIR)
             if VERBOSE:
-                ret = subprocess.run(
+                ret = runcmd(
                     [
                         "ls",
                         "-d",
                         "upx*"
-                    ],
-                    capture_output=True,
-                    text=True
+                    ]
                 )
-                print(ret.stdout)
+                print(ret.decode("utf-8"))
 
             if VERBOSE:
                 print("Deleting UPX archive & keeping folder")
             os.remove(os.path.join(".", UPX_FILE))
             if VERBOSE:
-                ret = subprocess.run(
+                ret = runcmd(
                     [
                         "ls",
                         "-d",
                         "upx*"
-                    ],
-                    capture_output=True,
-                    text=True
+                    ]
                 )
-                print(ret.stdout)
+                print(ret.decode("utf-8"))
 
     print(
-      "UPX should %sbe available."
-      %
-      (
-        "" if (
-                  os.path.isdir(UPX_DIR) and
-                  (len(os.listdir(UPX_DIR)) > 0)
-              ) else "not "
-      )
+        "UPX should %sbe available."
+        %
+        (
+            "" if (
+                os.path.isdir(UPX_DIR) and
+                (len(os.listdir(UPX_DIR)) > 0)
+            ) else "not "
+        )
     )
 
 
