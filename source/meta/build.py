@@ -7,8 +7,8 @@ DEST_DIRECTORY = "."
 
 # UPX greatly reduces the filesize.  You can get this utility from https://upx.github.io/
 # just place it in a subdirectory named "upx" and this script will find it
-UPX_DIR = os.path.join(".", "upx")
-if os.path.isdir(UPX_DIR):
+UPX_DIR = "upx"
+if os.path.isdir(os.path.join(".", UPX_DIR)):
     upx_string = f"--upx-dir={UPX_DIR}"
 else:
     upx_string = ""
