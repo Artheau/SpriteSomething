@@ -66,23 +66,22 @@ runs:
       run: |
         pip install pyinstaller
         python -m source.meta.build
-      if: contains(inputs.os-name, 'macos')
+      # if: contains(inputs.os-name, 'macos')
 
     # run pyinstaller action
-    - name: Build Binary (Linux)
-      uses: JackMcKew/pyinstaller-action-linux@0.1.4
-      with:
-        path: .
-        spec: ./source/SpriteSomething.spec
-        tkinter: true
-      if: contains(inputs.os-name, 'linux') || contains(inputs.os-name, 'ubuntu')
-
-    - name: Build Binary (Windows)
-      uses: JackMcKew/pyinstaller-action-windows@v0.1.2
-      with:
-        path: .
-        spec: ./source/SpriteSomething.spec
-      if: contains(inputs.os-name, 'windows')
+    # - name: Build Binary (Linux)
+    #   uses: JackMcKew/pyinstaller-action-linux@0.1.4
+    #   with:
+    #     path: .
+    #     spec: ./source/SpriteSomething.spec
+    #     tkinter: true
+    #   if: contains(inputs.os-name, 'linux') || contains(inputs.os-name, 'ubuntu')
+    # - name: Build Binary (Windows)
+    #   uses: JackMcKew/pyinstaller-action-windows@v0.1.2
+    #   with:
+    #     path: .
+    #     spec: ./source/SpriteSomething.spec
+    #   if: contains(inputs.os-name, 'windows')
 
     # prepare binary artifact for later step
     - name: Prepare Binary Artifact
