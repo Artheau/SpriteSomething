@@ -2,45 +2,11 @@ import common
 import json
 import os               # for env vars
 import platform
-import subprocess
 import ssl
 import sys              # for path
 import urllib.request   # for downloads
 from shutil import unpack_archive
 
-
-def runcmd(cmd, stdin=None, debug=False):
-    """
-    Run command specified by list `cmd` in a blocking fashion. If stdin is provided, feed it
-    to the process. Raise `RunCmdException` if the return code of the process is not 0. Return
-    a string with the combined stdout and stderr of the process.
-    """
-
-    if debug:
-        print(">")
-        if stdin is not None:
-            print("echo %r |" % str(stdin[:40] + "..." if len(stdin) > 40 else stdin))
-        print(" ".join(cmd))
-
-    proc = subprocess.Popen(
-        cmd,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT
-    )
-
-    # Doesn't work!
-    #o = proc.communicate(stdin)[0]
-    if stdin:
-        proc.stdin.write(stdin)
-    proc.stdin.close()
-    proc.wait()
-    o = proc.stdout.read()
-
-    if proc.returncode > 0:
-        raise Exception("Command '%s' failed" % " ".join(cmd), proc.returncode, o)
-        # raise RunCmdException("Command '%s' failed" % " ".join(cmd), proc.returncode, o)
-    return o
 
 
 def get_upx():
@@ -128,40 +94,31 @@ def get_upx():
                 print("Unpacking UPX archive")
             unpack_archive(UPX_FILE, os.path.join("."))
             if VERBOSE:
-                ret = runcmd(
-                    [
-                        "ls",
-                        "-d",
-                        '"upx*"'
-                    ]
-                )
-                print(ret.decode("utf-8"))
+                files = os.listdir(".")
+                for f in files:
+                    if "upx" in f:
+                        print(f + ('/' if os.path.isdir(f) else ""))
+                print("")
 
             if VERBOSE:
                 print("Renaming UPX folder")
             os.rename(os.path.join(".", UPX_SLUG), UPX_DIR)
             if VERBOSE:
-                ret = runcmd(
-                    [
-                        "ls",
-                        "-d",
-                        '"upx*"'
-                    ]
-                )
-                print(ret.decode("utf-8"))
+                files = os.listdir(".")
+                for f in files:
+                    if "upx" in f:
+                        print(f + ('/' if os.path.isdir(f) else ""))
+                print("")
 
             if VERBOSE:
                 print("Deleting UPX archive & keeping folder")
             os.remove(os.path.join(".", UPX_FILE))
             if VERBOSE:
-                ret = runcmd(
-                    [
-                        "ls",
-                        "-d",
-                        '"upx*"'
-                    ]
-                )
-                print(ret.decode("utf-8"))
+                files = os.listdir(".")
+                for f in files:
+                    if "upx" in f:
+                        print(f + ('/' if os.path.isdir(f) else ""))
+                print("")
 
     print(
         "UPX should %sbe available."
