@@ -38,7 +38,8 @@ def runcmd(cmd, stdin=None, debug=False):
     o = proc.stdout.read()
 
     if proc.returncode > 0:
-        raise RunCmdException("Command '%s' failed" % " ".join(cmd), proc.returncode, o)
+        raise Exception("Command '%s' failed" % " ".join(cmd), proc.returncode, o)
+        # raise RunCmdException("Command '%s' failed" % " ".join(cmd), proc.returncode, o)
     return o
 
 
