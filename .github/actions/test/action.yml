@@ -29,18 +29,29 @@ runs:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
 
-    - name: New Export Tests
+    # start virtual display driver & run tests
+    - name: Start virtual display driver & Test (!Windows)
       shell: bash
+      env:
+        DISPLAY: :99
       run: |
+        disp=:99
+        screen=0
+        geom=640x480x24
+        exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
+        export DISPLAY=:99
         python -m tests.new.asserts.test_exports
-    - name: New Animation Tests
-      shell: bash
-      run: |
         python -m tests.new.asserts.test_animations
-    - name: New GUI Tests
-      shell: bash
-      run: |
         python -m tests.new.asserts.test_gui
+      if: contains(inputs.os-name, 'windows') != true
+    - name: Start virtual display driver & Test (Windows)
+      uses: GabrielBB/xvfb-action@v1.6
+      with:
+        run: |
+          python -m tests.new.asserts.test_exports
+          python -m tests.new.asserts.test_animations
+          python -m tests.new.asserts.test_gui
+      if: contains(inputs.os-name, 'windows')
 
     # print failures
     - name: Print Failures
@@ -62,25 +73,3 @@ runs:
       with:
         name: failures-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./failures
-
-
-  # unittest works as expected, yay
-
-  # start virtual display driver & run tests
-  # - name: Start virtual display driver & Test (!Windows)
-  #   shell: bash
-  #   env:
-  #     DISPLAY: :99
-  #   run: |
-  #     disp=:99
-  #     screen=0
-  #     geom=640x480x24
-  #     exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
-  #     export DISPLAY=:99
-  #     python -m unittest
-  #   if: contains(inputs.os-name, 'windows') != true
-  # - name: Start virtual display driver & Test (Windows)
-  #   uses: GabrielBB/xvfb-action@v1.6
-  #   with:
-  #     run: python -m unittest
-  #   if: contains(inputs.os-name, 'windows')
