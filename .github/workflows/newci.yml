@@ -364,6 +364,7 @@ jobs:
       - name: 🔽Download AppVersion Artifact
         uses: actions/download-artifact@v3.0.0
         with:
+          name: appversion-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
       # Prepare Pages
       - name: Prepare GitHub Pages
