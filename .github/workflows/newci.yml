@@ -61,19 +61,19 @@ jobs:
       - name: Checkout commit
         uses: actions/checkout@v3
       # install
-      - name: Call Install
-        uses: ./.github/actions/install
-        with:
-          os-name: ${{ matrix.os-name }}
-          python-version: ${{ matrix.python-version }}
-          pillow-version: ${{ matrix.pillow-version }}
+      # - name: Call Install
+      #   uses: ./.github/actions/install
+      #   with:
+      #     os-name: ${{ matrix.os-name }}
+      #     python-version: ${{ matrix.python-version }}
+      #     pillow-version: ${{ matrix.pillow-version }}
       # test
-      - name: Call Test
-        uses: ./.github/actions/test
-        with:
-          os-name: ${{ matrix.os-name }}
-          python-version: ${{ matrix.python-version }}
-          pillow-version: ${{ matrix.pillow-version }}
+      # - name: Call Test
+      #   uses: ./.github/actions/test
+      #   with:
+      #     os-name: ${{ matrix.os-name }}
+      #     python-version: ${{ matrix.python-version }}
+      #     pillow-version: ${{ matrix.pillow-version }}
 
   # Build
   install-build:
@@ -115,6 +115,7 @@ jobs:
             # "9.0.1",
           ]
         exclude:
+          # mac & windows fail on 3.9+
           - os-name: macOS-latest
             python-version: 3.9
           - os-name: macOS-latest

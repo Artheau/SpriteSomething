@@ -28,7 +28,7 @@ runs:
     - name: Download Binary Artifact
       uses: actions/download-artifact@v3
       with:
-        name: binary-${{ inputs.os-name }}-${{ inputs-python-version }}-${{ inputs.pillow-version }}
+        name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./
     # Prepare AppVersion & Release
     - name: Prepare AppVersion & Release
