@@ -9,7 +9,9 @@ outputs:
     description: "Parent Directory (Windows)"
     value: ${{ steps.parentDir.outputs.value }}
 
+#########
 # actions
+#########
 # mad9000/actions-find-and-replace-string@2
 
 runs:

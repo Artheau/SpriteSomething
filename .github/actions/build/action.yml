@@ -11,8 +11,15 @@ inputs:
     required: true
     description: Pillow version to install
 
+#########
 # actions
-# actions/download-artifact@v3
+#########
+# actions/checkout@v3.0.0
+# actions/download-artifact@v3.0.0
+# actions/upload-artifact@v3.0.0
+# Artheau/SpriteSomething/get-parent-dir
+# JackMcKew/pyinstaller-action-linux@0.1.4
+# JackMcKew/pyinstaller-action-windows@0.1.2
 # mad9000/actions-find-and-replace-string@2
 
 runs:
@@ -20,7 +27,7 @@ runs:
   steps:
     # checkout commit
     - name: Checkout commit
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3.0.0
 
     # get parent dir
     - name: Get Parent Directory
@@ -29,7 +36,7 @@ runs:
 
     # download pipline
     - name: Download PipLine
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v3.0.0
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
@@ -75,7 +82,7 @@ runs:
 
     # upload binary artifact for later step
     - name: Upload Binary Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.0.0
       with:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ${{ steps.parentDir.outputs.parentDir }}/artifact

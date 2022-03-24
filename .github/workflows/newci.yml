@@ -4,9 +4,16 @@ name: New CI
 # fire on
 on: [push, pull_request]
 
+#########
 # actions
-# Artheau/SpriteSomething/.github/actions/install
-# Artheau/SpriteSomething/.github/actions/test
+#########
+# actions/checkout@v3.0.0
+# actions/download-artifact@v3.0.0
+# actions/create-release
+# actions/upload-release-asset
+# Artheau/SpriteSomething/get-parent-dir
+# Artheau/SpriteSomething/install
+# Artheau/SpriteSomething/test
 
 jobs:
   # Test
@@ -59,7 +66,7 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.0.0
       # install
       # - name: Call Install
       #   uses: ./.github/actions/install
@@ -127,7 +134,7 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.0.0
       # install
       - name: Call Install
         uses: ./.github/actions/install
@@ -171,7 +178,7 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.0.0
       # install
       - name: Call Install
         uses: ./.github/actions/install
@@ -190,12 +197,118 @@ jobs:
   # Deploy Release
   release-deploy:
     name: 📀->🚀
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os-name }}
     needs: [install-release-prepare]
+
+    strategy:
+      matrix:
+        os-name: [ubuntu-latest]
+        python-version: [3.8]
+
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.0.0
+
+      # install dependencies via pip
+      - name: Install Dependencies via pip
+        shell: bash
+        run: |
+          python -m pip install pytz requests
+
+      # get parent dir
+      - name: Get Parent Dir
+        uses: ./.github/actions/get-parent-dir
+
+      # download appversion artifact
+      - name: Download AppVersion Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: appversion-${{ matrix.os-name }}
+          path: ${{ steps.parentDir.outputs.value }}/build
+
+      # download ubuntu archive artifact
+      - name: Download Ubuntu Archive Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: archive-ubuntu-latest
+          path: ${{ steps.parentDir.outputs.value }}/deploy/linux
+
+      # download macos archive artifact
+      # - name: Download MacOS Archive Artifact
+      #   uses: actions/download-artifact@v3.0.0
+      #   with:
+      #     name: archive-macos-latest
+      #     path: ${{ steps.parentDir.outputs.value }}/deploy/macos
+
+      # download windows archive artifact
+      - name: Download Windows Archive Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: archive-windows-latest
+          path: ${{ steps.parentDir.outputs.value }}/deploy/windows
+
+      # debug info
+      - name: Debug Info
+        id: debug_info
+        run: |
+          GITHUB_TAG="$(head -n 1 ../build/app_version.txt)"
+          echo "::set-output name=github_tag::$GITHUB_TAG"
+          GITHUB_TAG="v${GITHUB_TAG}"
+          RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
+          echo "Release Name: ${RELEASE_NAME}"
+          echo "Git Tag:      ${GITHUB_TAG}"
+
+      # create a release
+      - name: Create a Release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.debug_info.outputs.github_tag }}
+          release_name: SpriteSomething v${{ steps.debug_info.outputs.github_tag }}
+          body_path: RELEASENOTES.md
+          draft: true
+        # if: contains(github.ref, 'master')
+
+      # upload linux archive asset
+      - name: Upload Linux Archive Asset
+        id: upload-linux-asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ../deploy/linux/SpriteSomething.tar.gz
+          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
+          asset_content_type: application/gzip
+        # if: contains(github.ref, 'master')
+
+      # upload macos archive asset
+      # - name: Upload MacOS Archive Asset
+      #   id: upload-macos-asset
+      #   uses: actions/upload-release-asset@v1.0.2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ../deploy/macos/SpriteSomething.tar.gz
+      #     asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
+      #     asset_content_type: application/gzip
+      #   if: contains(github.ref, 'master')
+
+      # upload windows archive asset
+      - name: Upload Windows Archive Asset
+        id: upload-windows-asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ../deploy/windows/SpriteSomething.zip
+          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-windows.zip
+          asset_content_type: application/zip
+        # if: contains(github.ref, 'master')
 
   # Prepare Pages
   pages-prepare:
@@ -206,7 +319,10 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.0.0
+      # download appversion artifact
+      - name: Download AppVersion Artifact
+        uses: actions/download-artifact@v3.0.0
 
   # Deploy Pages
   pages-deploy:
@@ -217,4 +333,4 @@ jobs:
     steps:
       # checkout commit
       - name: Checkout commit
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.0.0

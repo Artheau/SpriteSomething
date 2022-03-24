@@ -11,8 +11,11 @@ inputs:
     required: true
     description: Pillow version to install
 
+#########
 # actions
-# actions/download-artifact@v3
+#########
+# actions/checkout@v3.0.0
+# actions/download-artifact@v3.0.0
 # GabrielBB/xvfb-action@v1.6
 
 runs:
@@ -20,7 +23,7 @@ runs:
   steps:
     # checkout commit
     - name: Checkout commit
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3.0.0
 
     # start virtual display driver & run tests
     - name: Start virtual display driver & Test (!Windows)
@@ -62,7 +65,7 @@ runs:
     # upload failures
     - name: Upload Failures
       if: failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3.0.0
       with:
         name: failures-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./failures

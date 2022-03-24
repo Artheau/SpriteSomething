@@ -11,18 +11,22 @@ inputs:
     required: true
     description: Pillow version to install
 
+#########
 # actions
-# actions/upload-artifact@v3
+#########
+# actions/checkout@v3.0.0
+# actions/setup-python@v3.0.0
+# actions/upload-artifact@v3.0.0
 
 runs:
   using: "composite"
   steps:
     # checkout commit
     - name: Checkout commit
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3.0.0
     # install python
     - name: Install Python
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v3.0.0
       with:
         python-version: ${{ inputs.python-version }}
     # install modules via pip
@@ -41,7 +45,7 @@ runs:
         cat ./resources/user/meta/manifests/pipline.txt
     # upload pipline
     - name: Upload PipLine
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3.0.0
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests

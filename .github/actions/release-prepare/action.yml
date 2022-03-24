@@ -11,22 +11,26 @@ inputs:
     required: true
     description: Pillow version to install
 
+#########
 # actions
-# actions/download-artifact@v3
+#########
+# Artheau/SpriteSomething/get-parent-dir
+# actions/checkout@v3.0.0
+# actions/download-artifact@v3.0.0
 
 runs:
   using: "composite"
   steps:
     # checkout commit
     - name: Checkout commit
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3.0.0
     # get parent dir
     - name: Get Parent Directory
       id: parentDir
       uses: ./.github/actions/get-parent-dir
     # download binary artifact
     - name: Download Binary Artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v3.0.0
       with:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./
@@ -40,13 +44,13 @@ runs:
         python ./resources/ci/common/prepare_release.py
     # upload appversion artifact for later step
     - name: Upload AppVersion Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.0.0
       with:
         name: appversion-${{ inputs.os-name }}
         path: ./resources/app/meta/manifests/app_version.txt
     # upload archive artifact for later step
     - name: Upload Archive Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3.0.0
       with:
         name: archive-${{ inputs.os-name }}
         path: ${{ steps.parentDir.outputs.parentDir }}/deploy
