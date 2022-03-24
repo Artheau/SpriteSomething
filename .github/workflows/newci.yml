@@ -281,7 +281,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ../deploy/linux/SpriteSomething.tar.gz
+          asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux/SpriteSomething.tar.gz
           asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
           asset_content_type: application/gzip
         # if: contains(github.ref, 'master')
@@ -294,7 +294,7 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   with:
       #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ../deploy/macos/SpriteSomething.tar.gz
+      #     asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos/SpriteSomething.tar.gz
       #     asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
       #     asset_content_type: application/gzip
       #   if: contains(github.ref, 'master')
@@ -307,7 +307,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ../deploy/windows/SpriteSomething.zip
+          asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows/SpriteSomething.zip
           asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-windows.zip
           asset_content_type: application/zip
         # if: contains(github.ref, 'master')
