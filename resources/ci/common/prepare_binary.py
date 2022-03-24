@@ -39,14 +39,12 @@ def prepare_binary():
         print(f"Dest Filename:  {DEST_FILENAME}")
         if not BUILD_FILENAME == "":
             print("Build Filesize: " + common.file_size(BUILD_FILENAME))
-        else:
-            exit(1)
-
-        if not BUILD_FILENAME == "":
             move(
                 os.path.join(".", BUILD_FILENAME),
-                os.path.join("..", "artifact", os.path.basename(BUILD_FILENAME))
+                os.path.join("..", "artifact", os.path.basename(DEST_FILENAME))
             )
+        else:
+            exit(1)
 
 
 def main():

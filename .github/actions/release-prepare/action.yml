@@ -22,6 +22,7 @@ runs:
       uses: actions/checkout@v3
     # get parent dir
     - name: Get Parent Directory
+      id: parentDir
       uses: ./.github/actions/get-parent-dir
     # download binary artifact
     - name: Download Binary Artifact

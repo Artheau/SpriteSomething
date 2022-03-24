@@ -23,7 +23,8 @@ runs:
       uses: actions/checkout@v3
 
     # get parent dir
-    - name: Get Parent Dir
+    - name: Get Parent Directory
+      id: parentDir
       uses: ./.github/actions/get-parent-dir
 
     # download pipline
