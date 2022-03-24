@@ -28,7 +28,7 @@ jobs:
         os-name: [
           ubuntu-latest,
           ubuntu-18.04,
-          macOS-latest,
+          macos-latest,
           windows-latest
         ]
 
@@ -55,9 +55,9 @@ jobs:
             # "9.0.1",
           ]
         exclude:
-          - os-name: macOS-latest
+          - os-name: macos-latest
             python-version: 3.9
-          - os-name: macOS-latest
+          - os-name: macos-latest
             python-version: "3.10"
           - os-name: windows-latest
             python-version: 3.9
@@ -95,7 +95,7 @@ jobs:
         os-name: [
           ubuntu-latest,
           ubuntu-18.04,
-          macOS-latest,
+          macos-latest,
           windows-latest
         ]
 
@@ -123,9 +123,9 @@ jobs:
           ]
         exclude:
           # mac & windows fail on 3.9+
-          - os-name: macOS-latest
+          - os-name: macos-latest
             python-version: 3.9
-          - os-name: macOS-latest
+          - os-name: macos-latest
             python-version: "3.10"
           - os-name: windows-latest
             python-version: 3.9
@@ -161,7 +161,7 @@ jobs:
         # should run on all LATEST OS
         os-name: [
           ubuntu-latest,
-          macOS-latest,
+          macos-latest,
           windows-latest
         ]
 
