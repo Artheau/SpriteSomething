@@ -249,6 +249,12 @@ jobs:
           name: archive-windows-latest
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows
 
+      # archive listing
+      - name: Archive Listing
+        shell: bash
+        run: |
+          ls -R ./deploy/
+
       # debug info
       - name: Debug Info
         id: debug_info
