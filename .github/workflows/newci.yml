@@ -279,6 +279,14 @@ jobs:
           draft: true
         # if: contains(github.ref, 'master')
 
+      # determine linux archive asset
+      - name: ❔Identify Linux Archive Asset
+        id: identify-linux-asset
+        shell: bash
+        run: |
+          ASSET_LINUX="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/linux)"
+          echo "::set-output name=asset_linux::$ASSET_LINUX"
+
       # upload linux archive asset
       - name: 🔼Upload Linux Archive Asset
         id: upload-linux-asset
@@ -287,10 +295,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux/*.tar.gz
+          asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux/${{ steps.identify-linux-asset.outputs.asset_linux }}
           asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
           asset_content_type: application/gzip
         # if: contains(github.ref, 'master')
+
+      # determine macos archive asset
+      # - name: ❔Identify MacOS Archive Asset
+      #   id: identify-macos-asset
+      #   shell: bash
+      #   run: |
+      #     ASSET_MACOS="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/macos)"
+      #     echo "::set-output name=asset_macos::$ASSET_MACOS"
 
       # upload macos archive asset
       # - name: 🔼Upload MacOS Archive Asset
@@ -300,10 +316,18 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #   with:
       #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos/*.tar.gz
+      #     asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos/${{ steps.identify-macos-asset.outputs.asset_macos }}
       #     asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
       #     asset_content_type: application/gzip
       #   if: contains(github.ref, 'master')
+
+      # determine windows archive asset
+      - name: ❔Identify Windows Archive Asset
+        id: identify-windows-asset
+        shell: bash
+        run: |
+          ASSET_WIN="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/windows)"
+          echo "::set-output name=asset_windows::$ASSET_WIN"
 
       # upload windows archive asset
       - name: 🔼Upload Windows Archive Asset
@@ -313,7 +337,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows/*.zip
+          asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows/${{ steps.identify-windows-asset.outputs.asset_windows }}
           asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-windows.zip
           asset_content_type: application/zip
         # if: contains(github.ref, 'master')
