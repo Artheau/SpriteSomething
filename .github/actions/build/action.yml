@@ -18,9 +18,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-      # checkout commit
-      - name: Checkout commit
-        uses: actions/checkout@v3
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v3
 
     # get parent dir
     - name: Get Parent Dir
