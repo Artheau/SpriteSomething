@@ -176,6 +176,10 @@ jobs:
       # prepare release
       - name: Prepare Release
         uses: ./.github/actions/release-prepare
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
 
   # Deploy Release
   release-deploy:
