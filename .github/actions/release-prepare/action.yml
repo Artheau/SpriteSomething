@@ -1,0 +1,51 @@
+name: Prepare Release
+description: Prepare Release for Deployment
+inputs:
+  os-name:
+    required: true
+    description: OS to run on
+  python-version:
+    required: true
+    description: Python version to install
+  pillow-version:
+    required: true
+    description: Pillow version to install
+
+# actions
+# actions/download-artifact@v3
+
+runs:
+  using: "composite"
+  steps:
+    # checkout commit
+    - name: Checkout commit
+      uses: actions/checkout@v3
+    # get parent dir
+    - name: Get Parent Directory
+      uses: ./.github/actions/get-parent-dir
+    # download binary artifact
+    - name: Download Binary Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: binary-${{ matrix.os-name }}-${{ matrix-python-version }}-${{ matrix.pillow-version }}
+        path: ./
+    # Prepare AppVersion & Release
+    - name: Prepare AppVersion & Release
+      shell: bash
+      env:
+        OS_NAME: ${{ matrix.os-name }}
+      run: |
+        python ./resources/ci/common/prepare_appversion.py
+        python ./resources/ci/common/prepare_release.py
+    # upload appversion artifact for later step
+    - name: Upload AppVersion Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: appversion-${{ matrix.os-name }}
+        path: ./resources/app/meta/manifests/app_version.txt
+    # upload archive artifact for later step
+    - name: Upload Archive Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: archive-${{ matrix.os-name }}
+        path: ${{ steps.parentDir.outputs.value }}/deploy

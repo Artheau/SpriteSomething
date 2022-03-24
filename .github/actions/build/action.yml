@@ -18,32 +18,13 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # checkout commit
-    - name: Checkout commit
-      uses: actions/checkout@v3
+      # checkout commit
+      - name: Checkout commit
+        uses: actions/checkout@v3
 
-    # get parent directory
-    - name: Get Repo Name
-      uses: mad9000/actions-find-and-replace-string@2
-      id: repoName
-      with:
-        source: ${{ github.repository }}
-        find: '${{ github.repository_owner }}/'
-        replace: ''
-    - name: Get Parent Directory Path (!Windows)
-      uses: mad9000/actions-find-and-replace-string@2
-      id: parentDirNotWin
-      with:
-        source: ${{ github.workspace }}
-        find: '${{ steps.repoName.outputs.value }}/${{ steps.repoName.outputs.value }}'
-        replace: ${{ steps.repoName.outputs.value }}
-    - name: Get Parent Directory Path (Windows)
-      uses: mad9000/actions-find-and-replace-string@2
-      id: parentDir
-      with:
-        source: ${{ steps.parentDirNotWin.outputs.value }}
-        find: '${{ steps.repoName.outputs.value }}\${{ steps.repoName.outputs.value }}'
-        replace: ${{ steps.repoName.outputs.value }}
+    # get parent dir
+    - name: Get Parent Dir
+      uses: ./.github/actions/get-parent-dir
 
     # download pipline
     - name: Download PipLine
@@ -95,5 +76,5 @@ runs:
     - name: Upload Binary Artifact
       uses: actions/upload-artifact@v2
       with:
-        name: binary-${{ inputs.os-name }}
+        name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ${{ steps.parentDir.outputs.value }}/artifact

@@ -9,24 +9,29 @@ on: [push, pull_request]
 # Artheau/SpriteSomething/.github/actions/test
 
 jobs:
+  # Test
   install-test:
     name: Install/Test
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os-name }}
     continue-on-error: True
 
     strategy:
       matrix:
+        # should run on all OS
         os-name: [
             ubuntu-latest,
             ubuntu-18.04,
             macOS-latest,
             windows-latest
-          ]
+        ]
+        # should run on 3.8-3.10
         python-version: [
             3.8,
             3.9,
-            "3.10",
-          ]
+            "3.10"
+        ]
+        # PIL 6.2.2 is good
+        # PIL 7.0.0+ introduces color error
         pillow-version: [
             "6.2.2",
             # "7.0.0",
@@ -38,7 +43,7 @@ jobs:
             # "8.3.2",
             # "8.4.0",
             # "9.0.1",
-          ]
+        ]
     steps:
       # checkout commit
       - name: Checkout commit
@@ -58,25 +63,30 @@ jobs:
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
 
+  # Build
   install-build:
     name: Install/Build
-    runs-on: ubuntu-latest
-    needs: [ install-test ]
+    runs-on: ${{ matrix.os-name }}
+    needs: [install-test]
     continue-on-error: True
 
     strategy:
       matrix:
+        # should run on all OS
         os-name: [
             ubuntu-latest,
             ubuntu-18.04,
             macOS-latest,
             windows-latest
-          ]
+        ]
+        # should run on 3.8-3.10
         python-version: [
             3.8,
             3.9,
-            "3.10",
-          ]
+            "3.10"
+        ]
+        # PIL 6.2.2 is good
+        # PIL 7.0.0+ introduces color error
         pillow-version: [
             "6.2.2",
             # "7.0.0",
@@ -88,7 +98,7 @@ jobs:
             # "8.3.2",
             # "8.4.0",
             # "9.0.1",
-          ]
+        ]
     steps:
       # checkout commit
       - name: Checkout commit
@@ -107,3 +117,69 @@ jobs:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
+
+  # Prepare Release
+  install-release-prepare:
+    name: "Install/Prepare Release"
+    runs-on: ${{ matrix.os-name }}
+    needs: [install-build]
+
+    strategy:
+      matrix:
+        os-name: [
+            ubuntu-latest,
+            macOS-latest,
+            windows-latest
+        ]
+        python-version: [
+            3.8
+        ]
+        pillow-version: [
+            "6.2.2"
+        ]
+    steps:
+      # checkout commit
+      - name: Checkout commit
+        uses: actions/checkout@v3
+      # install
+      - name: Call Install
+        uses: ./.github/actions/install
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
+      # prepare release
+      - name: Prepare Release
+        uses: ./.github/actions/release-prepare
+
+  # Deploy Release
+  release-deploy:
+    name: "Deploy Release"
+    runs-on: ubuntu-latest
+    needs: [install-release-prepare]
+    steps:
+      # checkout commit
+      - name: Checkout commit
+        uses: actions/checkout@v3
+
+  # Prepare Pages
+  pages-prepare:
+    name: "Prepare Pages"
+    runs-on: ubuntu-latest
+    needs: [release-deploy]
+
+    steps:
+      # checkout commit
+      - name: Checkout commit
+        uses: actions/checkout@v3
+
+  # Deploy Pages
+  pages-deploy:
+    name: "Deploy Pages"
+    runs-on: ubuntu-latest
+    needs: [pages-prepare]
+
+    steps:
+      # checkout commit
+      - name: Checkout commit
+        uses: actions/checkout@v3
