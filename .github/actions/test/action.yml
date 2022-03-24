@@ -22,13 +22,6 @@ runs:
     - name: Checkout commit
       uses: actions/checkout@v3
 
-    # download pipline
-    - name: Download PipLine
-      uses: actions/download-artifact@v3
-      with:
-        name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
-        path: ./resources/user/meta/manifests
-
     # start virtual display driver & run tests
     - name: Start virtual display driver & Test (!Windows)
       shell: bash

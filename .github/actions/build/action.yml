@@ -42,12 +42,6 @@ runs:
       run: |
         python ./resources/ci/common/get_upx.py
 
-    # ugprade modules
-    - name: Upgrade Modules
-      shell: bash
-      run: |
-        python ./resources/ci/common/upgrade_modules.py
-
     # run build.py
     - name: Build Binary (MacOS)
       shell: bash

@@ -285,6 +285,23 @@ def install_modules():
                         )
                     )
                 )
+
+                if "=" not in modulename and VERSIONS[modulename]["installed"] != VERSIONS[modulename]["latest"]:
+                    # install modules from list
+                    ret = subprocess.run(
+                        [
+                            *args,
+                            "-m",
+                            PIPEXE,
+                            "install",
+                            "--upgrade",
+                            f"{modulename}"
+                        ],
+                        capture_output=True,
+                        text=True
+                    )
+                    print(ret)
+
             # ignore lines about certain things
             elif "Collecting" in line or \
                 "Downloading" in line or \
