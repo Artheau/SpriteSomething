@@ -250,10 +250,10 @@ jobs:
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows
 
       # archive listing
-      - name: Archive Listing
-        shell: bash
-        run: |
-          ls -R ${{ steps.parentDir.outputs.parentDir }}/deploy/
+      # - name: Archive Listing
+      #   shell: bash
+      #   run: |
+      #     ls -R ${{ steps.parentDir.outputs.parentDir }}/deploy/
 
       # debug info
       - name: Debug Info
@@ -276,8 +276,8 @@ jobs:
           tag_name: v${{ steps.debug_info.outputs.github_tag }}
           release_name: SpriteSomething v${{ steps.debug_info.outputs.github_tag }}
           body_path: RELEASENOTES.md
-          draft: true
-        # if: contains(github.ref, 'master')
+          # draft: true
+        if: contains(github.ref, 'master')
 
       # determine linux archive asset
       - name: ❔Identify Linux Archive Asset
@@ -298,7 +298,7 @@ jobs:
           asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux/${{ steps.identify-linux-asset.outputs.asset_linux }}
           asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
           asset_content_type: application/gzip
-        # if: contains(github.ref, 'master')
+        if: contains(github.ref, 'master')
 
       # determine macos archive asset
       # - name: ❔Identify MacOS Archive Asset
@@ -340,7 +340,7 @@ jobs:
           asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows/${{ steps.identify-windows-asset.outputs.asset_windows }}
           asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-windows.zip
           asset_content_type: application/zip
-        # if: contains(github.ref, 'master')
+        if: contains(github.ref, 'master')
 
   # Prepare Pages
   pages-prepare:
@@ -352,9 +352,26 @@ jobs:
       # checkout commit
       - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
+      # get parent dir
+      - name: Get Parent Dir
+        id: parentDir
+        uses: ./.github/actions/get-parent-dir
       # download appversion artifact
       - name: 🔽Download AppVersion Artifact
         uses: actions/download-artifact@v3.0.0
+        with:
+          path: ${{ steps.parentDir.outputs.parentDir }}/build
+      # Prepare Pages
+      - name: Prepare GitHub Pages
+        shell: bash
+        run: |
+          python ./resources/ci/common/prepare_pages.py
+      # upload pages artifact for later step
+      - name: 🔼Upload Pages Artifact
+        uses: actions/upload-artifact@v3.0.0
+        with:
+          name: pages-${{ matrix.os-name }}
+          path: ${{ steps.parentDir.outputs.parentDir }}/pages
 
   # Deploy Pages
   pages-deploy:
@@ -366,3 +383,33 @@ jobs:
       # checkout commit
       - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
+      # download pages artifact
+      - name: 🔽Download Pages Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: pages-${{ matrix.os-name }}
+          path: ./
+      # Prepare for GH-Pages
+      - name: Prepare for GH-Pages
+        shell: bash
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+      # List Differences
+      - name: List Differences
+        shell: bash
+        run: |
+          git diff --name-status --cached
+      # Set Commit
+      - name: Set Commit
+        shell: bash
+        run: |
+          git commit -q -F commit.txt
+          git log
+      # Push to GH-Pages
+      - name: Push to GH-Pages (MASTER)
+        shell: bash
+        run: |
+          git push
+        if: contains(github.ref, 'master')
