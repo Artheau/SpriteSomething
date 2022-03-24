@@ -94,7 +94,7 @@ jobs:
         # should run on all OS
         os-name: [
           ubuntu-latest,
-          ubuntu-18.04,
+          # ubuntu-18.04,
           macOS-latest,
           windows-latest
         ]
@@ -253,7 +253,7 @@ jobs:
       - name: Archive Listing
         shell: bash
         run: |
-          ls -R ./deploy/
+          ls -R ${{ steps.parentDir.outputs.parentDir }}/deploy/
 
       # debug info
       - name: Debug Info
