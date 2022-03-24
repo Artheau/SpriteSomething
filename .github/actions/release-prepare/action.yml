@@ -49,4 +49,4 @@ runs:
       uses: actions/upload-artifact@v2
       with:
         name: archive-${{ inputs.os-name }}
-        path: ${{ steps.parentDir.outputs.value }}/deploy
+        path: ${{ steps.parentDir.outputs.parentDir }}/deploy

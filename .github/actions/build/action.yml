@@ -78,4 +78,4 @@ runs:
       uses: actions/upload-artifact@v2
       with:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
-        path: ${{ steps.parentDir.outputs.value }}/artifact
+        path: ${{ steps.parentDir.outputs.parentDir }}/artifact
