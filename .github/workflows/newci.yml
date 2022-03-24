@@ -27,16 +27,16 @@ jobs:
         # should run on all OS
         os-name: [
           ubuntu-latest,
-          # ubuntu-18.04,
-          # macOS-latest,
-          # windows-latest
+          ubuntu-18.04,
+          macOS-latest,
+          windows-latest
         ]
 
         # should run on py 3.8-3.10
         python-version: [
           3.8,
-          # 3.9,
-          # "3.10"
+          3.9,
+          "3.10"
         ]
 
         # PIL 6.2.2 is good
@@ -68,19 +68,19 @@ jobs:
       - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
       # install
-      # - name: 💿Call Install
-      #   uses: ./.github/actions/install
-      #   with:
-      #     os-name: ${{ matrix.os-name }}
-      #     python-version: ${{ matrix.python-version }}
-      #     pillow-version: ${{ matrix.pillow-version }}
+      - name: 💿Call Install
+        uses: ./.github/actions/install
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
       # test
-      # - name: Call Test
-      #   uses: ./.github/actions/test
-      #   with:
-      #     os-name: ${{ matrix.os-name }}
-      #     python-version: ${{ matrix.python-version }}
-      #     pillow-version: ${{ matrix.pillow-version }}
+      - name: Call Test
+        uses: ./.github/actions/test
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
 
   # Build
   install-build:
@@ -94,7 +94,7 @@ jobs:
         # should run on all OS
         os-name: [
           ubuntu-latest,
-          # ubuntu-18.04,
+          ubuntu-18.04,
           macOS-latest,
           windows-latest
         ]
@@ -102,8 +102,8 @@ jobs:
         # should run on py 3.8-3.10
         python-version: [
           3.8,
-          # 3.9,
-          # "3.10"
+          3.9,
+          "3.10"
         ]
 
         # PIL 6.2.2 is good
@@ -236,11 +236,11 @@ jobs:
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux
 
       # download macos archive artifact
-      # - name: 🔽Download MacOS Archive Artifact
-      #   uses: actions/download-artifact@v3.0.0
-      #   with:
-      #     name: archive-macos-latest
-      #     path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos
+      - name: 🔽Download MacOS Archive Artifact
+        uses: actions/download-artifact@v3.0.0
+        with:
+          name: archive-macos-latest
+          path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos
 
       # download windows archive artifact
       - name: 🔽Download Windows Archive Artifact
@@ -301,12 +301,12 @@ jobs:
         if: contains(github.ref, 'master')
 
       # determine macos archive asset
-      # - name: ❔Identify MacOS Archive Asset
-      #   id: identify-macos-asset
-      #   shell: bash
-      #   run: |
-      #     ASSET_MACOS="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/macos)"
-      #     echo "::set-output name=asset_macos::$ASSET_MACOS"
+      - name: ❔Identify MacOS Archive Asset
+        id: identify-macos-asset
+        shell: bash
+        run: |
+          ASSET_MACOS="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/macos)"
+          echo "::set-output name=asset_macos::$ASSET_MACOS"
 
       # upload macos archive asset
       # - name: 🔼Upload MacOS Archive Asset
