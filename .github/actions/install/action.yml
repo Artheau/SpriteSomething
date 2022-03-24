@@ -22,7 +22,7 @@ runs:
   using: "composite"
   steps:
     # checkout commit
-    - name: Checkout commit
+    - name: ✔️Checkout commit
       uses: actions/checkout@v3.0.0
     # install python
     - name: Install Python

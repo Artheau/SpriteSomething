@@ -65,10 +65,10 @@ jobs:
             python-version: "3.10"
     steps:
       # checkout commit
-      - name: Checkout commit
+      - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
       # install
-      # - name: Call Install
+      # - name: 💿Call Install
       #   uses: ./.github/actions/install
       #   with:
       #     os-name: ${{ matrix.os-name }}
@@ -133,17 +133,17 @@ jobs:
             python-version: "3.10"
     steps:
       # checkout commit
-      - name: Checkout commit
+      - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
       # install
-      - name: Call Install
+      - name: 💿Call Install
         uses: ./.github/actions/install
         with:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
       # build
-      - name: Call Build
+      - name: 🔨Call Build
         uses: ./.github/actions/build
         with:
           os-name: ${{ matrix.os-name }}
@@ -177,17 +177,17 @@ jobs:
         pillow-version: ["6.2.2"]
     steps:
       # checkout commit
-      - name: Checkout commit
+      - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
       # install
-      - name: Call Install
+      - name: 💿Call Install
         uses: ./.github/actions/install
         with:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
       # prepare release
-      - name: Prepare Release
+      - name: 📀->📦Prepare Release
         uses: ./.github/actions/release-prepare
         with:
           os-name: ${{ matrix.os-name }}
@@ -207,7 +207,7 @@ jobs:
 
     steps:
       # checkout commit
-      - name: Checkout commit
+      - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
 
       # install dependencies via pip
@@ -218,35 +218,36 @@ jobs:
 
       # get parent dir
       - name: Get Parent Dir
+        id: parentDir
         uses: ./.github/actions/get-parent-dir
 
       # download appversion artifact
-      - name: Download AppVersion Artifact
+      - name: 🔽Download AppVersion Artifact
         uses: actions/download-artifact@v3.0.0
         with:
           name: appversion-${{ matrix.os-name }}
-          path: ${{ steps.parentDir.outputs.value }}/build
+          path: ${{ steps.parentDir.outputs.parentDir }}/build
 
       # download ubuntu archive artifact
-      - name: Download Ubuntu Archive Artifact
+      - name: 🔽Download Ubuntu Archive Artifact
         uses: actions/download-artifact@v3.0.0
         with:
           name: archive-ubuntu-latest
-          path: ${{ steps.parentDir.outputs.value }}/deploy/linux
+          path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux
 
       # download macos archive artifact
-      # - name: Download MacOS Archive Artifact
+      # - name: 🔽Download MacOS Archive Artifact
       #   uses: actions/download-artifact@v3.0.0
       #   with:
       #     name: archive-macos-latest
-      #     path: ${{ steps.parentDir.outputs.value }}/deploy/macos
+      #     path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos
 
       # download windows archive artifact
-      - name: Download Windows Archive Artifact
+      - name: 🔽Download Windows Archive Artifact
         uses: actions/download-artifact@v3.0.0
         with:
           name: archive-windows-latest
-          path: ${{ steps.parentDir.outputs.value }}/deploy/windows
+          path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows
 
       # debug info
       - name: Debug Info
@@ -272,7 +273,7 @@ jobs:
         # if: contains(github.ref, 'master')
 
       # upload linux archive asset
-      - name: Upload Linux Archive Asset
+      - name: 🔼Upload Linux Archive Asset
         id: upload-linux-asset
         uses: actions/upload-release-asset@v1.0.2
         env:
@@ -285,7 +286,7 @@ jobs:
         # if: contains(github.ref, 'master')
 
       # upload macos archive asset
-      # - name: Upload MacOS Archive Asset
+      # - name: 🔼Upload MacOS Archive Asset
       #   id: upload-macos-asset
       #   uses: actions/upload-release-asset@v1.0.2
       #   env:
@@ -298,7 +299,7 @@ jobs:
       #   if: contains(github.ref, 'master')
 
       # upload windows archive asset
-      - name: Upload Windows Archive Asset
+      - name: 🔼Upload Windows Archive Asset
         id: upload-windows-asset
         uses: actions/upload-release-asset@v1.0.2
         env:
@@ -318,10 +319,10 @@ jobs:
 
     steps:
       # checkout commit
-      - name: Checkout commit
+      - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
       # download appversion artifact
-      - name: Download AppVersion Artifact
+      - name: 🔽Download AppVersion Artifact
         uses: actions/download-artifact@v3.0.0
 
   # Deploy Pages
@@ -332,5 +333,5 @@ jobs:
 
     steps:
       # checkout commit
-      - name: Checkout commit
+      - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0

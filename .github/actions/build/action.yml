@@ -26,7 +26,7 @@ runs:
   using: "composite"
   steps:
     # checkout commit
-    - name: Checkout commit
+    - name: ✔️Checkout commit
       uses: actions/checkout@v3.0.0
 
     # get parent dir
@@ -35,7 +35,7 @@ runs:
       uses: ./.github/actions/get-parent-dir
 
     # download pipline
-    - name: Download PipLine
+    - name: 🔽Download PipLine
       uses: actions/download-artifact@v3.0.0
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
@@ -81,7 +81,7 @@ runs:
         python ./resources/ci/common/prepare_binary.py
 
     # upload binary artifact for later step
-    - name: Upload Binary Artifact
+    - name: 🔼Upload Binary Artifact
       uses: actions/upload-artifact@v3.0.0
       with:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}

@@ -22,7 +22,7 @@ runs:
   using: "composite"
   steps:
     # checkout commit
-    - name: Checkout commit
+    - name: ✔️Checkout commit
       uses: actions/checkout@v3.0.0
     # get parent dir
     - name: Get Parent Directory
@@ -43,13 +43,13 @@ runs:
         python ./resources/ci/common/prepare_appversion.py
         python ./resources/ci/common/prepare_release.py
     # upload appversion artifact for later step
-    - name: Upload AppVersion Artifact
+    - name: 🔼Upload AppVersion Artifact
       uses: actions/upload-artifact@v3.0.0
       with:
         name: appversion-${{ inputs.os-name }}
         path: ./resources/app/meta/manifests/app_version.txt
     # upload archive artifact for later step
-    - name: Upload Archive Artifact
+    - name: 🔼Upload Archive Artifact
       uses: actions/upload-artifact@v3.0.0
       with:
         name: archive-${{ inputs.os-name }}
