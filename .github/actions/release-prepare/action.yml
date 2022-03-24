@@ -1,4 +1,4 @@
-name: Prepare Release
+name: 📀->📦Prepare Release
 description: Prepare Release for Deployment
 inputs:
   os-name:
