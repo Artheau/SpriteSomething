@@ -48,16 +48,14 @@ jobs:
             # "9.0.1",
           ]
         exclude:
-          # - os-name: macOS-latest
-          #   python-version: 3.9
-          # - os-name: macOS-latest
-          #   python-version: "3.10"
-          # - os-name: windows-latest
-          #   python-version: 3.9
-          # - os-name: windows-latest
-          #   python-version: "3.10"
-          - os-name: macOS-latest, windows-latest
-            python-version: 3.9, "3.10"
+          - os-name: macOS-latest
+            python-version: 3.9
+          - os-name: macOS-latest
+            python-version: "3.10"
+          - os-name: windows-latest
+            python-version: 3.9
+          - os-name: windows-latest
+            python-version: "3.10"
     steps:
       # checkout commit
       - name: Checkout commit
@@ -117,16 +115,14 @@ jobs:
             # "9.0.1",
           ]
         exclude:
-          # - os-name: macOS-latest
-          #   python-version: 3.9
-          # - os-name: macOS-latest
-          #   python-version: "3.10"
-          # - os-name: windows-latest
-          #   python-version: 3.9
-          # - os-name: windows-latest
-          #   python-version: "3.10"
-          - os-name: macOS-latest, windows-latest
-            python-version: 3.9, "3.10"
+          - os-name: macOS-latest
+            python-version: 3.9
+          - os-name: macOS-latest
+            python-version: "3.10"
+          - os-name: windows-latest
+            python-version: 3.9
+          - os-name: windows-latest
+            python-version: "3.10"
     steps:
       # checkout commit
       - name: Checkout commit
