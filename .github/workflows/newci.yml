@@ -11,7 +11,7 @@ on: [push, pull_request]
 jobs:
   # Test
   install-test:
-    name: Install/Test
+    name: 💿/Test
     runs-on: ${{ matrix.os-name }}
     continue-on-error: True
 
@@ -65,7 +65,7 @@ jobs:
 
   # Build
   install-build:
-    name: Install/Build
+    name: 💿/Build
     runs-on: ${{ matrix.os-name }}
     needs: [install-test]
     continue-on-error: True
@@ -120,7 +120,7 @@ jobs:
 
   # Prepare Release
   install-release-prepare:
-    name: "Install/Prepare Release"
+    name: "💿/Prepare Release"
     runs-on: ${{ matrix.os-name }}
     needs: [install-build]
 

@@ -1,4 +1,4 @@
-name: Install
+name: 💿Install
 description: Install app
 inputs:
   os-name:
