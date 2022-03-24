@@ -345,8 +345,12 @@ jobs:
   # Prepare Pages
   pages-prepare:
     name: 🌎->📦
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os-name }}
     needs: [release-deploy]
+
+    strategy:
+      matrix:
+        os-name: [ubuntu-latest]
 
     steps:
       # checkout commit
@@ -376,8 +380,12 @@ jobs:
   # Deploy Pages
   pages-deploy:
     name: 🌎->🚀
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os-name }}
     needs: [pages-prepare]
+
+    strategy:
+      matrix:
+        os-name: [ubuntu-latest]
 
     steps:
       # checkout commit
