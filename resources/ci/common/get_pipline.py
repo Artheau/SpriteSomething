@@ -14,7 +14,6 @@ WIDTH = 70  # width for labels
 args = []
 
 PIPEXE = ""
-PIP_EXECUTABLE = ""
 
 PYTHON_EXECUTABLE = os.path.splitext(sys.executable.split(os.path.sep).pop())[0]  # get command to run python
 # get python version
@@ -140,7 +139,7 @@ def python_info():
 def pip_info():
     global args
     global PIPEXE
-    global PIP_EXECUTABLE
+    global PIPEXE
     global VERSIONS
 
     # get pip debug info
@@ -182,7 +181,7 @@ def pip_info():
                         ((isinstance(args[0], list) and " ".join(args[0])) or args[0]).strip(),
                         PYTHON_VERSION,
                         sys.platform,
-                        PIP_EXECUTABLE,
+                        PIPEXE,
                         PIP_VERSION,
                         PIP_LATEST
                     )
@@ -333,8 +332,8 @@ def main():
     print('=' * WIDTH)
 
     # figure out pip executable
-    PIP_EXECUTABLE = "pip" if "windows" in env["OS_NAME"] else "pip3"
-    PIP_EXECUTABLE = "pip" if "osx" in env["OS_NAME"] and "actions" in env["CI_SYSTEM"] else PIP_EXECUTABLE
+    PIPEXE = "pip" if "windows" in env["OS_NAME"] else "pip3"
+    PIPEXE = "pip" if "osx" in env["OS_NAME"] and "actions" in env["CI_SYSTEM"] else PIPEXE
 
     PIP_VERSION = ""  # holder for pip's version
 

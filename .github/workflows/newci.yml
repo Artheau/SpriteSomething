@@ -152,13 +152,19 @@ jobs:
     strategy:
       matrix:
         # should run on all LATEST OS
-        os-name: [ubuntu-latest, macOS-latest, windows-latest]
+        os-name: [
+          ubuntu-latest,
+          macOS-latest,
+          windows-latest
+        ]
+
         # run on py 3.8 (EOL: 2024-10-14)
         # EOL
         #  3.8:   2024-10-14
         #  3.9:   2025-10-05
         #  3.10:  2026-10-04
         python-version: [3.8]
+
         # run on PIL 6.2.2
         # can't build on py 3.9-3.10
         pillow-version: ["6.2.2"]
