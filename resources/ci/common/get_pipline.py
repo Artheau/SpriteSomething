@@ -28,6 +28,99 @@ SUCCESS = False
 VERSIONS = {}
 
 
+def process_module_output(lines):
+    for line in lines:
+        # if there's an error, print it and bail
+        if "status 'error'" in line.strip():
+            print(
+                "[%s] %s"
+                %
+                (
+                    "_",
+                    line.strip()
+                )
+            )
+            return
+            # exit(1)
+        # if it's already satisfied or building a wheel, print version data
+        elif "already satisfied" in line or \
+            "Building wheel" in line or \
+                "Created wheel" in line:
+
+            modulename = print_module_line(line)
+
+            if "=" not in modulename and VERSIONS[modulename]["installed"] != VERSIONS[modulename]["latest"]:
+                # install modules from list
+                ret = subprocess.run(
+                    [
+                        *args,
+                        "-m",
+                        PIPEXE,
+                        "install",
+                        "--upgrade",
+                        f"{modulename}"
+                    ],
+                    capture_output=True,
+                    text=True
+                )
+                # if there's output
+                if ret.stdout.strip():
+                    process_module_output(ret.stdout.strip().split("\n"))
+
+        # ignore lines about certain things
+        elif "Attempting uninstall" in line or \
+            "Collecting" in line or \
+            "Downloading" in line or \
+            "eta 0:00:00" in line or \
+            "Found existing" in line or \
+            "Installing collected" in line or \
+            "Preparing metadata" in line or \
+            "Successfully built" in line or \
+            "Successfully installed" in line or \
+            "Successfully uninstalled" in line or \
+            "Stored in" in line or \
+            "Uninstalling " in line or \
+                "Using cached" in line:
+            pass
+        # else, I don't know what it is, print it
+        else:
+            print(line.strip())
+    print("")
+
+
+def print_module_line(line):
+    global VERSIONS
+    satisfied = line.strip().split(" in ")
+    sver = ((len(satisfied) > 1) and satisfied[1].split(
+        "(").pop().replace(")", "")) or ""
+
+    if "Created wheel" in line:
+        line = line.strip().split(':')
+        satisfied = [line[0]]
+        sver = line[1].split('-')[1]
+
+    modulename = satisfied[0].replace("Requirement already satisfied: ", "")
+    VERSIONS[modulename] = {
+        "installed": sver,
+        "latest": (sver and get_module_version(satisfied[0].split(" ")[-1])).strip() or ""
+    }
+
+    print(
+        (
+            "[%s] %s\t%s\t%s"
+            %
+            (
+                "Building wheel" in line and '.' or "X",
+                satisfied[0].ljust(
+                    len("Requirement already satisfied: ") + len("python-bps-continued")),
+                VERSIONS[modulename]["installed"],
+                VERSIONS[modulename]["latest"]
+            )
+        )
+    )
+    return modulename
+
+
 def get_module_version(module):
     # pip index versions [module]                             // >= 21.2
     # pip install [module]==                                  // >= 21.1
@@ -242,78 +335,8 @@ def install_modules():
 
     # if there's output
     if ret.stdout.strip():
-        for line in ret.stdout.strip().split("\n"):
-            # if there's an error, print it and bail
-            if "status 'error'" in line.strip():
-                print(
-                    "[%s] %s"
-                    %
-                    (
-                        "_",
-                        line.strip()
-                    )
-                )
-                return
-                # exit(1)
-            # if it's already satisfied or building a wheel, print version data
-            elif "already satisfied" in line or \
-                "Building wheel" in line or \
-                    "Created wheel" in line:
-                satisfied = line.strip().split(" in ")
-                sver = ((len(satisfied) > 1) and satisfied[1].split("(").pop().replace(")", "")) or ""
+        process_module_output(ret.stdout.strip().split("\n"))
 
-                if "Created wheel" in line:
-                    line = line.strip().split(':')
-                    satisfied = [line[0]]
-                    sver = line[1].split('-')[1]
-
-                modulename = satisfied[0].replace("Requirement already satisfied: ", "")
-                VERSIONS[modulename] = {
-                    "installed": sver,
-                    "latest": (sver and get_module_version(satisfied[0].split(" ")[-1])).strip() or ""
-                }
-
-                print(
-                    (
-                        "[%s] %s\t%s\t%s"
-                        %
-                        (
-                            "Building wheel" in line and '.' or "X",
-                            satisfied[0].ljust(len("Requirement already satisfied: ") + len("python-bps-continued")),
-                            VERSIONS[modulename]["installed"],
-                            VERSIONS[modulename]["latest"]
-                        )
-                    )
-                )
-
-                if "=" not in modulename and VERSIONS[modulename]["installed"] != VERSIONS[modulename]["latest"]:
-                    # install modules from list
-                    ret = subprocess.run(
-                        [
-                            *args,
-                            "-m",
-                            PIPEXE,
-                            "install",
-                            "--upgrade",
-                            f"{modulename}"
-                        ],
-                        capture_output=True,
-                        text=True
-                    )
-                    print(ret)
-
-            # ignore lines about certain things
-            elif "Collecting" in line or \
-                "Downloading" in line or \
-                "eta 0:00:00" in line or \
-                "Preparing metadata" in line or \
-                "Successfully built" in line or \
-                    "Stored in" in line:
-                pass
-            # else, I don't know what it is, print it
-            else:
-                print(line.strip())
-        print("")
         with open(os.path.join(".", "resources", "user", "meta", "manifests", "settings.json"), "w") as settings:
             settings.write(
                 json.dumps(

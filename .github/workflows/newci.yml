@@ -267,7 +267,7 @@ jobs:
           echo "Git Tag:      ${GITHUB_TAG}"
 
       # create a release
-      - name: 📀->🚀Create a Release
+      - name: 📀->🚀Create a Release (MASTER)
         id: create_release
         uses: actions/create-release@v1.1.4
         env:
@@ -288,7 +288,7 @@ jobs:
           echo "::set-output name=asset_linux::$ASSET_LINUX"
 
       # upload linux archive asset
-      - name: 🔼Upload Linux Archive Asset
+      - name: 🔼Upload Linux Archive Asset (MASTER)
         id: upload-linux-asset
         uses: actions/upload-release-asset@v1.0.2
         env:
@@ -309,7 +309,7 @@ jobs:
           echo "::set-output name=asset_macos::$ASSET_MACOS"
 
       # upload macos archive asset
-      # - name: 🔼Upload MacOS Archive Asset
+      # - name: 🔼Upload MacOS Archive Asset (MASTER)
       #   id: upload-macos-asset
       #   uses: actions/upload-release-asset@v1.0.2
       #   env:
@@ -330,7 +330,7 @@ jobs:
           echo "::set-output name=asset_windows::$ASSET_WIN"
 
       # upload windows archive asset
-      - name: 🔼Upload Windows Archive Asset
+      - name: 🔼Upload Windows Archive Asset (MASTER)
         id: upload-windows-asset
         uses: actions/upload-release-asset@v1.0.2
         env:
@@ -399,7 +399,7 @@ jobs:
           name: pages-${{ matrix.os-name }}
           path: ./
       # Prepare actor for GH-Pages
-      - name: :octocat:Prepare actor for GH-Pages
+      - name: 📝Prepare actor for GH-Pages
         shell: bash
         run: |
           git config user.name github-actions
