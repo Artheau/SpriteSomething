@@ -25,7 +25,7 @@ runs:
     - name: ✔️Checkout commit
       uses: actions/checkout@v3.0.0
     # get parent dir
-    - name: Get Parent Directory
+    - name: 📁Get Parent Directory
       id: parentDir
       uses: ./.github/actions/get-parent-dir
     # download binary artifact
