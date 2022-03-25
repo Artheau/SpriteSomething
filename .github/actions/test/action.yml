@@ -16,15 +16,18 @@ inputs:
 #########
 # actions/checkout@v3.0.0
 # actions/download-artifact@v3.0.0
+# actions/upload-artifact@v3.0.0
 # GabrielBB/xvfb-action@v1.6
 
 runs:
   using: "composite"
   steps:
-    # checkout commit
-    - name: ✔️Checkout commit
-      uses: actions/checkout@v3.0.0
-
+    # download pipline
+    - name: Download PipLine
+      uses: actions/download-artifact@v3.0.0
+      with:
+        name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        path: ./resources/user/meta/manifests
     # start virtual display driver & run tests
     - name: 🖥️Start virtual display driver & Test (!Windows)
       shell: bash
