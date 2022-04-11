@@ -193,8 +193,11 @@ class SpriteSomethingMainFrame(tk.Frame):
             image_path = os.path.join(self.game.resource_subpath,"icons")
           if "sprite_plugins" in internal_name:
             image_path = os.path.join(self.sprite.resource_subpath,"icons")
-          with Image.open(common.get_resource(image_path,image_filename)) as img:
-            cascade.images[image_name] = ImageTk.PhotoImage(img)
+          if common.get_resource(image_path,image_filename) is not None:
+            with Image.open(common.get_resource(image_path,image_filename)) as img:
+              cascade.images[image_name] = ImageTk.PhotoImage(img)
+          else:
+            cascade.images[image_name] = None
         else:
           cascade.images[image_name] = None
         cascade.add_command(label=display_name, image=cascade.images[image_name], compound=tk.LEFT, command=function_to_call, state="disabled" if function_to_call is None else "normal")
@@ -1037,6 +1040,141 @@ class SpriteSomethingMainFrame(tk.Frame):
       return returnvalue
     #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
     return False
+
+  def export_palette(self, fmt="gimp"):
+    if self.sprite.classic_name != "Link":
+      return
+
+    palette_doc = []
+    header = []
+    footer = [""]
+    clrfmt = lambda x:(
+      "%d %d %d"
+      %
+      (
+        x[0],
+        x[1],
+        x[2]
+      )
+    )
+
+    paletteID = ""
+    #get animation engine handle
+    ani_eng = self.animation_engine
+    if "mail_var" in ani_eng.spiffy_dict:
+      paletteID = ani_eng.spiffy_dict["mail_var"].get()
+    elif "suit_var" in ani_eng.spiffy_dict:
+      paletteID = ani_eng.spiffy_dict["suit_var"].get()
+
+    # GIMP
+    # CinePaint
+    # Inkscape
+    # Krita
+    if fmt == "gimp":
+      header = [
+        "GIMP Palette",
+        "Base Sprite Name: ".ljust(len("Custom Sprite Name: "))   + self.sprite.classic_name,
+        "Base Palette Name: ".ljust(len("Custom Sprite Name: "))  + paletteID,
+        "Base Game Name: ".ljust(len("Custom Sprite Name: "))     + self.game.name,
+        "Custom Sprite Name: ".ljust(len("Custom Sprite Name: ")) + self.sprite.metadata["sprite.name"],
+        "Author: ".ljust(len("Custom Sprite Name: "))             + self.sprite.metadata["author.name"],
+        "Columns: ".ljust(len("Custom Sprite Name: "))            + str(0),
+        "#"
+      ]
+      clrfmt = lambda x:(
+        "%s %s %s\t%s"
+        %
+        (
+          str(x[0]).rjust(3),
+          str(x[1]).rjust(3),
+          str(x[2]).rjust(3),
+          " " or "Color Name"
+        )
+      )
+
+    # Corel
+    # Graphics Gale
+    # Paint Shop Pro
+    elif fmt == "jasc":
+      header = [
+        "JASC-PAL",
+        "0100",
+        "16"
+      ]
+
+    # Paint.NET
+    elif fmt == "pdn":
+      header = [
+        "; paint.net Palette File",
+        "; Lines that start with a semicolon are comments",
+        "; Colors are written as 8-digit hexadecimal numbers: aarrggbb",
+        "; For example, this would specify green: FF00FF00",
+        "; The alpha ('aa') value specifies how transparent a color is. FF is fully opaque, 00 is fully transparent.",
+        "; A palette must consist of ninety six (96) colors. If there are less than this, the remaining color",
+        "; slots will be set to white (FFFFFFFF). If there are more, then the remaining colors will be ignored.",
+        ";",
+        "; Base Sprite Name: ".ljust(len("; Custom Sprite Name: "))   + self.sprite.classic_name,
+        "; Base Palette Name: ".ljust(len("; Custom Sprite Name: "))  + paletteID,
+        "; Base Game Name: ".ljust(len("; Custom Sprite Name: "))     + self.game.name,
+        "; Custom Sprite Name: ".ljust(len("; Custom Sprite Name: ")) + self.sprite.metadata["sprite.name"],
+        "; Author: ".ljust(len("; Custom Sprite Name: "))             + self.sprite.metadata["author.name"],
+      ]
+      clrfmt = lambda x:(
+        "%s%s%s%s"
+        %
+        (
+          "FF",
+          (hex(x[0])[2:]).ljust(2,'0').upper(),
+          (hex(x[1])[2:]).ljust(2,'0').upper(),
+          (hex(x[2])[2:]).ljust(2,'0').upper()
+        )
+      )
+
+    # TileShop
+    elif fmt == "tileshop":
+      header = [
+        '<?xml version="1.0" encoding="utf-8"?>',
+        '<!--',
+        '<sprite>',
+        "\t" + f"<base name=\"{self.sprite.classic_name}\" game=\"{self.game.name}\" />",
+        "\t" + f"<palette name=\"{paletteID}\" />",
+        "\t" + f"<custom name=\"{self.sprite.metadata['sprite.name']}\" author=\"{self.sprite.metadata['author.name']}\" />",
+        '</sprite>',
+        '-->',
+        '<palette datafile="" color="Bgr15" zeroindextransparent="true">'
+      ]
+      clrfmt = lambda x:(
+        "\t<nativecolor value=\"#%s%s%s%s\" />"
+        %
+        (
+          (hex(x[0])[2:]).ljust(2,'0').upper(),
+          (hex(x[1])[2:]).ljust(2,'0').upper(),
+          (hex(x[2])[2:]).ljust(2,'0').upper(),
+          "FF"
+        )
+      )
+      footer = [
+        '</palette>',
+        ""
+      ]
+      pass
+
+    palette_doc += header
+
+    palette_doc.append(clrfmt((0,0,0)))
+
+    for color in self.sprite.get_palette([paletteID]):
+      color = clrfmt(color)
+      palette_doc.append(color)
+
+    if fmt == "pdn":
+      padding = 96 - len(palette_doc) + len(header)
+      for i in range(padding):
+        palette_doc.append("FFFFFFFF")
+
+    palette_doc += footer
+
+    print("\n".join(palette_doc))
 
   def open_project_website(self):
     website_url = "https://artheau.github.io/SpriteSomething"
