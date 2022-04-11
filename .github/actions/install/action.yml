@@ -22,12 +22,12 @@ runs:
   using: "composite"
   steps:
     # install python
-    - name: Install Python
+    - name: 💿Install Python
       uses: actions/setup-python@v3.0.0
       with:
         python-version: ${{ inputs.python-version }}
     # install modules via pip
-    - name: Install Modules
+    - name: 💿Install Modules
       shell: bash
       env:
         OS_NAME: ${{ inputs.os-name }}
@@ -41,13 +41,13 @@ runs:
         echo "PipLine"
         cat ./resources/user/meta/manifests/pipline.txt
     # upload pipline
-    - name: Upload PipLine
+    - name: 🔼Upload PipLine
       uses: actions/upload-artifact@v3.0.0
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
     # install pillow
-    - name: Install Pillow
+    - name: 💿Install Pillow
       shell: bash
       run: |
         python -m pip install pillow==${{ inputs.pillow-version }}

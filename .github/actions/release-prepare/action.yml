@@ -29,7 +29,7 @@ runs:
       id: parentDir
       uses: ./.github/actions/get-parent-dir
     # download binary artifact
-    - name: Download Binary Artifact
+    - name: 🔽Download Binary Artifact
       uses: actions/download-artifact@v3.0.0
       with:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}

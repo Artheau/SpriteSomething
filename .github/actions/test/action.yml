@@ -23,7 +23,7 @@ runs:
   using: "composite"
   steps:
     # download pipline
-    - name: Download PipLine
+    - name: 🔽Download PipLine
       uses: actions/download-artifact@v3.0.0
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
