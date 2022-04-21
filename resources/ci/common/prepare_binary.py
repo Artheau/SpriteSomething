@@ -23,7 +23,7 @@ def prepare_binary():
             distdir = os.path.join(".", "dist", "linux")
         elif "windows" in env["OS_NAME"]:
             distdir = os.path.join(".", "dist", "windows")
-        if distdir != "":
+        if distdir != "" and os.path.exists(distdir):
             BUILD_FILENAME = common.find_binary(distdir)
     if len(BUILD_FILENAME) == 0:
         BUILD_FILENAME = common.find_binary(os.path.join("..", "artifact"))
