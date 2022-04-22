@@ -86,3 +86,4 @@ runs:
       with:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ${{ steps.parentDir.outputs.parentDir }}/artifact
+        if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`

@@ -53,6 +53,7 @@ a = Analysis(
 
 # https://stackoverflow.com/questions/17034434/how-to-remove-exclude-modules-and-files-from-pyinstaller
 excluded_binaries = [
+    'api-ms-win-crt-heap-l1-1-0.dll',
     'api-ms-win-crt-math-11-1-0.dll',
     'mfc140u.dll',
     'msvcp140.dll',
