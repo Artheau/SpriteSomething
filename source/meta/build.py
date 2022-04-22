@@ -22,7 +22,6 @@ def run_build():
         os.path.join("source", "SpriteSomething.spec"),
         upx_string,
         "-y",
-        "--onefile",
         f"--distpath={DEST_DIRECTORY}"
     ]
     print("PyInstaller args: %s" % " ".join(args))
