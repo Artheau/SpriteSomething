@@ -55,6 +55,7 @@ a = Analysis(
 excluded_binaries = [
     'api-ms-win-crt-heap-l1-1-0.dll',
     'api-ms-win-crt-math-l1-1-0.dll',
+    'api-ms-win-crt-runtime-l1-1-0.dll',
     'mfc140u.dll',
     'msvcp140.dll',
     'ucrtbase.dll',
