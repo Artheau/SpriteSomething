@@ -34,7 +34,7 @@ def recurse_for_py_files(names_so_far):
 
 
 hiddenimports = recurse_for_py_files(["source"])
-hiddenimports.append("pkg_resources.py2_warn")
+# hiddenimports.append("pkg_resources.py2_warn")
 
 a = Analysis(
     [f"../{BINARY_SLUG}.py"],
@@ -54,7 +54,7 @@ a = Analysis(
 # https://stackoverflow.com/questions/17034434/how-to-remove-exclude-modules-and-files-from-pyinstaller
 excluded_binaries = [
     'api-ms-win-crt-heap-l1-1-0.dll',
-    'api-ms-win-crt-math-11-1-0.dll',
+    'api-ms-win-crt-math-l1-1-0.dll',
     'mfc140u.dll',
     'msvcp140.dll',
     'ucrtbase.dll',
