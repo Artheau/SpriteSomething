@@ -112,12 +112,13 @@ def prepare_env():
   if OS_VERSION == "" and OS_DIST != "" and OS_DIST != "notset":
     OS_VERSION = OS_DIST
 
-	# if no tag
+  # if no tag
   if GITHUB_TAG == "":
-    # if we haven't appended the build number, do it
-    if env["BUILD_NUMBER"] not in GITHUB_TAG:
-      GITHUB_TAG = APP_VERSION
-      # if the app version didn't have the build number, add it
+    # default to app version
+    GITHUB_TAG = APP_VERSION
+    # if we have a build number
+    if env["BUILD_NUMBER"] != "":
+      # if it's not in the tag, add it
       # set to <app_version>.<build_number>
       if env["BUILD_NUMBER"] not in GITHUB_TAG:
         GITHUB_TAG += '.' + env["BUILD_NUMBER"]

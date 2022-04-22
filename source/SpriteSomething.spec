@@ -53,10 +53,11 @@ a = Analysis(
 
 # https://stackoverflow.com/questions/17034434/how-to-remove-exclude-modules-and-files-from-pyinstaller
 excluded_binaries = [
-    'VCRUNTIME140.dll',
-    'ucrtbase.dll',
+    'api-ms-win-crt-math-11-1-0.dll',
+    'mfc140u.dll',
     'msvcp140.dll',
-    'mfc140u.dll'
+    'ucrtbase.dll',
+    'VCRUNTIME140.dll'
 ]
 a.binaries = TOC([x for x in a.binaries if x[0] not in excluded_binaries])
 
