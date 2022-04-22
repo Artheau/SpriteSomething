@@ -10,7 +10,7 @@ from shutil import unpack_archive
 
 
 def get_upx():
-    VERBOSE = True
+    VERBOSE = False
     CI_SETTINGS = {}
     manifest_path = os.path.join("resources", "app", "meta", "manifests", "ci.json")
     if (not os.path.isfile(manifest_path)):

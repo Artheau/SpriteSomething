@@ -28,13 +28,13 @@ def recurse_for_py_files(names_so_far):
                         if not new_name in returnvalue:
                             returnvalue.append(new_name)
                 returnvalue.extend(recurse_for_py_files(new_name_list))
-    returnvalue.append("PIL._tkinter_finder")  # Linux needs this
-    returnvalue.append("source.meta.gui.animationlib")  # Windows missed this
     return returnvalue
 
 
 hiddenimports = recurse_for_py_files(["source"])
-# hiddenimports.append("pkg_resources.py2_warn")
+hiddenimports.append("PIL._tkinter_finder")           # Linux needs this
+hiddenimports.append("pkg_resources.py2_warn")        # pyinstaller cried about this
+hiddenimports.append("source.meta.gui.animationlib")  # Windows missed this
 
 a = Analysis(
     [f"../{BINARY_SLUG}.py"],
