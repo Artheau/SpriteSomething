@@ -34,6 +34,8 @@ def recurse_for_py_files(names_so_far):
 hiddenimports = recurse_for_py_files(["source"])
 hiddenimports.append("PIL._tkinter_finder")           # Linux needs this
 hiddenimports.append("pkg_resources.py2_warn")        # pyinstaller cried about this
+for hidden in (collect_submodules("pkg_resources")):
+    hiddenimports.append(hidden)
 hiddenimports.append("source.meta.gui.animationlib")  # Windows missed this
 
 a = Analysis(
@@ -62,6 +64,7 @@ excluded_binaries = [
 # win is temperamental
 for dll in [
   "heap",
+  "locale",
   "math",
   "runtime",
   "stdio"
