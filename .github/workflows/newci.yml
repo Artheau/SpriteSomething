@@ -93,17 +93,17 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          ubuntu-latest,
-          ubuntu-18.04,
-          macos-latest,
+          # ubuntu-latest,
+          # ubuntu-18.04,
+          # macos-latest,
           windows-latest
         ]
 
         # should run on py 3.8-3.10
         python-version: [
           3.8,
-          3.9,
-          "3.10"
+          # 3.9,
+          # "3.10"
         ]
 
         # PIL 6.2.2 is good
@@ -160,8 +160,8 @@ jobs:
       matrix:
         # should run on all LATEST OS
         os-name: [
-          ubuntu-latest,
-          macos-latest,
+          # ubuntu-latest,
+          # macos-latest,
           windows-latest
         ]
 
