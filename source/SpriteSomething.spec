@@ -1,6 +1,8 @@
 # -*- mode: python -*-
 
+import os
 import sys
+from PyInstaller.utils.hooks import collect_submodules
 
 block_cipher = None
 console = False  # <--- change this to True to enable command prompt when the app runs
