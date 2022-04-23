@@ -67,6 +67,7 @@ excluded_binaries = [
 dlls = [
   "conio",
   "convert",
+  "console",
   "datetime",
   "environment",
   "errorhandling",
