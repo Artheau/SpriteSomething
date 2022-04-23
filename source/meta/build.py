@@ -36,9 +36,10 @@ def run_build():
       bufsize=1,
       universal_newlines=True
     ) as p:
+      print(p)
       if p.stdout:
         for line in p.stdout:
-          print(line.strip(), end='')
+          print(f"STDOUT: {line.strip()}", end='')
           if "NotCompressibleException" in line.strip():
             errs.append(line.strip())
       if p.stderr:

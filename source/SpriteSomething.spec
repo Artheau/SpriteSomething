@@ -103,6 +103,7 @@ dlls = [
   "sysinfo",
 
   "time",
+  "timezone",
 
   "util"
 ]
