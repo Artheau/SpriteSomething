@@ -24,24 +24,25 @@ def run_build():
         "-y",
         f"--distpath={DEST_DIRECTORY}"
     ]
+    errs = []
     print("PyInstaller args: %s" % " ".join(args))
-    ret = subprocess.run(
-        [
-            PYINST_EXECUTABLE,
-            *args
-        ],
-        capture_output=True,
-        text=True
-    )
-    print("/" + ("=" * 8) + "\\")
-    print("| STDOUT |")
-    print("\\" + ("=" * 8) + "/")
-    print(ret.stdout)
-    if ret.stderr.strip():
-      print("/" + ("=" * 8) + "\\")
-      print("| STDERR |")
-      print("\\" + ("=" * 8) + "/")
-      print(ret.stderr)
+    cmd = [
+      PYINST_EXECUTABLE,
+      *args
+    ]
+    with subprocess.Popen(cmd, stdout=subprocess.PIPE, bufsize=1, universal_newlines=True) as p:
+      if p.stdout:
+        for line in p.stdout:
+          print(line.strip(), end='')
+      if p.stderr:
+        for line in p.stderr:
+          errs.append(line.strip())
+          print(f"ERROR: {line.strip()}", end='')
+    if len(errs) > 0:
+      print("=" * 10)
+      print("| ERRORS |")
+      print("=" * 10)
+      print("\n".join(errs))
 
 
 if __name__ == "__main__":
