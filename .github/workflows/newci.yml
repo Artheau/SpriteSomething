@@ -67,26 +67,26 @@ jobs:
       # checkout commit
       - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
-      # install
-      - name: 💿Call Install
-        uses: ./.github/actions/install
-        with:
-          os-name: ${{ matrix.os-name }}
-          python-version: ${{ matrix.python-version }}
-          pillow-version: ${{ matrix.pillow-version }}
-      # test
-      - name: ⏱️Call Test
-        uses: ./.github/actions/test
-        with:
-          os-name: ${{ matrix.os-name }}
-          python-version: ${{ matrix.python-version }}
-          pillow-version: ${{ matrix.pillow-version }}
+      # # install
+      # - name: 💿Call Install
+      #   uses: ./.github/actions/install
+      #   with:
+      #     os-name: ${{ matrix.os-name }}
+      #     python-version: ${{ matrix.python-version }}
+      #     pillow-version: ${{ matrix.pillow-version }}
+      # # test
+      # - name: ⏱️Call Test
+      #   uses: ./.github/actions/test
+      #   with:
+      #     os-name: ${{ matrix.os-name }}
+      #     python-version: ${{ matrix.python-version }}
+      #     pillow-version: ${{ matrix.pillow-version }}
 
   # Build
   install-build:
     name: 💿/🔨
     runs-on: ${{ matrix.os-name }}
-    needs: [install-test]
+    # needs: [install-test]
     # continue-on-error: True
 
     strategy:

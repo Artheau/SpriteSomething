@@ -66,6 +66,7 @@ excluded_binaries = [
 # win is temperamental
 for dll in [
   "core-errorhandling",
+  "core-handle",
 
   "crt-conio",
   "crt-convert",
