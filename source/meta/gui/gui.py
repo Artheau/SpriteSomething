@@ -232,6 +232,9 @@ class SpriteSomethingMainFrame(tk.Frame):
                           (self.fish.translate("meta","menu","export.animation-as-hcollage"),"animation-as-hcollage",partial(self.export_animation_as_collage,"horizontal")),
                           #(self.fish.translate("meta","menu","export.animation-as-vcollage"),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
                           (None,None,None),
+                          (self.fish.translate("meta","menu","export.sprite-4bpp"),"sprite-4bpp",partial(self.export_sprite,"4bpp")),
+                          (None,None,None),
+                          (self.fish.translate("meta","menu","export.palette-binary"),"palette-binary",partial(self.export_palette,"binary")),
                           (self.fish.translate("meta","menu","export.palette-gimp"),"palette-gimp",partial(self.export_palette,"gimp")),
                           (self.fish.translate("meta","menu","export.palette-jasc"),"palette-jasc",partial(self.export_palette,"jasc")),
                           (self.fish.translate("meta","menu","export.palette-pdn"),"palette-pdn",partial(self.export_palette,"pdn")),
@@ -826,6 +829,8 @@ class SpriteSomethingMainFrame(tk.Frame):
     filetypes += ".png "
 #    filetypes += ".nes " # NES RomHandler
     filetypes += ".smc .sfc " # SNES RomHandler
+    filetypes += ".4bpp "
+    filetypes += ".zhx "
     filename = filedialog.askopenfilename(initialdir=self.working_dirs["file.open"], title=self.fish.translate("meta","dialogue","file.open.title"), filetypes=((self.fish.translate("meta","dialogue","file.open.types.label"),filetypes),))
     if filename:
       #if we've got a filename, set the working dir and load the sprite
@@ -837,7 +842,13 @@ class SpriteSomethingMainFrame(tk.Frame):
   #query user to export file; PNG/ZSPR/RDC
   def save_file_as(self):
     # Save in one of the valid formats.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
-    filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),(self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),(self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"))
+    filetypes = (
+      (self.fish.translate("meta","dialogue","file.save.png"),"*.png"),
+      (self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),
+      (self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"),
+      (self.fish.translate("meta","dialogue","file.save.4bpp"),"*.4bpp"),
+      (self.fish.translate("meta","dialogue","file.save.zhx"),"*.zhx")
+    )
 
     filename = ""
     if "sprite.name" in self.sprite.metadata:
@@ -847,7 +858,7 @@ class SpriteSomethingMainFrame(tk.Frame):
       filename = "unknown"
     filename = common.filename_scrub(filename)
 
-    filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
+    filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc",".4bpp"), initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
     if filename:
       save_success_bool = self.sprite.save_as(filename)
       if save_success_bool:
@@ -1041,9 +1052,20 @@ class SpriteSomethingMainFrame(tk.Frame):
     #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
     return False
 
+  def export_sprite(self, filename):
+    self.sprite.save_as_binary(filename)
+
   def export_palette(self, fmt="gimp"):
     if self.sprite.classic_name != "Link":
       return
+
+    if fmt == "binary":
+      filename = self.sprite.classic_name.lower() + ".palette"
+      write_buffer = bytearray()
+      write_buffer.extend(self.sprite.get_binary_palettes())
+      with open(filename, "wb") as palettes_file:
+          palettes_file.write(write_buffer)
+      return True
 
     palette_doc = []
     header = []

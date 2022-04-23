@@ -11,6 +11,7 @@ import io
 import json
 import os
 import random
+import yaml
 from functools import partial
 from PIL import Image
 from source.meta.classes import layoutlib
@@ -109,7 +110,9 @@ class SpriteParent():
 
     def import_from_filename(self):
         _, file_extension = os.path.splitext(self.filename)
-        if file_extension.lower() == '.png':
+        if file_extension.lower() == ".4bpp":
+            self.import_from_binary()
+        elif file_extension.lower() == '.png':
             self.import_from_PNG()
         elif file_extension.lower() == '.zspr':
             self.import_from_ZSPR()
@@ -425,22 +428,71 @@ class SpriteParent():
 
     def save_as(self, filename):
         _, file_extension = os.path.splitext(filename)
+        if file_extension.lower() == ".4bpp":
+            return self.save_as_binary(filename)
         if file_extension.lower() == ".png":
             return self.save_as_PNG(filename)
-        if file_extension.lower() == ".zspr":
-            return self.save_as_ZSPR(filename)
         if file_extension.lower() == ".rdc":
             return self.save_as_RDC(filename)
+        if file_extension.lower() == ".zhx":
+            return self.save_as_ZHX(filename)
+        if file_extension.lower() == ".zspr":
+            return self.save_as_ZSPR(filename)
         # tk.messagebox.showerror(
         #     "ERROR",
         #     f"Did not recognize file type \"{file_extension}\""
         # )
         return False
 
+    def save_as_binary(self, filename):
+        write_buffer = bytearray()
+        write_buffer.extend(self.get_binary_sprite_sheet())
+        with open(filename, "wb") as FOURbpp_file:
+            FOURbpp_file.write(write_buffer)
+        return True
+
     def save_as_PNG(self, filename):
         master_image = self.get_master_PNG_image()
         master_image.save(filename, "PNG")
         return True
+
+    def save_as_ZHX(self, filename):
+        if filename == "":
+            filename = "./"
+        zhxLines = []
+        zhxLines.append("---")
+        zhxLines.append("# ZHX manifest file")
+        zhxLines.append("# https://github.com/spannerisms/ZippedHacks")
+        zhxLines.append("")
+        zhxObj = {
+          "meta": {
+            "game": "Zelda 3 Randomizer",
+            "package": {
+              "name": self.metadata["sprite.name"],
+              "author": self.metadata["author.name"]
+            }
+          },
+          "included": [
+            [
+              {
+                "file": self.metadata["sprite.name"].lower() + ".4bpp",
+                "read": "raw",
+                "type": "PlayerGraphics"
+              },
+              {
+                "file": self.metadata["sprite.name"].lower() + ".palette",
+                "read": "raw",
+                "type": "PlayerPalette"
+              }
+            ]
+          ]
+        }
+        zhxObj["meta"]["package"]["name_rom"] = zhxObj["meta"]["package"]["name"].upper()
+        zhxObj["meta"]["package"]["author_rom"] = self.metadata["author.name-short"]
+        print(
+          "\n".join(zhxLines) +
+          yaml.dump(zhxObj, sort_keys=False, indent=2)
+        )
 
     def save_as_ZSPR(self, filename):
         # check to see if the functions exist (e.g. crashes hard if used

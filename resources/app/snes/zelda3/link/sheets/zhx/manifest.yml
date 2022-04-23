@@ -1,0 +1,20 @@
+---
+# ZHX manifest file
+# https://github.com/spannerisms/ZippedHacks
+meta:
+  game: Zelda 3 Randomizer
+
+  package:
+    name: Link
+    author: Nintendo
+    name_rom: LINK
+    author_rom: NINTENDO
+
+included:
+  - - file: link.4bpp
+      read: raw
+      type: PlayerGraphics
+
+    - file: link.palette
+      read: raw
+      type: PlayerPalette
