@@ -93,6 +93,9 @@ for [ver, fnames] in {
     "crt-string",
     "crt-time"
   ],
+  "1-1-1": [
+    "core-processthreads"
+  ],
   "1-2-0": [
     "core-file",
     "core-localization"
