@@ -65,20 +65,22 @@ excluded_binaries = [
 
 # win is temperamental
 for dll in [
-  "conio",
-  "convert",
-  "environment",
-  "filesystem",
-  "heap",
-  "locale",
-  "math",
-  "process",
-  "runtime",
-  "stdio",
-  "string",
-  "time"
+  "core-errorhandling",
+
+  "crt-conio",
+  "crt-convert",
+  "crt-environment",
+  "crt-filesystem",
+  "crt-heap",
+  "crt-locale",
+  "crt-math",
+  "crt-process",
+  "crt-runtime",
+  "crt-stdio",
+  "crt-string",
+  "crt-time"
 ]:
-    excluded_binaries.append(f"api-ms-win-crt-{dll}-l1-1-0.dll")
+    excluded_binaries.append(f"api-ms-win-{dll}-l1-1-0.dll")
 
 a.binaries = TOC([x for x in a.binaries if x[0] not in excluded_binaries])
 
