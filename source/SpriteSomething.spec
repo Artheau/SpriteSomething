@@ -66,6 +66,7 @@ excluded_binaries = [
 # win is temperamental
 for [ver, fnames] in {
   "1-1-0": [
+    "core-datetime",
     "core-errorhandling",
     "core-file",
     "core-handle",
