@@ -36,11 +36,11 @@ def run_build():
       text=True
     )
     if ret.stdout:
-      for line in ret.stdout:
+      for line in ret.stdout.strip().split("\n"):
         if "NotCompressibleException" in line.strip():
           errs.append(line.strip())
     if ret.stderr:
-      for line in ret.stderr:
+      for line in ret.stderr.strip().split("\n"):
         errs.append(line.strip())
         print(f"ERROR: {line.strip()}", end='')
     if len(errs) > 0:
