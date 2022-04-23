@@ -2,6 +2,7 @@ import argparse
 import platform
 import subprocess  # for executing scripts within scripts
 import os  # for checking for dirs
+import re
 
 DEST_DIRECTORY = "."
 
