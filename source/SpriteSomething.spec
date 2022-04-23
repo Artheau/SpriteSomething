@@ -92,7 +92,8 @@ for [ver, fnames] in {
     "crt-time"
   ],
   "1-2-0": [
-    "core-file"
+    "core-file",
+    "core-localization"
   ]
 }.items():
     for fname in fnames:
