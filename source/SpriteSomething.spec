@@ -70,6 +70,7 @@ for [ver, fnames] in {
     "core-file",
     "core-handle",
     "core-interlocked",
+    "core-memory",
     "core-processthreads",
     "core-string",
     "core-sysinfo",
