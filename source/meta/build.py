@@ -30,22 +30,19 @@ def run_build():
       PYINST_EXECUTABLE,
       *args
     ]
-    with subprocess.Popen(
+    ret = subprocess.run(
       cmd,
-      stdout=subprocess.PIPE,
-      bufsize=1,
-      universal_newlines=True
-    ) as p:
-      print(p)
-      if p.stdout:
-        for line in p.stdout:
-          print(f"STDOUT: {line.strip()}", end='')
-          if "NotCompressibleException" in line.strip():
-            errs.append(line.strip())
-      if p.stderr:
-        for line in p.stderr:
+      capture_output=True,
+      text=True
+    )
+    if ret.stdout:
+      for line in ret.stdout:
+        if "NotCompressibleException" in line.strip():
           errs.append(line.strip())
-          print(f"ERROR: {line.strip()}", end='')
+    if ret.stderr:
+      for line in ret.stderr:
+        errs.append(line.strip())
+        print(f"ERROR: {line.strip()}", end='')
     if len(errs) > 0:
       print("=" * 10)
       print("| ERRORS |")
