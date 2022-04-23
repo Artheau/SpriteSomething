@@ -124,6 +124,8 @@ class ExportAudit(unittest.TestCase):
 
             if importExt == "rdc":
                 importExt = "png"
+            if importExt == "zhx":
+                return
 
             sprite = {
                 "import": {
