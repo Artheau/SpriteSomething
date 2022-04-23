@@ -24,6 +24,7 @@ def run_build():
         "-y",
         f"--distpath={DEST_DIRECTORY}"
     ]
+    msgs = []
     errs = []
     print("PyInstaller args: %s" % " ".join(args))
     cmd = [
@@ -35,14 +36,22 @@ def run_build():
       capture_output=True,
       text=True
     )
-    if ret.stdout:
+    if ret.stdout.strip():
       for line in ret.stdout.strip().split("\n"):
+        msgs.append(f"MSG: {line.strip()}")
         if "NotCompressibleException" in line.strip():
           errs.append(line.strip())
-    if ret.stderr:
+          print(f"ERROR: {line.strip()}")
+    if ret.stderr.strip():
       for line in ret.stderr.strip().split("\n"):
-        errs.append(line.strip())
-        print(f"ERROR: {line.strip()}", end='')
+        if "NotCompressibleException" in line.strip():
+          errs.append(line.strip())
+          print(f"ERROR: {line.strip()}")
+    if len(msgs) > 0:
+      print("=" * 10)
+      print("| MESSAGES |")
+      print("=" * 10)
+      print("\n".join(msgs))
     if len(errs) > 0:
       print("=" * 10)
       print("| ERRORS |")

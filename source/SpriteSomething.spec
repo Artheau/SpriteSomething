@@ -83,6 +83,7 @@ dlls = [
 
   "interlocked",
 
+  "libraryloader",
   "locale",
   "localization",
 
