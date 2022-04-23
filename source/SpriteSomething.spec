@@ -68,6 +68,7 @@ for dll in [
   "core-errorhandling",
   "core-file",
   "core-handle",
+  "core-processthreads",
   "core-sysinfo",
 
   "crt-conio",
