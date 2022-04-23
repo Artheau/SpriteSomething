@@ -70,6 +70,7 @@ for dll in [
   "heap",
   "locale",
   "math",
+  "process",
   "runtime",
   "stdio",
   "string"
