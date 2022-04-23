@@ -69,7 +69,11 @@ for dll in [
   "core-file",
   "core-handle",
   "core-processthreads",
+  "core-string",
   "core-sysinfo",
+
+  # both
+  # -string
 
   "crt-conio",
   "crt-convert",
