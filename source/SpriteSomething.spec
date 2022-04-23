@@ -70,6 +70,7 @@ for [ver, fnames] in {
     "core-errorhandling",
     "core-file",
     "core-handle",
+    "core-heap",
     "core-interlocked",
     "core-memory",
     "core-processthreads",
