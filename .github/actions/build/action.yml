@@ -49,6 +49,11 @@ runs:
       run: |
         python ./resources/ci/common/get_upx.py
 
+    - name: List MS API CRT Files
+      shell: bash
+      run: |
+        ls C:\Users\runneradmin\AppData\Local\pyinstaller\bincache01_py38_64bit\api-ms-win-crt-* -l
+
     # run build.py
     - name: Build Binary (MacOS)
       shell: bash

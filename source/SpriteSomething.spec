@@ -66,6 +66,7 @@ excluded_binaries = [
 # win is temperamental
 for dll in [
   "convert",
+  "environment",
   "filesystem",
   "heap",
   "locale",
