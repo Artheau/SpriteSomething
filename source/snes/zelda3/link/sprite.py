@@ -206,11 +206,12 @@ class Sprite(SpriteParent):
 		# FIXME: English
 		raise AssertionError(f"Could not locate tile with name {image_name}")
 
-	def import_cleanup(self):
-		self.load_plugins()
-		self.images["transparent"] = Image.new("RGBA",(0,0),0)
-		self.equipment = self.plugins.equipment_test(False)
-		self.images = dict(self.images,**self.equipment)
+  def import_cleanup(self):
+    self.load_plugins()
+    self.equipment = self.plugins.equipment_test(False)
+    if hasattr(self, "images"):
+      self.images["transparent"] = Image.new("RGBA",(0,0),0)
+      self.images = dict(self.images,**self.equipment)
 
 	def import_from_ROM(self, rom):
 		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)		#the big Link sheet
