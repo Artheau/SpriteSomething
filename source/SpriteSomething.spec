@@ -70,6 +70,7 @@ dlls = [
   "console",
 
   "datetime",
+  "debug",
 
   "environment",
   "errorhandling",
