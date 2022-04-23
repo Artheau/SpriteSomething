@@ -24,8 +24,8 @@ def run_build():
         "-y",
         f"--distpath={DEST_DIRECTORY}"
     ]
-    msgs = []
     errs = []
+    strs = []
     print("PyInstaller args: %s" % " ".join(args))
     cmd = [
       PYINST_EXECUTABLE,
@@ -38,25 +38,23 @@ def run_build():
     )
     if ret.stdout.strip():
       for line in ret.stdout.strip().split("\n"):
-        msgs.append(f"MSG: {line.strip()}")
         if "NotCompressibleException" in line.strip():
           errs.append(line.strip())
-          print(f"ERROR: {line.strip()}")
     if ret.stderr.strip():
       for line in ret.stderr.strip().split("\n"):
         if "NotCompressibleException" in line.strip():
+          strs.append(re.search(r'api-ms-win-(?:[^-]*)-([^-]*)', line.strip()).group(1))
           errs.append(line.strip())
-          print(f"ERROR: {line.strip()}")
-    if len(msgs) > 0:
-      print("=" * 10)
-      print("| MESSAGES |")
-      print("=" * 10)
-      print("\n".join(msgs))
     if len(errs) > 0:
       print("=" * 10)
       print("| ERRORS |")
       print("=" * 10)
       print("\n".join(errs))
+    if len(strs) > 0:
+      print("=" * 10)
+      print("| STRINGS |")
+      print("=" * 10)
+      print("\n".join(strs))
 
 
 if __name__ == "__main__":
