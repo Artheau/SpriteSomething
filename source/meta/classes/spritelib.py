@@ -110,9 +110,7 @@ class SpriteParent():
 
     def import_from_filename(self):
         _, file_extension = os.path.splitext(self.filename)
-        if file_extension.lower() == ".4bpp":
-            self.import_from_binary()
-        elif file_extension.lower() == '.png':
+        if file_extension.lower() == '.png':
             self.import_from_PNG()
         elif file_extension.lower() == '.zspr':
             self.import_from_ZSPR()
@@ -125,6 +123,8 @@ class SpriteParent():
             rom_path = rom_path.replace(os.sep, '.')
             rom_module = self.import_module(f"source.{rom_path}.rom")
             self.import_from_ROM(rom_module.RomHandler(self.filename))
+        # elif file_extension.lower() == ".4bpp":
+        #     self.import_from_binary()
         self.import_cleanup()
 
     def import_from_PNG(self):
