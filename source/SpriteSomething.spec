@@ -74,7 +74,8 @@ for dll in [
   "process",
   "runtime",
   "stdio",
-  "string"
+  "string",
+  "time"
 ]:
     excluded_binaries.append(f"api-ms-win-crt-{dll}-l1-1-0.dll")
 
