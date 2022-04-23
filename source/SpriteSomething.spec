@@ -64,32 +64,38 @@ excluded_binaries = [
 ]
 
 # win is temperamental
-for dll in [
-  "core-errorhandling",
-  "core-file",
-  "core-handle",
-  "core-interlocked",
-  "core-processthreads",
-  "core-string",
-  "core-sysinfo",
+for [ver, fnames] in {
+  "1-1-0": [
+    "core-errorhandling",
+    "core-file",
+    "core-handle",
+    "core-interlocked",
+    "core-processthreads",
+    "core-string",
+    "core-sysinfo",
 
-  # both
-  # -string
+    # both
+    # -string
 
-  "crt-conio",
-  "crt-convert",
-  "crt-environment",
-  "crt-filesystem",
-  "crt-heap",
-  "crt-locale",
-  "crt-math",
-  "crt-process",
-  "crt-runtime",
-  "crt-stdio",
-  "crt-string",
-  "crt-time"
-]:
-    excluded_binaries.append(f"api-ms-win-{dll}-l1-1-0.dll")
+    "crt-conio",
+    "crt-convert",
+    "crt-environment",
+    "crt-filesystem",
+    "crt-heap",
+    "crt-locale",
+    "crt-math",
+    "crt-process",
+    "crt-runtime",
+    "crt-stdio",
+    "crt-string",
+    "crt-time"
+  ],
+  "1-2-0": [
+    "core-file"
+  ]
+}.items():
+    for fname in fnames:
+        excluded_binaries.append(f"api-ms-win-{fname}-l{ver}.dll")
 
 a.binaries = TOC([x for x in a.binaries if x[0] not in excluded_binaries])
 
