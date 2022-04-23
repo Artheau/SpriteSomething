@@ -25,12 +25,23 @@ def run_build():
         f"--distpath={DEST_DIRECTORY}"
     ]
     print("PyInstaller args: %s" % " ".join(args))
-    subprocess.run(
+    ret = subprocess.run(
         [
             PYINST_EXECUTABLE,
             *args
-        ]
+        ],
+        capture_output=True,
+        text=True
     )
+    print("/" + ("=" * 8) + "\\")
+    print("| STDOUT |")
+    print("\\" + ("=" * 8) + "/")
+    print(ret.stdout)
+    if ret.stderr.strip():
+      print("/" + ("=" * 8) + "\\")
+      print("| STDERR |")
+      print("\\" + ("=" * 8) + "/")
+      print(ret.stderr)
 
 
 if __name__ == "__main__":
