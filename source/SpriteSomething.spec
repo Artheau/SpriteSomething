@@ -92,6 +92,7 @@ dlls = [
   "namedpipe",
 
   "process",
+  "processenvironment",
   "processthreads",
   "profile",
 
@@ -101,7 +102,9 @@ dlls = [
   "string",
   "sysinfo",
 
-  "time"
+  "time",
+
+  "util"
 ]
 for dll in dlls:
   for submod in ["core", "crt"]:
