@@ -68,6 +68,7 @@ for dll in [
   "core-errorhandling",
   "core-file",
   "core-handle",
+  "core-interlocked",
   "core-processthreads",
   "core-string",
   "core-sysinfo",
