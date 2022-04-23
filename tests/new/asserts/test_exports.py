@@ -124,7 +124,7 @@ class ExportAudit(unittest.TestCase):
 
             if importExt == "rdc":
                 importExt = "png"
-            if importExt == "zhx":
+            if importExt in ["4bpp", "palette", "zhx"]:
                 return
 
             sprite = {
@@ -169,9 +169,13 @@ class ExportAudit(unittest.TestCase):
                         exportFile
                     )
 
-            self.assertTrue(match)
+            exception = False
+            try:
+                self.assertTrue(match)
+            except:
+                exception = True
 
-            if VERBOSE:
+            if VERBOSE or exception:
                 print("%s -> %s : %s do%s match%s" % (
                     importExt.ljust(4),
                     exportExt.ljust(4),
@@ -211,6 +215,10 @@ class ExportAudit(unittest.TestCase):
                     tempFile,
                     destFile
                 )
+
+                if exception:
+                    exit(1)
+
             RESULTS["pf"].append('.' if match else "F")
 
 
