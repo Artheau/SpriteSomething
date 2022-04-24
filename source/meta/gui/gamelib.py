@@ -2,12 +2,16 @@
 #handling backgrounds, etc.
 #handles import of new sprites
 
-import os							#for filesystem manipulation
+try:
+  from PIL import Image, ImageFile
+  import tkinter as tk	#for GUI stuff
+except ModuleNotFoundError as e:
+  print(e)
+
 import importlib			#for importing libraries dynamically
 import json						#for reading JSON
-import tkinter as tk	#for GUI stuff
+import os							#for filesystem manipulation
 import random					#for choosing background image to load on app startup
-from PIL import Image, ImageFile
 from functools import partial
 from source.meta.gui import widgetlib
 from source.meta.common import common

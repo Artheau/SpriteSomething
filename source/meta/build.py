@@ -47,7 +47,9 @@ def run_build():
           errs.append(line.strip())
     if ret.stderr.strip():
       for line in ret.stderr.strip().split("\n"):
-        if "NotCompressibleException" in line.strip():
+        if "UPX" in line:
+          print(line)
+        elif "NotCompressibleException" in line.strip():
           strAdd = re.search(r'api-ms-win-(?:[^-]*)-([^-]*)', line.strip()).group(1)
           strs.append(strAdd)
           errs.append(line.strip())

@@ -1,17 +1,22 @@
-import tkinter as tk                            #for GUI stuff
-from tkinter import ttk, messagebox, filedialog #for GUI stuff
-import random                                   #for choosing random app titles
+try:
+  import tkinter as tk                            #for GUI stuff
+  from tkinter import ttk, messagebox, filedialog #for GUI stuff
+  from PIL import Image,ImageTk                   #for converting PNG to formats that tk can use
+except ModuleNotFoundError as e:
+  print(e)
+
 import json                                     #for reading JSON
-import re                                       #for regexes in hyperlinks in about box
-import traceback                                #for error reporting
 import os                                       #for filesystem manipulation
+import random                                   #for choosing random app titles
+import re                                       #for regexes in hyperlinks in about box
 import stat                                     #for filesystem manipulation
 import sys                                      #for filesystem manipulation
 import time                                     #for timekeeping
+import traceback                                #for error reporting
 import urllib                                   #for getting latest version number from GitHub Pages
 import webbrowser                               #for launching browser from about box
 from functools import partial                   #for passing parameters to user-triggered function calls
-from PIL import Image,ImageTk                   #for converting PNG to formats that tk can use
+
 from source.meta.gui import widgetlib
 from source.meta import ssDiagnostics as diagnostics
 from source.meta.gui import gamelib
@@ -293,7 +298,7 @@ class SpriteSomethingMainFrame(tk.Frame):
     plugins_menu = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
     tools_menu = tk.Menu(self.menu, tearoff=0, name="tools_menu")
     tools_menu.add_command(label=self.fish.translate("meta","menu","tools.palette-editor"),command=None,state="disabled")
-    tools_menu.add_command(label=self.fish.translate("meta","menu","tools.sheet-trawler"),command=sheet_trawler)
+    # tools_menu.add_command(label=self.fish.translate("meta","menu","tools.sheet-trawler"),command=sheet_trawler)
     tools_menu.add_cascade(label=self.fish.translate("meta","menu","tools.get-representative-image"), menu=representative_images_menu)
     tools_menu.add_cascade(label=self.fish.translate("meta","menu","plugins"), menu=plugins_menu)
     self.menu.add_cascade(label=self.fish.translate("meta","menu","tools"), menu=tools_menu)

@@ -74,6 +74,7 @@ runs:
 
     # upload binary artifact for later step
     - name: 🔼Upload Problem Children Artifact
+      if: failure()
       uses: actions/upload-artifact@v3.0.0
       with:
         name: problemchildren-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}

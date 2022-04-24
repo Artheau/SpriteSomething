@@ -5,15 +5,19 @@
 # and they have to interpret the global frame timer, and communicate back
 #  when to next check in
 
+try:
+  import yaml
+  from PIL import Image
+except ModuleNotFoundError as e:
+  print(e)
+
 import itertools
 import importlib
 import io
 import json
 import os
 import random
-import yaml
 from functools import partial
-from PIL import Image
 from source.meta.classes import layoutlib
 from source.meta.common import common
 
