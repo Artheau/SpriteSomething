@@ -69,7 +69,7 @@ with open(os.path.join(".","resources","app","meta","manifests","excluded_dlls.j
   dlls = json.load(dllsManifest)
   for dll in dlls:
     for submod in ["core", "crt"]:
-      for ver in ["1-1-0", "1-1-1", "1-2-0"]:
+      for ver in ["1-1-0", "1-1-1", "1-2-0", "2-1-0"]:
         excluded_binaries.append(f"api-ms-win-{submod}-{dll}-l{ver}.dll")
 
 a.binaries = TOC([x for x in a.binaries if x[0] not in excluded_binaries])
