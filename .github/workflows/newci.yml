@@ -67,6 +67,11 @@ jobs:
       # checkout commit
       - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
+      # install python
+      - name: 💿Install Python
+        uses: actions/setup-python@v3.0.0
+        with:
+          python-version: ${{ inputs.python-version }}
       # test
       - name: 🧮Print Diagnostics
         shell: bash
@@ -124,14 +129,14 @@ jobs:
       # checkout commit
       - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
-      # # install
+      # install
       - name: 💿Call Install
         uses: ./.github/actions/install
         with:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
-      # # test
+      # test
       - name: ⏱️Call Test
         uses: ./.github/actions/test
         with:

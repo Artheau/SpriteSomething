@@ -1,5 +1,5 @@
 import unittest         # tests
-import source.meta.ssDiagnostics as diags
+from source.meta import ssDiagnostics as diags
 
 global VERBOSE
 VERBOSE = True
