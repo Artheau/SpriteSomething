@@ -26,17 +26,17 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          # ubuntu-latest,
-          # ubuntu-18.04,
-          # macos-latest,
+          ubuntu-latest,
+          ubuntu-18.04,
+          macos-latest,
           windows-latest
         ]
 
         # should run on py 3.8-3.10
         python-version: [
           3.8,
-          # 3.9,
-          # "3.10"
+          3.9,
+          "3.10"
         ]
 
         # PIL 6.2.2 is good
@@ -68,42 +68,42 @@ jobs:
       - name: ✔️Checkout commit
         uses: actions/checkout@v3.0.0
       # # install
-      # - name: 💿Call Install
-      #   uses: ./.github/actions/install
-      #   with:
-      #     os-name: ${{ matrix.os-name }}
-      #     python-version: ${{ matrix.python-version }}
-      #     pillow-version: ${{ matrix.pillow-version }}
+      - name: 💿Call Install
+        uses: ./.github/actions/install
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
       # # test
-      # - name: ⏱️Call Test
-      #   uses: ./.github/actions/test
-      #   with:
-      #     os-name: ${{ matrix.os-name }}
-      #     python-version: ${{ matrix.python-version }}
-      #     pillow-version: ${{ matrix.pillow-version }}
+      - name: ⏱️Call Test
+        uses: ./.github/actions/test
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
 
   # Build
   install-build:
     name: 💿/🔨
     runs-on: ${{ matrix.os-name }}
-    # needs: [install-test]
-    # continue-on-error: True
+    needs: [install-test]
+    continue-on-error: True
 
     strategy:
       matrix:
         # should run on all OS
         os-name: [
-          # ubuntu-latest,
-          # ubuntu-18.04,
-          # macos-latest,
+          ubuntu-latest,
+          ubuntu-18.04,
+          macos-latest,
           windows-latest
         ]
 
         # should run on py 3.8-3.10
         python-version: [
           3.8,
-          # 3.9,
-          # "3.10"
+          3.9,
+          "3.10"
         ]
 
         # PIL 6.2.2 is good
@@ -160,8 +160,8 @@ jobs:
       matrix:
         # should run on all LATEST OS
         os-name: [
-          # ubuntu-latest,
-          # macos-latest,
+          ubuntu-latest,
+          macos-latest,
           windows-latest
         ]
 
