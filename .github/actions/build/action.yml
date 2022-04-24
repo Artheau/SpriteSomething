@@ -72,6 +72,14 @@ runs:
     #     spec: ./source/SpriteSomething.spec
     #   if: contains(inputs.os-name, 'windows')
 
+    # upload binary artifact for later step
+    - name: 🔼Upload Problem Children Artifact
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        name: problemchildren-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        path: ./resources/app/meta/manifests/excluded_dlls.json
+        if-no-files-found: warn # 'warn' or 'ignore' are also available, defaults to `warn`
+
     # prepare binary artifact for later step
     - name: Prepare Binary Artifact
       shell: bash

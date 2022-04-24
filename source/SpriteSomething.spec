@@ -1,5 +1,6 @@
 # -*- mode: python -*-
 
+import json
 import os
 import sys
 from PyInstaller.utils.hooks import collect_submodules
@@ -64,55 +65,12 @@ excluded_binaries = [
 ]
 
 # win is temperamental
-dlls = [
-  "conio",
-  "convert",
-  "console",
-
-  "datetime",
-  "debug",
-
-  "environment",
-  "errorhandling",
-
-  "file",
-  "filesystem",
-
-  "handle",
-  "heap",
-
-  "interlocked",
-
-  "libraryloader",
-  "locale",
-  "localization",
-
-  "math",
-  "memory",
-
-  "namedpipe",
-
-  "process",
-  "processenvironment",
-  "processthreads",
-  "profile",
-
-  "runtime",
-
-  "stdio",
-  "string",
-  "synch",
-  "sysinfo",
-
-  "time",
-  "timezone",
-
-  "util"
-]
-for dll in dlls:
-  for submod in ["core", "crt"]:
-    for ver in ["1-1-0", "1-1-1", "1-2-0"]:
-      excluded_binaries.append(f"api-ms-win-{submod}-{dll}-l{ver}.dll")
+with open(os.path.join(".","resources","app","meta","manifests","excluded_dlls.json")) as dllsManifest:
+  dlls = json.load(dllsManifest)
+  for dll in dlls:
+    for submod in ["core", "crt"]:
+      for ver in ["1-1-0", "1-1-1", "1-2-0"]:
+        excluded_binaries.append(f"api-ms-win-{submod}-{dll}-l{ver}.dll")
 
 a.binaries = TOC([x for x in a.binaries if x[0] not in excluded_binaries])
 
