@@ -72,7 +72,13 @@ def run_build():
         dllsManifest.seek(0)
         dllsManifest.truncate()
         dllsManifest.write(json.dumps(sorted(newDLLs), indent=2))
-        print(f"Wrote the following to the DLL manifest: {json.dumps(sorted(addDLLs))}")
+        print("Old DLLs")
+        print(f"{json.dumps(sorted(dlls))}")
+        print("New DLLs")
+        print(f"{json.dumps(sorted(newDLLs))}")
+        print("Add DLLs")
+        print(f"{json.dumps(sorted(addDLLs))}")
+    print("")
 
 
 if __name__ == "__main__":
