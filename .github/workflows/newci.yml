@@ -38,22 +38,6 @@ jobs:
           3.9,
           "3.10"
         ]
-
-        # PIL 6.2.2 is good
-        # PIL 7.0.0+ introduces color error
-        pillow-version:
-          [
-            "6.2.2",
-            # "7.0.0",
-            # "7.1.2",
-            # "7.2.0",
-            # "8.0.1",
-            # "8.1.2",
-            # "8.2.0",
-            # "8.3.2",
-            # "8.4.0",
-            # "9.0.1",
-          ]
         exclude:
           - os-name: macos-latest
             python-version: 3.9
@@ -71,7 +55,7 @@ jobs:
       - name: 💿Install Python
         uses: actions/setup-python@v3.0.0
         with:
-          python-version: ${{ inputs.python-version }}
+          python-version: ${{ matrix.python-version }}
       # python version
       - name: 🐍Python Version
         shell: bash
