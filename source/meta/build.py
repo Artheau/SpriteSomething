@@ -39,6 +39,7 @@ def run_build():
     )
     if ret.stdout.strip():
       for line in ret.stdout.strip().split("\n"):
+        print(line)
         if "NotCompressibleException" in line.strip():
           errs.append(line.strip())
     if ret.stderr.strip():
@@ -46,11 +47,6 @@ def run_build():
         if "NotCompressibleException" in line.strip():
           strs.append(re.search(r'api-ms-win-(?:[^-]*)-([^-]*)', line.strip()).group(1))
           errs.append(line.strip())
-    if len(errs) > 0:
-      print("=" * 10)
-      print("| ERRORS |")
-      print("=" * 10)
-      print("\n".join(errs))
     if len(strs) > 0:
       print("=" * 10)
       print("| STRINGS |")

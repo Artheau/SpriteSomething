@@ -101,6 +101,7 @@ dlls = [
 
   "stdio",
   "string",
+  "synch",
   "sysinfo",
 
   "time",
