@@ -31,6 +31,7 @@
   "processthreads",
   "profile",
 
+  "rtlsupport",
   "runtime",
 
   "stdio",
@@ -41,5 +42,6 @@
   "time",
   "timezone",
 
-  "util"
+  "util",
+  "utility"
 ]
