@@ -14,7 +14,7 @@ class DiagnosticsAudit(unittest.TestCase):
 
 if __name__ == "__main__":
     if VERBOSE:
-        print("ANIMATIONS")
+        print("DIAGNOSTICS")
         print('.' * 70)
 
     unittest.main()

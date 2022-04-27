@@ -17,7 +17,9 @@ import io
 import json
 import os
 import random
+import tempfile
 from functools import partial
+from shutil import make_archive, move
 from source.meta.classes import layoutlib
 from source.meta.common import common
 
@@ -461,8 +463,11 @@ class SpriteParent():
         return True
 
     def save_as_ZHX(self, filename):
+        filename = os.path.splitext(filename)[0]
+        slug = self.metadata["sprite.name"].replace(' ', '-').lower()
         if filename == "":
-            filename = "./"
+            filename = os.path.join(".", f"{slug}.zhx")
+        temporary_zhx_directory = tempfile.mkdtemp()
         zhxLines = []
         zhxLines.append("---")
         zhxLines.append("# ZHX manifest file")
@@ -479,14 +484,18 @@ class SpriteParent():
           "included": [
             [
               {
-                "file": self.metadata["sprite.name"].lower() + ".4bpp",
+                "file": f"{slug}.4bpp",
                 "read": "raw",
                 "type": "PlayerGraphics"
               },
               {
-                "file": self.metadata["sprite.name"].lower() + ".palette",
+                "file": f"{slug}.palette",
                 "read": "raw",
                 "type": "PlayerPalette"
+              },
+              {
+                "file": f"{slug}.png",
+                "type": "PlayerPreview"
               }
             ]
           ]
@@ -497,6 +506,13 @@ class SpriteParent():
           "\n".join(zhxLines) +
           yaml.dump(zhxObj, sort_keys=False, indent=2)
         )
+        self.save_as(os.path.join(temporary_zhx_directory, f"{slug}.4bpp"))
+        self.save_as(os.path.join(temporary_zhx_directory, f"{slug}.png"))
+        with(open(os.path.join(temporary_zhx_directory, f"{slug}.yml"), "w+")) as manifestFile:
+          manifestFile.write("\n".join(zhxLines))
+          manifestFile.write(yaml.dump(zhxObj, sort_keys=False, indent=2))
+        make_archive(f"{slug}", "zip", temporary_zhx_directory)
+        move(f"{slug}.zip", f"{filename}.zhx")
 
     def save_as_ZSPR(self, filename):
         # check to see if the functions exist (e.g. crashes hard if used

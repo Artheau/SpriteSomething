@@ -18,7 +18,7 @@ on: [push, pull_request]
 jobs:
   # Test
   test:
-    name: ⏱️
+    name: 🧮
     runs-on: ${{ matrix.os-name }}
     continue-on-error: True
 
