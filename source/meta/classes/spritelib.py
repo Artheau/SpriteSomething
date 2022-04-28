@@ -201,6 +201,149 @@ class SpriteParent():
             raise AssertionError(
                 f"No support is implemented for ZSPR version {int(data[4])}")
 
+    # filename, gameName, paletteID, fmt
+    def export_palette(self, filename="", gameName="", paletteID="", fmt="gimp"):
+        if self.classic_name != "Link":
+          return
+
+        if filename == "":
+          filename = self.classic_name.lower() + ".palette"
+          if fmt != "binary":
+            filename += '-' + fmt
+
+        if fmt == "binary":
+          write_buffer = bytearray()
+          write_buffer.extend(self.get_binary_palettes())
+          with open(filename, "wb") as palettes_file:
+              palettes_file.write(write_buffer)
+          return True
+
+        palette_doc = []
+        header = []
+        footer = [""]
+        clrfmt = lambda x:(
+          "%d %d %d"
+          %
+          (
+            x[0],
+            x[1],
+            x[2]
+          )
+        )
+
+        # GIMP
+        # CinePaint
+        # Inkscape
+        # Krita
+        if fmt == "gimp":
+          header = [
+            "GIMP Palette",
+            "Base Sprite Name: ".ljust(len("Custom Sprite Name: "))   + self.classic_name,
+            "Base Palette Name: ".ljust(len("Custom Sprite Name: "))  + paletteID,
+            "Base Game Name: ".ljust(len("Custom Sprite Name: "))     + gameName,
+            "Custom Sprite Name: ".ljust(len("Custom Sprite Name: ")) + self.metadata["sprite.name"],
+            "Author: ".ljust(len("Custom Sprite Name: "))             + self.metadata["author.name"],
+            "Columns: ".ljust(len("Custom Sprite Name: "))            + str(0),
+            "#"
+          ]
+          clrfmt = lambda x:(
+            "%s %s %s\t%s"
+            %
+            (
+              str(x[0]).rjust(3),
+              str(x[1]).rjust(3),
+              str(x[2]).rjust(3),
+              " " or "Color Name"
+            )
+          )
+
+        # Corel
+        # Graphics Gale
+        # Paint Shop Pro
+        elif fmt == "jasc":
+          header = [
+            "JASC-PAL",
+            "0100",
+            "16"
+          ]
+
+        # Paint.NET
+        elif fmt == "pdn":
+          header = [
+            "; paint.net Palette File",
+            "; Lines that start with a semicolon are comments",
+            "; Colors are written as 8-digit hexadecimal numbers: aarrggbb",
+            "; For example, this would specify green: FF00FF00",
+            "; The alpha ('aa') value specifies how transparent a color is. FF is fully opaque, 00 is fully transparent.",
+            "; A palette must consist of ninety six (96) colors. If there are less than this, the remaining color",
+            "; slots will be set to white (FFFFFFFF). If there are more, then the remaining colors will be ignored.",
+            ";",
+            "; Base Sprite Name: ".ljust(len("; Custom Sprite Name: "))   + self.classic_name,
+            "; Base Palette Name: ".ljust(len("; Custom Sprite Name: "))  + paletteID,
+            "; Base Game Name: ".ljust(len("; Custom Sprite Name: "))     + gameName,
+            "; Custom Sprite Name: ".ljust(len("; Custom Sprite Name: ")) + self.metadata["sprite.name"],
+            "; Author: ".ljust(len("; Custom Sprite Name: "))             + self.metadata["author.name"],
+          ]
+          clrfmt = lambda x:(
+            "%s%s%s%s"
+            %
+            (
+              "FF",
+              (hex(x[0])[2:]).ljust(2,'0').upper(),
+              (hex(x[1])[2:]).ljust(2,'0').upper(),
+              (hex(x[2])[2:]).ljust(2,'0').upper()
+            )
+          )
+
+        # TileShop
+        elif fmt == "tileshop":
+          header = [
+            '<?xml version="1.0" encoding="utf-8"?>',
+            '<!--',
+            '<sprite>',
+            "\t" + f"<base name=\"{self.classic_name}\" game=\"{gameName}\" />",
+            "\t" + f"<palette name=\"{paletteID}\" />",
+            "\t" + f"<custom name=\"{self.metadata['sprite.name']}\" author=\"{self.metadata['author.name']}\" />",
+            '</sprite>',
+            '-->',
+            '<palette datafile="" color="Bgr15" zeroindextransparent="true">'
+          ]
+          clrfmt = lambda x:(
+            "\t<nativecolor value=\"#%s%s%s%s\" />"
+            %
+            (
+              (hex(x[0])[2:]).ljust(2,'0').upper(),
+              (hex(x[1])[2:]).ljust(2,'0').upper(),
+              (hex(x[2])[2:]).ljust(2,'0').upper(),
+              "FF"
+            )
+          )
+          footer = [
+            '</palette>',
+            ""
+          ]
+          pass
+
+        palette_doc += header
+
+        palette_doc.append(clrfmt((0,0,0)))
+
+        for color in self.get_palette([paletteID]):
+          color = clrfmt(color)
+          palette_doc.append(color)
+
+        if fmt == "pdn":
+          padding = 96 - len(palette_doc) + len(header)
+          for i in range(padding):
+            palette_doc.append("FFFFFFFF")
+
+        palette_doc += footer
+
+        with(open(filename, "w")) as palettes_file:
+          palettes_file.write("\n".join(palette_doc))
+
+        # print("\n".join(palette_doc))
+
     def get_supplemental_tiles(self, animation, direction, pose_number,
                                palettes, frame_number):
         return []
@@ -432,7 +575,7 @@ class SpriteParent():
         # should return a list of tuples of the form (filename, PIL Image)
         return return_images
 
-    def save_as(self, filename):
+    def save_as(self, filename="", gameName=""):
         _, file_extension = os.path.splitext(filename)
         if file_extension.lower() == ".4bpp":
             return self.save_as_binary(filename)
@@ -441,7 +584,7 @@ class SpriteParent():
         if file_extension.lower() == ".rdc":
             return self.save_as_RDC(filename)
         if file_extension.lower() == ".zhx":
-            return self.save_as_ZHX(filename)
+            return self.save_as_ZHX(filename, gameName)
         if file_extension.lower() == ".zspr":
             return self.save_as_ZSPR(filename)
         # tk.messagebox.showerror(
@@ -462,7 +605,7 @@ class SpriteParent():
         master_image.save(filename, "PNG")
         return True
 
-    def save_as_ZHX(self, filename):
+    def save_as_ZHX(self, filename="", gameName="", paletteID=""):
         filename = os.path.splitext(filename)[0]
         slug = self.metadata["sprite.name"].replace(' ', '-').lower()
         if filename == "":
@@ -473,46 +616,73 @@ class SpriteParent():
         zhxLines.append("# ZHX manifest file")
         zhxLines.append("# https://github.com/spannerisms/ZippedHacks")
         zhxLines.append("")
-        zhxObj = {
-          "meta": {
-            "game": "Zelda 3 Randomizer",
-            "package": {
-              "name": self.metadata["sprite.name"],
-              "author": self.metadata["author.name"]
-            }
-          },
-          "included": [
-            [
-              {
-                "file": f"{slug}.4bpp",
-                "read": "raw",
-                "type": "PlayerGraphics"
-              },
-              {
-                "file": f"{slug}.palette",
-                "read": "raw",
-                "type": "PlayerPalette"
-              },
-              {
-                "file": f"{slug}.png",
-                "type": "PlayerPreview"
-              }
-            ]
-          ]
+        zhxObj = {}
+        zhxObj["meta"] = {
+          "game": gameName,
+          "package": {
+            "name": self.metadata["sprite.name"],
+            "author": self.metadata["author.name"]
+          }
         }
+        zhxObj["included"] = [[]]
         zhxObj["meta"]["package"]["name_rom"] = zhxObj["meta"]["package"]["name"].upper()
         zhxObj["meta"]["package"]["author_rom"] = self.metadata["author.name-short"]
-        print(
-          "\n".join(zhxLines) +
-          yaml.dump(zhxObj, sort_keys=False, indent=2)
-        )
+        # print(
+        #   "\n".join(zhxLines) +
+        #   yaml.dump(zhxObj, sort_keys=False, indent=2)
+        # )
+
+        print(f"Saving '{slug}.4bpp'")
         self.save_as(os.path.join(temporary_zhx_directory, f"{slug}.4bpp"))
+        zhxObj["included"][0].append(
+          {
+            "file": f"{slug}.4bpp",
+            "read": "raw",
+            "type": "PlayerGraphics"
+          }
+        )
+
+        print(f"Exporting binary palette to: '{slug}.pal'")
+        # filename, gameName, paletteID, fmt
+        self.export_palette(
+          os.path.join(temporary_zhx_directory, f"{slug}.pal"),
+          gameName,
+          paletteID,
+          "binary"
+        )
+        self.export_palette(
+          os.path.join(temporary_zhx_directory, f"{slug}.palette-gimp"),
+          gameName,
+          paletteID,
+          "gimp"
+        )
+        zhxObj["included"][0].append(
+          {
+            "file": f"{slug}.pal",
+            "read": "raw",
+            "type": "PlayerPalette"
+          }
+        )
+
+        print(f"Saving '{slug}.png'")
         self.save_as(os.path.join(temporary_zhx_directory, f"{slug}.png"))
+        zhxObj["included"][0].append(
+          {
+            "file": f"{slug}.png",
+            "type": "PlayerPreview"
+          }
+        )
+
         with(open(os.path.join(temporary_zhx_directory, f"{slug}.yml"), "w+")) as manifestFile:
           manifestFile.write("\n".join(zhxLines))
           manifestFile.write(yaml.dump(zhxObj, sort_keys=False, indent=2))
+        print(f"Writing '{slug}.yml'")
+
         make_archive(f"{slug}", "zip", temporary_zhx_directory)
+        print(f"Made archive '{slug}.zip'; ren to '{filename}.zhx'")
         move(f"{slug}.zip", f"{filename}.zhx")
+
+        return True
 
     def save_as_ZSPR(self, filename):
         # check to see if the functions exist (e.g. crashes hard if used
