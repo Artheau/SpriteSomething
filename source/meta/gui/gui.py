@@ -569,7 +569,6 @@ class SpriteSomethingMainFrame(tk.Frame):
     return save_success_bool
 
 
-
   ############################ ANIMATION FUNCTIONS HERE ################################
 
   # get sprite animation booted up and running
