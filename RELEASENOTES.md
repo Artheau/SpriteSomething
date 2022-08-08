@@ -7,6 +7,7 @@ This release of SpriteSomething includes many basic features of the main design 
 ### Core
 
 * Prelim work on some new unit tests.
+* Fixed `.rdc` export.
 
 ## Known Issues
 

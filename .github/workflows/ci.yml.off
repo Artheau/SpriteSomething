@@ -54,7 +54,23 @@ jobs:
     strategy:
       matrix:
         os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
-        python-version: [3.8]
+        python-version: [
+          3.8,
+          # 3.9,
+          "3.10"
+        ]
+        pillow-version: [
+          "6.2.2",
+          # "7.0.0",
+          # "7.1.2",
+          # "7.2.0",
+          # "8.0.1",
+          # "8.1.2",
+          # "8.2.0",
+          # "8.3.2",
+          # "8.4.0",
+          "9.0.1"
+        ]
     steps:
       # checkout commit
       - name: Checkout commit
@@ -70,6 +86,9 @@ jobs:
           OS_NAME: ${{ matrix.os-name }}
         run: |
           python ./resources/ci/common/install.py
+      - name: Install Pillow
+        run: |
+          python -m pip install pillow==${{ matrix.pillow-version }}
       # start virtual display driver & run tests
       - name: Start virtual display driver & Test (!Windows)
         env:
@@ -80,12 +99,13 @@ jobs:
           geom=640x480x24
           exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
           export DISPLAY=:99
-          python -m unittest
+          python -m ./tests/new/custom-tests.py
         if: contains(matrix.os-name, 'windows') != true
       - name: Start virtual display driver & Test (Windows)
         uses: GabrielBB/xvfb-action@v1.4
         with:
-          run: python -m unittest
+          # run: python -m unittest
+          run: python -m ./tests/new/custom-tests.py
         if: contains(matrix.os-name, 'windows')
   # Install & Build
   #  Set up environment

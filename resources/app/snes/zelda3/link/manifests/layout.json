@@ -39,6 +39,29 @@
 		[	"AA0","AA1","AA2","AA3","AA4","AA5","AA6","AA7"		],
 		[	"AB0","AB1","AB2","AB3","AB4","AB5","AB6","null_block","palette_block"	]
 	],
+  "pseudoimages": [
+    "BED0","BED1",
+    "BOOK",
+    "BOOMERANG",
+    "BOW0","BOW1","BOW2",
+    "BUGNET0","BUGNET1","BUGNET2","BUGNET3","BUGNET4","BUGNET5","BUGNET6",
+    "BUSH",
+    "BUSH_SHADOW",
+    "CANE0","CANE1","CANE2","CANE3","CANE4",
+    "CRYSTAL",
+    "HAMMER0","HAMMER1","HAMMER2","HAMMER3","HAMMER4","HAMMER5","HAMMER6",
+    "HOOK0","HOOK1","HOOK2","HOOK3","HOOK4",
+    "ITEM",
+    "ROD0","ROD1","ROD2","ROD3","ROD4","ROD5",
+    "SHALLOW_WATER0","SHALLOW_WATER1","SHALLOW_WATER2",
+    "SHIELD0","SHIELD1","SHIELD2","SHIELD3",
+    "SHOVEL0","SHOVEL1",
+    "SWAGDUCK0","SWAGDUCK1",
+    "SWORD0","SWORD1","SWORD2","SWORD3","SWORD4","SWORD5","SWORD6","SWORD7","SWORD8","SWORD9","SWORD10","SWORD11","SWORD12",
+    "TALL_GRASS0","TALL_GRASS1","TALL_GRASS2",
+    "main_shadow",
+    "small_shadow"
+  ],
 	"images":
 	{
 		"A0": {

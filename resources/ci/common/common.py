@@ -2,7 +2,6 @@ import json
 import os   # for env vars
 import stat # file statistics
 import sys  # default system info
-from my_path import get_py_path
 
 CI_SETTINGS = {}
 manifest_path = os.path.join("resources","app","meta","manifests","ci.json")
@@ -58,8 +57,6 @@ def prepare_env():
 
   # ci data
   env["CI_SYSTEM"] = os.getenv("CI_SYSTEM","")
-  # py data
-  (env["PYTHON_EXE_PATH"],env["PY_EXE_PATH"],env["PIP_EXE_PATH"]) = get_py_path()
   # git data
   env["BRANCH"] = os.getenv("TRAVIS_BRANCH","")
   env["GITHUB_ACTOR"] = os.getenv("GITHUB_ACTOR",CI_SETTINGS["common"]["common"]["actor"])
@@ -159,15 +156,16 @@ def find_binary(listdir):
   BUILD_FILENAMES = []
   executable = stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH
   for filename in os.listdir(listdir):
-    if os.path.isfile(filename):
+    filepath = os.path.join(listdir,filename)
+    if os.path.isfile(filepath):
       if os.path.splitext(filename)[1] != ".py":
-        st = os.stat(filename)
+        st = os.stat(filepath)
         mode = st.st_mode
         big = st.st_size > FILESIZE_CHECK
         if (mode & executable) or big:
           for check in FILENAME_CHECKS:
             if check in filename:
-              BUILD_FILENAMES.append(filename)
+              BUILD_FILENAMES.append(filepath)
   return BUILD_FILENAMES
 
 

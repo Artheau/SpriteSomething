@@ -384,7 +384,7 @@ class Sprite(SpriteParent):
 
 		return rom
 
-	def get_palette(self, palettes, default_range, frame_number):
+	def get_palette(self, palettes, default_range=[], frame_number=0):
 		palette_indices = None
 		this_palette = []
 		for i in range(1,16):

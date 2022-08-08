@@ -584,7 +584,7 @@ class Sprite(SpriteParent):
 	def concatenate_facing_and_aiming(self, facing, aiming):
 		return "_aim_".join([facing,aiming])
 
-	def get_palette(self, palettes, default_range, frame_number):
+	def get_palette(self, palettes, default_range=[], frame_number=0):
 		#get the actual list of associated palettes
 		palette_timing_list = self.get_timed_palette_converter(palettes)
 		#figure out the timing
