@@ -39,7 +39,7 @@ def rom_inject(player_sprite, spiffy_dict, old_rom, verbose=False):
 		tournament_flag = field["race"]
 
 		# iddqd = False
-    iddqd = True
+		iddqd = True
 		app_overrides_path = os.path.join(".","resources","user","meta","manifests","overrides.json")
 		if os.path.exists(app_overrides_path):
 			with open(app_overrides_path) as json_file:
