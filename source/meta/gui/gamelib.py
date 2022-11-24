@@ -1,3 +1,4 @@
+# pylint: disable=bad-indentation
 #common functions to all games
 #handling backgrounds, etc.
 #handles import of new sprites
@@ -76,14 +77,17 @@ def autodetect(sprite_filename):
 	#need to autodetect which game, and which sprite
 	#then return an instance of THAT game's class, and an instance of THAT sprite
 	_,file_extension = os.path.splitext(sprite_filename)
-  #If this is a SNES filetype
+	#If this is a SNES filetype
 	if file_extension.lower() in [".sfc",".smc"]:
+		print("SNES game file")
 		game, (sprite, animation_assist) = autodetect_snes(sprite_filename)
 	#If this is a NES filetype
 	elif file_extension.lower() == ".nes":
+		print("NES game file")
 		game, (sprite, animation_assist) = autodetect_nes(sprite_filename)
-  #If it's not a known filetype but a PNG, cycle through and find one that matches
+	#If it's not a known filetype but a PNG, cycle through and find one that matches
 	elif file_extension.lower() == ".png":
+		print("PNG file")
 		game, sprite, animation_assist = autodetect_png(sprite_filename)
 	# # FIXME: For now, RDCs are M3Samus sprites and we're assuming SNES
 	# elif file_extension.lower() == ".rdc":

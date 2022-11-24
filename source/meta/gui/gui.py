@@ -243,7 +243,7 @@ class SpriteSomethingMainFrame(tk.Frame):
     bundled_games = {}
     root = os.path.join("resources","app")
     for console in os.listdir(root):
-      if not console == "meta":
+      if not console in ["meta","css","js"]:
         if os.path.isdir(os.path.join(root,console)):
           if not console in bundled_games:
             bundled_games[console] = {}
