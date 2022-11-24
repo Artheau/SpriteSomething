@@ -41,6 +41,7 @@ runs:
         export DISPLAY=:99
         mkdir -p ./failures
         echo "" > ./failures/errors.txt
+        python -m tests.new.asserts.test_diags
         python -m tests.new.asserts.test_exports
         python -m tests.new.asserts.test_animations
         python -m tests.new.asserts.test_gui
@@ -49,6 +50,7 @@ runs:
       uses: GabrielBB/xvfb-action@v1.6
       with:
         run: |
+          python -m tests.new.asserts.test_diags
           python -m tests.new.asserts.test_exports
           python -m tests.new.asserts.test_animations
           python -m tests.new.asserts.test_gui

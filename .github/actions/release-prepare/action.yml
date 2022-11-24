@@ -34,13 +34,12 @@ runs:
       with:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./
-    # Prepare AppVersion & Release
-    - name: Prepare AppVersion & Release
+    # Prepare Release
+    - name: Prepare Release
       shell: bash
       env:
         OS_NAME: ${{ inputs.os-name }}
       run: |
-        python ./resources/ci/common/prepare_appversion.py
         python ./resources/ci/common/prepare_release.py
     # upload appversion artifact for later step
     - name: 🔼Upload AppVersion Artifact

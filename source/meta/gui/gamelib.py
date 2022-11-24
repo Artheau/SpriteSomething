@@ -47,6 +47,9 @@ def autodetect_nes(sprite_filename):
 		return game, game.make_player_sprite(sprite_filename)
 
 def autodetect_png(sprite_filename):
+		not_consoles = []
+		with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
+		    not_consoles = json.load(f)
 		#the following line prevents a "cannot identify image" error from PIL
 		ImageFile.LOAD_TRUNCATED_IMAGES = True
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
@@ -55,7 +58,7 @@ def autodetect_png(sprite_filename):
 		  game_found = False
 		  search_path = os.path.join("resources","app")
 		  for console in os.listdir(search_path):
-		    if os.path.isdir(os.path.join(search_path,console)) and not console == "meta":
+		    if os.path.isdir(os.path.join(search_path,console)) and not console in not_consoles:
 		      for item in os.listdir(os.path.join(search_path,console)):
 		        game_name = item
 		        sprite_manifest_filename = os.path.join(search_path,console,game_name,"manifests","manifest.json")

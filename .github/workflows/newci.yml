@@ -17,6 +17,57 @@ on: [push, pull_request]
 
 jobs:
   # Test
+  test:
+    name: 🧮
+    runs-on: ${{ matrix.os-name }}
+    continue-on-error: True
+
+    strategy:
+      matrix:
+        # should run on all OS
+        os-name: [
+          ubuntu-latest,
+          ubuntu-18.04,
+          macos-latest,
+          windows-latest
+        ]
+
+        # should run on py 3.8-3.10
+        python-version: [
+          3.8,
+          3.9,
+          "3.10"
+        ]
+        exclude:
+          - os-name: macos-latest
+            python-version: 3.9
+          - os-name: macos-latest
+            python-version: "3.10"
+          - os-name: windows-latest
+            python-version: 3.9
+          - os-name: windows-latest
+            python-version: "3.10"
+    steps:
+      # checkout commit
+      - name: ✔️Checkout commit
+        uses: actions/checkout@v3.0.0
+      # install python
+      - name: 💿Install Python
+        uses: actions/setup-python@v3.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      # python version
+      - name: 🐍Python Version
+        shell: bash
+        run: |
+          python --version
+      # test
+      - name: 🧮Print Diagnostics
+        shell: bash
+        run: |
+          python -m tests.new.asserts.test_diags
+
+  # Install/Test
   install-test:
     name: 💿/⏱️
     runs-on: ${{ matrix.os-name }}
@@ -82,7 +133,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
 
-  # Build
+  # Install/Build
   install-build:
     name: 💿/🔨
     runs-on: ${{ matrix.os-name }}
@@ -150,7 +201,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
 
-  # Prepare Release
+  # Install/Prepare Release
   install-release-prepare:
     name: 💿/📀->📦
     runs-on: ${{ matrix.os-name }}
