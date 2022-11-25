@@ -54,7 +54,23 @@ jobs:
     strategy:
       matrix:
         os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
-        python-version: [3.8]
+        python-version: [
+          3.8,
+          # 3.9,
+          "3.10"
+        ]
+        pillow-version: [
+          "6.2.2",
+          # "7.0.0",
+          # "7.1.2",
+          # "7.2.0",
+          # "8.0.1",
+          # "8.1.2",
+          # "8.2.0",
+          # "8.3.2",
+          # "8.4.0",
+          "9.0.1"
+        ]
     steps:
       # checkout commit
       - name: Checkout commit
@@ -70,6 +86,9 @@ jobs:
           OS_NAME: ${{ matrix.os-name }}
         run: |
           python ./resources/ci/common/install.py
+      - name: Install Pillow
+        run: |
+          python -m pip install pillow==${{ matrix.pillow-version }}
       # start virtual display driver & run tests
       - name: Start virtual display driver & Test (!Windows)
         env:
@@ -80,12 +99,13 @@ jobs:
           geom=640x480x24
           exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
           export DISPLAY=:99
-          python -m unittest
+          python -m ./tests/new/custom-tests.py
         if: contains(matrix.os-name, 'windows') != true
       - name: Start virtual display driver & Test (Windows)
         uses: GabrielBB/xvfb-action@v1.4
         with:
-          run: python -m unittest
+          # run: python -m unittest
+          run: python -m ./tests/new/custom-tests.py
         if: contains(matrix.os-name, 'windows')
   # Install & Build
   #  Set up environment
@@ -100,7 +120,8 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+#        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+        os-name: [ubuntu-latest, ubuntu-18.04, windows-latest]
         python-version: [3.8]
     needs: [install-test]
     steps:
@@ -180,7 +201,8 @@ jobs:
     strategy:
       matrix:
         # install/release on not xenial
-        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+#        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+        os-name: [ubuntu-latest, ubuntu-18.04, windows-latest]
         python-version: [3.8]
 
     needs: [install-build]
@@ -310,11 +332,11 @@ jobs:
           name: archive-ubuntu-latest
           path: ${{ steps.parentDir.outputs.value }}/deploy/linux
       # download macos archive artifact
-      - name: Download MacOS Archive Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: archive-macOS-latest
-          path: ${{ steps.parentDir.outputs.value }}/deploy/macos
+      # - name: Download MacOS Archive Artifact
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: archive-macOS-latest
+      #     path: ${{ steps.parentDir.outputs.value }}/deploy/macos
       # download windows archive artifact
       - name: Download Windows Archive Artifact
         uses: actions/download-artifact@v2
@@ -359,17 +381,17 @@ jobs:
           asset_content_type: application/gzip
         if: contains(github.ref, 'master')
       # upload macos archive asset
-      - name: Upload MacOS Archive Asset
-        id: upload-macos-asset
-        uses: actions/upload-release-asset@v1.0.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ../deploy/macos/SpriteSomething.tar.gz
-          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
-          asset_content_type: application/gzip
-        if: contains(github.ref, 'master')
+      # - name: Upload MacOS Archive Asset
+      #   id: upload-macos-asset
+      #   uses: actions/upload-release-asset@v1.0.2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ../deploy/macos/SpriteSomething.tar.gz
+      #     asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
+      #     asset_content_type: application/gzip
+      #   if: contains(github.ref, 'master')
       # upload windows archive asset
       - name: Upload Windows Archive Asset
         id: upload-windows-asset

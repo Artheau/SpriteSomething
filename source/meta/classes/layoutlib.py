@@ -7,6 +7,7 @@
 
 import itertools
 import json
+import os
 from PIL import Image, ImageOps, ImageDraw
 from source.meta.common import common
 
@@ -213,7 +214,7 @@ class Layout():
             current_y += image.size[1]
         return collage
 
-    def export_all_images_to_PNG(self, all_images, master_palette):
+    def export_all_images_to_PNG(self, all_images, master_palette, filename):
         all_collages = []
         for row in self.get_rows():
 
@@ -244,7 +245,17 @@ class Layout():
             collage = self.make_horizontal_collage(this_row_images)
             all_collages.append(collage)
 
-        full_layout = self.make_vertical_collage(all_collages)
+        full_layout_collage = self.make_vertical_collage(all_collages)
+
+        # load the original PNG and use a mask to grab everything outside
+        # the frame and paste it back ontop of the collage
+
+        samus_mask = Image.open(common.get_resource(os.path.join("snes","metroid3","samus","sheets"),"samus_mask.png"))
+        if (samus_mask.width == full_layout_collage.width) and (os.path.splitext(filename)[1] == "png"):
+            original_image = Image.open(filename).convert("RGBA")
+            full_layout = Image.composite(original_image, full_layout_collage, samus_mask)
+        else:
+            full_layout = full_layout_collage
         return full_layout
 
     def extract_all_images_from_master(self, master_image):

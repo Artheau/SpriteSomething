@@ -554,7 +554,8 @@ class SpriteParent():
     def get_master_PNG_image(self):
         return self.layout.export_all_images_to_PNG(
             self.images,
-            self.master_palette
+            self.master_palette,
+            self.filename
         )
 
     def import_module(self, module_name):
@@ -563,3 +564,10 @@ class SpriteParent():
             return importlib.import_module(module_name)
         except ModuleNotFoundError as err:
             raise AssertionError(f"ModuleNotFoundError in spritelib.py: {err}")
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

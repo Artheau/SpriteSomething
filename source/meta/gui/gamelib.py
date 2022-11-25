@@ -1,3 +1,4 @@
+# pylint: disable=bad-indentation
 #common functions to all games
 #handling backgrounds, etc.
 #handles import of new sprites
@@ -13,12 +14,7 @@ from source.meta.gui import widgetlib
 from source.meta.common import common
 from source.meta.gui import gui_common #TODO: Should not use GUI stuff in game class, need to move this elsewhere
 
-def autodetect(sprite_filename):
-	#need to autodetect which game, and which sprite
-	#then return an instance of THAT game's class, and an instance of THAT sprite
-	_,file_extension = os.path.splitext(sprite_filename)
-  #If this is a SNES filetype
-	if file_extension.lower() in [".sfc",".smc"]:
+def autodetect_snes(sprite_filename):
 		#If the file is a rom, then we can go into the internal header and get the name of the game
 		game_names = autodetect_game_type_from_rom_filename("snes",sprite_filename)
 		selected_game = None
@@ -32,8 +28,9 @@ def autodetect(sprite_filename):
 
 		game = get_game_class_of_type("snes",selected_game)
 		#And by default, we will grab the player sprite from this game
-		sprite, animation_assist = game.make_player_sprite(sprite_filename)
-	elif file_extension.lower() == ".nes":
+		return game, game.make_player_sprite(sprite_filename)
+
+def autodetect_nes(sprite_filename):
 		#If the file is a rom, then we can go into the internal header and get the name of the game
 		game_names = autodetect_game_type_from_rom_filename("nes",sprite_filename)
 		selected_game = None
@@ -47,17 +44,21 @@ def autodetect(sprite_filename):
 
 		game = get_game_class_of_type("nes",selected_game)
 		#And by default, we will grab the player sprite from this game
-		sprite, animation_assist = game.make_player_sprite(sprite_filename)
-  #If it's not a known filetype but a PNG, cycle through and find one that matches
-	elif file_extension.lower() == ".png":
+		return game, game.make_player_sprite(sprite_filename)
+
+def autodetect_png(sprite_filename):
+		not_consoles = []
+		with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
+		    not_consoles = json.load(f)
 		#the following line prevents a "cannot identify image" error from PIL
 		ImageFile.LOAD_TRUNCATED_IMAGES = True
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
+		(game, sprite, animation_assist) = (None, None, None)
 		with Image.open(sprite_filename) as loaded_image:
 		  game_found = False
 		  search_path = os.path.join("resources","app")
 		  for console in os.listdir(search_path):
-		    if os.path.isdir(os.path.join(search_path,console)) and not console == "meta":
+		    if os.path.isdir(os.path.join(search_path,console)) and not console in not_consoles:
 		      for item in os.listdir(os.path.join(search_path,console)):
 		        game_name = item
 		        sprite_manifest_filename = os.path.join(search_path,console,game_name,"manifests","manifest.json")
@@ -73,12 +74,36 @@ def autodetect(sprite_filename):
 		if not game_found:
 			# FIXME: English
 			raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
+		return game, sprite, animation_assist
+
+def autodetect(sprite_filename):
+	#need to autodetect which game, and which sprite
+	#then return an instance of THAT game's class, and an instance of THAT sprite
+	_,file_extension = os.path.splitext(sprite_filename)
+	#If this is a SNES filetype
+	if file_extension.lower() in [".sfc",".smc"]:
+		print("SNES game file")
+		game, (sprite, animation_assist) = autodetect_snes(sprite_filename)
+	#If this is a NES filetype
+	elif file_extension.lower() == ".nes":
+		print("NES game file")
+		game, (sprite, animation_assist) = autodetect_nes(sprite_filename)
+	#If it's not a known filetype but a PNG, cycle through and find one that matches
+	elif file_extension.lower() == ".png":
+		print("PNG file")
+		game, sprite, animation_assist = autodetect_png(sprite_filename)
+	# # FIXME: For now, RDCs are M3Samus sprites and we're assuming SNES
+	# elif file_extension.lower() == ".rdc":
+	# 	with open(sprite_filename,"rb") as file:
+	# 		rdc_data = bytearray(file.read())
+	# 	game = get_game_class_of_type("snes",get_game_type_from_rdc_data(rdc_data))
+	# 	(sprite, animation_assist) = game.make_sprite_by_number(get_sprite_number_from_rdc_data(rdc_data),sprite_filename)
   # FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
 	elif file_extension.lower() == ".zspr":
 		with open(sprite_filename,"rb") as file:
 			zspr_data = bytearray(file.read())
 		game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
-		sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
+		(sprite, animation_assist) = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename)
 	else:
 		# FIXME: English
 		raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its filename")
@@ -112,6 +137,10 @@ def autodetect_game_type_from_rom(rom):
 		#print(f"Could not identify the type of ROM from its header name: {rom_name}")
 
 	return game_names
+
+def get_game_type_from_rdc_data(rdc_data):
+	#for now, until other types of RDC files exist, we will just assume that all RDC files are Metroid3 Samus files
+	return "metroid3"
 
 def get_game_type_from_zspr_data(zspr_data):
 	#for now, until other types of ZSPR files exist, we will just assume that all ZSPR files are Zelda3 Link files
@@ -241,7 +270,6 @@ class GameParent():
 			except ImportError:    #there was no sprite-specific animation library, so import the parent
 				animationlib = importlib.import_module(f"source.meta.gui.animationlib")
 				animation_assist = animationlib.AnimationEngineParent(resource_subpath, self, sprite)
-
 			return sprite, animation_assist
 		# FIXME: English
 		raise AssertionError(f"make_sprite_by_number() called for non-implemented sprite_number {sprite_number}")
@@ -250,3 +278,10 @@ class GameParent():
 		#dynamic import
 		rom_module = importlib.import_module(f"source.{self.console_name}.{self.internal_name}.rom")
 		return rom_module.RomHandler(filename)
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

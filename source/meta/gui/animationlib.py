@@ -14,9 +14,9 @@ class AnimationEngineParent():
 	def __init__(self, my_subpath, game, sprite):
 		self.game = game
 		self.sprite = sprite
-		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
-		self.spiffy_dict = {}						 #the variables created by the spiffy buttons will go here
-		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
+		self.resource_subpath = my_subpath  #the path to this sprite's subfolder in resources
+		self.spiffy_dict = {}               #the variables created by the spiffy buttons will go here
+		self.overhead = True                #by default, this will create NESW direction buttons.  If false, only left/right buttons
 		self.overview_scale_factor = sprite.overview_scale_factor #when the overview is made, it is scaled up by this amount
 		self.step_number_label = tk.Label()
 		self.step_total_label = tk.Label()
@@ -29,8 +29,8 @@ class AnimationEngineParent():
 			self.animations = json.load(file)
 		if "$schema" in self.animations:
 			del self.animations["$schema"]
-
-		self.current_animation = next(iter(self.animations.keys()))   #using a default value until the animation_panel attachment overrides this
+		#using a default value until the animation_panel attachment overrides this
+		self.current_animation = next(iter(self.animations.keys()))
 
 	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, coord_setter, fish):
 		ANIMATION_DROPDOWN_WIDTH = 25
@@ -179,6 +179,9 @@ class AnimationEngineParent():
 			else:
 				self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
 
+			if "mail_var" in self.spiffy_dict:
+				if "Bunny" in self.current_animation:
+					self.spiffy_dict["mail_var"].set("bunny_mail")
 			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
 			self.pose_number = self.get_pose_number_from_frames(current_frame)
@@ -463,3 +466,10 @@ class AnimationEngineParent():
 				return False
 		else:
 			return False
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

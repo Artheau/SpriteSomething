@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.om/Artheau/SpriteSomething/master/schema/spiffy-buttons.schema.json",
+  "$id": "https://raw.githubusercontent.com/Artheau/SpriteSomething/master/schema/spiffy-buttons.schema.json",
   "type": "object",
   "title": "SpriteSomething Spiffy Button Layout Schema",
   "properties": {

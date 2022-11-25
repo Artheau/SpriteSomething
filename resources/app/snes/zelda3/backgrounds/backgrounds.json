@@ -10,140 +10,140 @@
       "title": "Throne Room"
     },
     {
-    	"filename": "boss-arrghus.0.png",
-    	"title": "Boss: Arrghus' Arena"
+      "filename": "boss-arrghus.0.png",
+      "title": "Boss: Arrghus' Arena"
     },
     {
-    	"filename": "boss-blind.png",
-    	"title": "Boss: Blind's Arena"
+      "filename": "boss-blind.png",
+      "title": "Boss: Blind's Arena"
     },
     {
-    	"filename": "boss-moldorm.png",
-    	"title": "Boss: Moldorm's Arena"
+      "filename": "boss-moldorm.png",
+      "title": "Boss: Moldorm's Arena"
     },
     {
-    	"filename": "boss-mothula.png",
-    	"title": "Boss: Mothula's Arena"
+      "filename": "boss-mothula.png",
+      "title": "Boss: Mothula's Arena"
     },
     {
-    	"filename": "boss-vitreous.0.png",
-    	"title": "Boss: Vitreous' Arena"
+      "filename": "boss-vitreous.0.png",
+      "title": "Boss: Vitreous' Arena"
     },
     {
-    	"filename": "cave.0.png",
-    	"title": "Cave"
+      "filename": "cave.0.png",
+      "title": "Cave"
     },
     {
-    	"filename": "darkworld.0.png",
-    	"title": "Dark World"
+      "filename": "darkworld.0.png",
+      "title": "Dark World"
     },
     {
-    	"filename": "deathmountain.0.png",
-    	"title": "Death Mountain"
+      "filename": "deathmountain.0.png",
+      "title": "Death Mountain"
     },
     {
-    	"filename": "dungeon-agastower.0.png",
-    	"title": "Dungeon: Agahnim's Tower"
+      "filename": "dungeon-agastower.0.png",
+      "title": "Dungeon: Agahnim's Tower"
     },
     {
-    	"filename": "dungeon-desertpalace.0.png",
-    	"title": "Dungeon: Desert Palace"
+      "filename": "dungeon-desertpalace.0.png",
+      "title": "Dungeon: Desert Palace"
     },
     {
-    	"filename": "dungeon-easternpalace.png",
-    	"title": "Dungeon: Eastern Palace"
+      "filename": "dungeon-easternpalace.png",
+      "title": "Dungeon: Eastern Palace"
     },
     {
-    	"filename": "dungeon-ganonstower.png",
-    	"title": "Dungeon: Ganon's Tower"
+      "filename": "dungeon-ganonstower.png",
+      "title": "Dungeon: Ganon's Tower"
     },
     {
-    	"filename": "dungeon-icepalace.png",
-    	"title": "Dungeon: Ice Palace"
+      "filename": "dungeon-icepalace.png",
+      "title": "Dungeon: Ice Palace"
     },
     {
-    	"filename": "dungeon-miserymire.0.png",
-    	"title": "Dungeon: Misery Mire"
+      "filename": "dungeon-miserymire.0.png",
+      "title": "Dungeon: Misery Mire"
     },
     {
-    	"filename": "dungeon-palaceofdarkness.png",
-    	"title": "Dungeon: Palace of Darkness"
+      "filename": "dungeon-palaceofdarkness.png",
+      "title": "Dungeon: Palace of Darkness"
     },
     {
-    	"filename": "dungeon-skullwoods.png",
-    	"title": "Dungeon: Skull Woods"
+      "filename": "dungeon-skullwoods.png",
+      "title": "Dungeon: Skull Woods"
     },
     {
-    	"filename": "dungeon-swamppalace.0.png",
-    	"title": "Dungeon: Swamp Palace"
+      "filename": "dungeon-swamppalace.0.png",
+      "title": "Dungeon: Swamp Palace"
     },
     {
-    	"filename": "dungeon-thievestown.0.png",
-    	"title": "Dungeon: Thieves' Town"
+      "filename": "dungeon-thievestown.0.png",
+      "title": "Dungeon: Thieves' Town"
     },
     {
-    	"filename": "dungeon-towerofhera.0.png",
-    	"title": "Dungeon: Tower of Hera"
+      "filename": "dungeon-towerofhera.0.png",
+      "title": "Dungeon: Tower of Hera"
     },
     {
-    	"filename": "dungeon-turtlerock.0.png",
-    	"title": "Dungeon: Turtle Rock"
+      "filename": "dungeon-turtlerock.0.png",
+      "title": "Dungeon: Turtle Rock"
     },
     {
-    	"filename": "empty (white).png",
-    	"title": "Empty (white)"
+      "filename": "empty (white).png",
+      "title": "Empty (white)"
     },
     {
-    	"filename": "empty.png",
-    	"title": "Empty (black)"
+      "filename": "empty.png",
+      "title": "Empty (black)"
     },
     {
-    	"filename": "explorationglitch.0.png",
-    	"title": "Exploration Glitch"
+      "filename": "explorationglitch.0.png",
+      "title": "Exploration Glitch"
     },
     {
-    	"filename": "gameover.png",
-    	"title": "Game Over"
+      "filename": "gameover.png",
+      "title": "Game Over"
     },
     {
-    	"filename": "greenscreen.png",
-    	"title": "Green Screen"
+      "filename": "greenscreen.png",
+      "title": "Green Screen"
     },
     {
-    	"filename": "houlihan.png",
-    	"title": "Chris Houlihan Room"
+      "filename": "houlihan.png",
+      "title": "Chris Houlihan Room"
     },
     {
-    	"filename": "house.png",
-    	"title": "Generic House"
+      "filename": "house.png",
+      "title": "Generic House"
     },
     {
-    	"filename": "lightworld.0.png",
-    	"title": "Light World"
+      "filename": "lightworld.0.png",
+      "title": "Light World"
     },
     {
-    	"filename": "mosaic.0.png",
-    	"title": "Mosaic"
+      "filename": "mosaic.0.png",
+      "title": "Mosaic"
     },
     {
-    	"filename": "spikecave.0.png",
-    	"title": "Spike Cave"
+      "filename": "spikecave.0.png",
+      "title": "Spike Cave"
     },
     {
-    	"filename": "static.0.png",
-    	"title": "Static"
+      "filename": "static.0.png",
+      "title": "Static"
     },
     {
-    	"filename": "tileroom.png",
-    	"title": "Tile Room"
+      "filename": "tileroom.png",
+      "title": "Tile Room"
     },
     {
-    	"filename": "water.0.png",
-    	"title": "Water"
+      "filename": "water.0.png",
+      "title": "Water"
     },
     {
-    	"filename": "worldmap.png",
-    	"title": "World Map"
+      "filename": "worldmap.png",
+      "title": "World Map"
     }
   ]
 }
