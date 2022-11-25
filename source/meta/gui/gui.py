@@ -241,9 +241,12 @@ class SpriteSomethingMainFrame(tk.Frame):
 
     # try to get bundled sprites and add menu options to load them instead of requiring the user to hunt for them
     bundled_games = {}
+    not_consoles = []
+    with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
+      not_consoles = json.load(f)
     root = os.path.join("resources","app")
     for console in os.listdir(root):
-      if not console in ["meta","css","js"]:
+      if not console in not_consoles:
         if os.path.isdir(os.path.join(root,console)):
           if not console in bundled_games:
             bundled_games[console] = {}

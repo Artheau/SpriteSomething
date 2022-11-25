@@ -251,7 +251,7 @@ class Layout():
         # the frame and paste it back ontop of the collage
 
         samus_mask = Image.open(common.get_resource(os.path.join("snes","metroid3","samus","sheets"),"samus_mask.png"))
-        if samus_mask.width == full_layout_collage.width:
+        if (samus_mask.width == full_layout_collage.width) and (os.path.splitext(filename)[1] == "png"):
             original_image = Image.open(filename).convert("RGBA")
             full_layout = Image.composite(original_image, full_layout_collage, samus_mask)
         else:
