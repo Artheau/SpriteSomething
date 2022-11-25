@@ -38,7 +38,16 @@ def rom_inject(player_sprite, spiffy_dict, old_rom, verbose=False):
 
 		tournament_flag = field["race"]
 
-	if not tournament_flag:
+		# iddqd = False
+		iddqd = True
+		app_overrides_path = os.path.join(".","resources","user","meta","manifests","overrides.json")
+		if os.path.exists(app_overrides_path):
+			with open(app_overrides_path) as json_file:
+				data = json.load(json_file)
+				if "iddqd" in data.keys():
+					iddqd = data["iddqd"]
+
+	if not tournament_flag or iddqd:
 		#in case these were disabled in rom.py, we definitely need to do these before we convert to wizzywig
 		rom._apply_bugfixes()
 		rom._apply_improvements()

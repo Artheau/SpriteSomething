@@ -37,6 +37,4 @@ def run_build(PY_VERSION):
 
 
 if __name__ == "__main__":
-  PY_VERSION = 0
-
-  run_build(PY_VERSION)
+    run_build()

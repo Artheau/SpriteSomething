@@ -1,7 +1,7 @@
 body {
   background-color: #000000;
-  color:            #ffffff;
-  margin:           0;
+  color: #ffffff;
+  margin: 0;
 }
 
 a {
@@ -10,11 +10,12 @@ a {
 
 .sprite {
   border: 1px solid #ffffff;
-  float:  left;
-  width:  160px;
+  float: left;
+  width: 160px;
   height: 150px;
 }
 
-.name, .author {
+.name,
+.author {
   text-align: center;
 }

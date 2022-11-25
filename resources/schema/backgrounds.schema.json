@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.om/Artheau/SpriteSomething/master/schema/backgrounds.schema.json",
+  "$id": "https://raw.githubusercontent.com/Artheau/SpriteSomething/master/schema/backgrounds.schema.json",
   "type": "object",
   "title": "SpriteSomething Background Images Schema",
   "description": "A list of background images available for use in the animations window",

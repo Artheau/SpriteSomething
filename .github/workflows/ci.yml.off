@@ -53,8 +53,24 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        os-name: [ubuntu-20.04, ubuntu-18.04, macOS-latest, windows-latest]
-        python-version: [3.8]
+        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+        python-version: [
+          3.8,
+          # 3.9,
+          "3.10"
+        ]
+        pillow-version: [
+          "6.2.2",
+          # "7.0.0",
+          # "7.1.2",
+          # "7.2.0",
+          # "8.0.1",
+          # "8.1.2",
+          # "8.2.0",
+          # "8.3.2",
+          # "8.4.0",
+          "9.0.1"
+        ]
     steps:
       # checkout commit
       - name: Checkout commit
@@ -70,6 +86,9 @@ jobs:
           OS_NAME: ${{ matrix.os-name }}
         run: |
           python ./resources/ci/common/install.py
+      - name: Install Pillow
+        run: |
+          python -m pip install pillow==${{ matrix.pillow-version }}
       # start virtual display driver & run tests
       - name: Start virtual display driver & Test (!Windows)
         env:
@@ -80,12 +99,13 @@ jobs:
           geom=640x480x24
           exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
           export DISPLAY=:99
-          python -m unittest
+          python -m ./tests/new/custom-tests.py
         if: contains(matrix.os-name, 'windows') != true
       - name: Start virtual display driver & Test (Windows)
         uses: GabrielBB/xvfb-action@v1.4
         with:
-          run: python -m unittest
+          # run: python -m unittest
+          run: python -m ./tests/new/custom-tests.py
         if: contains(matrix.os-name, 'windows')
   # Install & Build
   #  Set up environment
@@ -100,7 +120,8 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        os-name: [ubuntu-20.04, ubuntu-18.04, macOS-latest, windows-latest]
+#        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+        os-name: [ubuntu-latest, ubuntu-18.04, windows-latest]
         python-version: [3.8]
     needs: [install-test]
     steps:
@@ -143,18 +164,16 @@ jobs:
           OS_NAME: ${{ matrix.os-name }}
         run: |
           python ./resources/ci/common/install.py
-
       # try to get UPX
-      # - name: Get UPX
-      #   env:
-      #     OS_NAME: ${{ matrix.os-name }}
-      #   run: |
-      #     python ./resources/ci/common/get_upx.py
-
+      - name: Get UPX
+        env:
+          OS_NAME: ${{ matrix.os-name }}
+        run: |
+          python ./resources/ci/common/get_upx.py
       # run build.py
       - name: Build Binary
         run: |
-          pip install cx_freeze
+          pip install pyinstaller
           python -m source.meta.build
       # prepare binary artifact for later step
       - name: Prepare Binary Artifact
@@ -182,7 +201,8 @@ jobs:
     strategy:
       matrix:
         # install/release on not xenial
-        os-name: [ubuntu-20.04, ubuntu-18.04, macOS-latest, windows-latest]
+#        os-name: [ubuntu-latest, ubuntu-18.04, macOS-latest, windows-latest]
+        os-name: [ubuntu-latest, ubuntu-18.04, windows-latest]
         python-version: [3.8]
 
     needs: [install-build]
@@ -265,8 +285,8 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        # release only on focal
-        os-name: [ubuntu-20.04]
+        # release only on focal/bionic
+        os-name: [ubuntu-latest]
         python-version: [3.8]
 
     needs: [install-prepare-release]
@@ -309,7 +329,7 @@ jobs:
       - name: Download Ubuntu Archive Artifact
         uses: actions/download-artifact@v2
         with:
-          name: archive-ubuntu-20.04
+          name: archive-ubuntu-latest
           path: ${{ steps.parentDir.outputs.value }}/deploy/linux
       # download macos archive artifact
       # - name: Download MacOS Archive Artifact
@@ -403,7 +423,7 @@ jobs:
     strategy:
       matrix:
         # pages on one OS
-        os-name: [ubuntu-20.04]
+        os-name: [ubuntu-latest]
 
     needs: [deploy-release]
     steps:
@@ -460,7 +480,7 @@ jobs:
     strategy:
       matrix:
         # pages on one OS
-        os-name: [ubuntu-20.04]
+        os-name: [ubuntu-latest]
 
     needs: [prepare-pages]
     steps:
