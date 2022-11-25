@@ -16,7 +16,7 @@ inputs:
 #########
 # actions/checkout@v3.0.0
 # actions/download-artifact@v3.0.0
-# actions/upload-artifact@v3.0.0
+# actions/upload-artifact@v3.1.1
 # GabrielBB/xvfb-action@v1.6
 
 runs:
@@ -72,7 +72,7 @@ runs:
     # upload failures
     - name: 🔼Upload Failures
       if: failure()
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: failures-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./failures

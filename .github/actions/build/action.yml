@@ -16,11 +16,11 @@ inputs:
 #########
 # actions/checkout@v3.0.0
 # actions/download-artifact@v3.0.0
-# actions/upload-artifact@v3.0.0
+# actions/upload-artifact@v3.1.1
 # Artheau/SpriteSomething/get-parent-dir
 # JackMcKew/pyinstaller-action-linux@0.1.4
 # JackMcKew/pyinstaller-action-windows@0.1.2
-# mad9000/actions-find-and-replace-string@2
+# mad9000/actions-find-and-replace-string@3
 
 runs:
   using: "composite"
@@ -59,7 +59,7 @@ runs:
 
     # upload appversion artifact for later step
     - name: 🔼Upload AppVersion Artifact
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: appversion-${{ inputs.os-name }}
         path: ./resources/app/meta/manifests/app_version.txt
@@ -90,7 +90,7 @@ runs:
     # upload binary artifact for later step
     - name: 🔼Upload Problem Children Artifact
       if: failure()
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: problemchildren-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/app/meta/manifests/excluded_dlls.json
@@ -106,7 +106,7 @@ runs:
 
     # upload binary artifact for later step
     - name: 🔼Upload Binary Artifact
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ${{ steps.parentDir.outputs.parentDir }}/artifact
