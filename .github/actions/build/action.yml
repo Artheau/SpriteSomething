@@ -14,20 +14,20 @@ inputs:
 #########
 # actions
 #########
-# actions/checkout@v3.0.0
-# actions/download-artifact@v3.0.0
-# actions/upload-artifact@v3.0.0
+# actions/checkout@v3.1.0
+# actions/download-artifact@v3.0.1
+# actions/upload-artifact@v3.1.1
 # Artheau/SpriteSomething/get-parent-dir
 # JackMcKew/pyinstaller-action-linux@0.1.4
 # JackMcKew/pyinstaller-action-windows@0.1.2
-# mad9000/actions-find-and-replace-string@2
+# mad9000/actions-find-and-replace-string@3
 
 runs:
   using: "composite"
   steps:
     # checkout commit
     - name: ✔️Checkout commit
-      uses: actions/checkout@v3.0.0
+      uses: actions/checkout@v3.1.0
 
     # get parent dir
     - name: 📁Get Parent Directory
@@ -36,7 +36,7 @@ runs:
 
     # download pipline
     - name: 🔽Download PipLine
-      uses: actions/download-artifact@v3.0.0
+      uses: actions/download-artifact@v3.0.1
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
@@ -48,6 +48,21 @@ runs:
         OS_NAME: ${{ inputs.os-name }}
       run: |
         python ./resources/ci/common/get_upx.py
+
+    # Prepare AppVersion
+    - name: Prepare AppVersion
+      shell: bash
+      env:
+        OS_NAME: ${{ inputs.os-name }}
+      run: |
+        python ./resources/ci/common/prepare_appversion.py
+
+    # upload appversion artifact for later step
+    - name: 🔼Upload AppVersion Artifact
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: appversion-${{ inputs.os-name }}
+        path: ./resources/app/meta/manifests/app_version.txt
 
     # run build.py
     - name: Build Binary (MacOS)
@@ -72,6 +87,15 @@ runs:
     #     spec: ./source/SpriteSomething.spec
     #   if: contains(inputs.os-name, 'windows')
 
+    # upload binary artifact for later step
+    - name: 🔼Upload Problem Children Artifact
+      if: failure()
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: problemchildren-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        path: ./resources/app/meta/manifests/excluded_dlls.json
+        if-no-files-found: warn # 'warn' or 'ignore' are also available, defaults to `warn`
+
     # prepare binary artifact for later step
     - name: Prepare Binary Artifact
       shell: bash
@@ -82,7 +106,8 @@ runs:
 
     # upload binary artifact for later step
     - name: 🔼Upload Binary Artifact
-      uses: actions/upload-artifact@v3.0.0
+      uses: actions/upload-artifact@v3.1.1
       with:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ${{ steps.parentDir.outputs.parentDir }}/artifact
+        if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`

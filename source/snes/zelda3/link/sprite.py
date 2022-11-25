@@ -346,7 +346,7 @@ class Sprite(SpriteParent):
 					author = self.metadata["author.name"]
 				if "author.name-short" in self.metadata:
 					author_short = self.metadata["author.name-short"]
-				char_class = "a-zA-Z0-9\'\.\/\:\_ "
+				char_class = "a-zA-Z0-9\' "
 				pattern = r'^([' + char_class + ']+)$'
 				antipattern = r'([^' + char_class + '])'
 				linelen = 32
