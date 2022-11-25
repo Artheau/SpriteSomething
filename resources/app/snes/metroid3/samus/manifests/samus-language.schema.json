@@ -1,16 +1,29 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://raw.githubusercontent.om/Artheau/SpriteSomething/master/resources/app/metroid3/samus/manifests/samus-language.schema.json",
+  "$id": "https://raw.githubusercontent.com/Artheau/SpriteSomething/master/resources/app/metroid3/samus/manifests/samus-language.schema.json",
   "type": "object",
   "title": "SpriteSomething Metroid3 Samus Sprite Translation File Schema",
   "description": "Required strings for translation",
-  "required": ["section", "Aiming", "Facing", "Suit", "Variant", "Cannon Port"],
+  "required": [
+    "section",
+    "Aiming",
+    "Facing",
+    "Suit",
+    "Variant",
+    "Cannon Port"
+  ],
   "properties": {
     "section": {
       "$id": "#/properties/section",
       "type": "object",
       "title": "The Section Schema",
-      "required": ["aiming", "facing", "suit", "variant", "cannon-port"],
+      "required": [
+        "aiming",
+        "facing",
+        "suit",
+        "variant",
+        "cannon-port"
+      ],
       "items": {
         "$id": "#/properties/section/items",
         "type": "string",
@@ -22,7 +35,14 @@
       "$id": "#/properties/Aiming",
       "type": "object",
       "title": "The Aiming Schema",
-      "required": ["up", "diag_up", "neutral", "shoot", "diag_down", "down"],
+      "required": [
+        "up",
+        "diag_up",
+        "neutral",
+        "shoot",
+        "diag_down",
+        "down"
+      ],
       "items": {
         "$id": "#/properties/Aiming/items",
         "type": "string",
@@ -34,7 +54,10 @@
       "$id": "#/properties/Facing",
       "type": "object",
       "title": "The Facing Schema",
-      "required": ["left", "right"],
+      "required": [
+        "left",
+        "right"
+      ],
       "items": {
         "$id": "#/properties/Facing/items",
         "type": "string",
@@ -46,7 +69,11 @@
       "$id": "#/properties/Suit",
       "type": "object",
       "title": "The Suit Schema",
-      "required": ["power", "varia", "gravity"],
+      "required": [
+        "power",
+        "varia",
+        "gravity"
+      ],
       "items": {
         "$id": "#/properties/Suit/items",
         "type": "string",
@@ -58,7 +85,17 @@
       "$id": "#/properties/Variant",
       "type": "object",
       "title": "The Variant Schema",
-      "required": ["standard", "charge", "speed_boost", "speed_squat", "hyper", "heat", "xray", "sepia", "door"],
+      "required": [
+        "standard",
+        "charge",
+        "speed_boost",
+        "speed_squat",
+        "hyper",
+        "heat",
+        "xray",
+        "sepia",
+        "door"
+      ],
       "items": {
         "$id": "#/properties/Variant/items",
         "type": "string",
@@ -70,7 +107,10 @@
       "$id": "#/properties/Cannon Port",
       "type": "object",
       "title": "The Cannon port Schema",
-      "required": ["no", "yes"],
+      "required": [
+        "no",
+        "yes"
+      ],
       "items": {
         "$id": "#/properties/Cannon Port/items",
         "type": "string",

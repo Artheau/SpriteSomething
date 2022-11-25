@@ -9,7 +9,8 @@
     },
     "common": {
       "ubuntu": {
-        "latest": "focal",
+        "latest": "latest",
+        "22.04": "jammy",
         "20.04": "focal",
         "18.04": "bionic",
         "16.04": "xenial"
@@ -19,7 +20,9 @@
         "username": "Artheau",
         "repository": "SpriteSomething"
       },
-      "filenames": [ "SpriteSomething" ],
+      "filenames": [
+        "SpriteSomething"
+      ],
       "filesize": 10,
       "actor": "MegaMan.EXE"
     },
@@ -39,10 +42,22 @@
       "user_resources": "resources/user*"
     },
     "install": {
-      "pip_requirements": [ "resources", "app", "meta", "manifests", "pip_requirements.txt" ]
+      "pip_requirements": [
+        "resources",
+        "app",
+        "meta",
+        "manifests",
+        "pip_requirements.txt"
+      ]
     },
     "prepare_appversion": {
-      "app_version": [ "resources", "app", "meta", "manifests", "app_version.txt" ]
+      "app_version": [
+        "resources",
+        "app",
+        "meta",
+        "manifests",
+        "app_version.txt"
+      ]
     },
     "prepare_discord_notif": {
       "colors": {

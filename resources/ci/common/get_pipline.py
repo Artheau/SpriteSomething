@@ -2,7 +2,6 @@ import common                     # app common functions
 
 import json                       # json manipulation
 import os                         # for os data, filesystem manipulation
-import platform                   # for python data
 import subprocess                 # for running shell commands
 import sys                        # for system commands
 import traceback                  # for errors
@@ -91,8 +90,7 @@ def process_module_output(lines):
 def print_module_line(line):
     global VERSIONS
     satisfied = line.strip().split(" in ")
-    sver = ((len(satisfied) > 1) and satisfied[1].split(
-        "(").pop().replace(")", "")) or ""
+    sver = ((len(satisfied) > 1) and satisfied[1].split("(").pop().replace(")", "")) or ""
 
     if "Created wheel" in line:
         line = line.strip().split(':')
@@ -111,8 +109,7 @@ def print_module_line(line):
             %
             (
                 "Building wheel" in line and '.' or "X",
-                satisfied[0].ljust(
-                    len("Requirement already satisfied: ") + len("python-bps-continued")),
+                satisfied[0].ljust(len("Requirement already satisfied: ") + len("python-bps-continued")),
                 VERSIONS[modulename]["installed"],
                 VERSIONS[modulename]["latest"]
             )
@@ -271,7 +268,8 @@ def pip_info():
                     "%s\t%s\t%s\t%s\t%s\t%s"
                     %
                     (
-                        ((isinstance(args[0], list) and " ".join(args[0])) or args[0]).strip(),
+                        ((isinstance(args[0], list) and " ".join(
+                            args[0])) or args[0]).strip(),
                         PYTHON_VERSION,
                         sys.platform,
                         PIPEXE,

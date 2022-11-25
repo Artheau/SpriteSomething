@@ -7,8 +7,8 @@ on: [push, pull_request]
 #########
 # actions
 #########
-# actions/checkout@v3.0.0
-# actions/download-artifact@v3.0.0
+# actions/checkout@v3.1.0
+# actions/download-artifact@v3.0.1
 # actions/create-release
 # actions/upload-release-asset
 # Artheau/SpriteSomething/get-parent-dir
@@ -27,7 +27,8 @@ jobs:
         # should run on all OS
         os-name: [
           ubuntu-latest,
-          ubuntu-18.04,
+          ubuntu-22.04,
+          ubuntu-20.04,
           macos-latest,
           windows-latest
         ]
@@ -37,6 +38,21 @@ jobs:
           3.8,
           3.9,
           "3.10"
+        ]
+
+        # PIL 6.2.2 is good
+        # PIL 7.0.0+ introduces color error
+        pillow-version: [
+          "6.2.2",
+          # "7.0.0",
+          # "7.1.2",
+          # "7.2.0",
+          # "8.0.1",
+          # "8.1.2",
+          # "8.2.0",
+          # "8.3.2",
+          # "8.4.0",
+          # "9.0.1",
         ]
         exclude:
           - os-name: macos-latest
@@ -50,10 +66,10 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.1.0
       # install python
       - name: 💿Install Python
-        uses: actions/setup-python@v3.0.0
+        uses: actions/setup-python@v4.3.0
         with:
           python-version: ${{ matrix.python-version }}
       # python version
@@ -61,6 +77,13 @@ jobs:
         shell: bash
         run: |
           python --version
+      # install
+      - name: 💿Call Install
+        uses: ./.github/actions/install
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
       # test
       - name: 🧮Print Diagnostics
         shell: bash
@@ -78,7 +101,8 @@ jobs:
         # should run on all OS
         os-name: [
           ubuntu-latest,
-          ubuntu-18.04,
+          ubuntu-22.04,
+          ubuntu-20.04,
           macos-latest,
           windows-latest
         ]
@@ -92,19 +116,18 @@ jobs:
 
         # PIL 6.2.2 is good
         # PIL 7.0.0+ introduces color error
-        pillow-version:
-          [
-            "6.2.2",
-            # "7.0.0",
-            # "7.1.2",
-            # "7.2.0",
-            # "8.0.1",
-            # "8.1.2",
-            # "8.2.0",
-            # "8.3.2",
-            # "8.4.0",
-            # "9.0.1",
-          ]
+        pillow-version: [
+          "6.2.2",
+          # "7.0.0",
+          # "7.1.2",
+          # "7.2.0",
+          # "8.0.1",
+          # "8.1.2",
+          # "8.2.0",
+          # "8.3.2",
+          # "8.4.0",
+          # "9.0.1",
+        ]
         exclude:
           - os-name: macos-latest
             python-version: 3.9
@@ -117,7 +140,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.1.0
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -145,7 +168,8 @@ jobs:
         # should run on all OS
         os-name: [
           ubuntu-latest,
-          ubuntu-18.04,
+          ubuntu-22.04,
+          ubuntu-20.04,
           macos-latest,
           windows-latest
         ]
@@ -159,8 +183,7 @@ jobs:
 
         # PIL 6.2.2 is good
         # PIL 7.0.0+ introduces color error
-        pillow-version:
-          [
+        pillow-version: [
             "6.2.2",
             # "7.0.0",
             # "7.1.2",
@@ -185,7 +208,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.1.0
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -229,7 +252,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.1.0
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -259,7 +282,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.1.0
 
       # install dependencies via pip
       - name: 💿Install Dependencies via pip
@@ -274,28 +297,28 @@ jobs:
 
       # download appversion artifact
       - name: 🔽Download AppVersion Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: appversion-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
 
       # download ubuntu archive artifact
       - name: 🔽Download Ubuntu Archive Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: archive-ubuntu-latest
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux
 
       # download macos archive artifact
       - name: 🔽Download MacOS Archive Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: archive-macos-latest
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos
 
       # download windows archive artifact
       - name: 🔽Download Windows Archive Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: archive-windows-latest
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows
@@ -311,7 +334,7 @@ jobs:
         id: debug_info
         run: |
           GITHUB_TAG="$(head -n 1 ../build/app_version.txt)"
-          echo "::set-output name=github_tag::$GITHUB_TAG"
+          echo "github_tag=$GITHUB_TAG" >> $GITHUB_OUTPUT
           GITHUB_TAG="v${GITHUB_TAG}"
           RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
           echo "Release Name: ${RELEASE_NAME}"
@@ -336,7 +359,7 @@ jobs:
         shell: bash
         run: |
           ASSET_LINUX="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/linux)"
-          echo "::set-output name=asset_linux::$ASSET_LINUX"
+          echo "asset_linux=$ASSET_LINUX" >> $GITHUB_OUTPUT
 
       # upload linux archive asset
       - name: 🔼Upload Linux Archive Asset (MASTER)
@@ -357,7 +380,7 @@ jobs:
         shell: bash
         run: |
           ASSET_MACOS="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/macos)"
-          echo "::set-output name=asset_macos::$ASSET_MACOS"
+          echo "asset_macos=$ASSET_MACOS" >> $GITHUB_OUTPUT
 
       # upload macos archive asset
       # - name: 🔼Upload MacOS Archive Asset (MASTER)
@@ -378,7 +401,7 @@ jobs:
         shell: bash
         run: |
           ASSET_WIN="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/windows)"
-          echo "::set-output name=asset_windows::$ASSET_WIN"
+          echo "asset_windows=$ASSET_WIN" >> $GITHUB_OUTPUT
 
       # upload windows archive asset
       - name: 🔼Upload Windows Archive Asset (MASTER)
@@ -406,14 +429,14 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.1.0
       # get parent dir
       - name: 📁Get Parent Directory
         id: parentDir
         uses: ./.github/actions/get-parent-dir
       # download appversion artifact
       - name: 🔽Download AppVersion Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: appversion-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
@@ -424,7 +447,7 @@ jobs:
           python ./resources/ci/common/prepare_pages.py
       # upload pages artifact for later step
       - name: 🔼Upload Pages Artifact
-        uses: actions/upload-artifact@v3.0.0
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: pages-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/pages
@@ -442,10 +465,10 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.0.0
+        uses: actions/checkout@v3.1.0
       # download pages artifact
       - name: 🔽Download Pages Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: pages-${{ matrix.os-name }}
           path: ./

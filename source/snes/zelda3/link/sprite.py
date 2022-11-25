@@ -288,7 +288,8 @@ class Sprite(SpriteParent):
 
 			tournament_flag = field["race"]
 
-		iddqd = False
+		# iddqd = False
+		iddqd = True
 		app_overrides_path = os.path.join(".","resources","user","meta","manifests","overrides.json")
 		if os.path.exists(app_overrides_path):
 			with open(app_overrides_path) as json_file:
@@ -346,7 +347,7 @@ class Sprite(SpriteParent):
 					author = self.metadata["author.name"]
 				if "author.name-short" in self.metadata:
 					author_short = self.metadata["author.name-short"]
-				char_class = "a-zA-Z0-9\'\.\/\:\_ "
+				char_class = "a-zA-Z0-9\' "
 				pattern = r'^([' + char_class + ']+)$'
 				antipattern = r'([^' + char_class + '])'
 				linelen = 32
