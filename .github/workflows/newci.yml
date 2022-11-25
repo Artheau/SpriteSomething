@@ -61,11 +61,13 @@ jobs:
         shell: bash
         run: |
           python --version
-      # install numpy
-      - name: Install numpy
-        shell: bash
-        run: |
-          python -m pip install numpy
+      # install
+      - name: 💿Call Install
+        uses: ./.github/actions/install
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
       # test
       - name: 🧮Print Diagnostics
         shell: bash
