@@ -61,6 +61,11 @@ jobs:
         shell: bash
         run: |
           python --version
+      # install numpy
+      - name: Install numpy
+        shell: bash
+        run: |
+          python -m pip install numpy
       # test
       - name: 🧮Print Diagnostics
         shell: bash
@@ -309,7 +314,7 @@ jobs:
         id: debug_info
         run: |
           GITHUB_TAG="$(head -n 1 ../build/app_version.txt)"
-          echo "::set-output name=github_tag::$GITHUB_TAG"
+          echo "github_tag=$GITHUB_TAG" >> $GITHUB_OUTPUT
           GITHUB_TAG="v${GITHUB_TAG}"
           RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
           echo "Release Name: ${RELEASE_NAME}"
@@ -334,7 +339,7 @@ jobs:
         shell: bash
         run: |
           ASSET_LINUX="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/linux)"
-          echo "::set-output name=asset_linux::$ASSET_LINUX"
+          echo "asset_linux=$ASSET_LINUX" >> $GITHUB_OUTPUT
 
       # upload linux archive asset
       - name: 🔼Upload Linux Archive Asset (MASTER)
@@ -355,7 +360,7 @@ jobs:
         shell: bash
         run: |
           ASSET_MACOS="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/macos)"
-          echo "::set-output name=asset_macos::$ASSET_MACOS"
+          echo "asset_macos=$ASSET_MACOS" >> $GITHUB_OUTPUT
 
       # upload macos archive asset
       # - name: 🔼Upload MacOS Archive Asset (MASTER)
@@ -376,7 +381,7 @@ jobs:
         shell: bash
         run: |
           ASSET_WIN="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/windows)"
-          echo "::set-output name=asset_windows::$ASSET_WIN"
+          echo "asset_windows=$ASSET_WIN" >> $GITHUB_OUTPUT
 
       # upload windows archive asset
       - name: 🔼Upload Windows Archive Asset (MASTER)
