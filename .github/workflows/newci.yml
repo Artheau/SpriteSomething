@@ -26,6 +26,7 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
+          ubuntu-latest,
           ubuntu-22.04,
           ubuntu-20.04,
           macos-latest,
@@ -99,6 +100,7 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
+          ubuntu-latest,
           ubuntu-22.04,
           ubuntu-20.04,
           macos-latest,
@@ -165,6 +167,7 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
+          ubuntu-latest,
           ubuntu-22.04,
           ubuntu-20.04,
           macos-latest,
