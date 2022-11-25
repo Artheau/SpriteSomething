@@ -8,7 +8,7 @@ on: [push, pull_request]
 # actions
 #########
 # actions/checkout@v3.1.0
-# actions/download-artifact@v3.0.0
+# actions/download-artifact@v3.0.1
 # actions/create-release
 # actions/upload-release-asset
 # Artheau/SpriteSomething/get-parent-dir
@@ -26,8 +26,8 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          ubuntu-latest,
-          ubuntu-18.04,
+          ubuntu-22.04,
+          ubuntu-20.04,
           macos-latest,
           windows-latest
         ]
@@ -99,8 +99,8 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          ubuntu-latest,
-          ubuntu-18.04,
+          ubuntu-22.04,
+          ubuntu-20.04,
           macos-latest,
           windows-latest
         ]
@@ -165,8 +165,8 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          ubuntu-latest,
-          ubuntu-18.04,
+          ubuntu-22.04,
+          ubuntu-20.04,
           macos-latest,
           windows-latest
         ]
@@ -294,28 +294,28 @@ jobs:
 
       # download appversion artifact
       - name: 🔽Download AppVersion Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: appversion-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
 
       # download ubuntu archive artifact
       - name: 🔽Download Ubuntu Archive Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: archive-ubuntu-latest
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux
 
       # download macos archive artifact
       - name: 🔽Download MacOS Archive Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: archive-macos-latest
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos
 
       # download windows archive artifact
       - name: 🔽Download Windows Archive Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: archive-windows-latest
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows
@@ -433,7 +433,7 @@ jobs:
         uses: ./.github/actions/get-parent-dir
       # download appversion artifact
       - name: 🔽Download AppVersion Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: appversion-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
@@ -465,7 +465,7 @@ jobs:
         uses: actions/checkout@v3.1.0
       # download pages artifact
       - name: 🔽Download Pages Artifact
-        uses: actions/download-artifact@v3.0.0
+        uses: actions/download-artifact@v3.0.1
         with:
           name: pages-${{ matrix.os-name }}
           path: ./

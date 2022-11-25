@@ -16,7 +16,7 @@ inputs:
 #########
 # Artheau/SpriteSomething/get-parent-dir
 # actions/checkout@v3.1.0
-# actions/download-artifact@v3.0.0
+# actions/download-artifact@v3.0.1
 
 runs:
   using: "composite"
@@ -30,7 +30,7 @@ runs:
       uses: ./.github/actions/get-parent-dir
     # download binary artifact
     - name: 🔽Download Binary Artifact
-      uses: actions/download-artifact@v3.0.0
+      uses: actions/download-artifact@v3.0.1
       with:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./

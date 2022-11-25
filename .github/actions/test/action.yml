@@ -15,7 +15,7 @@ inputs:
 # actions
 #########
 # actions/checkout@v3.1.0
-# actions/download-artifact@v3.0.0
+# actions/download-artifact@v3.0.1
 # actions/upload-artifact@v3.1.1
 # GabrielBB/xvfb-action@v1.6
 
@@ -24,7 +24,7 @@ runs:
   steps:
     # download pipline
     - name: 🔽Download PipLine
-      uses: actions/download-artifact@v3.0.0
+      uses: actions/download-artifact@v3.0.1
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
