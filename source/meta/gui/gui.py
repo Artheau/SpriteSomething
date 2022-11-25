@@ -1278,7 +1278,7 @@ class SpriteSomethingMainFrame(tk.Frame):
           "",
           "Created by:",
           "[Artheau](http://github.com/Artheau/PixelArt)",
-          "[Mike Trethewey](http://github.com/miketrethewey)",
+          "[Minnie A. Trethewey](http://github.com/miketrethewey)",
           "",
           "Thanks to:",
           "[Auximines](https://metroidfanon.fandom.com/wiki/Super_Justin_Bailey) for initial inspiration for custom Super Metroid sprites",
