@@ -287,7 +287,16 @@ class Sprite(SpriteParent):
 
 			tournament_flag = field["race"]
 
-		if not tournament_flag:
+		# iddqd = False
+		iddqd = True
+		app_overrides_path = os.path.join(".","resources","user","meta","manifests","overrides.json")
+		if os.path.exists(app_overrides_path):
+			with open(app_overrides_path) as json_file:
+				data = json.load(json_file)
+				if "iddqd" in data.keys():
+					iddqd = data["iddqd"]
+
+		if not tournament_flag or iddqd:
 			#the sheet needs to be placed directly into address $108000-$10F000
 			for i,row in enumerate(itertools.chain(ascii_uppercase, ["AA","AB"])):	#over all 28 rows of the sheet
 				for column in range(8):		#over all 8 columns
@@ -337,7 +346,7 @@ class Sprite(SpriteParent):
 					author = self.metadata["author.name"]
 				if "author.name-short" in self.metadata:
 					author_short = self.metadata["author.name-short"]
-				char_class = "a-zA-Z0-9\'\.\/\:\_ "
+				char_class = "a-zA-Z0-9\' "
 				pattern = r'^([' + char_class + ']+)$'
 				antipattern = r'([^' + char_class + '])'
 				linelen = 32
@@ -376,7 +385,7 @@ class Sprite(SpriteParent):
 
 		return rom
 
-	def get_palette(self, palettes, default_range, frame_number):
+	def get_palette(self, palettes, default_range=[], frame_number=0):
 		palette_indices = None
 		this_palette = []
 		for i in range(1,16):

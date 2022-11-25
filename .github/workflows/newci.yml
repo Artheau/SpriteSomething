@@ -1,0 +1,498 @@
+# workflow name
+name: New CI
+
+# fire on
+on: [push, pull_request]
+
+#########
+# actions
+#########
+# actions/checkout@v3.1.0
+# actions/download-artifact@v3.0.1
+# actions/create-release
+# actions/upload-release-asset
+# Artheau/SpriteSomething/get-parent-dir
+# Artheau/SpriteSomething/install
+# Artheau/SpriteSomething/test
+
+jobs:
+  # Test
+  test:
+    name: 🧮
+    runs-on: ${{ matrix.os-name }}
+    continue-on-error: True
+
+    strategy:
+      matrix:
+        # should run on all OS
+        os-name: [
+          ubuntu-latest,
+          ubuntu-22.04,
+          ubuntu-20.04,
+          macos-latest,
+          windows-latest
+        ]
+
+        # should run on py 3.8-3.10
+        python-version: [
+          3.8,
+          3.9,
+          "3.10"
+        ]
+
+        # PIL 6.2.2 is good
+        # PIL 7.0.0+ introduces color error
+        pillow-version: [
+          "6.2.2",
+          # "7.0.0",
+          # "7.1.2",
+          # "7.2.0",
+          # "8.0.1",
+          # "8.1.2",
+          # "8.2.0",
+          # "8.3.2",
+          # "8.4.0",
+          # "9.0.1",
+        ]
+        exclude:
+          - os-name: macos-latest
+            python-version: 3.9
+          - os-name: macos-latest
+            python-version: "3.10"
+          - os-name: windows-latest
+            python-version: 3.9
+          - os-name: windows-latest
+            python-version: "3.10"
+    steps:
+      # checkout commit
+      - name: ✔️Checkout commit
+        uses: actions/checkout@v3.1.0
+      # install python
+      - name: 💿Install Python
+        uses: actions/setup-python@v4.3.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      # python version
+      - name: 🐍Python Version
+        shell: bash
+        run: |
+          python --version
+      # install
+      - name: 💿Call Install
+        uses: ./.github/actions/install
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
+      # test
+      - name: 🧮Print Diagnostics
+        shell: bash
+        run: |
+          python -m tests.new.asserts.test_diags
+
+  # Install/Test
+  install-test:
+    name: 💿/⏱️
+    runs-on: ${{ matrix.os-name }}
+    continue-on-error: True
+
+    strategy:
+      matrix:
+        # should run on all OS
+        os-name: [
+          ubuntu-latest,
+          ubuntu-22.04,
+          ubuntu-20.04,
+          macos-latest,
+          windows-latest
+        ]
+
+        # should run on py 3.8-3.10
+        python-version: [
+          3.8,
+          3.9,
+          "3.10"
+        ]
+
+        # PIL 6.2.2 is good
+        # PIL 7.0.0+ introduces color error
+        pillow-version: [
+          "6.2.2",
+          # "7.0.0",
+          # "7.1.2",
+          # "7.2.0",
+          # "8.0.1",
+          # "8.1.2",
+          # "8.2.0",
+          # "8.3.2",
+          # "8.4.0",
+          # "9.0.1",
+        ]
+        exclude:
+          - os-name: macos-latest
+            python-version: 3.9
+          - os-name: macos-latest
+            python-version: "3.10"
+          - os-name: windows-latest
+            python-version: 3.9
+          - os-name: windows-latest
+            python-version: "3.10"
+    steps:
+      # checkout commit
+      - name: ✔️Checkout commit
+        uses: actions/checkout@v3.1.0
+      # install
+      - name: 💿Call Install
+        uses: ./.github/actions/install
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
+      # test
+      - name: ⏱️Call Test
+        uses: ./.github/actions/test
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
+
+  # Install/Build
+  install-build:
+    name: 💿/🔨
+    runs-on: ${{ matrix.os-name }}
+    needs: [install-test]
+    continue-on-error: True
+
+    strategy:
+      matrix:
+        # should run on all OS
+        os-name: [
+          ubuntu-latest,
+          ubuntu-22.04,
+          ubuntu-20.04,
+          macos-latest,
+          windows-latest
+        ]
+
+        # should run on py 3.8-3.10
+        python-version: [
+          3.8,
+          3.9,
+          "3.10"
+        ]
+
+        # PIL 6.2.2 is good
+        # PIL 7.0.0+ introduces color error
+        pillow-version: [
+            "6.2.2",
+            # "7.0.0",
+            # "7.1.2",
+            # "7.2.0",
+            # "8.0.1",
+            # "8.1.2",
+            # "8.2.0",
+            # "8.3.2",
+            # "8.4.0",
+            # "9.0.1",
+          ]
+        exclude:
+          # mac & windows fail on 3.9+
+          - os-name: macos-latest
+            python-version: 3.9
+          - os-name: macos-latest
+            python-version: "3.10"
+          - os-name: windows-latest
+            python-version: 3.9
+          - os-name: windows-latest
+            python-version: "3.10"
+    steps:
+      # checkout commit
+      - name: ✔️Checkout commit
+        uses: actions/checkout@v3.1.0
+      # install
+      - name: 💿Call Install
+        uses: ./.github/actions/install
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
+      # build
+      - name: 🔨Call Build
+        uses: ./.github/actions/build
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
+
+  # Install/Prepare Release
+  install-release-prepare:
+    name: 💿/📀->📦
+    runs-on: ${{ matrix.os-name }}
+    needs: [install-build]
+
+    strategy:
+      matrix:
+        # should run on all LATEST OS
+        os-name: [
+          ubuntu-latest,
+          macos-latest,
+          windows-latest
+        ]
+
+        # run on py 3.8 (EOL: 2024-10-14)
+        # EOL
+        #  3.8:   2024-10-14
+        #  3.9:   2025-10-05
+        #  3.10:  2026-10-04
+        python-version: [3.8]
+
+        # run on PIL 6.2.2
+        # can't build on py 3.9-3.10
+        pillow-version: ["6.2.2"]
+    steps:
+      # checkout commit
+      - name: ✔️Checkout commit
+        uses: actions/checkout@v3.1.0
+      # install
+      - name: 💿Call Install
+        uses: ./.github/actions/install
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
+      # prepare release
+      - name: 📀->📦Prepare Release
+        uses: ./.github/actions/release-prepare
+        with:
+          os-name: ${{ matrix.os-name }}
+          python-version: ${{ matrix.python-version }}
+          pillow-version: ${{ matrix.pillow-version }}
+
+  # Deploy Release
+  release-deploy:
+    name: 📀->🚀
+    runs-on: ${{ matrix.os-name }}
+    needs: [install-release-prepare]
+
+    strategy:
+      matrix:
+        os-name: [ubuntu-latest]
+        python-version: [3.8]
+
+    steps:
+      # checkout commit
+      - name: ✔️Checkout commit
+        uses: actions/checkout@v3.1.0
+
+      # install dependencies via pip
+      - name: 💿Install Dependencies via pip
+        shell: bash
+        run: |
+          python -m pip install pytz requests
+
+      # get parent dir
+      - name: 📁Get Parent Directory
+        id: parentDir
+        uses: ./.github/actions/get-parent-dir
+
+      # download appversion artifact
+      - name: 🔽Download AppVersion Artifact
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: appversion-${{ matrix.os-name }}
+          path: ${{ steps.parentDir.outputs.parentDir }}/build
+
+      # download ubuntu archive artifact
+      - name: 🔽Download Ubuntu Archive Artifact
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: archive-ubuntu-latest
+          path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux
+
+      # download macos archive artifact
+      - name: 🔽Download MacOS Archive Artifact
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: archive-macos-latest
+          path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos
+
+      # download windows archive artifact
+      - name: 🔽Download Windows Archive Artifact
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: archive-windows-latest
+          path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows
+
+      # archive listing
+      # - name: Archive Listing
+      #   shell: bash
+      #   run: |
+      #     ls -R ${{ steps.parentDir.outputs.parentDir }}/deploy/
+
+      # debug info
+      - name: 📝Debug Info
+        id: debug_info
+        run: |
+          GITHUB_TAG="$(head -n 1 ../build/app_version.txt)"
+          echo "github_tag=$GITHUB_TAG" >> $GITHUB_OUTPUT
+          GITHUB_TAG="v${GITHUB_TAG}"
+          RELEASE_NAME="SpriteSomething ${GITHUB_TAG}"
+          echo "Release Name: ${RELEASE_NAME}"
+          echo "Git Tag:      ${GITHUB_TAG}"
+
+      # create a release
+      - name: 📀->🚀Create a Release (MASTER)
+        id: create_release
+        uses: actions/create-release@v1.1.4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.debug_info.outputs.github_tag }}
+          release_name: SpriteSomething v${{ steps.debug_info.outputs.github_tag }}
+          body_path: RELEASENOTES.md
+          # draft: true
+        if: contains(github.ref, 'master')
+
+      # determine linux archive asset
+      - name: ❔Identify Linux Archive Asset
+        id: identify-linux-asset
+        shell: bash
+        run: |
+          ASSET_LINUX="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/linux)"
+          echo "asset_linux=$ASSET_LINUX" >> $GITHUB_OUTPUT
+
+      # upload linux archive asset
+      - name: 🔼Upload Linux Archive Asset (MASTER)
+        id: upload-linux-asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux/${{ steps.identify-linux-asset.outputs.asset_linux }}
+          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-linux-focal.tar.gz
+          asset_content_type: application/gzip
+        if: contains(github.ref, 'master')
+
+      # determine macos archive asset
+      - name: ❔Identify MacOS Archive Asset
+        id: identify-macos-asset
+        shell: bash
+        run: |
+          ASSET_MACOS="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/macos)"
+          echo "asset_macos=$ASSET_MACOS" >> $GITHUB_OUTPUT
+
+      # upload macos archive asset
+      # - name: 🔼Upload MacOS Archive Asset (MASTER)
+      #   id: upload-macos-asset
+      #   uses: actions/upload-release-asset@v1.0.2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos/${{ steps.identify-macos-asset.outputs.asset_macos }}
+      #     asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-osx.tar.gz
+      #     asset_content_type: application/gzip
+      #   if: contains(github.ref, 'master')
+
+      # determine windows archive asset
+      - name: ❔Identify Windows Archive Asset
+        id: identify-windows-asset
+        shell: bash
+        run: |
+          ASSET_WIN="$(ls ${{ steps.parentDir.outputs.parentDir }}/deploy/windows)"
+          echo "asset_windows=$ASSET_WIN" >> $GITHUB_OUTPUT
+
+      # upload windows archive asset
+      - name: 🔼Upload Windows Archive Asset (MASTER)
+        id: upload-windows-asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows/${{ steps.identify-windows-asset.outputs.asset_windows }}
+          asset_name: SpriteSomething-${{ steps.debug_info.outputs.github_tag }}-windows.zip
+          asset_content_type: application/zip
+        if: contains(github.ref, 'master')
+
+  # Prepare Pages
+  pages-prepare:
+    name: 🌎->📦
+    runs-on: ${{ matrix.os-name }}
+    needs: [release-deploy]
+
+    strategy:
+      matrix:
+        os-name: [ubuntu-latest]
+
+    steps:
+      # checkout commit
+      - name: ✔️Checkout commit
+        uses: actions/checkout@v3.1.0
+      # get parent dir
+      - name: 📁Get Parent Directory
+        id: parentDir
+        uses: ./.github/actions/get-parent-dir
+      # download appversion artifact
+      - name: 🔽Download AppVersion Artifact
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: appversion-${{ matrix.os-name }}
+          path: ${{ steps.parentDir.outputs.parentDir }}/build
+      # Prepare Pages
+      - name: 🌎->📦Prepare GitHub Pages
+        shell: bash
+        run: |
+          python ./resources/ci/common/prepare_pages.py
+      # upload pages artifact for later step
+      - name: 🔼Upload Pages Artifact
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: pages-${{ matrix.os-name }}
+          path: ${{ steps.parentDir.outputs.parentDir }}/pages
+
+  # Deploy Pages
+  pages-deploy:
+    name: 🌎->🚀
+    runs-on: ${{ matrix.os-name }}
+    needs: [pages-prepare]
+
+    strategy:
+      matrix:
+        os-name: [ubuntu-latest]
+
+    steps:
+      # checkout commit
+      - name: ✔️Checkout commit
+        uses: actions/checkout@v3.1.0
+      # download pages artifact
+      - name: 🔽Download Pages Artifact
+        uses: actions/download-artifact@v3.0.1
+        with:
+          name: pages-${{ matrix.os-name }}
+          path: ./
+      # Prepare actor for GH-Pages
+      - name: 📝Prepare actor for GH-Pages
+        shell: bash
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+      # List Differences
+      - name: ➖List Differences
+        shell: bash
+        run: |
+          git diff --name-status --cached
+      # Set Commit
+      - name: ➕Set Commit
+        shell: bash
+        run: |
+          git commit -q -F commit.txt
+          git log
+      # Push to GH-Pages
+      - name: 🚀Push to GH-Pages (MASTER)
+        shell: bash
+        run: |
+          git push
+        if: contains(github.ref, 'master')

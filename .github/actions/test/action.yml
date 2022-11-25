@@ -1,0 +1,78 @@
+name: ⏱️Test
+description: Test app
+inputs:
+  os-name:
+    required: true
+    description: OS to run on
+  python-version:
+    required: true
+    description: Python version to install
+  pillow-version:
+    required: true
+    description: Pillow version to install
+
+#########
+# actions
+#########
+# actions/checkout@v3.1.0
+# actions/download-artifact@v3.0.1
+# actions/upload-artifact@v3.1.1
+# GabrielBB/xvfb-action@v1.6
+
+runs:
+  using: "composite"
+  steps:
+    # download pipline
+    - name: 🔽Download PipLine
+      uses: actions/download-artifact@v3.0.1
+      with:
+        name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        path: ./resources/user/meta/manifests
+    # start virtual display driver & run tests
+    - name: 🖥️Start virtual display driver & Test (!Windows)
+      shell: bash
+      env:
+        DISPLAY: :99
+      run: |
+        disp=:99
+        screen=0
+        geom=640x480x24
+        exec Xvfb $disp -screen $screen $geom 2>/tmp/Xvfb.log &
+        export DISPLAY=:99
+        mkdir -p ./failures
+        echo "" > ./failures/errors.txt
+        python -m tests.new.asserts.test_diags
+        python -m tests.new.asserts.test_exports
+        python -m tests.new.asserts.test_animations
+        python -m tests.new.asserts.test_gui
+      if: contains(inputs.os-name, 'windows') != true
+    - name: 🖥️Start virtual display driver & Test (Windows)
+      uses: GabrielBB/xvfb-action@v1.6
+      with:
+        run: |
+          python -m tests.new.asserts.test_diags
+          python -m tests.new.asserts.test_exports
+          python -m tests.new.asserts.test_animations
+          python -m tests.new.asserts.test_gui
+      if: contains(inputs.os-name, 'windows')
+
+    # print failures
+    - name: Print Failures
+      if: failure()
+      shell: bash
+      run: |
+        ERR_STRING="$(cat ./failures/errors.txt)"
+        ERR_STRING="${ERR_STRING//'%'/'%25'}"
+        ERR_STRING="${ERR_STRING//$'\n'/' | '}"
+        ERR_STRING="${ERR_STRING//$'\r'/' | '}"
+        ERR_STRING="${ERR_STRING//$'\n'/'%0A'}"
+        ERR_STRING="${ERR_STRING//$'\r'/'%0D'}"
+        echo "::error ::$ERR_STRING"
+
+    # upload failures
+    - name: 🔼Upload Failures
+      if: failure()
+      uses: actions/upload-artifact@v3.1.1
+      with:
+        name: failures-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        path: ./failures

@@ -11,6 +11,10 @@ __pycache__/
 #do not include the upx compressor directory (you can get this utility from https://upx.github.io/)
 /upx
 
+# no node
+node_modules
+package*.json
+
 # no IDE stuff
 /.vscode
 /.idea
@@ -53,6 +57,7 @@ palette_writers.json
 
 # no custom files
 custom/
-resources/user/**/sheets
+failures/
+resources/user/**/**
 resources/tmp/*
 resources/**/stamped.png

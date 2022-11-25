@@ -1,16 +1,16 @@
 {
   "facing": {
-    "up": ["<Up>", "8"],
-    "left": ["<Left>"],
-    "right": ["<Right>"],
-    "down": ["<Down>", "2"]
+    "up": [ "<Up>", "8" ],
+    "left": [ "<Left>" ],
+    "right": [ "<Right>" ],
+    "down": [ "<Down>", "2" ]
   },
   "aiming": {
-    "neutral": ["<Insert>", "5"],
-    "up": ["<Up>", "8"],
-    "diag_up": ["7", "<Prior>", "9"],
-    "shoot": ["4", "<Delete>", "6"],
-    "diag_down": ["1", "<Next>", "3"],
-    "down": ["<Down>", "2"]
+    "neutral": [ "<Insert>", "5" ],
+    "up": [ "<Up>", "8" ],
+    "diag_up": [ "7", "<Prior>", "9" ],
+    "shoot": [ "4", "<Delete>", "6" ],
+    "diag_down": [ "1", "<Next>", "3" ],
+    "down": [ "<Down>", "2" ]
   }
 }

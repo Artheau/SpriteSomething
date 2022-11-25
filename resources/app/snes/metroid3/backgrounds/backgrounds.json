@@ -4,22 +4,22 @@
     {
       "filename": "colony.png",
       "title": "Space Colony",
-      "origin": [124, 171]
+      "origin": [ 124, 171 ]
     },
     {
       "filename": "fileselect.png",
       "title": "File Select",
-      "origin": [156, 67]
+      "origin": [ 156, 67 ]
     },
     {
       "filename": "landingsite.png",
       "title": "Landing Site",
-      "origin": [114, 202]
+      "origin": [ 114, 202 ]
     },
     {
       "filename": "title.png",
       "title": "Title Screen",
-      "origin": [74, 124]
+      "origin": [ 74, 124 ]
     }
   ]
 }
