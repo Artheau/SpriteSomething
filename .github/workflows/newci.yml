@@ -92,8 +92,7 @@ jobs:
 
         # PIL 6.2.2 is good
         # PIL 7.0.0+ introduces color error
-        pillow-version:
-          [
+        pillow-version: [
             "6.2.2",
             # "7.0.0",
             # "7.1.2",
@@ -159,8 +158,7 @@ jobs:
 
         # PIL 6.2.2 is good
         # PIL 7.0.0+ introduces color error
-        pillow-version:
-          [
+        pillow-version: [
             "6.2.2",
             # "7.0.0",
             # "7.1.2",

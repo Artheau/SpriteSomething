@@ -11,6 +11,10 @@ __pycache__/
 #do not include the upx compressor directory (you can get this utility from https://upx.github.io/)
 /upx
 
+# no node
+node_modules
+package*.json
+
 # no IDE stuff
 /.vscode
 /.idea
