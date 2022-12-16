@@ -114,7 +114,7 @@ class CLIMainFrame():
   def load_sprite(self, sprite_filename, random=False):
     print(" Loading %sSprite for CLI" % ("Random " if random else ""))
 
-    self.game, self.sprite, _ = gamelib.autodetect(sprite_filename)
+    self.game, self.sprite, self.animation_engine = gamelib.autodetect(sprite_filename)
 
     print(f"  Loaded a \"{self.sprite.classic_name}\" Sprite for injection into {self.game.name} Game files")
     # Additional GUI stuff
@@ -143,7 +143,7 @@ class CLIMainFrame():
     same_internal_name = self.game.internal_name == gamelib.autodetect_game_type_from_rom_filename("snes",source_filename)[0]	#the game file matches
     is_zsm = "ZSM" in str(rom.get_name())	#this is a ZSM game file
     if same_internal_name or (is_zsm and self.sprite.classic_name in ["Link","Samus"]):	#if we've got a compatible game file, inject it!
-      modified_rom = self.sprite.inject_into_ROM(rom)
+      modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
       modified_rom.save(dest_filename, overwrite=True)
       print(action)
       print("    Injected \"%s\" into: %s" % (self.sprite.classic_name, dest_filename[dest_filename.rfind('\\')+1:]))
