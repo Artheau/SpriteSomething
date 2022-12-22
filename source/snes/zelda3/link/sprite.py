@@ -263,7 +263,7 @@ class Sprite(SpriteParent):
 		#should work for the (J) & (U) ROMs but won't automatically include the extra code needed to manage gloves, etc
 
 		#this'll check VT rando Tournament Flag
-		tournament_flag = rom.read(0x180213, 2) == 1
+		tournament_flag = (float(rom.get_size_in_MB()) > 1.5) and (rom.read(0x180213, 2) == 1)
 		#this'll check combo Tournament Flag
 		if rom.type() == "EXHIROM" and not tournament_flag:
 			config = rom.read_from_snes_address(0x80FF52, 2)
