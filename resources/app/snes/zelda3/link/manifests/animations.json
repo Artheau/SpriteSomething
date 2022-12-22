@@ -3862,49 +3862,50 @@
     "right": [
       {
         "frames": 10, "tiles": [
+          { "image": "MASTER_SWORD", "pos": [-2,0] },
           { "image": "A1", "pos": [0,0] },
           { "image": "B3", "pos": [0,8] }
         ]
       },
       {
-        "frames": 10, "tiles": [
-          { "image": "E3", "pos": [0,3] },
-          { "image": "X5", "pos": [0,8] }
+        "frames": 432, "tiles": [
+          { "image": "MASTER_SWORD", "pos": [-2,0] },
+          { "image": "U0", "pos": [0,3] },
+          { "image": "U4", "pos": [0,8] }
         ]
       },
       {
-        "frames": 10, "tiles": [
-          { "image": "U0", "pos": [0,2] },
+        "frames": 8, "tiles": [
+          { "image": "MASTER_SWORD", "pos": [-2,0] },
+          { "image": "U0", "pos": [0,1] },
           { "image": "U3", "pos": [0,8] }
         ]
       },
       {
-        "frames": 10, "tiles": [
-          { "image": "U0", "pos": [0,3] },
-          { "image": "X5", "pos": [0,8] }
+        "frames": 23, "tiles": [
+          { "image": "MASTER_SWORD", "pos": [-2,0] },
+          { "image": "A1", "pos": [0,0] },
+          { "image": "B3", "pos": [0,8] }
         ]
       },
       {
-        "frames": 10, "tiles": [
-          { "image": "E3", "pos": [0,3] },
-          { "image": "X5", "pos": [0,8] }
+        "frames": 1, "tiles": [
+          { "image": "MASTER_SWORD", "pos": [-2,0] },
+          { "image": "SHIELD1", "pos": [-4,6], "flip": "h" },
+          { "image": "L1", "pos": [0,0] },
+          { "image": "L2", "pos": [0,8] }
         ]
       },
       {
-        "frames": 10, "tiles": [
+        "frames": 298, "tiles": [
           { "image": "SWORD0", "pos": [11,-15] },
-          { "image": "L1", "pos": [0,-1] },
-          { "image": "L2", "pos": [0,7] }
+          { "image": "SHIELD1", "pos": [-4,6], "flip": "h" },
+          { "image": "L1", "pos": [0,0] },
+          { "image": "L2", "pos": [0,8] }
         ]
       },
       {
-        "frames": 10, "tiles": [
-          { "image": "E3", "pos": [0,3] },
-          { "image": "X5", "pos": [0,8] }
-        ]
-      },
-      {
-        "frames": 10, "tiles": [
+        "frames": 30, "tiles": [
           { "image": "A1", "pos": [0,0] },
           { "image": "B3", "pos": [0,8] }
         ]

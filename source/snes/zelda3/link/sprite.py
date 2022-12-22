@@ -182,7 +182,8 @@ class Sprite(SpriteParent):
 				"SHALLOW_WATER",
 				"SHOVEL",
 				"SWAGDUCK",
-				"TALL_GRASS"
+				"TALL_GRASS",
+				"MASTER_SWORD",
 				]:
 				if image_name.startswith(item):
 					found_alt = True
