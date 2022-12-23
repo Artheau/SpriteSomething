@@ -122,6 +122,11 @@
       "title": "Light World"
     },
     {
+      "filename": "pedestal.0.png",
+      "title": "Pedestal",
+      "origin": [100,100]
+    },
+    {
       "filename": "mosaic.0.png",
       "title": "Mosaic"
     },

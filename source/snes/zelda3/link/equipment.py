@@ -118,7 +118,8 @@ def equipment_test(save=False):
 		"tall_grass2": ((16,320),(16, 8)),
 		"shallow_water0": ((32,320),(16, 8)),
 		"shallow_water1": ((32,328),(16, 8)),
-		"shallow_water2": ((48,320),(16, 8))
+		"shallow_water2": ((48,320),(16, 8)),
+		"master_sword": (( 0,336),(16,32)),
 	}
 	#add more inventory stuff
 	for key in inventory:
