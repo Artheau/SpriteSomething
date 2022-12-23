@@ -3861,7 +3861,7 @@
   "Pedestal pull": {
     "right": [
       {
-        "frames": 10, "tiles": [
+        "frames": 10, "background": "pedestal.0.png", "origin": [100,100], "tiles": [
           { "image": "MASTER_SWORD", "pos": [-2,0] },
           { "image": "A1", "pos": [0,0] },
           { "image": "B3", "pos": [0,8] }
@@ -3891,15 +3891,15 @@
       {
         "frames": 1, "tiles": [
           { "image": "MASTER_SWORD", "pos": [-2,0] },
-          { "image": "SHIELD1", "pos": [-4,6], "flip": "h" },
+          { "image": "SHIELD1", "pos": [-4,7], "flip": "h" },
           { "image": "L1", "pos": [0,0] },
           { "image": "L2", "pos": [0,8] }
         ]
       },
       {
         "frames": 298, "tiles": [
-          { "image": "SWORD0", "pos": [11,-15] },
-          { "image": "SHIELD1", "pos": [-4,6], "flip": "h" },
+          { "image": "SWORD0", "pos": [11,-14] },
+          { "image": "SHIELD1", "pos": [-4,7], "flip": "h" },
           { "image": "L1", "pos": [0,0] },
           { "image": "L2", "pos": [0,8] }
         ]
