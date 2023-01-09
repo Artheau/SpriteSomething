@@ -317,7 +317,13 @@ class Sprite(SpriteParent):
 			#the glove colors are placed into $1BEDF5-$1BEDF8
 			for i in range(2):
 				rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
-			if (hex(rom.read_from_snes_address(0x238000, 2)) == "0x3702") and (hex(rom.read_from_snes_address(0x23801E, 2)) == "0x3702"):
+			linelen = 0
+			if hex(rom.read_from_snes_address(0x238000, 2)) == "0x3702":
+				if hex(rom.read_from_snes_address(0x23801E, 2)) == "0x3702":
+					linelen = 28
+				elif hex(rom.read_from_snes_address(0x238022, 2)) == "0x3702":
+					linelen = 32
+			if linelen > 0:
 				# print("v32-compatible credits")
 				contiguous = digits + ascii_uppercase + "'"
 				letters = {
@@ -350,7 +356,6 @@ class Sprite(SpriteParent):
 				char_class = "a-zA-Z0-9\' "
 				pattern = r'^([' + char_class + ']+)$'
 				antipattern = r'([^' + char_class + '])'
-				linelen = 32
 				if len(author) <= linelen:
 					matches = re.match(pattern,author)
 					if matches:
@@ -377,8 +382,8 @@ class Sprite(SpriteParent):
 					msg["lo"]["rom"]["dec"].append(int(letters["lo"][ltr],16))
 				# print(msg)
 
-				rom.bulk_write_to_snes_address(0x238002,msg["hi"]["rom"]["dec"],0x20)
-				rom.bulk_write_to_snes_address(0x238020,msg["lo"]["rom"]["dec"],0x20)
+				rom.bulk_write_to_snes_address(0x238002,msg["hi"]["rom"]["dec"],linelen)
+				rom.bulk_write_to_snes_address(0x238004+linelen,msg["lo"]["rom"]["dec"],linelen)
 
 		else:
 			# FIXME: English
