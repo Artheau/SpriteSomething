@@ -1,13 +1,11 @@
-import importlib			#for dynamic imports
 import itertools
 import json						#for reading JSON
 import os							#for filesystem manipulation
 import io							#for filesystem manipution
-import urllib.request	#for downloading stuff
 import re
+from string import ascii_uppercase, digits
 from PIL import Image
 from source.meta.common import common
-from string import ascii_uppercase, digits
 from source.meta.classes.spritelib import SpriteParent
 
 class Sprite(SpriteParent):
@@ -325,6 +323,7 @@ class Sprite(SpriteParent):
 					linelen = 32
 			if linelen > 0:
 				# print("v32-compatible credits")
+				# print(f"Length: {linelen}")
 				contiguous = digits + ascii_uppercase + "'"
 				letters = {
 					"hi": {
@@ -371,7 +370,7 @@ class Sprite(SpriteParent):
 				if len(author_short) > len(author):
 					author = author_short
 				author = author.upper()
-				lpad = int((linelen - len(author)) / 2) - 2
+				lpad = int((linelen - len(author)) / 2)
 				author = author.rjust(lpad + len(author)).ljust(linelen)
 				for i,ltr in enumerate(itertools.chain(author)):
 					msg["hi"]["ascii"] += ltr
