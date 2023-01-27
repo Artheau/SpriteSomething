@@ -1644,19 +1644,34 @@
 	},
 	"X-Ray": {
 		"right_aim_up": [
-			{	"frames": 1,	"displacement": [0,-6],	"tiles": [	{"image": "xray_right", "pos": [-13,-21]}	], "palette": "xray_variant"	}
+			{	"frames": 1,	"displacement": [0,-6],	"tiles": [
+        {"image": "xray_right", "pos": [-13,-21]},
+        {"image": "optional_xray_standing_looking_up", "pos": [0,-140]}
+      ], "palette": "xray_variant"	}
 		],
 		"right_aim_diag_up": [
-			{	"frames": 1,	"displacement": [0,-6],	"tiles": [	{"image": "xray_right1", "pos": [-13,-21]}	], "palette": "xray_variant"	}
+			{	"frames": 1,	"displacement": [0,-6],	"tiles": [
+        {"image": "xray_right1", "pos": [-13,-21]},
+        {"image": "optional_xray_standing_45o_up", "pos": [0,-140]}
+      ], "palette": "xray_variant"	}
 		],
 		"right": [
-			{	"frames": 1,	"displacement": [0,-6],	"tiles": [	{"image": "xray_right2", "pos": [-13,-21]}	], "palette": "xray_variant"	}
+			{	"frames": 1,	"displacement": [0,-6],	"tiles": [
+        {"image": "xray_right2", "pos": [-13,-21]},
+        {"image": "optional_xray_standing_looking_forward", "pos": [0,-140]}
+      ], "palette": "xray_variant"	}
 		],
 		"right_aim_diag_down": [
-			{	"frames": 1,	"displacement": [0,-6],	"tiles": [	{"image": "xray_right3", "pos": [-13,-21]}	], "palette": "xray_variant"	}
+			{	"frames": 1,	"displacement": [0,-6],	"tiles": [
+        {"image": "xray_right3", "pos": [-13,-21]},
+        {"image": "optional_xray_standing_45o_down", "pos": [0,-140]}
+      ], "palette": "xray_variant"	}
 		],
 		"right_aim_down": [
-			{	"frames": 1,	"displacement": [0,-6],	"tiles": [	{"image": "xray_right4", "pos": [-13,-21]}	], "palette": "xray_variant"	}
+			{	"frames": 1,	"displacement": [0,-6],	"tiles": [
+        {"image": "xray_right4", "pos": [-13,-21]},
+        {"image": "optional_xray_standing_looking_down", "pos": [0,-140]}
+      ], "palette": "xray_variant"	}
 		],
 		"left_aim_up": [
 			{	"frames": 1,	"displacement": [0,-6],	"tiles": [	{"image": "xray_left", "pos": [-19,-21]}	], "palette": "xray_variant"	}
