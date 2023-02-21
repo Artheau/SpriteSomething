@@ -8,7 +8,7 @@ Runs the CLI interface for SpriteSomething
 import json    #for reading JSON
 import os      #for filesystem manipulation
 import random  #for choosing random app titles, random game files & random sprites
-import sys     # exit
+# import sys     # exit
 from source.meta.common import common
 from source.meta.common import constants as CONST
 from source.meta.gui import gamelib
@@ -69,10 +69,10 @@ class CLIMainFrame():
                 # sys.exit(1)
             self.randomize_into_ROM(
                 inject=True,
-                dest_filename=dest_filename,
-                source_filename=source_filename,
-                source_filepath=source_filepath,
-                sprite_filepath=sprite_filepath
+                # dest_filename=dest_filename,
+                # source_filename=source_filename,
+                # source_filepath=source_filepath,
+                # sprite_filepath=sprite_filepath
             )
         else:    #we're injecting the loaded sprite into one game file
             if not isinstance(source_filename, str):
@@ -259,11 +259,11 @@ class CLIMainFrame():
 
     def randomize_into_ROM(
         self,
-        inject=False,
-        dest_filename=None,
-        source_filename=None,
-        source_filepath=None,
-        sprite_filepath=None
+        # inject=False,
+        # dest_filename=None,
+        # source_filename=None,
+        # source_filepath=None,
+        # sprite_filepath=None
     ):
         """
         #try to randomize a sprite and inject it
