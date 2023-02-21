@@ -8,11 +8,24 @@ Manage Paper Doll imagery
 # list of cells for base
 # list of cells for boots
 # list of cells for varia
-import json
 import os
-from string import ascii_uppercase
 from PIL import Image
 # from source.meta.common import common
+
+base_path_user = os.path.join(
+    ".",
+    "resources",
+    "user",
+    "snes",
+    "metroid3",
+    "samus",
+    "sheets",
+    "paperdoll",
+    "arima"
+)
+
+if not os.path.isdir(os.path.join(base_path_user, "cells")):
+    os.makedirs(os.path.join(base_path_user, "cells"))
 
 arimaCells = [
     [   1,   2,   3,   4,   5,   0,   0,   0,   6,   7,   8,   9,  10,  11,  12,  13 ],
@@ -120,17 +133,6 @@ def paperdoll_test(mode):
     '''
     Splice up cells
     '''
-    base_path_user = os.path.join(
-        "resources",
-        "user",
-        "snes",
-        "metroid3",
-        "samus",
-        "sheets",
-        "paperdoll",
-        "arima"
-    )
-
     with Image.open(os.path.join(
             "resources",
             "app",

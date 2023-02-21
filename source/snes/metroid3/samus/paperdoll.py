@@ -14,6 +14,19 @@ from string import ascii_uppercase
 from PIL import Image
 # from source.meta.common import common
 
+base_path_user = os.path.join(
+    ".",
+    "resources",
+    "user",
+    "snes",
+    "metroid3",
+    "samus",
+    "sheets",
+    "paperdoll"
+)
+if not os.path.isdir(os.path.join(base_path_user, "cells")):
+    os.makedirs(os.path.join(base_path_user, "cells"))
+
 suit_defns = {
     "power": [
         [ "A0", "A1", "A2", "A3" ],
@@ -290,18 +303,7 @@ def paperdoll_test(mode):
             paperdoll[cellID] = cropped_image
             if "save" in mode:
                 cropped_image.save(
-                    os.path.join(
-                        ".",
-                        "resources",
-                        "user",
-                        "snes",
-                        "metroid3",
-                        "samus",
-                        "sheets",
-                        "paperdoll",
-                        "cells",
-                        cellID + ".png"
-                    )
+                    os.path.join(base_path_user, "cells", cellID + ".png")
                 )
         # print(json.dumps(cell_specs, indent=2))
         for [suit_type, cell_list] in suit_defns.items():
@@ -323,13 +325,7 @@ def paperdoll_test(mode):
             ]:
                 base_image = Image.open(
                     os.path.join(
-                        "resources",
-                        "user",
-                        "snes",
-                        "metroid3",
-                        "samus",
-                        "sheets",
-                        "paperdoll",
+                        base_path_user,
                         "power" + ("-mirrors" if "mirror" in mode else "") + ".png"
                     )
                 )
@@ -339,13 +335,7 @@ def paperdoll_test(mode):
             ]:
                 base_image = Image.open(
                     os.path.join(
-                        "resources",
-                        "user",
-                        "snes",
-                        "metroid3",
-                        "samus",
-                        "sheets",
-                        "paperdoll",
+                        base_path_user,
                         "varia" + ("-mirrors" if "mirror" in mode else "") + ".png"
                     )
                 )
@@ -381,16 +371,7 @@ def paperdoll_test(mode):
                                 paperdoll[cellID].transpose(Image.FLIP_LEFT_RIGHT),
                                 (int(x) * 8, int(y) * 8)
                             )
-            saveName = os.path.join(
-                "resources",
-                "user",
-                "snes",
-                "metroid3",
-                "samus",
-                "sheets",
-                "paperdoll"
-            )
-            saveName = os.path.join(saveName, suit_type + ("-mirrors" if didMirror else "") + ".png")
+            saveName = os.path.join(base_path_user, suit_type + ("-mirrors" if didMirror else "") + ".png")
             this_image.save(saveName)
 
     bin_image = Image.new(
@@ -436,7 +417,7 @@ def paperdoll_test(mode):
                     cellID
                 )
         print()
-    saveName = os.path.join(".","resources","user","snes","metroid3","samus","sheets","paperdoll","binary.png")
+    saveName = os.path.join(base_path_user, "binary.png")
     bin_image.save(saveName)
     for [used, usedB] in used_bin.items():
         print(used,usedB)
