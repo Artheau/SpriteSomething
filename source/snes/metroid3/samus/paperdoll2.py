@@ -6,6 +6,8 @@ import os
 from string import ascii_uppercase
 from PIL import Image
 
+export_folder = ""
+
 arimaCells = [
     [   1,   2,   3,   4,   5,   0,   0,   0,   6,   7,   8,   9,  10,  11,  12,  13 ],
     [  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29 ],
@@ -16,6 +18,18 @@ arimaCells = [
     [  84,  85,  86,  87,  88,  89,  90,  91,   0,   0,  92,  93,  94,  95,  96,   0 ],
     [  97,  98,  99, 100, 101, 102, 103, 104,   0, 105, 106, 107, 108, 109, 110, 111 ],
     [ 112, 113, 114, 115,   0,   0,   0,   0,   0, 116, 117, 118, 119, 120, 121, 122 ]
+]
+
+arimaCells = [
+    [   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,  16 ],
+    [  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32 ],
+    [  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48 ],
+    [  49,  50,  51,  52,  53,  54,  55,  56,  57,  58,  59,  60,  61,  62,  63,  64 ],
+    [  65,  66,  67,  68,  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80 ],
+    [  81,  82,  83,  84,  85,  86,  87,  88,  89,  90,  91,  92,  93,  94,  95,  96 ],
+    [  97,  98,  99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112 ],
+    [ 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128 ],
+    [ 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144 ]
 ]
 
 mirrorCells = {
@@ -121,6 +135,83 @@ arimaSuits = {
   ]
 }
 
+arimaSuits = {
+  "power": [
+    [0,0,0,68],
+    [77,78,79,84],
+    [93,94,95,100],
+    [109,110,125,126,13,14,15,16],
+    [1,2,3,4,5],
+    [17,18,37,20,21,9,23,24],
+    [33,34,53,54],
+    [49,50,69,70],
+    [0,90,85,86],
+    [0,0,101,102],
+    [0,0,71,72],
+    [0,0,87,88],
+    [0,0,103,104],
+    [0,0,32,0],
+    [31,47,48,0,0,0,127,46],
+    [62,63,64,0,0,0,143,0]
+  ],
+  "powerboots": [
+    [],                                         # A
+    [],                                         # B
+    [],                                         # C
+    [],                                         # D
+    [],                                         # E
+    [],                                         # F
+    [],                                         # G
+    [],                                         # H
+    [],                                         # I
+    [],                                         # J
+    [],                                         # K
+    [],                                         # L
+    [],                                         # M
+    [0,10,29,104],
+    [0,26,27],
+    [41,42,43,44],
+    [57,58,59,0,0,0,61]
+  ],
+  "varia": [
+    [],
+    [81,82,83],
+    [97,98,99],
+    [113,114,115,116,117,118,119,120],
+    [0,0,131,132],
+    [0,0,19,0,0,22],
+    [0,0,35,36,0,38,39,40],
+    [0,0,51,52],
+    [0,0,91,92],
+    [0,0,0,107,108],
+    [0,122,123,124],
+    [0,138,139,140],
+    [0,0,12],
+    [0,0,28],
+    [],
+    [0,0,0,0,0,0,0,144]
+  ],
+  "variaboots": [
+    [],                                         # A
+    [],                                         # B
+    [],                                         # C
+    [],                                         # D
+    [],                                         # E
+    [],                                         # F
+    [],                                         # G
+    [],                                         # H
+    [],                                         # I
+    [],                                         # J
+    [],                                         # K
+    [],                                         # L
+    [],                                         # M
+    [0,10,11,0],
+    [0,26,27],
+    [41,42,43,44],
+    [57,58,59,0,0,0,61]
+  ]
+}
+
 cell_specs = {}
 paperdoll = {}
 
@@ -133,13 +224,18 @@ def coord_calc(origin, dims):
     return (x1, x2, w + x1, h+ x2)
 
 def my_pad(input):
-    return str(input).rjust(3, "0")
+    '''
+    strpad
+    '''
+    return str(input).strip().rjust(3, "0")
 
 def make_cell_specs():
     '''
     Get cell placements within the binary sheet
     '''
     print("Identifying cells in binary sheet")
+    print(" Input: Defined arrays in the code")
+    print(" Output: Populated cell_specs object")
     for row in range(0, int(72/8)):
         for col in range(0, int(128/8)):
             cellID = arimaCells[row][col]
@@ -154,6 +250,9 @@ def splice_up_binary(mode, sheet):
     if sheet is None:
         sheet = "binary-natural"
     print(f"Splicing binary sheet: {sheet}")
+    print(f" Input: Imported binary sheets")
+    print(f" Output: Populated paperdoll object")
+    print(f" Optional Output: Individual cell images ({os.path.join(base_path_user,export_folder,'cells')})")
     blank_image = Image.new(
         mode="RGB",
         size=(8, 8),
@@ -165,13 +264,14 @@ def splice_up_binary(mode, sheet):
         blank_image.save(
             os.path.join(
                 base_path_user,
-                "paperdoll2",
+                export_folder,
                 "cells",
                 "-1.png"
             )
         )
     for cellID, cell_coords in cell_specs.items():
         colorGoal = 5
+        colorGoal = 2
         if sheet == "binary2":
             colorGoal = 2
         elif sheet == "binary3":
@@ -187,7 +287,7 @@ def splice_up_binary(mode, sheet):
                 cropped_image.save(
                     os.path.join(
                         base_path_user,
-                        "paperdoll2",
+                        export_folder,
                         "cells",
                         str(cellID) + ".png"
                     )
@@ -196,7 +296,12 @@ def splice_up_binary(mode, sheet):
             print(f"  CellID: #{cellID} [Colors: {colors}] [# Colors: {len(colors)}] is invalid!")
 
 def export_suit(suit_type):
+    '''
+    Export a suit
+    '''
     print(f"Exporting Suit: {suit_type}")
+    print(f" Input: Suit type; paperdoll object")
+    print(f" Output: {os.path.join(base_path_user,export_folder,suit_type + '.png')}")
     display = "tileID"
     base_suits = [ "power" ]
     cellIDs = {}
@@ -253,7 +358,8 @@ def export_suit(suit_type):
             this_image.save(
                 os.path.join(
                     base_path_user,
-                    "paperdoll2",
+                    export_folder,
+                    "output",
                     suit_type + ".png"
                 )
             )
@@ -281,7 +387,7 @@ def splice_suit(filename):
     this_image = Image.open(
         os.path.join(
             base_path_user,
-            "paperdoll2",
+            export_folder,
             filename + ".png"
         )
     )
@@ -329,7 +435,8 @@ def splice_suit(filename):
     bin_image.save(
         os.path.join(
             base_path_user,
-            "paperdoll2",
+            export_folder,
+            "output",
             suit_type + "-binary.png"
         )
     )
@@ -349,7 +456,7 @@ def combine_suits():
         this_image = Image.open(
             os.path.join(
                 base_path_user,
-                "paperdoll2",
+                export_folder,
                 filename + "-binary.png"
             )
         )
@@ -372,7 +479,8 @@ def combine_suits():
     combined_image.save(
         os.path.join(
             base_path_user,
-            "paperdoll2",
+            export_folder,
+            "output",
             "combined.png"
         )
     )
@@ -387,23 +495,29 @@ def paperdoll_test(mode):
     make_cell_specs()
 
     # Optional section
-    if False:
-        splice_up_binary(mode, "binary-natural")
+    if True:
+        # Take binary sheet and splice it into cells
+        #  Optional: Save cells as images
+        splice_up_binary(mode, "binary-clean")
 
     # Optional section
-    if False:
+    if True:
+        # Requires splice_up_binary()
+        # Export suit from spliced-up binary sheet
         export_suit("power")
         export_suit("powerboots")
         export_suit("varia")
         export_suit("variaboots")
 
     # Optional section
-    if True:
+    if False:
+        # Convert composite suit into binary sheet
         splice_suit("power")
         splice_suit("powerboots")
         splice_suit("varia")
         splice_suit("variaboots")
 
+        # Combine all binary sheets
         combine_suits()
 
         #TODO: Create MMX source and work with that for proof-of-concept
@@ -419,35 +533,48 @@ base_path_user = os.path.join(
     "metroid3",
     "samus",
     "sheets",
-    "paperdoll"
+    "paperdoll",
+    "labels"
 )
-if not os.path.isdir(
-    os.path.join(
-        base_path_user,
-        "paperdoll2",
-        "cells"
-    )
-):
-    os.makedirs(
+for folder in ["cells", "output"]:
+    if not os.path.isdir(
         os.path.join(
             base_path_user,
-            "paperdoll2",
-            "cells"
+            export_folder,
+            folder
         )
-    )
+    ):
+        os.makedirs(
+            os.path.join(
+                base_path_user,
+                export_folder,
+                folder
+            )
+        )
 
 images = {}
+print(f"Importing binary sheets: {os.path.join(base_path_user,'input')}")
 for filename in [
     "binary2",
     "binary3",
+    "binary-clean",
     "binary-natural"
 ]:
-    images[filename] = Image.open(
+    if os.path.isfile(
         os.path.join(
             base_path_user,
+            "input",
             f"{filename}.png"
         )
-    )
+    ):
+        print(f" Importing binary sheet: {filename}")
+        images[filename] = Image.open(
+            os.path.join(
+                base_path_user,
+                "input",
+                f"{filename}.png"
+            )
+        )
 
 paperdoll_test("")
 # paperdoll_test("save")
