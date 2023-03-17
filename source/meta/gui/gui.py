@@ -38,6 +38,7 @@ def make_GUI(command_line_args):
   # set window attributes
   root.geometry("900x768")       #window size
   root.configure(bg='#f0f0f0')   #background color
+  # root.tk_setPalette(background="#000000", foreground="#ffffff")
   main_frame = SpriteSomethingMainFrame(root, command_line_args)
   root.protocol("WM_DELETE_WINDOW", main_frame.exit)           #intercept when the user clicks the X
 

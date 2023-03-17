@@ -20,6 +20,18 @@
       "filename": "title.png",
       "title": "Title Screen",
       "origin": [ 74, 124 ]
+    },
+    {
+      "filename": "empty (white).png",
+      "title": "Empty (white)"
+    },
+    {
+      "filename": "empty.png",
+      "title": "Empty (black)"
+    },
+    {
+      "filename": "transparent.png",
+      "title": "Empty (transparent)"
     }
   ]
 }
