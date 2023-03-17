@@ -16,6 +16,7 @@
     "export.animation-as-vcollage": "Animation as Vertical Collage",
     "export.sprite-4bpp": "4bpp Binary Sprite Data",
     "export.palette-binary": "Binary Palette (WIP)",
+    "export.palette-aspr": "ASPR Palette (WIP)",
     "export.palette-gimp": "GIMP Palette",
     "export.palette-jasc": "JASC Paint Shop Pro Palette",
     "export.palette-pdn": "Paint.NET Palette",

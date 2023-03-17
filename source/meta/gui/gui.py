@@ -73,7 +73,8 @@ class SpriteSomethingMainFrame(tk.Frame):
       "export.frame-as-png": "./",
       "export.animation-as-gif": "./",
       "export.animation-as-hcollage": "./",
-      "export.animation-as-vcollage": "./"
+      "export.animation-as-vcollage": "./",
+      "export.palette": "./"
     }
     #read saved working dirs file if it exists and set these
     working_dir_path = os.path.join(".","resources","user","meta","manifests","working_dirs.json")
@@ -240,6 +241,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                           (self.fish.translate("meta","menu","export.sprite-4bpp"),"sprite-4bpp",partial(self.export_sprite,"4bpp")),
                           (None,None,None),
                           (self.fish.translate("meta","menu","export.palette-binary"),"palette-binary",partial(self.export_palette,"binary")),
+                          (self.fish.translate("meta","menu","export.palette-aspr"),"palette-aspr",partial(self.export_palette,"aspr")),
                           (self.fish.translate("meta","menu","export.palette-gimp"),"palette-gimp",partial(self.export_palette,"gimp")),
                           (self.fish.translate("meta","menu","export.palette-jasc"),"palette-jasc",partial(self.export_palette,"jasc")),
                           (self.fish.translate("meta","menu","export.palette-pdn"),"palette-pdn",partial(self.export_palette,"pdn")),
@@ -1067,13 +1069,19 @@ class SpriteSomethingMainFrame(tk.Frame):
   def export_sprite(self, filename):
     self.sprite.save_as_binary(filename)
 
-  def export_palette(self, filename, fmt="gimp"):
+  def export_palette(self, fmt="gimp"):
     #get animation engine handle
     ani_eng = self.animation_engine
     if "mail_var" in ani_eng.spiffy_dict:
       paletteID = ani_eng.spiffy_dict["mail_var"].get()
     elif "suit_var" in ani_eng.spiffy_dict:
       paletteID = ani_eng.spiffy_dict["suit_var"].get()
+
+    defExt = ".palette"
+    if fmt != "binary":
+      defExt = defExt + "-" + fmt
+    filetypes = ((self.fish.translate("meta","menu",f"export.palette-{fmt}"),f"*{defExt}"),)
+    filename = filedialog.asksaveasfilename(defaultextension=(defExt), initialfile=self.sprite.classic_name.lower(), initialdir=self.working_dirs["export.palette"], title=self.fish.translate("meta","menu",f"export.palette-{fmt}"), filetypes=filetypes)
 
     self.sprite.export_palette(filename, self.game.name, paletteID, fmt)
 

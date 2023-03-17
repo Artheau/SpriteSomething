@@ -231,11 +231,22 @@ class SpriteParent():
           )
         )
 
+        # ASPR
+        if fmt == "aspr":
+          header = [
+            "---"
+          ]
+          clrfmt = lambda x:(
+            "%s"
+            %
+            str(x)
+          )
+
         # GIMP
         # CinePaint
         # Inkscape
         # Krita
-        if fmt == "gimp":
+        elif fmt == "gimp":
           header = [
             "GIMP Palette",
             "Base Sprite Name: ".ljust(len("Custom Sprite Name: "))   + self.classic_name,
@@ -326,11 +337,25 @@ class SpriteParent():
 
         palette_doc += header
 
-        palette_doc.append(clrfmt((0,0,0)))
-
-        for color in self.get_palette([paletteID]):
-          color = clrfmt(color)
-          palette_doc.append(color)
+        if fmt == "aspr":
+          for paletteID in ["green","blue","red","bunny","gloves"]:
+            palette_doc.append(f"{paletteID}:")
+            if paletteID != "gloves":
+              palette_doc.append(f"    col0: " + str((0,0,0)))
+            for [colID, color] in enumerate(self.get_palette([paletteID])):
+              colNum = colID
+              if paletteID == "gloves":
+                colNum = ["power","titan"][colNum]
+              else:
+                colNum += 1
+                colNum = f"col{hex(colNum)[2:].upper()}"
+              color = f"    {colNum}: " + str(color)
+              palette_doc.append(color)
+        else:
+          palette_doc.append(clrfmt((0,0,0)))
+          for color in self.get_palette([paletteID]):
+            color = clrfmt(color)
+            palette_doc.append(color)
 
         if fmt == "pdn":
           padding = 96 - len(palette_doc) + len(header)
@@ -649,6 +674,12 @@ class SpriteParent():
           gameName,
           paletteID,
           "binary"
+        )
+        self.export_palette(
+          os.path.join(temporary_zhx_directory, f"{slug}.palette-aspr"),
+          gameName,
+          paletteID,
+          "aspr"
         )
         self.export_palette(
           os.path.join(temporary_zhx_directory, f"{slug}.palette-gimp"),
