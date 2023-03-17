@@ -1,39 +1,36 @@
+import argparse
 import platform
-import subprocess	#for executing scripts within scripts
-import os					#for checking for dirs
-import sys
-from shutil import move
+import subprocess  # for executing scripts within scripts
+import os  # for checking for dirs
 
 DEST_DIRECTORY = "."
 
-def run_build(PY_VERSION):
-  print("Building via Python %s" % platform.python_version())
-  include_modules = []
+# UPX greatly reduces the filesize.  You can get this utility from https://upx.github.io/
+# just place it in a subdirectory named "upx" and this script will find it
+UPX_DIR = "upx"
+if os.path.isdir(os.path.join(".", UPX_DIR)):
+    upx_string = f"--upx-dir={UPX_DIR}"
+else:
+    upx_string = ""
 
-  for (r,d,f) in os.walk(os.path.join(".","source")):
-    if "__pycache__" not in r:
-      if "__pycache__" in d:
-        d.remove("__pycache__")
-      if "__init__.py" in f:
-        f.remove("__init__.py")
-      for fName in f:
-        if ".py" in fName:
-          include_modules.append(r.replace(os.sep,'.').replace("..",'') + '.' + fName.replace(".py",''))
 
-  DISTILLER_EXECUTABLE = "cxfreeze"
-  args = [
-    "SpriteSomething.py",
-    "--include-modules=" + ",".join(include_modules)
-  ]
-  print("Distiller args: %s" % " ".join(args))
-  subprocess.check_call([DISTILLER_EXECUTABLE,*args])
+def run_build():
+    print("Building via Python %s" % platform.python_version())
 
-  for f in os.listdir(os.path.join(".","build")):
-    for g in os.listdir(os.path.join(".","build",f)):
-      move(
-        os.path.join(".","build",f,g),
-        os.path.join(".")
-      )
+    PYINST_EXECUTABLE = "pyinstaller"
+    args = [
+        os.path.join("source", "SpriteSomething.spec"),
+        upx_string,
+        "-y",
+        f"--distpath={DEST_DIRECTORY}"
+    ]
+    print("PyInstaller args: %s" % " ".join(args))
+    subprocess.run(
+        [
+            PYINST_EXECUTABLE,
+            *args
+        ]
+    )
 
 
 if __name__ == "__main__":
