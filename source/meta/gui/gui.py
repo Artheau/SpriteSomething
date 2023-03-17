@@ -842,7 +842,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 #    filetypes += ".nes " # NES RomHandler
     filetypes += ".smc .sfc " # SNES RomHandler
     filetypes += ".4bpp "
-    filetypes += ".zhx "
+    # filetypes += ".zhx "
     filename = filedialog.askopenfilename(initialdir=self.working_dirs["file.open"], title=self.fish.translate("meta","dialogue","file.open.title"), filetypes=((self.fish.translate("meta","dialogue","file.open.types.label"),filetypes),))
     if filename:
       #if we've got a filename, set the working dir and load the sprite
@@ -858,8 +858,8 @@ class SpriteSomethingMainFrame(tk.Frame):
       (self.fish.translate("meta","dialogue","file.save.png"),"*.png"),
       (self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),
       (self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"),
-      (self.fish.translate("meta","dialogue","file.save.4bpp"),"*.4bpp"),
-      (self.fish.translate("meta","dialogue","file.save.zhx"),"*.zhx")
+      (self.fish.translate("meta","dialogue","file.save.4bpp"),"*.4bpp")
+      # (self.fish.translate("meta","dialogue","file.save.zhx"),"*.zhx")
     )
 
     filename = ""
