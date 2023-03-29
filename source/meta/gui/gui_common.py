@@ -1,10 +1,14 @@
 #functions that are utilities common to all GUI functionality were stored here
 #do not merge them with common.py, because common.py is imported by some classes that have no GUI awareness
 
-import io                	#for BytesIO() stream.  TODO: Could probably refactor this to use bytearray instead
-import tkinter as tk     	#for GUI stuff
-from tkinter import ttk, messagebox, filedialog	#for GUI stuff
+try:
+  from tkinter import ttk, messagebox, filedialog	#for GUI stuff
+  import tkinter as tk     	#for GUI stuff
+except ModuleNotFoundError as e:
+  print(e)
+
 import base64            	#TODO: I don't know why we import this
+import io                	#for BytesIO() stream.  TODO: Could probably refactor this to use bytearray instead
 import json
 import random
 import ssl

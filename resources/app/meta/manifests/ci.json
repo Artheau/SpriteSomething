@@ -37,6 +37,8 @@
         ".vscode",
         ".idea",
         "*.json",
+        "lib",
+        "*.dll",
         "*app*version.*"
       ],
       "user_resources": "resources/user*"

@@ -3,12 +3,16 @@
 #handling backgrounds, etc.
 #handles import of new sprites
 
-import os							#for filesystem manipulation
+try:
+  from PIL import Image, ImageFile
+  import tkinter as tk	#for GUI stuff
+except ModuleNotFoundError as e:
+  print(e)
+
 import importlib			#for importing libraries dynamically
 import json						#for reading JSON
-import tkinter as tk	#for GUI stuff
+import os							#for filesystem manipulation
 import random					#for choosing background image to load on app startup
-from PIL import Image, ImageFile
 from functools import partial
 from source.meta.gui import widgetlib
 from source.meta.common import common
@@ -126,15 +130,18 @@ def autodetect_game_type_from_rom(rom):
 
 	game_names = []
 	for game_name, header_name_list in game_header_info.items():
-		for header_name in header_name_list:
-			if rom_name[:len(header_name)] == header_name:
-				game_names.append(game_name)
+		if game_name.lower() != "$schema":
+			for header_name in header_name_list:
+				if rom_name.upper()[:len(header_name.upper())] == header_name.upper():
+					game_names.append(game_name)
 
 	if len(game_names) == 0:
 		game_names = None
 		raise AssertionError(f"Could not identify the type of ROM from its header name: {rom_name}")
 		# FIXME: English; CLI Errors
 		#print(f"Could not identify the type of ROM from its header name: {rom_name}")
+	else:
+		print(f"Found names: {game_names}")
 
 	return game_names
 

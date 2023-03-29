@@ -207,9 +207,10 @@ class Sprite(SpriteParent):
 
 	def import_cleanup(self):
 		self.load_plugins()
-		self.images["transparent"] = Image.new("RGBA",(0,0),0)
 		self.equipment = self.plugins.equipment_test(False)
-		self.images = dict(self.images,**self.equipment)
+		if hasattr(self, "images"):
+				self.images["transparent"] = Image.new("RGBA",(0,0),0)
+				self.images = dict(self.images,**self.equipment)
 
 	def import_from_ROM(self, rom):
 		pixel_data = rom.bulk_read_from_snes_address(0x108000,0x7000)		#the big Link sheet
@@ -393,13 +394,18 @@ class Sprite(SpriteParent):
 	def get_palette(self, palettes, default_range=[], frame_number=0):
 		palette_indices = None
 		this_palette = []
-		for i in range(1,16):
+		range_end = 16
+		if "gloves" in palettes:
+			range_end = 2 + 1
+		for i in range(1,range_end):
 			this_palette.append((0,0,0))
 
 		if "zap_mail" in palettes:
 			this_palette = self.link_globals["zap_palette"]
 		elif "bunny_mail" in palettes:
 			palette_indices = range(0x31,0x40)	 #use the bunny colors, skipping the transparency color
+		elif "gloves" in palettes:
+			palette_indices = [0x10,0x20]
 		else:
 			palette_indices = list(range(1,16))	 #start with green mail and modify it as needed
 			for i,_ in enumerate(palette_indices):
