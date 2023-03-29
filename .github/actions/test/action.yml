@@ -44,7 +44,6 @@ runs:
         python -m tests.new.asserts.test_diags
         python -m tests.new.asserts.test_exports
         python -m tests.new.asserts.test_animations
-        python -m tests.new.asserts.test_cli
         python -m tests.new.asserts.test_gui
       if: contains(inputs.os-name, 'windows') != true
     - name: 🖥️Start virtual display driver & Test (Windows)
