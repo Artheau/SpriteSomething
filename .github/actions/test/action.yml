@@ -14,9 +14,9 @@ inputs:
 #########
 # actions
 #########
-# actions/checkout@v3.1.0
-# actions/download-artifact@v3.0.1
-# actions/upload-artifact@v3.1.1
+# actions/checkout@v3.5.0
+# actions/download-artifact@v3.0.2
+# actions/upload-artifact@v3.1.2
 # coactions/setup-xvfb@v1.0.1
 
 runs:
@@ -24,7 +24,7 @@ runs:
   steps:
     # download pipline
     - name: 🔽Download PipLine
-      uses: actions/download-artifact@v3.0.1
+      uses: actions/download-artifact@v3.0.2
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
@@ -72,7 +72,7 @@ runs:
     # upload failures
     - name: 🔼Upload Failures
       if: failure()
-      uses: actions/upload-artifact@v3.1.1
+      uses: actions/upload-artifact@v3.1.2
       with:
         name: failures-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./failures
