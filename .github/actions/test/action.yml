@@ -17,7 +17,7 @@ inputs:
 # actions/checkout@v3.1.0
 # actions/download-artifact@v3.0.1
 # actions/upload-artifact@v3.1.1
-# GabrielBB/xvfb-action@v1.6
+# coactions/setup-xvfb@v1.0.1
 
 runs:
   using: "composite"
@@ -47,7 +47,7 @@ runs:
         python -m tests.new.asserts.test_gui
       if: contains(inputs.os-name, 'windows') != true
     - name: 🖥️Start virtual display driver & Test (Windows)
-      uses: GabrielBB/xvfb-action@v1.6
+      uses: coactions/setup-xvfb@v1.0.1
       with:
         run: |
           python -m tests.new.asserts.test_diags
