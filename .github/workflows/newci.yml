@@ -485,11 +485,12 @@ jobs:
         run: |
           git diff --name-status --cached
       # Set Commit
-      - name: ➕Set Commit
+      - name: ➕Set Commit (MASTER)
         shell: bash
         run: |
           git commit -q -F commit.txt
           git log
+        if: contains(github.ref, 'master')
       # Push to GH-Pages
       - name: 🚀Push to GH-Pages (MASTER)
         shell: bash

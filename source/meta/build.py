@@ -1,7 +1,9 @@
-import argparse
+'''
+Build SpriteSomething.py
+'''
 import json
 import platform
-import subprocess  # for executing scripts within scripts
+from subprocess import Popen, PIPE, STDOUT, CalledProcessError
 import os  # for checking for dirs
 import re
 
@@ -23,7 +25,7 @@ def run_build():
 
     PYINST_EXECUTABLE = "pyinstaller"
     args = [
-        os.path.join("source", "SpriteSomething.spec"),
+        os.path.join("source", "SpriteSomething.spec").replace(os.sep, os.sep * 2),
         upx_string,
         "-y",
         f"--distpath={DEST_DIRECTORY}"
@@ -35,24 +37,35 @@ def run_build():
       PYINST_EXECUTABLE,
       *args
     ]
-    ret = subprocess.run(
-      cmd,
-      capture_output=True,
-      text=True
-    )
-    if ret.stdout.strip():
-      for line in ret.stdout.strip().split("\n"):
-        print(line)
-        if "NotCompressibleException" in line.strip():
-          errs.append(line.strip())
-    if ret.stderr.strip():
-      for line in ret.stderr.strip().split("\n"):
-        if "UPX" in line:
-          print(line)
-        elif "NotCompressibleException" in line.strip():
-          strAdd = re.search(r'api-ms-win-(?:[^-]*)-([^-]*)', line.strip()).group(1)
-          strs.append(strAdd)
-          errs.append(line.strip())
+
+    ret = {
+      "stdout": [],
+      "stderr": []
+    }
+
+    with Popen(cmd, stdout=PIPE, stderr=STDOUT, bufsize=1, universal_newlines=True) as p:
+      for line in p.stdout:
+        ret["stdout"].append(line)
+        print(line, end='')
+      # if p.stderr:
+      #   for line in p.stderr:
+      #     ret["stderr"].append(line)
+      #     print(line, end='')
+      # if p.returncode != 0:
+      #   raise CalledProcessError(p.returncode, p.args)
+
+    for key in ["stdout","stderr"]:
+      if len(ret[key]) > 0:
+        for line in ret[key]:
+          if "NotCompressibleException" in line.strip():
+            print(line)
+            errs.append(line.strip())
+          if "UPX" in line:
+            print(line)
+          elif "NotCompressibleException" in line.strip():
+            strAdd = re.search(r'api-ms-win-(?:[^-]*)-([^-]*)', line.strip()).group(1)
+            strs.append(strAdd)
+            errs.append(line.strip())
     if len(errs) > 0:
       print("=" * 10)
       print("| ERRORS |")
@@ -86,3 +99,4 @@ def run_build():
 if __name__ == "__main__":
     while GO:
         run_build()
+        GO = False

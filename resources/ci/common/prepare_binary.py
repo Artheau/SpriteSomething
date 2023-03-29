@@ -33,10 +33,6 @@ def prepare_binary():
 
     for BUILD_FILENAME in BUILD_FILENAMES:
         DEST_FILENAME = common.prepare_filename(BUILD_FILENAME)
-        DEST_FILENAME = os.path.join("..", "artifact", os.path.basename(DEST_FILENAME))
-
-    for BUILD_FILENAME in BUILD_FILENAMES:
-        DEST_FILENAME = common.prepare_filename(BUILD_FILENAME)
 
         print(f"OS Name:        {env['OS_NAME']}")
         print(f"OS Version:     {env['OS_VERSION']}")

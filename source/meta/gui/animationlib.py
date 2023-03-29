@@ -270,7 +270,7 @@ class AnimationEngineParent():
 			return direction
 		return "right"   #TODO: figure out a better way to handle the error case
 
-	#Mike likes spiffy buttons
+	#Minnie likes spiffy buttons
 	def get_spiffy_buttons(self, parent, fish):
 		spiffy_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self)
 

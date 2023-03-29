@@ -10,7 +10,7 @@
   {
     "title": "Master Build Status",
     "keyword": "github/actions/workflow/status",
-    "query": "ci.yml?branch=master",
+    "query": "newci.yml?branch=master",
     "left": "master build",
     "logo": "github",
     "url": "https://github.com/Artheau/SpriteSomething/tree/master"
@@ -18,7 +18,7 @@
   {
     "title": "Stable Build Status",
     "keyword": "github/actions/workflow/status",
-    "query": "ci.yml?branch=stable",
+    "query": "newci.yml?branch=stable",
     "left": "stable build",
     "logo": "github",
     "url": "https://github.com/Artheau/SpriteSomething/tree/stable"
