@@ -84,6 +84,11 @@ jobs:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
+      # Analyze used GitHub Actions
+      - name: Analyze used GitHub Actions
+        shell: bash
+        run: |
+          py ./resources/ci/common/list_actions.py
       # test
       - name: 🧮Print Diagnostics
         shell: bash
