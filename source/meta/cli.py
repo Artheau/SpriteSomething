@@ -29,6 +29,21 @@ class CLIMainFrame():
         print("\n".join(diags.output()))
         return 0
         # sys.exit(0)
+    def mode_convert(self, command_line_args):
+        """Convert a batch of sprite files of like type to like type"""
+        src_filepath = command_line_args["src-filepath"] if "src-filepath" in command_line_args else "."
+        convert_from = command_line_args["convert-from"] if "convert-from" in command_line_args else "zspr"
+        convert_to = command_line_args["convert-to"] if "convert-to" in command_line_args else "rdc"
+
+        if convert_from.startswith("."):
+            convert_from = convert_from[1:]
+        if convert_to.startswith("."):
+            convert_to = convert_to[1:]
+
+        for filename in os.listdir(os.path.join(src_filepath)):
+            if os.path.isfile(os.path.join(src_filepath, filename)) and os.path.splitext(filename)[1][1:] == convert_from:
+                self.load_sprite(os.path.join(src_filepath, filename))
+                self.save_file_as(os.path.join(src_filepath, filename).replace(f".{convert_from}", f".{convert_to}"))
     def mode_export(self, export_filename):
         """Export sprite"""
         export_filename = export_filename if export_filename is not None and export_filename != "None" else "export.png"
@@ -44,8 +59,8 @@ class CLIMainFrame():
         if not os.path.isdir(dest_default_path):    #make directories to get the designated destination if necessary
             os.makedirs(dest_default_path)
 
-        dest_filename = "dest-filename" in command_line_args or dest_filename    #if we've provide a destination, set it
-        source_filename = "src-filename" in command_line_args or source_filename    #if we've provided a source, set it
+        dest_filename = "dest-filename" in command_line_args and command_line_args["dest-filename"] or dest_filename    #if we've provide a destination, set it
+        source_filename = "src-filename" in command_line_args and command_line_args["src-filename"] or source_filename    #if we've provided a source, set it
         if "-bulk" in mode:    #if we're injecting into many game files
             # SpriteSomething.[py|exe] --cli=1 --mode=inject-bulk --src-filepath=resources/zelda3/gamefiles/inject
             source_filepath = os.path.join("resources","user",self.game.console_name,self.game.internal_name,"gamefiles","inject")    #default inject location | user_resources/snes/zelda3/gamefiles/inject/*.*
@@ -62,7 +77,7 @@ class CLIMainFrame():
             else:
                 self.copy_into_ROM_bulk(source_filepath=source_filepath)
         elif "-random" in mode:    #we're injecting a random sprite into one game file
-            sprite_filepath = "spr-filepath" in command_line_args or None
+            sprite_filepath = "spr-filepath" in command_line_args and command_line_args["spr-filepath"] or None
             if sprite_filepath is None:
                 print("   Sprite filepath not provided!")
                 return 1
@@ -117,6 +132,9 @@ class CLIMainFrame():
                     self.mode_export(command_line_args["export-filename"])
                     return
                     # return 0
+                elif mode == "convert":
+                    self.mode_convert(command_line_args)
+                    return
                 elif "inject" in mode:    #we're injecting a [single|random] sprite into game file(s)
                     # SpriteSomething.[py|exe] --cli=1 --mode=inject --dest-filename=resources/zelda3/gamefiles/export/export.sfc \
                     #    --source-filename=resources/zelda3/gamefiles/source/zelda3.sfc
