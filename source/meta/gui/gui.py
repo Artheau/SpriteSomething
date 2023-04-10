@@ -840,7 +840,9 @@ class SpriteSomethingMainFrame(tk.Frame):
     #save current animation/bg/direction settings
     self.save_ani_settings()
 
-    filetypes = ".zspr " # FIXME: Assuming Z3Link-only
+    filetypes = ""
+    # filetypes += ".rdc " # FIXME: Assuming M3Samus-only
+    filetypes += ".zspr " # FIXME: Assuming Z3Link-only
     filetypes += ".png "
 #    filetypes += ".nes " # NES RomHandler
     filetypes += ".smc .sfc " # SNES RomHandler
@@ -861,8 +863,8 @@ class SpriteSomethingMainFrame(tk.Frame):
       (self.fish.translate("meta","dialogue","file.save.png"),"*.png"),
       (self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),
       (self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"),
+      (self.fish.translate("meta","dialogue","file.save.zhx"),"*.zhx"),
       (self.fish.translate("meta","dialogue","file.save.4bpp"),"*.4bpp")
-      # (self.fish.translate("meta","dialogue","file.save.zhx"),"*.zhx")
     )
 
     filename = ""

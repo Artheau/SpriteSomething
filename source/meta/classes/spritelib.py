@@ -33,8 +33,12 @@ class SpriteParent():
         self.classic_name = manifest_dict["name"]  # e.g. "Samus" or "Link"
         # the path to this sprite's subfolder in resources
         self.resource_subpath = my_subpath
-        self.metadata = {"sprite.name": "",
-                         "author.name": "", "author.name-short": ""}
+        self.internal_name = manifest_dict["folder name"]
+        self.metadata = {
+                            "sprite.name": "",
+                            "author.name": "",
+                            "author.name-short": ""
+                        }
         self.filename = filename
         self.overview_scale_factor = 2
         self.overhead = True
@@ -118,6 +122,8 @@ class SpriteParent():
         _, file_extension = os.path.splitext(self.filename)
         if file_extension.lower() == '.png':
             self.import_from_PNG()
+        elif file_extension.lower() == '.rdc':
+            self.import_from_RDC()
         elif file_extension.lower() == '.zspr':
             self.import_from_ZSPR()
         elif file_extension.lower() in [
@@ -138,14 +144,107 @@ class SpriteParent():
             self.images, self.master_palette = self.layout.extract_all_images_from_master(
                 master)
 
+    def import_from_RDC(self):
+        with open(self.filename, "rb") as file:
+            data = bytearray(file.read())
+
+        pointer = 0
+        HEADER_STRING = "RETRODATACONTAINER"
+        readLen = len(HEADER_STRING)
+        print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+        print(f"Header:    {data[0:readLen].decode('utf-8')}")
+        print()
+
+        if data[pointer:(pointer + readLen)] != bytes(ord(x) for x in HEADER_STRING):
+            # FIXME: English
+            raise AssertionError("This file does not have a valid RDC header")
+
+        pointer += readLen
+        readLen = 1
+        print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+        version = common.from_u8(data[pointer:(pointer + readLen)])
+        print(f"Version:   {version}")
+        print()
+        if int.from_bytes(data[pointer:(pointer + readLen)], byteorder='little', signed=False) == 1:
+            pointer += readLen
+
+            readLen = 4
+            print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+            number_of_blocks = common.from_u32(data[pointer:(pointer + readLen)])
+            print(f"NumBlocks: {number_of_blocks}")
+            print()
+
+            block_types = { "0": "JSON Metadata", "4": "Type 2" }
+
+            blocks = []
+            for i in range(0, number_of_blocks):
+                pointer += readLen
+                readLen = 4
+                # print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+                block_type = common.from_u32(data[pointer:(pointer + readLen)])
+                # print(f"Block Type: {block_type}/{block_types[str(block_type)]}")
+
+                pointer += readLen
+                readLen = 4
+                # print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+                block_offset = common.from_u32(data[pointer:(pointer + readLen)])
+                # print(f"Block Offset: {block_offset}")
+                blocks.append(
+                    {
+                        "typeID": block_type,
+                        "type": block_types[str(block_type)],
+                        "offset": block_offset
+                    }
+                )
+                if i > 0:
+                    blocks[i - 1]["length"] = block_offset - blocks[i - 1]["offset"]
+                # print()
+
+        print(blocks)
+
+        pointer += readLen
+        print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+        readLen = data[pointer:200].decode("utf-8").find("O")
+        authorName = data[pointer:(pointer + readLen - 1)].decode("utf-8")
+        self.metadata["author.name"] = authorName
+        self.metadata["author.name-short"] = authorName
+        print(authorName)
+        pointer += 1
+
+        for block in blocks:
+            pointer = block["offset"] + 1
+            block_data = None
+            if "length" in block:
+                readLen = block["length"]
+                block_data = (data[pointer:(pointer + readLen - 1)])
+            else:
+                block_data = (data[pointer:200])
+            if block_data:
+                if block["typeID"] == 0:
+                    block_data = block_data.decode("utf-8")
+                    block_data = block_data[block_data.find("{"):]
+                    block_data = json.loads(block_data)
+                    self.metadata["sprite.name"] = block_data["title"]
+            print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+            print(f"Block Data: {block_data}")
+
+        print(self.metadata)
+
+        # pointer += readLen
+        # print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+        # print(data[pointer:200])
+
     def import_from_ZSPR(self):
         with open(self.filename, "rb") as file:
             data = bytearray(file.read())
 
-        if data[0:4] != bytes(ord(x) for x in 'ZSPR'):
+        HEADER_STRING = "ZSPR"
+
+        if data[0:len(HEADER_STRING)] != bytes(ord(x) for x in HEADER_STRING):
             # FIXME: English
             raise AssertionError("This file does not have a valid ZSPR header")
-        if data[4] == 1:
+        if data[len(HEADER_STRING)] == 1:
+            print("ZSPRv1")
             pixel_data_offset = int.from_bytes(
                 data[9:13], byteorder='little', signed=False)
             pixel_data_length = int.from_bytes(
@@ -200,6 +299,67 @@ class SpriteParent():
             # FIXME: English
             raise AssertionError(
                 f"No support is implemented for ZSPR version {int(data[4])}")
+
+    def translate_author(self, rom):
+        name = ""
+        rom_name = rom.get_name()
+        is_zsm = "ZSM" in rom_name
+        bigText = { "": [0x00, 0x00 ] }
+        addrs = { rom.type().lower(): [ "SNES0x00" ] }
+
+        alphabetsPath = common.get_resource([self.resource_subpath, "..", "manifests"], "alphabets.json")
+        with open(alphabetsPath, "r", encoding="utf-8") as alphabetsFile:
+            key = "zsm" if is_zsm else self.resource_subpath.split(os.sep)[1]
+            alphabetsJSON = json.load(alphabetsFile)
+            if key in alphabetsJSON:
+                bigText = alphabetsJSON[key]["alphabet"]
+                addrs = alphabetsJSON[key]["addrs"][self.internal_name]
+
+        if isinstance(addrs, dict):
+            addrs = addrs[rom.type().lower()]
+        names = {}
+        for addr in addrs:
+            readType = "SNES" if "SNES" in addr else "PC"
+            addr = addr[len(readType):]
+            if int(str(addr), 16) > 0:
+                names[addr] = ""
+                data = []
+                if readType == "SNES":
+                    data = rom.bulk_read_from_snes_address(int(str(addr), 16), (28 * 2)).hex()
+                elif readType == "PC":
+                    data = rom.bulk_read(int(str(addr), 16), (28 * 2)).hex()
+                n = 2
+                data = [data[i:i+n] for i in range(0, len(data), n)]
+                for hexCode in data:
+                    for [bigLetter, bigLCodes] in bigText.items():
+                        for bigLCode in bigLCodes:
+                            if isinstance(bigLCode, str):
+                                bigLCode = int(bigLCode, 16)
+                            if int(f"0x{hexCode}", 16) == bigLCode:
+                                # if bigLetter not in [ " ", "0", "Q" ]:
+                                names[addr] += bigLetter
+                if names[addr] != "":
+                    names[addr] = " ".join(map(str.capitalize, names[addr].split())).strip()
+                    names[addr] = names[addr].split("0 ")[0].strip()
+                    names[addr] = " ".join(list(set(names[addr].split(" "))))
+                    if names[addr] != "":
+                        for [srch, repl] in [
+                          [ "DA", "D" ],
+                          [ "EQ", "E" ],
+                          [ "G0", "G" ],
+                          [ "I3", "I" ],
+                          [ "Mt", "M" ],
+                          [ "N_", "N" ],
+                          [ "UQ", "U" ],
+                          [ "Y6", "Y" ]
+                        ]:
+                            names[addr] = names[addr].replace(srch, repl).strip()
+                            names[addr] = names[addr].replace(srch.lower(), repl.lower()).strip()
+                    if names[addr] != "":
+                        name = names[addr]
+                        print("Found Sprite Author:", name, names)
+                        return name
+        return name
 
     # filename, gameName, paletteID, fmt
     def export_palette(self, filename="", gameName="", paletteID="", fmt="gimp"):
@@ -811,7 +971,9 @@ class SpriteParent():
         data = json.dumps(
             {
                 "title": title_name,
-                "author": author_name
+                "author": author_name,
+                "game": "snes/metroid3",
+                "spriteType": 1
             },
             separators=(',', ':')
         ).encode('utf-8')
