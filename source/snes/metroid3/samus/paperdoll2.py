@@ -9,18 +9,6 @@ from PIL import Image
 export_folder = ""
 
 arimaCells = [
-    [   1,   2,   3,   4,   5,   0,   0,   0,   6,   7,   8,   9,  10,  11,  12,  13 ],
-    [  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29 ],
-    [  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45 ],
-    [  46,  47,  48,  49,  50,  51,  52,  53,  54,  55,  56,   0,  57,  58,  59,  60 ],
-    [   0,   0,   0,  61,  62,  63,  64,  65,   0,   0,   0,   0,  66,  67,  68,   0 ],
-    [  69,  70,  71,  72,  73,  74,  75,  76,  77,  78,  79,  80,  81,  82,  83,   0 ],
-    [  84,  85,  86,  87,  88,  89,  90,  91,   0,   0,  92,  93,  94,  95,  96,   0 ],
-    [  97,  98,  99, 100, 101, 102, 103, 104,   0, 105, 106, 107, 108, 109, 110, 111 ],
-    [ 112, 113, 114, 115,   0,   0,   0,   0,   0, 116, 117, 118, 119, 120, 121, 122 ]
-]
-
-arimaCells = [
     [   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13,  14,  15,  16 ],
     [  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,  32 ],
     [  33,  34,  35,  36,  37,  38,  39,  40,  41,  42,  43,  44,  45,  46,  47,  48 ],
@@ -55,86 +43,6 @@ mirrorCells = {
 # Power -> Power Boots
 # Power -> Varia
 # Varia -> Varia Boots
-arimaSuits = {
-  "power": [
-    #   0    1    2    3    4    5    6    7
-    [   0,   0,   0,  61 ],                     # A
-    [  66,  67,  68,  72 ],                     # B
-    [  81,  82,  82,  87 ],                     # C
-    [  94,  95,  96, 109,  10,  11,  12,  13 ], # D
-    [ 112, 113, 119, 120 ],                     # E
-    [   1,   2,   3,   4,   5 ],                # F
-    [  14,  15,  34,  17,  18,   6,  20,  21 ], # G
-    [  30,  31,  50,  51,   0,  22,  36,  37 ], # H
-    [  46,  47,  62,  63,   0,   0,  52,  53 ], # I
-    [   0,  78,  73,  74 ],                     # J
-    [   0,   0,  88,  89 ],                     # K
-    [   0, 105,  64,  65 ],                     # L
-    [   0, 116,  75,  76 ],                     # M
-    [   0,   0,  90,  91 ],                     # N
-    [   0,   0,  29,   0 ],                     # O
-    [  28,  44,  45,   0,   0,   0, 110,  43 ], # P, 45,41,41,45
-    [  58,  59,  60,   0,   0,   0, 121, 122 ]  # Q
-  ],
-  "powerboots": [
-    [],                                         # A
-    [],                                         # B
-    [],                                         # C
-    [],                                         # D
-    [],                                         # E
-    [],                                         # F
-    [],                                         # G
-    [],                                         # H
-    [],                                         # I
-    [],                                         # J
-    [],                                         # K
-    [],                                         # L
-    [],                                         # M
-    [   0,   0,  26,  27 ],                     # N
-    [   0,  23,  24 ],                          # O
-    [  38,  39,  40,  41,   0,   0,  42,  43 ], # P
-    [  54,  55,  56,   0,   0,   0,  57,   0 ]  # Q
-  ],
-  "varia": [
-    [],                                         # A
-    [  69,  70,  71 ],                          # B
-    [  84,  85,  86 ],                          # C
-    [  97,  98,  99, 100, 101, 102, 103, 104 ], # D
-    [ 112, 113, 114, 115],                      # E
-    [   1,   2,   3,   4,   5],                 # F
-    [  14,  15,  16,  17,  18,  19,  20,  21],  # G
-    [  30,  31,  32,  33,   0,  35,  36,  37],  # H
-    [  46,  47,  48,  49,   0,   0,  52,  53],  # I
-    [   0,  78,  79,  80],                      # J
-    [   0,   0,  92,  93],                      # K
-    [   0, 105, 106, 107],                      # L
-    [   0, 116, 117, 118],                      # M
-    [   0,   0,   9],                           # N
-    [   0,   0,  25],                           # O
-    [  28,  44,  45,   0,   0,   0, 110,  43],  # P
-    [  54,  55,  56,   0,   0,   0,  57, 122]   # Q
-  ],
-  "variaboots": [
-    [],                                         # A
-    [],                                         # B
-    [],                                         # C
-    [],                                         # D
-    [],                                         # E
-    [],                                         # F
-    [],                                         # G
-    [],                                         # H
-    [],                                         # I
-    [],                                         # J
-    [],                                         # K
-    [],                                         # L
-    [],                                         # M
-    [   0,   0,   8,  27 ],                     # N
-    [   0,  23,  24 ],                          # O
-    [  38,  39,  40,  41,   0,   0,  42,  43 ], # P
-    [  54,  55,  56,   0,   0,   0,  57,   0 ]  # Q
-  ]
-}
-
 arimaSuits = {
   "power": [
     [0,0,0,68],
@@ -223,11 +131,11 @@ def coord_calc(origin, dims):
     w, h = dims
     return (x1, x2, w + x1, h+ x2)
 
-def my_pad(input):
+def my_pad(item):
     '''
     strpad
     '''
-    return str(input).strip().rjust(3, "0")
+    return str(item).strip().rjust(3, "0")
 
 def make_cell_specs():
     '''
@@ -243,16 +151,15 @@ def make_cell_specs():
                 cell_specs[cellID] = coord_calc((col * 8, row * 8), (8, 8))
     return cell_specs
 
-def splice_up_binary(mode, sheet):
+def splice_up_binary(mode=None, workingdir=os.path.join("."), sheet=None):
     '''
     Splice up the binary sheet
     '''
     if sheet is None:
         sheet = "binary-natural"
     print(f"Splicing binary sheet: {sheet}")
-    print(f" Input: Imported binary sheets")
-    print(f" Output: Populated paperdoll object")
-    print(f" Optional Output: Individual cell images ({os.path.join(base_path_user,export_folder,'cells')})")
+    print( " Output: Populated paperdoll object")
+    print(f" Optional Output: Individual cell images ({os.path.join(workingdir,'cells')})")
     blank_image = Image.new(
         mode="RGB",
         size=(8, 8),
@@ -260,24 +167,27 @@ def splice_up_binary(mode, sheet):
     )
     paperdoll["-1"] = blank_image
     if "save" in mode:
-        print(f" Saving cells")
+        print(" Saving cells")
         blank_image.save(
             os.path.join(
-                base_path_user,
-                export_folder,
+                workingdir,
                 "cells",
                 "-1.png"
             )
         )
+
+    # import sheet
+    images[sheet] = Image.open(
+        os.path.join(
+            workingdir,
+            "input",
+            "binary",
+            f"{sheet}.png"
+        )
+    )
+
     for cellID, cell_coords in cell_specs.items():
-        colorGoal = 5
-        colorGoal = 2
-        if sheet == "binary2":
-            colorGoal = 2
-        elif sheet == "binary3":
-            colorGoal = 2
-        elif sheet == "binary-natural":
-            colorGoal = 2
+        colorGoal = 1
         cropped_image = images[sheet].crop(cell_coords)
         cropped_image.convert(mode="RGB")
         colors = cropped_image.getcolors()
@@ -286,22 +196,25 @@ def splice_up_binary(mode, sheet):
             if "save" in mode:
                 cropped_image.save(
                     os.path.join(
-                        base_path_user,
-                        export_folder,
+                        workingdir,
                         "cells",
                         str(cellID) + ".png"
                     )
                 )
         if len(colors) < colorGoal:
             print(f"  CellID: #{cellID} [Colors: {colors}] [# Colors: {len(colors)}] is invalid!")
+    print(paperdoll.keys())
 
-def export_suit(suit_type):
+def export_suit(
+    workingdir=os.path.join("."),
+    suit_type="power"
+):
     '''
     Export a suit
     '''
     print(f"Exporting Suit: {suit_type}")
-    print(f" Input: Suit type; paperdoll object")
-    print(f" Output: {os.path.join(base_path_user,export_folder,suit_type + '.png')}")
+    print( " Input: Suit type; paperdoll object")
+    print(f" Output: {os.path.join(workingdir,'output',suit_type + '.png')}")
     display = "tileID"
     base_suits = [ "power" ]
     cellIDs = {}
@@ -357,15 +270,39 @@ def export_suit(suit_type):
                 print()
             this_image.save(
                 os.path.join(
-                    base_path_user,
-                    export_folder,
+                    workingdir,
                     "output",
-                    suit_type + ".png"
+                    "composites",
+                    f"{suit_type}.png"
                 )
             )
     print()
 
-def splice_suit(filename):
+def export_suits(workingdir=os.path.join(".")):
+    '''
+    Export one sheet with all four suits
+    '''
+    suits = Image.new(
+        mode="RGBA",
+        size=((64 * 4), 136),
+        color=(0,0,0,0)
+    )
+    x = 0
+    for suit_type in ["power", "powerboots", "varia", "variaboots"]:
+        export_suit(workingdir, suit_type)
+        img = Image.open(os.path.join(workingdir, "output", "composites", f"{suit_type}.png"))
+        suits.paste(img, (x, 0, ))
+        x += 64
+    suits.save(os.path.join(workingdir, "output", "composites", "suits.png"))
+
+
+def splice_suit(
+    workingdir=os.path.join("."),
+    filename="power"
+):
+    '''
+    Splice composite into binary sheet
+    '''
     suit_type = "power"
     base_suits = [ "power" ]
     for check_type in [
@@ -386,8 +323,9 @@ def splice_suit(filename):
     print(f" Splicing suit: {suit_type}")
     this_image = Image.open(
         os.path.join(
-            base_path_user,
-            export_folder,
+            workingdir,
+            "input",
+            "composites",
             filename + ".png"
         )
     )
@@ -434,14 +372,17 @@ def splice_suit(filename):
         # print()
     bin_image.save(
         os.path.join(
-            base_path_user,
-            export_folder,
+            workingdir,
             "output",
-            suit_type + "-binary.png"
+            "binary",
+            f"binary-{suit_type}.png"
         )
     )
 
-def combine_suits():
+def combine_suits(workingdir):
+    '''
+    Combine spliced binary sheets into one binary sheet
+    '''
     combined_image = Image.new(
         mode="RGBA",
         size=(128, 72),
@@ -455,9 +396,10 @@ def combine_suits():
     ]:
         this_image = Image.open(
             os.path.join(
-                base_path_user,
-                export_folder,
-                filename + "-binary.png"
+                workingdir,
+                "output",
+                "binary",
+                f"binary-{filename}.png"
             )
         )
         newdata = []
@@ -478,103 +420,158 @@ def combine_suits():
         )
     combined_image.save(
         os.path.join(
-            base_path_user,
-            export_folder,
+            workingdir,
             "output",
+            "binary",
             "combined.png"
         )
     )
 
+images = {}
 
-def paperdoll_test(mode):
+def setupDirs(workingdir=os.path.join(".")):
     '''
-    Main Driver
+    Create subdirs
     '''
-
-    # Required
-    make_cell_specs()
-
-    # Optional section
-    if True:
-        # Take binary sheet and splice it into cells
-        #  Optional: Save cells as images
-        splice_up_binary(mode, "binary-clean")
-
-    # Optional section
-    if True:
-        # Requires splice_up_binary()
-        # Export suit from spliced-up binary sheet
-        export_suit("power")
-        export_suit("powerboots")
-        export_suit("varia")
-        export_suit("variaboots")
-
-    # Optional section
-    if False:
-        # Convert composite suit into binary sheet
-        splice_suit("power")
-        splice_suit("powerboots")
-        splice_suit("varia")
-        splice_suit("variaboots")
-
-        # Combine all binary sheets
-        combine_suits()
-
-        #TODO: Create MMX source and work with that for proof-of-concept
-
-    print()
-
-
-base_path_user = os.path.join(
-    ".",
-    "resources",
-    "user",
-    "snes",
-    "metroid3",
-    "samus",
-    "sheets",
-    "paperdoll",
-    "labels"
-)
-for folder in ["cells", "output"]:
-    if not os.path.isdir(
-        os.path.join(
-            base_path_user,
-            export_folder,
-            folder
-        )
-    ):
-        os.makedirs(
+    for folder in [
+        "cells",
+        "output",
+        os.path.join("output", "binary"),
+        os.path.join("output", "composites")
+    ]:
+        if not os.path.isdir(
             os.path.join(
-                base_path_user,
-                export_folder,
+                workingdir,
                 folder
             )
-        )
-
-images = {}
-print(f"Importing binary sheets: {os.path.join(base_path_user,'input')}")
-for filename in [
-    "binary2",
-    "binary3",
-    "binary-clean",
-    "binary-natural"
-]:
-    if os.path.isfile(
-        os.path.join(
-            base_path_user,
-            "input",
-            f"{filename}.png"
-        )
-    ):
-        print(f" Importing binary sheet: {filename}")
-        images[filename] = Image.open(
-            os.path.join(
-                base_path_user,
-                "input",
-                f"{filename}.png"
+        ):
+            os.makedirs(
+                os.path.join(
+                    workingdir,
+                    folder
+                )
             )
-        )
 
-paperdoll_test("")
-# paperdoll_test("save")
+def mandatory():
+    '''
+    Identify cells in binary sheet
+    Just an array
+    '''
+    make_cell_specs()
+
+def binSheetToCells(
+    mode=None,
+    workingdir=os.path.join("."),
+    binfilename="binary"
+):
+    '''
+    Take binary sheet and splice it into cells
+    Optional: Save cells as images
+    '''
+    splice_up_binary(
+        mode,
+        workingdir,
+        binfilename
+    )
+
+def compositesToBinSheet(
+    workingdir=os.path.join(".")
+):
+    '''
+    Take set of composite sheets
+    Make a binary sheet for each
+    Combine make binary sheets
+    '''
+    # IN:  cwd/input/composites
+    # OUT: cwd/output/binary
+    splice_suit(workingdir, "power")
+    splice_suit(workingdir, "powerboots")
+    splice_suit(workingdir, "varia")
+    splice_suit(workingdir, "variaboots")
+    # IN:  cwd/output/binary
+    combine_suits(workingdir)
+
+def compositeToBinSheet(workingdir):
+    '''
+    Take single composite sheet
+    Make set of composite sheets
+    Send to compositesToBinSheet()
+    '''
+    composite = Image.open(
+        os.path.join(
+            workingdir,
+            "output",
+            "composites",
+            "suits.png"
+        )
+    )
+    for [i, suit_type] in enumerate(["power", "powerboots", "varia", "variaboots"]):
+        img = composite.crop(coord_calc((64 * i, 0), (64, 136)))
+        img.save(os.path.join(workingdir, "input", "composites", f"{suit_type}.png"))
+
+    compositesToBinSheet(workingdir)
+
+def doTheThing(
+    mode=None,
+    workingdir=os.path.join("."),
+    binfilename=None
+):
+    '''
+    Do The Thing
+    '''
+    baseoutput = os.path.join(
+        ".",
+        "resources",
+        "user",
+        "snes",
+        "metroid3",
+        "samus",
+        "sheets",
+        "paperdoll"
+    )
+    mode = "" if mode is None else mode
+    workingdir = os.path.join(baseoutput,workingdir) \
+        if workingdir is not None \
+        else baseoutput
+    setupDirs(
+        workingdir
+    )
+    mandatory()
+
+    # requires binary sheet
+    # cwd/input/binary
+    binSheetToCells(
+        mode,
+        workingdir,
+        binfilename
+    )
+
+    # requires 4 composites
+    # cwd/input/composites
+    # power.png
+    # powerboots.png
+    # varia.png
+    # variaboots.png
+    compositesToBinSheet(workingdir)
+
+    # export suit
+    # requires binSheetToCells()
+    export_suit(workingdir, "power")
+    export_suit(workingdir, "powerboots")
+    export_suit(workingdir, "varia")
+    export_suit(workingdir, "variaboots")
+
+    # export suits
+    # requires binSheetToCells()
+    export_suits(workingdir)
+
+    # requires 1 composite
+    # cwd/input/composites
+    # suits.png
+    compositeToBinSheet(workingdir)
+
+doTheThing(
+    "save",
+    "labels",
+    "combined"
+)
