@@ -45,22 +45,23 @@ mirrorCells = {
 # Varia -> Varia Boots
 arimaSuits = {
   "power": [
-    [0,0,0,68],
-    [77,78,79,84],
-    [93,94,95,100],
-    [109,110,125,126,13,14,15,16],
-    [1,2,3,4,5],
-    [17,18,37,20,21,9,23,24],
-    [33,34,53,54],
-    [49,50,69,70],
-    [0,90,85,86],
-    [0,0,101,102],
-    [0,0,71,72],
-    [0,0,87,88],
-    [0,0,103,104],
-    [0,0,32,0],
-    [31,47,48,0,0,0,127,46],
-    [62,63,64,0,0,0,143,0]
+    [   0,   0,   0,  68 ],                     # A
+    [  77,  78,  79,  84 ],                     # B
+    [  93,  94,  95, 100 ],                     # C
+    [ 109, 110, 125, 126,  13,  14,  15,  16 ], # D
+    [ 129, 130, 141, 142 ],                     # E
+    [   1,   2,   3,   4,   5 ],                # F
+    [  17,  18,  37,  20,  21,   9,  23,  24 ], # G
+    [  33,  34,  53,  54,   0,  25,  39,  40 ], # H
+    [  49,  50,  69,  70,   0,   0,  55,  56 ], # I
+    [   0,  90,  85,  86 ],                     # J
+    [   0,   0, 101, 102 ],                     # K
+    [   0,   0,  71,  72 ],                     # L
+    [   0,   0,  87,  88 ],                     # M
+    [   0,   0, 103, 104 ],                     # N
+    [   0,   0,  32,   0 ],                     # O
+    [  31,  47,  48,   0,   0,   0, 127,  46 ], # P
+    [  62,  63,  64,   0,   0,   0, 143,   0 ]  # Q
   ],
   "powerboots": [
     [],                                         # A
@@ -76,28 +77,29 @@ arimaSuits = {
     [],                                         # K
     [],                                         # L
     [],                                         # M
-    [0,10,29,104],
-    [0,26,27],
-    [41,42,43,44],
-    [57,58,59,0,0,0,61]
+    [   0,  10,  29, 104],                      # N
+    [   0,  26,  27],                           # O
+    [  41,  42,  43,  44],                      # P
+    [  57,  58,  59,   0,   0,   0,  61]        # Q
   ],
   "varia": [
-    [],
-    [81,82,83],
-    [97,98,99],
-    [113,114,115,116,117,118,119,120],
-    [0,0,131,132],
-    [0,0,19,0,0,22],
-    [0,0,35,36,0,38,39,40],
-    [0,0,51,52],
-    [0,0,91,92],
-    [0,0,0,107,108],
-    [0,122,123,124],
-    [0,138,139,140],
-    [0,0,12],
-    [0,0,28],
-    [],
-    [0,0,0,0,0,0,0,144]
+    [],                                         # A
+    [  81,  82,  83 ],                          # B
+    [  97,  98,  99 ],                          # C
+    [ 113, 114, 115, 116, 117, 118, 119, 120 ], # D
+    [ 129, 130, 131, 132 ],                     # E
+    [   1,   2,   3,   4,   5 ],                # F
+    [   0,   0,  19,   0,   0,  22 ],           # G
+    [   0,   0,  35,  36,   0,  38,  39,  40 ], # H
+    [   0,   0,  51,  52,   0,   0,  55,  56 ], # I
+    [   0,  90,  91,  92 ],                     # J
+    [   0,   0, 107, 108 ],                     # K
+    [   0, 122, 123, 124 ],                     # L
+    [   0, 138, 139, 140 ],                     # M
+    [   0,   0,  12 ],                          # N
+    [   0,   0,  28 ],                          # O
+    [],                                         # P
+    [   0,   0,   0,   0,   0,   0,   0, 144 ]  # Q
   ],
   "variaboots": [
     [],                                         # A
@@ -113,10 +115,10 @@ arimaSuits = {
     [],                                         # K
     [],                                         # L
     [],                                         # M
-    [0,10,11,0],
-    [0,26,27],
-    [41,42,43,44],
-    [57,58,59,0,0,0,61]
+    [   0,  10,  11,   0 ],                     # N
+    [   0,  26,  27 ],                          # O
+    [  41,  42,  43,  44 ],                     # P
+    [  57,  58,  59,   0,   0,   0,  61 ]       # Q
   ]
 }
 
@@ -185,6 +187,10 @@ def splice_up_binary(mode=None, workingdir=os.path.join("."), sheet=None):
             f"{sheet}.png"
         )
     )
+    sheet_size = images[sheet].size
+    if sheet_size != (128, 72):
+        print(f"{sheet} invalid size; is {sheet_size}; should be (128, 72)")
+        return
 
     for cellID, cell_coords in cell_specs.items():
         colorGoal = 1
@@ -291,6 +297,10 @@ def export_suits(workingdir=os.path.join(".")):
     for suit_type in ["power", "powerboots", "varia", "variaboots"]:
         export_suit(workingdir, suit_type)
         img = Image.open(os.path.join(workingdir, "output", "composites", f"{suit_type}.png"))
+        img_size = img.size
+        if img_size != (64, 136):
+            print(f"{suit_type} invalid size; is {img_size}; should be (64, 136)")
+            return
         suits.paste(img, (x, 0, ))
         x += 64
     suits.save(os.path.join(workingdir, "output", "composites", "suits.png"))
@@ -329,6 +339,12 @@ def splice_suit(
             filename + ".png"
         )
     )
+
+    this_size = this_image.size
+    if this_size != (64, 136):
+        print(f"{filename} invalid size; is {this_size}; should be (64, 136)")
+        return
+
     bin_image = Image.new(
         mode="RGB",
         size=(128, 72),
@@ -402,6 +418,11 @@ def combine_suits(workingdir):
                 f"binary-{filename}.png"
             )
         )
+        this_size = this_image.size
+        if this_size != (128, 72):
+            print(f"{filename} invalid size; is {this_size}; should be (128, 72)")
+            return
+
         newdata = []
         find = (0, 0, 0)
         this_image = this_image.convert("RGBA")
@@ -418,6 +439,13 @@ def combine_suits(workingdir):
             (0, 0),
             this_image
         )
+    misc_image = Image.open(os.path.join(workingdir, "..", "samus", "input", "misc.png").replace("user","app"))
+    if misc_image.size != (24, 8):
+        print(f"misc.png invalid size; is {misc_image.size}; should be (24, 8)")
+    combined_image.paste(
+        misc_image,
+        (0, 32)
+    )
     combined_image.save(
         os.path.join(
             workingdir,
@@ -505,6 +533,10 @@ def compositeToBinSheet(workingdir):
             "suits.png"
         )
     )
+    composite_size = composite.size
+    if composite_size != (256, 136):
+        print(f"suits.png invalid size; is {composite_size}; should be (256, 136)")
+        return
     for [i, suit_type] in enumerate(["power", "powerboots", "varia", "variaboots"]):
         img = composite.crop(coord_calc((64 * i, 0), (64, 136)))
         img.save(os.path.join(workingdir, "input", "composites", f"{suit_type}.png"))
@@ -552,7 +584,7 @@ def doTheThing(
     # powerboots.png
     # varia.png
     # variaboots.png
-    compositesToBinSheet(workingdir)
+    # compositesToBinSheet(workingdir)
 
     # export suit
     # requires binSheetToCells()
@@ -572,6 +604,6 @@ def doTheThing(
 
 doTheThing(
     "save",
-    "labels",
+    "samus",
     "combined"
 )
