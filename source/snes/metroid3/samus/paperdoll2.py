@@ -305,6 +305,159 @@ def export_suits(workingdir=os.path.join(".")):
         x += 64
     suits.save(os.path.join(workingdir, "output", "composites", "suits.png"))
 
+def export_preview(workingdir=os.path.join(".")):
+    print(" Exporting Preview GIF")
+
+    image_list = []
+    duration = .5
+    gif_duration = 1000 * duration
+    gif_durations = []
+    print("  Getting base screen")
+    for suit_type in ["power","powerboots","varia","variaboots"]:
+        print(f"   Getting {suit_type}")
+        suit_img = Image.open(
+            os.path.join(
+                workingdir,
+                "output",
+                "composites",
+                f"{suit_type}.png"
+            )
+        )
+        suit_img = suit_img.convert("RGBA")
+        this_img = Image.open(
+            os.path.join(
+                ".",
+                "resources",
+                "app",
+                "snes",
+                "metroid3",
+                "samus",
+                "sheets",
+                "paperdoll",
+                "samus",
+                "input",
+                "screen.png"
+            )
+        )
+        this_img = this_img.convert("RGBA")
+        this_img.paste(
+            suit_img,
+            (94,22,),
+            suit_img
+        )
+
+        for label in [
+            "samus-marquee",
+            "suit",
+            "misc",
+            "boots",
+            "beam",
+            "samus-button"
+        ]:
+            label_path = os.path.join(
+                workingdir,
+                "input",
+                f"{label}.png"
+            )
+            if not os.path.isfile(label_path):
+                label_path = os.path.join(
+                    ".",
+                    "resources",
+                    "app",
+                    "snes",
+                    "metroid3",
+                    "samus",
+                    "sheets",
+                    "paperdoll",
+                    "samus",
+                    "input",
+                    f"{label}.png"
+                )
+            if os.path.isfile(label_path):
+                label_img = Image.open(label_path)
+                label_img.convert("RGBA")
+                dest = (0,0)
+                dests = {
+                    "samus-marquee": (102,6),
+                    "suit": (190,30),
+                    "misc": (190,62),
+                    "boots": (190,110),
+                    "beam": (38,86),
+                    "samus-button": (174,167)
+                }
+                if label in dests:
+                    dest = dests[label]
+                    print(f"    Pasting {label} label")
+                    this_img.paste(
+                        label_img,
+                        dest
+                    )
+
+        for icon in [
+            "boots",
+            "varia"
+        ]:
+            if icon in suit_type:
+                icon_img = Image.open(
+                    os.path.join(
+                        ".",
+                        "resources",
+                        "app",
+                        "snes",
+                        "metroid3",
+                        "samus",
+                        "sheets",
+                        "paperdoll",
+                        "samus",
+                        "input",
+                        "icons.png"
+                    )
+                )
+                icon_img = icon_img.convert("RGBA")
+                stats = {
+                    "boots": {"origin": (16,0), "dest": (36,20)},
+                    "varia": {"origin": (0,0), "dest": (20,20)}
+                }
+                icon_img = icon_img.crop(
+                    coord_calc(
+                        stats[icon]["origin"],
+                        (16,16)
+                    )
+                )
+                print(f"    Pasting {icon} icon")
+                this_img.paste(
+                    icon_img,
+                    stats[icon]["dest"],
+                    icon_img
+                )
+
+        image_list.append(this_img)
+        gif_durations.append(gif_duration)
+    image_list[0].save(
+        os.path.join(
+            workingdir,
+            "output",
+            "composites",
+            "screen.gif"
+        ),
+        format="GIF",
+        append_images=image_list[1:],
+        save_all=True,
+        transparency=255,
+        disposal=2,
+        duration=gif_durations,
+        loop=0,
+        optimize=False
+    )
+    screen_gif = Image.open(
+        os.path.join(
+            workingdir,
+            "output",
+            "composites",
+            "screen.gif"
+        )
+    )
+
 
 def splice_suit(
     workingdir=os.path.join("."),
@@ -584,7 +737,7 @@ def doTheThing(
     # powerboots.png
     # varia.png
     # variaboots.png
-    # compositesToBinSheet(workingdir)
+    compositesToBinSheet(workingdir)
 
     # export suit
     # requires binSheetToCells()
@@ -596,6 +749,7 @@ def doTheThing(
     # export suits
     # requires binSheetToCells()
     export_suits(workingdir)
+    export_preview(workingdir)
 
     # requires 1 composite
     # cwd/input/composites
