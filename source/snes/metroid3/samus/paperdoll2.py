@@ -306,6 +306,9 @@ def export_suits(workingdir=os.path.join(".")):
     suits.save(os.path.join(workingdir, "output", "composites", "suits.png"))
 
 def export_preview(workingdir=os.path.join(".")):
+    '''
+    Export Preview GIF
+    '''
     print(" Exporting Preview GIF")
 
     image_list = []
@@ -357,6 +360,7 @@ def export_preview(workingdir=os.path.join(".")):
             label_path = os.path.join(
                 workingdir,
                 "input",
+                "categories",
                 f"{label}.png"
             )
             if not os.path.isfile(label_path):
@@ -371,6 +375,7 @@ def export_preview(workingdir=os.path.join(".")):
                     "paperdoll",
                     "samus",
                     "input",
+                    "categories",
                     f"{label}.png"
                 )
             if os.path.isfile(label_path):
@@ -449,15 +454,6 @@ def export_preview(workingdir=os.path.join(".")):
         loop=0,
         optimize=False
     )
-    screen_gif = Image.open(
-        os.path.join(
-            workingdir,
-            "output",
-            "composites",
-            "screen.gif"
-        )
-    )
-
 
 def splice_suit(
     workingdir=os.path.join("."),
@@ -524,8 +520,6 @@ def splice_suit(
         for [col, tileID] in enumerate(arimaRow):
             x = col * 8
             y = row * 8
-            rowID = ascii_uppercase[row]
-            # print(f"{rowID}{col}[{my_pad(tileID)}]({my_pad(x)},{my_pad(y)})", end=" | ")
             tileX = -1
             tileY = -1
             for [binRowID, binRow] in enumerate(arimaCells):
@@ -592,7 +586,15 @@ def combine_suits(workingdir):
             (0, 0),
             this_image
         )
-    misc_image = Image.open(os.path.join(workingdir, "..", "samus", "input", "misc.png").replace("user","app"))
+    misc_image = Image.open(
+        os.path.join(
+            workingdir,
+            "..",
+            "samus",
+            "input",
+            "categories",
+            "misc.png"
+        ).replace("user","app"))
     if misc_image.size != (24, 8):
         print(f"misc.png invalid size; is {misc_image.size}; should be (24, 8)")
     combined_image.paste(
