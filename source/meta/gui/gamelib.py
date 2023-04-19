@@ -69,7 +69,7 @@ def autodetect_png(sprite_filename):
 		              check_size = sprite_manifest[sprite_id]["input"]["png"]["dims"]
 		              if loaded_image.size == tuple(check_size):
 		                game = get_game_class_of_type(console,game_name)
-		                sprite, animation_assist = game.make_player_sprite(sprite_filename)
+		                sprite, animation_assist = game.make_sprite_by_number(sprite_id, sprite_filename)
 		                game_found = True
 		if not game_found:
 			# FIXME: English

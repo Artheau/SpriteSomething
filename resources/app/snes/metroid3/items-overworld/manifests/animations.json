@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../../../schema/animations.schema.json",
+  "Bomb": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "bomb_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "bomb_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Gravity Suit": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "gravity_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "gravity_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Spring Ball": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "spring_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "spring_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Varia Suit": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "varia_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "varia_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Hi-Jump Boots": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "boots_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "boots_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Screw Attack": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "screw_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "screw_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Space Jump": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "space_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "space_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Morph Ball": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "morph_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "morph_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Grapple Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "grapple_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "grapple_on", "pos": [0,0]} ] }
+    ]
+  },
+  "X-Ray Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "xray_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "xray_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Speed Booster": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "speed_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "speed_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Charge Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "charge_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "charge_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Ice Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "ice_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "ice_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Wave Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "wave_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "wave_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Plasma Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "plasma_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "plasma_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Spazer Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "spazer_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "spazer_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Reserve Tank": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "reserve_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "reserve_on", "pos": [0,0]} ] }
+    ]
+  }
+}
