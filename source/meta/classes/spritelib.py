@@ -31,6 +31,7 @@ class SpriteParent():
         self.filename = filename
         self.overview_scale_factor = 2
         self.overhead = True
+        self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
         if "input" in manifest_dict and \
             "png" in manifest_dict["input"] and \
                 "overview-scale-factor" in manifest_dict["input"]["png"]:
@@ -353,6 +354,9 @@ class SpriteParent():
         return assembled_image, offset
 
     def get_representative_images(self, style="default"):
+        if self.view_only:
+            return []
+
         if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
             sprite_save_name = self.metadata["sprite.name"].lower()
         else:

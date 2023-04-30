@@ -334,7 +334,8 @@ class Layout():
         all_images["transparent"] = Image.new("RGBA", (0, 0), 0)
 
         master_palettes = list(
-            all_images["palette_block"].convert("RGB").getdata())
+            all_images["palette_block"].convert("RGB").getdata()) \
+            if "palette_block" in all_images else []
 
         for image_name, this_image in all_images.items():
             # FIXME: somewhere in here we need to take note of the bunny tiles

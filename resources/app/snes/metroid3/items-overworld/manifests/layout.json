@@ -29,10 +29,10 @@
       "spazer_off", "spazer_on"
     ],
     [
-      "reserve_off", "reserve_on"
-    ],
-    [
-      "palette_block"
+      "reserve_off", "reserve_on",
+      "blank","blank",
+      "blank","blank",
+      "blank","blank"
     ]
   ],
   "images": {
@@ -453,19 +453,17 @@
         [ "0x00", 0 ]
       ]
     },
-    "palette_block": {
-      "description": "",
+    "blank": {
+      "description": "Blank",
       "dimensions": [
-        0,
-        0,
-        1,
-        1
+        37,
+        73,
+        53,
+        89
       ],
+      "import palette interval": [ 0, 0 ],
       "used by": [
-        [
-          "0x00",
-          0
-        ]
+        [ "0x00", 0 ]
       ]
     }
   }

@@ -406,7 +406,8 @@ class SpriteSomethingMainFrame(tk.Frame):
     BUTTON_HEIGHT = 26
     vcr_controls = self.get_vcr_controls()  #have to do this early so that their values are available for other buttons
     self.left_panel.add(self.get_reload_button(),height=1 * BUTTON_HEIGHT)
-    self.attach_metadata_panel()
+    if not self.sprite.view_only:
+      self.attach_metadata_panel()
     self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
     self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.coord_setter,self.fish)
     #get animation engine handle
@@ -839,73 +840,89 @@ class SpriteSomethingMainFrame(tk.Frame):
 
   #query user to export file; PNG/ZSPR/RDC
   def save_file_as(self):
-    # Save in one of the valid formats.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
-    filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),(self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),(self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"))
+    if not self.sprite.view_only:
+      # Save in one of the valid formats.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
+      filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),(self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),(self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"))
 
-    filename = ""
-    if "sprite.name" in self.sprite.metadata:
-      filename = self.sprite.metadata["sprite.name"]
-    else:
-      # FIXME: English
-      filename = "unknown"
-    filename = common.filename_scrub(filename)
-
-    filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
-    if filename:
-      save_success_bool = self.sprite.save_as(filename)
-      if save_success_bool:
-        self.unsaved_changes = False
-        self.working_dirs["file.save"] = os.path.dirname(filename)
-        messagebox.showinfo("Save Complete", f"Saved as {filename}")
-        self.save_working_dirs()
+      filename = ""
+      if "sprite.name" in self.sprite.metadata:
+        filename = self.sprite.metadata["sprite.name"]
       else:
         # FIXME: English
-        messagebox.showerror("Not Yet Implemented",os.path.splitext(filename)[1][1:].upper() + " format not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
-      return save_success_bool
-    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
-    return False
+        filename = "unknown"
+      filename = common.filename_scrub(filename)
+
+      filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
+      if filename:
+        save_success_bool = self.sprite.save_as(filename)
+        if save_success_bool:
+          self.unsaved_changes = False
+          self.working_dirs["file.save"] = os.path.dirname(filename)
+          messagebox.showinfo("Save Complete", f"Saved as {filename}")
+          self.save_working_dirs()
+        else:
+          # FIXME: English
+          messagebox.showerror("Not Yet Implemented",os.path.splitext(filename)[1][1:].upper() + " format not yet available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+        return save_success_bool
+      #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+      return False
+    else:
+      #FIXME: English
+      messagebox.showerror("Not Implemented",f"Saving not availabel for {self.game.name}/{self.sprite.classic_name} Sprites.")
 
   #query user to inject sprite into game file
   # Inbound:
   #  inject: Are we injecting directly or making a copy?
   def copy_into_ROM(self, inject=False):
-    dest_filename = None
-    default_ext = ""
-    if self.game.console_name == "nes":
-      default_ext = ".nes"
-    elif self.game.console_name == "snes":
-      default_ext = ".sfc"
-    if inject:
-      dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),"*.sfc *.smc"),))
-      source_filename = dest_filename
-    else:
-      source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),"*.sfc *.smc"),))
-      if source_filename:
-        _,file_extension = os.path.splitext(source_filename)
-        if file_extension.lower() in ['.sfc','.smc']:
-          default_extension = file_extension.lower()
-        else:
-          default_extension = default_ext
-        dest_filename = os.path.splitext(source_filename)[0] + "_modified"
-        dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
-    if dest_filename:
-      rom = self.game.get_rom_from_filename(source_filename)
-      modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
-      #print(modified_rom.get_patch())
-      modified_rom.save(dest_filename, overwrite=True)
-      self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
-      self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
-      # FIXME: English
-      messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
+    if not self.sprite.view_only:
+      dest_filename = None
+      default_ext = ""
+      if self.game.console_name == "nes":
+        default_ext = ".nes"
+      elif self.game.console_name == "snes":
+        default_ext = ".sfc"
+      if inject:
+        dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),"*.sfc *.smc"),))
+        source_filename = dest_filename
+      else:
+        source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),"*.sfc *.smc"),))
+        if source_filename:
+          _,file_extension = os.path.splitext(source_filename)
+          if file_extension.lower() in ['.sfc','.smc']:
+            default_extension = file_extension.lower()
+          else:
+            default_extension = default_ext
+          dest_filename = os.path.splitext(source_filename)[0] + "_modified"
+          dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),"*.sfc *.smc"),))
+      if dest_filename:
+        rom = self.game.get_rom_from_filename(source_filename)
+        modified_rom = self.sprite.inject_into_ROM(self.animation_engine.spiffy_dict, rom)
+        #print(modified_rom.get_patch())
+        modified_rom.save(dest_filename, overwrite=True)
+        self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
+        self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
+        # FIXME: English
+        messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
+      else:
+        #FIXME: English
+        messagebox.showerror("Not Implemented", f"Injecting not available for {self.game.name}/{sepf.sprite.classic_name} Sprites.")
 
   #query user for directory to inject sprite into
   def copy_into_ROM_bulk(self, inject=False):
     source_filepath = None
-    if inject:
-      source_filepath = filedialog.askdirectory()  #only injection is supported
+    supported_consoles = [ "pc", "nes", "snes" ]
+    if self.sprite.view_only and self.game.console_name in supported_consoles:
+      supported_consoles.remove(self.game.console_name)
+
+    if self.game.console_name in supported_consoles:
+      if inject:
+        source_filepath = filedialog.askdirectory()	#only injection is supported
+      else:
+        #FIXME: English
+        raise AssertionError("Unsure if making copies fits this purpose well")
     else:
-      # FIXME: English
-      raise AssertionError("Unsure if making copies fits this purpose well")
+      messagebox.showerror("Not Implemented","Injection not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+      return
 
     source_filenames = []  #walk through the game files and inject the loaded sprite
 
