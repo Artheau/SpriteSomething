@@ -56,12 +56,12 @@ def autodetect(sprite_filename):
 		#And by default, we will grab the player sprite from this game
 		sprite, animation_assist = game.make_player_sprite(sprite_filename)
 		print("Detected NES!")
-	#If it's not a known filetype but a PNG, cycle through and find one that matches
-	elif file_extension.lower() == ".png":
+	#If it's not a known filetype but an image, cycle through and find one that matches
+	elif file_extension.lower() in [".bmp", ".png"]:
 		#the following line prevents a "cannot identify image" error from PIL
 		ImageFile.LOAD_TRUNCATED_IMAGES = True
 		#I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
-		print("Detected PNG!")
+		print(f"Detected {file_extension.upper()[1:]}!")
 		with Image.open(sprite_filename) as loaded_image:
 			game_found = False
 			sprite_found = False
@@ -75,22 +75,22 @@ def autodetect(sprite_filename):
 							sprite_manifest = json.load(f)
 							sprite_name = ""
 							for sprite_id in sprite_manifest:
-								if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"]:
-									pngs = sprite_manifest[sprite_id]["input"]["png"]
+								if "input" in sprite_manifest[sprite_id] and file_extension.lower()[1:] in sprite_manifest[sprite_id]["input"]:
+									pngs = sprite_manifest[sprite_id]["input"][file_extension.lower()[1:]]
 									if not isinstance(pngs,list):
 										pngs = [pngs]
 									for png in pngs:
 										if "dims" in png and not sprite_found:
 											check_size = png["dims"]
 											if loaded_image.size == tuple(check_size):
-												print("Detected PNG dimensions!" + " " + str(check_size))
+												print(f"Detected {file_extension.upper()[1:]} dimensions!" + " " + str(check_size))
 												if "name" in png:
 													check_names = png["name"]
-													print("Checking PNG name!")
+													print(f"Checking {file_extension.upper()[1:]} name!")
 													if file_slug in check_names:
 														sprite_name = file_slug
 														sprite_found = True
-														print("Detected PNG name!" + " [" + sprite_name + "]")
+														print(f"Detected {file_extension.upper()[1:]} name!" + " [" + sprite_name + "]")
 												elif not sprite_found:
 													sprite_name = sprite_manifest[sprite_id]["folder name"]
 													sprite_found = True

@@ -1,0 +1,93 @@
+{
+  "$schema": "../../../../../schema/png-layout.schema.json",
+  "comment": [
+    "This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",
+    "will also be the pose that is used to import the image.  For this reason, some poses will be out of order",
+    "and this is intentional because a pose might be mirrored in its first occurance (grapple), or perhaps",
+    "the way that it will be present in the ROM is different before and after modification (e.g. screw attack)"
+  ],
+  "border_color": [0, 0, 127, 255],
+  "border_size": 0,
+  "layout": [
+    [
+      "walk",
+      "push",
+      "jump",
+      "handRaise",
+      "throw",
+      "bomb",
+      "null_block2"
+    ],
+    [
+      "walk1",
+      "push1",
+      "jump1",
+      "handRaise1",
+      "throw1",
+      "shrug",
+      "shrugHand"
+    ],
+    [
+      "walk2",
+      "push2",
+      "jump2",
+      "null_block",
+      "throw2",
+      "climb",
+      "null_block2"
+    ],
+    [
+      "walk3",
+      "push3",
+      "null_block",
+      "null_block",
+      "death",
+      "climb1",
+      "null_block2"
+    ]
+  ],
+  "images": {
+    "walk": {
+      "dimensions": [0,0,16,16],
+      "palette": "",
+      "import palette interval": [1,16],
+      "used by": [["TODO",0]]
+    },
+    "push": { "parent": "walk", "used by": [["TODO",0]] },
+    "jump": { "parent": "walk", "used by": [["TODO",0]] },
+    "handRaise": { "parent": "walk", "used by": [["TODO",0]] },
+    "throw": { "parent": "walk", "used by": [["TODO",0]] },
+    "bomb": { "parent": "walk", "used by": [["TODO",0]] },
+    "null_block2": {
+      "dimensions": [0,0,8,16],
+      "used by": [["TODO",0]]
+    },
+
+    "walk1": { "parent": "walk", "used by": [["TODO",0]] },
+    "push1": { "parent": "walk", "used by": [["TODO",0]] },
+    "jump1": { "parent": "walk", "used by": [["TODO",0]] },
+    "handRaise1": { "parent": "walk", "used by": [["TODO",0]] },
+    "throw1": { "parent": "walk", "used by": [["TODO",0]] },
+    "shrug": { "parent": "walk", "used by": [["TODO",0]] },
+    "shrugHand": { "parent": "walk", "used by": [["TODO",0]] },
+
+    "walk2": { "parent": "walk", "used by": [["TODO",0]] },
+    "push2": { "parent": "walk", "used by": [["TODO",0]] },
+    "jump2": { "parent": "walk", "used by": [["TODO",0]] },
+    "null_block": { "parent": "walk", "used by": [["TODO",0]] },
+    "throw2": { "parent": "walk", "used by": [["TODO",0]] },
+    "climb": { "parent": "walk", "used by": [["TODO",0]] },
+
+    "walk3": { "parent": "walk", "used by": [["TODO",0]] },
+    "push3": { "parent": "walk", "used by": [["TODO",0]] },
+    "death": { "parent": "walk", "used by": [["TODO",0]] },
+    "climb1": {
+      "dimensions": [0,0,16,8],
+      "used by": [["TODO",0]]
+    },
+    "palette_block": {
+      "dimensions": [0,7,8,8],
+      "used by": [["TODO",0]]
+    }
+  }
+}

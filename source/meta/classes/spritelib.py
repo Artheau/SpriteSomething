@@ -112,7 +112,7 @@ class SpriteParent():
 
 	def import_from_filename(self):
 		_,file_extension = os.path.splitext(self.filename)
-		if file_extension.lower() == '.png':
+		if file_extension.lower() in ['.png', '.bmp']:
 			self.import_from_PNG()
 		elif file_extension.lower() == '.zspr':
 			self.import_from_ZSPR()
