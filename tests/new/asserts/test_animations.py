@@ -67,6 +67,9 @@ class AnimationAudit(unittest.TestCase):
 
     def test_animations(self):
         self.animations = {}
+        self.layout = {
+            "images": {}
+        }
         for [platID, plat] in DATA.items():
             for [gameID, game] in plat["games"].items():
                 for [spriteID, sprite] in game["sprites"].items():
