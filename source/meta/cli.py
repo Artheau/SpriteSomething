@@ -267,7 +267,20 @@ class CLIMainFrame():
                 for r,_,f in os.walk(sprite_filepath):
                     for file in f:
                         _,file_extension = os.path.splitext(file)
-                        if file_extension.lower() in [".png",".zspr",".sfc",".smc",".rdc"]:
+                        if file_extension.lower() in [
+                            #FIXME: Supported filetypes
+                            ".png",     # Main input
+                            ".4bpp",    # Raw
+                            ".zspr",    # Z3Link
+                            ".sfc",     # SNES
+                            ".smc",     # SNES
+                            ".nes",     # NES
+                            ".bmp",     # FFMQBen
+                            ".zip",     # Mo3Player
+                            ".aspr",    # ASPR (WIP)
+                            ".zhx",     # ZHX (WIP)
+                            ".rdc"      # Z3Link/M3Samus
+                        ]:
                             sprite_filenames.append(os.path.join(r,file))
             elif os.path.isfile(sprite_filepath):
                 sprite_filenames.append(sprite_filepath)

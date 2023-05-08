@@ -261,7 +261,9 @@ class AnimationEngineParent():
 
     def get_current_direction(self):
         if self.spiffy_dict:
-            direction = self.spiffy_dict["facing_var"].get().lower()   #grabbed from the direction buttons, which are named "facing"
+            direction = "right"
+            if "facing_var" in self.spiffy_dict:
+                direction = self.spiffy_dict["facing_var"].get().lower()
             if "aiming_var" in self.spiffy_dict:
                 direction = "_aim_".join([direction, self.spiffy_dict["aiming_var"].get().lower()])
             return direction

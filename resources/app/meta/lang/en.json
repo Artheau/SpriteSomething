@@ -42,6 +42,8 @@
     "file.save.types.label": "Supported Types",
     "file.save.title": "Save Sprite As...",
     "file.save.4bpp": "4bpp Binary Sprite Data",
+    "file.save.aspr": "ASPR (WIP)",
+    "file.save.bmp": "Bitmap",
     "file.save.gif": "Graphics Interchange Format",
     "file.save.png": "Portable Network Graphics",
     "file.save.rdc": "Retro Data Container",

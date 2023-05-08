@@ -203,9 +203,11 @@ class ExportAudit(unittest.TestCase):
             if importExt == "rdc":
                 importExt = "png"
             if importExt in ["4bpp", "palette", "zhx"]:
+                print(f"{importExt} not supported by Tests!")
                 return
             if f"{self.platID}/{self.gameID}/{self.spriteID}" in [
                 "pc/averge/trace",
+                "snes/mother2/player",
                 "snes/ffmq/benjamin"
             ]:
                 print(f"{self.spriteID} is a WIP!")

@@ -86,6 +86,21 @@ def autodetect_png(sprite_filename):
 def autodetect(sprite_filename):
     print("---")
     print("Autodetecting!")
+    #FIXME: Supported filetypes
+    filetypes = [
+        ".png",     # Main input
+        ".4bpp",    # Raw
+        ".zspr",    # Z3Link
+        ".sfc",     # SNES
+        ".smc",     # SNES
+        ".nes",     # NES
+        ".bmp",     # FFMQBen
+        ".zip",     # Mo3Player
+        ".aspr",    # ASPR (WIP)
+        ".zhx",     # ZHX (WIP)
+        ".rdc"      # Z3Link/M3Samus
+    ]
+
     #need to autodetect which game, and which sprite
     #then return an instance of THAT game's class, and an instance of THAT sprite
     file_slug,file_extension = os.path.splitext(sprite_filename)
@@ -211,6 +226,10 @@ def autodetect(sprite_filename):
                 sheet_slug,sheet_extension = os.path.splitext(os.path.basename(selected_sheet))
                 thisZip.extract(selected_sheet,scratch)
                 sprite, animation_assist = game.make_player_sprite(os.path.join(scratch,selected_sheet),sheet_slug)
+        print("Detected ZIP!")
+    elif file_extension.lower() in filetypes:
+        raise AssertionError(f"{file_extension.upper()[1:]} not yet supported by GUI!")
+
     elif sprite_filename == "":
             #FIXME: English
         raise AssertionError("No filename given")

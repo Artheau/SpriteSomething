@@ -497,14 +497,23 @@ class SpriteSomethingMainFrame(tk.Frame):
                                         )
                                         filename = ""
                                         for filetype in [
-                                            ".rdc",
-                                            ".zspr",
-                                            ".png",
-                                            ".bmp"
+                                            #FIXME: Supported filetypes
+                                            ".png",     # Main input
+                                            ".4bpp",    # Raw
+                                            ".zspr",    # Z3Link
+                                            ".sfc",     # SNES
+                                            ".smc",     # SNES
+                                            ".nes",     # NES
+                                            ".bmp",     # FFMQBen
+                                            ".zip",     # Mo3Player
+                                            ".aspr",    # ASPR (WIP)
+                                            ".zhx",     # ZHX (WIP)
+                                            ".rdc"      # Z3Link/M3Samus
                                         ]:
                                             filepath = os.path.join(path,folder+filetype)
                                             if os.path.isfile(filepath):
                                                 filename = filepath
+                                                break
                                         bundled_games[console][gamedir]["sprites"].append(
                                             (
                                                 name,
@@ -1460,15 +1469,21 @@ class SpriteSomethingMainFrame(tk.Frame):
         #save current animation/bg/direction settings
         self.save_ani_settings()
 
-        filetypes = ""
-        # filetypes += ".rdc " # FIXME: Assuming M3Samus-only
-        filetypes += ".zspr " # FIXME: Assuming Z3Link-only
-        filetypes += ".png "
-        filetypes += ".bmp "
-#        filetypes += ".nes " # NES RomHandler
-        filetypes += ".smc .sfc " # SNES RomHandler
-        filetypes += ".4bpp "
-        # filetypes += ".zhx "
+        filetypes = [
+            #FIXME: Supported filetypes
+            ".png",     # Main input
+            ".4bpp",    # Raw
+            ".zspr",    # Z3Link
+            ".sfc",     # SNES
+            ".smc",     # SNES
+            ".nes",     # NES
+            ".bmp",     # FFMQBen
+            ".zip",     # Mo3Player
+            ".aspr",    # ASPR (WIP)
+            ".zhx",     # ZHX (WIP)
+            ".rdc"      # Z3Link/M3Samus
+        ]
+        filetypes = " ".join(filetypes)
         filename = filedialog.askopenfilename(
             initialdir=self.working_dirs["file.open"],
             title=self.fish.translate("meta","dialogue","file.open.title"),
@@ -1497,13 +1512,33 @@ class SpriteSomethingMainFrame(tk.Frame):
         # TODO: When ZSPR export is implemented,
         # switch this around so that ZSPR is the default
         '''
-        filetypes = (
-            (self.fish.translate("meta","dialogue","file.save.png"),"*.png"),
-            (self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),
-            (self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"),
-            (self.fish.translate("meta","dialogue","file.save.zhx"),"*.zhx"),
-            (self.fish.translate("meta","dialogue","file.save.4bpp"),"*.4bpp")
-        )
+        filetypes = [
+            #FIXME: Supported filetypes
+            ".png",     # Main input
+            ".4bpp",    # Raw
+            ".zspr",    # Z3Link
+            # ".sfc",     # SNES
+            # ".smc",     # SNES
+            # ".nes",     # NES
+            ".bmp",     # FFMQBen
+            # ".zip",     # Mo3Player
+            # ".aspr",    # ASPR (WIP)
+            ".zhx",     # ZHX (WIP)
+            ".rdc"      # Z3Link/M3Samus
+        ]
+        savetypes = []
+        for filetype in filetypes:
+            savetypes.append(
+                (
+                    self.fish.translate(
+                        "meta",
+                        "dialogue",
+                        f"file.save{filetype}"
+                    ),
+                    f"*{filetype}"
+                )
+            )
+        savetypes = tuple(savetypes)
 
         filename = ""
         if "sprite.name" in self.sprite.metadata:
@@ -1514,11 +1549,11 @@ class SpriteSomethingMainFrame(tk.Frame):
         filename = common.filename_scrub(filename)
 
         filename = filedialog.asksaveasfilename(
-            defaultextension=(".png",".zspr",".rdc",".4bpp"),
+            defaultextension=(filetypes[0]),
             initialfile=filename,
             initialdir=self.working_dirs["file.save"],
             title=self.fish.translate("meta","dialogue","file.save.title"),
-            filetypes=filetypes
+            filetypes=savetypes
         )
         if filename:
             save_success_bool = self.sprite.save_as(filename, self.game.name)

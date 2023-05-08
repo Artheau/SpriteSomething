@@ -136,6 +136,20 @@ class SpriteParent():
 
     def import_from_filename(self):
         _, file_extension = os.path.splitext(self.filename)
+        #FIXME: Supported filetypes
+        filetypes = [
+            ".png",     # Main input
+            ".4bpp",    # Raw
+            ".zspr",    # Z3Link
+            ".sfc",     # SNES
+            ".smc",     # SNES
+            ".nes",     # NES
+            ".bmp",     # FFMQBen
+            ".zip",     # Mo3Player
+            ".aspr",    # ASPR (WIP)
+            ".zhx",     # ZHX (WIP)
+            ".rdc"      # Z3Link/M3Samus
+        ]
         if file_extension.lower() in ['.png', '.bmp']:
             self.import_from_PNG()
         elif file_extension.lower() == '.zspr':
@@ -149,6 +163,9 @@ class SpriteParent():
             rom_path = rom_path.replace(os.sep, '.')
             rom_module = self.import_module(f"source.{rom_path}.rom")
             self.import_from_ROM(rom_module.RomHandler(self.filename))
+        elif file_extension.lower() in filetypes:
+            print(f"{file_extension.upper()[1:]} not yet supported by CLI!")
+            return
         self.import_cleanup()
 
     def import_from_PNG(self):
@@ -414,12 +431,29 @@ class SpriteParent():
 
     def save_as(self, filename, game_name):
         _, file_extension = os.path.splitext(filename)
-        if file_extension.lower() == ".png":
+        #FIXME: Supported filetypes
+        filetypes = [
+            ".png",     # Main input
+            ".4bpp",    # Raw
+            ".zspr",    # Z3Link
+            ".sfc",     # SNES
+            ".smc",     # SNES
+            ".nes",     # NES
+            ".bmp",     # FFMQBen
+            ".zip",     # Mo3Player
+            ".aspr",    # ASPR (WIP)
+            ".zhx",     # ZHX (WIP)
+            ".rdc"      # Z3Link/M3Samus
+        ]
+        if file_extension.lower() in [".png", ".bmp"]:
             return self.save_as_PNG(filename)
         elif file_extension.lower() == ".zspr":
             return self.save_as_ZSPR(filename)
         elif file_extension.lower() == ".rdc":
             return self.save_as_RDC(filename)
+        elif file_extension.lower() in filetypes:
+            print(f"{file_extension.upper()[1:]} not yet supported by GUI!")
+            return
         else:
             # tk.messagebox.showerror(
             #     "ERROR",
