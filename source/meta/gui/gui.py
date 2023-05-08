@@ -1140,16 +1140,16 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.frame_number = self.frame_number + \
             self.animation_engine.frames_left_in_this_pose()
         self.pause_global_frame_timer()
-        ship_palettes = [
-            pal for _,pal in self.sprite.get_timed_palette(
-              "ship",
-              "standard"
-            )
-        ]
-        for colors in ship_palettes:
-            lst = colors
-            lst = [next(l) for l in lst]
-            print(lst)
+        # ship_palettes = [
+        #     pal for _,pal in self.sprite.get_timed_palette(
+        #       "ship",
+        #       "standard"
+        #     )
+        # ]
+        # for colors in ship_palettes:
+        #     lst = colors
+        #     lst = [next(l) for l in lst]
+        #     print(lst)
 
     def time_marches_forward(self):
         '''

@@ -102,6 +102,48 @@
       { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "reserve_on", "pos": [0,0]} ] }
     ]
   },
+  "All": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [
+        {"image": "bomb_off",       "pos": [  0, 0]},
+        {"image": "gravity_off",    "pos": [ 16, 0]},
+        {"image": "spring_off",     "pos": [ 32, 0]},
+        {"image": "varia_off",      "pos": [ 48, 0]},
+        {"image": "boots_off",      "pos": [ 64, 0]},
+        {"image": "screw_off",      "pos": [ 80, 0]},
+        {"image": "space_off",      "pos": [ 96, 0]},
+        {"image": "morph_off",      "pos": [114, 0]},
+        {"image": "grapple_off",    "pos": [  0,16]},
+        {"image": "xray_off",       "pos": [ 16,16]},
+        {"image": "speed_off",      "pos": [ 32,16]},
+        {"image": "charge_off",     "pos": [ 48,16]},
+        {"image": "ice_off",        "pos": [ 64,16]},
+        {"image": "wave_off",       "pos": [ 80,16]},
+        {"image": "plasma_off",     "pos": [ 96,16]},
+        {"image": "spazer_off",     "pos": [114,16]},
+        {"image": "reserve_off",    "pos": [  0,32]}
+      ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [
+        {"image": "bomb_on",       "pos": [  0, 0]},
+        {"image": "gravity_on",    "pos": [ 16, 0]},
+        {"image": "spring_on",     "pos": [ 32, 0]},
+        {"image": "varia_on",      "pos": [ 48, 0]},
+        {"image": "boots_on",      "pos": [ 64, 0]},
+        {"image": "screw_on",      "pos": [ 80, 0]},
+        {"image": "space_on",      "pos": [ 96, 0]},
+        {"image": "morph_on",      "pos": [114, 0]},
+        {"image": "grapple_on",    "pos": [  0,16]},
+        {"image": "xray_on",       "pos": [ 16,16]},
+        {"image": "speed_on",      "pos": [ 32,16]},
+        {"image": "charge_on",     "pos": [ 48,16]},
+        {"image": "ice_on",        "pos": [ 64,16]},
+        {"image": "wave_on",       "pos": [ 80,16]},
+        {"image": "plasma_on",     "pos": [ 96,16]},
+        {"image": "spazer_on",     "pos": [114,16]},
+        {"image": "reserve_on",    "pos": [  0,32]}
+      ] }
+    ]
+  },
   "Binary Sheet": {
     "right": [
       {
