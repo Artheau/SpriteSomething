@@ -1675,7 +1675,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                 )
         else:
             #FIXME: English
-            messagebox.showerror("Not Implemented", f"Injecting not available for {self.game.name}/{sepf.sprite.classic_name} Sprites.")
+            messagebox.showerror("Not Implemented", f"Injecting not available for {self.game.name}/{self.sprite.classic_name} Sprites.")
 
     #query user for directory to inject sprite into
     def copy_into_ROM_bulk(self, inject=False):
