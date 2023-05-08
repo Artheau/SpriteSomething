@@ -5,20 +5,20 @@
 Main GUI module, huge, could stand to be parted out
 '''
 try:
-    import tkinter as tk                            #for GUI stuff
+    import tkinter as tk                        #for GUI stuff
     from tkinter import ttk, messagebox, filedialog #for GUI stuff
-    from PIL import Image,ImageTk                   #for converting PNG to formats that tk can use
+    from PIL import Image,ImageTk                 #for converting PNG to formats that tk can use
 except ModuleNotFoundError as e:
     print(e)
 
-import json                   #for reading JSON
-import os                     #for filesystem manipulation
-import random                 #for choosing random app titles
-import re                     #for regexes in hyperlinks in about box
-import sys                    #for filesystem manipulation
-import time                   #for timekeeping
-import traceback              #for error reporting
-import urllib                 #for getting latest version number from GitHub Pages
+import json                 #for reading JSON
+import os                   #for filesystem manipulation
+import random               #for choosing random app titles
+import re                   #for regexes in hyperlinks in about box
+import sys                  #for filesystem manipulation
+import time                 #for timekeeping
+import traceback            #for error reporting
+import urllib               #for getting latest version number from GitHub Pages
 import webbrowser             #for launching browser from about box
 from functools import partial #for passing parameters to user-triggered function calls
 
@@ -59,17 +59,17 @@ def make_GUI(command_line_args):
         # FIXME: English
         if exception.__name__.upper() == "NOTIMPLEMENTEDERROR":
             messagebox.showerror(
-                "Not Yet Implemented",
-                "This function is not yet implemented\n\n" +
-                str(message)
+              "Not Yet Implemented",
+              "This function is not yet implemented\n\n" +
+              str(message)
             )
         else:
             messagebox.showerror(
-                "FATAL ERROR",
-                "While running, encountered fatal error:\n\n" +
-                f"{exception.__name__.upper()}\n" +
-                f"{str(message)}\n"+
-                f"{traceback.format_exc()}"
+              "FATAL ERROR",
+              "While running, encountered fatal error:\n\n" +
+              f"{exception.__name__.upper()}\n" +
+              f"{str(message)}\n"+
+              f"{traceback.format_exc()}"
             )
     tk.Tk.report_callback_exception = show_error  #tie this in so we see errors when they happen
 
@@ -225,19 +225,19 @@ class SpriteSomethingMainFrame(tk.Frame):
             #    command: Command to associate with button, default to None
             '''
             icon_path = common.get_resource(
-                ["meta","icons"],
-                image_filename if image_filename is not None else "blank.png"
+              ["meta","icons"],
+              image_filename if image_filename is not None else "blank.png"
             )
             img = ImageTk.PhotoImage(Image.open(icon_path)) if icon_path else None
             display_text = self.fish.translate("meta",fish_key,fish_subkey)
             button = tk.Button(
-                toolbar,
-                image=img,
-                relief=tk.FLAT,
-                width=16,
-                height=16,
-                command=command,
-                state="disabled" if command is None else "normal"
+              toolbar,
+              image=img,
+              relief=tk.FLAT,
+              width=16,
+              height=16,
+              command=command,
+              state="disabled" if command is None else "normal"
             )
             button.img = img
             widgetlib.ToolTip(button,display_text)
@@ -259,28 +259,28 @@ class SpriteSomethingMainFrame(tk.Frame):
         toolbar.pack(side=tk.TOP,fill=tk.X)
         toolbar_buttons = [
             (
-                # File -> Open
-                ["menu","file.open"],
-                "open.png",
-                self.open_file
+              # File -> Open
+              ["menu","file.open"],
+              "open.png",
+              self.open_file
             ),
             (
-                # File -> Save
-                ["menu","file.save"],
-                "save.png",
-                self.save_file_as
+              # File -> Save
+              ["menu","file.save"],
+              "save.png",
+              self.save_file_as
             ),
             (
-                # Export -> Inject
-                ["menu","export.inject"],
-                "inject.png",
-                self.inject_into_ROM
+              # Export -> Inject
+              ["menu","export.inject"],
+              "inject.png",
+              self.inject_into_ROM
             ),
             (
-                # Export -> Inject Copy
-                ["menu","export.inject-new"],
-                "inject-new.png",
-                self.copy_into_ROM
+              # Export -> Inject Copy
+              ["menu","export.inject-new"],
+              "inject-new.png",
+              self.copy_into_ROM
             )
         ]
         create_toolbar_buttons(toolbar_buttons)
@@ -339,9 +339,9 @@ class SpriteSomethingMainFrame(tk.Frame):
             self.fish.translate("meta","menu","file"),
             "file_menu",
             [
-                (self.fish.translate("meta","menu","file.open"),"open",self.open_file),
-                (self.fish.translate("meta","menu","file.save"),"save",self.save_file_as),
-                (self.fish.translate("meta","menu","file.exit"),"exit",self.exit)
+              (self.fish.translate("meta","menu","file.open"),"open",self.open_file),
+              (self.fish.translate("meta","menu","file.save"),"save",self.save_file_as),
+              (self.fish.translate("meta","menu","file.exit"),"exit",self.exit)
             ]
         )
         menu_options.append(file_menu)
@@ -351,80 +351,80 @@ class SpriteSomethingMainFrame(tk.Frame):
             self.fish.translate("meta","menu","export"),
             "export_menu",
             [
-                (
-                    self.fish.translate("meta","menu","export.inject"),
-                    "inject",
-                    self.inject_into_ROM
-                ),
-                (
-                    self.fish.translate("meta","menu","export.inject-new"),
-                    "inject-new",
-                    self.copy_into_ROM
-                ),
-                (
-                    self.fish.translate("meta","menu","export.inject-bulk"),
-                    "inject-bulk",
-                    self.inject_into_ROM_bulk
-                ),
-                (None,None,None),
-                (
-                    self.fish.translate("meta","menu","export.frame-as-png"),
-                    "frame-as-png",
-                    self.export_frame_as_png
-                ),
-                (
-                    self.fish.translate("meta","menu","export.animation-as-gif"),
-                    "animation-as-gif",
-                    self.export_animation_as_gif
-                ),
-                (
-                    self.fish.translate("meta","menu","export.animation-as-hcollage"),
-                    "animation-as-hcollage",
-                    partial(self.export_animation_as_collage,"horizontal")
-                ),
-                # (
-                #     self.fish.translate("meta","menu","export.animation-as-vcollage"),
-                #     "animation-as-vcollage",
-                #     None
-                # ),
-                #partial(self.export_animation_as_collage,"vertical")),
-                (None,None,None),
-                (
-                    self.fish.translate("meta","menu","export.sprite-4bpp"),
-                    "sprite-4bpp",
-                    partial(self.export_sprite,"4bpp")
-                ),
-                (None,None,None),
-                (
-                    self.fish.translate("meta","menu","export.palette-binary"),
-                    "palette-binary",
-                    partial(self.export_palette,"binary")
-                ),
-                (
-                    self.fish.translate("meta","menu","export.palette-aspr"),
-                    "palette-aspr",
-                    partial(self.export_palette,"aspr")
-                ),
-                (
-                    self.fish.translate("meta","menu","export.palette-gimp"),
-                    "palette-gimp",
-                    partial(self.export_palette,"gimp")
-                ),
-                (
-                    self.fish.translate("meta","menu","export.palette-jasc"),
-                    "palette-jasc",
-                    partial(self.export_palette,"jasc")
-                ),
-                (
-                    self.fish.translate("meta","menu","export.palette-pdn"),
-                    "palette-pdn",
-                    partial(self.export_palette,"pdn")
-                ),
-                (
-                    self.fish.translate("meta","menu","export.palette-tileshop"),
-                    "palette-tileshop",
-                    partial(self.export_palette,"tileshop")
-                )
+              (
+                  self.fish.translate("meta","menu","export.inject"),
+                  "inject",
+                  self.inject_into_ROM
+              ),
+              (
+                  self.fish.translate("meta","menu","export.inject-new"),
+                  "inject-new",
+                  self.copy_into_ROM
+              ),
+              (
+                  self.fish.translate("meta","menu","export.inject-bulk"),
+                  "inject-bulk",
+                  self.inject_into_ROM_bulk
+              ),
+              (None,None,None),
+              (
+                  self.fish.translate("meta","menu","export.frame-as-png"),
+                  "frame-as-png",
+                  self.export_frame_as_png
+              ),
+              (
+                  self.fish.translate("meta","menu","export.animation-as-gif"),
+                  "animation-as-gif",
+                  self.export_animation_as_gif
+              ),
+              (
+                  self.fish.translate("meta","menu","export.animation-as-hcollage"),
+                  "animation-as-hcollage",
+                  partial(self.export_animation_as_collage,"horizontal")
+              ),
+              # (
+              #     self.fish.translate("meta","menu","export.animation-as-vcollage"),
+              #     "animation-as-vcollage",
+              #     None
+              # ),
+              #partial(self.export_animation_as_collage,"vertical")),
+              (None,None,None),
+              (
+                  self.fish.translate("meta","menu","export.sprite-4bpp"),
+                  "sprite-4bpp",
+                  partial(self.export_sprite,"4bpp")
+              ),
+              (None,None,None),
+              (
+                  self.fish.translate("meta","menu","export.palette-binary"),
+                  "palette-binary",
+                  partial(self.export_palette,"binary")
+              ),
+              (
+                  self.fish.translate("meta","menu","export.palette-aspr"),
+                  "palette-aspr",
+                  partial(self.export_palette,"aspr")
+              ),
+              (
+                  self.fish.translate("meta","menu","export.palette-gimp"),
+                  "palette-gimp",
+                  partial(self.export_palette,"gimp")
+              ),
+              (
+                  self.fish.translate("meta","menu","export.palette-jasc"),
+                  "palette-jasc",
+                  partial(self.export_palette,"jasc")
+              ),
+              (
+                  self.fish.translate("meta","menu","export.palette-pdn"),
+                  "palette-pdn",
+                  partial(self.export_palette,"pdn")
+              ),
+              (
+                  self.fish.translate("meta","menu","export.palette-tileshop"),
+                  "palette-tileshop",
+                  partial(self.export_palette,"tileshop")
+              )
             ]
         )
         menu_options.append(export_menu)
@@ -435,11 +435,11 @@ class SpriteSomethingMainFrame(tk.Frame):
         not_consoles = []
         with open(
             os.path.join(
-                "resources",
-                "app",
-                "meta",
-                "manifests",
-                "not_consoles.json"
+              "resources",
+              "app",
+              "meta",
+              "manifests",
+              "not_consoles.json"
             ),
             "r",
             encoding="utf-8"
@@ -514,19 +514,19 @@ class SpriteSomethingMainFrame(tk.Frame):
                                             if os.path.isfile(filepath):
                                                 filename = filepath
                                                 break
-                                        bundled_games[console][gamedir]["sprites"].append(
-                                            (
-                                                name,
-                                                partial(self.load_sprite,filename)
-                                            )
-                                        )
+                                    bundled_games[console][gamedir]["sprites"].append(
+                                    (
+                                        name,
+                                        partial(self.load_sprite,filename)
+                                    )
+                                )
         bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")
         for console in bundled_games:
             bundled_console = bundled_games[console]
             bundled_console_menu = tk.Menu(
-                bundle_menu,
-                tearoff=0,
-                name=f"bundled_{console}_menu"
+              bundle_menu,
+              tearoff=0,
+              name=f"bundled_{console}_menu"
             )
             for bundled_game in bundled_console:
                 bundled_game = bundled_games[console][bundled_game]
@@ -542,8 +542,8 @@ class SpriteSomethingMainFrame(tk.Frame):
                     menu=bundled_game_menu
                 )
             bundle_menu.add_cascade(
-                label=self.fish.translate("meta","consoles",console),
-                menu=bundled_console_menu
+              label=self.fish.translate("meta","consoles",console),
+              menu=bundled_console_menu
             )
         self.menu.add_cascade(
             label=self.fish.translate("meta","menu","bundle"),
@@ -780,7 +780,8 @@ class SpriteSomethingMainFrame(tk.Frame):
         #have to do this early so that their values are available for other buttons
         vcr_controls = self.get_vcr_controls()
         self.left_panel.add(self.get_reload_button(),height=1 * BUTTON_HEIGHT)
-        self.attach_metadata_panel()
+        if not self.sprite.view_only:
+            self.attach_metadata_panel()
         self.game.attach_background_panel(
             self.left_panel,
             self.canvas,
@@ -984,9 +985,9 @@ class SpriteSomethingMainFrame(tk.Frame):
                 filetypes=(
                     (
                         self.fish.translate(
-                            "meta",
-                            "dialogue",
-                            "file.save.types.label"
+                          "meta",
+                          "dialogue",
+                          "file.save.types.label"
                         ),
                         "*.png *.gif"
                     ),
@@ -1141,8 +1142,8 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.pause_global_frame_timer()
         ship_palettes = [
             pal for _,pal in self.sprite.get_timed_palette(
-                "ship",
-                "standard"
+              "ship",
+              "standard"
             )
         ]
         for colors in ship_palettes:
@@ -1502,7 +1503,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             #if we've got a filename, set the working dir and load the sprite
             self.working_dirs["file.open"] = filename[:filename.rfind('/')]
             self.load_sprite(filename)
-            return True                #report success to caller, if they care
+            return True              #report success to caller, if they care
         return False             #we didn't open anything
 
     def save_file_as(self):
@@ -1512,65 +1513,66 @@ class SpriteSomethingMainFrame(tk.Frame):
         # TODO: When ZSPR export is implemented,
         # switch this around so that ZSPR is the default
         '''
-        filetypes = [
-            #FIXME: Supported filetypes
-            ".png",     # Main input
-            ".4bpp",    # Raw
-            ".zspr",    # Z3Link
-            # ".sfc",     # SNES
-            # ".smc",     # SNES
-            # ".nes",     # NES
-            ".bmp",     # FFMQBen
-            # ".zip",     # Mo3Player
-            # ".aspr",    # ASPR (WIP)
-            ".zhx",     # ZHX (WIP)
-            ".rdc"      # Z3Link/M3Samus
-        ]
-        savetypes = []
-        for filetype in filetypes:
-            savetypes.append(
-                (
-                    self.fish.translate(
-                        "meta",
-                        "dialogue",
-                        f"file.save{filetype}"
-                    ),
-                    f"*{filetype}"
+        if not self.sprite.view_only:
+            filetypes = [
+                #FIXME: Supported filetypes
+                ".png",     # Main input
+                ".4bpp",    # Raw
+                ".zspr",    # Z3Link
+                # ".sfc",     # SNES
+                # ".smc",     # SNES
+                # ".nes",     # NES
+                ".bmp",     # FFMQBen
+                # ".zip",     # Mo3Player
+                # ".aspr",    # ASPR (WIP)
+                ".zhx",     # ZHX (WIP)
+                ".rdc"      # Z3Link/M3Samus
+            ]
+            savetypes = []
+            for filetype in filetypes:
+                savetypes.append(
+                    (
+                        self.fish.translate(
+                            "meta",
+                            "dialogue",
+                            f"file.save{filetype}"
+                        ),
+                        f"*{filetype}"
+                    )
                 )
-            )
-        savetypes = tuple(savetypes)
+            savetypes = tuple(savetypes)
 
-        filename = ""
-        if "sprite.name" in self.sprite.metadata:
-            filename = self.sprite.metadata["sprite.name"]
-        else:
-            # FIXME: English
-            filename = "unknown"
-        filename = common.filename_scrub(filename)
-
-        filename = filedialog.asksaveasfilename(
-            defaultextension=(filetypes[0]),
-            initialfile=filename,
-            initialdir=self.working_dirs["file.save"],
-            title=self.fish.translate("meta","dialogue","file.save.title"),
-            filetypes=savetypes
-        )
-        if filename:
-            save_success_bool = self.sprite.save_as(filename, self.game.name)
-            if save_success_bool:
-                self.unsaved_changes = False
-                self.working_dirs["file.save"] = os.path.dirname(filename)
-                messagebox.showinfo("Save Complete", f"Saved as {filename}")
-                self.save_working_dirs()
+            filename = ""
+            if "sprite.name" in self.sprite.metadata:
+                filename = self.sprite.metadata["sprite.name"]
             else:
                 # FIXME: English
-                filext = os.path.splitext(filename)[1][1:].upper()
-                messagebox.showerror(
-                    "Not Yet Implemented",
-                    f"{filext} format not yet available for {self.game.name}" +
-                    f" / {self.sprite.classic_name} Sprites."
-                )
-            return save_success_bool
+                filename = "unknown"
+            filename = common.filename_scrub(filename)
+
+            filename = filedialog.asksaveasfilename(
+                defaultextension=(filetypes[0]),
+                initialfile=filename,
+                initialdir=self.working_dirs["file.save"],
+                title=self.fish.translate("meta","dialogue","file.save.title"),
+                filetypes=savetypes
+            )
+            if filename:
+                save_success_bool = self.sprite.save_as(filename, self.game.name)
+                if save_success_bool:
+                    self.unsaved_changes = False
+                    self.working_dirs["file.save"] = os.path.dirname(filename)
+                    messagebox.showinfo("Save Complete", f"Saved as {filename}")
+                    self.save_working_dirs()
+                else:
+                    # FIXME: English
+                    filext = os.path.splitext(filename)[1][1:].upper()
+                    messagebox.showerror(
+                        "Not Yet Implemented",
+                        f"{filext} format not yet available for {self.game.name}" +
+                        f" / {self.sprite.classic_name} Sprites."
+                    )
+                return save_success_bool
         #user cancelled out of the prompt,
         # in which case report that you did not save
         # (i.e. for exiting the program)
@@ -1582,106 +1584,115 @@ class SpriteSomethingMainFrame(tk.Frame):
         # Inbound:
         #    inject: Are we injecting directly or making a copy?
         '''
-        dest_filename = None
-        default_ext = ""
-        if self.game.console_name == "nes":
-            default_ext = ".nes"
-        elif self.game.console_name == "snes":
-            default_ext = ".sfc"
-        if inject:
-            dest_filename = filedialog.asksaveasfilename(
-                defaultextension=default_ext,
-                initialdir=self.working_dirs["export.dest"],
-                title=self.fish.translate(
-                    "meta",
-                    "dialogue",
-                    "export.inject.title"
-                ),
-                filetypes=(
-                    (
-                        self.fish.translate(
-                            "meta",
-                            "dialogue",
-                            "export.inject.types"
-                        ),
-                        "*.sfc *.smc"
-                    ),
-                )
-            )
-            source_filename = dest_filename
-        else:
-            source_filename = filedialog.askopenfilename(
-                initialdir=self.working_dirs["export.source"],
-                title=self.fish.translate(
-                    "meta",
-                    "dialogue",
-                    "export.source.title"
-                ),
-                filetypes=(
-                    (
-                        self.fish.translate(
-                            "meta",
-                            "dialogue",
-                            "export.source.types"
-                        ),
-                        "*.sfc *.smc"
-                    ),
-                )
-            )
-            if source_filename:
-                _,file_extension = os.path.splitext(source_filename)
-                if file_extension.lower() in ['.sfc','.smc']:
-                    default_extension = file_extension.lower()
-                else:
-                    default_extension = default_ext
-                dest_filename = os.path.splitext(source_filename)[0] + "_modified"
+        if not self.sprite.view_only:
+            dest_filename = None
+            default_ext = ""
+            if self.game.console_name == "nes":
+                default_ext = ".nes"
+            elif self.game.console_name == "snes":
+                default_ext = ".sfc"
+            if inject:
                 dest_filename = filedialog.asksaveasfilename(
-                    defaultextension=default_extension,
-                    initialfile=dest_filename,
+                    defaultextension=default_ext,
                     initialdir=self.working_dirs["export.dest"],
                     title=self.fish.translate(
                         "meta",
                         "dialogue",
-                        "export.inject-new.title"
+                        "export.inject.title"
+                    ),
+                    filetypes=(
+                        (
+                          self.fish.translate(
+                              "meta",
+                              "dialogue",
+                              "export.inject.types"
+                          ),
+                          "*.sfc *.smc"
+                        ),
+                    )
+                )
+                source_filename = dest_filename
+            else:
+                source_filename = filedialog.askopenfilename(
+                    initialdir=self.working_dirs["export.source"],
+                    title=self.fish.translate(
+                        "meta",
+                        "dialogue",
+                        "export.source.title"
                     ),
                     filetypes=(
                         (
                             self.fish.translate(
                                 "meta",
                                 "dialogue",
-                                "export.inject-new.types"
+                                "export.source.types"
+                            ),
+                            "*.sfc *.smc"
+                        ),
+                    )
+                )
+                if source_filename:
+                    _,file_extension = os.path.splitext(source_filename)
+                    if file_extension.lower() in ['.sfc','.smc']:
+                        default_extension = file_extension.lower()
+                    else:
+                        default_extension = default_ext
+                    dest_filename = os.path.splitext(source_filename)[0] + "_modified"
+                    dest_filename = filedialog.asksaveasfilename(
+                        defaultextension=default_extension,
+                        initialfile=dest_filename,
+                        initialdir=self.working_dirs["export.dest"],
+                        title=self.fish.translate(
+                            "meta",
+                            "dialogue",
+                            "export.inject-new.title"
+                        ),
+                        filetypes=(
+                            (
+                                self.fish.translate(
+                                    "meta",
+                                    "dialogue",
+                                    "export.inject-new.types"
                                 ),
                                 "*.sfc *.smc"
                             ),
                         )
                     )
-        if dest_filename:
-            rom = self.game.get_rom_from_filename(source_filename)
-            modified_rom = self.sprite.inject_into_ROM(
-                self.animation_engine.spiffy_dict,
-                rom
-            )
-            #print(modified_rom.get_patch())
-            modified_rom.save(dest_filename, overwrite=True)
-            self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
-            self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
-            # FIXME: English
-            messagebox.showinfo(
-                "Export success",
-                f"Saved injected ROM as {dest_filename}"
-            )
-
-    def copy_into_ROM_bulk(self, inject=False):
-        '''
-        #query user for directory to inject sprite into
-        '''
-        source_filepath = None
-        if inject:
-            #only injection is supported
-            source_filepath = filedialog.askdirectory()
+            if dest_filename:
+                rom = self.game.get_rom_from_filename(source_filename)
+                modified_rom = self.sprite.inject_into_ROM(
+                    self.animation_engine.spiffy_dict,
+                    rom
+                )
+                #print(modified_rom.get_patch())
+                modified_rom.save(dest_filename, overwrite=True)
+                self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
+                self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
+                # FIXME: English
+                messagebox.showinfo(
+                    "Export success",
+                    f"Saved injected ROM as {dest_filename}"
+                )
         else:
-            # FIXME: English
-            raise AssertionError("Unsure if making copies fits this purpose well")
+            #FIXME: English
+            messagebox.showerror("Not Implemented", f"Injecting not available for {self.game.name}/{sepf.sprite.classic_name} Sprites.")
+
+    #query user for directory to inject sprite into
+    def copy_into_ROM_bulk(self, inject=False):
+        source_filepath = None
+        supported_consoles = [ "pc", "nes", "snes" ]
+        if self.sprite.view_only and self.game.console_name in supported_consoles:
+            supported_consoles.remove(self.game.console_name)
+
+        if self.game.console_name in supported_consoles:
+            if inject:
+                source_filepath = filedialog.askdirectory()	#only injection is supported
+            else:
+                #FIXME: English
+                raise AssertionError("Unsure if making copies fits this purpose well")
+        else:
+            messagebox.showerror("Not Implemented","Injection not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+            return
 
         #walk through the game files and inject the loaded sprite
         source_filenames = []
@@ -2073,20 +2084,20 @@ class SpriteSomethingMainFrame(tk.Frame):
         def txtEvent(event):
             return "break"
         lines = [
-                    "SpriteSomething v" + CONST.APP_VERSION,
-                    "",
-                    "Created by:",
-                    "[Artheau](http://github.com/Artheau/PixelArt)",
-                    "[Minnie A. Trethewey](http://github.com/miketrethewey)",
-                    "",
-                    "Thanks to:",
-                    "[Auximines](https://metroidfanon.fandom.com/wiki/Super_Justin_Bailey) for initial inspiration for custom Super Metroid sprites",
-                     "[Pneumatic](http://twitch.tv/pneumaticgaming) for datastamp for Super Metroid/Samus sprites",
-                    "",
-                    "Based on:",
-                    "[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
-                    "[ZSpriteTools](http://github.com/sosuke3/ZSpriteTools) by Sosuke3",
-                    # Assets from SpriteAnimator & ZSpriteTools used with permission
+            "SpriteSomething v" + CONST.APP_VERSION,
+            "",
+            "Created by:",
+            "[Artheau](http://github.com/Artheau/PixelArt)",
+            "[Minnie A. Trethewey](http://github.com/miketrethewey)",
+            "",
+            "Thanks to:",
+            "[Auximines](https://metroidfanon.fandom.com/wiki/Super_Justin_Bailey) for initial inspiration for custom Super Metroid sprites",
+            "[Pneumatic](http://twitch.tv/pneumaticgaming) for datastamp for Super Metroid/Samus sprites",
+            "",
+            "Based on:",
+            "[SpriteAnimator](http://github.com/spannerisms/SpriteAnimator) by Spannerisms",
+            "[ZSpriteTools](http://github.com/sosuke3/ZSpriteTools) by Sosuke3",
+            # Assets from SpriteAnimator & ZSpriteTools used with permission
         ]
         about = tk.Tk()
         about.title(f"About {self.app_title}")
@@ -2170,7 +2181,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                 self.app_title,
                 self.fish.translate("meta","dialogue","exit.save-before-exit")
             )
-            if save_before_exit is not None:                #didn't cancel
+            if save_before_exit is not None:              #didn't cancel
                 if save_before_exit:
                     saved = self.save_file_as()
                     if not saved:

@@ -7,14 +7,13 @@
 
 import itertools
 import json
-import os
 from PIL import Image, ImageOps, ImageDraw
 from source.meta.common import common
 
 
 class Layout():
     def __init__(self, filename, sprite_name=""):
-        with open(filename) as inFile:
+        with open(filename, "r", encoding="utf-8") as inFile:
             self.data = json.load(inFile)
         self.reverse_lookup = {}
         # print("Finding Layouts!")
@@ -132,6 +131,7 @@ class Layout():
             #FIXME: English
             #print(f"Key not found in layout.json while investigating {image_name}")
             pass
+        return None
 
     def make_horizontal_collage(self, image_list):
         #assembles images horizontally and encapsulates them in a border.
@@ -242,7 +242,9 @@ class Layout():
 
         all_images["transparent"] = Image.new("RGBA",(0,0),0)
 
-        master_palettes = list(all_images["palette_block"].convert("RGB").getdata()) if "palette_block" in all_images else []
+        master_palettes = list(
+            all_images["palette_block"].convert("RGB").getdata()) \
+            if "palette_block" in all_images else []
 
         if len(master_palettes):
             for image_name, this_image in all_images.items():

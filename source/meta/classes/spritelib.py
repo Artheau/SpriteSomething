@@ -42,6 +42,7 @@ class SpriteParent():
         self.filename = filename
         self.input_dims = []
         self.overview_scale_factor = 2
+        self.overhead = True
         self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
         if "input" in manifest_dict and \
             "png" in manifest_dict["input"]:
@@ -369,7 +370,7 @@ class SpriteParent():
         assembled_image, offset = self.assemble_tiles_to_completed_image(tile_list)
         return assembled_image, offset
 
-    def get_representative_images(self,style="default"):
+    def get_representative_images(self, style="default"):
         if self.view_only:
             return []
 
