@@ -1,3 +1,8 @@
 from git_clean import git_clean
 
-git_clean(clean_user=True)
+
+def main():
+  git_clean(clean_user=True)
+
+if __name__ == "__main__":
+  main()

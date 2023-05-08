@@ -1,51 +1,51 @@
 {
-	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://raw.githubusercontent.com/Artheau/SpriteSomething/master/schema/backgrounds.schema.json",
-	"type": "object",
-	"title": "SpriteSomething Background Images Schema",
-	"description": "A list of background images available for use in the animations window",
-	"required": [
-		"backgrounds"
-	],
-	"properties": {
-		"backgrounds": {
-			"$id": "#/properties/backgrounds",
-			"type": "array",
-			"title": "Background Definitions",
-			"items": {
-				"$id": "#/items",
-				"type": "object",
-				"title": "Background Definition",
-				"description": "An object that describes one background image",
-				"required": [
-					"filename",
-					"title"
-				],
-				"properties": {
-					"filename": {
-						"$id": "#/items/properties/filename",
-						"type": "string",
-						"title": "Background Filename",
-						"description": "Local filename and extension for the background image",
-						"default": "",
-						"examples": [
-							"ship.png"
-						],
-						"pattern": "^(.*)$"
-					},
-					"title": {
-						"$id": "#/items/properties/title",
-						"type": "string",
-						"title": "Background Title",
-						"description": "Pretty title for display in backgrounds drop-down menu",
-						"default": "",
-						"examples": [
-							"Samus' Ship"
-						],
-						"pattern": "^(.*)$"
-					}
-				}
-			}
-		}
-	}
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/Artheau/SpriteSomething/master/schema/backgrounds.schema.json",
+  "type": "object",
+  "title": "SpriteSomething Background Images Schema",
+  "description": "A list of background images available for use in the animations window",
+  "required": [
+    "backgrounds"
+  ],
+  "properties": {
+    "backgrounds": {
+      "$id": "#/properties/backgrounds",
+      "type": "array",
+      "title": "Background Definitions",
+      "items": {
+        "$id": "#/items",
+        "type": "object",
+        "title": "Background Definition",
+        "description": "An object that describes one background image",
+        "required": [
+          "filename",
+          "title"
+        ],
+        "properties": {
+          "filename": {
+            "$id": "#/items/properties/filename",
+            "type": "string",
+            "title": "Background Filename",
+            "description": "Local filename and extension for the background image",
+            "default": "",
+            "examples": [
+              "ship.png"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "title": {
+            "$id": "#/items/properties/title",
+            "type": "string",
+            "title": "Background Title",
+            "description": "Pretty title for display in backgrounds drop-down menu",
+            "default": "",
+            "examples": [
+              "Samus' Ship"
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    }
+  }
 }

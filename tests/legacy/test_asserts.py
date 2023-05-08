@@ -1,17 +1,17 @@
 #unit testing framework
-#I have no idea what I'm doing:	http://www.quickmeme.com/meme/3p0di5
+#I have no idea what I'm doing:  http://www.quickmeme.com/meme/3p0di5
 #
 #
 #The intention is that most unit tests will go here, excepting the ones that do not play well with the others,
 # which at the time of writing this comment, are the tests for memory leaks and stray imports (test_gc.py and test_waterfalls.py)
 
-from tests.legacy.common_vars import *	#contains utilities common to all tests.	Should come first before the other imports.
+from tests.legacy.common_vars import LINK_FILENAME,LINK_RESOURCE_PATH,LINK_RESOURCE_SUBPATH,SAMUS_FILENAME,SAMUS_RESOURCE_PATH,SAMUS_RESOURCE_SUBPATH  #contains utilities common to all tests.  Should come first before the other imports.
 
-import unittest				#for unit testing, har har
-import json						#need to audit our json files
-import os							#for path.join and similar, to find the files we want to audit
-import tkinter as tk	#testing tk wrappers
-import tempfile				#for mock-saving files, in order to check the validity of the save
+import unittest     #for unit testing, har har
+import json         #need to audit our json files
+import os           #for path.join and similar, to find the files we want to audit
+import tkinter as tk   #testing tk wrappers
+import tempfile   #for mock-saving files, in order to check the validity of the save
 from PIL import ImageChops #for testing if images are same/different
 
 from source.meta.gui import gui #need to import the GUI to test it
@@ -19,11 +19,11 @@ from source.snes.zelda3.link import sprite as link_sprite_library
 from source.snes.metroid3.samus import sprite as samus_sprite_library
 
 class ExportAudit(unittest.TestCase):
-	def same(self, file1, file2):	 #not a test, just a helper function
+	def same(self, file1, file2):   #not a test, just a helper function
 		return file1.read() == file2.read()
 
 	def test_link_zspr_export(self):
-		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH, "")
+		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH)
 		_, temporary_zspr_filename = tempfile.mkstemp()
 		self.assertTrue(link_sprite.save_as_ZSPR(temporary_zspr_filename))
 		with open(LINK_FILENAME,"rb") as original_file_contents:
@@ -31,7 +31,7 @@ class ExportAudit(unittest.TestCase):
 				self.assertTrue(self.same(original_file_contents,temp_zspr))
 
 	def test_link_rdc_export(self):
-		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH, "")
+		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH)
 		_, temporary_rdc_filename = tempfile.mkstemp()
 		self.assertTrue(link_sprite.save_as_RDC(temporary_rdc_filename))
 		LINK_RDC_FILENAME = os.path.join(LINK_RESOURCE_PATH,"sheets","link.rdc")
@@ -40,7 +40,6 @@ class ExportAudit(unittest.TestCase):
 				self.assertTrue(self.same(original_file_contents,temp_rdc))
 
 	def test_samus_rdc_export(self):
-		pass
 		return
 		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH)
 		_, temporary_rdc_filename = tempfile.mkstemp()
@@ -67,7 +66,7 @@ class SamusAnimationAudit(unittest.TestCase):
 		for animation in self.samus_animations.values():
 			for directed_animation in animation.values():
 				for pose in directed_animation: #directed_animation is a list, not a dict
-					for tile in pose["tiles"]:	#pose["tiles"] is a list, not a dict
+					for tile in pose["tiles"]:  #pose["tiles"] is a list, not a dict
 						if not tile["image"].startswith("optional_"):
 							referenced_images.add(tile["image"])
 
@@ -90,7 +89,7 @@ class SamusAnimationAudit(unittest.TestCase):
 class SpiffyButtonAudit(unittest.TestCase):
 	#checks to make sure that sprites respond to the commands from things like spiffy buttons
 	#added this test because our spiffy buttons kept breaking every tiem there was a typoe
-	def image_is_same(self, image1, image2):	#not a test; don't name this "test"
+	def image_is_same(self, image1, image2):  #not a test; don't name this "test"
 		diff = ImageChops.difference(image1, image2)
 		image1_colors = {color:count for (count,color) in image1.getcolors()}
 		image2_colors = {color:count for (count,color) in image2.getcolors()}
@@ -110,10 +109,10 @@ class SpiffyButtonAudit(unittest.TestCase):
 								["red_mail", "titan_gloves"],
 								["titan_gloves"],
 							]
-		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH, "")
+		link_sprite = link_sprite_library.Sprite(LINK_FILENAME, {"name":"Link"}, LINK_RESOURCE_SUBPATH)
 
 		old_image = None
-		for i in range(0,len(PALETTES_TO_CHECK)):
+		for i,_ in enumerate(PALETTES_TO_CHECK):
 			new_image = link_sprite.get_image("Stand", "right", 0, PALETTES_TO_CHECK[i], 0)[0]
 			if old_image is not None:
 				with self.subTest(new_palette = PALETTES_TO_CHECK[i], old_palette = PALETTES_TO_CHECK[i-1]):
@@ -135,10 +134,10 @@ class SpiffyButtonAudit(unittest.TestCase):
 								["door_variant"],
 								[],
 							]
-		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH, "")
+		samus_sprite = samus_sprite_library.Sprite(SAMUS_FILENAME, {"name":"Samus"}, SAMUS_RESOURCE_SUBPATH)
 
 		old_image = None
-		for i in range(0,len(PALETTES_TO_CHECK)):
+		for i,_ in enumerate(PALETTES_TO_CHECK):
 			new_image = samus_sprite.get_image("Stand", "right", 0, PALETTES_TO_CHECK[i], 0)[0]
 			if old_image is not None:
 				with self.subTest(new_palette = PALETTES_TO_CHECK[i], old_palette = PALETTES_TO_CHECK[i-1]):
@@ -152,21 +151,21 @@ class GUIRunTimeTests(unittest.TestCase):
 		#make the GUI in skeleton form (no looping)
 		pseudo_command_line_args = {"sprite": LINK_FILENAME}
 		print("Emulated DISPLAY: %s" % os.getenv("DISPLAY","None"))
-		pseudo_root = tk.Tk()		#make a pseudo GUI environment
-		pseudo_root.withdraw()	#make the pseudo GUI invisible
+		pseudo_root = tk.Tk()   #make a pseudo GUI environment
+		pseudo_root.withdraw()  #make the pseudo GUI invisible
 		self.GUI_skeleton = gui.SpriteSomethingMainFrame(pseudo_root, pseudo_command_line_args)
 
 	def minitest_photoimage_does_not_accept_png_files(self):
 		#make sure the photoimage wrapper is not bypassed #TODO: move to its own test
 		try:
-			temp = tk.PhotoImage(file=os.path.join("resources","app","meta","icons","blank.png"))	 #any PNG file can be used here
+			temp = tk.PhotoImage(file=os.path.join("resources","app","meta","icons","blank.png"))   #any PNG file can be used here
 			self.assertFalse("The wrapper in gui_common.py to prevent PNG files from going to PhotoImage has been disabled, maybe by a tk import?")
 		except AssertionError:
 			try:
-				temp = tk.PhotoImage(file=os.path.join("resources","app","meta","icons","app.gif"))	 #any GIF file can be used here
+				temp = tk.PhotoImage(file=os.path.join("resources","app","meta","icons","app.gif"))   #any GIF file can be used here
 				self.assertTrue(True)
 			except AssertionError:
-				self.assertFalse("tk.PhotoImage is not accepting GIF files.	Has it been rerouted?")
+				self.assertFalse("tk.PhotoImage is not accepting GIF files.  Has it been rerouted?")
 
 	def minitest_zoom_function_does_not_crash_app(self):
 		#TODO: tie this test to the button press hooks directly

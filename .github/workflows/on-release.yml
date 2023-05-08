@@ -4,33 +4,46 @@ name: On Release Deployment
 # fire on
 on:
   release:
-    types: [published, prereleased]
+    types: [published, prereleased, released]
+
+#########
+# actions
+#########
+# actions/checkout@v3.5.0
+# actions/setup-python@v4.5.0
 
 # stuff to do
 jobs:
   # Get Release Info
   # Send Discord notification
   discord-notify:
+    # VM settings
+    #  os & python versions
+    strategy:
+      matrix:
+        os-name: [ubuntu-latest]
+        python-version: [3.8]
+
     name: Notify Discord of new Release
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os-name }}
     steps:
       # checkout commit
-      - name: Checkout commit
-        uses: actions/checkout@v1
+      - name: ✔️Checkout commit
+        uses: actions/checkout@v3.5.0
       # install python
-      - name: Install python
-        uses: actions/setup-python@v1
+      - name: 💿Install python
+        uses: actions/setup-python@v4.5.0
         with:
-          python-version: 3.8
+          python-version: ${{ matrix.python-version }}
           architecture: "x64"
       - run: |
           python --version
       # install dependencies via pip
-      - name: Install Dependencies via pip
+      - name: 💿Install Dependencies via pip
         run: |
           python -m pip install pytz requests
       - name: Build Discord Notification Payload
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_RELEASES }}
         run: |
           python ./resources/ci/common/prepare_discord_notif.py

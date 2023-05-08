@@ -1,15 +1,21 @@
 #functions that are utilities common to all GUI functionality were stored here
 #do not merge them with common.py, because common.py is imported by some classes that have no GUI awareness
 
-import io									#for BytesIO() stream.	TODO: Could probably refactor this to use bytearray instead
-import tkinter as tk		 	#for GUI stuff
-from tkinter import ttk, messagebox, filedialog	#for GUI stuff
-import base64							#TODO: I don't know why we import this
+try:
+  from tkinter import ttk, messagebox, filedialog	#for GUI stuff
+  import tkinter as tk     	#for GUI stuff
+except ModuleNotFoundError as e:
+  print(e)
+
+import base64            	#TODO: I don't know why we import this
+import io                	#for BytesIO() stream.  TODO: Could probably refactor this to use bytearray instead
 import json
 import random
-import urllib.request, ssl
-from functools import partial		#for tk debugging
-from source.meta.common.constants import DEBUG_MODE	#for tk debugging
+import ssl
+import sys
+import urllib.request
+from functools import partial    #for tk debugging
+from source.meta.common.constants import DEBUG_MODE  #for tk debugging
 from source.meta.common import common
 
 
@@ -125,9 +131,9 @@ def create_sheet_chooser(console_name,game_name,sheets):
 	return selected_sheet
 
 # download sprites for specified sprite manifest URL
-def get_sprites(self,title,dir,url):
+def get_sprites(self,title,destdir,url,gui=True):
 	success = False	#report success
-	filepath = os.path.join('.',"resources","user",dir)	#save to user_resources/<console_dir>/<game_dir>/<sprite_dir>/sheets/<dir>/*.zspr
+	filepath = os.path.join('.',"resources","user",destdir)	#save to user_resources/<console_dir>/<game_dir>/<sprite_dir>/sheets/<dir>/*.zspr
 	if not os.path.exists(filepath):
 		os.makedirs(filepath)	#make it if we don't have it
 
@@ -138,9 +144,14 @@ def get_sprites(self,title,dir,url):
 	sprites = json.loads(sprites_req.read().decode("utf-8"))
 	#get an iterator and a counter for a makeshift progress bar
 	total = len(sprites)
+	if "file" not in sprites[0]:
+		total -= 1
 	# FIXME: English
-	print("	 Downloading " + title + " Sprites")
-	messagebox.showwarning("Downloading " + title + " Sprites","Wait a little bit, dude, there's " + str(total) + " sprites.")
+	print("   Downloading " + title + " Sprites")
+	wintitle = "Downloading " + title + " Sprites"
+	winbody = "Wait a little bit, dude, there's " + str(total) + " sprites."
+	winquestion = "Are you a bad enough dude to get that many?"
+	dodownload = (gui == False) or messagebox.askyesno(wintitle,winbody + "\n\n" + winquestion)
 #	downloader = tk.Tk()
 #	downloader.title("Downloading " + title + " Sprites")
 #	dims = {
@@ -154,11 +165,14 @@ def get_sprites(self,title,dir,url):
 #	self.progressbar.pack(side=tk.TOP,pady=10)
 #	self.progressbar["maximum"] = total
 
-	for i,sprite in enumerate(sprites):
-		sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
-		sprite_destination = os.path.join(filepath,sprite_filename)	#set the destination
-		if not os.path.exists(sprite_destination):	#if we don't have it, download it
-			with open(sprite_destination, "wb") as g:
+	if dodownload:
+		i = 0
+		for _,sprite in enumerate(sprites):
+			if "file" not in sprite:
+				continue
+			sprite_filename = sprite["file"][sprite["file"].rfind('/')+1:]	#get the filename
+			sprite_destination = os.path.join(filepath,sprite_filename)	#set the destination
+			if not os.path.exists(sprite_destination):	#if we don't have it, download it
 				sprite_data_req = urllib.request.Request(
 					sprite["file"],
 					data=None,
@@ -166,15 +180,36 @@ def get_sprites(self,title,dir,url):
 						"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36"
 					}
 				)
-				sprite_data_req = urllib.request.urlopen(sprite_data_req, context=context)
-				sprite_data = sprite_data_req.read()
+				try:
+					sprite_data_req = urllib.request.urlopen(sprite_data_req, context=context)
+				except urllib.error.HTTPError as e:
+					if e.code == 404:
+						# print("Sprite not found!")
+						pass
+					elif e.code == 403:
+						# print("Sprite not authorized!")
+						pass
+					# FIXME: English
+					print("    [%s] %s/%d: %s" % (str(e.code).ljust(len("Skipping") - 2), str(i+1).rjust(len(str(total))), total, sprite_filename))
+					i += 1
+					continue
+				with open(sprite_destination, "wb") as g:
+					sprite_data = sprite_data_req.read()
+					# FIXME: English
+					print("    Writing  %s/%d: %s" % (str(i+1).rjust(len(str(total))), total, sprite_filename))
+					g.write(sprite_data)
+					success = True
+			else:	#if we do have it, next!
 				# FIXME: English
-				print("		Writing " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
-				g.write(sprite_data)
-				success = True
-		else:	#if we do have it, next!
-			# FIXME: English
-			print("		Skipping " + str(i+1).rjust(len(str(total))) + '/' + str(total) + ": " + sprite_filename)
-#		self.progressbar["value"] = (((i+1)/total)*100)
-#	downloader.destroy()
+				print("    Skipping %s/%d: %s" % (str(i+1).rjust(len(str(total))), total, sprite_filename))
+			i += 1
+	#		self.progressbar["value"] = (((i+1)/total)*100)
+	#	downloader.destroy()
 	return success
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

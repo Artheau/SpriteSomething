@@ -3,23 +3,22 @@
   "metroid3": [
     "ZSM",
     "      SM RANDOMIZER  ",
-		"Super Metroid",
-		"Hyper Metroid",
-		"SMRv",
-		"M3 Y-Faster Hack",
-		"Metroid: Redesign"
-	],
-
+    "Super Metroid",
+    "Hyper Metroid",
+    "SMRv",
+    "M3 Y-Faster Hack",
+    "Metroid: Redesign"
+  ],
   "mother3": [
     "EARTH BOUND",
     "MOTHER-2"
   ],
-
-	"zelda3": [
-		"ZSM",
-		"ZELDANODENSETSU",
-		"VT ",
-		"ER ",
-		"THE LEGEND OF ZELDA"
-	]
+  "zelda3": [
+    "ZSM",
+    "ZELDANODENSETSU",
+    "VT ",
+    "ER ",
+    "THE LEGEND OF ZELDA",
+    "ALTTPRAC"
+  ]
 }

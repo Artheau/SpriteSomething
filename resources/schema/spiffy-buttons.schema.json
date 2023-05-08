@@ -1,94 +1,94 @@
 {
-	"$schema": "http://json-schema.org/draft-07/schema#",
-	"$id": "https://raw.githubusercontent.com/Artheau/SpriteSomething/master/schema/spiffy-buttons.schema.json",
-	"type": "object",
-	"title": "SpriteSomething Spiffy Button Layout Schema",
-	"properties": {
-		"button-groups": {
-			"$id": "#/properties/button-groups",
-			"type": "array",
-			"title": "Spiffy Button Groups",
-			"items": {
-				"$id": "#/items",
-				"type": "object",
-				"title": "Spiffy Button Group",
-				"description": "Definition of a Spiffy Button Group that is a contained radio button set",
-				"required": [
-					"group-fish-key",
-					"buttons"
-				],
-				"properties": {
-					"group-fish-key": {
-						"$id": "#/items/properties/group-fish-key",
-						"type": "string",
-						"title": "Group Fish Key",
-						"description": "The Translation Key for this Spiffy Button Group to send to the BabelFish",
-						"default": "",
-						"examples": [
-							"mail"
-						],
-						"pattern": "^(.*)$"
-					},
-					"buttons": {
-						"$id": "#/items/properties/buttons",
-						"type": "array",
-						"title": "Spiffy Buttons",
-						"description": "An array of Spiffy Buttons that belong to this Spiffy Button Group",
-						"items": {
-							"$id": "#/items/properties/buttons/items",
-							"type": "object",
-							"title": "Spiffy Button Properties",
-							"description": "Specifics about this Spiffy Button",
-							"properties": {
-								"meta": {
-									"$id": "#/items/properties/buttons/items/properties/meta",
-									"type": "string",
-									"title": "Meta Button",
-									"description": "This is a layout key that will add a newline or a blank space",
-									"default": "",
-									"enum": [
-										"newline",
-										"blank"
-									]
-								},
-								"fish-subkey": {
-									"$id": "#/items/properties/buttons/items/properties/fish-subkey",
-									"type": "string",
-									"title": "Fish Subkey",
-									"description": "The Translation Key for this specific Spiffy Button to send to the BabelFish",
-									"default": "",
-									"examples": [
-										"green"
-									],
-									"pattern": "^(.*)$"
-								},
-								"img": {
-									"$id": "#/items/properties/buttons/items/properties/img",
-									"type": "string",
-									"title": "Spiffy Button Image filename",
-									"description": "Local filename and extension for this Spiffy Button",
-									"default": "",
-									"examples": [
-										"mail-green.png"
-									],
-									"pattern": "^(.*)$"
-								},
-								"default": {
-									"$id": "#/items/properties/buttons/items/properties/default",
-									"type": "boolean",
-									"title": "Default Spiffy Button",
-									"description": "Tell the GUI that this is the default-selected Spiffy Button for this Spiffy Button Group",
-									"default": false,
-									"enum": [
-										true,
-										false
-									]
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/Artheau/SpriteSomething/master/schema/spiffy-buttons.schema.json",
+  "type": "object",
+  "title": "SpriteSomething Spiffy Button Layout Schema",
+  "properties": {
+    "button-groups": {
+      "$id": "#/properties/button-groups",
+      "type": "array",
+      "title": "Spiffy Button Groups",
+      "items": {
+        "$id": "#/items",
+        "type": "object",
+        "title": "Spiffy Button Group",
+        "description": "Definition of a Spiffy Button Group that is a contained radio button set",
+        "required": [
+          "group-fish-key",
+          "buttons"
+        ],
+        "properties": {
+          "group-fish-key": {
+            "$id": "#/items/properties/group-fish-key",
+            "type": "string",
+            "title": "Group Fish Key",
+            "description": "The Translation Key for this Spiffy Button Group to send to the BabelFish",
+            "default": "",
+            "examples": [
+              "mail"
+            ],
+            "pattern": "^(.*)$"
+          },
+          "buttons": {
+            "$id": "#/items/properties/buttons",
+            "type": "array",
+            "title": "Spiffy Buttons",
+            "description": "An array of Spiffy Buttons that belong to this Spiffy Button Group",
+            "items": {
+              "$id": "#/items/properties/buttons/items",
+              "type": "object",
+              "title": "Spiffy Button Properties",
+              "description": "Specifics about this Spiffy Button",
+              "properties": {
+                "meta": {
+                  "$id": "#/items/properties/buttons/items/properties/meta",
+                  "type": "string",
+                  "title": "Meta Button",
+                  "description": "This is a layout key that will add a newline or a blank space",
+                  "default": "",
+                  "enum": [
+                    "newline",
+                    "blank"
+                  ]
+                },
+                "fish-subkey": {
+                  "$id": "#/items/properties/buttons/items/properties/fish-subkey",
+                  "type": "string",
+                  "title": "Fish Subkey",
+                  "description": "The Translation Key for this specific Spiffy Button to send to the BabelFish",
+                  "default": "",
+                  "examples": [
+                    "green"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "img": {
+                  "$id": "#/items/properties/buttons/items/properties/img",
+                  "type": "string",
+                  "title": "Spiffy Button Image filename",
+                  "description": "Local filename and extension for this Spiffy Button",
+                  "default": "",
+                  "examples": [
+                    "mail-green.png"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "default": {
+                  "$id": "#/items/properties/buttons/items/properties/default",
+                  "type": "boolean",
+                  "title": "Default Spiffy Button",
+                  "description": "Tell the GUI that this is the default-selected Spiffy Button for this Spiffy Button Group",
+                  "default": false,
+                  "enum": [
+                    true,
+                    false
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
