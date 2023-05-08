@@ -32,8 +32,6 @@ class AnimationAudit(unittest.TestCase):
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
         spriteLibrary = spriteData["lib"]
 
-        self.animations = {}
-
         if f"{self.platID}/{self.gameID}/{self.spriteID}" in [
             "pc/spelunky/damsel",
             "snes/mother2/player"
@@ -68,6 +66,7 @@ class AnimationAudit(unittest.TestCase):
                         self.layout = layout
 
     def test_animations(self):
+        self.animations = {}
         for [platID, plat] in DATA.items():
             for [gameID, game] in plat["games"].items():
                 for [spriteID, sprite] in game["sprites"].items():
