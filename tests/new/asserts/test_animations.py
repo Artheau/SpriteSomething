@@ -39,6 +39,8 @@ class AnimationAudit(unittest.TestCase):
             print(f"{self.spriteID} is a WIP!" + "\n")
             return
 
+        self.animations = {}
+
         with open(os.path.join(spriteData["paths"]["resource"]["app"],"manifests","animations.json")) as inFile:
             animations_found = False
             self.animations = json.load(inFile)

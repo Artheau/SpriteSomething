@@ -14,7 +14,7 @@ inputs:
 #########
 # actions
 #########
-# actions/checkout@v3.5.0
+# actions/checkout@v3.5.2
 # actions/download-artifact@v3.0.2
 # actions/upload-artifact@v3.1.2
 # Artheau/SpriteSomething/get-parent-dir
@@ -27,7 +27,7 @@ runs:
   steps:
     # checkout commit
     - name: ✔️Checkout commit
-      uses: actions/checkout@v3.5.0
+      uses: actions/checkout@v3.5.2
 
     # get parent dir
     - name: 📁Get Parent Directory
