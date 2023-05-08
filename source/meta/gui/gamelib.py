@@ -156,6 +156,7 @@ def autodetect(sprite_filename):
                         with open(sprite_manifest_filename) as f:
                             sprite_manifest = json.load(f)
                             sprite_name = ""
+                            found_id = None
                             for sprite_id in sprite_manifest:
                                 if "input" in sprite_manifest[sprite_id] and file_extension.lower()[1:] in sprite_manifest[sprite_id]["input"]:
                                     pngs = sprite_manifest[sprite_id]["input"][file_extension.lower()[1:]]
@@ -173,13 +174,15 @@ def autodetect(sprite_filename):
                                                         sprite_name = file_slug
                                                         sprite_found = True
                                                         print(f"Detected {file_extension.upper()[1:]} name!" + " [" + sprite_name + "]")
+                                                        found_id = sprite_id
                                                 elif not sprite_found:
                                                     sprite_name = sprite_manifest[sprite_id]["folder name"]
                                                     sprite_found = True
                                                     print("Defaulting name!" + " [" + sprite_name + "]")
+                                                    found_id = sprite_id
                             if sprite_name != "":
                                 game = get_game_class_of_type(console,game_name)
-                                sprite, animation_assist = game.make_player_sprite(sprite_filename,sprite_name)
+                                sprite, animation_assist = game.make_sprite_by_number(found_id, sprite_filename,sprite_name)
                                 game_found = True
         if not game_found:
             # FIXME: English

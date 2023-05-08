@@ -117,6 +117,7 @@ class SpriteParent():
             ],
             "animations.json"
         )
+        self.animations = {}
         if animsManifest:
             with open(animsManifest, "r", encoding="utf-8") as file:
                 self.animations = json.load(file)

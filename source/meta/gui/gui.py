@@ -514,11 +514,11 @@ class SpriteSomethingMainFrame(tk.Frame):
                                             if os.path.isfile(filepath):
                                                 filename = filepath
                                                 break
-                                    bundled_games[console][gamedir]["sprites"].append(
-                                    (
-                                        name,
-                                        partial(self.load_sprite,filename)
-                                    )
+                                        bundled_games[console][gamedir]["sprites"].append(
+                                        (
+                                            name,
+                                            partial(self.load_sprite,filename)
+                                        )
                                 )
         bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")
         for console in bundled_games:
