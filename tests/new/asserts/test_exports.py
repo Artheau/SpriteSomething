@@ -1,16 +1,18 @@
-from tests.new.common import DATA  # get pathdata
+#pylint: disable=subprocess-run-check
 
+'''
+Run tests
+'''
 from shutil import copy
 
 import importlib        # dynamic sprite imports
 import unittest         # tests
 import json             # parsing JSON objects
 import os               # os pathing
-import platform
 import subprocess
-import sys
 import tempfile         # temp for objects
-import traceback
+
+from tests.new.common import DATA  # get pathdata
 
 global VERBOSE
 VERBOSE = True
@@ -22,17 +24,10 @@ RESULTS = {
     "failures": []
 }
 
-try:
-    from PIL import ImageChops
-except ModuleNotFoundError as e:
-    print(e)
-    try:
-        from Pillow import ImageChops
-    except ModuleNotFoundError as e:
-        print(e)
-
-
 def get_module_version(module, mode):
+    '''
+    Get module version data
+    '''
     if mode == None:
         mode = "latest"
     # pip index versions [module]                             // >= 21.2
@@ -47,7 +42,18 @@ def get_module_version(module, mode):
     if args == "" or \
             PIPEXE == "" or \
             PIP_FLOAT_VERSION == "":
-        with open(os.path.join(".", "resources", "user", "meta", "manifests", "settings.json"), "r") as settingsFile:
+        with open(
+            os.path.join(
+                ".",
+                "resources",
+                "user",
+                "meta",
+                "manifests",
+                "settings.json"
+            ),
+            "r",
+            encoding="utf-8"
+        ) as settingsFile:
             settings = json.load(settingsFile)
             args = settings["py"]
             PIPEXE = settings["pip"]
@@ -57,7 +63,18 @@ def get_module_version(module, mode):
     ver = ""
     if mode == "latest":
         if float(PIP_FLOAT_VERSION) >= 21.2:
-            ret = subprocess.run([*args, "-m", PIPEXE, "index", "versions", module], capture_output=True, text=True)
+            ret = subprocess.run(
+                [
+                    *args,
+                    "-m",
+                    PIPEXE,
+                    "index",
+                    "versions",
+                    module
+                ],
+                capture_output=True,
+                text=True
+            )
             lines = ret.stdout.strip().split("\n")
             lines = lines[2::]
             vers = (list(map(lambda x: x.split(' ')[-1], lines)))
@@ -65,20 +82,69 @@ def get_module_version(module, mode):
                 ver = vers[1]
         elif float(PIP_FLOAT_VERSION) >= 21.1:
             ret = subprocess.run(
-                [*args, "-m", PIPEXE, "install", f"{module}=="], capture_output=True, text=True)
+                [
+                    *args,
+                    "-m",
+                    PIPEXE,
+                    "install",
+                    f"{module}=="
+                ],
+                capture_output=True,
+                text=True
+            )
         elif float(PIP_FLOAT_VERSION) >= 20.3:
-            ret = subprocess.run([*args, "-m", PIPEXE, "install", "--use-deprecated=legacy-resolver", f"{module}=="], capture_output=True, text=True)
+            ret = subprocess.run(
+                [
+                    *args,
+                    "-m",
+                    PIPEXE,
+                    "install",
+                    "--use-deprecated=legacy-resolver",
+                    f"{module}=="
+                ],
+                capture_output=True,
+                text=True
+            )
         elif float(PIP_FLOAT_VERSION) >= 9.0:
             ret = subprocess.run(
-                [*args, "-m", PIPEXE, "install", f"{module}=="], capture_output=True, text=True)
+                [
+                    *args,
+                    "-m",
+                    PIPEXE,
+                    "install",
+                    f"{module}=="
+                ],
+                capture_output=True,
+                text=True
+            )
         elif float(PIP_FLOAT_VERSION) < 9.0:
-            ret = subprocess.run([*args, "-m", PIPEXE, "install", f"{module}==blork"], capture_output=True, text=True)
+            ret = subprocess.run(
+                [
+                    *args,
+                    "-m",
+                    PIPEXE,
+                    "install",
+                    f"{module}==blork"
+                ],
+                capture_output=True,
+                text=True
+            )
 
         # if ver == "" and ret.stderr.strip():
         #     ver = (ret.stderr.strip().split("\n")[0].split(",")[-1].replace(')', '')).strip()
 
     elif mode == "installed":
-        summary = subprocess.run([*args, "-m", PIPEXE, "show", f"{module}" ], capture_output=True, text=True)
+        summary = subprocess.run(
+            [
+                *args,
+                "-m",
+                PIPEXE,
+                "show",
+                f"{module}"
+            ],
+            capture_output=True,
+            text=True
+        )
         summary = summary.stdout.strip().split("\n")
         ver = summary[1].split(":")[1].strip()
 
@@ -86,27 +152,36 @@ def get_module_version(module, mode):
 
 
 class ExportAudit(unittest.TestCase):
+    '''
+    Export Tests
+    '''
     def set_Up(self, *args):
-        self.platID = len(args) > 1 and args[1] or "snes"
-        self.gameID = len(args) > 2 and args[2] or "zelda3"
-        self.spriteID = len(args) > 3 and args[3] or "link"
+        '''
+        Set Up the Test
+        '''
+        self.platID = args[1] if len(args) > 1 else "snes"
+        self.gameID = args[2] if len(args) > 2 else "zelda3"
+        self.spriteID = args[3] if len(args) > 3 else "link"
 
         libref = f"source.{self.platID}.{self.gameID}.{self.spriteID}.sprite"
         DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]["lib"] = importlib.import_module(libref)
 
-        spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
-        spriteLibrary = spriteData["lib"]
-
     def same(self, file1, file2):
+        '''
+        Are these the same?
+        '''
         return file1.read() == file2.read()
 
     def test_exports(self):
+        '''
+        Test the exports
+        '''
         for [platID, plat] in DATA.items():
             for [gameID, game] in plat["games"].items():
-                for [spriteID, sprite] in game["sprites"].items():
+                for [spriteID, _] in game["sprites"].items():
                     self.set_Up(self, platID, gameID, spriteID)
                     if VERBOSE:
-                        heading = ("%s/%s/%s" % (self.platID, self.gameID, self.spriteID))
+                        heading = f"{self.platID}/{self.gameID}/{self.spriteID}"
                         print(heading)
                         print("-" * 70)
                     for filext in DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]["paths"]["resource"]["sheetexts"].keys():
@@ -115,6 +190,9 @@ class ExportAudit(unittest.TestCase):
                         print("")
 
     def run_export(self, filext):
+        '''
+        Make an export
+        '''
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
         spriteLibrary = spriteData["lib"]
 
@@ -126,13 +204,24 @@ class ExportAudit(unittest.TestCase):
                 importExt = "png"
             if importExt in ["4bpp", "palette", "zhx"]:
                 return
+            if f"{self.platID}/{self.gameID}/{self.spriteID}" in [
+                "pc/averge/trace",
+                "snes/ffmq/benjamin"
+            ]:
+                print(f"{self.spriteID} is a WIP!")
+                return
 
             sprite = {
                 "import": {
                     importExt: spriteLibrary.Sprite(
                         spriteData["paths"]["resource"]["sheetexts"][importExt],
-                        {"name": self.spriteID.capitalize(), "folder name": self.spriteID},
-                        spriteData["paths"]["resource"]["subpath"]
+                        {
+                            "name": self.spriteID.capitalize(),
+                            "folder name": self.spriteID,
+                            "input": spriteData["input"]
+                        },
+                        spriteData["paths"]["resource"]["subpath"],
+                        self.spriteID
                     )
                 },
                 "export": {}
@@ -147,23 +236,32 @@ class ExportAudit(unittest.TestCase):
 
             if filext == "zspr":
                 sprite["export"][exportExt] = sprite["import"][importExt].save_as_ZSPR(
-                    tempFile)
+                    tempFile
+                )
             elif filext == "png":
                 sprite["export"][exportExt] = sprite["import"][importExt].save_as_PNG(
-                    tempFile)
+                    tempFile
+                )
             elif filext == "rdc":
                 sprite["export"][exportExt] = sprite["import"][importExt].save_as_RDC(
-                    tempFile)
+                    tempFile
+                )
 
-            file = {
-                "import": { importExt: None },
-                "export": { exportExt: None }
-            }
+            # file = {
+            #     "import": { importExt: None },
+            #     "export": { exportExt: None }
+            # }
 
             match = False
 
-            with open(spriteData["paths"]["resource"]["sheetexts"][filext], "rb") as importFile:
+            with open(
+                spriteData["paths"]["resource"]["sheetexts"][filext],
+                "rb"
+            ) as importFile:
                 with open(tempFile, "rb") as exportFile:
+                    # Run the files to the end?
+                    imImg = importFile.seek(0, os.SEEK_END)
+                    exImg = exportFile.seek(0, os.SEEK_END)
                     match = self.same(
                         importFile,
                         exportFile
@@ -176,32 +274,18 @@ class ExportAudit(unittest.TestCase):
                 exception = True
 
             if VERBOSE or exception:
-                print("%s -> %s : %s do%s match%s" % (
-                    importExt.ljust(4),
-                    exportExt.ljust(4),
-                    (filext.upper() + 's').ljust(4 + 1),
-                    "" if match else "n't",
-                    "" if match else ("\t" + tempFile)
-                ))
+                verb = "do" + ("" if match else "n't")
+                print(
+                    f"{importExt.ljust(4)} -> {exportExt.ljust(5)}: " + \
+                    f"{(filext.upper() + 's').ljust(5 + 1)}" + \
+                    verb + \
+                    " match",
+                    ("" if match else ("\t" + tempFile))
+                )
 
             if not match:
                 if not os.path.exists(os.path.join(".", "failures")):
                     os.makedirs(os.path.join(".", "failures"))
-
-                with open(os.path.join(".","failures","errors.txt"), "a") as errorFile:
-                  err = (
-                    "%s/%s/%s/%s-%s"
-                    %
-                    (
-                      self.platID,
-                      self.gameID,
-                      self.spriteID,
-                      importExt,
-                      exportExt
-                    )
-                    + "\n"
-                  )
-                  errorFile.write(err)
 
                 RESULTS["failures"].append(
                     {
@@ -210,7 +294,24 @@ class ExportAudit(unittest.TestCase):
                     }
                 )
 
-                destFile = os.path.join(".", "failures", os.path.basename(tempFile))
+                with open(
+                    os.path.join(
+                        ".",
+                        "failures",
+                        "errors.txt"
+                    ),
+                    "a",
+                    encoding="utf-8"
+                ) as errorFile:
+                    err = f"{self.platID}/{self.gameID}/{self.spriteID}/{importExt}-{exportExt}" + "\n"
+                    errorFile.write(err)
+                    errorFile.write(json.dumps(RESULTS) + "\n")
+
+                destFile = os.path.join(
+                    ".",
+                    "failures",
+                    os.path.basename(tempFile)
+                )
                 copy(
                     tempFile,
                     destFile
@@ -225,13 +326,9 @@ class ExportAudit(unittest.TestCase):
 if __name__ == "__main__":
     module = "pillow"
     print(
-        "%s\t%s\t%s"
-        %
-        (
-            module,
-            get_module_version(module, "installed"),
-            get_module_version(module, "latest")
-        )
+        f"{module}\t" +\
+        f"{get_module_version(module, 'installed')}\t" + \
+        f"{get_module_version(module, 'latest')}"
     )
     if VERBOSE:
         print("EXPORTS")

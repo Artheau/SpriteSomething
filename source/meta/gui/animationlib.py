@@ -25,10 +25,6 @@ class AnimationEngineParent():
         self.plugins = []
         self.prev_palette_info = []
 
-        with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
-            self.animations = json.load(file)
-        if "$schema" in self.animations:
-            del self.animations["$schema"]
         self.animations = sprite.animations
         #using a default value until the animation_panel attachment overrides this
         self.current_animation = next(iter(self.animations.keys()))

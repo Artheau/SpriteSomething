@@ -40,6 +40,7 @@ class SpriteParent():
                           "author.name-short": ""
         }
         self.filename = filename
+        self.input_dims = []
         self.overview_scale_factor = 2
         self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
         if "input" in manifest_dict and \
@@ -48,9 +49,10 @@ class SpriteParent():
             if not isinstance(pngs, list):
                 pngs = [pngs]
             for png in pngs:
-                if ((not sprite_name == "" and "name" in png and png["name"] == sprite_name) or sprite_name == "") and \
-                    "overview-scale-factor" in png:
-                    self.overview_scale_factor = png["overview-scale-factor"]
+                if ((not sprite_name == "" and "name" in png and png["name"] == sprite_name) or sprite_name == ""):
+                    self.input_dims = png["dims"]
+                    if "overview-scale-factor" in png:
+                        self.overview_scale_factor = png["overview-scale-factor"]
         self.plugins = None
         self.has_plugins = False
         self.load_layout(sprite_name)
@@ -107,22 +109,30 @@ class SpriteParent():
         self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"), sprite_name)
     def load_animations(self, sprite_name=""):
         animations_found = False
-        with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
-            self.animations = json.load(file)
-            print("Finding Animations!")
-            if "sets" in self.animations:
-                for thisSet in self.animations["sets"]:
-                    if "names" in thisSet and sprite_name in thisSet["names"] and not animations_found:
-                        animations_found = True
-                        self.animations = thisSet["animations"]
-                        self.set_name = sprite_name
-                        print("Found " + sprite_name + "!")
-                        print(self.animations)
-            else:
-                animations_found = True
-                print("Loading Animations!")
-            if "$schema" in self.animations:
-                del self.animations["$schema"]
+        animsManifest = common.get_resource(
+            [
+                self.resource_subpath,
+                "manifests"
+            ],
+            "animations.json"
+        )
+        if animsManifest:
+            with open(animsManifest, "r", encoding="utf-8") as file:
+                self.animations = json.load(file)
+                # print("Finding Animations!")
+                if "sets" in self.animations:
+                    for thisSet in self.animations["sets"]:
+                        if "names" in thisSet and sprite_name in thisSet["names"] and not animations_found:
+                            animations_found = True
+                            self.animations = thisSet["animations"]
+                            self.set_name = sprite_name
+                            # print("Found " + sprite_name + "!")
+                            # print(self.animations)
+                else:
+                    animations_found = True
+                    # print("Loading Animations!")
+                if "$schema" in self.animations:
+                    del self.animations["$schema"]
 
     def import_from_filename(self):
         _, file_extension = os.path.splitext(self.filename)
@@ -402,7 +412,7 @@ class SpriteParent():
         #should return a list of tuples of the form (filename, PIL Image)
         return return_images
 
-    def save_as(self, filename):
+    def save_as(self, filename, game_name):
         _, file_extension = os.path.splitext(filename)
         if file_extension.lower() == ".png":
             return self.save_as_PNG(filename)
@@ -517,10 +527,16 @@ class SpriteParent():
         return [(META_DATA_BLOCK_TYPE, bytearray(common.as_u32(len(data))) + data)]
 
     def get_master_PNG_image(self):
-        return self.layout.export_all_images_to_PNG(
+        img = self.layout.export_all_images_to_PNG(
             self.images,
             self.master_palette
         )
+        if len(self.input_dims):
+            if tuple(self.input_dims) != img.size:
+                new_image = Image.new("RGBA", tuple(self.input_dims), 0)
+                new_image.paste(img, (0,0))
+                img = new_image
+        return img
 
     def import_module(self, module_name):
         #TODO: factor this out to a common source file

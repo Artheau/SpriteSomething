@@ -63,7 +63,7 @@ class SpriteParentTestVersion(SpriteParent):
 		#TODO
 		return None
 
-	def save_as(self, filename):
+	def save_as(self, filename, game_name):
 		#TODO
 		return None
 
