@@ -32,14 +32,14 @@ class AnimationAudit(unittest.TestCase):
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
         spriteLibrary = spriteData["lib"]
 
+        self.animations = {}
+
         if f"{self.platID}/{self.gameID}/{self.spriteID}" in [
             "pc/spelunky/damsel",
             "snes/mother2/player"
         ]:
             print(f"{self.spriteID} is a WIP!" + "\n")
             return
-
-        self.animations = {}
 
         with open(os.path.join(spriteData["paths"]["resource"]["app"],"manifests","animations.json")) as inFile:
             animations_found = False
