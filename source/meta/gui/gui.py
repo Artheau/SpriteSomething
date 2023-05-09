@@ -1569,8 +1569,8 @@ class SpriteSomethingMainFrame(tk.Frame):
                     filext = os.path.splitext(filename)[1][1:].upper()
                     messagebox.showerror(
                         "Not Yet Implemented",
-                        f"{filext} format not yet available for {self.game.name}" +
-                        f" / {self.sprite.classic_name} Sprites."
+                        f"{filext} format not yet available for '{self.game.name}'" +
+                        f" / '{self.sprite.classic_name}' Sprites."
                     )
                 return save_success_bool
         #user cancelled out of the prompt,

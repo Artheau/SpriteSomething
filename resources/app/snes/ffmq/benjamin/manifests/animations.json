@@ -1,6 +1,6 @@
 {
-	"$schema": "../../../../../schema/animations.schema.json",
-	"Walk": {
+  "$schema": "../../../../../schema/animations.schema.json",
+  "Walk (full-flip)": {
     "down": [
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "pos": [0,0] } ] },
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "pos": [0,0], "flip": "h" } ] }
@@ -18,7 +18,7 @@
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk3", "pos": [0,0], "flip": "h" } ] }
     ]
   },
-  "Push": {
+  "Push (full-flip)": {
     "down": [
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "push", "pos": [0,0] } ] },
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "push", "pos": [0,0], "flip": "h" } ] }
@@ -34,6 +34,66 @@
     "up": [
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "push3", "pos": [0,0] } ] },
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "push3", "pos": [0,0], "flip": "h" } ] }
+    ]
+  },
+  "Walk (half-flip)": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk", "pos": [0,0], "crop": [0,0,16,8] },
+        { "image": "walk", "pos": [0,8], "crop": [0,8,16,16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk", "pos": [0,0], "crop": [0,0,16,8] },
+        { "image": "walk", "pos": [0,8], "crop": [0,8,16,16], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "pos": [0,0] } ]},
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk2", "pos": [0,0] } ]}
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "pos": [0,0], "flip": "h" } ]},
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk2", "pos": [0,0], "flip": "h" } ]}
+    ],
+    "up": [
+        { "frames": 20, "displacement": [0,0], "tiles": [
+            { "image": "walk3", "pos": [0,0], "crop": [0,0,16,8] },
+            { "image": "walk3", "pos": [0,8], "crop": [0,8,16,16] }
+          ] },
+          { "frames": 20, "displacement": [0,0], "tiles": [
+            { "image": "walk3", "pos": [0,0], "crop": [0,0,16,8] },
+            { "image": "walk3", "pos": [0,8], "crop": [0,8,16,16], "flip": "h" }
+          ] }
+        ]
+  },
+  "Push (half-flip)": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "push", "pos": [0,0], "crop": [0,0,16,8] },
+        { "image": "push", "pos": [0,8], "crop": [0,8,16,16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "push", "pos": [0,0], "crop": [0,0,16,8] },
+        { "image": "push", "pos": [0,8], "crop": [0,8,16,16], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "push1", "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "push2", "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "push1", "pos": [0,0], "flip": "h" } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "push2", "pos": [0,0], "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "push3", "pos": [0,0], "crop": [0,0,16,8] },
+        { "image": "push3", "pos": [0,8], "crop": [0,8,16,16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "push3", "pos": [0,0], "crop": [0,0,16,8] },
+        { "image": "push3", "pos": [0,8], "crop": [0,8,16,16], "flip": "h" }
+      ] }
     ]
   },
   "Jump": {
@@ -91,6 +151,11 @@
   "Dead": {
     "right": [
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "death", "pos": [0,0] } ] }
+    ]
+  },
+  "Meta Block": {
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ {"image": "meta_block", "pos": [0,0] } ] }
     ]
   }
 }

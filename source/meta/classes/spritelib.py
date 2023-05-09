@@ -166,7 +166,7 @@ class SpriteParent():
             rom_module = self.import_module(f"source.{rom_path}.rom")
             self.import_from_ROM(rom_module.RomHandler(self.filename))
         elif file_extension.lower() in filetypes:
-            print(f"{file_extension.upper()[1:]} not yet supported by CLI!")
+            print(f"{file_extension.upper()[1:]} not yet available by CLI for '{self.classic_name}' Sprites!")
             return
         self.import_cleanup()
 
@@ -454,7 +454,7 @@ class SpriteParent():
         elif file_extension.lower() == ".rdc":
             return self.save_as_RDC(filename)
         elif file_extension.lower() in filetypes:
-            print(f"{file_extension.upper()[1:]} not yet supported by GUI!")
+            print(f"{file_extension.upper()[1:]} not yet available by GUI for '{game_name}' / '{self.classic_name}' Sprites!")
             return
         else:
             # tk.messagebox.showerror(
@@ -465,7 +465,13 @@ class SpriteParent():
 
     def save_as_PNG(self, filename):
         master_image = self.get_master_PNG_image()
-        master_image.save(filename, "PNG")
+        _, file_extension = os.path.splitext(filename)
+        #FIXME: Extrapolate this to FFMQ/Benjamin
+        if file_extension.lower() in [".bmp"]:
+            bmp = master_image.convert("P", palette=Image.ADAPTIVE, colors=8)
+            bmp.save(filename, file_extension.upper()[1:])
+        else:
+            master_image.save(filename, file_extension.upper()[1:])
         return True
 
     def save_as_ZSPR(self, filename):

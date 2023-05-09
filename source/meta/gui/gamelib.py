@@ -231,7 +231,7 @@ def autodetect(sprite_filename):
                 sprite, animation_assist = game.make_player_sprite(os.path.join(scratch,selected_sheet),sheet_slug)
         print("Detected ZIP!")
     elif file_extension.lower() in filetypes:
-        raise AssertionError(f"{file_extension.upper()[1:]} not yet supported by GUI!")
+        raise AssertionError(f"{file_extension.upper()[1:]} not yet available by GUI!")
 
     elif sprite_filename == "":
             #FIXME: English
