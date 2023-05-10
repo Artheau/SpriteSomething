@@ -50,7 +50,7 @@
     "walk": {
       "dimensions": [0,0,16,16],
       "palette": "",
-      "import palette interval": [1,16],
+      "import palette interval": [1,8],
       "used by": [["TODO",0]]
     },
     "push": { "parent": "walk", "used by": [["TODO",0]] },
@@ -59,6 +59,7 @@
     "throw": { "parent": "walk", "used by": [["TODO",0]] },
     "bomb": { "parent": "walk", "used by": [["TODO",0]] },
     "half_width": {
+      "parent": "walk",
       "dimensions": [0,0,8,16],
       "used by": [["TODO",0]]
     },
@@ -70,6 +71,7 @@
     "throw1": { "parent": "walk", "used by": [["TODO",0]] },
     "shrug": { "parent": "walk", "used by": [["TODO",0]] },
     "shrugHand": {
+      "parent": "walk",
       "dimensions": [0,0,8,16],
       "used by": [["TODO",0]]
     },
@@ -85,10 +87,12 @@
     "push3": { "parent": "walk", "used by": [["TODO",0]] },
     "death": { "parent": "walk", "used by": [["TODO",0]] },
     "climb1": {
+      "parent": "walk",
       "dimensions": [0,0,16,8],
       "used by": [["TODO",0]]
     },
     "meta_block": {
+      "parent": "walk",
       "dimensions": [0,0,8,16],
       "used by": [["TODO",0]]
     }

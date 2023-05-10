@@ -153,6 +153,11 @@
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "death", "pos": [0,0] } ] }
     ]
   },
+  "Palette Block": {
+    "right": [
+        { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "palette_block", "pos": [0,0] } ] }
+    ]
+  },
   "Meta Block": {
     "right": [
       { "frames": 20, "displacement": [0,0], "tiles": [ {"image": "meta_block", "pos": [0,0] } ] }

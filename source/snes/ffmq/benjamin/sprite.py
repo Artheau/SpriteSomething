@@ -9,3 +9,33 @@ class Sprite(SpriteParent):
     def __init__(self, filename, manifest_dict, my_subpath, sprite_name=""):
         super().__init__(filename, manifest_dict, my_subpath, sprite_name)
         self.load_plugins()
+
+        self.ben_globals = {}
+        self.ben_globals["petrified_palette"] = [
+            # (  0,  0,  0),
+            ( 33, 33, 33),
+            (206,206,206),
+            (173,173,173),
+            (132,132,132),
+            (206,206,206),
+            (173,173,173),
+            (132,132,132)
+        ]
+
+    def get_palette(self, palettes, default_range=[], frame_number=0):
+        palette_indices = None
+        this_palette = []
+        range_end = 8
+        for i in range(1,range_end):
+            this_palette.append((0,0,0))
+
+        if "petrified_mail" in palettes:
+            this_palette = self.ben_globals["petrified_palette"]
+        else:
+            palette_indices = list(range(1,8))     #start with normal mail and modify it as needed
+
+        if palette_indices:
+            for i,_ in enumerate(palette_indices):
+                this_palette[i] = self.master_palette[palette_indices[i]]
+
+        return this_palette

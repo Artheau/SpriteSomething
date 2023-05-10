@@ -195,6 +195,11 @@ class Layout():
         full_layout = self.make_vertical_collage(all_collages)
         return full_layout
 
+    def coord_calc(self,origin,dims):
+        x1, x2 = origin
+        w, h = dims
+        return (x1,x2,w+x1,h+x2)
+
     def extract_all_images_from_master(self, master_image):
         all_images = {}
         master_height = 0
@@ -241,6 +246,12 @@ class Layout():
                 all_images[image_name] = this_image
 
         all_images["transparent"] = Image.new("RGBA",(0,0),0)
+
+        #FIXME: Extrapolate layoutlib.py to <console>/<game>/<sprite>/layout.py
+        if "meta_block" in all_images:
+            meta_block = all_images["meta_block"].transpose(Image.FLIP_TOP_BOTTOM)
+            palette_block = meta_block.crop(self.coord_calc((0,0),(8,1)))
+            all_images["palette_block"] = palette_block
 
         master_palettes = list(
             all_images["palette_block"].convert("RGB").getdata()) \

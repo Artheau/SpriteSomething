@@ -2073,11 +2073,11 @@ class SpriteSomethingMainFrame(tk.Frame):
         '''
         dims = {
             "window": {
-                "width": 350,
-                "height": 200
+                "width": 450,
+                "height": 250
             },
             "textarea.characters": {
-                "width": 60,
+                "width": 70,
                 "height": 100
             }
         }
@@ -2092,6 +2092,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             "",
             "Thanks to:",
             "[Auximines](https://metroidfanon.fandom.com/wiki/Super_Justin_Bailey) for initial inspiration for custom Super Metroid sprites",
+            "[Giga Otomia](http://www.twitch.tv/gigaotomia) for Final Fantasy Mystic Quest/Benjamin background scenes",
             "[Pneumatic](http://twitch.tv/pneumaticgaming) for datastamp for Super Metroid/Samus sprites",
             "",
             "Based on:",
