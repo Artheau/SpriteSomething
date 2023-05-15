@@ -1021,7 +1021,9 @@ class SpriteSomethingMainFrame(tk.Frame):
             if base_folder:
                 try:
                     #try to save each one
-                    for filename, image in image_list:
+                    for data in image_list:
+                        filename = data[0]
+                        image = data[1]
                         image.save(os.path.join(base_folder, filename))
                     # FIXME: English
                     messagebox.showinfo(

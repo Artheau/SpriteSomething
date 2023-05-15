@@ -1,32 +1,175 @@
 {
-  "default": [
-    ["Stand", "down"]
-  ],
-  "upgraded": [
-    ["File select", "right", 0, ["red_mail", "titan_gloves", "gold_sword", "mirror_shield"]]
-  ],
-  "spiffy": [
-    ["Walk downstairs (1F)",  "middle", 4],
-    ["Walk",                  "left",   2,  ["red_mail",  "titan_gloves", "",               "mirror_shield"]],
-    ["Cane",                  "right",  0,  ["blue_mail", "titan_gloves", "",               "",               "yes_accessories"]],
-    ["Swim",                  "down",   0,  ["",          "power_gloves"]],
-    ["Walk",                  "down",   5,  ["",          "",             "",               "fighter_shield"]],
-    ["Lift",                  "right",  0,  ["",          "power_gloves", "",               "",               "none_accessories"]],
-    ["Crystal get",           "right",  0,  ["blue_mail", "titan_gloves", "",               "",               "yes_accessories"]],
-    ["Quake",                 "right",  42, ["blue_mail", "titan_gloves", "gold_sword"]],
-    ["Spin attack",           "right",  1,  ["",          "power_gloves", "master_sword"]],
-    ["Attack",                "down",   5,  ["red_mail",  "titan_gloves", "gold_sword",     "mirror_shield"]],
-    ["Item get",              "right",  0,  ["",          "power_gloves", "",               "fighter_shield", "yes_accessories"]],
-    ["Asleep",                "right",  0,  ["",          "power_gloves", "",               "",               "yes_accessories"]],
-    ["Bonk",                  "down",   0,  ["",          "",             "fighter_sword", "fighter_shield"]],
-    ["Walk",                  "up",     6,  ["blue_mail", "power_gloves", "",               "fire_shield"]],
-    ["Tree pull",             "right",  3,  ["",          "power_gloves"]]
-  ],
-	"hunk": [
-    [ "Stand", "up" ],
-    [ "Stand", "left" ],
-    [ "Stand", "down" ],
-    [ "Stand", "right" ]
-	],
-  "crossproduct": []
+  "default": {
+    "images": [
+        ["Stand", "down"]
+    ]
+  },
+  "upgraded": {
+    "images": [
+        ["File select", "right", 0, ["red_mail", "titan_gloves", "gold_sword", "mirror_shield"]]
+    ]
+  },
+  "spiffy": {
+    "base": "titlecard.png",
+    "images": [
+      [
+        "Walk downstairs (1F)",  "middle", 4,
+        [],
+        0,
+        [49, 40]
+      ],
+      [
+        "Walk",                  "left",   2,
+        ["red_mail",  "titan_gloves", "",               "mirror_shield"],
+        0,
+        [75, 30]
+      ],
+      [
+        "Cane",                  "right",  0,
+        ["blue_mail", "titan_gloves", "",               "",               "yes_accessories"],
+        0,
+        [118,30]
+      ],
+      [
+        "Swim",                  "down",   0,
+        ["",          "power_gloves"],
+        0,
+        [160,31]
+      ],
+      [
+        "Walk",                  "down",   5,
+        ["",          "",             "",               "fighter_shield"],
+        0,
+        [32,69]
+      ],
+      [
+        "Lift",                  "right",  0,
+        ["",          "power_gloves", "",               "",               "none_accessories"],
+        0,
+        [138,67]
+      ],
+      [
+        "Crystal get",           "right",  0,
+        ["blue_mail", "titan_gloves", "",               "",               "yes_accessories"],
+        0,
+        [32,103]
+      ],
+      [
+        "Quake",                 "right",  42,
+        ["blue_mail", "titan_gloves", "gold_sword"],
+        0,
+        [67,88]
+      ],
+      [
+        "Spin attack",           "right",  1,
+        ["",          "power_gloves", "master_sword"],
+        0,
+        [95,117]
+      ],
+      [
+        "Attack",                "down",   5,
+        ["red_mail",  "titan_gloves", "gold_sword",     "mirror_shield"],
+        0,
+        [126,107]
+      ],
+      [
+        "Item get",              "right",  0,
+        ["",          "power_gloves", "",               "fighter_shield", "yes_accessories"],
+        0,
+        [168,91]
+      ],
+      [
+        "Asleep",                "right",  0,
+        ["",          "power_gloves", "",               "",               "yes_accessories"],
+        0,
+        [24,146]
+      ],
+      [
+        "Bonk",                  "down",   0,
+        ["",          "",             "fighter_sword", "fighter_shield"],
+        0,
+        [64,143]
+      ],
+      [
+        "Walk",                  "up",     6,
+        ["blue_mail", "power_gloves", "",               "fire_shield"],
+        0,
+        [104,161]
+      ],
+      [
+        "Tree pull",             "right",  3,
+        ["",          "power_gloves"],
+        0,
+        [134,143]
+      ],
+      [
+        "Stand",    "down", 0,
+        [],
+        0,
+        [60, 64]
+      ],
+      [
+        "Stand",    "down", 0,
+        ["blue_mail"],
+        0,
+        [80, 64]
+      ],
+      [
+        "Stand",    "down", 0,
+        ["red_mail"],
+        0,
+        [100, 64]
+      ],
+      [
+        "Bunny stand",    "down", 0,
+        ["bunny_mail"],
+        0,
+        [120, 64]
+      ]
+    ]
+  },
+  "hunk": {
+    "base": "hunk.png",
+    "images": [
+      [ "Stand", "up", 0, [], 0, [28,1] ],
+      [ "Stand", "left", 0, [], 0, [0,26] ],
+      [ "Stand", "down", 0, [], 0, [24,26] ],
+      [ "Stand", "right", 0, [], 0, [45,26] ]
+    ]
+  },
+  "moeChicken": {
+    "base": "moechicken.png",
+    "images": [
+      [ "Zap", "", 0, [], 0, [93,13] ],
+
+      [ "Attack",   "", 0, ["sword1"], 0, [ 72, 36] ],
+      [ "Bonk",     "left", 0, [], 0, [100 ,38] ],
+      [ "Lift",     "", 0, [], 0, [134, 30] ],
+      [ "Asleep",   "", 0, [], 0, [153, 41] ],
+
+      [ "Rod",              "down", 0, [], 0, [ 24, 77] ],
+      [ "Prayer",           "",     0, [], 0, [ 93, 86] ],
+      [ "Pedestal pull",    "",     0, [], 0, [112, 89] ],
+      [ "Carry",            "",     0, [], 0, [199, 93] ],
+      [ "Fall",             "",     0, [], 0, [198, 80] ],
+
+      [ "Lift", "up",   0, [], 0, [ 30,103] ],
+      [ "Rod", "up",    0, [], 0, [129,123] ],
+
+      [ "Shovel", "", 0, [], 0, [ 46,158] ],
+      [ "Hammer", "down", 0, [], 0, [ 88,156] ],
+
+      [ "Powder", "",   0, [], 0, [ 73,189] ],
+      [ "Stand", "up",    0, [], 0, [ 98,205] ],
+      [ "Powder", "right",0, [], 0, [143,202] ],
+      [ "File select", "", 0, [], 0, [166,196] ],
+      [ "File select", "", 0, ["blue_mail"], 0, [186,196] ],
+      [ "File select", "", 0, ["red_mail"], 0, [206,196] ],
+
+      [ "Powder", "", 0, [], 0, [163,213] ],
+      [ "Tree pull", "", 0, [], 0, [180,226] ],
+      [ "Bunny stand", "up", 0, ["bunny_mail"], 0, [194,219] ]
+    ]
+  },
+  "crossproduct": {}
 }

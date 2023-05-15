@@ -367,6 +367,7 @@ class SpriteParent():
         # e.g. get_image("Walk", "right", 2, ["red_mail", "master_sword"])
         #and it will return (Image, position_offset)
         #the frame number here is passed as an argument to allow for the implementation of dynamic palettes
+        # print(animation, direction, pose, palettes, frame_number)
         tile_list = self.get_tiles_for_pose(animation, direction, pose, palettes, frame_number)
         assembled_image, offset = self.assemble_tiles_to_completed_image(tile_list)
         return assembled_image, offset
@@ -401,7 +402,10 @@ class SpriteParent():
 
 
         if style in manifest_images:
-            images = manifest_images[style]
+            if "images" in manifest_images[style]:
+                images = manifest_images[style]["images"]
+            else:
+                images = manifest_images[style]
         elif style == "default":
             images = [[]]    #use defaults
         else:
@@ -414,19 +418,27 @@ class SpriteParent():
             if "$schema" in animationkeys:
                 animationkeys.remove("$schema")
             animation = animationkeys[0] # default to first image here
-            if 0 in image:
+            if len(image) > 0:
                 animation = image[0]
 
             direction = list(self.animations[animation].keys())[0] # default: first direction
-            if 1 in image:
-                direction = image[1]
+            if len(image) > 1:
+                if image[1].strip() != "":
+                    direction = image[1].strip()
 
             pose = image[2] if len(image) > 2 else 0 #default: #first pose
             palette = image[3] if len(image) > 3 else [] #defaults to the defaults determined by get_image
             frame = image[4] if len(image) > 4 else 0 #default to the first frame of timed palette
-            filename = image[5] if len(image) > 5 else \
+            coords = image[5] if len(image) > 5 else [0, 0]
+            filename = image[6] if len(image) > 6 and image[6] != "" else \
                 common.filename_scrub("-".join([sprite_save_name,style]) + ".png") #default to the sprite name and style
-            return_images.append(        ( filename, self.get_image(animation,direction,pose,palette,frame)[0] )        )
+            return_images.append(
+                (
+                    filename,
+                    self.get_image(animation,direction,pose,palette,frame)[0],
+                    coords
+                )
+            )
 
         #should return a list of tuples of the form (filename, PIL Image)
         return return_images
