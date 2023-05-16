@@ -190,7 +190,7 @@ class CLIMainFrame():
         #    since the GUI has extra dialogue boxes and stuff
         """
         print(f"   Exporting '{self.sprite.classic_name}' Sprite as {os.path.splitext(export_filename)[1].upper()} to {export_filename}")
-        self.sprite.save_as(export_filename)
+        self.sprite.save_as(export_filename, self.game.name)
 
     def copy_into_ROM(self, inject=False, dest_filename=None, source_filename=None):
         """

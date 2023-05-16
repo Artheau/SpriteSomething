@@ -4,28 +4,219 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Run",
+      "label": "R1. Run",
       "type": "shell",
-      "command": "python3 ./SpriteSomething.py",
+      "command": "python3",
+      "args": [
+        "./SpriteSomething.py"
+      ],
       "windows": {
-        "command": "py -3.8 ./SpriteSomething.py"
+        "command": "py",
+        "args": [
+          "-3.8",
+          "./SpriteSomething.py"
+        ]
       }
     },
     {
-      "label": "Load Link from ZSPR",
+      "label": "B1. Load Z3Link from ZSPR",
+      "group": "build",
       "type": "shell",
-      "command": "python3 ./SpriteSomething.py --sprite ./resources/app/snes/zelda3/link/sheets/link.zspr",
+      "command": "python3",
+      "args": [
+        "./SpriteSomething.py",
+        "--sprite",
+        "./resources/app/snes/zelda3/link/sheets/link.zspr"
+      ],
       "windows": {
-        "command": "py -3.8 ./SpriteSomething.py --sprite ./resources/app/snes/zelda3/link/sheets/link.zspr"
+        "command": "py",
+        "args": [
+          "-3.8",
+          "./SpriteSomething.py",
+          "--sprite",
+          "./resources/app/snes/zelda3/link/sheets/link.zspr"
+        ]
       }
     },
     {
-      "label": "Load Samus from PNG",
+      "label": "B2.1 Load M3Samus from PNG",
+      "group": "build",
       "type": "shell",
-      "command": "python3 ./SpriteSomething.py --sprite ./resources/app/snes/metroid3/samus/sheets/samus.png",
+      "command": "python3",
+      "args": [
+        "./SpriteSomething.py",
+        "--sprite",
+        "./resources/app/snes/metroid3/samus/sheets/samus.png"
+      ],
       "windows": {
-        "command": "py -3.8 ./SpriteSomething.py --sprite ./resources/app/snes/metroid3/samus/sheets/samus.png"
+        "command": "py",
+        "args": [
+          "-3.8",
+          "./SpriteSomething.py",
+          "--sprite",
+          "./resources/app/snes/metroid3/samus/sheets/samus.png"
+        ]
       }
+    },
+    {
+      "label": "B2.2 Load M3Items-Overworld from PNG",
+      "group": "build",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "./SpriteSomething.py",
+        "--sprite",
+        "./resources/app/snes/metroid3/items-overworld/sheets/items-overworld.png"
+      ],
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.8",
+          "./SpriteSomething.py",
+          "--sprite",
+          "./resources/app/snes/metroid3/items-overworld/sheets/items-overworld.png"
+        ]
+      }
+    },
+    {
+      "label": "B3. Load Mo2Ness from PNG",
+      "group": "build",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "./SpriteSomething.py",
+        "--sprite",
+        "./resources/app/snes/mother2/player/sheets/001.png"
+      ],
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.8",
+          "./SpriteSomething.py",
+          "--sprite",
+          "./resources/app/snes/mother2/player/sheets/001.png"
+        ]
+      }
+    },
+    {
+      "label": "T1. Test Diagnostics",
+      "group": "test",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "-m",
+        "tests.new.asserts.test_diags"
+      ],
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.8",
+          "-m",
+          "tests.new.asserts.test_diags"
+        ]
+      }
+    },
+    {
+      "label": "T2. Test CLI",
+      "group": "test",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "-m",
+        "tests.new.asserts.test_cli"
+      ],
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.8",
+          "-m",
+          "tests.new.asserts.test_cli"
+        ]
+      }
+    },
+    {
+      "label": "T3. Test Exports",
+      "group": "test",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "-m",
+        "tests.new.asserts.test_exports"
+      ],
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.8",
+          "-m",
+          "tests.new.asserts.test_exports"
+        ]
+      }
+    },
+    {
+      "label": "T4. Test Animations",
+      "group": "test",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "-m",
+        "tests.new.asserts.test_animations"
+      ],
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.8",
+          "-m",
+          "tests.new.asserts.test_animations"
+        ]
+      }
+    },
+    {
+      "label": "T5. Test GUI",
+      "group": "test",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "-m",
+        "tests.new.asserts.test_gui"
+      ],
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.8",
+          "-m",
+          "tests.new.asserts.test_gui"
+        ]
+      }
+    },
+    {
+      "label": "T6. Test Spiffy Buttons",
+      "group": "test",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "-m",
+        "tests.new.asserts.test_spiffybuttons"
+      ],
+      "windows": {
+        "command": "py",
+        "args": [
+          "-3.8",
+          "-m",
+          "tests.new.asserts.test_spiffybuttons"
+        ]
+      }
+    },
+    {
+      "label": "T0. Run Tests",
+      "group": "test",
+      "dependsOn": [
+        "T1. Test Diagnostics",
+        "T2. Test CLI",
+        "T3. Test Exports",
+        "T4. Test Animations",
+        "T5. Test GUI",
+        "T6. Test Spiffy Buttons"
+      ]
     }
   ]
 }

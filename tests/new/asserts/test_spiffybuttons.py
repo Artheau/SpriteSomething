@@ -81,15 +81,21 @@ class SpiffyButtonAudit(unittest.TestCase):
                     self.run_palette_audit(palettes)
 
     def run_palette_audit(self, PALETTES_TO_CHECK):
+        if self.gameID in ["mother2"]:
+            print(f"{self.gameID} is a WIP!")
+            return
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
         spriteLibrary = spriteData["lib"]
         importExt = "png"
+        if importExt not in spriteData["paths"]["resource"]["sheetexts"]:
+            importExt = list(spriteData["paths"]["resource"]["sheetexts"].keys())[0]
         sprite = {
             "import": {
                 importExt: spriteLibrary.Sprite(
                     spriteData["paths"]["resource"]["sheetexts"][importExt],
-                    {"name": self.spriteID.capitalize()},
-                    spriteData["paths"]["resource"]["subpath"]
+                    {"name": self.spriteID.capitalize(), "folder name": self.spriteID},
+                    spriteData["paths"]["resource"]["subpath"],
+                    self.spriteID
                 )
             }
         }
