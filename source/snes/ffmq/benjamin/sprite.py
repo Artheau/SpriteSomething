@@ -22,6 +22,17 @@ class Sprite(SpriteParent):
             (132,132,132)
         ]
 
+    def import_cleanup(self):
+        '''
+        Post-import cleanup
+        '''
+        self.load_plugins()
+        # self.equipment = self.plugins.equipment_test(False)
+        self.equipment = self.plugins.equipment_test(True)
+        if hasattr(self, "images"):
+            self.images["transparent"] = Image.new("RGBA",(0,0),0)
+            self.images = dict(self.images,**self.equipment)
+
     def get_palette(self, palettes, default_range=[], frame_number=0):
         palette_indices = None
         this_palette = []

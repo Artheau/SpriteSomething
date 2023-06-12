@@ -142,6 +142,138 @@
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "throw2", "pos": [0,0] } ] }
     ]
   },
+  "Sword Attack (full-flip)": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk" , "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk" , "pos": [0,0] },
+        { "image": "sword0" , "pos": [3,6] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw" , "pos": [0,0] },
+        { "image": "sword0" , "pos": [3,16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw" , "pos": [0,0] },
+        { "image": "sword0" , "pos": [3,8] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "throw" , "pos": [0,0] } ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1" , "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk1" , "pos": [0,0] },
+        { "image": "sword1" , "pos": [-4,4] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1" , "pos": [0,0] },
+        { "image": "sword1" , "pos": [-16,4] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1" , "pos": [0,0] },
+        { "image": "sword1" , "pos": [-8,4] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "throw1" , "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1" , "pos": [0,0], "flip": "h" } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk1" , "pos": [0,0], "flip": "h" },
+        { "image": "sword1" , "pos": [4,4], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1" , "pos": [0,0], "flip": "h" },
+        { "image": "sword1" , "pos": [16,4], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1" , "pos": [0,0], "flip": "h" },
+        { "image": "sword1" , "pos": [8,4], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "throw1" , "pos": [0,0], "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk3" , "pos": [0,0], "flip": "h" } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk3" , "pos": [0,0], "flip": "h" },
+        { "image": "sword0" , "pos": [5,-7], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2" , "pos": [0,0] },
+        { "image": "sword0" , "pos": [5,-16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2" , "pos": [0,0] },
+        { "image": "sword0" , "pos": [5,-7], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "throw2" , "pos": [0,0] } ] }
+    ]
+  },
+  "Sword Attack (half-flip) (NYI)": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk" , "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk" , "pos": [0,0] },
+        { "image": "sword0" , "pos": [3,6] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw" , "pos": [0,0] },
+        { "image": "sword0" , "pos": [3,16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw" , "pos": [0,0] },
+        { "image": "sword0" , "pos": [3,8] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "throw" , "pos": [0,0] } ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1" , "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk1" , "pos": [0,0] },
+        { "image": "sword1" , "pos": [-4,4] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1" , "pos": [0,0] },
+        { "image": "sword1" , "pos": [-16,4] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1" , "pos": [0,0] },
+        { "image": "sword1" , "pos": [-8,4] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "throw1" , "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1" , "pos": [0,0], "flip": "h" } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk1" , "pos": [0,0], "flip": "h" },
+        { "image": "sword1" , "pos": [4,4], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1" , "pos": [0,0], "flip": "h" },
+        { "image": "sword1" , "pos": [16,4], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1" , "pos": [0,0], "flip": "h" },
+        { "image": "sword1" , "pos": [8,4], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "throw1" , "pos": [0,0], "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk3" , "pos": [0,0], "flip": "h" } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk3" , "pos": [0,0], "flip": "h" },
+        { "image": "sword0" , "pos": [5,-7], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2" , "pos": [0,0] },
+        { "image": "sword0" , "pos": [5,-16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2" , "pos": [0,0] },
+        { "image": "sword0" , "pos": [5,-7], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "throw2" , "pos": [0,0] } ] }
+    ]
+  },
   "Climb": {
     "up": [
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "climb", "pos": [0,0] } ] },
