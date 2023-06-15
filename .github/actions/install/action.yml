@@ -51,7 +51,7 @@ runs:
     - name: Pillow PreReqs (Mac)
       shell: bash
       run: |
-        brew install libjpeg libtiff little-cms2 openjpeg webp
+        brew install libjpeg libtiff little-cms2 openjpeg webp zlib
       if: contains(inputs.os-name, 'macos')
     # install pillow
     - name: 💿Install Pillow (!Windows)
