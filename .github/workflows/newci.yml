@@ -166,11 +166,7 @@ jobs:
 
         # exclude PIL == 7.x & py >= 3.10
 
-        exclude:
-          - os-name: ubuntu-latest
-            python-version: "3.12"
-          - os-name: ubuntu-20.04
-            python-version: "3.12"
+        # exclude:
         #   - os-name: macos-latest
         #     python-version: 3.9
         #   - os-name: macos-latest
