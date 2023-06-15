@@ -7,7 +7,7 @@ on: [push, pull_request]
 #########
 # actions
 #########
-# actions/checkout@v3.5.2
+# actions/checkout@v3.5.3
 # actions/download-artifact@v3.0.2
 # actions/create-release
 # actions/upload-release-asset
@@ -81,10 +81,10 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
       # install python
       - name: 💿Install Python
-        uses: actions/setup-python@v4.6.0
+        uses: actions/setup-python@v4.6.1
         with:
           python-version: ${{ matrix.python-version }}
       # python version
@@ -143,9 +143,9 @@ jobs:
 
           # exclude macos / py3.9+
           # exclude win   / py3.9+
-          # "7.0.0",
-          # "7.1.2",
-          # "7.2.0",
+          "7.0.0",
+          "7.1.2",
+          "7.2.0",
 
           # exclude macos / py3.9+
           # exclude win   / py3.9+
@@ -158,29 +158,32 @@ jobs:
           # "8.3.2",
           # "8.4.0",
 
-          "9.0.0",
-          "9.0.1",
-          "9.1.0",
-          "9.1.1",
-          "9.2.0",
-          "9.3.0",
-          "9.4.0",
-          "9.5.0",
+          # exclude macos / py3.9+
+          # exclude win   / py3.9+
+          # "9.0.0",
+          # "9.0.1",
+          # "9.1.0",
+          # "9.1.1",
+          # "9.2.0",
+          # "9.3.0",
+          # "9.4.0",
+          # "9.5.0",
         ]
 
         # exclude PIL == 7.x & py >= 3.10
 
         exclude:
+          # ubuntu-latest/py3.12
           # ubuntu-20.04/py3.12
-          - os-name: ubuntu-20.04
+          - os-name: [ubuntu-latest, ubuntu-20.04]
             python-version: "3.12"
           # macos,win/py3.9,3.10,3.11,3.12
-          # - os-name: [macos-latest, windows-latest]
-          #   python-version: [3.9, "3.10", "3.11", "3.12"]
+          - os-name: [macos-latest, windows-latest]
+            python-version: [3.9, "3.10", "3.11", "3.12"]
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -264,7 +267,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -339,7 +342,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -369,7 +372,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
 
       # install dependencies via pip
       - name: 💿Install Dependencies via pip
@@ -516,7 +519,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
       # get parent dir
       - name: 📁Get Parent Directory
         id: parentDir
@@ -552,7 +555,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.5.2
+        uses: actions/checkout@v3.5.3
       # download pages artifact
       - name: 🔽Download Pages Artifact
         uses: actions/download-artifact@v3.0.2
