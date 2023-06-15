@@ -26,11 +26,11 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          ubuntu-latest,
+          # ubuntu-latest,  # ubuntu-22.04
           ubuntu-22.04,
           ubuntu-20.04,
-          macos-latest,
-          windows-latest
+          macos-latest,   # macos-12
+          windows-latest  # windows-2022
         ]
 
         # should run on py 3.8-3.10
@@ -120,11 +120,11 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          ubuntu-latest,
+          # ubuntu-latest,  # ubuntu-22.04
           ubuntu-22.04,
           ubuntu-20.04,
-          macos-latest,
-          windows-latest
+          macos-latest,   # macos-12
+          windows-latest  # windows-2022
         ]
 
         # should run on py 3.8-3.10
@@ -203,11 +203,11 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          ubuntu-latest,
+          # ubuntu-latest,  # ubuntu-22.04
           ubuntu-22.04,
           ubuntu-20.04,
-          macos-latest,
-          windows-latest
+          macos-latest,   # macos-12
+          windows-latest  # windows-2022
         ]
 
         # should run on py 3.8-3.10

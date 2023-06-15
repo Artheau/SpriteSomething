@@ -8,6 +8,10 @@
   ],
   "border_color": [0, 0, 0, 255],
   "border_size": 0,
+  "pseudoimages": [
+    "axe0","axe1","axe2","axe3",
+    "sword0","sword1"
+  ],
   "layout": [
     [
       "walk",
