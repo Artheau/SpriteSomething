@@ -184,14 +184,14 @@ jobs:
             python-version: "3.12"
 
           # macos/py3.9
-          # - os-name: macos-latest
-          #   python-version: 3.9
+          - os-name: macos-latest
+            python-version: 3.9
           # macos/py3.10
-          # - os-name: macos-latest
-          #   python-version: "3.10"
+          - os-name: macos-latest
+            python-version: "3.10"
           # macos/py3.11
-          # - os-name: macos-latest
-          #   python-version: "3.11"
+          - os-name: macos-latest
+            python-version: "3.11"
           # macos/py3.12
           - os-name: macos-latest
             python-version: "3.12"

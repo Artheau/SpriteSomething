@@ -46,15 +46,8 @@ runs:
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
-    # install pillow (macos)
-    - name: 💿Install Pillow (MacOS)
-      shell: bash
-      run: |
-        python -m pip install pillow==${{ inputs.pillow-version }} --global-option="--disable-zlib"
-      if: contains(inputs.os-name, 'macos')
     # install pillow
-    - name: 💿Install Pillow (!MacOS)
+    - name: 💿Install Pillow
       shell: bash
       run: |
         python -m pip install pillow==${{ inputs.pillow-version }}
-      if: contains(inputs.os-name, 'macos') != true
