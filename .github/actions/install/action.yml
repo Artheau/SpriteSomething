@@ -46,8 +46,22 @@ runs:
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
+    # install pillow prereqs
+    # macos
+    - name: Pillow PreReqs (Mac)
+      shell: bash
+      run: |
+        brew install libjpeg libtiff little-cms2 openjpeg webp
+      if: contains(inputs.os-name, 'macos')
     # install pillow
-    - name: 💿Install Pillow
+    - name: 💿Install Pillow (!Windows)
       shell: bash
       run: |
         python -m pip install pillow==${{ inputs.pillow-version }}
+      if: contains(inputs.os-name, 'windows') != true
+    # install pillow
+    - name: 💿Install Pillow (Windows)
+      shell: bash
+      run: |
+        python -m pip install pillow==${{ inputs.pillow-version }} --only-binary=:all:
+      if: contains(inputs.os-name, 'windows')

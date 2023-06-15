@@ -120,8 +120,8 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          # ubuntu-latest,  # ubuntu-22.04
-          ubuntu-22.04,
+          ubuntu-latest,  # ubuntu-22.04
+          # ubuntu-22.04,
           ubuntu-20.04,
           macos-latest,   # macos-12
           windows-latest  # windows-2022
@@ -133,12 +133,14 @@ jobs:
           3.9,
           "3.10",
           "3.11",
-          # "3.12",
+          "3.12",
         ]
 
         # PIL 6.2.2 is good
         # PIL 7.0.0+ introduces color error
         pillow-version: [
+          # exclude macos / py3.9+
+          # exclude win   / py3.9+
           "6.2.2",
 
           # exclude macos / py3.9+
@@ -195,17 +197,17 @@ jobs:
           #   python-version: "3.12"
 
           # windows/py3.9
-          # - os-name: windows-latest
-          #   python-version: 3.9
+          - os-name: windows-latest
+            python-version: 3.9
           # windows/py3.10
-          # - os-name: windows-latest
-          #   python-version: "3.10"
+          - os-name: windows-latest
+            python-version: "3.10"
           # windows/py3.11
-          # - os-name: windows-latest
-          #   python-version: "3.11"
+          - os-name: windows-latest
+            python-version: "3.11"
           # windows/py3.12
-          # - os-name: windows-latest
-          #   python-version: "3.12"
+          - os-name: windows-latest
+            python-version: "3.12"
     steps:
       # checkout commit
       - name: ✔️Checkout commit
@@ -236,8 +238,8 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          # ubuntu-latest,  # ubuntu-22.04
-          ubuntu-22.04,
+          ubuntu-latest,  # ubuntu-22.04
+          # ubuntu-22.04,
           ubuntu-20.04,
           macos-latest,   # macos-12
           windows-latest  # windows-2022
@@ -338,7 +340,7 @@ jobs:
         ]
 
         # run on PIL 6.2.2
-        # can't build on py 3.9-3.10
+        # can't build on py 3.9-3.12
         pillow-version: [
           "6.2.2",
 
