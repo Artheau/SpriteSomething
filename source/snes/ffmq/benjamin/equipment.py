@@ -50,18 +50,18 @@ def equipment_test(save=False):
             origin = ((17*j), (17 * (i+1)))
             dims = (16,16)
             icon_specs[key + str(j)] = coord_calc(origin,dims)
-            print(key + str(j), icon_specs[key + str(j)])
+            # print(key + str(j), icon_specs[key + str(j)])
 
     for [i, key] in enumerate(["bomb", "jumbo", "mega"]):
         origin = ((36*i), 51)
         dims = (16, 23)
         icon_specs[key + str(0)] = coord_calc(origin,dims)
-        print(key + str(0), icon_specs[key + str(0)])
+        # print(key + str(0), icon_specs[key + str(0)])
 
         origin = (((36*i) + 17), 51)
         dims = (18, 23)
         icon_specs[key + str(1)] = coord_calc(origin,dims)
-        print(key + str(1), icon_specs[key + str(1)])
+        # print(key + str(1), icon_specs[key + str(1)])
 
     splodey = {
         "explode0": (( 0,76),(16,16)),

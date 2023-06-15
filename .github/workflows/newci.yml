@@ -197,7 +197,7 @@ jobs:
     name: 💿/🔨
     runs-on: ${{ matrix.os-name }}
     needs: [install-test]
-    continue-on-error: True
+    # continue-on-error: True
 
     strategy:
       matrix:
