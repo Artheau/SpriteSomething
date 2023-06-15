@@ -193,21 +193,21 @@ jobs:
           # - os-name: macos-latest
           #   python-version: "3.11"
           # macos/py3.12
-          # - os-name: macos-latest
-          #   python-version: "3.12"
+          - os-name: macos-latest
+            python-version: "3.12"
 
           # windows/py3.9
-          # - os-name: windows-latest
-          #   python-version: 3.9
+          - os-name: windows-latest
+            python-version: 3.9
           # windows/py3.10
-          # - os-name: windows-latest
-          #   python-version: "3.10"
+          - os-name: windows-latest
+            python-version: "3.10"
           # windows/py3.11
-          # - os-name: windows-latest
-          #   python-version: "3.11"
+          - os-name: windows-latest
+            python-version: "3.11"
           # windows/py3.12
-          # - os-name: windows-latest
-          #   python-version: "3.12"
+          - os-name: windows-latest
+            python-version: "3.12"
     steps:
       # checkout commit
       - name: ✔️Checkout commit
