@@ -274,6 +274,202 @@
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "throw2" , "pos": [0,0] } ] }
     ]
   },
+  "Axe Attack (full-flip)": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0] },
+        { "image": "axe1", "pos": [-16,0] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe3", "pos": [-16,16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe3", "pos": [8,16], "flip": "both" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0], "flip": "h" },
+        { "image": "axe2", "pos": [16,8], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0], "flip": "h" },
+        { "image": "axe1", "pos": [16,0], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "pos": [0,0], "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2", "pos": [0,0] },
+        { "image": "axe0", "pos": [0,-16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0] },
+        { "image": "axe3", "pos": [-16,-16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0] },
+        { "image": "axe3", "pos": [-16,16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe2", "pos": [-8,16], "flip": "both" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe0", "pos": [0,16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "pos": [0,0], "flip": "h" } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2", "pos": [0,0] },
+        { "image": "axe0", "pos": [0,-16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0], "flip": "h" },
+        { "image": "axe3", "pos": [16,-16], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0], "flip": "h" },
+        { "image": "axe3", "pos": [16,16], "flip": "both" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe2", "pos": [8,16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe0", "pos": [0,16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "pos": [0,0] } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk3", "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0], "flip": "h" },
+        { "image": "axe1", "pos": [16,0], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2", "pos": [0,0] },
+        { "image": "axe3", "pos": [16,-16], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2", "pos": [0,0] },
+        { "image": "axe3", "pos": [-16,-16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0] },
+        { "image": "axe2", "pos": [-16,-8], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0] },
+        { "image": "axe1", "pos": [-16,0] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "pos": [0,0] } ] }
+    ]
+  },
+  "Axe Attack (half-flip) (NYI)": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0] },
+        { "image": "axe1", "pos": [-16,0] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe3", "pos": [-16,16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe3", "pos": [8,16], "flip": "both" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0], "flip": "h" },
+        { "image": "axe2", "pos": [16,8], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0], "flip": "h" },
+        { "image": "axe1", "pos": [16,0], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "pos": [0,0], "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2", "pos": [0,0] },
+        { "image": "axe0", "pos": [0,-16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0] },
+        { "image": "axe3", "pos": [-16,-16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0] },
+        { "image": "axe3", "pos": [-16,16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe2", "pos": [-8,16], "flip": "both" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe0", "pos": [0,16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "pos": [0,0], "flip": "h" } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2", "pos": [0,0] },
+        { "image": "axe0", "pos": [0,-16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0], "flip": "h" },
+        { "image": "axe3", "pos": [16,-16], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0], "flip": "h" },
+        { "image": "axe3", "pos": [16,16], "flip": "both" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe2", "pos": [8,16], "flip": "v" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw", "pos": [0,0] },
+        { "image": "axe0", "pos": [0,16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "pos": [0,0] } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk3", "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0], "flip": "h" },
+        { "image": "axe1", "pos": [16,0], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2", "pos": [0,0] },
+        { "image": "axe3", "pos": [16,-16], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw2", "pos": [0,0] },
+        { "image": "axe3", "pos": [-16,-16] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0] },
+        { "image": "axe2", "pos": [-16,-8], "flip": "h" }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "throw1", "pos": [0,0] },
+        { "image": "axe1", "pos": [-16,0] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "pos": [0,0] } ] }
+    ]
+  },
   "Climb": {
     "up": [
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "climb", "pos": [0,0] } ] },
