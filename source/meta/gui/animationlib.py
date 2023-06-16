@@ -221,6 +221,13 @@ class AnimationEngineParent():
             tile_list_text = ""
         if pose_number is not None and pose_list:
             pose = pose_list[pose_number]
+            tile_list_text += "Name: <none>"
+            if "#name" in pose:
+                tile_list_text = tile_list_text.replace("<none>", pose["#name"])
+            if "name" in pose:
+                tile_list_text = tile_list_text.replace("<none>", pose["name"])
+            tile_list_text += "\n\n"
+
             for tile in pose["tiles"]:
                 tile_list_text += tile["image"]
                 if "flip" in tile:
