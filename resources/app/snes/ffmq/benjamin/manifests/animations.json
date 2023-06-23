@@ -15277,7 +15277,21 @@
           ]
         }
       ]
-                  },
+  },
+  "Shrug": {
+    "right": [
+      { "frames": 20, "disposition": [0,0], "tiles": [
+        { "image": "shrug", "pos": [0,0] },
+        { "image": "shrugHand", "pos": [16,0] },
+        { "image": "shrugHand", "pos": [-8,0], "flip": "h" }
+      ] },
+      { "frames": 20, "disposition": [0,0], "tiles": [
+        { "image": "shrug", "pos": [0,0] },
+        { "image": "shrugHand", "pos": [16,-1], "flip": "" },
+        { "image": "shrugHand", "pos": [-8,-1], "flip": "h" }
+      ] }
+    ]
+  },
   "Climb": {
     "up": [
       { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "climb", "pos": [0,0] } ] },
