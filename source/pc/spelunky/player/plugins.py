@@ -18,7 +18,7 @@ class Plugins(PluginsParent):
 	def get_spritesomething_sprites(self):
 		success = gui_common.get_sprites(
 			self,
-			"Unofficial SpriteSomething Spelunky Player",
+			"Unofficial SpriteSomething Spelunky/Player",
 			"pc/spelunky/player/sheets/unofficial",
 			"https://raw.githubusercontent.com/Artheau/SpriteSomething/gh-pages/resources/app/pc/spelunky/player/sprites.json"
 		)
