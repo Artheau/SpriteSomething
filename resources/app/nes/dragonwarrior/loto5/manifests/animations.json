@@ -1,0 +1,123 @@
+{
+  "$schema": "../../../../../schema/animations.schema.json",
+  "Walk": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "crop": [1,1,17,17], "pos": [0,0], "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk6", "crop": [1,1,17,17], "pos": [0,0], "flip": "h" } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk7", "crop": [1,1,17,17], "pos": [0,0], "flip": "h" } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk6", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk7", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk4", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk4", "crop": [1,1,17,17], "pos": [0,0], "flip": "h" } ] }
+    ]
+  },
+  "Walk (Sword)": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk8", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk9", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk6", "crop": [1,1,17,17], "pos": [0,0], "flip": "h" } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk7", "crop": [1,1,17,17], "pos": [0,0], "flip": "h" } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk14", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk15", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk12", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk13", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ]
+  },
+  "Walk (Shield)": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        {"image": "walk", "crop": [1,1,9,17], "pos": [0,0] },
+        {"image": "walk16", "crop": [9,1,17,17], "pos": [8,0] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        {"image": "walk", "crop": [9,1,17,17], "pos": [0,0], "flip": "h" },
+        {"image": "walk17", "crop": [9,1,17,17], "pos": [8,0] }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk26", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk27", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk6", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk7", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk4", "crop": [9,1,17,17], "pos": [8,0] },
+        { "image": "walk20", "crop": [1,1,9,17], "pos": [0,0] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk4", "crop": [1,1,9,17], "pos": [8,0], "flip": "h" },
+        { "image": "walk21", "crop": [1,1,9,17], "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Walk (Equipped)": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk8", "crop": [1,1,9,17], "pos": [0,0] },
+        { "image": "walk24", "crop": [8,1,17,17], "pos": [7,0] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk9", "crop": [1,1,9,17], "pos": [0,0] },
+        { "image": "walk25", "crop": [8,1,17,17], "pos": [7,0] }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk26", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk27", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk14", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk15", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "walk12", "crop": [9,1,17,17], "pos": [8,0] },
+        { "image": "walk28", "crop": [1,1,9,17], "pos": [0,0] }
+      ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+          { "image": "walk13", "crop": [9,1,17,17], "pos": [8,0] },
+          { "image": "walk29", "crop": [1,1,9,17], "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Carry": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "carry", "crop": [1,1,17,9], "pos": [0,0] },
+        { "image": "carry1", "crop": [1,1,17,17], "pos": [0,0] }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry2", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry3", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry6", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry7", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry4", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [
+        { "image": "carry4", "crop": [1,1,17,9], "pos": [0,0] },
+        { "image": "carry5", "crop": [1,1,17,17], "pos": [0,0] }
+      ] }
+    ]
+  }
+}
