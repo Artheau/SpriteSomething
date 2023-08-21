@@ -321,33 +321,17 @@ class Sprite(SpriteParent):
                 rom.write_to_snes_address(0x1BEDF5+0x02*i,converted_palette[0x10+0x10*i],2)
             linelen = 0
             if hex(rom.read_from_snes_address(0x238000, 2)) == "0x3702":
+                print("CHECK ONE")
                 if hex(rom.read_from_snes_address(0x23801E, 2)) == "0x3702":
+                    print("CHECK TWO")
                     linelen = 28
                 elif hex(rom.read_from_snes_address(0x238022, 2)) == "0x3702":
+                    print("CHECK THREE")
                     linelen = 32
             if linelen > 0:
                 # print("v32-compatible credits")
                 # print(f"Length: {linelen}")
-                contiguous = digits + ascii_uppercase + "'"
-                letters = {
-                    "hi": {
-                        " ": "0x9F",
-                        '.': "0xA0",
-                        '/': "0xA2",
-                        ':': "0xA3",
-                        '_': "0xA6"
-                    },
-                    "lo": {
-                        " ": "0x9F",
-                        '.': "0xC0",
-                        '/': "0xC2",
-                        ':': "0xC3",
-                        '_': "0xC6"
-                    }
-                }
-                for i,ltr in enumerate(itertools.chain(contiguous)):
-                    letters["hi"][ltr] = hex(i + 83).upper().replace("0X","0x")
-                    letters["lo"][ltr] = hex(i + 83 + 38).upper().replace("0X","0x")
+                [bigText, addrs, charClass] = self.get_alphabet(rom)
 
                 msg = {"hi":{"ascii":"","rom":{"hex":[],"dec":[]}},"lo":{"ascii":"","rom":{"hex":[],"dec":[]}}}
                 author = ""
@@ -356,7 +340,7 @@ class Sprite(SpriteParent):
                     author = self.metadata["author.name"]
                 if "author.name-short" in self.metadata:
                     author_short = self.metadata["author.name-short"]
-                char_class = "a-zA-Z0-9\' "
+                char_class = "a-zA-Z0-9\' " if charClass == "" else charClass
                 pattern = r'^([' + char_class + ']+)$'
                 antipattern = r'([^' + char_class + '])'
                 if len(author) <= linelen:
@@ -379,11 +363,11 @@ class Sprite(SpriteParent):
                 for i,ltr in enumerate(itertools.chain(author)):
                     msg["hi"]["ascii"] += ltr
                     msg["lo"]["ascii"] += ltr
-                    msg["hi"]["rom"]["hex"].append(letters["hi"][ltr])
-                    msg["lo"]["rom"]["hex"].append(letters["lo"][ltr])
-                    msg["hi"]["rom"]["dec"].append(int(letters["hi"][ltr],16))
-                    msg["lo"]["rom"]["dec"].append(int(letters["lo"][ltr],16))
-                # print(msg)
+                    msg["hi"]["rom"]["hex"].append(bigText[ltr][0])
+                    msg["lo"]["rom"]["hex"].append(bigText[ltr][1])
+                    msg["hi"]["rom"]["dec"].append(int(bigText[ltr][0],16))
+                    msg["lo"]["rom"]["dec"].append(int(bigText[ltr][1],16))
+                print(msg)
 
                 rom.bulk_write_to_snes_address(0x238002,msg["hi"]["rom"]["dec"],linelen)
                 rom.bulk_write_to_snes_address(0x238004+linelen,msg["lo"]["rom"]["dec"],linelen)

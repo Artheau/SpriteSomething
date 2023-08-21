@@ -300,8 +300,7 @@ class SpriteParent():
             raise AssertionError(
                 f"No support is implemented for ZSPR version {int(data[4])}")
 
-    def translate_author(self, rom):
-        name = ""
+    def get_alphabet(self, rom):
         rom_name = rom.get_name()
         is_zsm = "ZSM" in rom_name
         bigText = { "": [0x00, 0x00 ] }
@@ -311,12 +310,25 @@ class SpriteParent():
         with open(alphabetsPath, "r", encoding="utf-8") as alphabetsFile:
             key = "zsm" if is_zsm else self.resource_subpath.split(os.sep)[1]
             alphabetsJSON = json.load(alphabetsFile)
+            alphaVersion = "base"
+            romVersion = rom.read(0x7FE2, 1) if not is_zsm else "vanilla-like"
+            if romVersion in [3, 4]:
+                alphaVersion = "0003"
+            if is_zsm or key == "zelda3":
+                print(romVersion, alphaVersion)
             if key in alphabetsJSON:
-                bigText = alphabetsJSON[key]["alphabet"]
-                addrs = alphabetsJSON[key]["addrs"][self.internal_name]
+                if alphaVersion in alphabetsJSON[key]:
+                    bigText = alphabetsJSON[key][alphaVersion]["alphabet"]
+                    addrs = alphabetsJSON[key][alphaVersion]["addrs"][self.internal_name]
 
         if isinstance(addrs, dict):
             addrs = addrs[rom.type().lower()]
+        return [bigText, addrs, alphabetsJSON[key][alphaVersion]["charClass"] if "charClass" in alphabetsJSON[key][alphaVersion] else ""]
+
+    def translate_author(self, rom):
+        name = ""
+        [bigText, addrs, _] = self.get_alphabet(rom)
+
         names = {}
         for addr in addrs:
             readType = "SNES" if "SNES" in addr else "PC"
