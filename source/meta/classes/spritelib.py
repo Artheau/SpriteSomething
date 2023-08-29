@@ -297,14 +297,14 @@ class SpriteParent():
             self.import_from_binary_data(pixel_data, palette_data)
         else:
             # FIXME: English
-            raise AssertionError(
-                f"No support is implemented for ZSPR version {int(data[4])}")
+            raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
 
     def get_alphabet(self, rom):
         rom_name = rom.get_name()
         is_zsm = "ZSM" in rom_name
         bigText = { "": [0x00, 0x00 ] }
         addrs = { rom.type().lower(): [ "SNES0x00" ] }
+        charClass = ""
 
         alphabetsPath = common.get_resource([self.resource_subpath, "..", "manifests"], "alphabets.json")
         with open(alphabetsPath, "r", encoding="utf-8") as alphabetsFile:
@@ -320,10 +320,11 @@ class SpriteParent():
                 if alphaVersion in alphabetsJSON[key]:
                     bigText = alphabetsJSON[key][alphaVersion]["alphabet"]
                     addrs = alphabetsJSON[key][alphaVersion]["addrs"][self.internal_name]
+                    charClass = alphabetsJSON[key][alphaVersion]["charClass"] if "charClass" in alphabetsJSON[key][alphaVersion] else ""
 
         if isinstance(addrs, dict):
             addrs = addrs[rom.type().lower()]
-        return [bigText, addrs, alphabetsJSON[key][alphaVersion]["charClass"] if "charClass" in alphabetsJSON[key][alphaVersion] else ""]
+        return [bigText, addrs, charClass]
 
     def translate_author(self, rom):
         name = ""
