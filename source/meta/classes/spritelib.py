@@ -228,8 +228,249 @@ class SpriteParent():
             palette_data = data[palette_data_offset:palette_data_offset+palette_data_length]
             self.import_from_binary_data(pixel_data,palette_data)
         else:
-            #FIXME: English
+            # FIXME: English
             raise AssertionError(f"No support is implemented for ZSPR version {int(data[4])}")
+
+    def get_alphabet(self, rom):
+        rom_name = rom.get_name()
+        is_zsm = "ZSM" in rom_name
+        bigText = { "": [0x00, 0x00 ] }
+        addrs = { rom.type().lower(): [ "SNES0x00" ] }
+
+        alphabetsPath = common.get_resource([self.resource_subpath, "..", "manifests"], "alphabets.json")
+        with open(alphabetsPath, "r", encoding="utf-8") as alphabetsFile:
+            key = "zsm" if is_zsm else self.resource_subpath.split(os.sep)[1]
+            alphabetsJSON = json.load(alphabetsFile)
+            alphaVersion = "base"
+            romVersion = rom.read(0x7FE2, 1) if not is_zsm else "vanilla-like"
+            if romVersion in [3, 4]:
+                alphaVersion = "0003"
+            if is_zsm or key == "zelda3":
+                print(romVersion, alphaVersion)
+            if key in alphabetsJSON:
+                if alphaVersion in alphabetsJSON[key]:
+                    bigText = alphabetsJSON[key][alphaVersion]["alphabet"]
+                    addrs = alphabetsJSON[key][alphaVersion]["addrs"][self.internal_name]
+
+        if isinstance(addrs, dict):
+            addrs = addrs[rom.type().lower()]
+        return [bigText, addrs, alphabetsJSON[key][alphaVersion]["charClass"] if "charClass" in alphabetsJSON[key][alphaVersion] else ""]
+
+    def translate_author(self, rom):
+        name = ""
+        [bigText, addrs, _] = self.get_alphabet(rom)
+
+        names = {}
+        for addr in addrs:
+            readType = "SNES" if "SNES" in addr else "PC"
+            addr = addr[len(readType):]
+            if int(str(addr), 16) > 0:
+                names[addr] = ""
+                data = []
+                if readType == "SNES":
+                    data = rom.bulk_read_from_snes_address(int(str(addr), 16), (28 * 2)).hex()
+                elif readType == "PC":
+                    data = rom.bulk_read(int(str(addr), 16), (28 * 2)).hex()
+                n = 2
+                data = [data[i:i+n] for i in range(0, len(data), n)]
+                for hexCode in data:
+                    for [bigLetter, bigLCodes] in bigText.items():
+                        for bigLCode in bigLCodes:
+                            if isinstance(bigLCode, str):
+                                bigLCode = int(bigLCode, 16)
+                            if int(f"0x{hexCode}", 16) == bigLCode:
+                                # if bigLetter not in [ " ", "0", "Q" ]:
+                                names[addr] += bigLetter
+                if names[addr] != "":
+                    names[addr] = " ".join(map(str.capitalize, names[addr].split())).strip()
+                    names[addr] = names[addr].split("0 ")[0].strip()
+                    names[addr] = " ".join(list(set(names[addr].split(" "))))
+                    if names[addr] != "":
+                        for [srch, repl] in [
+                          [ "DA", "D" ],
+                          [ "EQ", "E" ],
+                          [ "G0", "G" ],
+                          [ "I3", "I" ],
+                          [ "Mt", "M" ],
+                          [ "N_", "N" ],
+                          [ "UQ", "U" ],
+                          [ "Y6", "Y" ]
+                        ]:
+                            names[addr] = names[addr].replace(srch, repl).strip()
+                            names[addr] = names[addr].replace(srch.lower(), repl.lower()).strip()
+                    if names[addr] != "":
+                        name = names[addr]
+                        print("Found Sprite Author:", name, names)
+                        return name
+        return name
+
+    # filename, gameName, paletteID, fmt
+    def export_palette(self, filename="", gameName="", paletteID="", fmt="gimp"):
+        if self.classic_name != "Link":
+          return
+
+        if filename == "":
+          filename = self.classic_name.lower() + ".palette"
+          if fmt != "binary":
+            filename += '-' + fmt
+
+        if fmt == "binary":
+          write_buffer = bytearray()
+          write_buffer.extend(self.get_binary_palettes())
+          with open(filename, "wb") as palettes_file:
+              palettes_file.write(write_buffer)
+          return True
+
+        palette_doc = []
+        header = []
+        footer = [""]
+        clrfmt = lambda x:(
+          "%d %d %d"
+          %
+          (
+            x[0],
+            x[1],
+            x[2]
+          )
+        )
+
+        # ASPR
+        if fmt == "aspr":
+          header = [
+            "---"
+          ]
+          clrfmt = lambda x:(
+            "%s"
+            %
+            str(x)
+          )
+
+        # GIMP
+        # CinePaint
+        # Inkscape
+        # Krita
+        elif fmt == "gimp":
+          header = [
+            "GIMP Palette",
+            "Base Sprite Name: ".ljust(len("Custom Sprite Name: "))   + self.classic_name,
+            "Base Palette Name: ".ljust(len("Custom Sprite Name: "))  + paletteID,
+            "Base Game Name: ".ljust(len("Custom Sprite Name: "))     + gameName,
+            "Custom Sprite Name: ".ljust(len("Custom Sprite Name: ")) + self.metadata["sprite.name"],
+            "Author: ".ljust(len("Custom Sprite Name: "))             + self.metadata["author.name"],
+            "Columns: ".ljust(len("Custom Sprite Name: "))            + str(0),
+            "#"
+          ]
+          clrfmt = lambda x:(
+            "%s %s %s\t%s"
+            %
+            (
+              str(x[0]).rjust(3),
+              str(x[1]).rjust(3),
+              str(x[2]).rjust(3),
+              " " or "Color Name"
+            )
+          )
+
+        # Corel
+        # Graphics Gale
+        # Paint Shop Pro
+        elif fmt == "jasc":
+          header = [
+            "JASC-PAL",
+            "0100",
+            "16"
+          ]
+
+        # Paint.NET
+        elif fmt == "pdn":
+          header = [
+            "; paint.net Palette File",
+            "; Lines that start with a semicolon are comments",
+            "; Colors are written as 8-digit hexadecimal numbers: aarrggbb",
+            "; For example, this would specify green: FF00FF00",
+            "; The alpha ('aa') value specifies how transparent a color is. FF is fully opaque, 00 is fully transparent.",
+            "; A palette must consist of ninety six (96) colors. If there are less than this, the remaining color",
+            "; slots will be set to white (FFFFFFFF). If there are more, then the remaining colors will be ignored.",
+            ";",
+            "; Base Sprite Name: ".ljust(len("; Custom Sprite Name: "))   + self.classic_name,
+            "; Base Palette Name: ".ljust(len("; Custom Sprite Name: "))  + paletteID,
+            "; Base Game Name: ".ljust(len("; Custom Sprite Name: "))     + gameName,
+            "; Custom Sprite Name: ".ljust(len("; Custom Sprite Name: ")) + self.metadata["sprite.name"],
+            "; Author: ".ljust(len("; Custom Sprite Name: "))             + self.metadata["author.name"],
+          ]
+          clrfmt = lambda x:(
+            "%s%s%s%s"
+            %
+            (
+              "FF",
+              (hex(x[0])[2:]).ljust(2,'0').upper(),
+              (hex(x[1])[2:]).ljust(2,'0').upper(),
+              (hex(x[2])[2:]).ljust(2,'0').upper()
+            )
+          )
+
+        # TileShop
+        elif fmt == "tileshop":
+          header = [
+            '<?xml version="1.0" encoding="utf-8"?>',
+            '<!--',
+            '<sprite>',
+            "\t" + f"<base name=\"{self.classic_name}\" game=\"{gameName}\" />",
+            "\t" + f"<palette name=\"{paletteID}\" />",
+            "\t" + f"<custom name=\"{self.metadata['sprite.name']}\" author=\"{self.metadata['author.name']}\" />",
+            '</sprite>',
+            '-->',
+            '<palette datafile="" color="Bgr15" zeroindextransparent="true">'
+          ]
+          clrfmt = lambda x:(
+            "\t<nativecolor value=\"#%s%s%s%s\" />"
+            %
+            (
+              (hex(x[0])[2:]).ljust(2,'0').upper(),
+              (hex(x[1])[2:]).ljust(2,'0').upper(),
+              (hex(x[2])[2:]).ljust(2,'0').upper(),
+              "FF"
+            )
+          )
+          footer = [
+            '</palette>',
+            ""
+          ]
+          pass
+
+        palette_doc += header
+
+        if fmt == "aspr":
+          for paletteID in ["green","blue","red","bunny","gloves"]:
+            palette_doc.append(f"{paletteID}:")
+            if paletteID != "gloves":
+              palette_doc.append(f"    col0: " + str((0,0,0)))
+            for [colID, color] in enumerate(self.get_palette([paletteID])):
+              colNum = colID
+              if paletteID == "gloves":
+                colNum = ["power","titan"][colNum]
+              else:
+                colNum += 1
+                colNum = f"col{hex(colNum)[2:].upper()}"
+              color = f"    {colNum}: " + str(color)
+              palette_doc.append(color)
+        else:
+          palette_doc.append(clrfmt((0,0,0)))
+          for color in self.get_palette([paletteID]):
+            color = clrfmt(color)
+            palette_doc.append(color)
+
+        if fmt == "pdn":
+          padding = 96 - len(palette_doc) + len(header)
+          for i in range(padding):
+            palette_doc.append("FFFFFFFF")
+
+        palette_doc += footer
+
+        with(open(filename, "w")) as palettes_file:
+          palettes_file.write("\n".join(palette_doc))
+
+        # print("\n".join(palette_doc))
 
     def get_supplemental_tiles(self, animation, direction, pose_number,
                                palettes, frame_number):
