@@ -1,4 +1,4 @@
 wheel
 numpy
-pillow==6.2.2
+pillow==10.0.0
 setuptools
