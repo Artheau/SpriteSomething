@@ -9,5 +9,15 @@
         "dims": [ 128, 448 ]
       }
     }
+  },
+  "16": {
+    "type": "Icon",
+    "name": "Triforce Piece",
+    "folder name": "triforcepiece",
+    "input": {
+      "png": {
+        "dims": [ 16, 16 ]
+      }
+    }
   }
 }
