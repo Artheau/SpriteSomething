@@ -1,0 +1,18 @@
+{
+  "section": {
+    "aiming": "Aiming",
+    "facing": "Facing"
+  },
+  "Aiming": {
+    "up": "Straight Up",
+    "diag_up": "Diagonal Up",
+    "neutral": "No Gun",
+    "shoot": "Gun",
+    "diag_down": "Diagonal Down",
+    "down": "Straight Down"
+  },
+  "Facing": {
+    "left": "Left",
+    "right": "Right"
+  }
+}

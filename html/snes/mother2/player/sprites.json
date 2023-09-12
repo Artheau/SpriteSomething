@@ -1,0 +1,20 @@
+[
+	{
+		"name": "Classic Ness",
+		"author": "Ripped by Artheau",
+		"file": "https://artheau.github.io/SpriteSomething/resources/app/snes/mother2/player/sprites/Ness%20Classic.zip",
+		"preview": "https://raw.githubusercontent.com/Artheau/PixelArt/master/earthbound/Ness%20Classic/001.png"
+	},
+	{
+		"name": "MegaMan",
+		"author": "Artheau",
+		"file": "https://artheau.github.io/SpriteSomething/resources/app/snes/mother2/player/sprites/Megaman.zip",
+		"preview": "https://raw.githubusercontent.com/Artheau/PixelArt/master/earthbound/Megaman/001.png"
+	},
+	{
+		"name": "ProtoMan",
+		"author": "Artheau",
+		"file": "https://artheau.github.io/SpriteSomething/resources/app/snes/mother2/player/sprites/Protoman.zip",
+		"preview": "https://raw.githubusercontent.com/Artheau/PixelArt/master/earthbound/Protoman/001.png"
+	}
+]

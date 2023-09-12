@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../../../schema/animations.schema.json",
+  "Walk": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk1", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk2", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk3", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk6", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk7", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk4", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk5", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ]
+  },
+  "Walk (Equipped)": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk8", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk9", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk10", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk11", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk14", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk15", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk12", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "walk13", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ]
+  },
+  "Carry": {
+    "down": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry1", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "left": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry2", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry3", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "right": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry6", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry7", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ],
+    "up": [
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry4", "crop": [1,1,17,17], "pos": [0,0] } ] },
+      { "frames": 20, "displacement": [0,0], "tiles": [ { "image": "carry5", "crop": [1,1,17,17], "pos": [0,0] } ] }
+    ]
+  }
+}

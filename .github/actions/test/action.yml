@@ -14,7 +14,7 @@ inputs:
 #########
 # actions
 #########
-# actions/checkout@v3.5.0
+# actions/checkout@v3.5.3
 # actions/download-artifact@v3.0.2
 # actions/upload-artifact@v3.1.2
 # coactions/setup-xvfb@v1.0.1
@@ -42,6 +42,7 @@ runs:
         mkdir -p ./failures
         echo "" > ./failures/errors.txt
         python -m tests.new.asserts.test_diags
+        python -m tests.new.asserts.test_cli
         python -m tests.new.asserts.test_exports
         python -m tests.new.asserts.test_animations
         python -m tests.new.asserts.test_gui
@@ -51,6 +52,7 @@ runs:
       with:
         run: |
           python -m tests.new.asserts.test_diags
+          python -m tests.new.asserts.test_cli
           python -m tests.new.asserts.test_exports
           python -m tests.new.asserts.test_animations
           python -m tests.new.asserts.test_gui

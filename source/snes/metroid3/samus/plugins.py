@@ -25,7 +25,7 @@ class Plugins(PluginsParent):
 	def get_spritesomething_sprites(self):
 		success = gui_common.get_sprites(
 			self,
-			"Unofficial SpriteSomething Samus",
+			"Unofficial SpriteSomething Super Metroid/Samus",
 			"snes/metroid3/samus/sheets/unofficial",
 			"https://miketrethewey.github.io/SpriteSomething-collections/snes/metroid3/samus/sprites.json"
 		)

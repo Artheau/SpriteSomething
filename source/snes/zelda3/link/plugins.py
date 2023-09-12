@@ -36,7 +36,7 @@ class Plugins(PluginsParent):
 	def get_spritesomething_sprites(self):
 		success = gui_common.get_sprites(
 			self,
-			"Unofficial SpriteSomething Link",
+			"Unofficial SpriteSomething ALttP/Link",
 			"snes/zelda3/link/sheets/unofficial",
 			"https://miketrethewey.github.io/SpriteSomething-collections/snes/zelda3/link/sprites.json"
 		)

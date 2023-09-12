@@ -3,9 +3,9 @@
 #
 #in general, these tests should be testing the import framework
 
-from tests.legacy.common_vars import *   #contains utilities common to all tests.  Should come first before the other imports.
+from tests.legacy.common_vars import *	 #contains utilities common to all tests.	Should come first before the other imports.
 
-import unittest     #for unit testing, har har
+import unittest		 #for unit testing, har har
 import sys			#so that we can check to see which modules are imported at any given time
 
 class DontGoChasingWaterfalls(unittest.TestCase):
