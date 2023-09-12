@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../../../schema/animations.schema.json",
+  "Triforce Piece": {
+    "right": [
+      {
+        "frames": 10000, "tiles": [
+          { "image": "triforcepiece", "pos": [0,0] }
+        ]
+      }
+    ]
+  }
+}

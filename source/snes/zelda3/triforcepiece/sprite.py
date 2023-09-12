@@ -9,8 +9,11 @@ from source.meta.common import common
 from source.meta.classes.spritelib import SpriteParent
 
 class Sprite(SpriteParent):
-    def __init__(self, filename, manifest_dict, my_subpath):
-        super().__init__(filename, manifest_dict, my_subpath)
+    def __init__(self, filename, manifest_dict, my_subpath, sprite_name=""):
+        super().__init__(filename, manifest_dict, my_subpath, sprite_name)
+
+        # Icons are sideview, so only left/right direction buttons should show
+        self.overhead = False
 
     def import_from_ROM(self, rom):
         author_data = self.translate_author(rom)

@@ -1,0 +1,22 @@
+{
+	"$schema": "../../../../../schema/png-layout.schema.json",
+	"comment":
+	[
+		"This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",
+		"will also be the pose that is used to import the image.  For this reason, some poses will be out of order",
+		"and this is intentional because a pose might be mirrored in its first occurance"
+	],
+	"border_color": [0,0,0,0],
+	"border_size": 0,
+	"layout":
+	[
+        [ "triforcepiece" ]
+	],
+	"images":
+	{
+		"triforcepiece": {
+			"dimensions": [0,0,16,16],
+            "used by": [["TODO", 0]]
+		}
+	}
+}
