@@ -15,6 +15,82 @@ class Sprite(SpriteParent):
         # Icons are sideview, so only left/right direction buttons should show
         self.overhead = False
 
+        self.tfp_globals = {}
+        self.tfp_globals["palettes"] = {
+          "1": [
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (248, 200, 32),
+            (248, 112, 48),
+            (0, 0, 0),
+            (248, 248, 248),
+            (200, 88, 48),
+            (176, 40, 40),
+            (224, 112, 112),
+            (40, 40, 40),
+            (184, 184, 200),
+            (120, 120, 136)
+          ],
+          "2": [
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (0, 0, 0),
+            (248, 248, 248),
+            (248, 128, 176),
+            (80, 104, 168),
+            (144, 168, 232),
+            (40, 40, 40),
+            (248, 176, 80),
+            (184, 96, 40)
+          ],
+          "4": [
+            (False, False, False),
+            (248, 248, 248),
+            (216, 96, 96),
+            (176, 96, 40),
+            (240, 160, 104),
+            (40, 40, 40),
+            (176, 144, 248),
+            (80, 112, 200),
+            (0, 0, 0),
+            (248, 248, 248),
+            (200, 48, 24),
+            (72, 144, 48),
+            (152, 208, 112),
+            (40, 40, 40),
+            (248, 208, 56),
+            (184, 136, 32)
+          ],
+          "7": [
+            (False, False, False),
+            (248, 248, 248),
+            (240, 216, 64),
+            (184, 104, 32),
+            (240, 160, 104),
+            (40, 40, 40),
+            (248, 120, 0),
+            (192, 24, 32),
+            (232, 96, 176),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False),
+            (False, False, False)
+          ]
+        }
+
     def import_from_ROM(self, rom):
         author_data = self.translate_author(rom)
         self.metadata["author.name"] = author_data
