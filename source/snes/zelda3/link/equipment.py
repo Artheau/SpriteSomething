@@ -83,7 +83,9 @@ def equipment_test(save=False):
         "book":         ((32,112),(16,16)),
         "bush":         ((48,112),(16,16)),
         "pendant":      ((64,112),(16,16)),
-        "crystal":      ((80,112),(16,16))
+        "crystal":      ((80,112),(16,16)),
+        "open_chest":   ((96,112),(16,16)),
+        "get_link":     ((62,137),(22,39))
     }
     #add some inventory stuff
     for key in inventory:

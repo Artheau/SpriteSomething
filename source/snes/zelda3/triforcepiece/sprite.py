@@ -11,6 +11,7 @@ from source.meta.classes.spritelib import SpriteParent
 class Sprite(SpriteParent):
     def __init__(self, filename, manifest_dict, my_subpath, sprite_name=""):
         super().__init__(filename, manifest_dict, my_subpath, sprite_name)
+        self.load_plugins()
 
         # Icons are sideview, so only left/right direction buttons should show
         self.overhead = False
@@ -90,6 +91,16 @@ class Sprite(SpriteParent):
             (False, False, False)
           ]
         }
+
+    def import_cleanup(self):
+        '''
+        Post-import cleanup
+        '''
+        self.load_plugins()
+        self.equipment = self.plugins.equipment_test(False)
+        if hasattr(self, "images"):
+            self.images["transparent"] = Image.new("RGBA",(0,0),0)
+            self.images = dict(self.images,**self.equipment)
 
     def import_from_ROM(self, rom):
         author_data = self.translate_author(rom)
