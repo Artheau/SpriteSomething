@@ -5,6 +5,7 @@ import json
 import os   # for env vars
 import stat  # file statistics
 import sys  # default system info
+from json.decoder import JSONDecodeError
 
 CI_SETTINGS = {}
 manifest_path = os.path.join(
@@ -17,7 +18,11 @@ manifest_path = os.path.join(
 if not os.path.isfile(manifest_path):
     raise AssertionError("Manifest not found: " + manifest_path)
 with(open(manifest_path, encoding="utf-8")) as ci_settings_file:
-    CI_SETTINGS = json.load(ci_settings_file)
+    CI_SETTINGS = {}
+    try:
+        CI_SETTINGS = json.load(ci_settings_file)
+    except JSONDecodeError as e:
+        raise ValueError("CI Settings file malformed!")
 
 UBUNTU_VERSIONS = CI_SETTINGS["common"]["common"]["ubuntu"]
 DEFAULT_EVENT = "event"

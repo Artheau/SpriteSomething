@@ -15,7 +15,7 @@ inputs:
 # actions
 #########
 # Artheau/SpriteSomething/get-parent-dir
-# actions/checkout@v3.5.0
+# actions/checkout@v4.0.0
 # actions/download-artifact@v3.0.2
 
 runs:
@@ -23,7 +23,7 @@ runs:
   steps:
     # checkout commit
     - name: ✔️Checkout commit
-      uses: actions/checkout@v3.5.0
+      uses: actions/checkout@v4.0.0
     # get parent dir
     - name: 📁Get Parent Directory
       id: parentDir
@@ -43,13 +43,13 @@ runs:
         python ./resources/ci/common/prepare_release.py
     # upload appversion artifact for later step
     - name: 🔼Upload AppVersion Artifact
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v3.1.3
       with:
         name: appversion-${{ inputs.os-name }}
         path: ./resources/app/meta/manifests/app_version.txt
     # upload archive artifact for later step
     - name: 🔼Upload Archive Artifact
-      uses: actions/upload-artifact@v3.1.2
+      uses: actions/upload-artifact@v3.1.3
       with:
         name: archive-${{ inputs.os-name }}
         path: ${{ steps.parentDir.outputs.parentDir }}/deploy

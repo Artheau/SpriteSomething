@@ -19,6 +19,7 @@ import os
 import random
 import tempfile
 from functools import partial
+from json.decoder import JSONDecodeError
 from shutil import make_archive, move
 from source.meta.classes import layoutlib
 from source.meta.common import common
@@ -109,14 +110,24 @@ class SpriteParent():
             [self.resource_subpath, "manifests"], "layout.json"))
 
     def load_animations(self):
-        with open(common.get_resource(
-            [
+        with open(common.get_resource([
                 self.resource_subpath,
                 "manifests"
             ],
             "animations.json"
         )) as file:
-            self.animations = json.load(file)
+            self.animations = {}
+            try:
+                self.animations = json.load(file)
+            except JSONDecodeError as e:
+                raise ValueError(
+                    "Animations manifest malformed: " +
+                    os.sep.join([
+                        self.resource_subpath,
+                        "manifests",
+                        "animations.json"
+                    ])
+                )
 
     def import_from_filename(self):
         _, file_extension = os.path.splitext(self.filename)
@@ -223,7 +234,10 @@ class SpriteParent():
                 if block["typeID"] == 0:
                     block_data = block_data.decode("utf-8")
                     block_data = block_data[block_data.find("{"):]
-                    block_data = json.loads(block_data)
+                    try:
+                        block_data = json.loads(block_data)
+                    except ValueError as e:
+                        raise ValueError("Block Data malformed! Within Sprite Type: " + self.resource_subpath)
                     self.metadata["sprite.name"] = block_data["title"]
             print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
             print(f"Block Data: {block_data}")
@@ -309,7 +323,11 @@ class SpriteParent():
         alphabetsPath = common.get_resource([self.resource_subpath, "..", "manifests"], "alphabets.json")
         with open(alphabetsPath, "r", encoding="utf-8") as alphabetsFile:
             key = "zsm" if is_zsm else self.resource_subpath.split(os.sep)[1]
-            alphabetsJSON = json.load(alphabetsFile)
+            alphabetsJSON = {}
+            try:
+                alphabetsJSON = json.load(alphabetsFile)
+            except ValueError as e:
+                raise ValueError("Alphabets file malformed: " + alphabetsPath)
             alphaVersion = "base"
             romVersion = rom.read(0x7FE2, 1) if not is_zsm else "vanilla-like"
             if romVersion in [3, 4]:
@@ -713,7 +731,11 @@ class SpriteParent():
             [self.resource_subpath, "manifests"], "representative-images.json")
         if manifest_file:
             with open(manifest_file) as manifest:
-                manifest_images = json.load(manifest)
+                manifest_image = {}
+                try:
+                    manifest_images = json.load(manifest)
+                except JSONDecodeError as e:
+                    raise ValueError("Manifest images malformed: " + manifest_file)
         else:
             manifest_images = {}
 

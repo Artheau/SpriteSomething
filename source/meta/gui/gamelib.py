@@ -14,6 +14,7 @@ import json                        #for reading JSON
 import os                            #for filesystem manipulation
 import random                    #for choosing background image to load on app startup
 from functools import partial
+from json.decoder import JSONDecodeError
 from source.meta.gui import widgetlib
 from source.meta.common import common
 from source.meta.gui import gui_common #TODO: Should not use GUI stuff in game class, need to move this elsewhere
@@ -53,7 +54,11 @@ def autodetect_nes(sprite_filename):
 def autodetect_png(sprite_filename):
         not_consoles = []
         with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
-            not_consoles = json.load(f)
+            not_consoles = []
+            try:
+                not_consoles = json.load(f)
+            except JSONDecodeError as e:
+                raise ValueError("Not Consoles manifest malformed!")
         #the following line prevents a "cannot identify image" error from PIL
         ImageFile.LOAD_TRUNCATED_IMAGES = True
         #I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
@@ -67,7 +72,11 @@ def autodetect_png(sprite_filename):
                 game_name = item
                 sprite_manifest_filename = os.path.join(search_path,console,game_name,"manifests","manifest.json")
                 with open(sprite_manifest_filename) as f:
-                  sprite_manifest = json.load(f)
+                  sprite_manifest = {}
+                  try:
+                    sprite_manifest = json.load(f)
+                  except JSONDecodeError as e:
+                    raise ValueError("Game Manifest malformed: " + game_name)
                   for sprite_id in sprite_manifest:
                     if "input" in sprite_manifest[sprite_id] and "png" in sprite_manifest[sprite_id]["input"] and "dims" in sprite_manifest[sprite_id]["input"]["png"]:
                       check_size = sprite_manifest[sprite_id]["input"]["png"]["dims"]
@@ -158,7 +167,10 @@ def get_sprite_number_from_rdc_data(rdc_data):
     rdcSlice = rdc_data[50:200]
     txtFmt = rdcSlice.decode("utf-8")
     metadata = txtFmt[txtFmt.find("{"):txtFmt.rindex("}") + 1]
-    metadata = json.loads(metadata)
+    try:
+      metadata = json.loads(metadata)
+    except JSONDecodeError as e:
+      raise ValueError("Sprite Number metadata malformed!")
     spriteType = metadata["spriteType"] if "spriteType" in metadata else 1
     return spriteType
 
@@ -215,7 +227,11 @@ class GameParent():
         background_manifests = common.get_all_resources([self.console_name,self.internal_name,"backgrounds"],"backgrounds.json")
         for background_manifest in background_manifests:
             with open(background_manifest) as f:
-                background_data = json.load(f)
+                background_data = []
+                try:
+                  background_data = json.load(f)
+                except JSONDecodeError as e:
+                  raise ValueError("Backgrounds Manifest malformed: " + self.internal_name)
                 for background in background_data["backgrounds"]:
                     self.background_datas["filename"][background["filename"]] = background["title"]
                     self.background_datas["title"][background["title"]] = background["filename"]
@@ -270,7 +286,11 @@ class GameParent():
     def make_sprite_by_number(self, sprite_number, sprite_filename):
         #go into the manifest and get the actual name of the sprite
         with open(common.get_resource([self.console_name,self.internal_name,"manifests"],"manifest.json")) as file:
-            manifest = json.load(file)
+            manifest = {}
+            try:
+                manifest = json.load(file)
+            except JSONDecodeError as e:
+                raise ValueError("Game Manifest malformed: " + self.internal_name)
         if str(sprite_number) in manifest:
             folder_name = manifest[str(sprite_number)]["folder name"]
             #dynamic imports to follow

@@ -4,6 +4,7 @@ import os                            #for filesystem manipulation
 import io                            #for filesystem manipution
 import re
 from string import ascii_uppercase, digits
+from json.decoder import JSONDecodeError
 from PIL import Image
 from source.meta.common import common
 from source.meta.classes.spritelib import SpriteParent
@@ -295,7 +296,11 @@ class Sprite(SpriteParent):
         app_overrides_path = os.path.join(".","resources","user","meta","manifests","overrides.json")
         if os.path.exists(app_overrides_path):
             with open(app_overrides_path) as json_file:
-                data = json.load(json_file)
+                data = {}
+                try:
+                    data = json.load(json_file)
+                except JSONDecodeError as e:
+                    raise ValueError("User App Overrides manifest malformed!")
                 if "iddqd" in data.keys():
                     iddqd = data["iddqd"]
 

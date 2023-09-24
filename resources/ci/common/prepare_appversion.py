@@ -1,6 +1,7 @@
 import common
 import json
 import os                 # for env vars
+from json.decoder import JSONDecodeError
 from shutil import copy   # file manipulation
 
 def prepare_appversion():
@@ -11,7 +12,10 @@ def prepare_appversion():
   if (not os.path.isfile(manifest_path)):
     raise AssertionError("Manifest not found: " + manifest_path)
   with(open(manifest_path)) as ci_settings_file:
-    CI_SETTINGS = json.load(ci_settings_file)
+    try:
+        CI_SETTINGS = json.load(ci_settings_file)
+    except JSONDecodeError as e:
+        raise ValueError("CI Settings file malformed!")
 
   # set tag to app_version.txt
   if not env["GITHUB_TAG"] == "":

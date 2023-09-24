@@ -5,6 +5,7 @@ import tkinter as tk
 import random
 import json
 import itertools
+from json.decoder import JSONDecodeError
 from PIL import Image, ImageTk
 from source.meta.common import common
 from source.meta.gui import gui_common
@@ -26,7 +27,11 @@ class AnimationEngineParent():
 		self.prev_palette_info = []
 
 		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
-			self.animations = json.load(file)
+			self.animations = {}
+			try:
+				self.animations = json.load(file)
+			except JSONDecodeError as e:
+				raise ValueError("Animations file malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
 		if "$schema" in self.animations:
 			del self.animations["$schema"]
 		#using a default value until the animation_panel attachment overrides this
@@ -277,7 +282,11 @@ class AnimationEngineParent():
 		spiffy_manifest = common.get_resource([self.resource_subpath,"manifests"],"spiffy-buttons.json")
 		if spiffy_manifest:
 			with open(spiffy_manifest) as f:
-				spiffy_list = json.load(f)
+				spiffy_list = {}
+				try:
+					spiffy_list = json.load(f)
+				except JSONDecodeError as e:
+					raise ValueError("Spiffy Buttons Manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
 
 				for group in spiffy_list["button-groups"]:
 					group_key = group["group-fish-key"]
@@ -304,8 +313,11 @@ class AnimationEngineParent():
 		direction_manifest = common.get_resource([self.resource_subpath,"manifests"],"direction-buttons.json")
 		if direction_manifest:
 			with open(direction_manifest) as f:
-				direction_list = json.load(f)
-
+				direction_list = {}
+				try:
+					direction_list = json.load(f)
+				except JSONDecodeError as e:
+					raise ValueError("Direction Buttons Manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
 				for group in direction_list["button-groups"]:
 					group_key = group["group-fish-key"]
 					button_group = direction_buttons.make_new_group(group_key,fish)

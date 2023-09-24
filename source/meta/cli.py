@@ -9,6 +9,7 @@ import json    #for reading JSON
 import os      #for filesystem manipulation
 import random  #for choosing random app titles, random game files & random sprites
 import sys     # exit
+from json.decoder import JSONDecodeError
 from source.meta.common import common
 from source.meta.common import constants as CONST
 from source.meta.gui import gamelib
@@ -156,7 +157,12 @@ class CLIMainFrame():
         name_dict = {}
         for filename in common.get_all_resources(["meta","manifests"],"app_names.json"):
             with open(filename, encoding="utf-8") as name_file:
-                for key,item in json.load(name_file).items():
+                nameJSON = {}
+                try:
+                    nameJSON = json.load(name_file)
+                except JSONDecodeError as e:
+                    raise ValueError("AppName JSON malformed!")
+                for key,item in nameJSON.items():
                     if "$" not in key and key in name_dict:
                         name_dict[key].extend(item)
                     else:

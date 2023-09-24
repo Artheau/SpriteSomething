@@ -16,6 +16,7 @@ import traceback                                #for error reporting
 import urllib                                   #for getting latest version number from GitHub Pages
 import webbrowser                               #for launching browser from about box
 from functools import partial                   #for passing parameters to user-triggered function calls
+from json.decoder import JSONDecodeError
 
 from source.meta.gui import widgetlib
 from source.meta import ssDiagnostics as diagnostics
@@ -81,7 +82,11 @@ class SpriteSomethingMainFrame(tk.Frame):
     working_dir_path = os.path.join(".","resources","user","meta","manifests","working_dirs.json")
     if os.path.exists(working_dir_path):
       with open(working_dir_path) as json_file:
-        data = json.load(json_file)
+        data = {}
+        try:
+            data = json.load(json_file)
+        except JSONDecodeError as e:
+            raise ValueError("Saved Working Dirs manifest malformed!")
         for k,v in data.items():
           self.working_dirs[k] = v
 
@@ -91,7 +96,11 @@ class SpriteSomethingMainFrame(tk.Frame):
     ani_settings_path = os.path.join(".","resources","user","meta","manifests","ani_settings.json")
     if os.path.exists(ani_settings_path):
       with open(ani_settings_path) as json_file:
-        data = json.load(json_file)
+        data = {}
+        try:
+          data = json.load(json_file)
+        except JSONDecodeError as e:
+          raise ValueError("Saved Animation Settings manifest malformed!")
         for console in data.keys():
           if console not in self.ani_settings:
             self.ani_settings[console] = {}
@@ -130,7 +139,12 @@ class SpriteSomethingMainFrame(tk.Frame):
     name_dict = {}
     for filename in common.get_all_resources(["meta","manifests"],"app_names.json"):
       with open(filename) as name_file:
-        for key,item in json.load(name_file).items():
+        nFile = {}
+        try:
+          nFile = json.load(name_file)
+        except JSONDecodeError as e:
+          raise ValueError("AppName JSON malformed!")
+        for key,item in nFile.items():
           if not key == "$schema":
             if key in name_dict:
               name_dict[key].extend(item)
@@ -254,7 +268,11 @@ class SpriteSomethingMainFrame(tk.Frame):
     bundled_games = {}
     not_consoles = []
     with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
-      not_consoles = json.load(f)
+      not_consoles = []
+      try:
+        not_consoles = json.load(f)
+      except JSONDecodeError as e:
+        raise ValueError("Not Consoles manifest malformed!")
     root = os.path.join("resources","app")
     for console in os.listdir(root):
       if not console in not_consoles:
@@ -264,7 +282,11 @@ class SpriteSomethingMainFrame(tk.Frame):
           for gamedir in os.listdir(os.path.join(root,console)):
             if os.path.isdir(os.path.join(root,console,gamedir)):
               with open(os.path.join(root,console,gamedir,"lang","en.json")) as en_lang:
-                en = json.load(en_lang)
+                en = {}
+                try:
+                  en = json.load(en_lang)
+                except JSONDecodeError as e:
+                  raise ValueError("Lang file malformed: " + gamedir + "/" + "EN")
                 if "game" in en:
                   if "name" in en["game"]:
                     bundled_games[console][gamedir] = {}
@@ -273,7 +295,11 @@ class SpriteSomethingMainFrame(tk.Frame):
                     bundled_games[console][gamedir]["game"]["name"] = en["game"]["name"]
                     bundled_games[console][gamedir]["sprites"] = []
               with open(os.path.join(root,console,gamedir,"manifests","manifest.json")) as game_manifest:
-                sprites = json.load(game_manifest)
+                sprites = {}
+                try:
+                  sprites = json.load(game_manifest)
+                except JSONDecodeError as e:
+                  raise ValueError("Game Manifest malformed: " + gamedir)
                 for spriteID,sprite in sprites.items():
                   if spriteID != "$schema":
                     name = sprite["name"]
@@ -329,7 +355,11 @@ class SpriteSomethingMainFrame(tk.Frame):
     self.menu.children["representative_images_menu"].add_command(label="Default",command=partial(self.get_representative_images,"default"))
     for manifest_file in common.get_all_resources([self.sprite.resource_subpath,"manifests"],"representative-images.json"):
       with open(manifest_file) as manifest:
-        manifest_images = json.load(manifest)
+        manifest_images = {}
+        try:
+          manifest_images = json.load(manifest)
+        except JSONDecodeError as e:
+          raise ValueError("Representative Images manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
         for key in manifest_images.keys():
           if not key == "default":
             self.menu.children["representative_images_menu"].add_command(label=key[0].upper() + key[1:],command=partial(self.get_representative_images,key))
@@ -387,7 +417,11 @@ class SpriteSomethingMainFrame(tk.Frame):
           bindings = None
           bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
           with open(bindings_filename,encoding="utf-8") as f:
-            bindings = json.load(f)
+            bindings = {}
+            try:
+              bindings = json.load(f)
+            except JSONDecodeError as e:
+              raise ValueError("Bindings Manifest malformed!")
           #cycle through all spiffy buttons
           for subwidget in widget.winfo_children():
             if "_button" in subwidget.winfo_name():
