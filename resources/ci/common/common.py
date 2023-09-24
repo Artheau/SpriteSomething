@@ -83,7 +83,9 @@ def prepare_env():
     # git data
     env["BRANCH"] = os.getenv("TRAVIS_BRANCH", "")
     env["GITHUB_ACTOR"] = os.getenv(
-        "GITHUB_ACTOR", CI_SETTINGS["common"]["common"]["actor"])
+        "GITHUB_ACTOR",
+        CI_SETTINGS["common"]["common"]["actor"]
+    )
     env["GITHUB_SHA"] = os.getenv("GITHUB_SHA", "")
     env["GITHUB_RUN_NUMBER"] = os.getenv("GITHUB_RUN_NUMBER", "")
     env["GITHUB_SHA_SHORT"] = env["GITHUB_SHA"]
@@ -96,8 +98,13 @@ def prepare_env():
     env["EVENT_TYPE"] = os.getenv(
         "TRAVIS_EVENT_TYPE", os.getenv("GITHUB_EVENT_NAME", DEFAULT_EVENT))
     # repo data
-    env["REPO_SLUG"] = os.getenv("TRAVIS_REPO_SLUG", os.getenv(
-        "GITHUB_REPOSITORY", DEFAULT_REPO_SLUG))
+    env["REPO_SLUG"] = os.getenv(
+        "TRAVIS_REPO_SLUG",
+        os.getenv(
+            "GITHUB_REPOSITORY",
+            DEFAULT_REPO_SLUG
+        )
+    )
     env["REPO_USERNAME"] = ""
     env["REPO_NAME"] = ""
 
@@ -115,14 +122,19 @@ def prepare_env():
         "TRAVIS_BUILD_NUMBER", env["GITHUB_RUN_NUMBER"])
 
     GITHUB_TAG = os.getenv("TRAVIS_TAG", os.getenv("GITHUB_TAG", ""))
-    OS_NAME = os.getenv("TRAVIS_OS_NAME", os.getenv(
-        "OS_NAME", sys.platform)).replace("macOS", "osx")
+    OS_NAME = os.getenv(
+        "TRAVIS_OS_NAME",
+        os.getenv(
+            "OS_NAME",
+            sys.platform
+        )
+    ).replace("macOS", "osx")
     OS_DIST = os.getenv("TRAVIS_DIST", "notset")
     OS_VERSION = ""
 
     if "win32" in OS_NAME or \
         "cygwin" in OS_NAME or \
-            "msys" in OS_NAME:
+        "msys" in OS_NAME:
         OS_NAME = "windows"
     elif "darwin" in OS_NAME:
         OS_NAME = "osx"
@@ -140,15 +152,13 @@ def prepare_env():
     if OS_VERSION == "" and OS_DIST != "" and OS_DIST != "notset":
         OS_VERSION = OS_DIST
 
-        # if no tag
-    if GITHUB_TAG == "":
-        # if we haven't appended the build number, do it
+    # if we haven't appended the build number, do it
+    if env["BUILD_NUMBER"] not in GITHUB_TAG:
+        GITHUB_TAG = APP_VERSION
+        # if the app version didn't have the build number, add it
+        # set to <app_version>.<build_number>
         if env["BUILD_NUMBER"] not in GITHUB_TAG:
-            GITHUB_TAG = APP_VERSION
-            # if the app version didn't have the build number, add it
-            # set to <app_version>.<build_number>
-            if env["BUILD_NUMBER"] not in GITHUB_TAG:
-                GITHUB_TAG += '.' + env["BUILD_NUMBER"]
+            GITHUB_TAG += '.' + env["BUILD_NUMBER"]
 
     env["GITHUB_TAG"] = GITHUB_TAG
     env["OS_NAME"] = OS_NAME
