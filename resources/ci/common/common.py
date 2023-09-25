@@ -122,6 +122,7 @@ def prepare_env():
         "TRAVIS_BUILD_NUMBER",
         env["GITHUB_RUN_NUMBER"]
     )
+    print("Build Number: " + env["BUILD_NUMBER"])
 
     GITHUB_TAG = os.getenv("TRAVIS_TAG", os.getenv("GITHUB_TAG", ""))
     OS_NAME = os.getenv(
@@ -154,6 +155,8 @@ def prepare_env():
     if OS_VERSION == "" and OS_DIST != "" and OS_DIST != "notset":
         OS_VERSION = OS_DIST
 
+    print("GITHUB_TAG: " + GITHUB_TAG)
+
     # if we haven't appended the build number, do it
     if env["BUILD_NUMBER"] not in GITHUB_TAG:
         GITHUB_TAG = APP_VERSION
@@ -162,10 +165,14 @@ def prepare_env():
         if env["BUILD_NUMBER"] not in GITHUB_TAG:
             GITHUB_TAG += '.' + env["BUILD_NUMBER"]
 
-    env["GITHUB_TAG"] = GITHUB_TAG
-    env["OS_NAME"] = OS_NAME
-    env["OS_DIST"] = OS_DIST
-    env["OS_VERSION"] = OS_VERSION
+    for [label, value] in {
+        "GITHUB_TAG": GITHUB_TAG,
+        "OS_NAME": OS_NAME,
+        "OS_DIST": OS_DIST,
+        "OS_VERSION": OS_VERSION
+    }.items():
+        env[label] = value
+        print(f"{label}: {value}")
 
     return env
 
