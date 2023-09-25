@@ -49,6 +49,17 @@ runs:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./
 
+    # get parent dir
+    - name: 📁Get Parent Directory
+      id: parentDir
+      uses: ./.github/actions/get-parent-dir
+    # download appversion artifact
+    - name: 🔽Download AppVersion Artifact
+      uses: actions/download-artifact@v3.0.2
+      with:
+        name: appversion-${{ matrix.os-name }}
+        path: ${{ steps.parentDir.outputs.parentDir }}/build
+
     # Prepare Release
     - name: 💬Prepare Release
       shell: bash
@@ -60,17 +71,6 @@ runs:
         OS_NAME: ${{ inputs.os-name }}
       run: |
         python ./resources/ci/common/prepare_release.py
-
-    # upload appversion artifact for later step
-    - name: 🔼Upload AppVersion Artifact
-      shell: bash
-      run: |
-        echo "🔼Upload AppVersion Artifact"
-    - name: 🔼Upload AppVersion Artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: appversion-${{ inputs.os-name }}
-        path: ./resources/app/meta/manifests/app_version.txt
 
     # upload archive artifact for later step
     - name: 🔼Upload Archive Artifact
