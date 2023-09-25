@@ -96,7 +96,12 @@ def prepare_env():
     env["EVENT_MESSAGE"] = os.getenv("TRAVIS_COMMIT_MESSAGE", "")
     env["EVENT_LOG"] = os.getenv("GITHUB_EVENT_PATH", "")
     env["EVENT_TYPE"] = os.getenv(
-        "TRAVIS_EVENT_TYPE", os.getenv("GITHUB_EVENT_NAME", DEFAULT_EVENT))
+        "TRAVIS_EVENT_TYPE",
+        os.getenv(
+            "GITHUB_EVENT_NAME",
+            DEFAULT_EVENT
+        )
+    )
     # repo data
     env["REPO_SLUG"] = os.getenv(
         "TRAVIS_REPO_SLUG",
@@ -119,7 +124,8 @@ def prepare_env():
 
     # ci data
     env["BUILD_NUMBER"] = os.getenv(
-        "TRAVIS_BUILD_NUMBER",
+        # "TRAVIS_BUILD_NUMBER",
+        "",
         env["GITHUB_RUN_NUMBER"]
     )
     print("Build Number: " + env["BUILD_NUMBER"])
