@@ -92,6 +92,7 @@ runs:
 
     # upload failures
     - name: 🔼Upload Failures
+      if: failure()
       shell: bash
       run: |
         echo "🔼Upload Failures"
