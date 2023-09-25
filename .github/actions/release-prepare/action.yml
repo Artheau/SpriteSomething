@@ -49,10 +49,6 @@ runs:
         name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./
 
-    # get parent dir
-    - name: 📁Get Parent Directory
-      id: parentDir
-      uses: ./.github/actions/get-parent-dir
     # download appversion artifact
     - name: 🔽Download AppVersion Artifact
       uses: actions/download-artifact@v3.0.2
