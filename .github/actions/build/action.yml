@@ -49,11 +49,20 @@ runs:
       run: |
         python ./resources/ci/common/get_upx.py
 
+    # Set Run Number
+    - name: Set Run Number
+      id: set_run_number
+      shell: bash
+      run: |
+        GITHUB_RUN_NUMBER="r${{ github.run_number }}-a${{ github.run_attempt }}"
+        echo "github_run_number=$GITHUB_RUN_NUMBER" >> $GITHUB_OUTPUT
+
     # Prepare AppVersion
     - name: Prepare AppVersion
       shell: bash
       env:
         OS_NAME: ${{ inputs.os-name }}
+        GITHUB_RUN_NUMBER: ${{ steps.set_run_number.outputs.github_run_number }}
       run: |
         python ./resources/ci/common/prepare_appversion.py
 

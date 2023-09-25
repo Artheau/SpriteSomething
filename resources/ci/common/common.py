@@ -119,7 +119,9 @@ def prepare_env():
 
     # ci data
     env["BUILD_NUMBER"] = os.getenv(
-        "TRAVIS_BUILD_NUMBER", env["GITHUB_RUN_NUMBER"])
+        "TRAVIS_BUILD_NUMBER",
+        env["GITHUB_RUN_NUMBER"]
+    )
 
     GITHUB_TAG = os.getenv("TRAVIS_TAG", os.getenv("GITHUB_TAG", ""))
     OS_NAME = os.getenv(
