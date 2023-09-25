@@ -123,11 +123,7 @@ def prepare_env():
         env["GITHUB_SHA_SHORT"] = env["GITHUB_SHA"][:7]
 
     # ci data
-    env["BUILD_NUMBER"] = os.getenv(
-        # "TRAVIS_BUILD_NUMBER",
-        "",
-        env["GITHUB_RUN_NUMBER"]
-    )
+    env["BUILD_NUMBER"] = env["GITHUB_RUN_NUMBER"]
     print("Build Number: " + env["BUILD_NUMBER"])
 
     GITHUB_TAG = os.getenv("TRAVIS_TAG", os.getenv("GITHUB_TAG", ""))
@@ -172,6 +168,7 @@ def prepare_env():
             GITHUB_TAG += '.' + env["BUILD_NUMBER"]
 
     for [label, value] in {
+        "APP_VERSION": APP_VERSION,
         "GITHUB_TAG": GITHUB_TAG,
         "OS_NAME": OS_NAME,
         "OS_DIST": OS_DIST,

@@ -38,6 +38,7 @@ runs:
       shell: bash
       run: |
         echo "🖥️Start virtual display driver & Test (!Windows)"
+      if: contains(inputs.os-name, 'windows') != true
     - name: 🖥️Start virtual display driver & Test (!Windows)
       shell: bash
       env:
@@ -60,6 +61,7 @@ runs:
       shell: bash
       run: |
         echo "🖥️Start virtual display driver & Test (Windows)"
+      if: contains(inputs.os-name, 'windows')
     - name: 🖥️Start virtual display driver & Test (Windows)
       uses: coactions/setup-xvfb@v1.0.1
       with:
