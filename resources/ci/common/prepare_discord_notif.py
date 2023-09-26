@@ -5,6 +5,7 @@ import os                             # for env vars
 import pytz                           # timezones
 import requests                       # http requests
 from argparse import ArgumentParser   # for argument variables
+from json.decoder import JSONDecodeError
 
 def prepare_discord_notif():
   CI_SETTINGS = {}
@@ -12,7 +13,10 @@ def prepare_discord_notif():
   if (not os.path.isfile(manifest_path)):
     raise AssertionError("Manifest not found: " + manifest_path)
   with(open(manifest_path)) as ci_settings_file:
-    CI_SETTINGS = json.load(ci_settings_file)
+    try:
+        CI_SETTINGS = json.load(ci_settings_file)
+    except JSONDecodeError as e:
+        raise ValueError("CI Settings file malformed!")
 
   # default stuff
   DEFAULT_EVENT = "event"
@@ -35,7 +39,10 @@ def prepare_discord_notif():
   event_manifest = {}
   if not env["EVENT_LOG"] == "":
       with(open(env["EVENT_LOG"],"r")) as f:
-          event_manifest = json.load(f)
+          try:
+              event_manifest = json.load(f)
+          except JSONDecodeError as e:
+              raise ValueError("Event Log malformed!")
 
   # branch
   if env["BRANCH"] == "":

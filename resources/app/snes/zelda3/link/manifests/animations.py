@@ -1,5 +1,6 @@
 import json
 import os
+from json.decoder import JSONDecodeError
 
 def comma(k,l,yes,no):
   if isinstance(l,int):
@@ -24,7 +25,10 @@ manifest_path = os.path.join(".","resources","app","snes","zelda3","link","manif
 if (not os.path.isfile(manifest_path)):
   raise AssertionError("Manifest not found: " + manifest_path)
 with(open(manifest_path)) as json_file:
-  animations = json.load(json_file)
+  try:
+    animations = json.load(json_file)
+  except JSONDecodeError as e:
+    raise ValueError("Animations file malformed: " + manifest_path)
 
 toWrite = "{" + "\n"
 

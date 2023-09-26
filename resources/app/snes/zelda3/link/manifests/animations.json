@@ -3858,6 +3858,60 @@
       }
     ]
   },
+  "Pedestal pull": {
+    "right": [
+      {
+        "frames": 10, "background": "pedestal.0.png", "origin": [100,100], "tiles": [
+          { "image": "MASTER_SWORD", "pos": [-2,0] },
+          { "image": "A1", "pos": [0,0] },
+          { "image": "B3", "pos": [0,8] }
+        ]
+      },
+      {
+        "frames": 432, "tiles": [
+          { "image": "MASTER_SWORD", "pos": [-2,0] },
+          { "image": "U0", "pos": [0,3] },
+          { "image": "U4", "pos": [0,8] }
+        ]
+      },
+      {
+        "frames": 8, "tiles": [
+          { "image": "MASTER_SWORD", "pos": [-2,0] },
+          { "image": "U0", "pos": [0,1] },
+          { "image": "U3", "pos": [0,8] }
+        ]
+      },
+      {
+        "frames": 23, "tiles": [
+          { "image": "MASTER_SWORD", "pos": [-2,0] },
+          { "image": "A1", "pos": [0,0] },
+          { "image": "B3", "pos": [0,8] }
+        ]
+      },
+      {
+        "frames": 1, "tiles": [
+          { "image": "MASTER_SWORD", "pos": [-2,0] },
+          { "image": "SHIELD1", "pos": [-4,7], "flip": "h" },
+          { "image": "L1", "pos": [0,0] },
+          { "image": "L2", "pos": [0,8] }
+        ]
+      },
+      {
+        "frames": 298, "tiles": [
+          { "image": "SWORD0", "pos": [11,-14] },
+          { "image": "SHIELD1", "pos": [-4,7], "flip": "h" },
+          { "image": "L1", "pos": [0,0] },
+          { "image": "L2", "pos": [0,8] }
+        ]
+      },
+      {
+        "frames": 30, "tiles": [
+          { "image": "A1", "pos": [0,0] },
+          { "image": "B3", "pos": [0,8] }
+        ]
+      }
+    ]
+  },
   "Item get": {
     "right": [
       {

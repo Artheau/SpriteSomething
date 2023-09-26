@@ -8,6 +8,8 @@ This release of SpriteSomething includes many basic features of the main design 
 
 * Prelim work on some new unit tests.
 * Fixed `.rdc` export.
+* Fixed Metroid3/Samus loading from game files
+* Forced Zelda3/Link Bunny Palette for Bunny animations
 
 ## Known Issues
 

@@ -35,7 +35,7 @@ class RomHandlerParent():
             self._rom_is_headered = True
             self._rom_size = file_size - self._HEADER_SIZE
         else:
-						# FIXME: English
+                        # FIXME: English
             raise AssertionError(f"{filename} does not contain an even number of half banks...is this a valid ROM?")
 
         #open the file and store the contents
@@ -84,17 +84,16 @@ class RomHandlerParent():
             pass    #lorom confirmed
         elif self._type == RomType.HIROM and makeup_byte in [0x21, 0x31]:
             pass    #hirom confirmed
-        elif (self._type == RomType.LOROM or self._type == RomType.HIROM) and makeup_byte == 0x23:
+        elif self._type in [RomType.LOROM, RomType.HIROM] and makeup_byte == 0x23:
             pass    #Maybe SA-1 will work with this library.  MAYBE.
         elif self._type == RomType.EXLOROM and makeup_byte in [0x32,0x30]:  #technically 0x32 is the correct value, but not all hackers respect this
             pass    #exlorom confirmed
         elif self._type == RomType.EXHIROM and makeup_byte == 0x35:
             pass    #exhirom confirmed
         else:
-						# FIXME: English
+                        # FIXME: English
             #raise AssertionError(f"Cannot recognize the makeup byte of this ROM: {hex(makeup_byte)}.")
             print(f"Cannot recognize the makeup byte of this ROM: {hex(makeup_byte)}.")
-            return None
 
         #information about onboard RAM/SRAM and enhancement chips lives here
         #rom_type_byte = self._read_from_internal_header(0x16, 1)
@@ -105,7 +104,7 @@ class RomHandlerParent():
     def save(self, filename, overwrite=False,fix_checksum=True,strip_header=False):
         #check to see if a file by this name already exists
         if not overwrite and os.path.isfile(filename):
-						# FIXME: English
+                        # FIXME: English
             raise FileExistsError(f"{filename} already exists")
 
         # fix checksum
@@ -141,7 +140,7 @@ class RomHandlerParent():
                 returnvalue.append(self._read_single(addr, size))
                 addr += size
             return returnvalue
-				# FIXME: English
+                # FIXME: English
         raise AssertionError(f"received call to read() but the encoding was not recognized: {encoding}")
 
     def bulk_read(self,addr,num_bytes):
@@ -159,14 +158,14 @@ class RomHandlerParent():
         #example: .write(0x7FDC, [0x111f,0x222f], "22") will write $1f $11 $2f $22 to 0x7FDC-0x7FDF
 
         if isinstance(encoding,int):
-						# FIXME: English
+                        # FIXME: English
             if isinstance(values,int):
                 self._write_single(values,addr,encoding)
             else:
                 raise AssertionError(f"received call to write() a single value, but {values} was not a single value")
         elif isinstance(encoding,str):
             if isinstance(values,int):
-                raise AssertionError(f"received call to do multiple writes, but only one value was given.  Should encoding be an integer instead of a string?")
+                raise AssertionError("received call to do multiple writes, but only one value was given.  Should encoding be an integer instead of a string?")
             if len(values) != len(encoding):
                 raise AssertionError(f"received call to write() but length of values and encoding did not match: i.e. {len(values)} vs. {len(encoding)}")
             for value,code in zip(values,encoding):
@@ -178,7 +177,7 @@ class RomHandlerParent():
 
     def bulk_write(self,addr,values,num_bytes):
         if len(values) != num_bytes:
-						# FIXME: English
+                        # FIXME: English
             raise AssertionError("call to bulk_write() with data not of length specified")
         self._contents[addr:addr+num_bytes] = bytearray(values)
 
@@ -197,7 +196,7 @@ class RomHandlerParent():
     def convert_to_snes_address(self, addr):
         #takes as input a PC ROM address and converts it into the address space of the SNES
         if addr > self._rom_size or addr < 0:
-						# FIXME: English
+                        # FIXME: English
             raise AssertionError(f"Function convert_to_snes_address() called on {hex(addr)}, but this is outside the ROM file.")
 
         if self._type == RomType.LOROM:
@@ -216,7 +215,7 @@ class RomHandlerParent():
             elif bank < 0xFE:
                 snes_address = (bank-0x80)*0x10000 + (offset+0x8000)
             else:
-								# FIXME: English
+                                # FIXME: English
                 raise AssertionError(f"Function convert_to_snes_address() called on address {hex(addr)}, but this part of ROM is not mapped in ExLoRom.")
 
         elif self._type == RomType.EXHIROM:
@@ -227,7 +226,7 @@ class RomHandlerParent():
             elif addr % 0x10000 > 0x8000:   #only the upper banks of this last little bit are mapped
                 snes_address = addr - 0x400000    #for instance, 0x7E8000 PC is mapped to 0x3E8000 SNES
             else:
-								# FIXME: English
+                                # FIXME: English
                 raise AssertionError(f"Function convert_to_snes_address() called on {hex(addr)}, but this part of ROM is not mapped in ExHiRom.")
 
         else:
@@ -238,7 +237,7 @@ class RomHandlerParent():
     def convert_to_pc_address(self, addr):
         #takes as input an address in the SNES address space and maps it to the correct address in the PC ROM.
         if addr > 0xFFFFFF or addr < 0:
-						# FIXME: English
+                        # FIXME: English
             raise AssertionError(f"Function convert_to_pc_address() called on {hex(addr)}, but this is outside SNES address space.")
 
         bank = addr // 0x10000
@@ -250,7 +249,7 @@ class RomHandlerParent():
                 offset += 0x8000
             #Now check for the usual stuff
             if offset < 0x8000 or bank in [0x7E,0x7F]:
-								# FIXME: English
+                                # FIXME: English
                 raise AssertionError(f"Function convert_to_pc_address() called on {hex(addr)}, but this does not map to ROM.")
             pc_address = (bank % 0x80)*0x8000 + (offset - 0x8000)
 
@@ -269,7 +268,7 @@ class RomHandlerParent():
             elif bank not in [0x7E, 0x7F] and offset >= 0x8000:    #slowrom block
                 pc_address = (bank+0x80)*0x8000 + (offset-0x8000)
             else:
-								# FIXME: English
+                                # FIXME: English
                 raise AssertionError(f"Function convert_to_pc_address() called on address {hex(addr)}, but this does not map to ROM.")
 
         elif self._type == RomType.EXHIROM:
@@ -284,14 +283,14 @@ class RomHandlerParent():
             elif bank < 0x3E and offset >= 0x8000:  #the slowrom mirror
                 pc_address = (bank + 0x40)*0x10000 + offset
             else:
-								# FIXME: English
+                                # FIXME: English
                 raise AssertionError(f"Function convert_to_pc_address() called on {hex(addr)}, but this does not map to ROM.")
         else:
             raise NotImplementedError(f"Function convert_to_pc_address() called with not implemented type {self._type}")
 
         if pc_address > self._rom_size:
             #the rom is not large enough to actually contain the indexed address, so we need to consider mirrored addresses
-            if self._type == RomType.LOROM or self._type == RomType.EXLOROM:
+            if self._type in [RomType.LOROM, RomType.EXLOROM]:
                 masked_addr = addr & 0x7FFFFF
             else:
                 masked_addr = addr & 0x3FFFFF
@@ -310,7 +309,7 @@ class RomHandlerParent():
         #expands the ROM upwards in size to the specified number of MBits.
         #In this implementation, does not work to expand ROMs any higher than 32 MBits.
         if size < 4 or size > 32 or size % 4 != 0:
-						# FIXME: English
+                        # FIXME: English
             raise NotImplementedError(f"Not Implemented to expand ROM to {size} MBits.  Must be a multiple of 4 between 4 and 32.")
         current_size = self._rom_size/self._MEGABIT
         if size <= current_size:
@@ -325,9 +324,11 @@ class RomHandlerParent():
 
         self._rom_size = size*self._MEGABIT
 
+        return self._rom_size
+
     def type(self):
-    	#to see if the rom is lorom, hirom, etc.
-    	return self._type.name
+        #to see if the rom is lorom, hirom, etc.
+        return self._type.name
 
     def get_name(self):
         raw_name = bytes(self._read_from_internal_header(0, "1"*21))
@@ -337,28 +338,28 @@ class RomHandlerParent():
             return raw_name
 
     def add_header(self):
-    	self._rom_is_headered = True
-    	self._header = bytearray([0]*self._HEADER_SIZE)
+        self._rom_is_headered = True
+        self._header = bytearray([0]*self._HEADER_SIZE)
 
     def remove_header(self):
-    	self._rom_is_headered = False
+        self._rom_is_headered = False
 
     def get_patch(self):
-      patch = self._patch
-      patch_keys = list(patch.keys())
-      patch_keys.sort()
-      new_patch = {}
-      for patch_key in patch_keys:
-        patch_val = patch[patch_key].replace("0x","").rjust(4,'0')
-        byte_one = patch_val[:2]
-        byte_two = patch_val[2:]
-        new_patch[patch_key] = int(byte_one,16)
-        new_patch[patch_key + 1] = int(byte_two,16)
-      return json.dumps(new_patch)
+        patch = self._patch
+        patch_keys = list(patch.keys())
+        patch_keys.sort()
+        new_patch = {}
+        for patch_key in patch_keys:
+            patch_val = patch[patch_key].replace("0x","").rjust(4,'0')
+            byte_one = patch_val[:2]
+            byte_two = patch_val[2:]
+            new_patch[patch_key] = int(byte_one,16)
+            new_patch[patch_key + 1] = int(byte_two,16)
+        return json.dumps(new_patch)
 
     def _read_single(self, addr, size):
         if addr+size > self._rom_size:
-						# FIXME: English
+                        # FIXME: English
             raise AssertionError(f"function _read_single() called for address beyond ROM file boundary: : {hex(addr)}, size {size}")
         extracted_bytes = self._contents[addr:addr+size]
 
@@ -372,14 +373,14 @@ class RomHandlerParent():
         elif size == 4:
             unpack_code = 'L'
         else:
-						# FIXME: English
+                        # FIXME: English
             raise NotImplementedError(f"_read_single() called to read size {size}, but this is not implemented.")
 
         return struct.unpack('<'+unpack_code,extracted_bytes)[0]           #the '<' forces it to read as little-endian
 
     def _write_single(self, value, addr, size):
         if addr+size > self._rom_size:
-						# FIXME: English
+                        # FIXME: English
             raise AssertionError(f"function _write_single() called for address beyond ROM file boundary: {hex(addr)}, size {size}")
         if size == 1:
             pack_code = 'B'
@@ -394,12 +395,12 @@ class RomHandlerParent():
 
         self._contents[addr:addr+size] = struct.pack('<'+pack_code,value)[0:size]  #the '<' forces it to write as little-endian
         if isinstance(value,list):
-          for i in range(addr + size - addr):
-            val = struct.unpack('<'+pack_code,struct.pack('>'+pack_code,value[i]))[0]
-            self._patch[addr] = hex(val)
+            for i in range(addr + size - addr):
+                val = struct.unpack('<'+pack_code,struct.pack('>'+pack_code,value[i]))[0]
+                self._patch[addr] = hex(val)
         else:
-          val = struct.unpack('<'+pack_code,struct.pack('>'+pack_code,value))[0]
-          self._patch[addr] = hex(val)
+            val = struct.unpack('<'+pack_code,struct.pack('>'+pack_code,value))[0]
+            self._patch[addr] = hex(val)
 
     def _apply_single_fix_to_snes_address(self, snes_address, classic_values, fixed_values, encoding):
         #checks to see if, indeed, a value is still in the classic (bugged) value, and if so, fixes it
@@ -407,7 +408,7 @@ class RomHandlerParent():
 
         #first make sure the input makes sense -- either all integers or matching length lists
         if (not isinstance(encoding,int)) and len(classic_values) != len(fixed_values):
-						# FIXME: English
+                        # FIXME: English
             raise AssertionError(f"function _apply_single_fix_to_snes_address() called with different length lists:\n{classic_values}\n{fixed_values}")
 
         if self.read_from_snes_address(snes_address, encoding) == classic_values:
@@ -443,7 +444,7 @@ class RomHandlerParent():
                 checksum = sum(self._contents[:best_power_of_2*self._MEGABIT]) + \
                                     multiplier*sum(self._contents[best_power_of_2*self._MEGABIT:])
             else: #some strange MBit size maybe
-								# FIXME: English
+                                # FIXME: English
                 raise AssertionError(f"Unable to process checksum for ROM of size {mbit_size} MBits")
 
         return checksum % 0x10000

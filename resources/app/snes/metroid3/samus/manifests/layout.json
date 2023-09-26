@@ -8,6 +8,10 @@
   ],
   "border_color": [0, 0, 127, 255],
   "border_size": 1,
+  "pseudoimages": [
+    "save_chamber",
+    "save_ripple"
+  ],
   "layout": [
     [
       "palette_block"

@@ -1,16 +1,21 @@
 #functions that are utilities common to all GUI functionality were stored here
 #do not merge them with common.py, because common.py is imported by some classes that have no GUI awareness
 
-import io                	#for BytesIO() stream.  TODO: Could probably refactor this to use bytearray instead
-import tkinter as tk     	#for GUI stuff
-from tkinter import ttk, messagebox, filedialog	#for GUI stuff
+try:
+  from tkinter import ttk, messagebox, filedialog	#for GUI stuff
+  import tkinter as tk     	#for GUI stuff
+except ModuleNotFoundError as e:
+  print(e)
+
 import base64            	#TODO: I don't know why we import this
+import io                	#for BytesIO() stream.  TODO: Could probably refactor this to use bytearray instead
 import json
 import random
 import ssl
 import sys
 import urllib.request
 from functools import partial    #for tk debugging
+from json.decoder import JSONDecodeError
 from source.meta.common.constants import DEBUG_MODE  #for tk debugging
 from source.meta.common import common
 
@@ -60,7 +65,11 @@ def create_chooser(console_name,game_names):
 		for game_name in game_names:
 			sprite_name = ""
 			with open(common.get_resource([console_name,game_name,"manifests"],"manifest.json")) as f:
-				manifest = json.load(f)
+				manifest = {}
+				try:
+					manifest = json.load(f)
+				except JSONDecodeError as e:
+					raise ValueError("Game Manifest malformed: " + game_name)
 				sprite_name = manifest["1"]["name"]
 			game_button = tk.Button(
 				game_chooser,
@@ -93,7 +102,11 @@ def get_sprites(self,title,destdir,url,gui=True):
 	sprites_filename = url
 	context = ssl._create_unverified_context()
 	sprites_req = urllib.request.urlopen(sprites_filename, context=context)
-	sprites = json.loads(sprites_req.read().decode("utf-8"))
+	sprites = {}
+	try:
+		sprites = json.loads(sprites_req.read().decode("utf-8"))
+	except JSONDecodeError as e:
+		raise ValueError("Downloadable sprites manifest malformed: " + sprites_filename)
 	#get an iterator and a counter for a makeshift progress bar
 	total = len(sprites)
 	if "file" not in sprites[0]:

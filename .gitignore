@@ -2,6 +2,8 @@
 __pycache__/
 
 # no build dir
+*.build
+*.dist
 /build
 /dist
 
@@ -56,6 +58,7 @@ working_dirs.json
 palette_writers.json
 
 # no custom files
+export.png
 custom/
 failures/
 resources/user/**/**

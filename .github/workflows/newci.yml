@@ -7,8 +7,8 @@ on: [push, pull_request]
 #########
 # actions
 #########
-# actions/checkout@v3.1.0
-# actions/download-artifact@v3.0.1
+# actions/checkout@v4.0.0
+# actions/download-artifact@v3.0.2
 # actions/create-release
 # actions/upload-release-asset
 # Artheau/SpriteSomething/get-parent-dir
@@ -66,10 +66,10 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4.0.0
       # install python
       - name: 💿Install Python
-        uses: actions/setup-python@v4.3.0
+        uses: actions/setup-python@v4.7.0
         with:
           python-version: ${{ matrix.python-version }}
       # python version
@@ -84,6 +84,11 @@ jobs:
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
+      # Analyze used GitHub Actions
+      - name: Analyze used GitHub Actions
+        shell: bash
+        run: |
+          python ./resources/ci/common/list_actions.py
       # test
       - name: 🧮Print Diagnostics
         shell: bash
@@ -99,11 +104,12 @@ jobs:
     strategy:
       matrix:
         # should run on all OS
+        # except Mac now since it's erroring out with tk in py3.8+
         os-name: [
           ubuntu-latest,
           ubuntu-22.04,
           ubuntu-20.04,
-          macos-latest,
+          # macos-latest,
           windows-latest
         ]
 
@@ -140,7 +146,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4.0.0
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -208,7 +214,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4.0.0
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -252,7 +258,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4.0.0
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -282,7 +288,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4.0.0
 
       # install dependencies via pip
       - name: 💿Install Dependencies via pip
@@ -297,28 +303,28 @@ jobs:
 
       # download appversion artifact
       - name: 🔽Download AppVersion Artifact
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: appversion-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
 
       # download ubuntu archive artifact
       - name: 🔽Download Ubuntu Archive Artifact
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: archive-ubuntu-latest
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux
 
       # download macos archive artifact
       - name: 🔽Download MacOS Archive Artifact
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: archive-macos-latest
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos
 
       # download windows archive artifact
       - name: 🔽Download Windows Archive Artifact
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: archive-windows-latest
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows
@@ -429,14 +435,14 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4.0.0
       # get parent dir
       - name: 📁Get Parent Directory
         id: parentDir
         uses: ./.github/actions/get-parent-dir
       # download appversion artifact
       - name: 🔽Download AppVersion Artifact
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: appversion-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
@@ -447,7 +453,7 @@ jobs:
           python ./resources/ci/common/prepare_pages.py
       # upload pages artifact for later step
       - name: 🔼Upload Pages Artifact
-        uses: actions/upload-artifact@v3.1.1
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: pages-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/pages
@@ -465,10 +471,10 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4.0.0
       # download pages artifact
       - name: 🔽Download Pages Artifact
-        uses: actions/download-artifact@v3.0.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: pages-${{ matrix.os-name }}
           path: ./
@@ -485,11 +491,12 @@ jobs:
         run: |
           git diff --name-status --cached
       # Set Commit
-      - name: ➕Set Commit
+      - name: ➕Set Commit (MASTER)
         shell: bash
         run: |
           git commit -q -F commit.txt
           git log
+        if: contains(github.ref, 'master')
       # Push to GH-Pages
       - name: 🚀Push to GH-Pages (MASTER)
         shell: bash
