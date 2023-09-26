@@ -51,22 +51,23 @@ for platID in os.listdir(SOURCEPATH):
                                 SPRITEPATH = os.path.join(GAMEPATH, spriteID)
                                 if os.path.isdir(SPRITEPATH):
                                     SHEETSPATH = os.path.join(rsourceApp, spriteID, "sheets")
-                                    DATA[platID]["games"][gameID]["sprites"][spriteID] = {
-                                        "paths": {
-                                            "source": SPRITEPATH,
-                                            "resource": {
-                                                "subpath": os.path.join(rsourceSub, spriteID),
-                                                "app": os.path.join(rsourceApp, spriteID),
-                                                "sheet": {
-                                                    "root": SHEETSPATH
-                                                },
-                                                "sheetexts": {}
+                                    if os.path.isdir(SHEETSPATH):
+                                        DATA[platID]["games"][gameID]["sprites"][spriteID] = {
+                                            "paths": {
+                                                "source": SPRITEPATH,
+                                                "resource": {
+                                                    "subpath": os.path.join(rsourceSub, spriteID),
+                                                    "app": os.path.join(rsourceApp, spriteID),
+                                                    "sheet": {
+                                                        "root": SHEETSPATH
+                                                    },
+                                                    "sheetexts": {}
+                                                }
                                             }
                                         }
-                                    }
-                                    for sheet in os.listdir(SHEETSPATH):
-                                        if f"{spriteID}." in sheet:
-                                            DATA[platID]["games"][gameID]["sprites"][spriteID]["paths"]["resource"]["sheetexts"][os.path.splitext(sheet)[1][1::]] = os.path.join(SHEETSPATH, sheet)
-                                    # print(f">  {spriteID}")
+                                        for sheet in os.listdir(SHEETSPATH):
+                                            if f"{spriteID}." in sheet:
+                                                DATA[platID]["games"][gameID]["sprites"][spriteID]["paths"]["resource"]["sheetexts"][os.path.splitext(sheet)[1][1::]] = os.path.join(SHEETSPATH, sheet)
+                                        # print(f">  {spriteID}")
 
 # print(json.dumps(DATA, indent=2))

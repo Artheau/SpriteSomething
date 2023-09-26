@@ -1,17 +1,23 @@
-import tkinter as tk                            #for GUI stuff
-from tkinter import ttk, messagebox, filedialog #for GUI stuff
-import random                                   #for choosing random app titles
+try:
+  import tkinter as tk                            #for GUI stuff
+  from tkinter import ttk, messagebox, filedialog #for GUI stuff
+  from PIL import Image,ImageTk                   #for converting PNG to formats that tk can use
+except ModuleNotFoundError as e:
+  print(e)
+
 import json                                     #for reading JSON
-import re                                       #for regexes in hyperlinks in about box
-import traceback                                #for error reporting
 import os                                       #for filesystem manipulation
+import random                                   #for choosing random app titles
+import re                                       #for regexes in hyperlinks in about box
 import stat                                     #for filesystem manipulation
 import sys                                      #for filesystem manipulation
 import time                                     #for timekeeping
+import traceback                                #for error reporting
 import urllib                                   #for getting latest version number from GitHub Pages
 import webbrowser                               #for launching browser from about box
 from functools import partial                   #for passing parameters to user-triggered function calls
-from PIL import Image,ImageTk                   #for converting PNG to formats that tk can use
+from json.decoder import JSONDecodeError
+
 from source.meta.gui import widgetlib
 from source.meta import ssDiagnostics as diagnostics
 from source.meta.gui import gamelib
@@ -33,6 +39,7 @@ def make_GUI(command_line_args):
   # set window attributes
   root.geometry("900x768")       #window size
   root.configure(bg='#f0f0f0')   #background color
+  # root.tk_setPalette(background="#000000", foreground="#ffffff")
   main_frame = SpriteSomethingMainFrame(root, command_line_args)
   root.protocol("WM_DELETE_WINDOW", main_frame.exit)           #intercept when the user clicks the X
 
@@ -68,13 +75,18 @@ class SpriteSomethingMainFrame(tk.Frame):
       "export.frame-as-png": "./",
       "export.animation-as-gif": "./",
       "export.animation-as-hcollage": "./",
-      "export.animation-as-vcollage": "./"
+      "export.animation-as-vcollage": "./",
+      "export.palette": "./"
     }
     #read saved working dirs file if it exists and set these
     working_dir_path = os.path.join(".","resources","user","meta","manifests","working_dirs.json")
     if os.path.exists(working_dir_path):
       with open(working_dir_path) as json_file:
-        data = json.load(json_file)
+        data = {}
+        try:
+            data = json.load(json_file)
+        except JSONDecodeError as e:
+            raise ValueError("Saved Working Dirs manifest malformed!")
         for k,v in data.items():
           self.working_dirs[k] = v
 
@@ -84,7 +96,11 @@ class SpriteSomethingMainFrame(tk.Frame):
     ani_settings_path = os.path.join(".","resources","user","meta","manifests","ani_settings.json")
     if os.path.exists(ani_settings_path):
       with open(ani_settings_path) as json_file:
-        data = json.load(json_file)
+        data = {}
+        try:
+          data = json.load(json_file)
+        except JSONDecodeError as e:
+          raise ValueError("Saved Animation Settings manifest malformed!")
         for console in data.keys():
           if console not in self.ani_settings:
             self.ani_settings[console] = {}
@@ -123,7 +139,12 @@ class SpriteSomethingMainFrame(tk.Frame):
     name_dict = {}
     for filename in common.get_all_resources(["meta","manifests"],"app_names.json"):
       with open(filename) as name_file:
-        for key,item in json.load(name_file).items():
+        nFile = {}
+        try:
+          nFile = json.load(name_file)
+        except JSONDecodeError as e:
+          raise ValueError("AppName JSON malformed!")
+        for key,item in nFile.items():
           if not key == "$schema":
             if key in name_dict:
               name_dict[key].extend(item)
@@ -232,6 +253,10 @@ class SpriteSomethingMainFrame(tk.Frame):
                           (self.fish.translate("meta","menu","export.animation-as-hcollage"),"animation-as-hcollage",partial(self.export_animation_as_collage,"horizontal")),
                           #(self.fish.translate("meta","menu","export.animation-as-vcollage"),"animation-as-vcollage",None),#partial(self.export_animation_as_collage,"vertical")),
                           (None,None,None),
+                          (self.fish.translate("meta","menu","export.sprite-4bpp"),"sprite-4bpp",partial(self.export_sprite,"4bpp")),
+                          (None,None,None),
+                          (self.fish.translate("meta","menu","export.palette-binary"),"palette-binary",partial(self.export_palette,"binary")),
+                          (self.fish.translate("meta","menu","export.palette-aspr"),"palette-aspr",partial(self.export_palette,"aspr")),
                           (self.fish.translate("meta","menu","export.palette-gimp"),"palette-gimp",partial(self.export_palette,"gimp")),
                           (self.fish.translate("meta","menu","export.palette-jasc"),"palette-jasc",partial(self.export_palette,"jasc")),
                           (self.fish.translate("meta","menu","export.palette-pdn"),"palette-pdn",partial(self.export_palette,"pdn")),
@@ -243,7 +268,11 @@ class SpriteSomethingMainFrame(tk.Frame):
     bundled_games = {}
     not_consoles = []
     with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
-      not_consoles = json.load(f)
+      not_consoles = []
+      try:
+        not_consoles = json.load(f)
+      except JSONDecodeError as e:
+        raise ValueError("Not Consoles manifest malformed!")
     root = os.path.join("resources","app")
     for console in os.listdir(root):
       if not console in not_consoles:
@@ -253,7 +282,11 @@ class SpriteSomethingMainFrame(tk.Frame):
           for gamedir in os.listdir(os.path.join(root,console)):
             if os.path.isdir(os.path.join(root,console,gamedir)):
               with open(os.path.join(root,console,gamedir,"lang","en.json")) as en_lang:
-                en = json.load(en_lang)
+                en = {}
+                try:
+                  en = json.load(en_lang)
+                except JSONDecodeError as e:
+                  raise ValueError("Lang file malformed: " + gamedir + "/" + "EN")
                 if "game" in en:
                   if "name" in en["game"]:
                     bundled_games[console][gamedir] = {}
@@ -262,7 +295,11 @@ class SpriteSomethingMainFrame(tk.Frame):
                     bundled_games[console][gamedir]["game"]["name"] = en["game"]["name"]
                     bundled_games[console][gamedir]["sprites"] = []
               with open(os.path.join(root,console,gamedir,"manifests","manifest.json")) as game_manifest:
-                sprites = json.load(game_manifest)
+                sprites = {}
+                try:
+                  sprites = json.load(game_manifest)
+                except JSONDecodeError as e:
+                  raise ValueError("Game Manifest malformed: " + gamedir)
                 for spriteID,sprite in sprites.items():
                   if spriteID != "$schema":
                     name = sprite["name"]
@@ -293,7 +330,7 @@ class SpriteSomethingMainFrame(tk.Frame):
     plugins_menu = tk.Menu(self.menu, tearoff=0, name="plugins_menu")
     tools_menu = tk.Menu(self.menu, tearoff=0, name="tools_menu")
     tools_menu.add_command(label=self.fish.translate("meta","menu","tools.palette-editor"),command=None,state="disabled")
-    tools_menu.add_command(label=self.fish.translate("meta","menu","tools.sheet-trawler"),command=sheet_trawler)
+    # tools_menu.add_command(label=self.fish.translate("meta","menu","tools.sheet-trawler"),command=sheet_trawler)
     tools_menu.add_cascade(label=self.fish.translate("meta","menu","tools.get-representative-image"), menu=representative_images_menu)
     tools_menu.add_cascade(label=self.fish.translate("meta","menu","plugins"), menu=plugins_menu)
     self.menu.add_cascade(label=self.fish.translate("meta","menu","tools"), menu=tools_menu)
@@ -318,7 +355,11 @@ class SpriteSomethingMainFrame(tk.Frame):
     self.menu.children["representative_images_menu"].add_command(label="Default",command=partial(self.get_representative_images,"default"))
     for manifest_file in common.get_all_resources([self.sprite.resource_subpath,"manifests"],"representative-images.json"):
       with open(manifest_file) as manifest:
-        manifest_images = json.load(manifest)
+        manifest_images = {}
+        try:
+          manifest_images = json.load(manifest)
+        except JSONDecodeError as e:
+          raise ValueError("Representative Images manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
         for key in manifest_images.keys():
           if not key == "default":
             self.menu.children["representative_images_menu"].add_command(label=key[0].upper() + key[1:],command=partial(self.get_representative_images,key))
@@ -376,7 +417,11 @@ class SpriteSomethingMainFrame(tk.Frame):
           bindings = None
           bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
           with open(bindings_filename,encoding="utf-8") as f:
-            bindings = json.load(f)
+            bindings = {}
+            try:
+              bindings = json.load(f)
+            except JSONDecodeError as e:
+              raise ValueError("Bindings Manifest malformed!")
           #cycle through all spiffy buttons
           for subwidget in widget.winfo_children():
             if "_button" in subwidget.winfo_name():
@@ -564,7 +609,6 @@ class SpriteSomethingMainFrame(tk.Frame):
     return save_success_bool
 
 
-
   ############################ ANIMATION FUNCTIONS HERE ################################
 
   # get sprite animation booted up and running
@@ -632,6 +676,11 @@ class SpriteSomethingMainFrame(tk.Frame):
   def go_to_next_pose(self):
     self.frame_number = self.frame_number + self.animation_engine.frames_left_in_this_pose()
     self.pause_global_frame_timer()
+    ship_palettes = [pal for _,pal in self.sprite.get_timed_palette("ship","standard")]
+    for colors in ship_palettes:
+        lst = colors
+        lst = [next(l) for l in lst]
+        print(lst)
 
   # start global timer
   def time_marches_forward(self):
@@ -825,10 +874,14 @@ class SpriteSomethingMainFrame(tk.Frame):
     #save current animation/bg/direction settings
     self.save_ani_settings()
 
-    filetypes = ".zspr " # FIXME: Assuming Z3Link-only
+    filetypes = ""
+    # filetypes += ".rdc " # FIXME: Assuming M3Samus-only
+    filetypes += ".zspr " # FIXME: Assuming Z3Link-only
     filetypes += ".png "
 #    filetypes += ".nes " # NES RomHandler
     filetypes += ".smc .sfc " # SNES RomHandler
+    filetypes += ".4bpp "
+    # filetypes += ".zhx "
     filename = filedialog.askopenfilename(initialdir=self.working_dirs["file.open"], title=self.fish.translate("meta","dialogue","file.open.title"), filetypes=((self.fish.translate("meta","dialogue","file.open.types.label"),filetypes),))
     if filename:
       #if we've got a filename, set the working dir and load the sprite
@@ -840,7 +893,13 @@ class SpriteSomethingMainFrame(tk.Frame):
   #query user to export file; PNG/ZSPR/RDC
   def save_file_as(self):
     # Save in one of the valid formats.  TODO: When ZSPR export is implemented, switch this around so that ZSPR is the default
-    filetypes = ((self.fish.translate("meta","dialogue","file.save.png"),"*.png"),(self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),(self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"))
+    filetypes = (
+      (self.fish.translate("meta","dialogue","file.save.png"),"*.png"),
+      (self.fish.translate("meta","dialogue","file.save.zspr"),"*.zspr"),
+      (self.fish.translate("meta","dialogue","file.save.rdc"),"*.rdc"),
+      (self.fish.translate("meta","dialogue","file.save.zhx"),"*.zhx"),
+      (self.fish.translate("meta","dialogue","file.save.4bpp"),"*.4bpp")
+    )
 
     filename = ""
     if "sprite.name" in self.sprite.metadata:
@@ -850,9 +909,9 @@ class SpriteSomethingMainFrame(tk.Frame):
       filename = "unknown"
     filename = common.filename_scrub(filename)
 
-    filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc"), initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
+    filename = filedialog.asksaveasfilename(defaultextension=(".png",".zspr",".rdc",".4bpp"), initialfile=filename, initialdir=self.working_dirs["file.save"], title=self.fish.translate("meta","dialogue","file.save.title"), filetypes=filetypes)
     if filename:
-      save_success_bool = self.sprite.save_as(filename)
+      save_success_bool = self.sprite.save_as(filename, self.game.name)
       if save_success_bool:
         self.unsaved_changes = False
         self.working_dirs["file.save"] = os.path.dirname(filename)
@@ -1044,24 +1103,10 @@ class SpriteSomethingMainFrame(tk.Frame):
     #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
     return False
 
+  def export_sprite(self, filename):
+    self.sprite.save_as_binary(filename)
+
   def export_palette(self, fmt="gimp"):
-    if self.sprite.classic_name != "Link":
-      return
-
-    palette_doc = []
-    header = []
-    footer = [""]
-    clrfmt = lambda x:(
-      "%d %d %d"
-      %
-      (
-        x[0],
-        x[1],
-        x[2]
-      )
-    )
-
-    paletteID = ""
     #get animation engine handle
     ani_eng = self.animation_engine
     if "mail_var" in ani_eng.spiffy_dict:
@@ -1069,115 +1114,13 @@ class SpriteSomethingMainFrame(tk.Frame):
     elif "suit_var" in ani_eng.spiffy_dict:
       paletteID = ani_eng.spiffy_dict["suit_var"].get()
 
-    # GIMP
-    # CinePaint
-    # Inkscape
-    # Krita
-    if fmt == "gimp":
-      header = [
-        "GIMP Palette",
-        "Base Sprite Name: ".ljust(len("Custom Sprite Name: "))   + self.sprite.classic_name,
-        "Base Palette Name: ".ljust(len("Custom Sprite Name: "))  + paletteID,
-        "Base Game Name: ".ljust(len("Custom Sprite Name: "))     + self.game.name,
-        "Custom Sprite Name: ".ljust(len("Custom Sprite Name: ")) + self.sprite.metadata["sprite.name"],
-        "Author: ".ljust(len("Custom Sprite Name: "))             + self.sprite.metadata["author.name"],
-        "Columns: ".ljust(len("Custom Sprite Name: "))            + str(0),
-        "#"
-      ]
-      clrfmt = lambda x:(
-        "%s %s %s\t%s"
-        %
-        (
-          str(x[0]).rjust(3),
-          str(x[1]).rjust(3),
-          str(x[2]).rjust(3),
-          " " or "Color Name"
-        )
-      )
+    defExt = ".palette"
+    if fmt != "binary":
+      defExt = defExt + "-" + fmt
+    filetypes = ((self.fish.translate("meta","menu",f"export.palette-{fmt}"),f"*{defExt}"),)
+    filename = filedialog.asksaveasfilename(defaultextension=(defExt), initialfile=self.sprite.classic_name.lower(), initialdir=self.working_dirs["export.palette"], title=self.fish.translate("meta","menu",f"export.palette-{fmt}"), filetypes=filetypes)
 
-    # Corel
-    # Graphics Gale
-    # Paint Shop Pro
-    elif fmt == "jasc":
-      header = [
-        "JASC-PAL",
-        "0100",
-        "16"
-      ]
-
-    # Paint.NET
-    elif fmt == "pdn":
-      header = [
-        "; paint.net Palette File",
-        "; Lines that start with a semicolon are comments",
-        "; Colors are written as 8-digit hexadecimal numbers: aarrggbb",
-        "; For example, this would specify green: FF00FF00",
-        "; The alpha ('aa') value specifies how transparent a color is. FF is fully opaque, 00 is fully transparent.",
-        "; A palette must consist of ninety six (96) colors. If there are less than this, the remaining color",
-        "; slots will be set to white (FFFFFFFF). If there are more, then the remaining colors will be ignored.",
-        ";",
-        "; Base Sprite Name: ".ljust(len("; Custom Sprite Name: "))   + self.sprite.classic_name,
-        "; Base Palette Name: ".ljust(len("; Custom Sprite Name: "))  + paletteID,
-        "; Base Game Name: ".ljust(len("; Custom Sprite Name: "))     + self.game.name,
-        "; Custom Sprite Name: ".ljust(len("; Custom Sprite Name: ")) + self.sprite.metadata["sprite.name"],
-        "; Author: ".ljust(len("; Custom Sprite Name: "))             + self.sprite.metadata["author.name"],
-      ]
-      clrfmt = lambda x:(
-        "%s%s%s%s"
-        %
-        (
-          "FF",
-          (hex(x[0])[2:]).ljust(2,'0').upper(),
-          (hex(x[1])[2:]).ljust(2,'0').upper(),
-          (hex(x[2])[2:]).ljust(2,'0').upper()
-        )
-      )
-
-    # TileShop
-    elif fmt == "tileshop":
-      header = [
-        '<?xml version="1.0" encoding="utf-8"?>',
-        '<!--',
-        '<sprite>',
-        "\t" + f"<base name=\"{self.sprite.classic_name}\" game=\"{self.game.name}\" />",
-        "\t" + f"<palette name=\"{paletteID}\" />",
-        "\t" + f"<custom name=\"{self.sprite.metadata['sprite.name']}\" author=\"{self.sprite.metadata['author.name']}\" />",
-        '</sprite>',
-        '-->',
-        '<palette datafile="" color="Bgr15" zeroindextransparent="true">'
-      ]
-      clrfmt = lambda x:(
-        "\t<nativecolor value=\"#%s%s%s%s\" />"
-        %
-        (
-          (hex(x[0])[2:]).ljust(2,'0').upper(),
-          (hex(x[1])[2:]).ljust(2,'0').upper(),
-          (hex(x[2])[2:]).ljust(2,'0').upper(),
-          "FF"
-        )
-      )
-      footer = [
-        '</palette>',
-        ""
-      ]
-      pass
-
-    palette_doc += header
-
-    palette_doc.append(clrfmt((0,0,0)))
-
-    for color in self.sprite.get_palette([paletteID]):
-      color = clrfmt(color)
-      palette_doc.append(color)
-
-    if fmt == "pdn":
-      padding = 96 - len(palette_doc) + len(header)
-      for i in range(padding):
-        palette_doc.append("FFFFFFFF")
-
-    palette_doc += footer
-
-    print("\n".join(palette_doc))
+    self.sprite.export_palette(filename, self.game.name, paletteID, fmt)
 
   def open_project_website(self):
     website_url = "https://artheau.github.io/SpriteSomething"

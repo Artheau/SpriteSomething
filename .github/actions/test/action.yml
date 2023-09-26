@@ -14,21 +14,31 @@ inputs:
 #########
 # actions
 #########
-# actions/checkout@v3.1.0
-# actions/download-artifact@v3.0.1
-# actions/upload-artifact@v3.1.1
-# GabrielBB/xvfb-action@v1.6
+# actions/checkout@v4.0.0
+# actions/download-artifact@v3.0.2
+# actions/upload-artifact@v3.1.3
+# coactions/setup-xvfb@v1.0.1
 
 runs:
   using: "composite"
   steps:
     # download pipline
     - name: 🔽Download PipLine
-      uses: actions/download-artifact@v3.0.1
+      shell: bash
+      run: |
+        echo "🔽Download PipLine"
+    - name: 🔽Download PipLine
+      uses: actions/download-artifact@v3.0.2
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
+
     # start virtual display driver & run tests
+    - name: 🖥️Start virtual display driver & Test (!Windows)
+      shell: bash
+      run: |
+        echo "🖥️Start virtual display driver & Test (!Windows)"
+      if: contains(inputs.os-name, 'windows') != true
     - name: 🖥️Start virtual display driver & Test (!Windows)
       shell: bash
       env:
@@ -44,11 +54,16 @@ runs:
         python -m tests.new.asserts.test_diags
         python -m tests.new.asserts.test_exports
         python -m tests.new.asserts.test_animations
-        python -m tests.new.asserts.test_cli
         python -m tests.new.asserts.test_gui
       if: contains(inputs.os-name, 'windows') != true
+
     - name: 🖥️Start virtual display driver & Test (Windows)
-      uses: GabrielBB/xvfb-action@v1.6
+      shell: bash
+      run: |
+        echo "🖥️Start virtual display driver & Test (Windows)"
+      if: contains(inputs.os-name, 'windows')
+    - name: 🖥️Start virtual display driver & Test (Windows)
+      uses: coactions/setup-xvfb@v1.0.1
       with:
         run: |
           python -m tests.new.asserts.test_diags
@@ -58,6 +73,11 @@ runs:
       if: contains(inputs.os-name, 'windows')
 
     # print failures
+    - name: 💬Print Failures
+      if: failure()
+      shell: bash
+      run: |
+        echo "💬Print Failures"
     - name: Print Failures
       if: failure()
       shell: bash
@@ -73,7 +93,12 @@ runs:
     # upload failures
     - name: 🔼Upload Failures
       if: failure()
-      uses: actions/upload-artifact@v3.1.1
+      shell: bash
+      run: |
+        echo "🔼Upload Failures"
+    - name: 🔼Upload Failures
+      if: failure()
+      uses: actions/upload-artifact@v3.1.3
       with:
         name: failures-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./failures

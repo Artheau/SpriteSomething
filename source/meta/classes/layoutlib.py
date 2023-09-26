@@ -8,6 +8,7 @@
 import itertools
 import json
 import os
+from json.decoder import JSONDecodeError
 from PIL import Image, ImageOps, ImageDraw
 from source.meta.common import common
 
@@ -15,7 +16,11 @@ from source.meta.common import common
 class Layout():
     def __init__(self, filename):
         with open(filename) as inFile:
-            self.data = json.load(inFile)
+            self.data = []
+            try:
+                self.data = json.load(inFile)
+            except JSONDecodeError as e:
+                raise ValueError("Layout manifest malformed: " + filename)
         self.reverse_lookup = {}
         for image_name, image_info in self.data["images"].items():
             for image_ref in image_info["used by"]:
