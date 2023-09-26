@@ -205,11 +205,7 @@ class ExportAudit(unittest.TestCase):
             if importExt in ["4bpp", "palette", "zhx"]:
                 print(f"{importExt} not supported by Tests!")
                 return
-            if f"{self.platID}/{self.gameID}/{self.spriteID}" in [
-                "pc/averge/trace",
-                "snes/mother2/player",
-                "snes/ffmq/benjamin"
-            ]:
+            if importExt not in ["png", "bmp"] and spriteData["view-only"]:
                 print(f"{self.spriteID} is a WIP!")
                 return
 

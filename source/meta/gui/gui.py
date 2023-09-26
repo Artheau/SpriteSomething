@@ -488,6 +488,9 @@ class SpriteSomethingMainFrame(tk.Frame):
                                     if spriteID != "$schema":
                                         name = sprite["name"]
                                         folder = sprite["folder name"]
+                                        view_only = bool("view-only" in sprite and sprite["view-only"])
+                                        if view_only:
+                                            name = name + " (WIP)"
                                         path = os.path.join(
                                             root,
                                             console,

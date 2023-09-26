@@ -4,7 +4,7 @@
     "type": "Player Character Sprite",
     "name": "Loto-3",
     "folder name": "loto3",
-    "#view-only": true,
+    "view-only": true,
     "input": {
       "png": {
         "dims": [176, 130],
@@ -16,7 +16,7 @@
     "type": "Player Character Sprite",
     "name": "Loto-5",
     "folder name": "loto5",
-    "#view-only": true,
+    "view-only": true,
     "input": {
       "png": {
         "dims": [176, 176],

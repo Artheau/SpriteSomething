@@ -20,7 +20,7 @@ class Layout():
         if "layouts" in self.data:
             for layout in self.data["layouts"]:
                 if "names" in layout and sprite_name in layout["names"]:
-                    print("Found " + sprite_name + "!")
+                    # print("Found " + sprite_name + "!")
                     self.data = layout
         for image_name,image_info in self.data["images"].items():
             for image_ref in image_info["used by"]:

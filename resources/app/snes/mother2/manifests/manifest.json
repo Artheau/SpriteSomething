@@ -5,6 +5,7 @@
 		"name": "Player",
 		"folder name": "player",
 		"view-only": true,
+		"archive": true,
 		"input": {
 			"png": [
 				{

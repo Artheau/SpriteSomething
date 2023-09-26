@@ -50,6 +50,8 @@ for platID in os.listdir(SOURCEPATH):
                             for [spriteID, spriteManifest] in spriteData.items():
                                 if spriteID not in ["$schema"]:
                                     spriteFolder = spriteManifest["folder name"]
+                                    is_archive = bool("is-archive" in spriteManifest and spriteManifest["is-archive"])
+                                    view_only = bool("view-only" in spriteManifest and spriteManifest["view-only"])
                                     SPRITEPATH = os.path.join(GAMEPATH, spriteFolder)
                                     if os.path.isdir(SPRITEPATH):
                                         SHEETSPATH = os.path.join(rsourceApp, spriteFolder, "sheets")
@@ -65,7 +67,9 @@ for platID in os.listdir(SOURCEPATH):
                                                     "sheetexts": {}
                                                 }
                                             },
-                                            "input": spriteManifest["input"]
+                                            "input": spriteManifest["input"],
+                                            "is-archive": is_archive,
+                                            "view-only": view_only
                                         }
                                         for sheet in os.listdir(SHEETSPATH):
                                             if f"{spriteFolder}." in sheet:

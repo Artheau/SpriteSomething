@@ -14,7 +14,7 @@
 	},
 	"2": {
 		"type": "Damsel Character Sprite",
-		"name": "Damsel (WIP)",
+		"name": "Damsel",
 		"folder name": "damsel",
 		"view-only": true,
 		"input": {
