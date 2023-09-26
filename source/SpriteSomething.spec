@@ -1,6 +1,10 @@
 # -*- mode: python -*-
 
+import json
+import os
 import sys
+from json.decoder import JSONDecodeError
+from PyInstaller.utils.hooks import collect_submodules
 
 block_cipher = None
 console = False  # <--- change this to True to enable command prompt when the app runs
@@ -28,13 +32,15 @@ def recurse_for_py_files(names_so_far):
                         if not new_name in returnvalue:
                             returnvalue.append(new_name)
                 returnvalue.extend(recurse_for_py_files(new_name_list))
-    returnvalue.append("PIL._tkinter_finder")  # Linux needs this
-    returnvalue.append("source.meta.gui.animationlib")  # Windows missed this
     return returnvalue
 
 
 hiddenimports = recurse_for_py_files(["source"])
-hiddenimports.append("pkg_resources.py2_warn")
+hiddenimports.append("PIL._tkinter_finder")           # Linux needs this
+hiddenimports.append("pkg_resources.py2_warn")        # pyinstaller cried about this
+for hidden in (collect_submodules("pkg_resources")):
+    hiddenimports.append(hidden)
+hiddenimports.append("source.meta.gui.animationlib")  # Windows missed this
 
 a = Analysis(
     [f"../{BINARY_SLUG}.py"],
@@ -53,11 +59,24 @@ a = Analysis(
 
 # https://stackoverflow.com/questions/17034434/how-to-remove-exclude-modules-and-files-from-pyinstaller
 excluded_binaries = [
-    'VCRUNTIME140.dll',
-    'ucrtbase.dll',
+    'mfc140u.dll',
     'msvcp140.dll',
-    'mfc140u.dll'
+    'ucrtbase.dll',
+    'VCRUNTIME140.dll'
 ]
+
+# win is temperamental
+with open(os.path.join(".","resources","app","meta","manifests","excluded_dlls.json")) as dllsManifest:
+  dlls = []
+  try:
+    dlls = json.load(dllsManifest)
+  except JSONDecodeError as e:
+    raise ValueError("Windows DLLs manifest malformed!")
+  for dll in dlls:
+    for submod in ["core", "crt"]:
+      for ver in ["1-1-0", "1-1-1", "1-2-0", "2-1-0"]:
+        excluded_binaries.append(f"api-ms-win-{submod}-{dll}-l{ver}.dll")
+
 a.binaries = TOC([x for x in a.binaries if x[0] not in excluded_binaries])
 
 pyz = PYZ(

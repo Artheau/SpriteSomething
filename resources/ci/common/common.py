@@ -5,6 +5,7 @@ import json
 import os   # for env vars
 import stat  # file statistics
 import sys  # default system info
+from json.decoder import JSONDecodeError
 
 CI_SETTINGS = {}
 manifest_path = os.path.join(
@@ -17,7 +18,11 @@ manifest_path = os.path.join(
 if not os.path.isfile(manifest_path):
     raise AssertionError("Manifest not found: " + manifest_path)
 with(open(manifest_path, encoding="utf-8")) as ci_settings_file:
-    CI_SETTINGS = json.load(ci_settings_file)
+    CI_SETTINGS = {}
+    try:
+        CI_SETTINGS = json.load(ci_settings_file)
+    except JSONDecodeError as e:
+        raise ValueError("CI Settings file malformed!")
 
 UBUNTU_VERSIONS = CI_SETTINGS["common"]["common"]["ubuntu"]
 DEFAULT_EVENT = "event"
@@ -78,7 +83,9 @@ def prepare_env():
     # git data
     env["BRANCH"] = os.getenv("TRAVIS_BRANCH", "")
     env["GITHUB_ACTOR"] = os.getenv(
-        "GITHUB_ACTOR", CI_SETTINGS["common"]["common"]["actor"])
+        "GITHUB_ACTOR",
+        CI_SETTINGS["common"]["common"]["actor"]
+    )
     env["GITHUB_SHA"] = os.getenv("GITHUB_SHA", "")
     env["GITHUB_RUN_NUMBER"] = os.getenv("GITHUB_RUN_NUMBER", "")
     env["GITHUB_SHA_SHORT"] = env["GITHUB_SHA"]
@@ -89,10 +96,20 @@ def prepare_env():
     env["EVENT_MESSAGE"] = os.getenv("TRAVIS_COMMIT_MESSAGE", "")
     env["EVENT_LOG"] = os.getenv("GITHUB_EVENT_PATH", "")
     env["EVENT_TYPE"] = os.getenv(
-        "TRAVIS_EVENT_TYPE", os.getenv("GITHUB_EVENT_NAME", DEFAULT_EVENT))
+        "TRAVIS_EVENT_TYPE",
+        os.getenv(
+            "GITHUB_EVENT_NAME",
+            DEFAULT_EVENT
+        )
+    )
     # repo data
-    env["REPO_SLUG"] = os.getenv("TRAVIS_REPO_SLUG", os.getenv(
-        "GITHUB_REPOSITORY", DEFAULT_REPO_SLUG))
+    env["REPO_SLUG"] = os.getenv(
+        "TRAVIS_REPO_SLUG",
+        os.getenv(
+            "GITHUB_REPOSITORY",
+            DEFAULT_REPO_SLUG
+        )
+    )
     env["REPO_USERNAME"] = ""
     env["REPO_NAME"] = ""
 
@@ -106,18 +123,23 @@ def prepare_env():
         env["GITHUB_SHA_SHORT"] = env["GITHUB_SHA"][:7]
 
     # ci data
-    env["BUILD_NUMBER"] = os.getenv(
-        "TRAVIS_BUILD_NUMBER", env["GITHUB_RUN_NUMBER"])
+    env["BUILD_NUMBER"] = env["GITHUB_RUN_NUMBER"]
+    print("Build Number: " + env["BUILD_NUMBER"])
 
     GITHUB_TAG = os.getenv("TRAVIS_TAG", os.getenv("GITHUB_TAG", ""))
-    OS_NAME = os.getenv("TRAVIS_OS_NAME", os.getenv(
-        "OS_NAME", sys.platform)).replace("macOS", "osx")
+    OS_NAME = os.getenv(
+        "TRAVIS_OS_NAME",
+        os.getenv(
+            "OS_NAME",
+            sys.platform
+        )
+    ).replace("macOS", "osx")
     OS_DIST = os.getenv("TRAVIS_DIST", "notset")
     OS_VERSION = ""
 
     if "win32" in OS_NAME or \
         "cygwin" in OS_NAME or \
-            "msys" in OS_NAME:
+        "msys" in OS_NAME:
         OS_NAME = "windows"
     elif "darwin" in OS_NAME:
         OS_NAME = "osx"
@@ -135,20 +157,25 @@ def prepare_env():
     if OS_VERSION == "" and OS_DIST != "" and OS_DIST != "notset":
         OS_VERSION = OS_DIST
 
-        # if no tag
-    if GITHUB_TAG == "":
-        # if we haven't appended the build number, do it
-        if env["BUILD_NUMBER"] not in GITHUB_TAG:
-            GITHUB_TAG = APP_VERSION
-            # if the app version didn't have the build number, add it
-            # set to <app_version>.<build_number>
-            if env["BUILD_NUMBER"] not in GITHUB_TAG:
-                GITHUB_TAG += '.' + env["BUILD_NUMBER"]
+    print("GITHUB_TAG: " + GITHUB_TAG)
 
-    env["GITHUB_TAG"] = GITHUB_TAG
-    env["OS_NAME"] = OS_NAME
-    env["OS_DIST"] = OS_DIST
-    env["OS_VERSION"] = OS_VERSION
+    # if we haven't appended the build number, do it
+    if env["BUILD_NUMBER"] not in GITHUB_TAG:
+        GITHUB_TAG = APP_VERSION
+        # if the app version didn't have the build number, add it
+        # set to <app_version>.<build_number>
+        if env["BUILD_NUMBER"] not in GITHUB_TAG:
+            GITHUB_TAG += '.' + env["BUILD_NUMBER"]
+
+    for [label, value] in {
+        "APP_VERSION": APP_VERSION,
+        "GITHUB_TAG": GITHUB_TAG,
+        "OS_NAME": OS_NAME,
+        "OS_DIST": OS_DIST,
+        "OS_VERSION": OS_VERSION
+    }.items():
+        env[label] = value
+        print(f"{label}: {value}")
 
     return env
 

@@ -131,7 +131,7 @@ class ExportAudit(unittest.TestCase):
                 "import": {
                     importExt: spriteLibrary.Sprite(
                         spriteData["paths"]["resource"]["sheetexts"][importExt],
-                        {"name": self.spriteID.capitalize()},
+                        {"name": self.spriteID.capitalize(), "folder name": self.spriteID},
                         spriteData["paths"]["resource"]["subpath"]
                     )
                 },
