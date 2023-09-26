@@ -2,6 +2,8 @@
 __pycache__/
 
 # no build dir
+*.build
+*.dist
 /build
 /dist
 
@@ -11,9 +13,16 @@ __pycache__/
 #do not include the upx compressor directory (you can get this utility from https://upx.github.io/)
 /upx
 
+# no node
+node_modules
+package*.json
+
 # no IDE stuff
 /.vscode
 /.idea
+
+# But do keep tasks file
+!/.vscode/tasks.json
 
 # no PowerShell scripts
 *.ps*
@@ -49,6 +58,9 @@ working_dirs.json
 palette_writers.json
 
 # no custom files
+export.png
 custom/
-resources/user/*/*/*/sheets
+failures/
+resources/user/**/**
 resources/tmp/*
+resources/**/stamped.png

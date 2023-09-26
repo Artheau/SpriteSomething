@@ -106,8 +106,7 @@ class RomHandler(snes.RomHandlerParent):
 
 		if read_type:
 			return self.read_from_snes_address(duration_list_location+pose, read_type)
-		else:
-			return [control_code]
+		return [control_code]
 
 	def get_gun_data(self, animation, pose, frame=0x08):
 		#frame is used to tell the code how far the gun port is into the opening process
@@ -229,7 +228,7 @@ class RomHandler(snes.RomHandlerParent):
 					 0xD0+i+0x10*j+3*item,
 					 palette]
 					  for i in range(3) for j in range(3)]
-		elif item in [3,4,5,6,7]:   #the Samus visors
+		if item in [3,4,5,6,7]:   #the Samus visors
 			item_col = (item-3)//3
 			item_row = (item-3)%3
 			return [[4+0x08*i,
@@ -238,7 +237,7 @@ class RomHandler(snes.RomHandlerParent):
 					 0xD9+i+2*item_row+0x10*item_col,
 					 palette]
 					  for i in range(2)]
-		elif item in [8]: #cursor
+		if item in [8]: #cursor
 			return [[0x00,0x00,0x18,0xFE,palette],
 					[0x00,0x00,0x10,0xEE,palette],
 					[0x00,0x00,0x08,0xDF,palette],
@@ -246,21 +245,20 @@ class RomHandler(snes.RomHandlerParent):
 					[0x08,0x00,0x18,0xCC,palette],
 					[0x08,0x00,0x10,0xFF,palette],
 					[0x08,0x00,0x08,0xEF,palette]]
-		elif item in [9]: #pipe framework
+		if item in [9]: #pipe framework
 			return [[0x00,0x00,0x00,0xF9,palette],
 					[0x08,0x00,0x00,0xFA,palette],
 					[0x10,0x00,0x00,0xFB,palette],
 					[0x10,0x00,0x08,0xED,palette],
 					[0x00,0x00,0x10,0xFC,palette],
 					[0x10,0x00,0x10,0xFD,palette]]
-		else:
-			# FIXME: English
-			raise AssertionError(f"get_file_select_tilemaps() called for unknown item number {item}")
+		# FIXME: English
+		raise AssertionError(f"get_file_select_tilemaps() called for unknown item number {item}")
 
 	def get_palette(self, base_type, suit_type):
 		#interface to provide a string-based function to external callers
-		base_type = base_type.upper().replace(" ", "_") if type(base_type) is str else "STANDARD"
-		suit_type = suit_type.upper().replace(" ", "_") if type(suit_type) is str else "POWER"
+		base_type = base_type.upper().replace(" ", "_") if isinstance(base_type,str) else "STANDARD"
+		suit_type = suit_type.upper().replace(" ", "_") if isinstance(suit_type,str) else "POWER"
 
 		return self.get_palette_from_enum(getattr(PaletteType,base_type), getattr(SuitType,suit_type))
 
@@ -278,11 +276,11 @@ class RomHandler(snes.RomHandlerParent):
 			}
 			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
-			if base_address == None:
+			if base_address is None:
 				raise AssertionError(f"function get_palette_from_enum() called for standard palette with unknown suit type: {suit_type}")
 			return [self._get_static_palette(base_address)]
 
-		elif base_type == PaletteType.LOADER:
+		if base_type == PaletteType.LOADER:
 			suit_type_switcher = {
 				SuitType.POWER: 0x8DDB62,
 				SuitType.VARIA: 0x8DDCC8,
@@ -290,7 +288,7 @@ class RomHandler(snes.RomHandlerParent):
 			}
 			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
-			if base_address == None:
+			if base_address is None:
 				raise AssertionError(f"function get_palette_from_enum() called for loader palette with unknown suit type: {suit_type}")
 
 			#this is a set of rotating palettes implemented in microcode (loader is the most complex case of these, thankfully)
@@ -312,7 +310,7 @@ class RomHandler(snes.RomHandlerParent):
 
 			return full_palette_set
 
-		elif base_type == PaletteType.HEAT:
+		if base_type == PaletteType.HEAT:
 			suit_type_switcher = {
 				SuitType.POWER: 0x8DE45E,
 				SuitType.VARIA: 0x8DE68A,
@@ -320,14 +318,14 @@ class RomHandler(snes.RomHandlerParent):
 			}
 			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
-			if base_address == None:
+			if base_address is None:
 				raise AssertionError(f"function get_palette_from_enum() called for heat palette with unknown suit type: {suit_type}")
 
 			full_palette_set = []
 			base_address += 8                #skip over the control codes
 			return self._get_sequence_of_timed_palettes(base_address, 16, add_transparency=True)  #heat is not coded with transparency
 
-		elif base_type == PaletteType.CHARGE:
+		if base_type == PaletteType.CHARGE:
 			suit_type_switcher = {
 				SuitType.POWER: 0x9B9820,
 				SuitType.VARIA: 0x9B9920,
@@ -335,13 +333,13 @@ class RomHandler(snes.RomHandlerParent):
 			}
 			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
-			if base_address == None:
+			if base_address is None:
 				raise AssertionError(f"function get_palette_from_enum() called for charge palette with unknown suit type: {suit_type}")
 
 			#The charged shot palette advances every frame (determined by manual frame advance)
 			return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(8)]
 
-		elif base_type == PaletteType.SPEED_BOOST:
+		if base_type == PaletteType.SPEED_BOOST:
 			suit_type_switcher = {
 				SuitType.POWER: 0x9B9B20,
 				SuitType.VARIA: 0x9B9D20,
@@ -349,14 +347,14 @@ class RomHandler(snes.RomHandlerParent):
 			}
 			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
-			if base_address == None:
+			if base_address is None:
 				raise AssertionError(f"function get_palette_from_enum() called for speed boost palette with unknown suit type: {suit_type}")
 
 			#4 frames each during the warm up, then stay at last palette forever (determined by manual frame advance)
 			return [(4,self._get_raw_palette(base_address + i*0x20)) for i in range(3)] + \
 						 [(0,self._get_raw_palette(base_address + 0x60))]
 
-		elif base_type == PaletteType.SPEED_SQUAT:
+		if base_type == PaletteType.SPEED_SQUAT:
 			suit_type_switcher = {
 				SuitType.POWER: 0x9B9BA0,
 				SuitType.VARIA: 0x9B9DA0,
@@ -364,13 +362,13 @@ class RomHandler(snes.RomHandlerParent):
 			}
 			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
-			if base_address == None:
+			if base_address is None:
 				raise AssertionError(f"function get_palette_from_enum() called for speed squat palette with unknown suit type: {suit_type}")
 
 			#timing and order determined by manual frame advance.  One frame each, oscillates between 0 and 3
 			return [(1,self._get_raw_palette(base_address + i*0x20)) for i in [0,1,2,3,2,1]]
 
-		elif base_type == PaletteType.SHINESPARK:
+		if base_type == PaletteType.SHINESPARK:
 			suit_type_switcher = {
 				SuitType.POWER: 0x9B9C20,
 				SuitType.VARIA: 0x9B9E20,
@@ -378,13 +376,13 @@ class RomHandler(snes.RomHandlerParent):
 			}
 			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
-			if base_address == None:
+			if base_address is None:
 				raise AssertionError(f"function get_palette_from_enum() called for shine spark palette with unknown suit type: {suit_type}")
 
 			#timing and order determined by manual frame advance.  1 frame each, goes 0 to 3 then resets
 			return [(1,self._get_raw_palette(base_address + i*0x20)) for i in range(4)]
 
-		elif base_type == PaletteType.SCREW_ATTACK:
+		if base_type == PaletteType.SCREW_ATTACK:
 			suit_type_switcher = {
 				SuitType.POWER: 0x9B9CA0,
 				SuitType.VARIA: 0x9B9EA0,
@@ -392,19 +390,19 @@ class RomHandler(snes.RomHandlerParent):
 			}
 			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
-			if base_address == None:
+			if base_address is None:
 				raise AssertionError(f"function get_palette_from_enum() called for screw attack palette with unknown suit type: {suit_type}")
 
 			#timing and order determined by manual frame advance.  One frame each, oscillates between 0 and 3
 			return [(1,self._get_raw_palette(base_address + i*0x20)) for i in [0,1,2,3,2,1]]
 
-		elif base_type == PaletteType.HYPER_BEAM:
+		if base_type == PaletteType.HYPER_BEAM:
 			base_address = 0x9BA240
 
 			#timing and order estimated by Youtube frame advance.  Each frame goes down 1, overall from 9 to 0 then resets
 			return [(2,self._get_raw_palette(base_address + i*0x20)) for i in range(9,-1,-1)]
 
-		elif base_type == PaletteType.DEATH_SUIT:
+		if base_type == PaletteType.DEATH_SUIT:
 			#the colors for the exploding suit pieces can be set to different palettes.
 
 			#To retrieve these palettes, first need to grab the pointers to the palettes
@@ -415,7 +413,7 @@ class RomHandler(snes.RomHandlerParent):
 			}
 			# FIXME: English
 			base_address = suit_type_switcher.get(suit_type)
-			if base_address == None:
+			if base_address is None:
 				raise AssertionError(f"function get_palette_from_enum() called for death suit palette with unknown suit type: {suit_type}")
 
 			#There are ten pointers in total, grab them all
@@ -429,7 +427,7 @@ class RomHandler(snes.RomHandlerParent):
 
 			return full_palette_set
 
-		elif base_type == PaletteType.DEATH_FLESH:
+		if base_type == PaletteType.DEATH_FLESH:
 			palette_list_pointer = 0x9BB80F
 
 			#There are ten pointers in total, grab them all
@@ -443,35 +441,35 @@ class RomHandler(snes.RomHandlerParent):
 
 			return full_palette_set
 
-		elif base_type == PaletteType.CRYSTAL_FLASH:
+		if base_type == PaletteType.CRYSTAL_FLASH:
 			#timing determined by manual frame advance
 			return [(2,self._get_raw_palette(0x9B96C0 + i*0x20)) for i in range(6)]
 
-		elif base_type == PaletteType.SEPIA:
+		if base_type == PaletteType.SEPIA:
 			return [self._get_static_palette(0x8CE569)]
 
-		elif base_type == PaletteType.SEPIA_HURT:
+		if base_type == PaletteType.SEPIA_HURT:
 			return [self._get_static_palette(0x9BA380)]
 
-		elif base_type == PaletteType.SEPIA_ALTERNATE:
+		if base_type == PaletteType.SEPIA_ALTERNATE:
 			return [self._get_static_palette(0x9BA3A0)]
 
-		elif base_type == PaletteType.DOOR:
+		if base_type == PaletteType.DOOR:
 			visor_color = self.read_from_snes_address(0x82E52C, 2)
 			base_colors = [0 for _ in range(16)]   #use 0 as the base color...technically this fades upwards into the suit color
 			base_colors[4] = visor_color
 			return [(0, base_colors)]
 
-		elif base_type == PaletteType.XRAY:
+		if base_type == PaletteType.XRAY:
 			_,base_palette = self.get_palette_from_enum(PaletteType.STANDARD, suit_type)[0]    #recurse to get the regular suit palette
 			visor_colors = self.get_nightvisor_colors()
 			#I did manual frame advances to learn that the duration is 6 frames for each visor color
 			return [(6, base_palette[:4]+[color]+base_palette[5:]) for color in visor_colors]
 
-		elif base_type == PaletteType.FILE_SELECT:
+		if base_type == PaletteType.FILE_SELECT:
 			return [self._get_static_palette(0x8EE5E0)]
 
-		elif base_type == PaletteType.SHIP:
+		if base_type == PaletteType.SHIP:
 			base_palette_address = 0xA2A59E    #yes, way over here
 			ship_underglow_address = 0x8DCA4E  #yes, way over there
 
@@ -487,18 +485,17 @@ class RomHandler(snes.RomHandlerParent):
 
 			return full_palette_set
 
-		elif base_type == PaletteType.INTRO_SHIP:
+		if base_type == PaletteType.INTRO_SHIP:
 			#Technically the thrusters alternate white and black every frame, but this is a bit much on the eyes
 			return [self._get_static_palette(0x8CE689)]
 
-		elif base_type == PaletteType.OUTRO_SHIP:
+		if base_type == PaletteType.OUTRO_SHIP:
 			base_address = 0x8DD6BA
 			base_address += 4       #skip the control codes
 			return self._get_sequence_of_timed_palettes(base_address, 16)
 
-		else:
-			# FIXME: English
-			raise AssertionError(f"function get_palette_from_enum() called with unknown palette type: {base_type}")
+		# FIXME: English
+		raise AssertionError(f"function get_palette_from_enum() called with unknown palette type: {base_type}")
 
 	def get_nightvisor_colors(self):
 		return self.read_from_snes_address(0x9BA3C6, "222")

@@ -1,0 +1,31 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run",
+      "type": "shell",
+      "command": "python3 ./SpriteSomething.py",
+      "windows": {
+        "command": "py -3.8 ./SpriteSomething.py"
+      }
+    },
+    {
+      "label": "Load Link from ZSPR",
+      "type": "shell",
+      "command": "python3 ./SpriteSomething.py --sprite ./resources/app/snes/zelda3/link/sheets/link.zspr",
+      "windows": {
+        "command": "py -3.8 ./SpriteSomething.py --sprite ./resources/app/snes/zelda3/link/sheets/link.zspr"
+      }
+    },
+    {
+      "label": "Load Samus from PNG",
+      "type": "shell",
+      "command": "python3 ./SpriteSomething.py --sprite ./resources/app/snes/metroid3/samus/sheets/samus.png",
+      "windows": {
+        "command": "py -3.8 ./SpriteSomething.py --sprite ./resources/app/snes/metroid3/samus/sheets/samus.png"
+      }
+    }
+  ]
+}

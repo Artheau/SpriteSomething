@@ -14,3 +14,10 @@ class PluginsParent():
     # setter
     def set_plugins(self, plugins):
         self.plugins = plugins
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()
