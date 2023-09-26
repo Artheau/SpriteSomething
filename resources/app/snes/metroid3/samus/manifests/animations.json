@@ -440,6 +440,30 @@
 			{	"frames": 48,	"displacement": [0,-4],	"tiles": [	{"image": "launcher_varia", "pos": [-16,-31]}	]	}
 		]
 	},
+  "Save": {
+    "neutral": [
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,-32]}, {"image": "save_chamber", "pos": [-16,-50]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,-24]}, {"image": "save_chamber", "pos": [-16,-50]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,-16]}, {"image": "save_chamber", "pos": [-16,-50]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,-8]}, {"image": "elevator", "pos": [-17,-24]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,0]}, {"image": "elevator", "pos": [-17,-24]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,8]}, {"image": "elevator", "pos": [-17,-24]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,16]}, {"image": "elevator", "pos": [-17,-24]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,24]}, {"image": "save_chamber", "pos": [-16,-50]} ] }
+    ]
+  },
+  "Save (Varia)": {
+    "neutral": [
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,-32]}, {"image": "save_chamber", "pos": [-16,-50]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,-24]}, {"image": "save_chamber", "pos": [-16,-50]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,-16]}, {"image": "save_chamber", "pos": [-16,-50]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,-8]}, {"image": "elevator_varia", "pos": [-17,-24]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,0]}, {"image": "elevator_varia", "pos": [-17,-24]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,8]}, {"image": "elevator_varia", "pos": [-17,-24]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,16]}, {"image": "elevator_varia", "pos": [-17,-24]} ] },
+      { "frames": 1, "displacement": [0, -11], "tiles": [ {"image": "save_ripple", "pos": [-16,24]}, {"image": "save_chamber", "pos": [-16,-50]} ] }
+    ]
+  },
 	"Turning": {
 		"right": [
 			{	"frames": 10,	"displacement": [0,-6],	"tiles": [	{"image": "optional_gun_port_right2", "pos": [11,-3]}, {"image": "stand_right",  "pos": [-13,-21]}	]	},

@@ -5,18 +5,22 @@ import platform
 import ssl
 import sys              # for path
 import urllib.request   # for downloads
+from json.decoder import JSONDecodeError
 from shutil import unpack_archive
 
 
 
 def get_upx():
-    VERBOSE = True
+    VERBOSE = False
     CI_SETTINGS = {}
     manifest_path = os.path.join("resources", "app", "meta", "manifests", "ci.json")
     if (not os.path.isfile(manifest_path)):
         raise AssertionError("Manifest not found: " + manifest_path)
     with(open(manifest_path)) as ci_settings_file:
-        CI_SETTINGS = json.load(ci_settings_file)
+        try:
+            CI_SETTINGS = json.load(ci_settings_file)
+        except JSONDecodeError as e:
+            raise ValueError("CI Settings file malformed!")
 
     env = common.prepare_env()
 

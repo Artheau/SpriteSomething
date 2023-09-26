@@ -64,6 +64,8 @@ class AnimationAudit(unittest.TestCase):
         supplied_images = set(self.layout["images"].keys())
         pseudo_images = "pseudoimages" in self.layout and set(self.layout["pseudoimages"]) or set()
         bad_image_references = referenced_images.difference(supplied_images.union(pseudo_images))
+        if len(set(bad_image_references)):
+            print(bad_image_references)
         self.assertTrue(0 == len(set(bad_image_references)))
 
     def run_no_duplicate_image_definitions_in_layout(self):
