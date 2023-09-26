@@ -3,9 +3,10 @@ Build SpriteSomething.py
 '''
 import json
 import platform
-from subprocess import Popen, PIPE, STDOUT, CalledProcessError
 import os  # for checking for dirs
 import re
+from json.decoder import JSONDecodeError
+from subprocess import Popen, PIPE, STDOUT, CalledProcessError
 
 DEST_DIRECTORY = "."
 
@@ -75,7 +76,11 @@ def run_build():
       GO = False
     if len(strs) > 0:
       with open(os.path.join(".","resources","app","meta","manifests","excluded_dlls.json"), "r+", encoding="utf-8") as dllsManifest:
-        dlls = json.load(dllsManifest)
+        dlls = []
+        try:
+          dlls = json.load(dllsManifest)
+        except JSONDecodeError as e:
+          raise ValueError("Windows DLLs manifest malformed!")
 
         newDLLs = dlls
 

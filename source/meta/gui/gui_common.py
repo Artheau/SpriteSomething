@@ -15,6 +15,7 @@ import ssl
 import sys
 import urllib.request
 from functools import partial    #for tk debugging
+from json.decoder import JSONDecodeError
 from source.meta.common.constants import DEBUG_MODE  #for tk debugging
 from source.meta.common import common
 
@@ -64,7 +65,11 @@ def create_extraction_chooser(console_name,game_names):
 		for game_name in game_names:
 			sprite_name = ""
 			with open(common.get_resource([console_name,game_name,"manifests"],"manifest.json")) as f:
-				manifest = json.load(f)
+				manifest = {}
+				try:
+					manifest = json.load(f)
+				except JSONDecodeError as e:
+					raise ValueError("Game Manifest malformed: " + game_name)
 				sprite_name = manifest["1"]["name"]
 			game_button = tk.Button(
 				game_chooser,
@@ -141,7 +146,11 @@ def get_sprites(self,title,destdir,url,gui=True):
 	sprites_filename = url
 	context = ssl._create_unverified_context()
 	sprites_req = urllib.request.urlopen(sprites_filename, context=context)
-	sprites = json.loads(sprites_req.read().decode("utf-8"))
+	sprites = {}
+	try:
+		sprites = json.loads(sprites_req.read().decode("utf-8"))
+	except JSONDecodeError as e:
+		raise ValueError("Downloadable sprites manifest malformed: " + sprites_filename)
 	#get an iterator and a counter for a makeshift progress bar
 	total = len(sprites)
 	if "file" not in sprites[0]:

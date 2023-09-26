@@ -11,16 +11,18 @@ try:
 except ModuleNotFoundError as e:
     print(e)
 
-import json                 #for reading JSON
-import os                   #for filesystem manipulation
-import random               #for choosing random app titles
-import re                   #for regexes in hyperlinks in about box
-import sys                  #for filesystem manipulation
-import time                 #for timekeeping
-import traceback            #for error reporting
-import urllib               #for getting latest version number from GitHub Pages
-import webbrowser             #for launching browser from about box
-from functools import partial #for passing parameters to user-triggered function calls
+import json                                     #for reading JSON
+import os                                       #for filesystem manipulation
+import random                                   #for choosing random app titles
+import re                                       #for regexes in hyperlinks in about box
+import stat                                     #for filesystem manipulation
+import sys                                      #for filesystem manipulation
+import time                                     #for timekeeping
+import traceback                                #for error reporting
+import urllib                                   #for getting latest version number from GitHub Pages
+import webbrowser                               #for launching browser from about box
+from functools import partial                   #for passing parameters to user-triggered function calls
+from json.decoder import JSONDecodeError
 
 from source.meta.gui import widgetlib
 from source.meta import ssDiagnostics as diagnostics
@@ -85,58 +87,52 @@ class SpriteSomethingMainFrame(tk.Frame):
         '''
         super().__init__(master)     #make the frame itself
 
-        #set default working dirs to same dir as script
-        self.working_dirs = {
-            "file.open": "./",
-            "file.save": "./",
-            "export.dest": "./",
-            "export.source": "./",
-            "export.sprite-as-rdc": "./",
-            "export.frame-as-png": "./",
-            "export.animation-as-gif": "./",
-            "export.animation-as-hcollage": "./",
-            "export.animation-as-vcollage": "./",
-            "export.palette": "./"
-        }
-        #read saved working dirs file if it exists and set these
-        working_dir_path = os.path.join(
-            ".",
-            "resources",
-            "user",
-            "meta",
-            "manifests",
-            "working_dirs.json"
-        )
-        if os.path.exists(working_dir_path):
-            with open(working_dir_path, "r", encoding="utf-8") as json_file:
-                data = json.load(json_file)
-                for [k, v] in data.items():
-                    self.working_dirs[k] = v
+    #set default working dirs to same dir as script
+    self.working_dirs = {
+      "file.open": "./",
+      "file.save": "./",
+      "export.dest": "./",
+      "export.source": "./",
+      "export.sprite-as-rdc": "./",
+      "export.frame-as-png": "./",
+      "export.animation-as-gif": "./",
+      "export.animation-as-hcollage": "./",
+      "export.animation-as-vcollage": "./",
+      "export.palette": "./"
+    }
+    #read saved working dirs file if it exists and set these
+    working_dir_path = os.path.join(".","resources","user","meta","manifests","working_dirs.json")
+    if os.path.exists(working_dir_path):
+      with open(working_dir_path) as json_file:
+        data = {}
+        try:
+            data = json.load(json_file)
+        except JSONDecodeError as e:
+            raise ValueError("Saved Working Dirs manifest malformed!")
+        for k,v in data.items():
+          self.working_dirs[k] = v
 
-        #set default animation settings
-        self.ani_settings = {}
-        #read saved animation settings
-        ani_settings_path = os.path.join(
-            ".",
-            "resources",
-            "user",
-            "meta",
-            "manifests",
-            "ani_settings.json"
-        )
-        if os.path.exists(ani_settings_path):
-            with open(ani_settings_path, "r", encoding="utf-8") as json_file:
-                data = json.load(json_file)
-                for console in data.keys():
-                    if console not in self.ani_settings:
-                        self.ani_settings[console] = {}
-                    for game in data[console]:
-                        if game not in self.ani_settings[console]:
-                            self.ani_settings[console][game] = {}
-                        for sprite,animation in data[console][game].items():
-                            if sprite not in self.ani_settings[console][game]:
-                                self.ani_settings[console][game][sprite] = 0
-                            self.ani_settings[console][game][sprite] = animation
+    #set default animation settings
+    self.ani_settings = {}
+    #read saved animation settings
+    ani_settings_path = os.path.join(".","resources","user","meta","manifests","ani_settings.json")
+    if os.path.exists(ani_settings_path):
+      with open(ani_settings_path) as json_file:
+        data = {}
+        try:
+          data = json.load(json_file)
+        except JSONDecodeError as e:
+          raise ValueError("Saved Animation Settings manifest malformed!")
+        for console in data.keys():
+          if console not in self.ani_settings:
+            self.ani_settings[console] = {}
+          for game in data[console]:
+            if game not in self.ani_settings[console]:
+              self.ani_settings[console][game] = {}
+            for sprite,animation in data[console][game].items():
+              if sprite not in self.ani_settings[console][game]:
+                self.ani_settings[console][game][sprite] = 0
+              self.ani_settings[console][game][sprite] = animation
 
         #create a fish
         self.fish = BabelFish(
@@ -183,32 +179,32 @@ class SpriteSomethingMainFrame(tk.Frame):
         #used to determine if we need to badger the user when they change things and try to exit
         self.unsaved_changes = False
 
-    def create_random_title(self):
-        '''
-        # Generate a new epic random title for this application
-        '''
-        name_dict = {}
-        for filename in common.get_all_resources(
-            ["meta","manifests"],
-            "app_names.json"
-        ):
-            with open(filename, "r", encoding="utf-8") as name_file:
-                for key,item in json.load(name_file).items():
-                    if not key == "$schema":
-                        if key in name_dict:
-                            name_dict[key].extend(item)
-                        else:
-                            name_dict[key] = item
-        app_name = []
-        if "pre" in name_dict and random.choice([True,False]):
-            app_name.append(random.choice(name_dict["pre"]))
-        app_name.append("Sprite") #Need to have "Sprite" in the name
-        if "noun" in name_dict:
-            app_name.append(random.choice(name_dict["noun"]))
-        if "post" in name_dict and random.choice([True,False]):
-            app_name.append(random.choice(name_dict["post"]))
-        self.app_title = " ".join(app_name)
-        self.master.title(self.app_title)
+  def create_random_title(self):
+    # Generate a new epic random title for this application
+    name_dict = {}
+    for filename in common.get_all_resources(["meta","manifests"],"app_names.json"):
+      with open(filename) as name_file:
+        nFile = {}
+        try:
+          nFile = json.load(name_file)
+        except JSONDecodeError as e:
+          raise ValueError("AppName JSON malformed!")
+        for key,item in nFile.items():
+          if not key == "$schema":
+            if key in name_dict:
+              name_dict[key].extend(item)
+            else:
+              name_dict[key] = item
+    app_name = []
+    if "pre" in name_dict and random.choice([True,False]):
+      app_name.append(random.choice(name_dict["pre"]))
+    app_name.append("Sprite")         #Need to have "Sprite" in the name
+    if "noun" in name_dict:
+      app_name.append(random.choice(name_dict["noun"]))
+    if "post" in name_dict and random.choice([True,False]):
+      app_name.append(random.choice(name_dict["post"]))
+    self.app_title = " ".join(app_name)
+    self.master.title(self.app_title)
 
     def create_toolbar(self):
         '''
@@ -429,126 +425,66 @@ class SpriteSomethingMainFrame(tk.Frame):
         )
         menu_options.append(export_menu)
 
-        # try to get bundled sprites and add menu options to load them
-        # instead of requiring the user to hunt for them
-        bundled_games = {}
-        not_consoles = []
-        with open(
-            os.path.join(
-              "resources",
-              "app",
-              "meta",
-              "manifests",
-              "not_consoles.json"
-            ),
-            "r",
-            encoding="utf-8"
-        ) as f:
-            not_consoles = json.load(f)
-        root = os.path.join("resources","app")
-        for console in os.listdir(root):
-            if not console in not_consoles:
-                if os.path.isdir(os.path.join(root,console)):
-                    if not console in bundled_games:
-                        bundled_games[console] = {}
-                    for gamedir in os.listdir(os.path.join(root,console)):
-                        if os.path.isdir(os.path.join(root,console,gamedir)):
-                            with open(
-                                os.path.join(
-                                    root,
-                                    console,
-                                    gamedir,
-                                    "lang",
-                                    "en.json"
-                                ),
-                                "r",
-                                encoding="utf-8"
-                            ) as en_lang:
-                                en = json.load(en_lang)
-                                if "game" in en:
-                                    if "name" in en["game"]:
-                                        bundled_games[console][gamedir] = {}
-                                        bundled_games[console][gamedir]["game"] = {}
-                                        bundled_games[console][gamedir]["game"]["internal name"] = gamedir
-                                        bundled_games[console][gamedir]["game"]["name"] = en["game"]["name"]
-                                        bundled_games[console][gamedir]["sprites"] = []
-                            with open(
-                                os.path.join(
-                                    root,
-                                    console,
-                                    gamedir,
-                                    "manifests",
-                                    "manifest.json"
-                                ),
-                                "r",
-                                encoding="utf-8"
-                            ) as game_manifest:
-                                sprites = json.load(game_manifest)
-                                for spriteID,sprite in sprites.items():
-                                    if spriteID != "$schema":
-                                        name = sprite["name"]
-                                        folder = sprite["folder name"]
-                                        path = os.path.join(
-                                            root,
-                                            console,
-                                            gamedir,
-                                            folder,
-                                            "sheets"
-                                        )
-                                        filename = ""
-                                        for filetype in [
-                                            #FIXME: Supported filetypes
-                                            ".png",     # Main input
-                                            ".4bpp",    # Raw
-                                            ".zspr",    # Z3Link
-                                            ".sfc",     # SNES
-                                            ".smc",     # SNES
-                                            ".nes",     # NES
-                                            ".bmp",     # FFMQBen
-                                            ".zip",     # Mo3Player
-                                            ".aspr",    # ASPR (WIP)
-                                            ".zhx",     # ZHX (WIP)
-                                            ".rdc"      # Z3Link/M3Samus
-                                        ]:
-                                            filepath = os.path.join(path,folder+filetype)
-                                            if os.path.isfile(filepath):
-                                                filename = filepath
-                                                break
-                                        bundled_games[console][gamedir]["sprites"].append(
-                                        (
-                                            name,
-                                            partial(self.load_sprite,filename)
-                                        )
-                                )
-        bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")
-        for console in bundled_games:
-            bundled_console = bundled_games[console]
-            bundled_console_menu = tk.Menu(
-              bundle_menu,
-              tearoff=0,
-              name=f"bundled_{console}_menu"
-            )
-            for bundled_game in bundled_console:
-                bundled_game = bundled_games[console][bundled_game]
-                bundled_game_menu = tk.Menu(
-                    bundled_console_menu,
-                    tearoff=0,
-                    name=f"bundled_{bundled_game['game']['internal name']}_menu")
-                for sprite in bundled_game["sprites"]:
-                    label,command = sprite
-                    bundled_game_menu.add_command(label=label,command=command)
-                bundled_console_menu.add_cascade(
-                    label=bundled_game["game"]["name"],
-                    menu=bundled_game_menu
-                )
-            bundle_menu.add_cascade(
-              label=self.fish.translate("meta","consoles",console),
-              menu=bundled_console_menu
-            )
-        self.menu.add_cascade(
-            label=self.fish.translate("meta","menu","bundle"),
-            menu=bundle_menu
-        )
+    # try to get bundled sprites and add menu options to load them instead of requiring the user to hunt for them
+    bundled_games = {}
+    not_consoles = []
+    with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
+      not_consoles = []
+      try:
+        not_consoles = json.load(f)
+      except JSONDecodeError as e:
+        raise ValueError("Not Consoles manifest malformed!")
+    root = os.path.join("resources","app")
+    for console in os.listdir(root):
+      if not console in not_consoles:
+        if os.path.isdir(os.path.join(root,console)):
+          if not console in bundled_games:
+            bundled_games[console] = {}
+          for gamedir in os.listdir(os.path.join(root,console)):
+            if os.path.isdir(os.path.join(root,console,gamedir)):
+              with open(os.path.join(root,console,gamedir,"lang","en.json")) as en_lang:
+                en = {}
+                try:
+                  en = json.load(en_lang)
+                except JSONDecodeError as e:
+                  raise ValueError("Lang file malformed: " + gamedir + "/" + "EN")
+                if "game" in en:
+                  if "name" in en["game"]:
+                    bundled_games[console][gamedir] = {}
+                    bundled_games[console][gamedir]["game"] = {}
+                    bundled_games[console][gamedir]["game"]["internal name"] = gamedir
+                    bundled_games[console][gamedir]["game"]["name"] = en["game"]["name"]
+                    bundled_games[console][gamedir]["sprites"] = []
+              with open(os.path.join(root,console,gamedir,"manifests","manifest.json")) as game_manifest:
+                sprites = {}
+                try:
+                  sprites = json.load(game_manifest)
+                except JSONDecodeError as e:
+                  raise ValueError("Game Manifest malformed: " + gamedir)
+                for spriteID,sprite in sprites.items():
+                  if spriteID != "$schema":
+                    name = sprite["name"]
+                    folder = sprite["folder name"]
+                    path = os.path.join(root,console,gamedir,folder,"sheets")
+                    filename = ""
+                    for filetype in [".rdc",".zspr",".png"]:
+                      filepath = os.path.join(path,folder+filetype)
+                      if os.path.isfile(filepath):
+                        filename = filepath
+                    bundled_games[console][gamedir]["sprites"].append((name,partial(self.load_sprite,filename)))
+    bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")
+    for console in bundled_games:
+      bundled_console = bundled_games[console]
+      bundled_console_menu = tk.Menu(bundle_menu, tearoff=0, name="bundled_" + console + "_menu")
+      for bundled_game in bundled_console:
+        bundled_game = bundled_games[console][bundled_game]
+        bundled_game_menu = tk.Menu(bundled_console_menu, tearoff=0, name="bundled_" + bundled_game["game"]["internal name"] + "_menu")
+        for sprite in bundled_game["sprites"]:
+          label,command = sprite
+          bundled_game_menu.add_command(label=label,command=command)
+        bundled_console_menu.add_cascade(label=bundled_game["game"]["name"], menu=bundled_game_menu)
+      bundle_menu.add_cascade(label=self.fish.translate("meta","consoles",console), menu=bundled_console_menu)
+    self.menu.add_cascade(label=self.fish.translate("meta","menu","bundle"), menu=bundle_menu)
 
         #for future implementation
         representative_images_menu = tk.Menu(
@@ -629,23 +565,14 @@ class SpriteSomethingMainFrame(tk.Frame):
             name="representative_images_menu"
         )
 
-        # FIXME: English
-        self.menu.children["representative_images_menu"].add_command(
-            label="Default",
-            command=partial(self.get_representative_images,"default")
-        )
-        for manifest_file in common.get_all_resources(
-            [self.sprite.resource_subpath,"manifests"],
-            "representative-images.json"
-        ):
-            with open(manifest_file, "r", encoding="utf-8") as manifest:
-                manifest_images = json.load(manifest)
-                for key in manifest_images.keys():
-                    if not key == "default":
-                        self.menu.children["representative_images_menu"].add_command(
-                            label=key[0].upper() + key[1:],
-                            command=partial(self.get_representative_images,key)
-                        )
+    # FIXME: English
+    self.menu.children["representative_images_menu"].add_command(label="Default",command=partial(self.get_representative_images,"default"))
+    for manifest_file in common.get_all_resources([self.sprite.resource_subpath,"manifests"],"representative-images.json"):
+      with open(manifest_file) as manifest:
+        manifest_images = json.load(manifest)
+        for key in manifest_images.keys():
+          if not key == "default":
+            self.menu.children["representative_images_menu"].add_command(label=key[0].upper() + key[1:],command=partial(self.get_representative_images,key))
 
         self.menu.children["plugins_menu"] = tk.Menu(
             self.menu,
@@ -712,65 +639,44 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.load_plugins()
         self.initialize_sprite_animation()
 
-    def attach_both_panels(self):
-        '''
-        #this same function can also be used to re-create the panels
-        #have to make the canvas before the buttons so that the left panel buttons can manipulate it
-        '''
-        # stops time, tell your friends;
-        # do not update the sprite while doing this
-        self.freeze_ray = True
-        if hasattr(self, "timer_callback"):
-            self.master.after_cancel(self.timer_callback)
-        if hasattr(self, "left_panel"):
-            for widget in self.left_panel.winfo_children():
-                #if we've got direction buttons
-                if "direction_buttons" in widget.winfo_name():
-                    #get the main bindings file
-                    bindings = None
-                    bindings_filename = common.get_resource(
-                        ["meta","manifests"],
-                        "bindings.json"
-                    )
-                    with open(bindings_filename,encoding="utf-8") as f:
-                        bindings = json.load(f)
-                    #cycle through all spiffy buttons
-                    for subwidget in widget.winfo_children():
-                        if "_button" in subwidget.winfo_name():
-                            button_name = subwidget.winfo_name().replace("_button","")
-                            button_section = button_name[:button_name.find("_")]
-                            button_name = button_name[button_name.find("_")+1:]
-                            keypresses = None
-                            keypresses_switcher = bindings[button_section] if button_section in bindings else {}
-                            keypresses = keypresses_switcher.get(
-                                button_name.lower(),
-                                None
-                            )
-                            if keypresses:
-                                #nuke all the bindings from orbit
-                                for keypress in keypresses:
-                                    subwidget.unbind_all(keypress)
-                                #nuke this button from orbit
-                                subwidget.destroy()
-        self.left_panel = tk.PanedWindow(
-            self.panes,
-            orient=tk.VERTICAL,
-            name="left_panel",
-            width=320,
-            handlesize=0,
-            sashwidth=0,
-            sashpad=2
-        )
-        self.right_panel = ttk.Notebook(self.panes, name="right_pane")
-        self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
-        self.overview_frame = tk.Frame(self.right_panel, name="overview_frame")
-        self.overview_canvas = tk.Canvas(
-            self.overview_frame,
-            name="overview_canvas"
-        )
-        self.attach_left_panel()
-        self.attach_right_panel()
-        self.create_status_bar()
+  def attach_both_panels(self):
+    #this same function can also be used to re-create the panels
+    #have to make the canvas before the buttons so that the left panel buttons can manipulate it
+    self.freeze_ray = True # stops time, tell your friends; do not update the sprite while doing this
+    if hasattr(self, "timer_callback"):
+      self.master.after_cancel(self.timer_callback)
+    if hasattr(self, "left_panel"):
+      for widget in self.left_panel.winfo_children():
+        #if we've got direction buttons
+        if "direction_buttons" in widget.winfo_name():
+          #get the main bindings file
+          bindings = None
+          bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
+          with open(bindings_filename,encoding="utf-8") as f:
+            bindings = json.load(f)
+          #cycle through all spiffy buttons
+          for subwidget in widget.winfo_children():
+            if "_button" in subwidget.winfo_name():
+              button_name = subwidget.winfo_name().replace("_button","")
+              button_section = button_name[:button_name.find("_")]
+              button_name = button_name[button_name.find("_")+1:]
+              keypresses = None
+              keypresses_switcher = bindings[button_section] if button_section in bindings else {}
+              keypresses = keypresses_switcher.get(button_name.lower(),None)
+              if keypresses:
+                #nuke all the bindings from orbit
+                for keypress in keypresses:
+                  subwidget.unbind_all(keypress)
+                #nuke this button from orbit
+                subwidget.destroy()
+    self.left_panel = tk.PanedWindow(self.panes, orient=tk.VERTICAL, name="left_panel",width=320,handlesize=0,sashwidth=0,sashpad=2)
+    self.right_panel = ttk.Notebook(self.panes, name="right_pane")
+    self.canvas = tk.Canvas(self.right_panel, name="main_canvas")
+    self.overview_frame = tk.Frame(self.right_panel, name="overview_frame")
+    self.overview_canvas = tk.Canvas(self.overview_frame, name="overview_canvas")
+    self.attach_left_panel()
+    self.attach_right_panel()
+    self.create_status_bar()
 
     def attach_left_panel(self):
         '''
