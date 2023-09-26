@@ -19,6 +19,7 @@ import os
 import random
 import tempfile
 from functools import partial
+from json.decoder import JSONDecodeError
 from shutil import make_archive, move
 from source.meta.classes import layoutlib
 from source.meta.common import common
@@ -106,12 +107,12 @@ class SpriteParent():
 
     #the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
 
-    def load_layout(self, sprite_name=""):
-        self.layout = layoutlib.Layout(common.get_resource([self.resource_subpath,"manifests"],"layout.json"), sprite_name)
-    def load_animations(self, sprite_name=""):
-        animations_found = False
-        animsManifest = common.get_resource(
-            [
+    def load_layout(self):
+        self.layout = layoutlib.Layout(common.get_resource(
+            [self.resource_subpath, "manifests"], "layout.json"))
+
+    def load_animations(self):
+        with open(common.get_resource([
                 self.resource_subpath,
                 "manifests"
             ],
@@ -120,7 +121,18 @@ class SpriteParent():
         self.animations = {}
         if animsManifest:
             with open(animsManifest, "r", encoding="utf-8") as file:
-                self.animations = json.load(file)
+                self.animations = {}
+                try:
+                    self.animations = json.load(file)
+                except JSONDecodeError as e:
+                    raise ValueError(
+                        "Animations manifest malformed: " +
+                        os.sep.join([
+                            self.resource_subpath,
+                            "manifests",
+                            "animations.json"
+                        ])
+                    )
                 # print("Finding Animations!")
                 if "sets" in self.animations:
                     for thisSet in self.animations["sets"]:
@@ -172,7 +184,101 @@ class SpriteParent():
 
     def import_from_PNG(self):
         with Image.open(self.filename) as master:
-            self.images, self.master_palette = self.layout.extract_all_images_from_master(master)
+            self.images, self.master_palette = self.layout.extract_all_images_from_master(
+                master)
+
+    def import_from_RDC(self):
+        with open(self.filename, "rb") as file:
+            data = bytearray(file.read())
+
+        pointer = 0
+        HEADER_STRING = "RETRODATACONTAINER"
+        readLen = len(HEADER_STRING)
+        print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+        print(f"Header:    {data[0:readLen].decode('utf-8')}")
+        print()
+
+        if data[pointer:(pointer + readLen)] != bytes(ord(x) for x in HEADER_STRING):
+            # FIXME: English
+            raise AssertionError("This file does not have a valid RDC header")
+
+        pointer += readLen
+        readLen = 1
+        print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+        version = common.from_u8(data[pointer:(pointer + readLen)])
+        print(f"Version:   {version}")
+        print()
+        if int.from_bytes(data[pointer:(pointer + readLen)], byteorder='little', signed=False) == 1:
+            pointer += readLen
+
+            readLen = 4
+            print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+            number_of_blocks = common.from_u32(data[pointer:(pointer + readLen)])
+            print(f"NumBlocks: {number_of_blocks}")
+            print()
+
+            block_types = { "0": "JSON Metadata", "4": "Type 2" }
+
+            blocks = []
+            for i in range(0, number_of_blocks):
+                pointer += readLen
+                readLen = 4
+                # print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+                block_type = common.from_u32(data[pointer:(pointer + readLen)])
+                # print(f"Block Type: {block_type}/{block_types[str(block_type)]}")
+
+                pointer += readLen
+                readLen = 4
+                # print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+                block_offset = common.from_u32(data[pointer:(pointer + readLen)])
+                # print(f"Block Offset: {block_offset}")
+                blocks.append(
+                    {
+                        "typeID": block_type,
+                        "type": block_types[str(block_type)],
+                        "offset": block_offset
+                    }
+                )
+                if i > 0:
+                    blocks[i - 1]["length"] = block_offset - blocks[i - 1]["offset"]
+                # print()
+
+        print(blocks)
+
+        pointer += readLen
+        print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+        readLen = data[pointer:200].decode("utf-8").find("O")
+        authorName = data[pointer:(pointer + readLen - 1)].decode("utf-8")
+        self.metadata["author.name"] = authorName
+        self.metadata["author.name-short"] = authorName
+        print(authorName)
+        pointer += 1
+
+        for block in blocks:
+            pointer = block["offset"] + 1
+            block_data = None
+            if "length" in block:
+                readLen = block["length"]
+                block_data = (data[pointer:(pointer + readLen - 1)])
+            else:
+                block_data = (data[pointer:200])
+            if block_data:
+                if block["typeID"] == 0:
+                    block_data = block_data.decode("utf-8")
+                    block_data = block_data[block_data.find("{"):]
+                    try:
+                        block_data = json.loads(block_data)
+                    except ValueError as e:
+                        raise ValueError("Block Data malformed! Within Sprite Type: " + self.resource_subpath)
+                    self.metadata["sprite.name"] = block_data["title"]
+            print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+            print(f"Block Data: {block_data}")
+
+        print(self.metadata)
+
+        # pointer += readLen
+        # print(f"Read: {pointer} + {readLen} = {pointer + readLen}")
+        # print(data[pointer:200])
 
     def import_from_ZSPR(self):
         with open(self.filename, "rb") as file:
@@ -241,7 +347,11 @@ class SpriteParent():
         alphabetsPath = common.get_resource([self.resource_subpath, "..", "manifests"], "alphabets.json")
         with open(alphabetsPath, "r", encoding="utf-8") as alphabetsFile:
             key = "zsm" if is_zsm else self.resource_subpath.split(os.sep)[1]
-            alphabetsJSON = json.load(alphabetsFile)
+            alphabetsJSON = {}
+            try:
+                alphabetsJSON = json.load(alphabetsFile)
+            except ValueError as e:
+                raise ValueError("Alphabets file malformed: " + alphabetsPath)
             alphaVersion = "base"
             romVersion = rom.read(0x7FE2, 1) if not is_zsm else "vanilla-like"
             if romVersion in [3, 4]:
@@ -628,7 +738,11 @@ class SpriteParent():
         manifest_file = common.get_resource([self.resource_subpath,"manifests"],"representative-images.json")
         if manifest_file:
             with open(manifest_file) as manifest:
-                manifest_images = json.load(manifest)
+                manifest_image = {}
+                try:
+                    manifest_images = json.load(manifest)
+                except JSONDecodeError as e:
+                    raise ValueError("Manifest images malformed: " + manifest_file)
         else:
             manifest_images = {}
 

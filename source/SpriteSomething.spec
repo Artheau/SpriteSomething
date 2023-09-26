@@ -3,6 +3,7 @@
 import json
 import os
 import sys
+from json.decoder import JSONDecodeError
 from PyInstaller.utils.hooks import collect_submodules
 
 block_cipher = None
@@ -66,7 +67,11 @@ excluded_binaries = [
 
 # win is temperamental
 with open(os.path.join(".","resources","app","meta","manifests","excluded_dlls.json")) as dllsManifest:
-  dlls = json.load(dllsManifest)
+  dlls = []
+  try:
+    dlls = json.load(dllsManifest)
+  except JSONDecodeError as e:
+    raise ValueError("Windows DLLs manifest malformed!")
   for dll in dlls:
     for submod in ["core", "crt"]:
       for ver in ["1-1-0", "1-1-1", "1-2-0", "2-1-0"]:

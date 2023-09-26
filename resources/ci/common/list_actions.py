@@ -7,6 +7,7 @@ import os
 import ssl
 import urllib.request
 import yaml
+from json.decoder import JSONDecodeError
 
 allACTIONS = {}
 listACTIONS = []
@@ -88,8 +89,12 @@ for r, d, f in os.walk(os.path.join(".", ".github")):
                                 if e.code != 403:
                                     print(e.code, apiURL)
                             if apiReq:
-                                apiRes = json.loads(
-                                    apiReq.read().decode("utf-8"))
+                                apiRes = {}
+                                try:
+                                    apiRes = json.loads(
+                                        apiReq.read().decode("utf-8"))
+                                except JSONDecodeError as e:
+                                    raise ValueError("API Request failed: " + apiURL)
                                 if apiRes:
                                     latest = apiRes["tag_name"] if "tag_name" in apiRes else ""
                                     if latest != "":
