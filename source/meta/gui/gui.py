@@ -33,22 +33,15 @@ from source.snes.zelda3.link.plugin.trawler import sheet_trawler
 def make_GUI(command_line_args):
   root = tk.Tk()
 
-	# get icon
-	try:
-		root.iconbitmap(default=common.get_resource(["meta","icons"],'app.ico')) #Windows
-	except Exception:
-		try:
-			root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file='@'+common.get_resource(["meta","icons"],'app.gif'))) #Linux?
-		except Exception:
-			try:
-				root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file=common.get_resource(["meta","icons"],'app.gif'))) #MacOSX?
-			except Exception:
-				pass #give up
-	# set window attributes
-	root.geometry("900x768")			 #window size
-	root.configure(bg='#f0f0f0')	 #background color
-	main_frame = SpriteSomethingMainFrame(root, command_line_args)
-	root.protocol("WM_DELETE_WINDOW", main_frame.exit)					 #intercept when the user clicks the X
+  # get icon
+  root.tk.call('wm','iconphoto',root._w,tk.PhotoImage(file=common.get_resource(["meta","icons"],'app.gif')))
+
+  # set window attributes
+  root.geometry("900x768")       #window size
+  root.configure(bg='#f0f0f0')   #background color
+  # root.tk_setPalette(background="#000000", foreground="#ffffff")
+  main_frame = SpriteSomethingMainFrame(root, command_line_args)
+  root.protocol("WM_DELETE_WINDOW", main_frame.exit)           #intercept when the user clicks the X
 
   # generic error message
   def show_error(self, exception, message, callstack):
