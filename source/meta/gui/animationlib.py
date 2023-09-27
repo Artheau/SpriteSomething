@@ -26,16 +26,16 @@ class AnimationEngineParent():
         self.plugins = []
         self.prev_palette_info = []
 
-		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
-			self.animations = {}
-			try:
-				self.animations = json.load(file)
-			except JSONDecodeError as e:
-				raise ValueError("Animations file malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
-		if "$schema" in self.animations:
-			del self.animations["$schema"]
-		#using a default value until the animation_panel attachment overrides this
-		self.current_animation = next(iter(self.animations.keys()))
+        with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
+            self.animations = {}
+            try:
+                self.animations = json.load(file)
+            except JSONDecodeError as e:
+                raise ValueError("Animations file malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
+        if "$schema" in self.animations:
+            del self.animations["$schema"]
+        #using a default value until the animation_panel attachment overrides this
+        self.current_animation = next(iter(self.animations.keys()))
 
     def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, coord_setter, fish):
         ANIMATION_DROPDOWN_WIDTH = 25
@@ -184,12 +184,12 @@ class AnimationEngineParent():
             else:
                 self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
 
-			if "mail_var" in self.spiffy_dict:
-				if "Bunny" in self.current_animation: #force bunny palette for bunny animations
-					self.spiffy_dict["mail_var"].set("bunny")
-				elif self.spiffy_dict["mail_var"].get() == "bunny": #reset to green palette when switching back to a non-bunny animation
-					self.spiffy_dict["mail_var"].set("green")
-			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
+            if "mail_var" in self.spiffy_dict:
+                if "Bunny" in self.current_animation: #force bunny palette for bunny animations
+                    self.spiffy_dict["mail_var"].set("bunny")
+                elif self.spiffy_dict["mail_var"].get() == "bunny": #reset to green palette when switching back to a non-bunny animation
+                    self.spiffy_dict["mail_var"].set("green")
+            palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
             self.pose_number = self.get_pose_number_from_frames(current_frame)
 
@@ -290,14 +290,14 @@ class AnimationEngineParent():
     def get_spiffy_buttons(self, parent, fish):
         spiffy_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self)
 
-		spiffy_manifest = common.get_resource([self.resource_subpath,"manifests"],"spiffy-buttons.json")
-		if spiffy_manifest:
-			with open(spiffy_manifest) as f:
-				spiffy_list = {}
-				try:
-					spiffy_list = json.load(f)
-				except JSONDecodeError as e:
-					raise ValueError("Spiffy Buttons Manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
+        spiffy_manifest = common.get_resource([self.resource_subpath,"manifests"],"spiffy-buttons.json")
+        if spiffy_manifest:
+            with open(spiffy_manifest) as f:
+                spiffy_list = {}
+                try:
+                    spiffy_list = json.load(f)
+                except JSONDecodeError as e:
+                    raise ValueError("Spiffy Buttons Manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
 
                 for group in spiffy_list["button-groups"]:
                     group_key = group["group-fish-key"]
@@ -321,41 +321,41 @@ class AnimationEngineParent():
         #if this is not overriden by the child (sprite-specific) class, then it will default to WASD layout for overhead, or just left/right if sideview (not overhead).
         direction_buttons = widgetlib.SpiffyButtons(parent, self.resource_subpath, self, frame_name="direction_buttons", align="center")
 
-		direction_manifest = common.get_resource([self.resource_subpath,"manifests"],"direction-buttons.json")
-		if direction_manifest:
-			with open(direction_manifest) as f:
-				direction_list = {}
-				try:
-					direction_list = json.load(f)
-				except JSONDecodeError as e:
-					raise ValueError("Direction Buttons Manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
-				for group in direction_list["button-groups"]:
-					group_key = group["group-fish-key"]
-					button_group = direction_buttons.make_new_group(group_key,fish)
-					button_list = []
-					for button in group["buttons"]:
-						if "meta" in button and button["meta"] == "newline":
-							button_list.append((None,None,None,None))
-						elif "meta" in button and button["meta"] == "blank": #a blank space, baby
-							button_list.append((None,"",None,None))
-						else:
-							default = button["default"] if "default" in button else False
-							disabled = group["disabled"] if "disabled" in group else False
-							button_list.append((button["fish-subkey"],button["img"],default,disabled))
-					button_group.adds(button_list,fish)
-		else:
-			facing_group = direction_buttons.make_new_group("facing", fish)
-			if self.overhead:
-				facing_group.adds([
-					(None,"",None,None), #a blank space, baby
-					("up","arrow-up.png",False,False),
-					(None,"",None,None), #a blank space, baby
-					(None,None,None,None)
-				],fish)
-			facing_group.add("left", "arrow-left.png", fish)
-			if self.overhead:
-				facing_group.add("down", "arrow-down.png", fish)
-			facing_group.add("right", "arrow-right.png", fish, default=True)
+        direction_manifest = common.get_resource([self.resource_subpath,"manifests"],"direction-buttons.json")
+        if direction_manifest:
+            with open(direction_manifest) as f:
+                direction_list = {}
+                try:
+                    direction_list = json.load(f)
+                except JSONDecodeError as e:
+                    raise ValueError("Direction Buttons Manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
+                for group in direction_list["button-groups"]:
+                    group_key = group["group-fish-key"]
+                    button_group = direction_buttons.make_new_group(group_key,fish)
+                    button_list = []
+                    for button in group["buttons"]:
+                        if "meta" in button and button["meta"] == "newline":
+                            button_list.append((None,None,None,None))
+                        elif "meta" in button and button["meta"] == "blank": #a blank space, baby
+                            button_list.append((None,"",None,None))
+                        else:
+                            default = button["default"] if "default" in button else False
+                            disabled = group["disabled"] if "disabled" in group else False
+                            button_list.append((button["fish-subkey"],button["img"],default,disabled))
+                    button_group.adds(button_list,fish)
+        else:
+            facing_group = direction_buttons.make_new_group("facing", fish)
+            if self.overhead:
+                facing_group.adds([
+                    (None,"",None,None), #a blank space, baby
+                    ("up","arrow-up.png",False,False),
+                    (None,"",None,None), #a blank space, baby
+                    (None,None,None,None)
+                ],fish)
+            facing_group.add("left", "arrow-left.png", fish)
+            if self.overhead:
+                facing_group.add("down", "arrow-down.png", fish)
+            facing_group.add("right", "arrow-right.png", fish, default=True)
 
         return direction_buttons
 

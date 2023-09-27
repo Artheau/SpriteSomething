@@ -14,7 +14,7 @@ from source.meta.common import common
 
 
 class Layout():
-    def __init__(self, filename):
+    def __init__(self, filename, sprite_name=""):
         with open(filename) as inFile:
             self.data = []
             try:

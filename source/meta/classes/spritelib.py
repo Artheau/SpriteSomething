@@ -107,18 +107,22 @@ class SpriteParent():
 
     #the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
 
-    def load_layout(self):
-        self.layout = layoutlib.Layout(common.get_resource(
-            [self.resource_subpath, "manifests"], "layout.json"))
+    def load_layout(self, sprite_name=""):
+        self.layout = layoutlib.Layout(
+            common.get_resource(
+                [self.resource_subpath, "manifests"],
+                "layout.json"
+            ),
+            sprite_name
+        )
 
-    def load_animations(self):
-        with open(common.get_resource([
-                self.resource_subpath,
-                "manifests"
-            ],
+    def load_animations(self, sprite_name=""):
+        animations_found = False
+        self.animations = {}
+        animsManifest = common.get_resource(
+            [self.resource_subpath,"manifests"],
             "animations.json"
         )
-        self.animations = {}
         if animsManifest:
             with open(animsManifest, "r", encoding="utf-8") as file:
                 self.animations = {}
@@ -147,6 +151,8 @@ class SpriteParent():
                     # print("Loading Animations!")
                 if "$schema" in self.animations:
                     del self.animations["$schema"]
+        else:
+            print("Animations not found: " + self.resource_subpath)
 
     def import_from_filename(self):
         _, file_extension = os.path.splitext(self.filename)
