@@ -14,7 +14,7 @@ from source.meta.common import common
 
 
 class Layout():
-    def __init__(self, filename):
+    def __init__(self, filename, sprite_name=""):
         with open(filename) as inFile:
             self.data = []
             try:
@@ -22,7 +22,13 @@ class Layout():
             except JSONDecodeError as e:
                 raise ValueError("Layout manifest malformed: " + filename)
         self.reverse_lookup = {}
-        for image_name, image_info in self.data["images"].items():
+        # print("Finding Layouts!")
+        if "layouts" in self.data:
+            for layout in self.data["layouts"]:
+                if "names" in layout and sprite_name in layout["names"]:
+                    print("Found " + sprite_name + "!")
+                    self.data = layout
+        for image_name,image_info in self.data["images"].items():
             for image_ref in image_info["used by"]:
                 if tuple(image_ref) in self.reverse_lookup:
                     self.reverse_lookup[tuple(image_ref)].append(image_name)
