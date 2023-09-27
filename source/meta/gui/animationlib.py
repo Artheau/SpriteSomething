@@ -26,16 +26,8 @@ class AnimationEngineParent():
     self.plugins = []
     self.prev_palette_info = []
 
-		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
-			self.animations = {}
-			try:
-				self.animations = json.load(file)
-			except JSONDecodeError as e:
-				raise ValueError("Animations file malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
-		if "$schema" in self.animations:
-			del self.animations["$schema"]
-		#using a default value until the animation_panel attachment overrides this
-		self.current_animation = next(iter(self.animations.keys()))
+    self.animations = self.sprite.animations
+    self.current_animation = next(iter(self.animations.keys()))
 
   def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, coord_setter, fish):
     ANIMATION_DROPDOWN_WIDTH = 25
@@ -184,12 +176,12 @@ class AnimationEngineParent():
       else:
         self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
 
-			if "mail_var" in self.spiffy_dict:
-				if "Bunny" in self.current_animation: #force bunny palette for bunny animations
-					self.spiffy_dict["mail_var"].set("bunny")
-				elif self.spiffy_dict["mail_var"].get() == "bunny": #reset to green palette when switching back to a non-bunny animation
-					self.spiffy_dict["mail_var"].set("green")
-			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
+        if "mail_var" in self.spiffy_dict:
+            if "Bunny" in self.current_animation: #force bunny palette for bunny animations
+                self.spiffy_dict["mail_var"].set("bunny")
+            elif self.spiffy_dict["mail_var"].get() == "bunny": #reset to green palette when switching back to a non-bunny animation
+                self.spiffy_dict["mail_var"].set("green")
+            palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
       self.pose_number = self.get_pose_number_from_frames(current_frame)
 
