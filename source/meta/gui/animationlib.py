@@ -181,7 +181,7 @@ class AnimationEngineParent():
                 self.spiffy_dict["mail_var"].set("bunny")
             elif self.spiffy_dict["mail_var"].get() == "bunny": #reset to green palette when switching back to a non-bunny animation
                 self.spiffy_dict["mail_var"].set("green")
-            palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
+        palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
       self.pose_number = self.get_pose_number_from_frames(current_frame)
 
