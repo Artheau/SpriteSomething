@@ -116,7 +116,8 @@ def autodetect(sprite_filename):
     file_slug = os.path.basename(file_slug)
     #If this is a SNES filetype
     if file_extension.lower() in [".sfc",".smc"]:
-        #If the file is a rom, then we can go into the internal header and get the name of the game
+        # print("Detected: SNES game file")
+        # #If the file is a rom, then we can go into the internal header and get the name of the game
         game_names = autodetect_game_type_from_rom_filename("snes",sprite_filename)
         selected_game = None
 
@@ -130,8 +131,8 @@ def autodetect(sprite_filename):
         game = get_game_class_of_type("snes",selected_game)
         #And by default, we will grab the player sprite from this game
         sprite, animation_assist = game.make_player_sprite(sprite_filename,"")
-        print("Detected SNES!")
     elif file_extension.lower() == ".nes":
+        # print("Detected: NES game file")
         #If the file is a rom, then we can go into the internal header and get the name of the game
         game_names = autodetect_game_type_from_rom_filename("nes",sprite_filename)
         selected_game = None
@@ -146,7 +147,6 @@ def autodetect(sprite_filename):
         game = get_game_class_of_type("nes",selected_game)
         #And by default, we will grab the player sprite from this game
         sprite, animation_assist = game.make_player_sprite(sprite_filename)
-        print("Detected NES!")
     #If it's not a known filetype but an image, cycle through and find one that matches
     elif file_extension.lower() in [".bmp", ".png"]:
         #the following line prevents a "cannot identify image" error from PIL
@@ -198,11 +198,11 @@ def autodetect(sprite_filename):
             raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
     # FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
     elif file_extension.lower() == ".zspr":
+        # print("Detected: ZSPR file")
         with open(sprite_filename,"rb") as file:
             zspr_data = bytearray(file.read())
         game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
         sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename,"")
-        print("Detected ZSPR!")
     elif file_extension.lower() == ".zip":
         thisData = {
             "likely": {

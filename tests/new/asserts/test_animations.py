@@ -32,10 +32,7 @@ class AnimationAudit(unittest.TestCase):
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
         spriteLibrary = spriteData["lib"]
 
-        if f"{self.platID}/{self.gameID}/{self.spriteID}" in [
-            "pc/spelunky/damsel",
-            "snes/mother2/player"
-        ]:
+        if spriteData["view-only"]:
             print(f"{self.spriteID} is a WIP!" + "\n")
             return
 

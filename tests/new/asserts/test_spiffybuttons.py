@@ -85,6 +85,10 @@ class SpiffyButtonAudit(unittest.TestCase):
             print(f"{self.gameID} is a WIP!")
             return
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
+        if spriteData["view-only"]:
+            print(f"{self.spriteID} is a WIP!")
+            print("")
+            return
         spriteLibrary = spriteData["lib"]
         importExt = "png"
         if importExt not in spriteData["paths"]["resource"]["sheetexts"]:

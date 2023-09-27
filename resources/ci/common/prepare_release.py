@@ -4,6 +4,7 @@ from glob import glob
 import os                     # for env vars
 import stat                   # for file stats
 import subprocess             # do stuff at the shell level
+import sys
 from git_clean import git_clean
 from shutil import copy, make_archive, move, rmtree  # file manipulation
 
@@ -173,7 +174,7 @@ def prepare_release():
   print(f"Git tag:        {env['GITHUB_TAG']}")
 
   if (len(BUILD_FILENAMES) == 0) or (ZIP_FILENAME == ""):
-      exit(1)
+      sys.exit(1)
 
 
 def main():

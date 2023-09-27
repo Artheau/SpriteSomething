@@ -4,6 +4,7 @@ from glob import glob
 import os                     # for env vars
 import stat                   # for file stats
 import subprocess             # do stuff at the shell level
+import sys
 from shutil import copy, make_archive, move, rmtree  # file manipulation
 
 
@@ -41,7 +42,7 @@ def prepare_binary():
         if not BUILD_FILENAME == "":
             print("Build Filesize: " + common.file_size(BUILD_FILENAME))
         else:
-            exit(1)
+            sys.exit(1)
 
         if not BUILD_FILENAME == "":
             move(

@@ -11,6 +11,7 @@ import json             # parsing JSON objects
 import os               # os pathing
 import subprocess
 import tempfile         # temp for objects
+import sys
 
 from tests.new.common import DATA  # get pathdata
 
@@ -40,24 +41,25 @@ def get_module_version(module, mode):
     PIP_FLOAT_VERSION = ""
 
     if args == "" or \
-            PIPEXE == "" or \
-            PIP_FLOAT_VERSION == "":
-        with open(
-            os.path.join(
-                ".",
-                "resources",
-                "user",
-                "meta",
-                "manifests",
-                "settings.json"
-            ),
-            "r",
-            encoding="utf-8"
-        ) as settingsFile:
-            settings = json.load(settingsFile)
-            args = settings["py"]
-            PIPEXE = settings["pip"]
-            PIP_FLOAT_VERSION = settings["versions"]["pip"]["version"][1]
+        PIPEXE == "" or \
+        PIP_FLOAT_VERSION == "":
+        settingsPath = os.path.join(
+            ".",
+            "resources",
+            "user",
+            "meta",
+            "manifests",
+            "settings.json"
+        )
+        if os.path.isfile(settingsPath):
+            with open(settingsPath, "r", encoding="utf-8") as settingsFile:
+                settings = json.load(settingsFile)
+                args = settings["py"]
+                PIPEXE = settings["pip"]
+                PIP_FLOAT_VERSION = settings["versions"]["pip"]["version"][1]
+        else:
+            print("PipLine not found!")
+            sys.exit(1)
 
     ret = ""
     ver = ""
@@ -205,11 +207,7 @@ class ExportAudit(unittest.TestCase):
             if importExt in ["4bpp", "palette", "zhx"]:
                 print(f"{importExt} not supported by Tests!")
                 return
-            if f"{self.platID}/{self.gameID}/{self.spriteID}" in [
-                "pc/averge/trace",
-                "snes/mother2/player",
-                "snes/ffmq/benjamin"
-            ]:
+            if importExt not in ["png", "bmp"] and spriteData["view-only"]:
                 print(f"{self.spriteID} is a WIP!")
                 return
 
@@ -320,7 +318,7 @@ class ExportAudit(unittest.TestCase):
                 )
 
                 if exception:
-                    exit(1)
+                    sys.exit(1)
 
             RESULTS["pf"].append('.' if match else "F")
 
