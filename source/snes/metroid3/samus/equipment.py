@@ -149,17 +149,35 @@ def equipment_test(save=False):
                     ) + icon + ".png"
                 )
 
-  ship_dir = os.path.join(".","resources","app","snes","metroid3","samus","sheets","ship")
-  for file in os.listdir(ship_dir):
-    icon = "optional_ship_" + file[:file.rfind('.')]
-    img = (Image.open(os.path.join(ship_dir,file)))
-    equipment[icon] = img
+    ship_dir = os.path.join(
+        ".",
+        "resources",
+        "app",
+        "snes",
+        "metroid3",
+        "samus",
+        "sheets",
+        "ship"
+    )
+    for file in os.listdir(ship_dir):
+        icon = "optional_ship_" + file[:file.rfind('.')]
+        with(Image.open(os.path.join(ship_dir,file))) as img:
+            equipment[icon] = img
 
-  xray_dir = os.path.join(".","resources","app","snes","metroid3","samus","sheets","xray")
-  for file in os.listdir(xray_dir):
-    icon = "optional_xray_" + file[:file.rfind('.')]
-    print(icon)
-    img = (Image.open(os.path.join(xray_dir,file)))
-    equipment[icon] = img
+    xray_dir = os.path.join(
+        ".",
+        "resources",
+        "app",
+        "snes",
+        "metroid3",
+        "samus",
+        "sheets",
+        "xray"
+    )
+    for file in os.listdir(xray_dir):
+      icon = "optional_xray_" + file[:file.rfind('.')]
+      print(icon)
+      img = (Image.open(os.path.join(xray_dir,file)))
+      equipment[icon] = img
 
-    return equipment
+      return equipment
