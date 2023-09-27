@@ -30,7 +30,7 @@ from source.meta.common import common
 
 class SpriteParent():
     # parent class for sprites to inherit
-    def __init__(self, filename, manifest_dict, my_subpath, _):
+    def __init__(self, filename, manifest_dict, my_subpath, sprite_name):
         self.classic_name = manifest_dict["name"]  # e.g. "Samus" or "Link"
         # the path to this sprite's subfolder in resources
         self.resource_subpath = my_subpath

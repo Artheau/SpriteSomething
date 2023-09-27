@@ -1,6 +1,8 @@
 # pylint: disable=invalid-name
 # pylint: disable=no-self-use
 """CLI Unit Tests"""
+from tests.new.common import DATA
+
 import unittest         # tests
 import os
 from source.meta import cli
@@ -12,11 +14,43 @@ class CLIAudit(unittest.TestCase):
     """CLI Unit Tests"""
     def set_Up(self, *args):
         """Set Up"""
-        pass
+        self.platID = len(args) > 1 and args[1] or "snes"
+        self.gameID = len(args) > 2 and args[2] or "zelda3"
+        self.spriteID = len(args) > 3 and args[3] or "link"
 
     def test_cli(self):
+        for [platID, plat] in DATA.items():
+            for [gameID, game] in plat["games"].items():
+                for [spriteID, spriteData] in game["sprites"].items():
+                    if VERBOSE:
+                        heading = f"{platID}/{gameID}/{spriteID}"
+                        print(heading)
+                        print("-" * 70)
+                    self.set_Up(self, platID, gameID, spriteID)
+                    self.cli_suite(spriteData)
+
+    def cli_suite(self, spriteData):
         """Run Test"""
+        if spriteData["view-only"] or spriteData["is-archive"]:
+            print("CLI not supported!")
+            print("")
+            return
         print("Testing CLI")
+        spritePath = os.path.join(
+            "resources",
+            "app",
+            self.platID,
+            self.gameID,
+            self.spriteID,
+            "sheets"
+        )
+        spriteFile = ""
+        for ext in ["png","bmp"]:
+            if os.path.isfile(os.path.join(spritePath, f"{self.spriteID}.{ext}")):
+                spriteFile = os.path.join(spritePath, f"{self.spriteID}.{ext}")
+
+        self.assertTrue(spriteFile != "")
+
         defaultargs = {
             "cli": "1",
             "lang": None,
@@ -25,7 +59,7 @@ class CLIAudit(unittest.TestCase):
             "dest-filename": None,
             "src-filename": None,
             "src-filepath": None,
-            "sprite": os.path.join("resources","app","snes","zelda3","link","sheets","link.zspr")
+            "sprite": spriteFile
         }
         # Diags
         args = defaultargs
