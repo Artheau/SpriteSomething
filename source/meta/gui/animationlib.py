@@ -26,15 +26,7 @@ class AnimationEngineParent():
         self.plugins = []
         self.prev_palette_info = []
 
-        with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
-            self.animations = {}
-            try:
-                self.animations = json.load(file)
-            except JSONDecodeError as e:
-                raise ValueError("Animations file malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
-        if "$schema" in self.animations:
-            del self.animations["$schema"]
-        #using a default value until the animation_panel attachment overrides this
+        self.animations = self.sprite.animations
         self.current_animation = next(iter(self.animations.keys()))
 
     def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, coord_setter, fish):

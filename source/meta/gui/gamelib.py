@@ -36,7 +36,7 @@ def autodetect_snes(sprite_filename):
 
         game = get_game_class_of_type("snes",selected_game)
         #And by default, we will grab the player sprite from this game
-        return game, game.make_player_sprite(sprite_filename)
+        return game, game.make_player_sprite(sprite_filename,"")
 
 def autodetect_nes(sprite_filename):
         #If the file is a rom, then we can go into the internal header and get the name of the game
@@ -52,7 +52,7 @@ def autodetect_nes(sprite_filename):
 
         game = get_game_class_of_type("nes",selected_game)
         #And by default, we will grab the player sprite from this game
-        return game, game.make_player_sprite(sprite_filename)
+        return game, game.make_player_sprite(sprite_filename,"")
 
 def autodetect_png(sprite_filename):
         not_consoles = []
@@ -85,7 +85,7 @@ def autodetect_png(sprite_filename):
                       check_size = sprite_manifest[sprite_id]["input"]["png"]["dims"]
                       if loaded_image.size == tuple(check_size):
                         game = get_game_class_of_type(console,game_name)
-                        sprite, animation_assist = game.make_player_sprite(sprite_filename)
+                        sprite, animation_assist = game.make_player_sprite(sprite_filename,"")
                         game_found = True
         if not game_found:
             # FIXME: English
@@ -146,7 +146,7 @@ def autodetect(sprite_filename):
 
         game = get_game_class_of_type("nes",selected_game)
         #And by default, we will grab the player sprite from this game
-        sprite, animation_assist = game.make_player_sprite(sprite_filename)
+        sprite, animation_assist = game.make_player_sprite(sprite_filename,"")
     #If it's not a known filetype but an image, cycle through and find one that matches
     elif file_extension.lower() in [".bmp", ".png"]:
         #the following line prevents a "cannot identify image" error from PIL

@@ -35,6 +35,8 @@ class SpriteParent():
         # the path to this sprite's subfolder in resources
         self.resource_subpath = my_subpath
         self.internal_name = manifest_dict["folder name"]
+        if sprite_name == "":
+            sprite_name = self.internal_name
         self.metadata = {
                           "sprite.name": "",
                           "author.name": "",
