@@ -392,25 +392,25 @@ class Sprite(SpriteParent):
         for i in range(1,range_end):
             this_palette.append((0,0,0))
 
-		if any(x in palettes for x in ["zap","zap_mail","zap_palette"]):
-			this_palette = self.link_globals["zap_palette"]
-		elif any(x in palettes for x in ["bunny","bunny_mail","bunny_palette"]):
-			palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
-		else:
-			palette_indices = list(range(1,16))	 #start with green mail and modify it as needed
-			for i in range(0,len(palette_indices)):
+        if any(x in palettes for x in ["zap","zap_mail","zap_palette"]):
+            this_palette = self.link_globals["zap_palette"]
+        elif any(x in palettes for x in ["bunny","bunny_mail","bunny_palette"]):
+            palette_indices = range(0x31,0x40)   #use the bunny colors, skipping the transparency color
+        else:
+            palette_indices = list(range(1,16))     #start with green mail and modify it as needed
+            for i in range(0,len(palette_indices)):
 
-				if palette_indices[i] == 0x0D:
-					if any(x in palettes for x in ["power","power_glove","power_gloves"]):
-						palette_indices[i] = 0x10
-					elif any(x in palettes for x in ["titan","titan_mitt","titan_gloves","titans_gloves","titans_mitt","titans_mitts"]):
-						palette_indices[i] = 0x20
+                if palette_indices[i] == 0x0D:
+                    if any(x in palettes for x in ["power","power_glove","power_gloves"]):
+                        palette_indices[i] = 0x10
+                    elif any(x in palettes for x in ["titan","titan_mitt","titan_gloves","titans_gloves","titans_mitt","titans_mitts"]):
+                        palette_indices[i] = 0x20
 
-				if palette_indices[i] in range(0,16):
-					if any(x in palettes for x in ["blue","blue_mail"]):
-						palette_indices[i] += 16
-					elif any(x in palettes for x in ["red","red_mail"]):
-						palette_indices[i] += 32
+                if palette_indices[i] in range(0,16):
+                    if any(x in palettes for x in ["blue","blue_mail"]):
+                        palette_indices[i] += 16
+                    elif any(x in palettes for x in ["red","red_mail"]):
+                        palette_indices[i] += 32
 
         if palette_indices:
             for i,_ in enumerate(palette_indices):
@@ -418,20 +418,20 @@ class Sprite(SpriteParent):
 
         return this_palette
 
-	def set_current_palette_color(self, color_value, palette_type, color_index, default_range):
- 		palette_switcher = {
-			"green":   0,
-			"blue":   16,
-			"red":    32,
-			"bunny":  48
-		}
- 		palette_index = palette_switcher.get(palette_type)
- 		color_value = common.convert_hex_to_rgb(color_value)
- 		self.master_palette[palette_index + color_index] = color_value
+    def set_current_palette_color(self, color_value, palette_type, color_index, default_range):
+         palette_switcher = {
+            "green":   0,
+            "blue":   16,
+            "red":    32,
+            "bunny":  48
+        }
+         palette_index = palette_switcher.get(palette_type)
+         color_value = common.convert_hex_to_rgb(color_value)
+         self.master_palette[palette_index + color_index] = color_value
 
-	def get_binary_sprite_sheet(self):
-		top_half_of_rows = bytearray()
-		bottom_half_of_rows = bytearray()
+    def get_binary_sprite_sheet(self):
+        top_half_of_rows = bytearray()
+        bottom_half_of_rows = bytearray()
 
         # 28 rows, 8 columns
         for image_name in [f"{row}{column}" for row in itertools.chain(ascii_uppercase, ["AA","AB"]) for column in range(8)]:
