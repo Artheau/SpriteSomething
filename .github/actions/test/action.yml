@@ -23,6 +23,10 @@ runs:
   using: "composite"
   steps:
     # download pipline
+    - name: Open Group
+      shell: bash
+      run: |
+        echo "::group::🔽Download PipLine"
     - name: 🔽Download PipLine
       shell: bash
       run: |
@@ -32,6 +36,10 @@ runs:
       with:
         name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
+    - name: Close Group
+      shell: bash
+      run: |
+        echo "::endgroup::"
 
     # start virtual display driver & run tests
     - name: 🖥️Start virtual display driver & Test (!Windows)
