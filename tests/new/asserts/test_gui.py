@@ -34,16 +34,21 @@ class GUIAudit(unittest.TestCase):
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
         spriteLibrary = spriteData["lib"]
 
+        sheet = {}
+        sheetexts = DATA[self.platID] \
+            ["games"] \
+            [self.gameID] \
+            ["sprites"] \
+            [self.spriteID] \
+            ["paths"] \
+            ["resource"] \
+            ["sheetexts"]
+        for ext in ["png","bmp"]:
+            if ext in sheetexts:
+                sheet = sheetexts[ext]
+
         pseudo_command_line_args = {
-            "sprite": DATA[self.platID] \
-                ["games"] \
-                [self.gameID] \
-                ["sprites"] \
-                [self.spriteID] \
-                ["paths"] \
-                ["resource"] \
-                ["sheetexts"] \
-                ["png"]
+            "sprite": sheet
         }
 
         #make the GUI in skeleton form (no looping)
@@ -53,9 +58,18 @@ class GUIAudit(unittest.TestCase):
         self.GUI_skeleton = gui.SpriteSomethingMainFrame(pseudo_root, pseudo_command_line_args)
 
     def test_gui(self):
-        self.set_Up()
+        # for [platID, plat] in DATA.items():
+        #     for [gameID, game] in plat["games"].items():
+        #         for [spriteID, sprite] in game["sprites"].items():
+        #             if VERBOSE:
+        #                 heading = f"{platID}/{gameID}/{spriteID}"
+        #                 print(heading)
+        #                 print("-" * 70)
+        # self.set_Up(self, platID, gameID, spriteID)
+        self.set_Up(self)
         self.minitest_photoimage_does_not_accept_png_files()
         self.minitest_zoom_function_does_not_crash_app()
+        self.minitest_destroy_gui()
 
     def minitest_photoimage_does_not_accept_png_files(self):
         #make sure the photoimage wrapper is not bypassed #TODO: move to its own test
@@ -74,6 +88,10 @@ class GUIAudit(unittest.TestCase):
         self.GUI_skeleton.current_zoom = 1.7
         self.GUI_skeleton.game.update_background_image()
         self.GUI_skeleton.update_sprite_animation()
+
+    def minitest_destroy_gui(self):
+        self.GUI_skeleton.save_working_dirs()
+        self.GUI_skeleton.save_ani_settings()
 
 if __name__ == "__main__":
     if VERBOSE:
