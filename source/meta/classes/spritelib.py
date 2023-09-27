@@ -58,8 +58,8 @@ class SpriteParent():
             self.overview_scale_factor = osf
         self.plugins = None
         self.has_plugins = False
-        self.load_layout()
-        self.load_animations()
+        self.load_layout(sprite_name)
+        self.load_animations(sprite_name)
         self.import_from_filename()
 
     # to make a new sprite class, you must write code for all
