@@ -95,25 +95,26 @@ def autodetect(sprite_filename):
     _,file_extension = os.path.splitext(sprite_filename)
     #If this is a SNES filetype
     if file_extension.lower() in [".sfc",".smc"]:
-        print("Detected: SNES game file")
+        # print("Detected: SNES game file")
         game, (sprite, animation_assist) = autodetect_snes(sprite_filename)
     #If this is a NES filetype
     elif file_extension.lower() == ".nes":
-        print("Detected: NES game file")
+        # print("Detected: NES game file")
         game, (sprite, animation_assist) = autodetect_nes(sprite_filename)
     #If it's not a known filetype but a PNG, cycle through and find one that matches
     elif file_extension.lower() == ".png":
-        print("Detected: PNG file")
+        # print("Detected: PNG file")
         game, sprite, animation_assist = autodetect_png(sprite_filename)
     # # FIXME: For now, RDCs are M3Samus sprites and we're assuming SNES
     elif file_extension.lower() == ".rdc":
+        # print("Detected: RDC file")
         with open(sprite_filename,"rb") as file:
             rdc_data = bytearray(file.read())
         game = get_game_class_of_type("snes",get_game_type_from_rdc_data(rdc_data))
         (sprite, animation_assist) = game.make_sprite_by_number(get_sprite_number_from_rdc_data(rdc_data),sprite_filename)
   # FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
     elif file_extension.lower() == ".zspr":
-        print("Detected: ZSPR file")
+        # print("Detected: ZSPR file")
         with open(sprite_filename,"rb") as file:
             zspr_data = bytearray(file.read())
         game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
