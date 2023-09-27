@@ -82,7 +82,7 @@ def autodetect_png(sprite_filename):
                       check_size = sprite_manifest[sprite_id]["input"]["png"]["dims"]
                       if loaded_image.size == tuple(check_size):
                         game = get_game_class_of_type(console,game_name)
-                        sprite, animation_assist = game.make_player_sprite(sprite_filename)
+                        sprite, animation_assist = game.make_player_sprite(sprite_filename,"")
                         game_found = True
         if not game_found:
             # FIXME: English
@@ -285,7 +285,7 @@ class GameParent():
     def make_player_sprite(self, sprite_filename, sprite_name):
         return self.make_sprite_by_number(0x01, sprite_filename, sprite_name)
 
-    def make_sprite_by_number(self, sprite_number, sprite_filename):
+    def make_sprite_by_number(self, sprite_number, sprite_filename, sprite_name):
         #go into the manifest and get the actual name of the sprite
         with open(common.get_resource([self.console_name,self.internal_name,"manifests"],"manifest.json")) as file:
             manifest = {}

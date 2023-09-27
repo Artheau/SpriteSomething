@@ -338,54 +338,57 @@ class Layout():
 
         all_images["transparent"] = Image.new("RGBA", (0, 0), 0)
 
-        master_palettes = list(
-            all_images["palette_block"].convert("RGB").getdata())
+        master_palettes = []
+        if "palette_block" in all_images:
+            master_palettes = list(
+                all_images["palette_block"].convert("RGB").getdata())
 
-        for image_name, this_image in all_images.items():
-            # FIXME: somewhere in here we need to take note of the bunny tiles
-            #  and check for usage of Bunny colors or Green Mail colors
-            #  if we have just Green Mail colors, we're set
-            #  if we find that we have Bunny colors, we need to paint them
-            #  in Green Mail colors upon export
-            #  this setup doesn't currently support that but I believe this
-            #  is the entry point that we need to start from
-            #  Bunny tiles:
-            #                            Z 5,     Z 7
-            #   AA0, AA1, AA2, AA3, AA4, AA5, AA6
-            if image_name not in ["transparent", "palette_block"]:
-                import_palette = self.get_property(
-                    "import palette interval", image_name)
-                # flatten the RGB values
-                palette = [x for color in master_palettes[
-                    import_palette[0]:import_palette[1]
-                ] for x in color]
-                palette = palette + palette[:3] * (256 - (len(palette) // 3))
-                palette_seed = Image.new("P", (1, 1))
-                palette_seed.putpalette(palette)
+        if len(master_palettes) > 0:
+            for image_name, this_image in all_images.items():
+                # FIXME: somewhere in here we need to take note of the bunny tiles
+                #  and check for usage of Bunny colors or Green Mail colors
+                #  if we have just Green Mail colors, we're set
+                #  if we find that we have Bunny colors, we need to paint them
+                #  in Green Mail colors upon export
+                #  this setup doesn't currently support that but I believe this
+                #  is the entry point that we need to start from
+                #  Bunny tiles:
+                #                            Z 5,     Z 7
+                #   AA0, AA1, AA2, AA3, AA4, AA5, AA6
+                if image_name not in ["transparent", "palette_block"]:
+                    import_palette = self.get_property(
+                        "import palette interval", image_name)
+                    # flatten the RGB values
+                    palette = [x for color in master_palettes[
+                        import_palette[0]:import_palette[1]
+                    ] for x in color]
+                    palette = palette + palette[:3] * (256 - (len(palette) // 3))
+                    palette_seed = Image.new("P", (1, 1))
+                    palette_seed.putpalette(palette)
 
-                # this is a workaround to quantize without dithering
-                paletted_image = this_image._new(
-                    this_image.im.convert("P", 0, palette_seed.im))
+                    # this is a workaround to quantize without dithering
+                    paletted_image = this_image._new(
+                        this_image.im.convert("P", 0, palette_seed.im))
 
-                # have to shift the palette over now to include the
-                #  transparent pixels correctly
-                # did it this way so that color pixels would not accidentally
-                #  be matched to transparency
-                original_image_L = [
-                    0 if alpha < 255 else 1
-                    for _, _, _, alpha in this_image.getdata()
-                ]
-                new_image_indices = [
-                    L * (index + 1)
-                    for (L, index) in zip(
-                        original_image_L, paletted_image.getdata()
-                    )
-                ]
-                paletted_image.putdata(new_image_indices)
-                shifted_palette = [0, 0, 0] + palette[:-3]
-                paletted_image.putpalette(shifted_palette)
+                    # have to shift the palette over now to include the
+                    #  transparent pixels correctly
+                    # did it this way so that color pixels would not accidentally
+                    #  be matched to transparency
+                    original_image_L = [
+                        0 if alpha < 255 else 1
+                        for _, _, _, alpha in this_image.getdata()
+                    ]
+                    new_image_indices = [
+                        L * (index + 1)
+                        for (L, index) in zip(
+                            original_image_L, paletted_image.getdata()
+                        )
+                    ]
+                    paletted_image.putdata(new_image_indices)
+                    shifted_palette = [0, 0, 0] + palette[:-3]
+                    paletted_image.putpalette(shifted_palette)
 
-                all_images[image_name] = paletted_image
+                    all_images[image_name] = paletted_image
 
         return all_images, master_palettes
 
