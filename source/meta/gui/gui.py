@@ -451,43 +451,43 @@ class SpriteSomethingMainFrame(tk.Frame):
     BUTTON_HEIGHT = 26
     vcr_controls = self.get_vcr_controls()	#have to do this early so that their values are available for other buttons
     self.left_panel.add(self.get_reload_button(),height=1 * BUTTON_HEIGHT)
-		if not self.sprite.view_only:
-	    self.attach_metadata_panel()
-    self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
-    self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.coord_setter,self.fish)
-    #get animation engine handle
-    ani_eng = self.animation_engine
-    #get console internal name
-    c = self.game.console_name
-    #get game internal name
-    g = self.game.internal_name
-    #get sprite internal name
-    s = self.sprite.internal_name
-    if c in self.ani_settings:
-      if g in self.ani_settings[c]:
-        if s in self.ani_settings[c][g]:
-          #get animation name
-          #get background name
-          #get facing direction name
-          #get aiming direction name
-          ani_name = self.ani_settings[c][g][s]["animation_name"] if "animation_name" in self.ani_settings[c][g][s] else ""
-          bg_name = self.ani_settings[c][g][s]["background_name"] if "background_name" in self.ani_settings[c][g][s] else ""
-          fac_dir = self.ani_settings[c][g][s]["facing_var"] if "facing_var" in self.ani_settings[c][g][s] else ""
-          aim_dir = self.ani_settings[c][g][s]["aiming_var"] if "aiming_var" in self.ani_settings[c][g][s] else ""
-          #set animation
-          if ani_name != "":
-            ani_eng.set_animation(ani_name)
-            ani_eng.animation_selection.set(ani_name)
-          #set background
-          if bg_name != "":
-            self.game.set_background(bg_name)
-            self.game.background_selection.set(bg_name)
-          #set facing direction
-          if fac_dir != "":
-            ani_eng.spiffy_dict["facing_var"].set(fac_dir)
-          #set aiming direction
-          if aim_dir != "":
-            ani_eng.spiffy_dict["aiming_var"].set(aim_dir)
+    if not self.sprite.view_only:
+      self.attach_metadata_panel()
+      self.game.attach_background_panel(self.left_panel,self.canvas,self.zoom_getter,self.frame_getter,self.fish)
+      self.animation_engine.attach_animation_panel(self.left_panel,self.canvas,self.overview_canvas,self.zoom_getter,self.frame_getter,self.coord_getter,self.coord_setter,self.fish)
+      #get animation engine handle
+      ani_eng = self.animation_engine
+      #get console internal name
+      c = self.game.console_name
+      #get game internal name
+      g = self.game.internal_name
+      #get sprite internal name
+      s = self.sprite.internal_name
+      if c in self.ani_settings:
+        if g in self.ani_settings[c]:
+          if s in self.ani_settings[c][g]:
+            #get animation name
+            #get background name
+            #get facing direction name
+            #get aiming direction name
+            ani_name = self.ani_settings[c][g][s]["animation_name"] if "animation_name" in self.ani_settings[c][g][s] else ""
+            bg_name = self.ani_settings[c][g][s]["background_name"] if "background_name" in self.ani_settings[c][g][s] else ""
+            fac_dir = self.ani_settings[c][g][s]["facing_var"] if "facing_var" in self.ani_settings[c][g][s] else ""
+            aim_dir = self.ani_settings[c][g][s]["aiming_var"] if "aiming_var" in self.ani_settings[c][g][s] else ""
+            #set animation
+            if ani_name != "":
+              ani_eng.set_animation(ani_name)
+              ani_eng.animation_selection.set(ani_name)
+            #set background
+            if bg_name != "":
+              self.game.set_background(bg_name)
+              self.game.background_selection.set(bg_name)
+            #set facing direction
+            if fac_dir != "":
+              ani_eng.spiffy_dict["facing_var"].set(fac_dir)
+            #set aiming direction
+            if aim_dir != "":
+              ani_eng.spiffy_dict["aiming_var"].set(aim_dir)
     self.left_panel.add(vcr_controls,height=5 * BUTTON_HEIGHT)
     self.animation_engine.attach_tile_details_panel(self.left_panel,self.fish)
     self.panes.add(self.left_panel)
@@ -604,10 +604,10 @@ class SpriteSomethingMainFrame(tk.Frame):
           save_success_bool = False
       else:		#user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
         save_success_bool = False
-		elif len(image_list) == 0:
-			#FIXME: English
-			messagebox.showerror("Not Implemented", "Representative Images not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
-			save_success_bool = True
+    elif len(image_list) == 0:
+      #FIXME: English
+      messagebox.showerror("Not Implemented", "Representative Images not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+      save_success_bool = True
     if not save_success_bool:
       # FIXME: English
       messagebox.showerror("ERROR", f"ERROR: Could not create image file(s)")
@@ -616,13 +616,13 @@ class SpriteSomethingMainFrame(tk.Frame):
 
   ############################ ANIMATION FUNCTIONS HERE ################################
 
-	# get sprite animation booted up and running
-	def initialize_sprite_animation(self):
-		self.frames_left_before_freeze = CONST.MAX_FRAMES
-		self.freeze_ray = True # stops time, tell your friends
-		self.frame_number = 0
-		self.coord_setter((100,100))		#an arbitrary default
-		self.start_global_frame_timer()
+  # get sprite animation booted up and running
+  def initialize_sprite_animation(self):
+    self.frames_left_before_freeze = CONST.MAX_FRAMES
+    self.freeze_ray = True # stops time, tell your friends
+    self.frame_number = 0
+    self.coord_setter((100,100))		#an arbitrary default
+    self.start_global_frame_timer()
 
   # update animation imagery in case an option was changed
   def update_sprite_animation(self):
@@ -937,39 +937,39 @@ class SpriteSomethingMainFrame(tk.Frame):
     dest_filename = None
     default_ext = ""
     filetypes = []
-		if self.sprite.view_only:
-				filetypes = []
-		elif self.game.console_name == "nes":
+    if self.sprite.view_only:
+      filetypes = []
+    elif self.game.console_name == "nes":
       default_ext = ".nes"
-			filetypes = [ "*.nes" ]
+      filetypes = [ "*.nes" ]
     elif self.game.console_name == "snes":
       default_ext = ".sfc"
-			filetypes = [ "*.sfc", "*.smc" ]
+      filetypes = [ "*.sfc", "*.smc" ]
 
-		if len(filetypes) > 0:
-	    if inject:
-	      dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),' '.join(filetypes)),))
-	      source_filename = dest_filename
-	    else:
-				source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),' '.join(filetypes)),))
-				if source_filename:
-					_,file_extension = os.path.splitext(source_filename)
-					if file_extension.lower() in ['.sfc','.smc']:
-						default_extension = file_extension.lower()
-					else:
-						default_extension = default_ext
-					dest_filename = os.path.splitext(source_filename)[0] + "_modified"
-					dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),' '.join(filetypes)),))
-			if dest_filename:
-				rom = self.game.get_rom_from_filename(source_filename)
-				modified_rom = self.sprite.inject_into_ROM(rom)
-				#print(modified_rom.get_patch())
-				modified_rom.save(dest_filename, overwrite=True)
-				self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
-				self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
-				#FIXME: English
-				messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
-		else:
+    if len(filetypes) > 0:
+      if inject:
+        dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),' '.join(filetypes)),))
+        source_filename = dest_filename
+      else:
+        source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),' '.join(filetypes)),))
+        if source_filename:
+          _,file_extension = os.path.splitext(source_filename)
+          if file_extension.lower() in ['.sfc','.smc']:
+            default_extension = file_extension.lower()
+          else:
+            default_extension = default_ext
+          dest_filename = os.path.splitext(source_filename)[0] + "_modified"
+          dest_filename = filedialog.asksaveasfilename(defaultextension=default_extension, initialfile=dest_filename, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject-new.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject-new.types"),' '.join(filetypes)),))
+      if dest_filename:
+        rom = self.game.get_rom_from_filename(source_filename)
+        modified_rom = self.sprite.inject_into_ROM(rom)
+        #print(modified_rom.get_patch())
+        modified_rom.save(dest_filename, overwrite=True)
+        self.working_dirs["export.dest"] = dest_filename[:dest_filename.rfind('/')]
+        self.working_dirs["export.source"] = source_filename[:source_filename.rfind('/')]
+        #FIXME: English
+        messagebox.showinfo("Export success",f"Saved injected ROM as {dest_filename}")
+    else:
       source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),"*.sfc *.smc"),))
       if source_filename:
         _,file_extension = os.path.splitext(source_filename)
@@ -992,19 +992,19 @@ class SpriteSomethingMainFrame(tk.Frame):
   #query user for directory to inject sprite into
   def copy_into_ROM_bulk(self, inject=False):
     source_filepath = None
-		supported_consoles = [ "pc", "nes", "snes" ]
-		if self.sprite.view_only and self.game.console_name in supported_consoles:
-			supported_consoles.remove(self.game.console_name)
+    supported_consoles = [ "pc", "nes", "snes" ]
+    if self.sprite.view_only and self.game.console_name in supported_consoles:
+      supported_consoles.remove(self.game.console_name)
 
-		if self.game.console_name in supported_consoles:
-	    if inject:
-	      source_filepath = filedialog.askdirectory()  #only injection is supported
-	    else:
-	      #FIXME: English
-	      raise AssertionError("Unsure if making copies fits this purpose well")
-		else:
-			messagebox.showerror("Not Implemented","Injection not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
-			return
+    if self.game.console_name in supported_consoles:
+      if inject:
+        source_filepath = filedialog.askdirectory()  #only injection is supported
+      else:
+        #FIXME: English
+        raise AssertionError("Unsure if making copies fits this purpose well")
+    else:
+      messagebox.showerror("Not Implemented","Injection not available for " + self.game.name + '/' + self.sprite.classic_name + " Sprites.")
+      return
 
     source_filenames = []  #walk through the game files and inject the loaded sprite
 
@@ -1106,38 +1106,38 @@ class SpriteSomethingMainFrame(tk.Frame):
         # FIXME: English
         messagebox.showinfo("Save Complete", f"Saved as {filename}")
       return returnvalue
-		#user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
-			return False
+    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+      return False
 
-	#export current animation as APNG
-	def export_animation_as_apng(self):
-		filetypes = ((self.fish.translate("meta","dialogue","file.save.apng"),"*.png"),)
+  #export current animation as APNG
+  def export_animation_as_apng(self):
+    filetypes = ((self.fish.translate("meta","dialogue","file.save.apng"),"*.png"),)
 
-		filename = ""
-		if "sprite.name" in self.sprite.metadata and self.sprite.metadata["sprite.name"]:
-			filename = self.sprite.metadata["sprite.name"]
-		else:
-			filename = "unknown"
+    filename = ""
+    if "sprite.name" in self.sprite.metadata and self.sprite.metadata["sprite.name"]:
+      filename = self.sprite.metadata["sprite.name"]
+    else:
+      filename = "unknown"
 
-		if hasattr(self.animation_engine,"animation_selection"):
-			filename += '_' + self.animation_engine.animation_selection.get()
+    if hasattr(self.animation_engine,"animation_selection"):
+      filename += '_' + self.animation_engine.animation_selection.get()
 
-		if hasattr(self.animation_engine,"zoom_getter"):
-			filename += ('_' + "zoom-" + self.zoom_factor.get()).strip()
-		if hasattr(self,"current_speed"):
-			filename += ('_' + "speed-" + str(self.current_speed * 100) + '%').strip()
+    if hasattr(self.animation_engine,"zoom_getter"):
+      filename += ('_' + "zoom-" + self.zoom_factor.get()).strip()
+    if hasattr(self,"current_speed"):
+      filename += ('_' + "speed-" + str(self.current_speed * 100) + '%').strip()
 
-		filename = common.filename_scrub(filename)
+    filename = common.filename_scrub(filename)
 
-		filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialfile=filename, initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.animation-as-apng"), filetypes=filetypes)
-		if filename:
-			returnvalue = self.animation_engine.export_animation_as_apng(filename, zoom=self.current_zoom, speed=self.current_speed)
-			if returnvalue:
-				#FIXME: English
-				messagebox.showinfo("Save Complete", f"Saved as {filename}")
-			return returnvalue
-		else:		#user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
-    return False
+    filename = filedialog.asksaveasfilename(defaultextension=(".png"), initialfile=filename, initialdir=self.working_dirs["export.frame-as-png"], title=self.fish.translate("meta","dialogue","export.animation-as-apng"), filetypes=filetypes)
+    if filename:
+      returnvalue = self.animation_engine.export_animation_as_apng(filename, zoom=self.current_zoom, speed=self.current_speed)
+      if returnvalue:
+        #FIXME: English
+        messagebox.showinfo("Save Complete", f"Saved as {filename}")
+      return returnvalue
+    else:    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+      return False
 
   #export current animation as collage PNG
   def export_animation_as_collage(self,orientation="horizontal"):
@@ -1351,20 +1351,20 @@ class SpriteSomethingMainFrame(tk.Frame):
       f.write(json.dumps(self.ani_settings,indent=2))
       os.chmod(os.path.join(ani_settings_path,ani_settings_filename),0o755)
 
-	#exit sequence
-	def exit(self):
-		if self.unsaved_changes:
-			save_before_exit = messagebox.askyesnocancel(self.app_title,self.fish.translate("meta","dialogue","exit.save-before-exit"))
-			if save_before_exit != None:        #didn't cancel
-				if save_before_exit:
-					saved = self.save_file_as()
-					if not saved:
-						exit_anyway = messagebox.askyesno(self.app_title, self.fish.translate("meta","dialogue","exit.save-failed-during-exit-attempt"))
-						if not exit_anyway:
-							#user bails because their file didn't save
-							return
-				else:
-					messagebox.showwarning(self.app_title, self.fish.translate("meta","dialogue","exit.nosave-before-exit"))   #TODO: can we add this humor somehow without forcing the user to close another dialogue box?
+  #exit sequence
+  def exit(self):
+    if self.unsaved_changes:
+      save_before_exit = messagebox.askyesnocancel(self.app_title,self.fish.translate("meta","dialogue","exit.save-before-exit"))
+      if save_before_exit != None:        #didn't cancel
+        if save_before_exit:
+          saved = self.save_file_as()
+          if not saved:
+            exit_anyway = messagebox.askyesno(self.app_title, self.fish.translate("meta","dialogue","exit.save-failed-during-exit-attempt"))
+            if not exit_anyway:
+              #user bails because their file didn't save
+              return
+        else:
+          messagebox.showwarning(self.app_title, self.fish.translate("meta","dialogue","exit.nosave-before-exit"))   #TODO: can we add this humor somehow without forcing the user to close another dialogue box?
 
     self.save_working_dirs()
     self.save_ani_settings()
