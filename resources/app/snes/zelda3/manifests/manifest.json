@@ -6,7 +6,7 @@
     "folder name": "link",
     "input": {
       "png": {
-        "dims": [128, 448]
+        "dims": [ 128, 448 ]
       }
     }
   }

@@ -1,0 +1,19 @@
+---
+# ZHX manifest file
+# https://github.com/spannerisms/ZippedHacks
+meta:
+  game: 'The Legend of Zelda: A Link to the Past'
+  package:
+    name: Link
+    author: Nintendo
+    name_rom: LINK
+    author_rom: Nintendo
+included:
+- - file: link.4bpp
+    read: raw
+    type: PlayerGraphics
+  - file: link.pal
+    read: raw
+    type: PlayerPalette
+  - file: link.png
+    type: PlayerPreview

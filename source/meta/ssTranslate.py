@@ -1,6 +1,7 @@
 import json
 import locale
 import os
+from json.decoder import JSONDecodeError
 from source.meta.common import common
 
 class BabelFish():
@@ -20,12 +21,17 @@ class BabelFish():
 		subpath.append("lang") #look in lang folder
 		subpath = os.path.join(*subpath) #put in path separators
 		for lang in self.langs:
-			if not lang in self.lang_defns:
+			if lang not in self.lang_defns:
 				self.lang_defns[lang] = {}
 			langs_filename = common.get_resource(subpath,lang + ".json") #get filename of translation file
 			if langs_filename and os.path.isfile(langs_filename): #if we've got a file
 				with open(langs_filename,encoding="utf-8") as f: #open it
-					self.lang_defns[lang][subpath[:subpath.rfind(os.sep)].replace(os.sep,'.')] = json.load(f) #save translation definitions
+					fJSON = {}
+					try:
+						fJSON = json.load(f)
+					except JSONDecodeError as e:
+						raise ValueError("Lang file malformed: " + langs_filename)
+					self.lang_defns[lang][subpath[:subpath.rfind(os.sep)].replace(os.sep,'.')] = fJSON #save translation definitions
 
 	def translate(self, domain="", key="", subkey=""): #three levels of keys
 		if os.sep in domain:

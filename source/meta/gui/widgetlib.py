@@ -9,6 +9,7 @@ import re
 import locale
 from PIL import Image, ImageTk
 from functools import partial
+from json.decoder import JSONDecodeError
 from source.meta.common import common
 from source.meta.gui import gui_common
 from source.meta import ssTranslate as fish
@@ -25,7 +26,7 @@ def left_align_grid_in_frame(frame):
 	#FIXME: English
 	raise AssertionError("Aligning left in frame is not yet implemented")
 
-def leakless_dropdown_trace(object, var_to_trace, fun_to_call):
+def leakless_dropdown_trace(obj, var_to_trace, fun_to_call):
 	#this function will add a "trace" to a particular variable, that is, to allow that variable when changed to call a particular function
 	#normally this is not needed except for when things like sprite or game have widgets that they place into the main GUI
 	#if this process is not done delicately, then there will be a memory leak
@@ -37,8 +38,8 @@ def leakless_dropdown_trace(object, var_to_trace, fun_to_call):
 		def call_desired_function(*args):
 			getattr(this_object(),fun_to_call)(getattr(this_object(),var_to_trace).get())
 		return call_desired_function
-	getattr(object,var_to_trace).trace('w', dropdown_wrapper(weakref.ref(object)))  #when the dropdown is changed, run this function
-	dropdown_wrapper(weakref.ref(object))()      #trigger this now to initialize
+	getattr(obj,var_to_trace).trace('w', dropdown_wrapper(weakref.ref(obj)))  #when the dropdown is changed, run this function
+	dropdown_wrapper(weakref.ref(obj))()      #trigger this now to initialize
 
 
 #this tooltip class modified from
@@ -67,10 +68,10 @@ class ToolTip(object):
 		self.id = self.widget.after(self.waittime, self.showtip)
 
 	def unschedule(self):
-		id = self.id
+		thisID = self.id
 		self.id = None
-		if id:
-			self.widget.after_cancel(id)
+		if thisID:
+			self.widget.after_cancel(thisID)
 
 	def showtip(self, event=None):
 		x = y = 0
@@ -159,8 +160,8 @@ class SpiffyGroup():
 		self.col += 1
 
 	def add(self, internal_value_name, image_filename, fish, default=False, disabled=False):
-		if image_filename == None:
-			image_filename == "blank.png"
+		if image_filename is None:
+			image_filename = "blank.png"
 		#disable sprite object in widgetlib
 		icon_path = common.get_resource([self.sprite_resource_subpath,"icons"],image_filename) #common.get_resource([self.parent.animation_engine.resource_subpath,"icons"],image_filename)
 		if icon_path is None:
@@ -206,7 +207,11 @@ class SpiffyGroup():
 		keypresses = None
 		bindings_filename = common.get_resource(["meta","manifests"],"bindings.json")
 		with open(bindings_filename,encoding="utf-8") as f:
-			bindings = json.load(f)
+			bindings = {}
+			try:
+				bindings = json.load(f)
+			except JSONDecodeError as e:
+				raise ValueError("Bindings Manifest malformed!")
 		keypresses_switcher = bindings[self.label.lower()] if self.label.lower() in bindings else {}
 		keypresses = keypresses_switcher.get(internal_value_name.lower(),None)
 		if keypresses:
@@ -227,9 +232,9 @@ class SpiffyGroup():
 
 	def adds(self, buttons, fish):
 		for (internal_value_name, image_filename, default, disabled) in buttons:
-			if internal_value_name == None and image_filename == None and default == None:
+			if internal_value_name is None and image_filename is None and default is None:
 				self.add_newline()
-			elif internal_value_name == None:
+			elif internal_value_name is None:
 				self.add_blank_space()
 			else:
 				self.add(internal_value_name, image_filename, fish, default, disabled)
@@ -296,3 +301,10 @@ class SpiffyGroup():
 	def invoke_spiffy_button(self, button, event=None):
 		button.config(relief = tk.SUNKEN)
 		button.invoke()
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

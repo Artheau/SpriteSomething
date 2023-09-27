@@ -7,6 +7,7 @@ import random
 import json
 import re
 import itertools
+from json.decoder import JSONDecodeError
 from PIL import Image, ImageTk
 from source.meta.common import common
 from source.meta.gui import gui_common
@@ -16,9 +17,9 @@ class AnimationEngineParent():
 	def __init__(self, my_subpath, game, sprite):
 		self.game = game
 		self.sprite = sprite
-		self.resource_subpath = my_subpath           #the path to this sprite's subfolder in resources
-		self.spiffy_dict = {}						 #the variables created by the spiffy buttons will go here
-		self.overhead = True                         #by default, this will create NESW direction buttons.  If false, only left/right buttons
+		self.resource_subpath = my_subpath  #the path to this sprite's subfolder in resources
+		self.spiffy_dict = {}               #the variables created by the spiffy buttons will go here
+		self.overhead = True                #by default, this will create NESW direction buttons.  If false, only left/right buttons
 		self.overview_scale_factor = sprite.overview_scale_factor #when the overview is made, it is scaled up by this amount
 		self.step_number_label = tk.Label()
 		self.step_total_label = tk.Label()
@@ -28,9 +29,16 @@ class AnimationEngineParent():
 		self.plugins = []
 		self.prev_palette_info = []
 
-		self.animations = self.sprite.animations
-
-		self.current_animation = next(iter(self.animations.keys()))   #using a default value until the animation_panel attachment overrides this
+		with open(common.get_resource([self.resource_subpath,"manifests"],"animations.json")) as file:
+			self.animations = {}
+			try:
+				self.animations = json.load(file)
+			except JSONDecodeError as e:
+				raise ValueError("Animations file malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
+		if "$schema" in self.animations:
+			del self.animations["$schema"]
+		#using a default value until the animation_panel attachment overrides this
+		self.current_animation = next(iter(self.animations.keys()))
 
 	def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, coord_setter, fish):
 		ANIMATION_DROPDOWN_WIDTH = 25
@@ -186,6 +194,11 @@ class AnimationEngineParent():
 			else:
 				self.frame_progression_table = list(itertools.accumulate([pose["frames"] for pose in pose_list]))
 
+			if "mail_var" in self.spiffy_dict:
+				if "Bunny" in self.current_animation: #force bunny palette for bunny animations
+					self.spiffy_dict["mail_var"].set("bunny")
+				elif self.spiffy_dict["mail_var"].get() == "bunny": #reset to green palette when switching back to a non-bunny animation
+					self.spiffy_dict["mail_var"].set("green")
 			palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
 			self.pose_number = self.get_pose_number_from_frames(current_frame)
@@ -206,15 +219,14 @@ class AnimationEngineParent():
 			current_frame -= self.palette_last_transition_frame
 
 			return self.current_animation, displayed_direction, self.pose_number, palette_info, current_frame, pose_list
-		else:
-#			print("No pose list for displayed direction (%s)!" % displayed_direction)
-			return None, None, None, None, None, None
+#		print("No pose list for displayed direction (%s)!" % displayed_direction)
+		return None, None, None, None, None, None
 
 	def get_current_image(self):
 		current_animation, displayed_direction, pose_number, palette_info, current_frame, pose_list = self.get_image_arguments_from_frame_number(self.frame_getter())
 		if current_animation:
 			pose_image,offset = self.sprite.get_image(current_animation, displayed_direction, pose_number, palette_info, current_frame)
-			if pose_image == None:
+			if pose_image is None:
 				pass
 #				print("Pose image (%s %s %d %d) not found!" % current_animation, displayed_direction, pose_number, current_frame)
 			tile_list = self.sprite.get_tiles_for_pose(current_animation, displayed_direction, pose_number, palette_info, current_frame)
@@ -273,17 +285,20 @@ class AnimationEngineParent():
 			if "aiming_var" in self.spiffy_dict:
 				direction = "_aim_".join([direction, self.spiffy_dict["aiming_var"].get().lower()])
 			return direction
-		else:
-			return "right"   #TODO: figure out a better way to handle the error case
+		return "right"   #TODO: figure out a better way to handle the error case
 
-	#Mike likes spiffy buttons
+	#Minnie likes spiffy buttons
 	def get_spiffy_buttons(self, parent, fish):
 		spiffy_buttons = widgetlib.SpiffyButtons(self.sprite, self)
 
 		spiffy_manifest = common.get_resource([self.resource_subpath,"manifests"],"spiffy-buttons.json")
 		if spiffy_manifest:
 			with open(spiffy_manifest) as f:
-				spiffy_list = json.load(f)
+				spiffy_list = {}
+				try:
+					spiffy_list = json.load(f)
+				except JSONDecodeError as e:
+					raise ValueError("Spiffy Buttons Manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
 
 				for group in spiffy_list["button-groups"]:
 					group_key = group["group-fish-key"]
@@ -330,8 +345,11 @@ class AnimationEngineParent():
 		direction_manifest = common.get_resource([self.resource_subpath,"manifests"],"direction-buttons.json")
 		if direction_manifest:
 			with open(direction_manifest) as f:
-				direction_list = json.load(f)
-
+				direction_list = {}
+				try:
+					direction_list = json.load(f)
+				except JSONDecodeError as e:
+					raise ValueError("Direction Buttons Manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
 				for group in direction_list["button-groups"]:
 					group_key = group["group-fish-key"]
 					button_group = direction_buttons.make_new_group(group_key,fish)
@@ -486,9 +504,16 @@ class AnimationEngineParent():
 					save_all=True, transparency=255, disposal=2, duration=gif_durations, loop=0,
 					optimize=False)
 				return True
-			elif len(frames) == 1:
+			if len(frames) == 1:
 				frames[0].save(filename)
 			else:
 				return False
 		else:
 			return False
+
+
+def main():
+    print(f"Called main() on utility library {__file__}")
+
+if __name__ == "__main__":
+    main()

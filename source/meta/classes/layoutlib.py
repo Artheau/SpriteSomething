@@ -7,29 +7,31 @@
 
 import itertools
 import json
+import os
+from json.decoder import JSONDecodeError
 from PIL import Image, ImageOps, ImageDraw
 from source.meta.common import common
 
 
 class Layout():
-	def __init__(self, filename, sprite_name=""):
-		with open(filename) as inFile:
-			self.data = json.load(inFile)
-		self.reverse_lookup = {}
-		if "layouts" in self.data:
-		  for layout in self.data["layouts"]:
-		    if "names" in layout and sprite_name in layout["names"]:
-		      self.data = layout
-		for image_name,image_info in self.data["images"].items():
-			for image_ref in image_info["used by"]:
-				if tuple(image_ref) in self.reverse_lookup:
-					self.reverse_lookup[tuple(image_ref)].append(image_name)
-				else:
-					self.reverse_lookup[tuple(image_ref)] = [image_name]
+    def __init__(self, filename):
+        with open(filename) as inFile:
+            self.data = []
+            try:
+                self.data = json.load(inFile)
+            except JSONDecodeError as e:
+                raise ValueError("Layout manifest malformed: " + filename)
+        self.reverse_lookup = {}
+        for image_name, image_info in self.data["images"].items():
+            for image_ref in image_info["used by"]:
+                if tuple(image_ref) in self.reverse_lookup:
+                    self.reverse_lookup[tuple(image_ref)].append(image_name)
+                else:
+                    self.reverse_lookup[tuple(image_ref)] = [image_name]
 
-	def get_image_name(self, animation, pose, force=None):
-		if type(animation) is int:
-			animation = common.pretty_hex(animation)
+    def get_image_name(self, animation, pose, force=None):
+        if isinstance(animation,int):
+            animation = common.pretty_hex(animation)
 
 		image_name_list = self.get_all_image_names(animation,pose)
 		if image_name_list:
@@ -45,11 +47,11 @@ class Layout():
 		else:
 			return "null"
 
-	def get_all_image_names(self,animation, pose):
-		if type(animation) is int:
-			animation = common.pretty_hex(animation)
-		#get the full list
-		return self.reverse_lookup[(animation, pose)]
+    def get_all_image_names(self, animation, pose):
+        if isinstance(animation,int):
+            animation = common.pretty_hex(animation)
+        # get the full list
+        return self.reverse_lookup[(animation, pose)]
 
 	def get_rows(self):
 		return self.data["layout"]
@@ -111,23 +113,30 @@ class Layout():
 
 		return image_with_border, origin
 
-	def get_property(self, this_property, image_name):
-		FAILSAFE = 100
-		if image_name in self.data["images"]:
-			for _ in range(FAILSAFE):
-				if this_property in self.data["images"][image_name]:
-					return self.data["images"][image_name][this_property]
-				elif "parent" in self.data["images"][image_name]:
-					image_name = self.data["images"][image_name]["parent"]
-				else:
-					return None
-			else:
-				#FIXME: English
-				raise AssertionError(f"Encountered infinite parental loop in layout.json while investigating {image_name}")
-		else:
-			#FIXME: English
-			#print(f"Key not found in layout.json while investigating {image_name}")
-			pass
+    def get_property(self, this_property, image_name):
+        FAILSAFE = 100
+        if image_name in self.data["images"]:
+            for _ in range(FAILSAFE):
+                if this_property in self.data["images"][image_name]:
+                    return self.data["images"][image_name][this_property]
+                if "parent" in self.data["images"][image_name]:
+                    image_name = self.data["images"][image_name]["parent"]
+                else:
+                    return None
+            else:
+                # FIXME: English
+                raise AssertionError(
+                    f"Encountered infinite parental loop in layout.json" +
+                    ' ' +
+                    "while investigating {image_name}"
+                )
+        else:
+            # FIXME: English
+            # print(
+            #     f"Key not found in layout.json" + ' ' +
+            #     "while investigating {image_name}"
+            # )
+            pass
 
 	def make_horizontal_collage(self, image_list):
 		#assembles images horizontally and encapsulates them in a border.
@@ -165,9 +174,9 @@ class Layout():
 			current_y += image.size[1]
 		return collage
 
-	def export_all_images_to_PNG(self, all_images, master_palette):
-		all_collages = []
-		for row in self.get_rows():
+    def export_all_images_to_PNG(self, all_images, master_palette, filename):
+        all_collages = []
+        for row in self.get_rows():
 
 			this_row_images = []
 			for image_name in row:   #for every image referenced explicitly in the layout
@@ -188,8 +197,18 @@ class Layout():
 			collage = self.make_horizontal_collage(this_row_images)
 			all_collages.append(collage)
 
-		full_layout = self.make_vertical_collage(all_collages)
-		return full_layout
+        full_layout_collage = self.make_vertical_collage(all_collages)
+
+        # load the original PNG and use a mask to grab everything outside
+        # the frame and paste it back ontop of the collage
+
+        samus_mask = Image.open(common.get_resource(os.path.join("snes","metroid3","samus","sheets"),"samus_mask.png"))
+        if (samus_mask.width == full_layout_collage.width) and (os.path.splitext(filename)[1] == "png"):
+            original_image = Image.open(filename).convert("RGBA")
+            full_layout = Image.composite(original_image, full_layout_collage, samus_mask)
+        else:
+            full_layout = full_layout_collage
+        return full_layout
 
 	def extract_all_images_from_master(self, master_image):
 		all_images = {}
