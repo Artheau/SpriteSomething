@@ -32,22 +32,49 @@ class AnimationAudit(unittest.TestCase):
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
         spriteLibrary = spriteData["lib"]
 
+        if spriteData["view-only"]:
+            print(f"{self.spriteID} is a WIP!" + "\n")
+            return
+
         with open(os.path.join(spriteData["paths"]["resource"]["app"],"manifests","animations.json")) as inFile:
+            animations_found = False
             self.animations = json.load(inFile)
-            if "$schema" in self.animations: #skip schema definition as it's not an animation
+            # print("Finding Animations!")
+            if "sets" in self.animations:
+                for thisSet in self.animations["sets"]:
+                    if "names" in thisSet and self.spriteID in thisSet["names"] and not animations_found:
+                        animations_found = True
+                        self.animations = thisSet["animations"]
+                        self.set_name = self.spriteID
+                        # print("Found " + self.spriteID + "!")
+                        # print(self.animations)
+            else:
+                animations_found = True
+                # print("Loading Animations!")
+            if "$schema" in self.animations:
                 del self.animations["$schema"]
         with open(os.path.join(spriteData["paths"]["resource"]["app"],"manifests","layout.json")) as inFile:
             self.layout = json.load(inFile)
+            # print("Finding Layouts!")
+            if "layouts" in self.layout:
+                for layout in self.layout["layouts"]:
+                    if "names" in layout and self.spriteID in layout["names"]:
+                        # print("Found " + self.spriteID + "!")
+                        self.layout = layout
 
     def test_animations(self):
+        self.animations = {}
+        self.layout = {
+            "images": {}
+        }
         for [platID, plat] in DATA.items():
             for [gameID, game] in plat["games"].items():
                 for [spriteID, sprite] in game["sprites"].items():
-                    self.set_Up(self, platID, gameID, spriteID)
                     if VERBOSE:
-                        heading = ("%s/%s/%s" % (self.platID, self.gameID, self.spriteID))
+                        heading = f"{platID}/{gameID}/{spriteID}"
                         print(heading)
                         print("-" * 70)
+                    self.set_Up(self, platID, gameID, spriteID)
                     self.run_animations_use_valid_image_names()
                     self.run_no_duplicate_image_definitions_in_layout()
 
