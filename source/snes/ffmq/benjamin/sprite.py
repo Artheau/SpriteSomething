@@ -27,8 +27,8 @@ class Sprite(SpriteParent):
         Post-import cleanup
         '''
         self.load_plugins()
-        # self.equipment = self.plugins.equipment_test(False)
-        self.equipment = self.plugins.equipment_test(True)
+        self.equipment = self.plugins.equipment_test(False)
+        # self.equipment = self.plugins.equipment_test(True)
         if hasattr(self, "images"):
             self.images["transparent"] = Image.new("RGBA",(0,0),0)
             self.images = dict(self.images,**self.equipment)
