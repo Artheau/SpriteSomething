@@ -1123,7 +1123,14 @@ class SpriteSomethingMainFrame(tk.Frame):
     filetypes = ((self.fish.translate("meta","menu",f"export.palette-{fmt}"),f"*{defExt}"),)
     filename = filedialog.asksaveasfilename(defaultextension=(defExt), initialfile=self.sprite.classic_name.lower(), initialdir=self.working_dirs["export.palette"], title=self.fish.translate("meta","menu",f"export.palette-{fmt}"), filetypes=filetypes)
 
-    self.sprite.export_palette(filename, self.game.name, paletteID, fmt)
+    if filename:
+      returnvalue = self.sprite.export_palette(filename, self.game.name, paletteID, fmt)
+      if returnvalue:
+        # FIXME: English
+        messagebox.showinfo("Save Complete", f"Saved as {filename}")
+      return returnvalue
+    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+    return False
 
   def open_project_website(self):
     website_url = "https://artheau.github.io/SpriteSomething"
