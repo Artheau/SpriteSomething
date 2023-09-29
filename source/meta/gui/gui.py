@@ -731,7 +731,8 @@ class SpriteSomethingMainFrame(tk.Frame):
       self.game.update_background_image()
       self.update_sprite_animation()
     def set_zoom_text():
-      self.zoom_factor.set('x' + str(round(self.current_zoom, 1)) + ' ')
+      self.current_zoom = round(self.current_zoom, 1)
+      self.zoom_factor.set('x' + str(self.current_zoom) + ' ')
 
     def speed_down(*args):
       self.current_speed = max(0.1, self.current_speed - 0.1)
@@ -740,6 +741,7 @@ class SpriteSomethingMainFrame(tk.Frame):
       self.current_speed = min(2.0, self.current_speed + 0.1)
       set_speed_text()
     def set_speed_text():
+      self.current_speed = round(self.current_speed, 1)
       self.speed_factor.set(str(round(self.current_speed * 100)) + '%')
 
     if not hasattr(self,"current_zoom"):
