@@ -110,6 +110,7 @@ def autodetect(sprite_filename):
         ".rdc"      # Z3Link/M3Samus
     ]
 
+    print(sprite_filename)
     #need to autodetect which game, and which sprite
     #then return an instance of THAT game's class, and an instance of THAT sprite
     file_slug,file_extension = os.path.splitext(sprite_filename)

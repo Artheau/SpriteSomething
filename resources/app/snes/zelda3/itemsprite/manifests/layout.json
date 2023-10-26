@@ -13,13 +13,26 @@
     ],
     "layout": [
         [
-            "triforcepiece"
+            "item_sprite_receipt",
+            "item_sprite_standing",
+            "palette_block"
         ]
     ],
     "images": {
-        "triforcepiece": {
+        "item_sprite_receipt": {
             "dimensions": [0,0,16,16],
+	    "import palette interval": [2,16],
             "used by": [["TODO",0]]
+        },
+        "item_sprite_standing": {
+            "dimensions": [0,0,16,16],
+	    "import palette interval": [2,16],
+            "used by": [["TODO",0]]
+        },
+        "palette_block": {
+            "dimensions": [0,0,17,4],
+            "used by": [["palette_block",0]],
+	    "shift": [0,11]
         }
     }
 }
