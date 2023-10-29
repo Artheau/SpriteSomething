@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../../../schema/animations.schema.json",
+  "Stand (Tail)": {
+    "right": [
+      {
+        "pose": 1,
+        "frames": 10000,
+        "tiles": [
+          {
+            "image": "tail_stand",
+            "pos": [0, 0]
+          }
+        ]
+      }
+    ]
+  }
+}

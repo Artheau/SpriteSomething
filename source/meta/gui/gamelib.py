@@ -262,6 +262,9 @@ def autodetect_game_type_from_rom_filename(console,filename):
   if console == "snes":
     rom_module = importlib.import_module(f"source.{console}.romhandler")
     return autodetect_game_type_from_rom(rom_module.RomHandlerParent(filename))
+  if console == "nes":
+    rom_module = importlib.import_module(f"source.{console}.romhandler")
+    return autodetect_game_type_from_rom(rom_module.RomHandlerParent(filename))
   raise AssertionError(f"Cannot recognize {console} as a supported console")
 
 def autodetect_game_type_from_rom(rom):

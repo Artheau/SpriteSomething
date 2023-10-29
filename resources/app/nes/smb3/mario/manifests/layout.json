@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../../../schema/png-layout.schema.json",
+  "border_color": [0, 0, 0, 0],
+  "border_size": 0,
+  "layout": [
+    ["tail_stand", "palette_block", "null_block"]
+  ],
+  "images": {
+    "tail_stand": {
+      "dimensions": [0, 0, 24, 32],
+      "import palette interval": [1, 4],
+      "used by": []
+    },
+    "palette_block": {
+      "dimensions": [0, 0, 4, 1],
+      "parent": "tail_stand",
+      "used by": [["palette_block", 0]]
+    },
+    "null_block": {
+      "dimensions": [0, 0, 260, 32],
+      "parent": "tail_stand",
+      "used by": [["null", 0]]
+    }
+  }
+}
