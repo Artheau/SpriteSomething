@@ -842,7 +842,7 @@ class SpriteSomethingMainFrame(tk.Frame):
 
     filetypes = ".zspr " # FIXME: Assuming Z3Link-only
     filetypes += ".png "
-#    filetypes += ".nes " # NES RomHandler
+    filetypes += ".nes " # NES RomHandler
     filetypes += ".smc .sfc " # SNES RomHandler
     filetypes += ".4bpp "
     # filetypes += ".zhx "
@@ -899,7 +899,7 @@ class SpriteSomethingMainFrame(tk.Frame):
     elif self.game.console_name == "snes":
       default_ext = ".sfc"
     if inject:
-      dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),"*.sfc *.smc"),))
+      dest_filename = filedialog.asksaveasfilename(defaultextension=default_ext, initialdir=self.working_dirs["export.dest"], title=self.fish.translate("meta","dialogue","export.inject.title"), filetypes=((self.fish.translate("meta","dialogue","export.inject.types"),"*.sfc *.smc *.nes"),))
       source_filename = dest_filename
     else:
       source_filename = filedialog.askopenfilename(initialdir=self.working_dirs["export.source"], title=self.fish.translate("meta","dialogue","export.source.title"), filetypes=((self.fish.translate("meta","dialogue","export.source.types"),"*.sfc *.smc"),))
