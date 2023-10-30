@@ -1,0 +1,22 @@
+{
+  "section": {
+    "facing": "Facing",
+    "size": "Size",
+    "brother": "Suit"
+  },
+  "Facing": {
+    "up": "Up",
+    "left": "Left",
+    "down": "Down",
+    "right": "Right"
+  },
+  "Size": {
+    "small": "Small",
+    "super": "Super"
+  },
+  "Suit": {
+    "mario": "Mario",
+    "luigi": "Luigi",
+    "fire": "Fire Flower"
+  }
+}

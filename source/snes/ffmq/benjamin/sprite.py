@@ -43,7 +43,7 @@ class Sprite(SpriteParent):
         if "petrified_mail" in palettes:
             this_palette = self.ben_globals["petrified_palette"]
         else:
-            palette_indices = list(range(1,8))     #start with normal mail and modify it as needed
+            palette_indices = list(range(1,range_end))     #start with normal mail and modify it as needed
 
         if palette_indices:
             for i,_ in enumerate(palette_indices):

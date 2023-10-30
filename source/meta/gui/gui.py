@@ -481,7 +481,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                                             ".rdc"      # Z3Link/M3Samus
                                         ]:
                                             filepath = os.path.join(path,folder+filetype)
-                                            if os.path.isfile(filepath):
+                                            if filename == "" and os.path.isfile(filepath):
                                                 filename = filepath
                                         bundled_games[console][gamedir]["sprites"].append((name,partial(self.load_sprite,filename)))
         bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")

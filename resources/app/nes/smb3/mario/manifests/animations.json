@@ -1,17 +1,980 @@
 {
   "$schema": "../../../../../schema/animations.schema.json",
-  "Stand (Tail)": {
+
+  "Stand (Small)": {
     "right": [
-      {
-        "pose": 1,
-        "frames": 10000,
-        "tiles": [
-          {
-            "image": "tail_stand",
-            "pos": [0, 0]
-          }
-        ]
-      }
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "small_stand", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "small_stand", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Walk (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_walk", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_walk", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Jump (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_jump", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_jump", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Run (Small)": {
+    "right": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "small_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "small_run1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "small_run", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "small_run1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Fly (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "small_fly", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "small_fly", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Skid (Small)": {
+    "right": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "small_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "small_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 5, "tiles": [
+        { "image": "small_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 5, "tiles": [
+        { "image": "small_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 5, "tiles": [
+          { "image": "small_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 6, "frames": 5, "tiles": [
+        { "image": "small_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 7, "frames": 20, "tiles": [
+        { "image": "small_skid", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "small_run", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "small_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 5, "tiles": [
+        { "image": "small_run", "pos": [0, 0] }
+      ] },
+      { "pose": 4, "frames": 5, "tiles": [
+        { "image": "small_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 5, "frames": 5, "tiles": [
+        { "image": "small_run", "pos": [0, 0] }
+      ] },
+      { "pose": 6, "frames": 5, "tiles": [
+        { "image": "small_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 7, "frames": 20, "tiles": [
+        { "image": "small_skid", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Pipe (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "small_pipe", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Hold (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_hold1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_hold1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Kick (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_kick", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_kick", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Slide (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "small_slide", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+        { "image": "small_slide", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Tread Water (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_swim", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_swim1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_swim1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Swim (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_swim", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_swim2", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "small_swim3", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_swim2", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "small_swim3", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Climb (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "small_climb", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "small_climb", "pos": [0, 0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Die (Small)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "small_die", "pos": [0, 0] }
+      ] }
+    ]
+  },
+
+  "Stand (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "super_stand", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "super_stand", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Walk (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_walk", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_walk", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Crouch (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "super_crouch", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "super_crouch", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Jump (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_jump", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_jump", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Run (Super)": {
+    "right": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "super_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "super_run1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "super_run", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "super_run1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Fly (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_launch", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_fly", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_launch", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_fly", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Skid (Super)": {
+    "right": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "super_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "super_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 5, "tiles": [
+        { "image": "super_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 5, "tiles": [
+        { "image": "super_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 5, "tiles": [
+          { "image": "super_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 6, "frames": 5, "tiles": [
+        { "image": "super_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 7, "frames": 20, "tiles": [
+        { "image": "super_skid", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "super_run", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "super_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 5, "tiles": [
+        { "image": "super_run", "pos": [0, 0] }
+      ] },
+      { "pose": 4, "frames": 5, "tiles": [
+        { "image": "super_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 5, "frames": 5, "tiles": [
+        { "image": "super_run", "pos": [0, 0] }
+      ] },
+      { "pose": 6, "frames": 5, "tiles": [
+        { "image": "super_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 7, "frames": 20, "tiles": [
+        { "image": "super_skid", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Pipe (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "super_pipe", "pos": [0, 0] }
+      ] }
+    ],
+    "up": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "super_pipe1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Hold (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_hold1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_hold1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Kick (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_kick", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_kick", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Slide (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "super_slide", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+        { "image": "super_slide", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Tread Water (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_swim", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_swim1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "super_swim2", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_swim1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "super_swim2", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Swim (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_swim", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_swim1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "super_swim2", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "super_swim3", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_swim1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "super_swim2", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "super_swim3", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Climb (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "super_climb", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "super_climb", "pos": [0, 0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Starman Flip (Super)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "super_flip8", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 3, "tiles": [
+        { "image": "super_flip3", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 3, "tiles": [
+        { "image": "super_flip4", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 3, "tiles": [
+        { "image": "super_flip5", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 3, "tiles": [
+        { "image": "super_flip6", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 6, "frames": 3, "tiles": [
+        { "image": "super_flip7", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 7, "frames": 3, "tiles": [
+        { "image": "super_flip", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 8, "frames": 3, "tiles": [
+        { "image": "super_flip1", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 9, "frames": 3, "tiles": [
+        { "image": "super_flip2", "pos": [0,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "super_flip8", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 3, "tiles": [
+        { "image": "super_flip3", "pos": [0,0] }
+      ] },
+      { "pose": 3, "frames": 3, "tiles": [
+        { "image": "super_flip4", "pos": [0,0] }
+      ] },
+      { "pose": 4, "frames": 3, "tiles": [
+        { "image": "super_flip5", "pos": [0,0] }
+      ] },
+      { "pose": 5, "frames": 3, "tiles": [
+        { "image": "super_flip6", "pos": [0,0] }
+      ] },
+      { "pose": 6, "frames": 3, "tiles": [
+        { "image": "super_flip7", "pos": [0,0] }
+      ] },
+      { "pose": 7, "frames": 3, "tiles": [
+        { "image": "super_flip", "pos": [0,0] }
+      ] },
+      { "pose": 8, "frames": 3, "tiles": [
+        { "image": "super_flip1", "pos": [0,0] }
+      ] },
+      { "pose": 9, "frames": 3, "tiles": [
+        { "image": "super_flip2", "pos": [0,0] }
+      ] }
+    ]
+  },
+
+  "Stand (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tail_stand", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tail_stand", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Walk (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_walk", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_walk", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Crouch (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tail_crouch", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tail_crouch", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Jump (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_jump", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_jump", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Descent (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_descend", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_descend1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_descend", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_descend1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Run (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "tail_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "tail_run1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "tail_run", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "tail_run1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Fly (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_launch", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_fly", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tail_fly1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "tail_fly2", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 10, "tiles": [
+        { "image": "tail_fly1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_launch", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_fly", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tail_fly1", "pos": [0, 0] }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "tail_fly2", "pos": [0, 0] }
+      ] },
+      { "pose": 5, "frames": 10, "tiles": [
+        { "image": "tail_fly1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Skid (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "tail_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "tail_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 5, "tiles": [
+        { "image": "tail_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 5, "tiles": [
+        { "image": "tail_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 5, "tiles": [
+          { "image": "tail_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 6, "frames": 5, "tiles": [
+        { "image": "tail_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 7, "frames": 20, "tiles": [
+        { "image": "tail_skid", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "tail_run", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "tail_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 5, "tiles": [
+        { "image": "tail_run", "pos": [0, 0] }
+      ] },
+      { "pose": 4, "frames": 5, "tiles": [
+        { "image": "tail_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 5, "frames": 5, "tiles": [
+        { "image": "tail_run", "pos": [0, 0] }
+      ] },
+      { "pose": 6, "frames": 5, "tiles": [
+        { "image": "tail_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 7, "frames": 20, "tiles": [
+        { "image": "tail_skid", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Pipe (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tail_pipe", "pos": [0, 0] }
+      ] }
+    ],
+    "up": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tail_pipe1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Spin (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "tail_stand", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_spin", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tail_pipe1", "pos": [0,0] }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "tail_spin", "pos": [0,0] }
+      ] },
+      { "pose": 5, "frames": 10, "tiles": [
+        { "image": "tail_pipe", "pos": [0,0] }
+      ] },
+      { "pose": 6, "frames": 10, "tiles": [
+        { "image": "tail_spin", "pos": [0,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "tail_stand", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_spin", "pos": [0,0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tail_pipe1", "pos": [0,0] }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "tail_spin", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 10, "tiles": [
+        { "image": "tail_pipe", "pos": [0,0] }
+      ] },
+      { "pose": 6, "frames": 10, "tiles": [
+        { "image": "tail_spin", "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Hold (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_hold1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_hold1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Kick (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_kick", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_kick", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Slide (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tail_slide", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+        { "image": "tail_slide", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Tread Water (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_swim", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_swim1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tail_swim2", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_swim1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tail_swim2", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Swim (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_swim", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_swim1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tail_swim2", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "tail_swim3", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_swim1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tail_swim2", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tail_swim3", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Climb (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tail_climb", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tail_climb", "pos": [0, 0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Starman Flip (Raccoon)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "tail_hold", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 3, "tiles": [
+        { "image": "tail_flip3", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 3, "tiles": [
+        { "image": "tail_flip4", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 3, "tiles": [
+        { "image": "tail_flip5", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 3, "tiles": [
+        { "image": "tail_flip6", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 6, "frames": 3, "tiles": [
+        { "image": "tail_flip7", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 7, "frames": 3, "tiles": [
+        { "image": "tail_flip", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 8, "frames": 3, "tiles": [
+        { "image": "tail_flip1", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 9, "frames": 3, "tiles": [
+        { "image": "tail_flip2", "pos": [0,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "tail_hold", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 3, "tiles": [
+        { "image": "tail_flip3", "pos": [0,0] }
+      ] },
+      { "pose": 3, "frames": 3, "tiles": [
+        { "image": "tail_flip4", "pos": [0,0] }
+      ] },
+      { "pose": 4, "frames": 3, "tiles": [
+        { "image": "tail_flip5", "pos": [0,0] }
+      ] },
+      { "pose": 5, "frames": 3, "tiles": [
+        { "image": "tail_flip6", "pos": [0,0] }
+      ] },
+      { "pose": 6, "frames": 3, "tiles": [
+        { "image": "tail_flip7", "pos": [0,0] }
+      ] },
+      { "pose": 7, "frames": 3, "tiles": [
+        { "image": "tail_flip", "pos": [0,0] }
+      ] },
+      { "pose": 8, "frames": 3, "tiles": [
+        { "image": "tail_flip1", "pos": [0,0] }
+      ] },
+      { "pose": 9, "frames": 3, "tiles": [
+        { "image": "tail_flip2", "pos": [0,0] }
+      ] }
     ]
   }
 }

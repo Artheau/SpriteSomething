@@ -6,11 +6,29 @@ from source.nes.romhandler import RomHandlerParent
 
 
 class Sprite(SpriteParent):
-    images = {}
-    master_palette = []
+    def __init__(self, filename, manifest_dict, my_subpath, _):
+        super().__init__(filename, manifest_dict, my_subpath, _)
+        self.load_plugins()
 
-    def import_from_ROM(self, rom):
-        super().import_from_ROM(rom)
+        self.mario_globals = {}
+        self.mario_globals["mario_palette"] = [
+            # (  0,  0,  0),
+            (  0,  0,  0),
+            (254,206,199),
+            (178, 50, 38)   # changes
+        ]
+        self.mario_globals["luigi_palette"] = [
+            # (  0,  0,  0),
+            (  0,  0,  0),
+            (254,206,199),
+            ( 98,226, 64)   # changes
+        ]
+        self.mario_globals["fire_palette"] = [
+            # (  0,  0,  0),
+            (178, 50, 38),
+            (254,206,199),
+            (232,157, 52)   # changes
+        ]
 
     def inject_into_ROM(self, spiffy_dict, rom: RomHandlerParent):
         # Inject palette data
@@ -31,6 +49,26 @@ class Sprite(SpriteParent):
 
         return rom
 
-    def import_from_PNG(self):
-        with Image.open(self.filename) as master:
-            self.images, self.master_palette = self.layout.extract_all_images_from_master(master)
+    def get_palette(self, palettes, default_range=[], frame_number=0):
+        palette_indices = None
+        this_palette = []
+        range_end = 4
+        for i in range(1,range_end):
+            this_palette.append((0,0,0))
+
+        for scheme in [
+            "mario",
+            "luigi",
+            "fire"
+        ]:
+            if f"{scheme}_brother" in palettes:
+                this_palette = self.mario_globals[f"{scheme}_palette"]
+
+        if len(this_palette) < 1:
+            palette_indices = list(range(1,range_end))     #start with normal mail and modify it as needed
+
+        if palette_indices:
+            for i,_ in enumerate(palette_indices):
+                this_palette[i] = self.master_palette[palette_indices[i]]
+
+        return this_palette
