@@ -71,6 +71,29 @@
       "frog_swim6", "frog_swim7", "frog_swim8",
       "frog_swim9", "frog_swim10",
       "null_block6"
+    ],
+    [
+      "tanooki_stand",
+      "tanooki_walk", "tanooki_walk1",
+      "tanooki_crouch",
+      "tanooki_jump",
+      "tanooki_descend", "tanooki_descend1",
+      "tanooki_run", "tanooki_run1",
+      "tanooki_launch",
+      "tanooki_fly", "tanooki_fly1", "tanooki_fly2",
+      "tanooki_skid", "tanooki_pipe",
+      "tanooki_spin", "tanooki_pipe1",
+      "tanooki_statue",
+      "null_block7"
+    ],
+    [
+      "tanooki_hold", "tanooki_hold1", "tanooki_hold2",
+      "tanooki_kick", "tanooki_slide",
+      "tanooki_swim", "tanooki_swim1", "tanooki_swim2", "tanooki_swim3",
+      "tanooki_climb",
+      "tanooki_flip", "tanooki_flip1", "tanooki_flip2", "tanooki_flip3",
+      "tanooki_flip4", "tanooki_flip5", "tanooki_flip6", "tanooki_flip7",
+      "null_block5"
     ]
   ],
   "images": {
@@ -196,6 +219,44 @@
     "frog_swim9":   { "parent": "frog_swim6", "used by": [] },
     "frog_swim10":  { "parent": "frog_swim6", "used by": [] },
 
+    "tanooki_stand":   { "parent": "tail_stand", "used by": [] },
+    "tanooki_walk":    { "parent": "tail_walk", "used by": [] },
+    "tanooki_walk1":   { "parent": "tanooki_walk", "used by": [] },
+    "tanooki_crouch":  { "parent": "tail_crouch", "used by": [] },
+    "tanooki_jump":    { "parent": "tail_jump", "used by": [] },
+    "tanooki_descend": { "parent": "tail_descend", "used by": [] },
+    "tanooki_descend1": { "parent": "tanooki_descend", "used by": [] },
+    "tanooki_run":     { "parent": "tail_run", "used by": [] },
+    "tanooki_run1":    { "parent": "tanooki_run", "used by": [] },
+    "tanooki_launch":  { "parent": "tanooki_run", "used by": [] },
+    "tanooki_fly":     { "parent": "tanooki_run", "used by": [] },
+    "tanooki_fly1":    { "parent": "tanooki_fly", "used by": [] },
+    "tanooki_fly2":    { "parent": "tanooki_fly", "used by": [] },
+    "tanooki_skid":    { "parent": "tail_skid", "used by": [] },
+    "tanooki_pipe":    { "parent": "tail_pipe", "used by": [] },
+    "tanooki_spin":    { "parent": "tanooki_run", "used by": [] },
+    "tanooki_pipe1":   { "parent": "tanooki_pipe", "used by": [] },
+    "tanooki_statue":  { "parent": "tanooki_pipe1", "used by": [] },
+    "tanooki_hold":    { "parent": "tanooki_stand", "used by": [] },
+    "tanooki_hold1":   { "parent": "tanooki_hold", "used by": [] },
+    "tanooki_hold2":   { "parent": "tanooki_hold", "used by": [] },
+    "tanooki_kick":    { "parent": "tanooki_run", "used by": [] },
+    "tanooki_slide":   { "parent": "tail_slide", "used by": [] },
+    "tanooki_swim":    { "parent": "tanooki_run", "used by": [] },
+    "tanooki_swim1":   { "parent": "tanooki_swim", "used by": [] },
+    "tanooki_swim2":   { "parent": "tanooki_swim", "used by": [] },
+    "tanooki_swim3":   { "parent": "tanooki_swim", "used by": [] },
+    "tanooki_climb":   { "parent": "tail_climb", "used by": [] },
+    "tanooki_flip":    { "parent": "tanooki_run", "used by": [] },
+    "tanooki_flip1":   { "parent": "tanooki_flip", "used by": [] },
+    "tanooki_flip2":   { "parent": "tanooki_flip", "used by": [] },
+    "tanooki_flip3":   { "parent": "tanooki_flip", "used by": [] },
+    "tanooki_flip4":   { "parent": "tanooki_flip", "used by": [] },
+    "tanooki_flip5":   { "parent": "tanooki_flip", "used by": [] },
+    "tanooki_flip6":   { "parent": "tanooki_flip", "used by": [] },
+    "tanooki_flip7":   { "parent": "tanooki_flip", "used by": [] },
+    "tanooki_flip8":   { "parent": "tanooki_stand", "used by": [] },
+
     "null_block1":  {
       "dimensions": [324, 0, 474, 16],
       "description": "End of row 1",
@@ -237,6 +298,12 @@
       "used by": []
     },
     "null_block7": {
+      "dimensions": [0,0,52,32],
+      "description": "End of row 7",
+      "import palette interval": [0,0],
+      "used by": []
+    },
+    "null_block8": {
       "dimensions": [0,0,1,0],
       "description": "End of bottom row",
       "import palette interval": [0,0],

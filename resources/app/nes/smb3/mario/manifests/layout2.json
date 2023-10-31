@@ -82,9 +82,8 @@
         "tanooki_launch",
         "tanooki_fly", "tanooki_fly1", "tanooki_fly2",
         "tanooki_skid", "tanooki_pipe",
-        "tanooki_spin", "tanooki_spin1",
-        "tanooki_statue",
-        "null_block3"
+        "tanooki_spin", "tanooki_pipe1",
+        "null_block4"
       ],
       [
         "tanooki_hold", "tanooki_hold1", "tanooki_hold2",

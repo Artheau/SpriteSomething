@@ -1120,5 +1120,424 @@
           { "image": "frog_swim5", "pos": [0, 0] }
       ] }
     ]
+  },
+
+  "Stand (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tanooki_stand", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tanooki_stand", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Walk (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_walk", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_walk", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Crouch (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tanooki_crouch", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tanooki_crouch", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Jump (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_jump", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_jump", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Descent (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_descend", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_descend1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_descend", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_descend1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Run (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "tanooki_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "tanooki_run1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "tanooki_run", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "tanooki_run1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Fly (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_launch", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_fly", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tanooki_fly1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "tanooki_fly2", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 10, "tiles": [
+        { "image": "tanooki_fly1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_launch", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_fly", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tanooki_fly1", "pos": [0, 0] }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "tanooki_fly2", "pos": [0, 0] }
+      ] },
+      { "pose": 5, "frames": 10, "tiles": [
+        { "image": "tanooki_fly1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Skid (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "tanooki_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "tanooki_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 5, "tiles": [
+        { "image": "tanooki_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 5, "tiles": [
+        { "image": "tanooki_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 5, "tiles": [
+          { "image": "tanooki_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 6, "frames": 5, "tiles": [
+        { "image": "tanooki_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 7, "frames": 20, "tiles": [
+        { "image": "tanooki_skid", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "tanooki_run", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "tanooki_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 5, "tiles": [
+        { "image": "tanooki_run", "pos": [0, 0] }
+      ] },
+      { "pose": 4, "frames": 5, "tiles": [
+        { "image": "tanooki_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 5, "frames": 5, "tiles": [
+        { "image": "tanooki_run", "pos": [0, 0] }
+      ] },
+      { "pose": 6, "frames": 5, "tiles": [
+        { "image": "tanooki_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 7, "frames": 20, "tiles": [
+        { "image": "tanooki_skid", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Pipe (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tanooki_pipe", "pos": [0, 0] }
+      ] }
+    ],
+    "up": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tanooki_pipe1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Spin (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "tanooki_stand", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_spin", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tanooki_pipe1", "pos": [0,0] }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "tanooki_spin", "pos": [0,0] }
+      ] },
+      { "pose": 5, "frames": 10, "tiles": [
+        { "image": "tanooki_pipe", "pos": [0,0] }
+      ] },
+      { "pose": 6, "frames": 10, "tiles": [
+        { "image": "tanooki_spin", "pos": [0,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "tanooki_stand", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_spin", "pos": [0,0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tanooki_pipe1", "pos": [0,0] }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "tanooki_spin", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 10, "tiles": [
+        { "image": "tanooki_pipe", "pos": [0,0] }
+      ] },
+      { "pose": 6, "frames": 10, "tiles": [
+        { "image": "tanooki_spin", "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Statue (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_statue", "pos": [0, 0] }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_statue", "pos": [0, 0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Hold (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_hold1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_hold1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Kick (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_kick", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_kick", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Slide (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "tanooki_slide", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+        { "image": "tanooki_slide", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Tread Water (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_swim", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_swim1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tanooki_swim2", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_swim1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tanooki_swim2", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Swim (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_swim", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_swim1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tanooki_swim2", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "tanooki_swim3", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_swim1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tanooki_swim2", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "tanooki_swim3", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Climb (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "tanooki_climb", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "tanooki_climb", "pos": [0, 0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Starman Flip (Tanooki)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "tanooki_hold", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 3, "tiles": [
+        { "image": "tanooki_flip3", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 3, "tiles": [
+        { "image": "tanooki_flip4", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 3, "tiles": [
+        { "image": "tanooki_flip5", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 3, "tiles": [
+        { "image": "tanooki_flip6", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 6, "frames": 3, "tiles": [
+        { "image": "tanooki_flip7", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 7, "frames": 3, "tiles": [
+        { "image": "tanooki_flip", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 8, "frames": 3, "tiles": [
+        { "image": "tanooki_flip1", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 9, "frames": 3, "tiles": [
+        { "image": "tanooki_flip2", "pos": [0,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "tanooki_hold", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 3, "tiles": [
+        { "image": "tanooki_flip3", "pos": [0,0] }
+      ] },
+      { "pose": 3, "frames": 3, "tiles": [
+        { "image": "tanooki_flip4", "pos": [0,0] }
+      ] },
+      { "pose": 4, "frames": 3, "tiles": [
+        { "image": "tanooki_flip5", "pos": [0,0] }
+      ] },
+      { "pose": 5, "frames": 3, "tiles": [
+        { "image": "tanooki_flip6", "pos": [0,0] }
+      ] },
+      { "pose": 6, "frames": 3, "tiles": [
+        { "image": "tanooki_flip7", "pos": [0,0] }
+      ] },
+      { "pose": 7, "frames": 3, "tiles": [
+        { "image": "tanooki_flip", "pos": [0,0] }
+      ] },
+      { "pose": 8, "frames": 3, "tiles": [
+        { "image": "tanooki_flip1", "pos": [0,0] }
+      ] },
+      { "pose": 9, "frames": 3, "tiles": [
+        { "image": "tanooki_flip2", "pos": [0,0] }
+      ] }
+    ]
   }
 }
