@@ -181,6 +181,22 @@ class AnimationEngineParent():
                     self.spiffy_dict["mail_var"].set("bunny")
                 elif self.spiffy_dict["mail_var"].get() == "bunny": #reset to green palette when switching back to a non-bunny animation
                     self.spiffy_dict["mail_var"].set("green")
+            if "brother_var" in self.spiffy_dict:
+                check_passed = False
+                mario_checks = [
+                    "Frog",
+                    "Tanooki",
+                    "Hammer",
+                    "Cloud",
+                    "Marker"
+                ]
+                for check in mario_checks:
+                    if not check_passed and check in self.current_animation:
+                        check_passed = True
+                if check_passed:
+                    self.spiffy_dict["brother_var"].set("global")
+                elif self.spiffy_dict["brother_var"].get() == "global":
+                    self.spiffy_dict["brother_var"].set("mario")
             palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
             self.pose_number = self.get_pose_number_from_frames(current_frame)

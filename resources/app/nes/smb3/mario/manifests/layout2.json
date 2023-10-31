@@ -60,7 +60,16 @@
         "null_block5"
       ],
       [
-        "frog",
+        "frog_stand",
+        "frog_walk", "frog_walk1",
+        "frog_pipe",
+        "null_block2", "null_block2",
+        "frog_hold", "frog_hold1", "frog_hold2",
+        "frog_kick",
+        "frog_swim", "frog_swim1", "frog_swim2",
+        "frog_swim3", "frog_swim4", "frog_swim5",
+        "frog_swim6", "frog_swim7", "frog_swim8",
+        "frog_swim9", "frog_swim10",
         "null_block6"
       ],
       [
@@ -114,7 +123,7 @@
       ],
       [
         "map_small1", "null_block2",
-        "mapp_small2", "null_block7"
+        "map_small2", "null_block7"
       ]
     ],
     "images": {

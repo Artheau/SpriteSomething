@@ -976,5 +976,149 @@
         { "image": "tail_flip2", "pos": [0,0] }
       ] }
     ]
+  },
+
+  "Stand (Frog)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_stand", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_stand", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Walk (Frog)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+          { "image": "frog_walk", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+          { "image": "frog_walk1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+          { "image": "frog_walk", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+          { "image": "frog_walk1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Pipe (Frog)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_pipe", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Hold (Frog)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "frog_hold1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "frog_hold2", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "frog_hold1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "frog_hold2", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Kick (Frog)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "frog_kick", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "frog_kick", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Swim (Frog)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_swim6", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+          { "image": "frog_swim7", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+          { "image": "frog_swim8", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+          { "image": "frog_swim9", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 10, "tiles": [
+          { "image": "frog_swim10", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_swim6", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+          { "image": "frog_swim7", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+          { "image": "frog_swim8", "pos": [0, 0] }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+          { "image": "frog_swim9", "pos": [0, 0] }
+      ] },
+      { "pose": 5, "frames": 10, "tiles": [
+          { "image": "frog_swim10", "pos": [0, 0] }
+      ] }
+    ],
+    "up": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+          { "image": "frog_swim1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+          { "image": "frog_swim2", "pos": [0, 0] }
+      ] }
+    ],
+    "down": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "frog_swim3", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+          { "image": "frog_swim4", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+          { "image": "frog_swim5", "pos": [0, 0] }
+      ] }
+    ]
   }
 }

@@ -15,19 +15,28 @@ class Sprite(SpriteParent):
             # (  0,  0,  0),
             (  0,  0,  0),
             (254,206,199),
-            (178, 50, 38)   # changes
+            (178, 50, 38),  # changes
         ]
         self.mario_globals["luigi_palette"] = [
             # (  0,  0,  0),
             (  0,  0,  0),
             (254,206,199),
-            ( 98,226, 64)   # changes
+            ( 98,226, 64),  # changes
         ]
         self.mario_globals["fire_palette"] = [
             # (  0,  0,  0),
             (178, 50, 38),
             (254,206,199),
-            (232,157, 52)   # changes
+            (232,157, 52),  # changes
+        ]
+        self.mario_globals["global_palette"] = [
+            # (  0,  0,  0),
+            (  0,  0,  0),
+            ( 98,226, 64),
+            (254,206,199),  # frog
+            (152, 78, 15),  # tanooki
+            (255,255,255),  # hammer
+            (232,157, 52),  # hammer
         ]
 
     def inject_into_ROM(self, spiffy_dict, rom: RomHandlerParent):
@@ -59,7 +68,8 @@ class Sprite(SpriteParent):
         for scheme in [
             "mario",
             "luigi",
-            "fire"
+            "fire",
+            "global"
         ]:
             if f"{scheme}_brother" in palettes:
                 this_palette = self.mario_globals[f"{scheme}_palette"]
