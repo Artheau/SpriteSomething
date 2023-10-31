@@ -114,6 +114,23 @@
       "hammer_hammer", "hammer_hammer1",
       "hammer_item", "hammer_item1", "hammer_item2", "hammer_item3",
       "null_block8"
+    ],
+    [
+      "map_small", "null_block2",
+      "map_die", "null_block2", "null_block2",
+      "map_super", "null_block2", "null_block2",
+      "map_tail", "null_block2",
+      "map_p", "map_p1", "null_block2", "null_block2",
+      "map_frog", "map_frog1", "map_frog2",
+      "map_tanooki", "map_tanooki1", "map_tanooki2",
+      "map_hammer", "map_hammer1",
+      "map_cloud",
+      "null_block2", "null_block2", "null_block2",
+      "map_m", "map_l"
+    ],
+    [
+      "map_small1", "null_block2",
+      "map_small2", "null_block9"
     ]
   ],
   "images": {
@@ -142,7 +159,7 @@
 
     "super_stand":  {
       "dimensions": [0,0,16,32],
-      "import palette interval": [1,4],
+      "import palette interval": [1,8],
       "used by": []
     },
     "super_walk":   { "parent": "super_stand", "used by": [] },
@@ -151,7 +168,7 @@
     "super_jump":   { "parent": "super_stand", "used by": [] },
     "super_run":    {
       "dimensions": [0,0,24,32],
-      "import palette interval": [1,4],
+      "import palette interval": [1,8],
       "used by": []
     },
     "super_run1":   { "parent": "super_run", "used by": [] },
@@ -310,22 +327,54 @@
     "hammer_hammer1": { "parent": "hammer_hammer", "used by": [] },
     "hammer_item":   {
       "dimensions": [0, 0, 8, 32],
-      "import palette interval": [0,0],
+      "import palette interval": [1,8],
       "used by": []
     },
     "hammer_item1":  { "parent": "hammer_item", "used by": [] },
     "hammer_item2":  { "parent": "hammer_item", "used by": [] },
     "hammer_item3":  { "parent": "hammer_item", "used by": [] },
-
-    "null_block1":  {
-      "dimensions": [324, 0, 474, 16],
-      "description": "End of row 1",
-      "import palette interval": [0,0],
+    "map_small":     {
+      "dimensions": [0, 0, 16, 24],
+      "import palette interval": [1,8],
       "used by": []
     },
+    "map_die":      { "parent": "map_small", "used by": [] },
+    "map_super":    { "parent": "map_small", "used by": [] },
+    "map_tail":     { "parent": "map_small", "used by": [] },
+    "map_p":        { "parent": "map_small", "used by": [] },
+    "map_p1":       { "parent": "map_small", "used by": [] },
+    "map_frog":     { "parent": "map_small", "used by": [] },
+    "map_frog1":    { "parent": "map_small", "used by": [] },
+    "map_frog2":    { "parent": "map_small", "used by": [] },
+    "map_tanooki":  { "parent": "map_small", "used by": [] },
+    "map_tanooki1": { "parent": "map_small", "used by": [] },
+    "map_tanooki2": { "parent": "map_small", "used by": [] },
+    "map_hammer":   { "parent": "map_small", "used by": [] },
+    "map_hammer1":  { "parent": "map_small", "used by": [] },
+    "map_hammer2":  { "parent": "map_small", "used by": [] },
+    "map_cloud":    { "parent": "map_small", "used by": [] },
+    "map_m":        {
+      "dimensions": [0,0,8,24],
+      "import palette interval": [1,8],
+      "used by": []
+    },
+    "map_l":        { "parent": "map_m", "used by": [] },
+    "map_small1":   {
+      "dimensions": [0,0,16,16],
+      "import palette interval": [1,8],
+      "used by": []
+    },
+    "map_small2":   { "parent": "map_small1", "used by": [] },
+
     "palette_block": {
       "dimensions": [0,0,16,16],
-      "import palette interval": [1,4],
+      "import palette interval": [1,8],
+      "used by": []
+    },
+    "null_block1":  {
+      "dimensions": [324, 0, 474, 1],
+      "description": "End of row 1",
+      "import palette interval": [0,0],
       "used by": []
     },
     "null_block2": {
@@ -334,38 +383,44 @@
       "used by": []
     },
     "null_block3": {
-      "dimensions": [0,0,196,32],
+      "dimensions": [0,0,196,1],
       "description": "Middle of row 3",
       "import palette interval": [0,0],
       "used by": []
     },
     "null_block4": {
-      "dimensions": [0,0,68,32],
+      "dimensions": [0,0,68,1],
       "description": "End of row 4 (3 null_block2)",
       "import palette interval": [0,0],
       "used by": []
     },
     "null_block5": {
-      "dimensions": [0,0,34,32],
+      "dimensions": [0,0,34,1],
       "description": "End of row 5 (2 null_block2)",
       "import palette interval": [0,0],
       "used by": []
     },
     "null_block6": {
-      "dimensions": [0,0,38,32],
+      "dimensions": [0,0,38,1],
       "description": "End of row 6",
       "import palette interval": [0,0],
       "used by": []
     },
     "null_block7": {
-      "dimensions": [0,0,52,32],
+      "dimensions": [0,0,52,1],
       "description": "End of row 7",
       "import palette interval": [0,0],
       "used by": []
     },
     "null_block8": {
-      "dimensions": [0,0,203,0],
+      "dimensions": [0,0,203,1],
       "description": "End of row 10",
+      "import palette interval": [0,0],
+      "used by": []
+    },
+    "null_block9": {
+      "dimensions": [0,0,432,1],
+      "description": "End of bottom row",
       "import palette interval": [0,0],
       "used by": []
     }

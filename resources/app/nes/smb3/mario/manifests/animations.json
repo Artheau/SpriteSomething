@@ -1887,5 +1887,121 @@
           { "image": "hammer_hammer1", "pos": [0, 0] }
       ] }
     ]
+  },
+  "Small Walk (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_small1", "pos": [0,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_small1", "pos": [0,0] }
+      ] }
+    ],
+    "up": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_small2", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "map_small2", "pos": [0,0], "flip": "h" }
+      ] }
+    ],
+    "down": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_small", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "map_small", "pos": [0,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Die (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_die", "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Super Walk (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_super", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "map_super", "pos": [0,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Racoon Walk (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_tail", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "map_tail", "pos": [0,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "P Balloon Walk (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_p", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "map_p1", "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Frog (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_frog1", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "map_frog2", "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Tanooki (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_tanooki1", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "map_tanooki2", "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Hammer Walk (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_hammer1", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "map_hammer1", "pos": [0,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Cloud (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_cloud", "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Mario Clear (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_m", "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Luigi Clear (Map)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "map_l", "pos": [0,0] }
+      ] }
+    ]
   }
 }
