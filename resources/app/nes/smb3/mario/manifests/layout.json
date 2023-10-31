@@ -94,6 +94,26 @@
       "tanooki_flip", "tanooki_flip1", "tanooki_flip2", "tanooki_flip3",
       "tanooki_flip4", "tanooki_flip5", "tanooki_flip6", "tanooki_flip7",
       "null_block5"
+    ],
+    [
+      "hammer_stand",
+      "hammer_walk", "hammer_walk1",
+      "hammer_crouch", "hammer_jump",
+      "hammer_run", "hammer_run1",
+      "hammer_launch", "hammer_fly", "hammer_skid",
+      "hammer_pipe", "null_block2",
+      "hammer_hold", "hammer_hold1", "hammer_hold2",
+      "hammer_kick", "hammer_slide",
+      "hammer_swim", "hammer_swim1", "hammer_swim2", "hammer_swim3",
+      "hammer_climb",
+      "null_block2"
+    ],
+    [
+      "hammer_flip", "hammer_flip1", "hammer_flip2", "hammer_flip3",
+      "hammer_flip4", "hammer_flip5", "hammer_flip6", "hammer_flip7",
+      "hammer_hammer", "hammer_hammer1",
+      "hammer_item", "hammer_item1", "hammer_item2", "hammer_item3",
+      "null_block8"
     ]
   ],
   "images": {
@@ -257,6 +277,46 @@
     "tanooki_flip7":   { "parent": "tanooki_flip", "used by": [] },
     "tanooki_flip8":   { "parent": "tanooki_stand", "used by": [] },
 
+    "hammer_stand":  { "parent": "super_stand", "used by": [] },
+    "hammer_walk":   { "parent": "hammer_stand", "used by": [] },
+    "hammer_walk1":  { "parent": "hammer_stand", "used by": [] },
+    "hammer_crouch": { "parent": "hammer_stand", "used by": [] },
+    "hammer_jump":   { "parent": "hammer_stand", "used by": [] },
+    "hammer_run":    { "parent": "super_run", "used by": [] },
+    "hammer_run1":   { "parent": "hammer_run", "used by": [] },
+    "hammer_launch": { "parent": "hammer_run", "used by": [] },
+    "hammer_fly":    { "parent": "hammer_run", "used by": [] },
+    "hammer_skid":   { "parent": "hammer_stand", "used by": [] },
+    "hammer_pipe":   { "parent": "hammer_stand", "used by": [] },
+    "hammer_hold":   { "parent": "hammer_stand", "used by": [] },
+    "hammer_hold1":  { "parent": "hammer_hold", "used by": [] },
+    "hammer_hold2":  { "parent": "hammer_hold", "used by": [] },
+    "hammer_kick":   { "parent": "hammer_run", "used by": [] },
+    "hammer_slide":  { "parent": "hammer_stand", "used by": [] },
+    "hammer_swim":   { "parent": "hammer_run", "used by": [] },
+    "hammer_swim1":  { "parent": "hammer_swim", "used by": [] },
+    "hammer_swim2":  { "parent": "hammer_swim", "used by": [] },
+    "hammer_swim3":  { "parent": "hammer_swim", "used by": [] },
+    "hammer_climb":  { "parent": "hammer_stand", "used by": [] },
+    "hammer_flip":   { "parent": "hammer_run", "used by": [] },
+    "hammer_flip1":  { "parent": "hammer_flip", "used by": [] },
+    "hammer_flip2":  { "parent": "hammer_flip", "used by": [] },
+    "hammer_flip3":  { "parent": "hammer_flip", "used by": [] },
+    "hammer_flip4":  { "parent": "hammer_flip", "used by": [] },
+    "hammer_flip5":  { "parent": "hammer_flip", "used by": [] },
+    "hammer_flip6":  { "parent": "hammer_flip", "used by": [] },
+    "hammer_flip7":  { "parent": "hammer_flip", "used by": [] },
+    "hammer_hammer": { "parent": "hammer_stand", "used by": [] },
+    "hammer_hammer1": { "parent": "hammer_hammer", "used by": [] },
+    "hammer_item":   {
+      "dimensions": [0, 0, 8, 32],
+      "import palette interval": [0,0],
+      "used by": []
+    },
+    "hammer_item1":  { "parent": "hammer_item", "used by": [] },
+    "hammer_item2":  { "parent": "hammer_item", "used by": [] },
+    "hammer_item3":  { "parent": "hammer_item", "used by": [] },
+
     "null_block1":  {
       "dimensions": [324, 0, 474, 16],
       "description": "End of row 1",
@@ -304,8 +364,8 @@
       "used by": []
     },
     "null_block8": {
-      "dimensions": [0,0,1,0],
-      "description": "End of bottom row",
+      "dimensions": [0,0,203,0],
+      "description": "End of row 10",
       "import palette interval": [0,0],
       "used by": []
     }

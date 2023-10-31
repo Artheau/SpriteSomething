@@ -1539,5 +1539,353 @@
         { "image": "tanooki_flip2", "pos": [0,0] }
       ] }
     ]
+  },
+
+  "Stand (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "hammer_stand", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "hammer_stand", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Walk (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_walk", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_walk", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Crouch (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "hammer_crouch", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "hammer_crouch", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Jump (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_jump", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_jump", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Run (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "hammer_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "hammer_run1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "hammer_run", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "hammer_run1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Fly (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_launch", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_fly", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_launch", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_fly", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Skid (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "hammer_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "hammer_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 5, "tiles": [
+        { "image": "hammer_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 5, "tiles": [
+        { "image": "hammer_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 5, "tiles": [
+          { "image": "hammer_run", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 6, "frames": 5, "tiles": [
+        { "image": "hammer_run1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 7, "frames": 20, "tiles": [
+        { "image": "hammer_skid", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 5, "tiles": [
+          { "image": "hammer_run", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 5, "tiles": [
+        { "image": "hammer_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 5, "tiles": [
+        { "image": "hammer_run", "pos": [0, 0] }
+      ] },
+      { "pose": 4, "frames": 5, "tiles": [
+        { "image": "hammer_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 5, "frames": 5, "tiles": [
+        { "image": "hammer_run", "pos": [0, 0] }
+      ] },
+      { "pose": 6, "frames": 5, "tiles": [
+        { "image": "hammer_run1", "pos": [0, 0] }
+      ] },
+      { "pose": 7, "frames": 20, "tiles": [
+        { "image": "hammer_skid", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Pipe (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "hammer_pipe", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Hold (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_hold1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_hold1", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Kick (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_hold", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_kick", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_hold", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_kick", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Slide (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10000, "tiles": [
+          { "image": "hammer_slide", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10000, "tiles": [
+        { "image": "hammer_slide", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Tread Water (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_swim", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_swim1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "hammer_swim2", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_swim1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "hammer_swim2", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Swim (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_swim", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_swim1", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "hammer_swim2", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 10, "tiles": [
+        { "image": "hammer_swim3", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_swim", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_swim1", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "hammer_swim2", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+        { "image": "hammer_swim3", "pos": [0, 0] }
+      ] }
+    ]
+  },
+  "Climb (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_climb", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+        { "image": "hammer_climb", "pos": [0, 0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Starman Flip (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "hammer_stand", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 3, "tiles": [
+        { "image": "hammer_flip2", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 3, "tiles": [
+        { "image": "hammer_flip1", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 4, "frames": 3, "tiles": [
+        { "image": "hammer_flip", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 5, "frames": 3, "tiles": [
+        { "image": "hammer_flip7", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 6, "frames": 3, "tiles": [
+        { "image": "hammer_flip6", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 7, "frames": 3, "tiles": [
+        { "image": "hammer_flip5", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 8, "frames": 3, "tiles": [
+        { "image": "hammer_flip4", "pos": [0,0], "flip": "h" }
+      ] },
+      { "pose": 9, "frames": 3, "tiles": [
+        { "image": "hammer_flip3", "pos": [0,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "hammer_stand", "pos": [0,0] }
+      ] },
+      { "pose": 2, "frames": 3, "tiles": [
+        { "image": "hammer_flip2", "pos": [0,0] }
+      ] },
+      { "pose": 3, "frames": 3, "tiles": [
+        { "image": "hammer_flip1", "pos": [0,0] }
+      ] },
+      { "pose": 4, "frames": 3, "tiles": [
+        { "image": "hammer_flip", "pos": [0,0] }
+      ] },
+      { "pose": 5, "frames": 3, "tiles": [
+        { "image": "hammer_flip7", "pos": [0,0] }
+      ] },
+      { "pose": 6, "frames": 3, "tiles": [
+        { "image": "hammer_flip6", "pos": [0,0] }
+      ] },
+      { "pose": 7, "frames": 3, "tiles": [
+        { "image": "hammer_flip5", "pos": [0,0] }
+      ] },
+      { "pose": 8, "frames": 3, "tiles": [
+        { "image": "hammer_flip4", "pos": [0,0] }
+      ] },
+      { "pose": 9, "frames": 3, "tiles": [
+        { "image": "hammer_flip3", "pos": [0,0] }
+      ] }
+    ]
+  },
+  "Hammer (Hammer)": {
+    "right": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_stand", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+          { "image": "hammer_hammer", "pos": [0, 0], "flip": "h" }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+          { "image": "hammer_hammer1", "pos": [0, 0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "pose": 1, "frames": 10, "tiles": [
+          { "image": "hammer_stand", "pos": [0, 0] }
+      ] },
+      { "pose": 2, "frames": 10, "tiles": [
+          { "image": "hammer_hammer", "pos": [0, 0] }
+      ] },
+      { "pose": 3, "frames": 10, "tiles": [
+          { "image": "hammer_hammer1", "pos": [0, 0] }
+      ] }
+    ]
   }
 }
