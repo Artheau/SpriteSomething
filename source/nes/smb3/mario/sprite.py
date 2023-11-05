@@ -13,30 +13,31 @@ class Sprite(SpriteParent):
         self.mario_globals = {}
         self.mario_globals["mario_palette"] = [
             # (  0,  0,  0),
-            (  0,  0,  0),
-            (254,206,199),
-            (178, 50, 38),  # changes
+            (  0,  0,  0),  # outline
+            (178, 50, 38),  # shirt color
+            (254,206,199),  # skin color
         ]
         self.mario_globals["luigi_palette"] = [
             # (  0,  0,  0),
-            (  0,  0,  0),
-            (254,206,199),
-            ( 98,226, 64),  # changes
+            (  0,  0,  0),  # outline
+            ( 98,226, 64),  # shirt color
+            (254,206,199),  # skin color
         ]
         self.mario_globals["fire_palette"] = [
             # (  0,  0,  0),
-            (178, 50, 38),
-            (254,206,199),
-            (232,157, 52),  # changes
+            (178, 50, 38),  # outline
+            ( 35, 77, 90),  # shirt color
+            (254,206,199),  # skin color
         ]
         self.mario_globals["global_palette"] = [
             # (  0,  0,  0),
             (  0,  0,  0),
-            ( 98,226, 64),
-            (254,206,199),  # frog
-            (152, 78, 15),  # tanooki
-            (255,255,255),  # hammer
-            (232,157, 52),  # hammer
+            ( 98,226, 64),  # frog
+            (152, 78, 15),  # tanooki costume
+            ( 99, 99, 99),  # tanooki statue "dark"
+            (173,173,173),  # tanooki statue "skin/light"
+            (255,255,255),  # hammer "light"
+            (232,157, 52),  # hammer "skin"
         ]
 
     def inject_into_ROM(self, spiffy_dict, rom: RomHandlerParent):
