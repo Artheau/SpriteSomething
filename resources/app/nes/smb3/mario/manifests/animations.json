@@ -2003,5 +2003,19 @@
         { "image": "map_l", "pos": [0,0] }
       ] }
     ]
+  },
+  "Crouch (Tail)": {
+    "right": [
+      {
+        "pose": 1,
+        "frames": 10000,
+        "tiles": [
+          {
+            "image": "tail_crouch",
+            "pos": [0, 0]
+          }
+        ]
+      }
+    ]
   }
 }
