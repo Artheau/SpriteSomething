@@ -1,0 +1,42 @@
+{
+  "settings": {
+    "tile_size": 8,
+    "address_offset": 262160,
+    "pattern": "x16"
+  },
+  "palette": {
+    "mario": 66873
+  },
+  "poses": {
+    "tail_stand": {
+      "palette": 0,
+      "tiles": [
+        {
+          "position": [0, 0],
+          "offset": 44,
+          "length": 4
+        },
+        {
+          "position": [0, 2],
+          "offset": 24,
+          "length": 6
+        }
+      ]
+    },
+    "tail_crouch": {
+      "palette": 0,
+      "tiles": [
+        {
+          "position": [0, 0],
+          "offset": 48,
+          "length": 4
+        },
+        {
+          "position": [0, 2],
+          "offset": 52,
+          "length": 6
+        }
+      ]
+    }
+  }
+}

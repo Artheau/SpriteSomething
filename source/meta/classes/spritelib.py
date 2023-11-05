@@ -11,17 +11,15 @@ try:
 except ModuleNotFoundError as e:
   print(e)
 
-import itertools
 import importlib
-import io
 import json
 import os
-import random
 import tempfile
-from functools import partial
 from shutil import make_archive, move
+
 from source.meta.classes import layoutlib
 from source.meta.common import common
+
 
 # TODO: make this an actual abstract class by importing 'abc'
 #  and doing the things
@@ -122,7 +120,7 @@ class SpriteParent():
             self.import_from_ZSPR()
         elif file_extension.lower() in [
             '.sfc', '.smc',  # SNES RomHandler
-            #        '.nes' # NES RomHandler
+            '.nes'           # NES RomHandler
         ]:
             # dynamic import
             rom_path, _ = os.path.split(self.resource_subpath)
