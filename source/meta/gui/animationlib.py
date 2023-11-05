@@ -188,14 +188,29 @@ class AnimationEngineParent():
                     "Tanooki",
                     "Hammer",
                     "Cloud",
-                    "Marker"
+                    "Clear"
                 ]
                 for check in mario_checks:
                     if not check_passed and check in self.current_animation:
                         check_passed = True
                 if check_passed:
-                    self.spiffy_dict["brother_var"].set("global")
-                elif self.spiffy_dict["brother_var"].get() == "global":
+                    spiffy = "global"
+                    if "Frog" in self.current_animation:
+                        spiffy = "luigi"
+                    elif "Tanooki" in self.current_animation:
+                        spiffy = "tanooki"
+                        if "Statue" in self.current_animation:
+                            spiffy += "_statue"
+                    elif "Hammer" in self.current_animation:
+                        spiffy = "hammer"
+                    self.spiffy_dict["brother_var"].set(spiffy)
+                elif self.spiffy_dict["brother_var"].get() in [
+                    "frog",
+                    "tanooki",
+                    "tanookie_statue",
+                    "hammer",
+                    "global"
+                ]:
                     self.spiffy_dict["brother_var"].set("mario")
             palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 

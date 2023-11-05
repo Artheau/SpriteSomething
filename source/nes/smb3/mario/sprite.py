@@ -31,18 +31,32 @@ class Sprite(SpriteParent):
         self.mario_globals["fire_palette"] = [
             # (  0,  0,  0),
             (178, 50, 38),  # outline
-            ( 35, 77, 90),  # shirt color
+            (232,157, 52),  # shirt color
             (254,206,199),  # skin color
+        ]
+        self.mario_globals["tanooki_palette"] = [
+            # (  0,  0,  0),
+            (  0,  0,  0),  # outline
+            (152, 78, 15),  # tanooki costume
+            (254,206,199),  # skin color
+            ( 99, 99, 99),  # tanooki statue "dark"
+        ]
+        self.mario_globals["tanooki_statue_palette"] = [
+            # (  0,  0,  0),
+            (  0,  0,  0),  # outline
+            ( 99, 99, 99),  # tanooki statue "dark"
+            (173,173,173),  # tanooki statue "light"
+        ]
+        self.mario_globals["hammer_palette"] = [
+            # (  0,  0,  0),
+            (  0,  0,  0),  # outline
+            (255,255,255),  # hammer "light"
+            (232,157, 52),  # hammer "skin"
         ]
         self.mario_globals["global_palette"] = [
             # (  0,  0,  0),
-            (  0,  0,  0),
-            ( 98,226, 64),  # frog
-            (152, 78, 15),  # tanooki costume
-            ( 99, 99, 99),  # tanooki statue "dark"
-            (173,173,173),  # tanooki statue "skin/light"
-            (255,255,255),  # hammer "light"
-            (232,157, 52),  # hammer "skin"
+            (  0,  0,  0),  # outline
+            (255,255,255),  # body color
         ]
 
     def import_from_ROM(self, rom: RomHandlerParent):
@@ -110,7 +124,7 @@ class Sprite(SpriteParent):
     def get_palette(self, palettes, default_range=[], frame_number=0):
         palette_indices = None
         this_palette = []
-        range_end = 4
+        range_end = 8
         for i in range(1,range_end):
             this_palette.append((0,0,0))
 
@@ -118,9 +132,16 @@ class Sprite(SpriteParent):
             "mario",
             "luigi",
             "fire",
+            "frog",
+            "tanooki",
+            "tanooki_statue",
+            "hammer",
             "global"
         ]:
-            if f"{scheme}_brother" in palettes:
+            check = f"{scheme}_brother"
+            if check in palettes:
+                if scheme == "frog":
+                    scheme = "luigi"
                 this_palette = self.mario_globals[f"{scheme}_palette"]
 
         if len(this_palette) < 1:

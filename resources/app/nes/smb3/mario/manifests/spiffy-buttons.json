@@ -30,6 +30,18 @@
         {
           "fish-subkey": "fire",
           "img": "fireflower.png"
+        },
+        {
+          "fish-subkey": "tanooki",
+          "img": "tanooki.png"
+        },
+        {
+          "fish-subkey": "tanooki_statue",
+          "img": "tanooki_statue.png"
+        },
+        {
+          "fish-subkey": "hammer",
+          "img": "hammer.png"
         }
       ]
     }

@@ -2004,18 +2004,11 @@
       ] }
     ]
   },
-  "Crouch (Tail)": {
+  "Palette Block": {
     "right": [
-      {
-        "pose": 1,
-        "frames": 10000,
-        "tiles": [
-          {
-            "image": "tail_crouch",
-            "pos": [0, 0]
-          }
-        ]
-      }
+      { "pose": 1, "frames": 10, "tiles": [
+        { "image": "palette_block", "pos": [0,0] }
+      ] }
     ]
   }
 }

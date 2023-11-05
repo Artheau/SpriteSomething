@@ -17,6 +17,9 @@
   "Suit": {
     "mario": "Mario",
     "luigi": "Luigi",
-    "fire": "Fire Flower"
+    "fire": "Fire Flower",
+    "tanooki": "Tanooki",
+    "tanooki_statue": "Tanooki Statue",
+    "hammer": "Hammer"
   }
 }
