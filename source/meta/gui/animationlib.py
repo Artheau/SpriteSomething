@@ -108,6 +108,8 @@ class AnimationEngineParent():
         return tile_details_panel
 
     def set_animation(self, animation_name):
+        if animation_name not in self.animations:
+            animation_name = list(self.animations.keys())[0]
         self.current_animation = animation_name
         if self.current_animation in self.animations:
             anims = self.animations

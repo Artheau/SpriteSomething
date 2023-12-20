@@ -22,11 +22,11 @@ class Layout():
             except JSONDecodeError as e:
                 raise ValueError("Layout manifest malformed: " + filename)
         self.reverse_lookup = {}
-        # print("Finding Layouts!")
+        print(f"Finding Layouts! [{sprite_name}]")
         if "layouts" in self.data:
             for layout in self.data["layouts"]:
                 if "names" in layout and sprite_name in layout["names"]:
-                    # print("Found " + sprite_name + "!")
+                    print(f"Found {sprite_name}!")
                     self.data = layout
         for image_name,image_info in self.data["images"].items():
             for image_ref in image_info["used by"]:
@@ -34,6 +34,7 @@ class Layout():
                     self.reverse_lookup[tuple(image_ref)].append(image_name)
                 else:
                     self.reverse_lookup[tuple(image_ref)] = [image_name]
+        self.filename = filename
 
     def get_image_name(self, animation, pose, force=None):
         if type(animation) is int:
@@ -254,10 +255,25 @@ class Layout():
         all_images["transparent"] = Image.new("RGBA",(0,0),0)
 
         #FIXME: Extrapolate layoutlib.py to <console>/<game>/<sprite>/layout.py
-        if "meta_block" in all_images:
-            meta_block = all_images["meta_block"].transpose(Image.FLIP_TOP_BOTTOM)
-            palette_block = meta_block.crop(self.coord_calc((0,0),(8,1)))
-            all_images["palette_block"] = palette_block
+        tmp = {}
+        for block_name in [
+            "meta_block",
+            "meta_block1",
+            "meta_block2"
+        ]:
+            if block_name in all_images:
+                palette_block = None
+                if f"ffmq{os.sep}benjamin" in self.filename:
+                    meta_block = all_images[block_name].transpose(Image.FLIP_TOP_BOTTOM)
+                    palette_block = meta_block.crop(self.coord_calc((0,0),(8,1)))
+                if f"ffmq{os.sep}darkking" in self.filename:
+                    meta_block = all_images[block_name].transpose(Image.FLIP_LEFT_RIGHT)
+                    meta_block = meta_block.crop(self.coord_calc((0,0),(8,1)))
+                    palette_block = meta_block.transpose(Image.FLIP_LEFT_RIGHT)
+                    # tmp[block_name] = palette_block
+                    # palette_block.show()
+                if palette_block:
+                    all_images["palette_block"] = palette_block
 
         master_palettes = list(
             all_images["palette_block"].convert("RGB").getdata()) \
@@ -265,7 +281,13 @@ class Layout():
 
         if len(master_palettes):
             for image_name, this_image in all_images.items():
-                if not image_name in ["transparent","palette_block"]:
+                if not image_name in [
+                    "transparent",
+                    "meta_block",
+                    "meta_block1",
+                    "meta_block2",
+                    "palette_block"
+                ]:
                     import_palette = self.get_property("import palette interval", image_name)
                     palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]     #flatten the RGB values
                     palette = palette + palette[:3]*(256-(len(palette)//3))

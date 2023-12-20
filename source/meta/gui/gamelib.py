@@ -93,6 +93,7 @@ def autodetect_png(sprite_filename):
         return game, sprite, animation_assist
 
 def autodetect(sprite_filename):
+    selected_sheet = ""
     print("---")
     print("Autodetecting!")
     #FIXME: Supported filetypes
@@ -152,7 +153,7 @@ def autodetect(sprite_filename):
         #the following line prevents a "cannot identify image" error from PIL
         ImageFile.LOAD_TRUNCATED_IMAGES = True
         #I'm not sure what to do here yet in a completely scalable way, since PNG files have no applicable metadata
-        print(f"Detected {file_extension.upper()[1:]}!")
+        print(f"Detected: {file_extension.upper()[1:]}!")
         with Image.open(sprite_filename) as loaded_image:
             game_found = False
             sprite_found = False
@@ -198,26 +199,28 @@ def autodetect(sprite_filename):
             raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its size: {loaded_image.size}")
     # FIXME: For now, ZSPRs are Z3Link sprites and we're assuming SNES
     elif file_extension.lower() == ".zspr":
-        # print("Detected: ZSPR file")
+        print("Detected: ZSPR file")
         with open(sprite_filename,"rb") as file:
             zspr_data = bytearray(file.read())
         game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
         sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename,"")
-        print("Detected ZSPR!")
     elif file_extension.lower() == ".zip":
+        print("Detected: ZIP file!")
         thisData = {
             "likely": {
                 "pc": {},
                 "nes": {},
-                "snes": { "mother2": False }
+                "snes": { "ffmq": False, "mother2": False }
             },
             "lists": {
                 "snes": {
-                    "mother2": [ 1,5,6,7,8,14,15,16,17,21,27,335,362,378,437,457 ]
+                    "ffmq": [ "darkking1.bmp", "darkking2.bmp" ],
+                    "mother2": [1,5,6,7,8,14,15,16,17,21,27,335,362,378,437,457 ]
                 }
             },
             "filenames": {
                 "snes": {
+                    "ffmq": [],
                     "mother2": []
                 }
             }
@@ -226,20 +229,21 @@ def autodetect(sprite_filename):
             thisData["lists"]["snes"]["mother2"][i] = (f'{thisData["lists"]["snes"]["mother2"][i]:03}') + ".png"
         scratch = os.path.join(".","resources","tmp","archive",file_slug)
         if not os.path.isdir(scratch):
-                os.makedirs(scratch)
+            os.makedirs(scratch)
         with zipfile.ZipFile(sprite_filename,'r') as thisZip:
-            for file in thisZip.namelist():
-                if os.path.basename(file) in thisData["lists"]["snes"]["mother2"]:
-                    thisData["likely"]["snes"]["mother2"] = True
-                    thisData["filenames"]["snes"]["mother2"].append(file)
-            if thisData["likely"]["snes"]["mother2"]:
-                selected_sheet = gui_common.create_sheet_chooser("snes","mother2",thisData["filenames"]["snes"]["mother2"])
-                game = get_game_class_of_type("snes","mother2")
-                #And by default, we will grab the player sprite from this game
-                sheet_slug,sheet_extension = os.path.splitext(os.path.basename(selected_sheet))
-                thisZip.extract(selected_sheet,scratch)
-                sprite, animation_assist = game.make_player_sprite(os.path.join(scratch,selected_sheet),sheet_slug)
-        print("Detected ZIP!")
+            for gameID in ["ffmq", "mother2"]:
+                for file in thisZip.namelist():
+                    if os.path.basename(file) in thisData["lists"]["snes"][gameID]:
+                        thisData["likely"]["snes"][gameID] = True
+                        thisData["filenames"]["snes"][gameID].append(file)
+                if thisData["likely"]["snes"][gameID]:
+                    selected_sheet = gui_common.create_sheet_chooser("snes",gameID,thisData["filenames"]["snes"][gameID])
+                    game = get_game_class_of_type("snes",gameID)
+                    #And by default, we will grab the player sprite from this game
+                    sheet_slug,sheet_extension = os.path.splitext(os.path.basename(selected_sheet))
+                    thisZip.extract(selected_sheet,scratch)
+                    print(f"Detected: {game.internal_name}/{selected_sheet}!")
+                    game, sprite, animation_assist = autodetect(os.path.join(scratch,selected_sheet))
     elif file_extension.lower() in filetypes:
         raise AssertionError(f"{file_extension.upper()[1:]} not yet available by GUI!")
 
@@ -252,6 +256,8 @@ def autodetect(sprite_filename):
     else:
         # FIXME: English
         raise AssertionError(f"Cannot recognize the type of file {sprite_filename} from its filename")
+
+    print(f"Detected: {game.internal_name}/{sprite.internal_name}/{selected_sheet}!")
 
     return game, sprite, animation_assist
 

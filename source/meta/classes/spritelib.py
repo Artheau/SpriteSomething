@@ -92,7 +92,7 @@ class SpriteParent():
 
         #if the child class didn't tell us what to do, just go back to whatever palette it was on when it was imported
         palette = []
-        if self.master_palette:
+        if self.master_palette and default_range:
             palette = self.master_palette[default_range[0]:default_range[1]]
 
         return palette
