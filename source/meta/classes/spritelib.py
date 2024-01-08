@@ -16,6 +16,7 @@ import json
 import os
 import tempfile
 
+from functools import partial                   #for passing parameters to user-triggered function calls
 from json import JSONDecodeError
 
 from source.meta.classes import layoutlib
@@ -42,19 +43,39 @@ class SpriteParent():
         }
         self.filename = filename
         self.input_dims = []
+        self.inputs = []
+        self.outputs = []
         self.overview_scale_factor = 2
         self.overhead = True
         self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
-        if "input" in manifest_dict and \
-            "png" in manifest_dict["input"]:
-            pngs = manifest_dict["input"]["png"]
-            if not isinstance(pngs, list):
-                pngs = [pngs]
-            for png in pngs:
-                if ((not sprite_name == "" and "name" in png and png["name"] == sprite_name) or sprite_name == ""):
-                    self.input_dims = png["dims"]
-                    if "overview-scale-factor" in png:
-                        self.overview_scale_factor = png["overview-scale-factor"]
+        if "input" in manifest_dict:
+            self.inputs = [f".{x}" for x in manifest_dict["input"].keys()]
+            if "png" in manifest_dict["input"]:
+                self.outputs = [ ".png" ]
+                pngs = manifest_dict["input"]["png"]
+                if not isinstance(pngs, list):
+                    pngs = [pngs]
+                for png in pngs:
+                    if ((not sprite_name == "" and "name" in png and png["name"] == sprite_name) or sprite_name == ""):
+                        self.input_dims = png["dims"]
+                        if "overview-scale-factor" in png:
+                            self.overview_scale_factor = png["overview-scale-factor"]
+        if "output" in manifest_dict:
+            self.outputs = [*self.outputs, *manifest_dict["output"]]
+
+        console_path = os.path.join("resources","app",self.resource_subpath,"..","..")
+        if os.path.isfile(os.path.join(console_path,"manifests","manifest.json")):
+            with open(os.path.join(console_path,"manifests","manifest.json")) as f:
+                console_manifest = {}
+                try:
+                    console_manifest = json.load(f)
+                except JSONDecodeError as e:
+                    raise ValueError("")
+                if "input" in console_manifest:
+                    self.inputs = [*self.inputs, *console_manifest["input"]]
+                if "output" in console_manifest:
+                    self.outputs = [*self.outputs, *console_manifest["output"]]
+
         self.plugins = None
         self.has_plugins = False
         self.load_layout(sprite_name)
@@ -162,20 +183,6 @@ class SpriteParent():
 
     def import_from_filename(self):
         _, file_extension = os.path.splitext(self.filename)
-        #FIXME: Supported filetypes
-        filetypes = [
-            ".png",     # Main input
-            ".4bpp",    # Raw
-            ".zspr",    # Z3Link
-            ".sfc",     # SNES
-            ".smc",     # SNES
-            ".nes",     # NES
-            ".bmp",     # FFMQBen
-            ".zip",     # Mo3Player
-            ".aspr",    # ASPR (WIP)
-            ".zhx",     # ZHX (WIP)
-            ".rdc"      # Z3Link/M3Samus
-        ]
         if file_extension.lower() in ['.png', '.bmp']:
             self.import_from_PNG()
         elif file_extension.lower() == '.zspr':
@@ -821,27 +828,12 @@ class SpriteParent():
 
     def save_as(self, filename, game_name):
         _, file_extension = os.path.splitext(filename)
-        #FIXME: Supported filetypes
-        filetypes = [
-            ".png",     # Main input
-            ".4bpp",    # Raw
-            ".zspr",    # Z3Link
-            ".sfc",     # SNES
-            ".smc",     # SNES
-            ".nes",     # NES
-            ".bmp",     # FFMQBen
-            ".zip",     # Mo3Player
-            ".aspr",    # ASPR (WIP)
-            ".zhx",     # ZHX (WIP)
-            ".rdc"      # Z3Link/M3Samus
-        ]
+        save_as_funcname = f"save_as_{file_extension.upper()[1:]}"
         if file_extension.lower() in [".png", ".bmp"]:
             return self.save_as_PNG(filename)
-        elif file_extension.lower() == ".zspr":
-            return self.save_as_ZSPR(filename)
-        elif file_extension.lower() == ".rdc":
-            return self.save_as_RDC(filename)
-        elif file_extension.lower() in filetypes:
+        elif hasattr(self, save_as_funcname):
+            return partial(getattr(self, save_as_funcname), filename)
+        elif file_extension.lower() in self.outputs:
             print(f"{file_extension.upper()[1:]} not yet available by GUI for '{game_name}' / '{self.classic_name}' Sprites!")
             return
         else:

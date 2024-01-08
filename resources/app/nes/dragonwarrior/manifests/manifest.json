@@ -10,7 +10,8 @@
         "dims": [176, 130],
         "overview-scale-factor": 1
       }
-    }
+    },
+    "output": []
   },
   "2": {
     "type": "Player Character Sprite",
@@ -22,6 +23,7 @@
         "dims": [176, 176],
         "overview-scale-factor": 1
       }
-    }
+    },
+    "output": []
   }
 }

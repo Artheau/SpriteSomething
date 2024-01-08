@@ -328,6 +328,76 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.menu = tk.Menu(self.master, name="menu_bar")
         self.master.configure(menu=self.menu)
 
+        # try to get bundled sprites and add menu options to load them instead of requiring the user to hunt for them
+        bundled_games = {}
+        not_consoles = []
+        not_games = []
+        self.openable_filetypes = [ ".png" ]
+        with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
+            not_consoles = []
+            try:
+                not_consoles = json.load(f)
+            except JSONDecodeError as e:
+                raise ValueError("Not Consoles manifest malformed!")
+        with open(os.path.join("resources","app","meta","manifests","not_games.json")) as f:
+            not_games = []
+            try:
+                not_games = json.load(f)
+            except JSONDecodeError as e:
+                raise ValueError("Not Games manifest malformed!")
+        root = os.path.join("resources","app")
+        for console in os.listdir(root):
+            if not console in not_consoles:
+                if os.path.isdir(os.path.join(root,console)):
+                    if os.path.isfile(os.path.join(root,console,"manifests","manifest.json")):
+                        with open(os.path.join(root,console,"manifests","manifest.json")) as console_manifest:
+                            console_data = json.load(console_manifest)
+                            if "input" in console_data:
+                                self.openable_filetypes = set((*self.openable_filetypes, *console_data["input"]))
+                    if not console in bundled_games:
+                        bundled_games[console] = {}
+                    for gamedir in os.listdir(os.path.join(root,console)):
+                        if not gamedir in not_games and os.path.isdir(os.path.join(root,console,gamedir)):
+                            if not os.path.isfile(os.path.join(root,console,gamedir,"lang","en.json")):
+                                raise AssertionError(f"Lang file not found: {console}/{gamedir}/EN")
+                            with open(os.path.join(root,console,gamedir,"lang","en.json")) as en_lang:
+                                en = {}
+                                try:
+                                    en = json.load(en_lang)
+                                except JSONDecodeError as e:
+                                    raise ValueError("Lang file malformed: " + gamedir + "/" + "EN")
+                                if "game" in en:
+                                    if "name" in en["game"]:
+                                        bundled_games[console][gamedir] = {}
+                                        bundled_games[console][gamedir]["game"] = {}
+                                        bundled_games[console][gamedir]["game"]["internal name"] = gamedir
+                                        bundled_games[console][gamedir]["game"]["name"] = en["game"]["name"]
+                                        bundled_games[console][gamedir]["sprites"] = []
+                            if not os.path.isfile(os.path.join(root,console,gamedir,"manifests","manifest.json")):
+                                raise AssertionError(f"Game manifest file not found: {console}/{gamedir}")
+                            with open(os.path.join(root,console,gamedir,"manifests","manifest.json")) as game_manifest:
+                                sprites = {}
+                                try:
+                                    sprites = json.load(game_manifest)
+                                except JSONDecodeError as e:
+                                    raise ValueError("Game Manifest malformed: " + gamedir)
+                                for spriteID,sprite in sprites.items():
+                                    if spriteID != "$schema":
+                                        name = sprite["name"]
+                                        folder = sprite["folder name"]
+                                        path = os.path.join(root,console,gamedir,folder,"sheets")
+                                        filename = ""
+                                        filetypes = [ ".png" ]
+                                        if "input" in sprite:
+                                            filetypes = set((*filetypes, *[f".{x}" for x in sprite["input"].keys()]))
+                                            self.openable_filetypes = set((*self.openable_filetypes, *filetypes))
+                                        for filetype in filetypes:
+                                            filepath = os.path.join(path,folder+filetype)
+                                            if filename == "" and os.path.isfile(filepath):
+                                                filename = filepath
+                                        disabled = filename == ""
+                                        bundled_games[console][gamedir]["sprites"].append((name,partial(self.load_sprite,filename),disabled))
+
         menu_options = []
 
         #create the file menu
@@ -425,70 +495,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         )
         menu_options.append(export_menu)
 
-        # try to get bundled sprites and add menu options to load them instead of requiring the user to hunt for them
-        bundled_games = {}
-        not_consoles = []
-        with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
-            not_consoles = []
-            try:
-                not_consoles = json.load(f)
-            except JSONDecodeError as e:
-                raise ValueError("Not Consoles manifest malformed!")
-        root = os.path.join("resources","app")
-        for console in os.listdir(root):
-            if not console in not_consoles:
-                if os.path.isdir(os.path.join(root,console)):
-                    if not console in bundled_games:
-                        bundled_games[console] = {}
-                    for gamedir in os.listdir(os.path.join(root,console)):
-                        if os.path.isdir(os.path.join(root,console,gamedir)):
-                            if not os.path.isfile(os.path.join(root,console,gamedir,"lang","en.json")):
-                                raise AssertionError(f"Lang file not found: {console}/{gamedir}/EN")
-                            with open(os.path.join(root,console,gamedir,"lang","en.json")) as en_lang:
-                                en = {}
-                                try:
-                                    en = json.load(en_lang)
-                                except JSONDecodeError as e:
-                                    raise ValueError("Lang file malformed: " + gamedir + "/" + "EN")
-                                if "game" in en:
-                                    if "name" in en["game"]:
-                                        bundled_games[console][gamedir] = {}
-                                        bundled_games[console][gamedir]["game"] = {}
-                                        bundled_games[console][gamedir]["game"]["internal name"] = gamedir
-                                        bundled_games[console][gamedir]["game"]["name"] = en["game"]["name"]
-                                        bundled_games[console][gamedir]["sprites"] = []
-                            if not os.path.isfile(os.path.join(root,console,gamedir,"manifests","manifest.json")):
-                                raise AssertionError(f"Game manifest file not found: {console}/{gamedir}")
-                            with open(os.path.join(root,console,gamedir,"manifests","manifest.json")) as game_manifest:
-                                sprites = {}
-                                try:
-                                    sprites = json.load(game_manifest)
-                                except JSONDecodeError as e:
-                                    raise ValueError("Game Manifest malformed: " + gamedir)
-                                for spriteID,sprite in sprites.items():
-                                    if spriteID != "$schema":
-                                        name = sprite["name"]
-                                        folder = sprite["folder name"]
-                                        path = os.path.join(root,console,gamedir,folder,"sheets")
-                                        filename = ""
-                                        for filetype in [
-                                            ".png",     # Main input
-                                            ".4bpp",    # Raw
-                                            ".zspr",    # Z3Link
-                                            ".sfc",     # SNES
-                                            ".smc",     # SNES
-                                            ".nes",     # NES
-                                            ".bmp",     # FFMQBen
-                                            ".zip",     # Mo3Player
-                                            ".aspr",    # ASPR (WIP)
-                                            ".zhx",     # ZHX (WIP)
-                                            ".rdc"      # Z3Link/M3Samus
-                                        ]:
-                                            filepath = os.path.join(path,folder+filetype)
-                                            if filename == "" and os.path.isfile(filepath):
-                                                filename = filepath
-                                        disabled = filename == ""
-                                        bundled_games[console][gamedir]["sprites"].append((name,partial(self.load_sprite,filename),disabled))
+        #create the bundle menu
         bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")
         for console in bundled_games:
             bundled_console = bundled_games[console]
@@ -1399,21 +1406,9 @@ class SpriteSomethingMainFrame(tk.Frame):
         #save current animation/bg/direction settings
         self.save_ani_settings()
 
-        filetypes = [
-            #FIXME: Supported filetypes
-            ".png",     # Main input
-            ".4bpp",    # Raw
-            ".zspr",    # Z3Link
-            ".sfc",     # SNES
-            ".smc",     # SNES
-            ".nes",     # NES
-            ".bmp",     # FFMQBen
-            ".zip",     # Mo3Player
-            ".aspr",    # ASPR (WIP)
-            ".zhx",     # ZHX (WIP)
-            ".rdc"      # Z3Link/M3Samus
-        ]
+        filetypes = set(([*self.openable_filetypes]))
         filetypes = " ".join(filetypes)
+
         filename = filedialog.askopenfilename(
             initialdir=self.working_dirs["file.open"],
             title=self.fish.translate("meta","dialogue","file.open.title"),
@@ -1443,20 +1438,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         # switch this around so that ZSPR is the default
         '''
         if not self.sprite.view_only:
-            filetypes = [
-                #FIXME: Supported filetypes
-                ".png",     # Main input
-                ".4bpp",    # Raw
-                ".zspr",    # Z3Link
-                # ".sfc",     # SNES
-                # ".smc",     # SNES
-                # ".nes",     # NES
-                ".bmp",     # FFMQBen
-                # ".zip",     # Mo3Player
-                # ".aspr",    # ASPR (WIP)
-                ".zhx",     # ZHX (WIP)
-                ".rdc"      # Z3Link/M3Samus
-            ]
+            filetypes = sorted(list(set(([".png", *self.game.outputs, *self.sprite.outputs]))))
             savetypes = []
             for filetype in filetypes:
                 savetypes.append(
@@ -1498,10 +1480,16 @@ class SpriteSomethingMainFrame(tk.Frame):
                     filext = os.path.splitext(filename)[1][1:].upper()
                     messagebox.showerror(
                         "Not Yet Implemented",
-                        f"{filext} format not yet available for '{self.game.name}'" +
-                        f" / '{self.sprite.classic_name}' Sprites."
+                        f"{filext} format not yet available for {self.game.name}" +
+                        f"/{self.sprite.classic_name} Sprites."
                     )
                 return save_success_bool
+        else:
+            messagebox.showerror(
+                "Not Yet Implemented",
+                f"View-Only mode set for {self.game.name}" +
+                f"/{self.sprite.classic_name} Sprites."
+            )
         #user cancelled out of the prompt,
         # in which case report that you did not save
         # (i.e. for exiting the program)
@@ -1516,10 +1504,23 @@ class SpriteSomethingMainFrame(tk.Frame):
         if not self.sprite.view_only:
             dest_filename = None
             default_ext = ""
-            if self.game.console_name == "nes":
-                default_ext = ".nes"
-            elif self.game.console_name == "snes":
-                default_ext = ".sfc"
+            all_exts = [ "*.moo" ]
+            if os.path.isfile(os.path.join("resources","app",self.game.console_name,"manifests","manifest.json")):
+                with open(os.path.join("resources","app",self.game.console_name,"manifests","manifest.json")) as f:
+                    manifest_dict = {}
+                    try:
+                        manifest_dict = json.load(f)
+                    except JSONDecodeError as e:
+                        raise ValueError("")
+                    if "input" in manifest_dict and len(manifest_dict["input"]):
+                        all_exts = manifest_dict["input"]
+                        pass
+                    if "output" in manifest_dict and len(manifest_dict["output"]):
+                        all_exts = manifest_dict["output"]
+                        pass
+
+            default_ext = all_exts[0]
+
             if inject:
                 dest_filename = filedialog.asksaveasfilename(
                     defaultextension=default_ext,
@@ -1536,7 +1537,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                               "dialogue",
                               "export.inject.types"
                           ),
-                          "*.sfc *.smc"
+                          all_exts
                         ),
                     )
                 )
@@ -1556,13 +1557,13 @@ class SpriteSomethingMainFrame(tk.Frame):
                                 "dialogue",
                                 "export.source.types"
                             ),
-                            "*.sfc *.smc"
+                            all_exts
                         ),
                     )
                 )
                 if source_filename:
                     _,file_extension = os.path.splitext(source_filename)
-                    if file_extension.lower() in ['.sfc','.smc']:
+                    if file_extension.lower() in all_exts:
                         default_extension = file_extension.lower()
                     else:
                         default_extension = default_ext
@@ -1583,7 +1584,7 @@ class SpriteSomethingMainFrame(tk.Frame):
                                     "dialogue",
                                     "export.inject-new.types"
                                 ),
-                                "*.sfc *.smc"
+                                all_exts
                             ),
                         )
                     )

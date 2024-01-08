@@ -9,7 +9,8 @@
         "dims": [ 876, 2543 ],
         "overview-scale-factor": 1
       }
-    }
+    },
+    "output": [ ".rdc" ]
   },
   "2": {
     "type": "",
@@ -20,6 +21,7 @@
       "png": {
         "dims": [ 144, 90 ]
       }
-    }
+    },
+    "output": []
   }
 }

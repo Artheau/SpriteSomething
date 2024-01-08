@@ -14,7 +14,8 @@
         "dims": [104, 64],
         "overview-scale-factor": 1
       }
-    }
+    },
+    "output": [ ".bmp" ]
   },
   "2": {
     "type": "Dark King Boss Sprite",
@@ -44,6 +45,7 @@
         "dims": [224, 162],
         "overview-scale-factor": 1
       }
-    }
+    },
+    "output": [ ".bmp" ]
   }
 }
