@@ -442,6 +442,8 @@ class SpriteSomethingMainFrame(tk.Frame):
                         bundled_games[console] = {}
                     for gamedir in os.listdir(os.path.join(root,console)):
                         if os.path.isdir(os.path.join(root,console,gamedir)):
+                            if not os.path.isfile(os.path.join(root,console,gamedir,"lang","en.json")):
+                                raise AssertionError(f"Lang file not found: {console}/{gamedir}/EN")
                             with open(os.path.join(root,console,gamedir,"lang","en.json")) as en_lang:
                                 en = {}
                                 try:
@@ -455,6 +457,8 @@ class SpriteSomethingMainFrame(tk.Frame):
                                         bundled_games[console][gamedir]["game"]["internal name"] = gamedir
                                         bundled_games[console][gamedir]["game"]["name"] = en["game"]["name"]
                                         bundled_games[console][gamedir]["sprites"] = []
+                            if not os.path.isfile(os.path.join(root,console,gamedir,"manifests","manifest.json")):
+                                raise AssertionError(f"Game manifest file not found: {console}/{gamedir}")
                             with open(os.path.join(root,console,gamedir,"manifests","manifest.json")) as game_manifest:
                                 sprites = {}
                                 try:
@@ -483,7 +487,8 @@ class SpriteSomethingMainFrame(tk.Frame):
                                             filepath = os.path.join(path,folder+filetype)
                                             if filename == "" and os.path.isfile(filepath):
                                                 filename = filepath
-                                        bundled_games[console][gamedir]["sprites"].append((name,partial(self.load_sprite,filename)))
+                                        disabled = filename == ""
+                                        bundled_games[console][gamedir]["sprites"].append((name,partial(self.load_sprite,filename),disabled))
         bundle_menu = tk.Menu(self.menu, tearoff=0, name="bundle_menu")
         for console in bundled_games:
             bundled_console = bundled_games[console]
@@ -492,8 +497,8 @@ class SpriteSomethingMainFrame(tk.Frame):
                 bundled_game = bundled_games[console][bundled_game]
                 bundled_game_menu = tk.Menu(bundled_console_menu, tearoff=0, name="bundled_" + bundled_game["game"]["internal name"] + "_menu")
                 for sprite in bundled_game["sprites"]:
-                    label,command = sprite
-                    bundled_game_menu.add_command(label=label,command=command)
+                    label,command,disabled = sprite
+                    bundled_game_menu.add_command(label=label,command=command,state="disabled" if disabled else "normal")
                 bundled_console_menu.add_cascade(label=bundled_game["game"]["name"], menu=bundled_game_menu)
             bundle_menu.add_cascade(label=self.fish.translate("meta","consoles",console), menu=bundled_console_menu)
         self.menu.add_cascade(label=self.fish.translate("meta","menu","bundle"), menu=bundle_menu)
@@ -2017,6 +2022,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             "Thanks to:",
             "[Auximines](https://metroidfanon.fandom.com/wiki/Super_Justin_Bailey) for initial inspiration for custom Super Metroid sprites",
             "[Giga Otomia](http://www.twitch.tv/gigaotomia) for Final Fantasy Mystic Quest/Benjamin background scenes",
+            "[karafruit](http://github.com/ardnaxelarak) for initial Zelda Oracles/Link support",
             "[Pneumatic](http://twitch.tv/pneumaticgaming) for datastamp for Super Metroid/Samus sprites",
             "",
             "Based on:",

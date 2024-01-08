@@ -16,6 +16,8 @@ import json
 import os
 import tempfile
 
+from json import JSONDecodeError
+
 from source.meta.classes import layoutlib
 from source.meta.common import common
 
@@ -106,13 +108,18 @@ class SpriteParent():
     #the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
 
     def load_layout(self, sprite_name=""):
-        self.layout = layoutlib.Layout(
-            common.get_resource(
-                [self.resource_subpath, "manifests"],
-                "layout.json"
-            ),
-            sprite_name
+        layout_resources = common.get_resource(
+            [self.resource_subpath, "manifests"],
+            "layout.json"
         )
+        if layout_resources:
+            self.layout = layoutlib.Layout(
+                layout_resources,
+                sprite_name
+            )
+        else:
+            layout_path = self.resource_subpath.replace(os.sep, '/') + "/manifests/layout.json"
+            raise AssertionError(f"Layout not found: {layout_path}")
 
     def load_animations(self, sprite_name=""):
         animations_found = False
@@ -150,7 +157,8 @@ class SpriteParent():
                 if "$schema" in self.animations:
                     del self.animations["$schema"]
         else:
-            print("Animations not found: " + self.resource_subpath)
+            animations_path = self.resource_subpath.replace(os.sep, '/') + "/manifests/animations.json"
+            raise AssertionError(f"Animations not found: {animations_path}")
 
     def import_from_filename(self):
         _, file_extension = os.path.splitext(self.filename)
@@ -653,6 +661,8 @@ class SpriteParent():
 
             base_image = common.apply_palette(base_image, this_palette)
 
+            if "pos" not in tile_info:
+                tile_info["pos"] = [0,0]
             position = [tile_info["pos"][i] + global_displacement[i] for i in range(2)]    #add the x and y coords
 
             full_tile_list.append( (base_image,position) )
@@ -683,15 +693,20 @@ class SpriteParent():
         return returnvalue
 
     def get_pose_list(self, animation, direction):
-        direction_dict = self.animations[animation]
-        if direction in direction_dict:
-            return direction_dict[direction]
-        else:
-            return []
+        directions = []
+
+        if len(self.animations):
+            if animation in self.animations:
+                direction_dict = self.animations[animation]
+                if direction in direction_dict:
+                    directions = direction_dict[direction]
+        return directions
 
     def get_alternative_direction(self, animation, direction):
-        direction_dict = self.animations[animation]
-        return next(iter(direction_dict.keys()))
+        direction_dict = None
+        if len(self.animations):
+            direction_dict = self.animations[animation]
+        return next(iter(direction_dict.keys())) if direction_dict else None
 
     def assemble_tiles_to_completed_image(self, tile_list):
         if tile_list:     #have to check this because some animations include "empty" poses

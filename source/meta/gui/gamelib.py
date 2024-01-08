@@ -319,7 +319,12 @@ def get_sprite_number_from_zspr_data(zspr_data):
 
 def get_game_class_of_type(console_name,game_name):
     #dynamic import
-    game_module = importlib.import_module(f"source.{console_name}.{game_name}.game")
+    source_subpath = f"source.{console_name}.{game_name}"
+    game_module = None
+    try:
+        game_module = importlib.import_module(f"{source_subpath}.game")
+    except ModuleNotFoundError as e:
+        raise ModuleNotFoundError(f"Game module not found: {source_subpath}.game")
     return game_module.Game()
 
 class GameParent():
@@ -438,7 +443,11 @@ class GameParent():
             folder_name = manifest[str(sprite_number)]["folder name"]
             #dynamic imports to follow
             source_subpath = f"source.{self.console_name}.{self.internal_name}.{folder_name}"
-            sprite_module = importlib.import_module(f"{source_subpath}.sprite")
+            sprite_module = None
+            try:
+                sprite_module = importlib.import_module(f"{source_subpath}.sprite")
+            except ModuleNotFoundError as e:
+                raise ModuleNotFoundError(f"Sprite module not found: {source_subpath}.sprite")
             resource_subpath = os.path.join(self.console_name,self.internal_name,folder_name)
             sprite = sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],resource_subpath,sprite_name)
 

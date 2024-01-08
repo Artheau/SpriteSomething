@@ -27,7 +27,10 @@ class AnimationEngineParent():
         self.prev_palette_info = []
 
         self.animations = self.sprite.animations
-        self.current_animation = next(iter(self.animations.keys()))
+        if len(self.animations):
+            self.current_animation = next(iter(self.animations.keys()))
+        else:
+            print(f"🟡WARNING: No animations defined to set to object: {self.game.internal_name}/{self.sprite.internal_name}")
 
     def attach_animation_panel(self, parent, canvas, overview_canvas, zoom_getter, frame_getter, coord_getter, coord_setter, fish):
         ANIMATION_DROPDOWN_WIDTH = 25
@@ -49,7 +52,10 @@ class AnimationEngineParent():
         animation_label.grid(row=0, column=1)
         self.animation_selection = tk.StringVar(animation_panel)
 
-        self.animation_selection.set(random.choice(list(self.animations.keys())))
+        if len(self.animations):
+            self.animation_selection.set(random.choice(list(self.animations.keys())))
+        else:
+            print(f"🟡WARNING: No animations defined to choose to load: {self.game.internal_name}/{self.sprite.internal_name}")
 
         animation_dropdown = tk.ttk.Combobox(animation_panel, state="readonly", values=list(self.animations.keys()), name="animation_dropdown")
         animation_dropdown.configure(width=ANIMATION_DROPDOWN_WIDTH, exportselection=0, textvariable=self.animation_selection)
@@ -108,28 +114,29 @@ class AnimationEngineParent():
         return tile_details_panel
 
     def set_animation(self, animation_name):
-        if animation_name not in self.animations:
-            animation_name = list(self.animations.keys())[0]
-        self.current_animation = animation_name
-        if self.current_animation in self.animations:
-            anims = self.animations
-            current_anim = self.current_animation
-            if self.sprite.get_alternative_direction(current_anim,self.get_current_direction()) in anims[current_anim]:
-                current_dir = self.sprite.get_alternative_direction(current_anim,self.get_current_direction())
-                if len(anims[current_anim][current_dir]) > 0:
-                    current_pose_num = 0
-                    curr_pos = anims[current_anim][current_dir][current_pose_num]
-                    if "background" in curr_pos:
-                        # print("Setting Background because of animation (%s): %s" % (animation_name, curr_pos["background"]))
-                        self.game.set_background(curr_pos["background"])
-                        fnames = list(self.game.background_datas["filename"].keys())
-                        pnames = list(self.game.background_datas["title"].keys())
-                        fname = curr_pos["background"]
-                        pname = pnames[fnames.index(fname)]
-                        self.game.background_selection.set(pname)
-                    if "origin" in curr_pos:
-                        # print("Setting Coordinates because of animation (%s): %s" % (animation_name, curr_pos["origin"]))
-                        self.coord_setter(curr_pos["origin"])
+        if len(self.animations):
+            if animation_name not in self.animations:
+                animation_name = list(self.animations.keys())[0]
+            self.current_animation = animation_name
+            if self.current_animation in self.animations:
+                anims = self.animations
+                current_anim = self.current_animation
+                if self.sprite.get_alternative_direction(current_anim,self.get_current_direction()) in anims[current_anim]:
+                    current_dir = self.sprite.get_alternative_direction(current_anim,self.get_current_direction())
+                    if len(anims[current_anim][current_dir]) > 0:
+                        current_pose_num = 0
+                        curr_pos = anims[current_anim][current_dir][current_pose_num]
+                        if "background" in curr_pos:
+                            # print("Setting Background because of animation (%s): %s" % (animation_name, curr_pos["background"]))
+                            self.game.set_background(curr_pos["background"])
+                            fnames = list(self.game.background_datas["filename"].keys())
+                            pnames = list(self.game.background_datas["title"].keys())
+                            fname = curr_pos["background"]
+                            pname = pnames[fnames.index(fname)]
+                            self.game.background_selection.set(pname)
+                        if "origin" in curr_pos:
+                            # print("Setting Coordinates because of animation (%s): %s" % (animation_name, curr_pos["origin"]))
+                            self.coord_setter(curr_pos["origin"])
         self.update_animation()
 
     def update_animation(self):
@@ -371,17 +378,18 @@ class AnimationEngineParent():
 
     def update_overview_panel(self):
         image = self.sprite.get_master_PNG_image()
-        scaled_image = image.resize(tuple(int(x*self.overview_scale_factor) for x in image.size))
+        if image:
+            scaled_image = image.resize(tuple(int(x*self.overview_scale_factor) for x in image.size))
 
-        if hasattr(self,"overview_ID") and self.overview_ID is not None:
-            del self.overview_image
-            self.overview_image = gui_common.get_tk_image(scaled_image)
-            self.overview_canvas.itemconfig(self.overview_ID, image=self.overview_image)
-        else:
-            import time
-            scaled_image = scaled_image.copy()
-            self.overview_image = gui_common.get_tk_image(scaled_image)
-            self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)
+            if hasattr(self,"overview_ID") and self.overview_ID is not None:
+                del self.overview_image
+                self.overview_image = gui_common.get_tk_image(scaled_image)
+                self.overview_canvas.itemconfig(self.overview_ID, image=self.overview_image)
+            else:
+                import time
+                scaled_image = scaled_image.copy()
+                self.overview_image = gui_common.get_tk_image(scaled_image)
+                self.overview_ID = self.overview_canvas.create_image(0, 0, image=self.overview_image, anchor=tk.NW)
 
     def export_frame_as_PNG(self, filename):
         #TODO: should this be factored out to the sprite class as some kind of export_as_PNG(animation, direction, ..., filename) call?

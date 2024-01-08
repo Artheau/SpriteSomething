@@ -1,0 +1,79 @@
+{
+  "$schema": "../../../../../schema/png-layout.schema.json",
+  "comment": [
+    "This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",
+    "will also be the pose that is used to import the image.  For this reason, some poses will be out of order",
+    "and this is intentional because a pose might be mirrored in its first occurance (grapple), or perhaps",
+    "the way that it will be present in the ROM is different before and after modification (e.g. screw attack)"
+  ],
+  "border_color": [0, 0, 0, 255],
+  "border_size": 0,
+  "layout": [
+    [
+      "walkUp", "pushUp",
+      "standLeft", "walkLeft",
+      "fall","fall1","fall2",
+      "carryDown","carryLeft"
+    ],
+    [
+      "walkDown","standDown",
+      "pushLeft","pushLeft1",
+      "play","instrument","play1",
+      "carryDown1",
+      "squish",
+      "dead"
+    ],
+    [
+      "walkUp_S1","walkUp1_S1",
+      "walkDown_S1","walkDown1_S1",
+      "walkRight_S1","walkRight1_S1",
+      "walkRight_S2","walkRight1_S2"
+    ],
+    [
+      "blockUp","blockUp1",
+      "blockDown_S1","blockDown1_S1",
+      "blockLeft","blockLeft1",
+      "blockRight","blockRight1"
+    ]
+  ],
+  "images": {
+    "walkUp": { "dimensions": [0,0,16,16] },
+    "pushUp": { "parent": "walkUp" },
+    "standLeft": { "parent": "walkUp" },
+    "walkLeft": { "parent": "walkUp" },
+    "fall": { "parent": "walkUp" },
+    "fall1": { "dimensions": [0,0,8,16] },
+    "fall2": { "parent": "fall1" },
+    "carryDown": { "parent": "walkUp" },
+    "carryLeft": { "parent": "walkUp" },
+
+    "walkDown": { "parent": "walkUp" },
+    "standDown": { "parent": "walkUp" },
+    "pushLeft": { "parent": "walkUp" },
+    "pushLeft1": { "parent": "pushLeft" },
+    "play": { "parent": "walkUp" },
+    "instrument": { "dimensions": [0,0,8,16] },
+    "play1": { "parent": "play" },
+    "carryDown1": { "dimensions": [0,0,8,16] },
+    "squish": { "dimensions": [0,0,8,16] },
+    "dead": { "dimensions": [0,0,8,16] },
+
+    "walkUp_S1": { "parent": "walkUp" },
+    "walkUp1_S1": { "parent": "walkUp" },
+    "walkDown_S1": { "parent": "walkUp" },
+    "walkDown1_S1": { "parent": "walkUp" },
+    "walkRight_S1": { "parent": "walkUp" },
+    "walkRight1_S1": { "parent": "walkUp" },
+    "walkRight_S2": { "parent": "walkUp" },
+    "walkRight1_S2": { "parent": "walkUp" },
+
+    "blockUp": { "parent": "walkUp" },
+    "blockUp1": { "parent": "walkUp" },
+    "blockDown_S1": { "parent": "walkUp" },
+    "blockDown1_S1": { "parent": "walkUp" },
+    "blockLeft": { "parent": "walkUp" },
+    "blockLeft1": { "parent": "walkUp" },
+    "blockRight": { "parent": "walkUp" },
+    "blockRight1": { "parent": "walkUp" }
+  }
+}

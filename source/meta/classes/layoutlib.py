@@ -15,6 +15,10 @@ from source.meta.common import common
 
 class Layout():
     def __init__(self, filename, sprite_name=""):
+        if not filename or not os.path.isfile(filename):
+            layout_path = self.filename.replace(os.sep, '/')
+            layout_path = layout_path[layout_path.find("app/")+len("app/"):]
+            raise AssertionError(f"Layout not found: {layout_path}")
         with open(filename) as inFile:
             self.data = []
             try:
@@ -29,11 +33,12 @@ class Layout():
                     print(f"Found {sprite_name}!")
                     self.data = layout
         for image_name,image_info in self.data["images"].items():
-            for image_ref in image_info["used by"]:
-                if tuple(image_ref) in self.reverse_lookup:
-                    self.reverse_lookup[tuple(image_ref)].append(image_name)
-                else:
-                    self.reverse_lookup[tuple(image_ref)] = [image_name]
+            if "used by" in image_info:
+                for image_ref in image_info["used by"]:
+                    if tuple(image_ref) in self.reverse_lookup:
+                        self.reverse_lookup[tuple(image_ref)].append(image_name)
+                    else:
+                        self.reverse_lookup[tuple(image_ref)] = [image_name]
         self.filename = filename
 
     def get_image_name(self, animation, pose, force=None):
@@ -61,7 +66,14 @@ class Layout():
         return self.reverse_lookup[(animation, pose)]
 
     def get_rows(self):
-        return self.data["layout"]
+        rows = None
+        if "layout" in self.data:
+            rows = self.data["layout"]
+        if not rows or len(rows) == 0:
+            layout_path = self.filename.replace(os.sep, '/')
+            layout_path = layout_path[layout_path.find("app/")+len("app/"):]
+            raise AssertionError(f"No rows found in layout: {layout_path}")
+        return rows
 
     def add_borders_and_scale(self, image, origin, image_name):
         #from the layout data, get all the different pieces of the image, and then assemble them together
@@ -166,14 +178,18 @@ class Layout():
         return collage
 
     def make_vertical_collage(self, image_list):
-        width = max([image.size[0] for image in image_list])
-        height = sum([image.size[1] for image in image_list])
+        collage = None
 
-        collage = Image.new("RGBA", (width,height), 0)
-        current_y = 0
-        for image in image_list:
-            collage.paste(image, ((width-image.size[0])//2,current_y))
-            current_y += image.size[1]
+        if len(image_list):
+            width = max([image.size[0] for image in image_list])
+            height = sum([image.size[1] for image in image_list])
+
+            collage = Image.new("RGBA", (width,height), 0)
+            current_y = 0
+            for image in image_list:
+                collage.paste(image, ((width-image.size[0])//2,current_y))
+                current_y += image.size[1]
+
         return collage
 
     def export_all_images_to_PNG(self, all_images, master_palette):
@@ -214,10 +230,15 @@ class Layout():
             row_width = 0
             row_y_min,row_y_max = float('Inf'),-float('Inf')
             for image_name in row:     #for every image referenced explicitly in the layout
-                spacer = self.data["images"][image_name]["spacer"] if "spacer" in self.data["images"][image_name] else 0
-                xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
-                row_width += (xmax-xmin)+2*self.data["border_size"]+abs(spacer)
-                row_y_min,row_y_max = min(row_y_min,ymin),max(row_y_max,ymax)
+                if image_name in self.data["images"]:
+                    spacer = self.data["images"][image_name]["spacer"] if "spacer" in self.data["images"][image_name] else 0
+                    xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
+                    row_width += (xmax-xmin)+2*self.data["border_size"]+abs(spacer)
+                    row_y_min,row_y_max = min(row_y_min,ymin),max(row_y_max,ymax)
+                else:
+                    layout_path = self.filename.replace(os.sep, '/')
+                    layout_path = layout_path[layout_path.find("app/")+len("app/"):]
+                    raise AssertionError(f"'{image_name}' not found in layout/image definition for '{layout_path}'!")
             row_height = row_y_max-row_y_min+2*self.data["border_size"]
             row_margin = (master_image.size[0] - row_width)//2
             row_of_images = master_image.crop((row_margin,master_height,row_width+row_margin,master_height+row_height))

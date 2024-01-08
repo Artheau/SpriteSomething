@@ -1,0 +1,108 @@
+{
+  "$schema": "../../../../../schema/animations.schema.json",
+  "Walk": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "walkDown" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkDown", "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "standLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkLeft" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "standLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkLeft", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "walkUp" }] },
+      { "frames": 20, "tiles": [ { "image": "walkUp", "flip": "h" }] }
+    ]
+  },
+  "Push": {
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "pushLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushLeft1" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "pushLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushLeft1", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "pushUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushUp", "flip": "h" } ] }
+    ]
+  },
+  "Fall": {
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "fall" } ] },
+      { "frames": 20, "tiles": [ { "image": "fall1" } ] },
+      { "frames": 20, "tiles": [ { "image": "fall2" } ] }
+    ]
+  },
+  "Carry": {
+    "down": [
+      { "frames": 20, "tiles": [ {"image": "carryDown" } ] },
+      { "frames": 20, "tiles": [ {"image": "carryDown", "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image":"carryLeft" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image":"carryLeft", "flip": "h" } ] }
+    ]
+  },
+  "Dead": {
+    "down": [
+      { "frames": 20, "tiles": [
+        {"image": "dead" },
+        {"image": "dead", "pos": [8,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Walk (Shield 1)": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "walkDown_S1" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkDown1_S1" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight1_S1", "flip": "h" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight1_S1" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "walkUp_S1" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkUp1_S1" } ] }
+    ]
+  },
+  "Walk (Shield 2)": {
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "walkRight_S2", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight1_S2", "flip": "h" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "walkRight_S2" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight1_S2" } ] }
+    ]
+  },
+  "Block (Shield 1)": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "blockDown_S1" } ] },
+      { "frames": 20, "tiles": [ { "image": "blockDown1_S1" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "blockRight", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "blockRight1", "flip": "h" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "blockRight" } ] },
+      { "frames": 20, "tiles": [ { "image": "blockRight1" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "blockUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "blockUp1" } ] }
+    ]
+  }
+}
