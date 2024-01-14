@@ -853,12 +853,10 @@ class SpriteSomethingMainFrame(tk.Frame):
         # canvas panel in right pane
         '''
         def move_sprite(event):
-            self.coord_setter(
-                [
-                    event.x/self.current_zoom,
-                    event.y/self.current_zoom
-                ]
-            )
+            x = event.x/self.current_zoom
+            y = event.y/self.current_zoom
+            self.coord_setter([x,y])
+            self.animation_engine.pos_text_label.config(text=f"({round(x)},{round(y)})")
             self.update_sprite_animation()
         #hook this function to call when the canvas is left-clicked
         self.canvas.bind("<Button-1>", move_sprite)

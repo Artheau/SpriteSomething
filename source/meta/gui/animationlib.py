@@ -85,29 +85,40 @@ class AnimationEngineParent():
         tile_details_panel = tk.Frame(parent, name="tile_details_panel")
         widgetlib.right_align_grid_in_frame(tile_details_panel)
 
+        # Position: (x,y)
         # Step: <step_number_label> / <step_total_label>
         # Tiles: <tile_list>
         LABEL_HEIGHT = 16
+        pos_panel = tk.Frame(parent, name="pos_panel", height=LABEL_HEIGHT)
+        widgetlib.right_align_grid_in_frame(pos_panel)
+        pos_label = tk.Label(pos_panel, text=fish.translate("meta","meta","pos") + ':')
+        pos_label.grid(row=0, column=1)
+
+        self.pos_text_label = tk.Label(pos_panel, text='(0,0)')
+        self.pos_text_label.grid(row=0, column=2)
+
+        parent.add(pos_panel)
+
         step_panel = tk.Frame(parent, name="step_panel", height=LABEL_HEIGHT)
         widgetlib.right_align_grid_in_frame(step_panel)
         step_label = tk.Label(step_panel, text=fish.translate("meta","meta","step") + ':')
-        step_label.grid(row=0, column=1)
+        step_label.grid(row=1, column=1)
 
         self.step_number_label = tk.Label(step_panel, text='0')
-        self.step_number_label.grid(row=0, column=2)
+        self.step_number_label.grid(row=1, column=2)
 
         step_sep = tk.Label(step_panel, text='/')
-        step_sep.grid(row=0, column=3)
+        step_sep.grid(row=1, column=3)
 
         self.step_total_label = tk.Label(step_panel, text='0')
-        self.step_total_label.grid(row=0, column=4)
+        self.step_total_label.grid(row=1, column=4)
 
         parent.add(step_panel)
 
         tiles_list_panel = tk.Frame(parent, name="tiles_list_panel")
         widgetlib.right_align_grid_in_frame(tiles_list_panel)
         self.tiles_list_label = tk.Label(tiles_list_panel, text='', justify=tk.RIGHT)
-        self.tiles_list_label.grid(row=1, column=2)
+        self.tiles_list_label.grid(row=2, column=2)
 
         parent.add(tiles_list_panel)
 
@@ -137,6 +148,11 @@ class AnimationEngineParent():
                         if "origin" in curr_pos:
                             # print("Setting Coordinates because of animation (%s): %s" % (animation_name, curr_pos["origin"]))
                             self.coord_setter(curr_pos["origin"])
+                            if hasattr(self, "pos_text_label"):
+                                pos_text = [str(i) for i in curr_pos["origin"]]
+                                pos_text = ','.join(pos_text)
+                                pos_text = f"({pos_text})"
+                                self.pos_text_label.config(text=pos_text)
         self.update_animation()
 
     def update_animation(self):
@@ -155,6 +171,12 @@ class AnimationEngineParent():
             new_size = tuple(int(dim*self.zoom_getter()) for dim in pose_image.size)
             scaled_image = ImageTk.PhotoImage(pose_image.resize(new_size,resample=Image.NEAREST))
             coords = self.coord_getter()
+            if hasattr(self, "pos_text_label"):
+                if self.pos_text_label.cget("text") == "(0,0)":
+                    pos_text = [str(i) for i in coords]
+                    pos_text = ','.join(pos_text)
+                    pos_text = f"({pos_text})"
+                    self.pos_text_label.config(text=pos_text)
             coord_on_canvas = tuple(int(self.zoom_getter()*(pos+x)) for pos,x in zip(coords,offset))
             self.sprite_IDs.append(self.canvas.create_image(*coord_on_canvas, image=scaled_image, anchor = tk.NW))
             self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!

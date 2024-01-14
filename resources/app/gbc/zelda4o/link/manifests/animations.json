@@ -1,5 +1,19 @@
 {
   "$schema": "../../../../../schema/animations.schema.json",
+  "Stand": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "walkDown" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "standLeft" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "standLeft", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "walkUp" } ] }
+    ]
+  },
   "Walk": {
     "down": [
       { "frames": 20, "tiles": [ { "image": "walkDown" } ] },
@@ -16,47 +30,6 @@
     "up": [
       { "frames": 20, "tiles": [ { "image": "walkUp" }] },
       { "frames": 20, "tiles": [ { "image": "walkUp", "flip": "h" }] }
-    ]
-  },
-  "Push": {
-    "left": [
-      { "frames": 20, "tiles": [ { "image": "pushLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushLeft1" } ] }
-    ],
-    "right": [
-      { "frames": 20, "tiles": [ { "image": "pushLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushLeft1", "flip": "h" } ] }
-    ],
-    "up": [
-      { "frames": 20, "tiles": [ { "image": "pushUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushUp", "flip": "h" } ] }
-    ]
-  },
-  "Fall": {
-    "right": [
-      { "frames": 20, "tiles": [ { "image": "fall" } ] },
-      { "frames": 20, "tiles": [ { "image": "fall1" } ] },
-      { "frames": 20, "tiles": [ { "image": "fall2" } ] }
-    ]
-  },
-  "Carry": {
-    "down": [
-      { "frames": 20, "tiles": [ {"image": "carryDown" } ] },
-      { "frames": 20, "tiles": [ {"image": "carryDown", "flip": "h" } ] }
-    ],
-    "left": [
-      { "frames": 20, "tiles": [ { "image":"carryLeft" } ] }
-    ],
-    "right": [
-      { "frames": 20, "tiles": [ { "image":"carryLeft", "flip": "h" } ] }
-    ]
-  },
-  "Dead": {
-    "down": [
-      { "frames": 20, "tiles": [
-        {"image": "dead" },
-        {"image": "dead", "pos": [8,0], "flip": "h" }
-      ] }
     ]
   },
   "Walk (Shield 1)": {
@@ -111,17 +84,14 @@
       { "frames": 20, "tiles": [ {"image": "blockDown1_S2" } ] }
     ]
   },
-  "Item Get": {
-    "down": [
-      { "frames": 20, "tiles": [ { "image": "itemGet" } ] }
-    ]
-  },
-  "Instrument Get": {
-    "down": [
-      { "frames": 20, "tiles": [
-        { "image": "instrumentGet" },
-        { "image": "instrumentGet", "pos": [8,0], "flip": "h" }
-      ] }
+  "Swim": {
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "swimLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "swimLeft1", "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "swimLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "swimLeft1" } ] }
     ]
   },
   "Tread Water": {
@@ -160,17 +130,67 @@
       ] }
     ]
   },
-  "Swim": {
+  "Fall": {
     "right": [
-      { "frames": 20, "tiles": [ { "image": "swimLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "swimLeft1", "flip": "h" } ] }
-    ],
-    "left": [
-      { "frames": 20, "tiles": [ { "image": "swimLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "swimLeft1" } ] }
+      { "frames": 20, "tiles": [ { "image": "fall" } ] },
+      { "frames": 20, "tiles": [ { "image": "fall1" } ] },
+      { "frames": 20, "tiles": [ { "image": "fall2" } ] }
     ]
   },
-  "Sleep": {
+  "Dead": {
+    "down": [
+      { "frames": 20, "tiles": [
+        {"image": "dead" },
+        {"image": "dead", "pos": [8,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Carry": {
+    "down": [
+      { "frames": 20, "tiles": [ {"image": "carryDown" } ] },
+      { "frames": 20, "tiles": [ {"image": "carryDown", "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image":"carryLeft" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image":"carryLeft", "flip": "h" } ] }
+    ]
+  },
+  "Push": {
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "pushLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushLeft1" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "pushLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushLeft1", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "pushUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushUp", "flip": "h" } ] }
+    ]
+  },
+  "Item get": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "itemGet" } ] }
+    ]
+  },
+  "Instrument get": {
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "instrumentGet" },
+        { "image": "instrumentGet", "pos": [8,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "File Select": {
+    "right": [
+      { "frames": 20, "background": "file-select.png", "origin": [80,62], "tiles": [ { "image": "walkDown" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkDown", "flip": "h" } ] }
+    ]
+  },
+  "Asleep": {
     "right": [
       { "frames": 20, "tiles": [ { "image": "sleep" } ] }
     ]

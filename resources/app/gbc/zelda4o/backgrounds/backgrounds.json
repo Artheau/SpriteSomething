@@ -1,0 +1,34 @@
+{
+  "backgrounds": [
+    {
+      "filename": "file-select.png",
+      "title": "File Select",
+      "origin": [80,62]
+    },
+    {
+      "filename": "file-erase.png",
+      "title": "File Erase",
+      "origin": [80,62]
+    },
+    {
+      "filename": "empty (white).png",
+      "title": "Empty (white)"
+    },
+    {
+      "filename": "empty.png",
+      "title": "Empty (black)"
+    },
+    {
+      "filename": "transparent.png",
+      "title": "Empty (transparent)"
+    },
+    {
+      "filename": "greenscreen.png",
+      "title": "Green Screen"
+    },
+    {
+      "filename": "house.png",
+      "title": "Generic House"
+    }
+  ]
+}
