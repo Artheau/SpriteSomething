@@ -104,5 +104,80 @@
       { "frames": 20, "tiles": [ { "image": "blockUp" } ] },
       { "frames": 20, "tiles": [ { "image": "blockUp1" } ] }
     ]
+  },
+  "Block (Shield 2)": {
+    "down": [
+      { "frames": 20, "tiles": [ {"image": "blockDown_S2" } ] },
+      { "frames": 20, "tiles": [ {"image": "blockDown1_S2" } ] }
+    ]
+  },
+  "Item Get": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "itemGet" } ] }
+    ]
+  },
+  "Instrument Get": {
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "instrumentGet" },
+        { "image": "instrumentGet", "pos": [8,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Tread Water": {
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "treadWaterDown" },
+        { "image": "treadWaterDown", "pos": [8,0], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "treadWaterDown1" },
+        { "image": "treadWaterDown1", "pos": [8,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "treadWaterLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "treadWaterLeft1" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "treadWaterLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "treadWaterLeft1", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "treadWaterUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "treadWaterUp1" } ] }
+    ]
+  },
+  "Dive": {
+    "right": [
+      { "frames": 20, "tiles": [
+        { "image": "dive" },
+        { "image": "dive", "pos": [8,0], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "dive1" },
+        { "image": "dive1", "pos": [8,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Swim": {
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "swimLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "swimLeft1", "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "swimLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "swimLeft1" } ] }
+    ]
+  },
+  "Sleep": {
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "sleep" } ] }
+    ]
+  },
+  "Awake": {
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "awake" } ] }
+    ]
   }
 }

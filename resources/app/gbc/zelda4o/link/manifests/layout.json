@@ -34,6 +34,80 @@
       "blockDown_S1","blockDown1_S1",
       "blockLeft","blockLeft1",
       "blockRight","blockRight1"
+    ],
+    [
+      "E0:L","E0:R",
+      "E1",
+      "blockDown_S2","blockDown1_S2",
+      "fall3","fall4","fall5","fall6","fall7"
+    ],
+    [
+      "F0","F1",
+      "F2:L","F2:R","F3:L","F3:R",
+      "F4","F5","F6","F7"
+    ],
+    [
+      "G0:L","G0:R","G1:L",
+      "jumpLeft","jumpLeft1","G3:R",
+      "G4:L",
+      "G4:span",
+      "G5:span",
+      "itemGet",
+      "instrumentGet"
+    ],
+    [
+      "treadWaterUp","treadWaterUp1",
+      "treadWaterDown","treadWaterDown1",
+      "treadWaterLeft","treadWaterLeft1",
+      "dive","dive1",
+      "swimLeft","swimLeft1"
+    ],
+    [
+      "I0","I1","I2","I3","I4","I5","I6","I7"
+    ],
+    [
+      "J0","J1","J2","J3","J4","J5","sleep","awake"
+    ],
+    [
+      "K0","K1","K2","K3","K4","K5","K6","K7"
+    ],
+    [
+      "L0","L1","L2","L3","L4","L5","L6","L7"
+    ],
+    [
+      "M0","M1","M2",
+      "M3:L","M3:R",
+      "M4","M5","M6","M7"
+    ],
+    [
+      "N0","N1","N2","N3","N4","N5",
+      "N6:L",
+      "N6:span",
+      "N7:R"
+    ],
+    [
+      "O0","O1","O2","O3","O4","O5","O6","O7"
+    ],
+    [
+      "P0",
+      "P1:L","P1:R",
+      "P2:L","P2:R",
+      "P3:L","P3:R",
+      "P4","P5","P6","P7"
+    ],
+    [
+      "Q0","Q1","Q2","Q3","Q4","Q5","Q6","Q7"
+    ],
+    [
+      "R0","R1",
+      "R2:L",
+      "R2:R",
+      "R3:L",
+      "R3:R",
+      "R4","R5","R6","R7"
+    ],
+    [
+      "S0","S1","S2","S3","S4","S5","S6","S7"
     ]
   ],
   "images": {
@@ -74,6 +148,157 @@
     "blockLeft": { "parent": "walkUp", "grid": "D4" },
     "blockLeft1": { "parent": "walkUp", "grid": "D5" },
     "blockRight": { "parent": "walkUp", "grid": "D6" },
-    "blockRight1": { "parent": "walkUp", "grid": "D7" }
+    "blockRight1": { "parent": "walkUp", "grid": "D7" },
+
+    "E0:L": { "dimensions": [0,0,8,16], "grid": "E0:left" },
+    "E0:R": { "parent": "E0:L", "grid": "E0:right" },
+    "E1": { "parent": "walkUp", "grid": "E1" },
+    "blockDown_S2": { "parent": "walkUp", "grid": "E2" },
+    "blockDown1_S2": { "parent": "walkUp", "grid": "E3" },
+    "fall3": { "dimensions": [0,0,8,16],"grid": "E4:left" },
+    "fall4": { "parent": "walkUp", "grid": "E4:right,E5:left" },
+    "fall5": { "parent": "walkUp", "grid": "E5:right,E6:left" },
+    "fall6": { "parent": "walkUp", "grid": "E6:right,E7:left" },
+    "fall7": { "dimensions": [0,0,8,16], "grid": "E7:right" },
+
+    "F0": { "parent": "walkUp", "grid": "F0" },
+    "F1": { "parent": "walkUp", "grid": "F1" },
+    "F2:L": { "dimensions": [0,0,8,16], "grid": "F2:left" },
+    "F2:R": { "parent": "F2:L", "grid": "F2:right" },
+    "F3:L": { "dimensions": [0,0,8,16], "grid": "F3:left" },
+    "F3:R": { "parent": "F3:L", "grid": "F3:right" },
+    "F4": { "parent": "walkUp", "grid": "F4" },
+    "F5": { "parent": "walkUp", "grid": "F5" },
+    "F6": { "parent": "walkUp", "grid": "F6" },
+    "F7": { "parent": "walkUp", "grid": "F7" },
+
+    "G0:L": { "dimensions": [0,0,8,16], "grid": "G0" },
+    "G0:R": { "parent": "G0:L", "grid": "G0" },
+    "G1:L": { "dimensions": [0,0,8,16], "grid": "G1" },
+    "jumpLeft": { "parent": "walkUp", "grid": "G1:right,G2:left" },
+    "jumpLeft1": { "parent": "walkUp", "grid": "G2:right,G3:left" },
+    "G3:R": { "dimensions": [0,0,8,16], "grid": "G3:right" },
+    "G4:L": { "dimensions": [0,0,8,16], "grid": "G4:left" },
+    "G4:span": { "parent": "walkUp", "grid": "G4:right,G5:left" },
+    "G5:span": { "parent": "walkUp", "grid": "G5:right,G6:left" },
+    "itemGet": { "parent": "walkUp", "grid": "G6:right,G7:left" },
+    "instrumentGet": { "dimensions": [0,0,8,16], "grid": "G7:right" },
+
+    "treadWaterUp": { "parent": "walkUp", "grid": "H0" },
+    "treadWaterUp1": { "parent": "walkUp", "grid": "H1" },
+    "treadWaterDown": { "dimensions": [0,0,8,16], "grid": "H2:left" },
+    "treadWaterDown1": { "parent": "treadWaterDown", "grid": "H2:right" },
+    "treadWaterLeft": { "parent": "walkUp", "grid": "H3" },
+    "treadWaterLeft1": { "parent": "walkUp", "grid": "H4" },
+    "dive": { "dimensions": [0,0,8,16], "grid": "H5:left" },
+    "dive1": { "parent": "dive", "grid": "H5:right" },
+    "swimLeft": { "parent": "walkUp", "grid": "H6" },
+    "swimLeft1": { "parent": "walkUp", "grid": "H7" },
+
+    "I0": { "parent": "walkUp", "grid": "I0" },
+    "I1": { "parent": "walkUp", "grid": "I1" },
+    "I2": { "parent": "walkUp", "grid": "I2" },
+    "I3": { "parent": "walkUp", "grid": "I3" },
+    "I4": { "parent": "walkUp", "grid": "I4" },
+    "I5": { "parent": "walkUp", "grid": "I5" },
+    "I6": { "parent": "walkUp", "grid": "I6" },
+    "I7": { "parent": "walkUp", "grid": "I7" },
+
+    "J0": { "parent": "walkUp", "grid": "J0" },
+    "J1": { "parent": "walkUp", "grid": "J1" },
+    "J2": { "parent": "walkUp", "grid": "J2" },
+    "J3": { "parent": "walkUp", "grid": "J3" },
+    "J4": { "parent": "walkUp", "grid": "J4" },
+    "J5": { "parent": "walkUp", "grid": "J5" },
+    "sleep": { "parent": "walkUp", "grid": "J6" },
+    "awake": { "parent": "walkUp", "grid": "J7" },
+
+    "K0": { "parent": "walkUp", "grid": "K0" },
+    "K1": { "parent": "walkUp", "grid": "K1" },
+    "K2": { "parent": "walkUp", "grid": "K2" },
+    "K3": { "parent": "walkUp", "grid": "K3" },
+    "K4": { "parent": "walkUp", "grid": "K4" },
+    "K5": { "parent": "walkUp", "grid": "K5" },
+    "K6": { "parent": "walkUp", "grid": "K6" },
+    "K7": { "parent": "walkUp", "grid": "K7" },
+
+    "L0": { "parent": "walkUp", "grid": "L0" },
+    "L1": { "parent": "walkUp", "grid": "L1" },
+    "L2": { "parent": "walkUp", "grid": "L2" },
+    "L3": { "parent": "walkUp", "grid": "L3" },
+    "L4": { "parent": "walkUp", "grid": "L4" },
+    "L5": { "parent": "walkUp", "grid": "L5" },
+    "L6": { "parent": "walkUp", "grid": "L6" },
+    "L7": { "parent": "walkUp", "grid": "L7" },
+
+    "M0": { "parent": "walkUp", "grid": "M0" },
+    "M1": { "parent": "walkUp", "grid": "M1" },
+    "M2": { "parent": "walkUp", "grid": "M2" },
+    "M3:L": { "dimensions": [0,0,8,16], "grid": "M3:left" },
+    "M3:R": { "parent": "M3:L", "grid": "M3:right" },
+    "M4": { "parent": "walkUp", "grid": "M4" },
+    "M5": { "parent": "walkUp", "grid": "M5" },
+    "M6": { "parent": "walkUp", "grid": "M6" },
+    "M7": { "parent": "walkUp", "grid": "M7" },
+
+    "N0": { "parent": "walkUp", "grid": "N0" },
+    "N1": { "parent": "walkUp", "grid": "N1" },
+    "N2": { "parent": "walkUp", "grid": "N2" },
+    "N3": { "parent": "walkUp", "grid": "N3" },
+    "N4": { "parent": "walkUp", "grid": "N4" },
+    "N5": { "parent": "walkUp", "grid": "N5" },
+    "N6:L": { "dimensions": [0,0,8,16], "grid": "N6:left" },
+    "N6:span": { "parent": "walkUp", "grid": "N6:right,N7:left" },
+    "N7:R": { "dimensions": [0,0,8,16], "grid": "N7:right" },
+
+    "O0": { "parent": "walkUp", "grid": "O0" },
+    "O1": { "parent": "walkUp", "grid": "O1" },
+    "O2": { "parent": "walkUp", "grid": "O2" },
+    "O3": { "parent": "walkUp", "grid": "O3" },
+    "O4": { "parent": "walkUp", "grid": "O4" },
+    "O5": { "parent": "walkUp", "grid": "O5" },
+    "O6": { "parent": "walkUp", "grid": "O6" },
+    "O7": { "parent": "walkUp", "grid": "O7" },
+
+    "P0": { "parent": "walkUp", "grid": "P0" },
+    "P1:L": { "dimensions": [0,0,8,16], "grid": "P1:left" },
+    "P1:R": { "parent": "P1:L", "grid": "P1:right" },
+    "P2:L": { "dimensions": [0,0,8,16], "grid": "P2:left" },
+    "P2:R": { "parent": "P2:L", "grid": "P2:right" },
+    "P3:L": { "dimensions": [0,0,8,16], "grid": "P3:left" },
+    "P3:R": { "parent": "P3:L", "grid": "P3:right" },
+    "P4": { "parent": "walkUp", "grid": "P4" },
+    "P5": { "parent": "walkUp", "grid": "P5" },
+    "P6": { "parent": "walkUp", "grid": "P6" },
+    "P7": { "parent": "walkUp", "grid": "P7" },
+
+    "Q0": { "parent": "walkUp", "grid": "Q0" },
+    "Q1": { "parent": "walkUp", "grid": "Q1" },
+    "Q2": { "parent": "walkUp", "grid": "Q2" },
+    "Q3": { "parent": "walkUp", "grid": "Q3" },
+    "Q4": { "parent": "walkUp", "grid": "Q4" },
+    "Q5": { "parent": "walkUp", "grid": "Q5" },
+    "Q6": { "parent": "walkUp", "grid": "Q6" },
+    "Q7": { "parent": "walkUp", "grid": "Q7" },
+
+    "R0": { "parent": "walkUp", "grid": "R0" },
+    "R1": { "parent": "walkUp", "grid": "R1" },
+    "R2:L": { "dimensions": [0,0,8,16], "grid": "R2:left" },
+    "R2:R": { "parent": "R2:L", "grid": "R2:right" },
+    "R3:L": { "dimensions": [0,0,8,16], "grid": "R3:left" },
+    "R3:R": { "parent": "R3:L", "grid": "R3:right" },
+    "R4": { "parent": "walkUp", "grid": "R4" },
+    "R5": { "parent": "walkUp", "grid": "R5" },
+    "R6": { "parent": "walkUp", "grid": "R6" },
+    "R7": { "parent": "walkUp", "grid": "R7" },
+
+    "S0": { "parent": "walkUp", "grid": "S0" },
+    "S1": { "parent": "walkUp", "grid": "S1" },
+    "S2": { "parent": "walkUp", "grid": "S2" },
+    "S3": { "parent": "walkUp", "grid": "S3" },
+    "S4": { "parent": "walkUp", "grid": "S4" },
+    "S5": { "parent": "walkUp", "grid": "S5" },
+    "S6": { "parent": "walkUp", "grid": "S6" },
+    "S7": { "parent": "walkUp", "grid": "S7" }
   }
 }
