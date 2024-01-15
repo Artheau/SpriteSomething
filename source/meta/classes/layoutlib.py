@@ -325,7 +325,7 @@ class Layout():
                         cropped_image, (x0 - xmin, y0 - ymin + vert_shift))
                 if scale:
                     this_image = this_image.resize(
-                        ((xmax - xmin) // scale, (ymax - ymin) // scale))
+                        ((xmax - xmin) // scale, (ymax - ymin) // scale), Image.Resampling.NEAREST)
                 master_width += xmax - xmin + 2 * \
                     self.data["border_size"] + max(spacer, 0)
 
