@@ -677,11 +677,12 @@ class SpriteSomethingMainFrame(tk.Frame):
   def go_to_next_pose(self):
     self.frame_number = self.frame_number + self.animation_engine.frames_left_in_this_pose()
     self.pause_global_frame_timer()
-    ship_palettes = [pal for _,pal in self.sprite.get_timed_palette("ship","standard")]
-    for colors in ship_palettes:
-        lst = colors
-        lst = [next(l) for l in lst]
-        print(lst)
+    if hasattr(self, "suit_var"):
+        ship_palettes = [pal for _,pal in self.sprite.get_timed_palette("ship","standard")]
+        for colors in ship_palettes:
+            lst = colors
+            lst = [next(l) for l in lst]
+            print(lst)
 
   # start global timer
   def time_marches_forward(self):
@@ -731,7 +732,8 @@ class SpriteSomethingMainFrame(tk.Frame):
       self.game.update_background_image()
       self.update_sprite_animation()
     def set_zoom_text():
-      self.zoom_factor.set('x' + str(round(self.current_zoom, 1)) + ' ')
+      self.current_zoom = round(self.current_zoom, 1)
+      self.zoom_factor.set('x' + str(self.current_zoom) + ' ')
 
     def speed_down(*args):
       self.current_speed = max(0.1, self.current_speed - 0.1)
@@ -740,6 +742,7 @@ class SpriteSomethingMainFrame(tk.Frame):
       self.current_speed = min(2.0, self.current_speed + 0.1)
       set_speed_text()
     def set_speed_text():
+      self.current_speed = round(self.current_speed, 1)
       self.speed_factor.set(str(round(self.current_speed * 100)) + '%')
 
     if not hasattr(self,"current_zoom"):
@@ -1150,7 +1153,14 @@ class SpriteSomethingMainFrame(tk.Frame):
     filetypes = ((self.fish.translate("meta","menu",f"export.palette-{fmt}"),f"*{defExt}"),)
     filename = filedialog.asksaveasfilename(defaultextension=(defExt), initialfile=self.sprite.classic_name.lower(), initialdir=self.working_dirs["export.palette"], title=self.fish.translate("meta","menu",f"export.palette-{fmt}"), filetypes=filetypes)
 
-    self.sprite.export_palette(filename, self.game.name, paletteID, fmt)
+    if filename:
+      returnvalue = self.sprite.export_palette(filename, self.game.name, paletteID, fmt)
+      if returnvalue:
+        # FIXME: English
+        messagebox.showinfo("Save Complete", f"Saved as {filename}")
+      return returnvalue
+    #user cancelled out of the prompt, in which case report that you did not save (i.e. for exiting the program)
+    return False
 
   def open_project_website(self):
     website_url = "https://artheau.github.io/SpriteSomething"
