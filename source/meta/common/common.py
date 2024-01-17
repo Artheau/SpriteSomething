@@ -1,4 +1,4 @@
-import fractions  # for gcd
+import math  # for gcd
 import itertools
 import os
 import struct
@@ -18,7 +18,7 @@ def equal(image1, image2):
 
 def lcm(x, y):
     # least common multiple
-    return x * y // fractions.gcd(x, y)
+    return x * y // math.gcd(x, y)
 
 
 def filename_scrub(filename):

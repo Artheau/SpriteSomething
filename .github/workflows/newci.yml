@@ -15,6 +15,14 @@ on: [push, pull_request]
 # Artheau/SpriteSomething/install
 # Artheau/SpriteSomething/test
 
+#########
+# runners
+# https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners
+#########
+# ubuntu-latest,  ubuntu-22.04, ubuntu-20.04
+# macos-latest,   macos-12
+# windows-latest, windows-2022
+
 jobs:
   # Test
   test:
@@ -26,43 +34,25 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          ubuntu-latest,
+          # ubuntu-latest,  # ubuntu-22.04
           ubuntu-22.04,
           ubuntu-20.04,
-          macos-latest,
-          windows-latest
+          macos-latest,   # macos-12
+          windows-latest  # windows-2022
         ]
 
-        # should run on py 3.8-3.10
+        # should run on py 3.11+
         python-version: [
-          3.8,
-          3.9,
-          "3.10"
+          "3.11",
+          "3.12",
         ]
 
         # PIL 6.2.2 is good
         # PIL 7.0.0+ introduces color error
+        # PIL 7.0.0+ should be fixed
         pillow-version: [
-          "6.2.2",
-          # "7.0.0",
-          # "7.1.2",
-          # "7.2.0",
-          # "8.0.1",
-          # "8.1.2",
-          # "8.2.0",
-          # "8.3.2",
-          # "8.4.0",
-          # "9.0.1",
+          "10.2.0",
         ]
-        exclude:
-          - os-name: macos-latest
-            python-version: 3.9
-          - os-name: macos-latest
-            python-version: "3.10"
-          - os-name: windows-latest
-            python-version: 3.9
-          - os-name: windows-latest
-            python-version: "3.10"
     steps:
       # checkout commit
       - name: ✔️Checkout commit
@@ -105,44 +95,28 @@ jobs:
       matrix:
         # should run on all OS
         # except Mac now since it's erroring out with tk in py3.8+
+        # FIXME: is Mac happy now?
         os-name: [
-          ubuntu-latest,
-          ubuntu-22.04,
+          ubuntu-latest,  # ubuntu-22.04
+          # ubuntu-22.04,
           ubuntu-20.04,
-          # macos-latest,
+          macos-latest,
           windows-latest
         ]
 
-        # should run on py 3.8-3.10
+        # should run on py 3.11+
         python-version: [
-          3.8,
-          3.9,
-          "3.10"
+          "3.11",
+          "3.12",
         ]
 
         # PIL 6.2.2 is good
         # PIL 7.0.0+ introduces color error
+        # PIL 7.0.0+ should be fixed
         pillow-version: [
-          "6.2.2",
-          # "7.0.0",
-          # "7.1.2",
-          # "7.2.0",
-          # "8.0.1",
-          # "8.1.2",
-          # "8.2.0",
-          # "8.3.2",
-          # "8.4.0",
-          # "9.0.1",
+          "10.2.0",
         ]
-        exclude:
-          - os-name: macos-latest
-            python-version: 3.9
-          - os-name: macos-latest
-            python-version: "3.10"
-          - os-name: windows-latest
-            python-version: 3.9
-          - os-name: windows-latest
-            python-version: "3.10"
+
     steps:
       # checkout commit
       - name: ✔️Checkout commit
@@ -167,50 +141,32 @@ jobs:
     name: 💿/🔨
     runs-on: ${{ matrix.os-name }}
     needs: [install-test]
-    continue-on-error: True
+    # continue-on-error: True
 
     strategy:
       matrix:
         # should run on all OS
         os-name: [
-          ubuntu-latest,
-          ubuntu-22.04,
+          ubuntu-latest,  # ubuntu-22.04
+          # ubuntu-22.04,
           ubuntu-20.04,
-          macos-latest,
-          windows-latest
+          macos-latest,   # macos-12
+          windows-latest  # windows-2022
         ]
 
-        # should run on py 3.8-3.10
+        # should run on py 3.11+
         python-version: [
-          3.8,
-          3.9,
-          "3.10"
+          "3.11",
+          "3.12",
         ]
 
         # PIL 6.2.2 is good
         # PIL 7.0.0+ introduces color error
+        # PIL 7.0.0+ should be fixed
         pillow-version: [
-            "6.2.2",
-            # "7.0.0",
-            # "7.1.2",
-            # "7.2.0",
-            # "8.0.1",
-            # "8.1.2",
-            # "8.2.0",
-            # "8.3.2",
-            # "8.4.0",
-            # "9.0.1",
-          ]
-        exclude:
-          # mac & windows fail on 3.9+
-          - os-name: macos-latest
-            python-version: 3.9
-          - os-name: macos-latest
-            python-version: "3.10"
-          - os-name: windows-latest
-            python-version: 3.9
-          - os-name: windows-latest
-            python-version: "3.10"
+          "10.2.0",
+        ]
+
     steps:
       # checkout commit
       - name: ✔️Checkout commit
@@ -247,14 +203,22 @@ jobs:
 
         # run on py 3.8 (EOL: 2024-10-14)
         # EOL
+        # https://devguide.python.org/versions/
         #  3.8:   2024-10-14
         #  3.9:   2025-10-05
         #  3.10:  2026-10-04
-        python-version: [3.8]
+        #  3.11:  2027-10
+        #  3.12:  2028-10
+        python-version: [
+          "3.11",
+          "3.12",
+        ]
 
-        # run on PIL 6.2.2
-        # can't build on py 3.9-3.10
-        pillow-version: ["6.2.2"]
+        # PIL 7.0.0+ should be fixed
+        pillow-version: [
+          "10.2.0",
+        ]
+
     steps:
       # checkout commit
       - name: ✔️Checkout commit
@@ -283,7 +247,9 @@ jobs:
     strategy:
       matrix:
         os-name: [ubuntu-latest]
-        python-version: [3.8]
+        python-version: [
+          "3.12"
+        ]
 
     steps:
       # checkout commit
