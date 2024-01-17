@@ -49,6 +49,7 @@ class SpriteParent():
         self.filename = filename
         self.overview_scale_factor = 2
         self.overhead = True
+        self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
         if "input" in manifest_dict and \
             "png" in manifest_dict["input"] and \
                 "overview-scale-factor" in manifest_dict["input"]["png"]:
