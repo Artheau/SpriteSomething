@@ -5,6 +5,12 @@ import sys
 import source.meta.common.constants as CONST
 from datetime import datetime
 
+hasUTC = True
+try:
+    from datetime import UTC
+except ImportError as e:
+    hasUTC = False
+
 if "windows" in platform.system().lower():
   import pkg_resources
 
@@ -15,7 +21,7 @@ def output():
   lines = [
     "SpriteSomething Diagnostics",
     "===========================",
-    diagpad("UTC Time") + str(datetime.utcnow())[:19],
+    diagpad("UTC Time") + (str(datetime.now(UTC))[:19] if hasUTC else (str(datetime.utcnow()))),
     diagpad("SpriteSomething Version") + CONST.APP_VERSION,
     diagpad("Python Version") + platform.python_version()
   ]
