@@ -75,6 +75,7 @@
     "author.name-short": "Author Name Short",
     "background": "Background",
     "animations": "Animations",
+    "pos": "Position",
     "step": "Step"
   },
   "tab": {

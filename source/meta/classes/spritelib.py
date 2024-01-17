@@ -11,18 +11,17 @@ try:
 except ModuleNotFoundError as e:
     print(e)
 
-import itertools
 import importlib
-import io
 import json
 import os
-import random
 import tempfile
-from functools import partial
-from json.decoder import JSONDecodeError
-from shutil import make_archive, move
+
+from functools import partial                   #for passing parameters to user-triggered function calls
+from json import JSONDecodeError
+
 from source.meta.classes import layoutlib
 from source.meta.common import common
+
 
 # TODO: make this an actual abstract class by importing 'abc'
 #    and doing the things
@@ -35,6 +34,8 @@ class SpriteParent():
         # the path to this sprite's subfolder in resources
         self.resource_subpath = my_subpath
         self.internal_name = manifest_dict["folder name"]
+        if sprite_name == "":
+            sprite_name = self.internal_name
         self.metadata = {
                           "sprite.name": "",
                           "author.name": "",
@@ -42,19 +43,39 @@ class SpriteParent():
         }
         self.filename = filename
         self.input_dims = []
+        self.inputs = []
+        self.outputs = []
         self.overview_scale_factor = 2
         self.overhead = True
         self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
-        if "input" in manifest_dict and \
-            "png" in manifest_dict["input"]:
-            pngs = manifest_dict["input"]["png"]
-            if not isinstance(pngs, list):
-                pngs = [pngs]
-            for png in pngs:
-                if ((not sprite_name == "" and "name" in png and png["name"] == sprite_name) or sprite_name == ""):
-                    self.input_dims = png["dims"]
-                    if "overview-scale-factor" in png:
-                        self.overview_scale_factor = png["overview-scale-factor"]
+        if "input" in manifest_dict:
+            self.inputs = [f".{x}" for x in manifest_dict["input"].keys()]
+            if "png" in manifest_dict["input"]:
+                self.outputs = [ ".png" ]
+                pngs = manifest_dict["input"]["png"]
+                if not isinstance(pngs, list):
+                    pngs = [pngs]
+                for png in pngs:
+                    if ((not sprite_name == "" and "name" in png and png["name"] == sprite_name) or sprite_name == ""):
+                        self.input_dims = png["dims"]
+                        if "overview-scale-factor" in png:
+                            self.overview_scale_factor = png["overview-scale-factor"]
+        if "output" in manifest_dict:
+            self.outputs = [*self.outputs, *manifest_dict["output"]]
+
+        console_path = os.path.join("resources","app",self.resource_subpath,"..","..")
+        if os.path.isfile(os.path.join(console_path,"manifests","manifest.json")):
+            with open(os.path.join(console_path,"manifests","manifest.json")) as f:
+                console_manifest = {}
+                try:
+                    console_manifest = json.load(f)
+                except JSONDecodeError as e:
+                    raise ValueError("")
+                if "input" in console_manifest:
+                    self.inputs = [*self.inputs, *console_manifest["input"]]
+                if "output" in console_manifest:
+                    self.outputs = [*self.outputs, *console_manifest["output"]]
+
         self.plugins = None
         self.has_plugins = False
         self.load_layout(sprite_name)
@@ -94,7 +115,7 @@ class SpriteParent():
 
         #if the child class didn't tell us what to do, just go back to whatever palette it was on when it was imported
         palette = []
-        if self.master_palette:
+        if self.master_palette and default_range:
             palette = self.master_palette[default_range[0]:default_range[1]]
 
         return palette
@@ -108,13 +129,18 @@ class SpriteParent():
     #the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
 
     def load_layout(self, sprite_name=""):
-        self.layout = layoutlib.Layout(
-            common.get_resource(
-                [self.resource_subpath, "manifests"],
-                "layout.json"
-            ),
-            sprite_name
+        layout_resources = common.get_resource(
+            [self.resource_subpath, "manifests"],
+            "layout.json"
         )
+        if layout_resources:
+            self.layout = layoutlib.Layout(
+                layout_resources,
+                sprite_name
+            )
+        else:
+            layout_path = self.resource_subpath.replace(os.sep, '/') + "/manifests/layout.json"
+            raise AssertionError(f"Layout not found: {layout_path}")
 
     def load_animations(self, sprite_name=""):
         animations_found = False
@@ -125,6 +151,7 @@ class SpriteParent():
         )
         if animsManifest:
             with open(animsManifest, "r", encoding="utf-8") as file:
+                self.animations = {}
                 try:
                     self.animations = json.load(file)
                 except JSONDecodeError as e:
@@ -150,30 +177,19 @@ class SpriteParent():
                     # print("Loading Animations!")
                 if "$schema" in self.animations:
                     del self.animations["$schema"]
+        else:
+            animations_path = self.resource_subpath.replace(os.sep, '/') + "/manifests/animations.json"
+            raise AssertionError(f"Animations not found: {animations_path}")
 
     def import_from_filename(self):
         _, file_extension = os.path.splitext(self.filename)
-        #FIXME: Supported filetypes
-        filetypes = [
-            ".png",     # Main input
-            ".4bpp",    # Raw
-            ".zspr",    # Z3Link
-            ".sfc",     # SNES
-            ".smc",     # SNES
-            ".nes",     # NES
-            ".bmp",     # FFMQBen
-            ".zip",     # Mo3Player
-            ".aspr",    # ASPR (WIP)
-            ".zhx",     # ZHX (WIP)
-            ".rdc"      # Z3Link/M3Samus
-        ]
         if file_extension.lower() in ['.png', '.bmp']:
             self.import_from_PNG()
         elif file_extension.lower() == '.zspr':
             self.import_from_ZSPR()
         elif file_extension.lower() in [
             '.sfc', '.smc',  # SNES RomHandler
-            #        '.nes' # NES RomHandler
+            '.nes'           # NES RomHandler
         ]:
             # dynamic import
             rom_path, _ = os.path.split(self.resource_subpath)
@@ -652,6 +668,8 @@ class SpriteParent():
 
             base_image = common.apply_palette(base_image, this_palette)
 
+            if "pos" not in tile_info:
+                tile_info["pos"] = [0,0]
             position = [tile_info["pos"][i] + global_displacement[i] for i in range(2)]    #add the x and y coords
 
             full_tile_list.append( (base_image,position) )
@@ -682,15 +700,20 @@ class SpriteParent():
         return returnvalue
 
     def get_pose_list(self, animation, direction):
-        direction_dict = self.animations[animation]
-        if direction in direction_dict:
-            return direction_dict[direction]
-        else:
-            return []
+        directions = []
+
+        if len(self.animations):
+            if animation in self.animations:
+                direction_dict = self.animations[animation]
+                if direction in direction_dict:
+                    directions = direction_dict[direction]
+        return directions
 
     def get_alternative_direction(self, animation, direction):
-        direction_dict = self.animations[animation]
-        return next(iter(direction_dict.keys()))
+        direction_dict = None
+        if len(self.animations):
+            direction_dict = self.animations[animation]
+        return next(iter(direction_dict.keys())) if direction_dict else None
 
     def assemble_tiles_to_completed_image(self, tile_list):
         if tile_list:     #have to check this because some animations include "empty" poses
@@ -805,27 +828,12 @@ class SpriteParent():
 
     def save_as(self, filename, game_name):
         _, file_extension = os.path.splitext(filename)
-        #FIXME: Supported filetypes
-        filetypes = [
-            ".png",     # Main input
-            ".4bpp",    # Raw
-            ".zspr",    # Z3Link
-            ".sfc",     # SNES
-            ".smc",     # SNES
-            ".nes",     # NES
-            ".bmp",     # FFMQBen
-            ".zip",     # Mo3Player
-            ".aspr",    # ASPR (WIP)
-            ".zhx",     # ZHX (WIP)
-            ".rdc"      # Z3Link/M3Samus
-        ]
+        save_as_funcname = f"save_as_{file_extension.upper()[1:]}"
         if file_extension.lower() in [".png", ".bmp"]:
             return self.save_as_PNG(filename)
-        elif file_extension.lower() == ".zspr":
-            return self.save_as_ZSPR(filename)
-        elif file_extension.lower() == ".rdc":
-            return self.save_as_RDC(filename)
-        elif file_extension.lower() in filetypes:
+        elif hasattr(self, save_as_funcname):
+            return partial(getattr(self, save_as_funcname), filename)
+        elif file_extension.lower() in self.outputs:
             print(f"{file_extension.upper()[1:]} not yet available by GUI for '{game_name}' / '{self.classic_name}' Sprites!")
             return
         else:

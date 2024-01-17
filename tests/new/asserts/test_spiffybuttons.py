@@ -81,9 +81,6 @@ class SpiffyButtonAudit(unittest.TestCase):
                     self.run_palette_audit(palettes)
 
     def run_palette_audit(self, PALETTES_TO_CHECK):
-        if self.gameID in ["mother2"]:
-            print(f"{self.gameID} is a WIP!")
-            return
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
         if spriteData["view-only"]:
             print(f"{self.spriteID} is a WIP!")

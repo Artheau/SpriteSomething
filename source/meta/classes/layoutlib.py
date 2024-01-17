@@ -15,6 +15,10 @@ from source.meta.common import common
 
 class Layout():
     def __init__(self, filename, sprite_name=""):
+        if not filename or not os.path.isfile(filename):
+            layout_path = self.filename.replace(os.sep, '/')
+            layout_path = layout_path[layout_path.find("app/")+len("app/"):]
+            raise AssertionError(f"Layout not found: {layout_path}")
         with open(filename) as inFile:
             self.data = []
             try:
@@ -22,18 +26,20 @@ class Layout():
             except JSONDecodeError as e:
                 raise ValueError("Layout manifest malformed: " + filename)
         self.reverse_lookup = {}
-        # print("Finding Layouts!")
+        print(f"Finding Layouts! [{sprite_name}]")
         if "layouts" in self.data:
             for layout in self.data["layouts"]:
                 if "names" in layout and sprite_name in layout["names"]:
-                    print("Found " + sprite_name + "!")
+                    print(f"Found {sprite_name}!")
                     self.data = layout
         for image_name,image_info in self.data["images"].items():
-            for image_ref in image_info["used by"]:
-                if tuple(image_ref) in self.reverse_lookup:
-                    self.reverse_lookup[tuple(image_ref)].append(image_name)
-                else:
-                    self.reverse_lookup[tuple(image_ref)] = [image_name]
+            if "used by" in image_info:
+                for image_ref in image_info["used by"]:
+                    if tuple(image_ref) in self.reverse_lookup:
+                        self.reverse_lookup[tuple(image_ref)].append(image_name)
+                    else:
+                        self.reverse_lookup[tuple(image_ref)] = [image_name]
+        self.filename = filename
 
     def get_image_name(self, animation, pose, force=None):
         if type(animation) is int:
@@ -60,7 +66,14 @@ class Layout():
         return self.reverse_lookup[(animation, pose)]
 
     def get_rows(self):
-        return self.data["layout"]
+        rows = None
+        if "layout" in self.data:
+            rows = self.data["layout"]
+        if not rows or len(rows) == 0:
+            layout_path = self.filename.replace(os.sep, '/')
+            layout_path = layout_path[layout_path.find("app/")+len("app/"):]
+            raise AssertionError(f"No rows found in layout: {layout_path}")
+        return rows
 
     def add_borders_and_scale(self, image, origin, image_name):
         #from the layout data, get all the different pieces of the image, and then assemble them together
@@ -165,14 +178,18 @@ class Layout():
         return collage
 
     def make_vertical_collage(self, image_list):
-        width = max([image.size[0] for image in image_list])
-        height = sum([image.size[1] for image in image_list])
+        collage = None
 
-        collage = Image.new("RGBA", (width,height), 0)
-        current_y = 0
-        for image in image_list:
-            collage.paste(image, ((width-image.size[0])//2,current_y))
-            current_y += image.size[1]
+        if len(image_list):
+            width = max([image.size[0] for image in image_list])
+            height = sum([image.size[1] for image in image_list])
+
+            collage = Image.new("RGBA", (width,height), 0)
+            current_y = 0
+            for image in image_list:
+                collage.paste(image, ((width-image.size[0])//2,current_y))
+                current_y += image.size[1]
+
         return collage
 
     def export_all_images_to_PNG(self, all_images, master_palette):
@@ -213,10 +230,15 @@ class Layout():
             row_width = 0
             row_y_min,row_y_max = float('Inf'),-float('Inf')
             for image_name in row:     #for every image referenced explicitly in the layout
-                spacer = self.data["images"][image_name]["spacer"] if "spacer" in self.data["images"][image_name] else 0
-                xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
-                row_width += (xmax-xmin)+2*self.data["border_size"]+abs(spacer)
-                row_y_min,row_y_max = min(row_y_min,ymin),max(row_y_max,ymax)
+                if image_name in self.data["images"]:
+                    spacer = self.data["images"][image_name]["spacer"] if "spacer" in self.data["images"][image_name] else 0
+                    xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
+                    row_width += (xmax-xmin)+2*self.data["border_size"]+abs(spacer)
+                    row_y_min,row_y_max = min(row_y_min,ymin),max(row_y_max,ymax)
+                else:
+                    layout_path = self.filename.replace(os.sep, '/')
+                    layout_path = layout_path[layout_path.find("app/")+len("app/"):]
+                    raise AssertionError(f"'{image_name}' not found in layout/image definition for '{layout_path}'!")
             row_height = row_y_max-row_y_min+2*self.data["border_size"]
             row_margin = (master_image.size[0] - row_width)//2
             row_of_images = master_image.crop((row_margin,master_height,row_width+row_margin,master_height+row_height))
@@ -265,16 +287,30 @@ class Layout():
                         )
                 master_width += xmax - xmin + 2 * \
                     self.data["border_size"] + max(spacer, 0)
-
                 all_images[image_name] = this_image
 
         all_images["transparent"] = Image.new("RGBA",(0,0),0)
 
         #FIXME: Extrapolate layoutlib.py to <console>/<game>/<sprite>/layout.py
-        if "meta_block" in all_images:
-            meta_block = all_images["meta_block"].transpose(Image.FLIP_TOP_BOTTOM)
-            palette_block = meta_block.crop(self.coord_calc((0,0),(8,1)))
-            all_images["palette_block"] = palette_block
+        tmp = {}
+        for block_name in [
+            "meta_block",
+            "meta_block1",
+            "meta_block2"
+        ]:
+            if block_name in all_images:
+                palette_block = None
+                if f"ffmq{os.sep}benjamin" in self.filename:
+                    meta_block = all_images[block_name].transpose(Image.FLIP_TOP_BOTTOM)
+                    palette_block = meta_block.crop(self.coord_calc((0,0),(8,1)))
+                if f"ffmq{os.sep}darkking" in self.filename:
+                    meta_block = all_images[block_name].transpose(Image.FLIP_LEFT_RIGHT)
+                    meta_block = meta_block.crop(self.coord_calc((0,0),(8,1)))
+                    palette_block = meta_block.transpose(Image.FLIP_LEFT_RIGHT)
+                    # tmp[block_name] = palette_block
+                    # palette_block.show()
+                if palette_block:
+                    all_images["palette_block"] = palette_block
 
         master_palettes = list(
             all_images["palette_block"].convert("RGB").getdata()) \
@@ -282,7 +318,13 @@ class Layout():
 
         if len(master_palettes):
             for image_name, this_image in all_images.items():
-                if not image_name in ["transparent","palette_block"]:
+                if not image_name in [
+                    "transparent",
+                    "meta_block",
+                    "meta_block1",
+                    "meta_block2",
+                    "palette_block"
+                ]:
                     import_palette = self.get_property("import palette interval", image_name)
                     palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]     #flatten the RGB values
                     palette = palette + palette[:3]*(256-(len(palette)//3))

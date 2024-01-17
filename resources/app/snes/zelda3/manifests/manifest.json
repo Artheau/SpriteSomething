@@ -8,7 +8,8 @@
       "png": {
         "dims": [ 128, 448 ]
       }
-    }
+    },
+    "output": [ ".zspr", ".rdc" ]
   },
   "16": {
     "type": "Icon",
