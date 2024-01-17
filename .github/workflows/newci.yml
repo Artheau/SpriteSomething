@@ -98,8 +98,8 @@ jobs:
         # except Mac now since it's erroring out with tk in py3.8+
         # FIXME: is Mac happy now?
         os-name: [
-          ubuntu-latest,  # ubuntu-22.04
-          # ubuntu-22.04,
+          # ubuntu-latest,  # ubuntu-22.04
+          ubuntu-22.04,
           ubuntu-20.04,
           macos-latest,
           windows-latest
@@ -149,8 +149,8 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          ubuntu-latest,  # ubuntu-22.04
-          # ubuntu-22.04,
+          # ubuntu-latest,  # ubuntu-22.04
+          ubuntu-22.04,
           ubuntu-20.04,
           macos-latest,   # macos-12
           windows-latest  # windows-2022
