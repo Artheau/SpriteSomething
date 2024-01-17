@@ -1,6 +1,9 @@
 name: 🔨Build
 description: Build app
 inputs:
+  calling-job:
+    required: true
+    description: Job that's calling this one
   os-name:
     required: true
     description: OS to run on
@@ -98,7 +101,7 @@ runs:
     - name: 🔼Upload AppVersion Artifact
       uses: actions/upload-artifact@v4.1.0
       with:
-        name: appversion-${{ inputs.os-name }}
+        name: appversion-${{ inputs.calling-job }}-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./resources/app/meta/manifests/app_version.txt
 
     # run build.py
