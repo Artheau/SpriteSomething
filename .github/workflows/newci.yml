@@ -71,6 +71,7 @@ jobs:
       - name: 💿Call Install
         uses: ./.github/actions/install
         with:
+          calling-job: diags
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
@@ -125,6 +126,7 @@ jobs:
       - name: 💿Call Install
         uses: ./.github/actions/install
         with:
+          calling-job: test
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
@@ -175,6 +177,7 @@ jobs:
       - name: 💿Call Install
         uses: ./.github/actions/install
         with:
+          calling-job: build
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
@@ -227,6 +230,7 @@ jobs:
       - name: 💿Call Install
         uses: ./.github/actions/install
         with:
+          calling-job: release
           os-name: ${{ matrix.os-name }}
           python-version: ${{ matrix.python-version }}
           pillow-version: ${{ matrix.pillow-version }}
