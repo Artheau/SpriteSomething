@@ -1,0 +1,124 @@
+{
+  "$schema": "../../../../../schema/png-layout.schema.json",
+  "comment": [
+    "This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",
+    "will also be the pose that is used to import the image.  For this reason, some poses will be out of order",
+    "and this is intentional because a pose might be mirrored in its first occurance (grapple), or perhaps",
+    "the way that it will be present in the ROM is different before and after modification (e.g. screw attack)"
+  ],
+  "border_color": [217, 87, 99, 255],
+  "border_size": 0,
+  "layout": [
+    [ "header" ],
+    [
+      "spacer",
+
+      "walk",
+      "walk1",
+
+      "spacer2",
+
+      "walk2",
+      "walk3",
+
+      "spacer2",
+
+      "walk4",
+      "walk5",
+
+      "spacer2",
+
+      "walk6",
+      "walk7",
+
+      "spacer3"
+    ],
+    [ "spacer4" ],
+    [
+      "spacer",
+
+      "walk8",
+      "walk9",
+
+      "spacer2",
+
+      "walk10",
+      "walk11",
+
+      "spacer2",
+
+      "walk12",
+      "walk13",
+
+      "spacer2",
+
+      "walk14",
+      "walk15",
+
+      "spacer3"
+    ],
+    [ "spacer4" ],
+    [
+      "spacer",
+
+      "carry",
+      "carry1",
+
+      "spacer2",
+
+      "carry2",
+      "carry3",
+
+      "spacer2",
+
+      "carry4",
+      "carry5",
+
+      "spacer2",
+
+      "carry6",
+      "carry7",
+
+      "spacer3"
+    ]
+  ],
+  "images": {
+    "header": { "dimensions": [0,0,176,54], "used by": [["TODO",0]] },
+    "spacer": { "dimensions": [0,0,16,18], "used by": [["TODO",0]] },
+
+    "walk": {
+      "dimensions": [0,0,17,18],
+      "used by": [["TODO",0]]
+    },
+    "walk1": { "parent": "walk", "used by": [["TODO",0]] },
+
+    "spacer2": { "dimensions": [0,0,3,18], "used by": [["TODO",0]] },
+
+    "walk2": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk3": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk4": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk5": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk6": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk7": { "parent": "walk", "used by": [["TODO",0]] },
+
+    "spacer3": { "dimensions": [0,0,15,18], "used by": [["TODO",0]] },
+    "spacer4": { "dimensions": [0,0,176,5], "used by": [["TODO",0]] },
+
+    "walk8": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk9": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk10": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk11": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk12": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk13": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk14": { "parent": "walk", "used by": [["TODO",0]] },
+    "walk15": { "parent": "walk", "used by": [["TODO",0]] },
+    "carry": { "parent": "walk", "used by": [["TODO",0]] },
+    "carry1": { "parent": "walk", "used by": [["TODO",0]] },
+    "carry2": { "parent": "walk", "used by": [["TODO",0]] },
+    "carry3": { "parent": "walk", "used by": [["TODO",0]] },
+    "carry4": { "parent": "walk", "used by": [["TODO",0]] },
+    "carry5": { "parent": "walk", "used by": [["TODO",0]] },
+    "carry6": { "parent": "walk", "used by": [["TODO",0]] },
+    "carry7": { "parent": "walk", "used by": [["TODO",0]] }
+  }
+}

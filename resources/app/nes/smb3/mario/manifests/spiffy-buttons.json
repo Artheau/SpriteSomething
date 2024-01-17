@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../../../schema/spiffy-buttons.schema.json",
+  "button-groups": [
+    {
+      "group-fish-key": "size",
+      "buttons": [
+        {
+          "fish-subkey": "small",
+          "img": "poison.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "super",
+          "img": "shroom.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "brother",
+      "buttons": [
+        {
+          "fish-subkey": "mario",
+          "img": "mario.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "luigi",
+          "img": "luigi.png"
+        },
+        {
+          "fish-subkey": "fire",
+          "img": "fireflower.png"
+        }
+      ]
+    }
+  ]
+}

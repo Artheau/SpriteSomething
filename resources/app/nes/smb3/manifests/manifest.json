@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../../schema/game-sprite-manifest.schema.json",
+  "1": {
+    "type": "Player Character Sprite",
+    "name": "Mario",
+    "folder name": "mario",
+    "input": {
+      "png": {
+        "dims": [ 490, 370 ]
+      }
+    },
+    "output": []
+  }
+}

@@ -1,0 +1,15 @@
+{
+	"$schema": "../../../../../schema/animations.schema.json",
+	"sets": [
+		{
+			"names": [ "trace", "tracecoat" ],
+			"animations": {
+			  "Dead": {
+			    "right": [
+			      { "frames": 10, "tiles": [ {"image": "dead", "pos": [0,0]} ] }
+			    ]
+			  }
+			}
+		}
+	]
+}

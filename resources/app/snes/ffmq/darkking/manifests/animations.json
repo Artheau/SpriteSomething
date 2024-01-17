@@ -1,0 +1,90 @@
+{
+  "$schema": "../../../../../schema/animations.schema.json",
+  "sets": [
+    {
+      "names": [ "darkking" ],
+      "animations": {
+        "Dark King: Phase 1": {
+          "right": [
+            { "frames": 20, "background": "battle-dark-king.0.png", "origin": [76,29], "tiles": [ { "image": "darkkinga", "pos": [0,0] } ] }
+          ]
+        },
+        "Dark King: Phase 2": {
+          "right": [
+            { "frames": 20, "background": "battle-dark-king.0.png", "origin": [22,29], "tiles": [ { "image": "darkkingb", "pos": [0,0] } ] }
+          ]
+        },
+        "Dark King: Phase 3": {
+          "right": [
+            { "frames": 20, "background": "battle-dark-king.0.png", "origin": [15,29], "displacement": [0,0], "tiles": [ { "image": "darkking1", "pos": [0,0] } ] }
+          ]
+        },
+        "Meta Block: Phase 3": {
+          "right": [
+            { "frames": 20, "displacement": [0,0], "tiles": [ {"image": "meta_block1", "pos": [0,0] } ] }
+          ]
+        },
+        "Dark King: Phase 4": {
+          "right": [
+            { "frames": 20, "background": "battle-dark-king.0.png", "origin": [15,29], "displacement": [0,0], "tiles": [ { "image": "darkking2", "pos": [0,0] } ] }
+          ]
+        },
+        "Meta Block: Phase 4": {
+          "right": [
+            { "frames": 20, "displacement": [0,0], "tiles": [ {"image": "meta_block2", "pos": [0,0] } ] }
+          ]
+        }
+      }
+    },
+    {
+      "names": [ "darkking1" ],
+      "animations": {
+        "Dark King: Phase 1": {
+          "right": [
+            { "frames": 20, "background": "battle-dark-king.0.png", "origin": [76,29], "tiles": [ { "image": "darkkinga", "pos": [0,0] } ] }
+          ]
+        },
+        "Dark King: Phase 2": {
+          "right": [
+            { "frames": 20, "background": "battle-dark-king.0.png", "origin": [22,29], "tiles": [ { "image": "darkkingb", "pos": [0,0] } ] }
+          ]
+        },
+        "Dark King: Phase 3": {
+          "right": [
+            { "frames": 20, "background": "battle-dark-king.0.png", "origin": [15,29], "displacement": [0,0], "tiles": [ { "image": "darkking1", "pos": [0,0] } ] }
+          ]
+        },
+        "Meta Block: Phase 3": {
+          "right": [
+            { "frames": 20, "displacement": [0,0], "tiles": [ {"image": "meta_block1", "pos": [0,0] } ] }
+          ]
+        }
+      }
+    },
+    {
+      "names": [ "darkking2" ],
+      "animations": {
+        "Dark King: Phase 1": {
+          "right": [
+            { "frames": 20, "background": "battle-dark-king.0.png", "origin": [76,29], "tiles": [ { "image": "darkkinga", "pos": [0,0] } ] }
+          ]
+        },
+        "Dark King: Phase 2": {
+          "right": [
+            { "frames": 20, "background": "battle-dark-king.0.png", "origin": [22,29], "tiles": [ { "image": "darkkingb", "pos": [0,0] } ] }
+          ]
+        },
+        "Dark King: Phase 4": {
+          "right": [
+            { "frames": 20, "background": "battle-dark-king.0.png", "origin": [15,29], "displacement": [0,0], "tiles": [ { "image": "darkking1", "pos": [0,0] } ] }
+          ]
+        },
+        "Meta Block: Phase 4": {
+          "right": [
+            { "frames": 20, "displacement": [0,0], "tiles": [ {"image": "meta_block1", "pos": [0,0] } ] }
+          ]
+        }
+      }
+    }
+  ]
+}

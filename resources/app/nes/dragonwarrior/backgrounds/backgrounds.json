@@ -1,0 +1,24 @@
+{
+  "backgrounds": [
+    {
+      "filename": "brick.png",
+      "title": "Brick"
+    },
+    {
+      "filename": "grass.png",
+      "title": "Grass"
+    },
+    {
+      "filename": "sand.png",
+      "title": "Sand"
+    },
+    {
+      "filename": "trees.png",
+      "title": "Trees"
+    },
+    {
+      "filename": "loto5.png",
+      "title": "Loto-5"
+    }
+  ]
+}

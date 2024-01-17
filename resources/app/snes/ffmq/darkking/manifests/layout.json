@@ -1,0 +1,94 @@
+{
+  "$schema": "../../../../../schema/png-layout.schema.json",
+  "comment": [
+    "This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",
+    "will also be the pose that is used to import the image.  For this reason, some poses will be out of order",
+    "and this is intentional because a pose might be mirrored in its first occurance (grapple), or perhaps",
+    "the way that it will be present in the ROM is different before and after modification (e.g. screw attack)"
+  ],
+  "layouts": [
+    {
+      "names": [ "darkking" ],
+      "border_color": [0, 0, 0, 255],
+      "border_size": 0,
+      "layout": [
+        [
+          "darkking1"
+        ],
+        [
+          "meta_block1"
+        ],
+        [
+          "darkking2"
+        ],
+        [
+          "meta_block2"
+        ]
+      ],
+      "images": {
+        "darkking1": {
+          "dimensions": [0,0,224,80],
+          "import palette interval": [1,8],
+          "used by": [["TODO",0]]
+        },
+        "meta_block1": {
+          "dimensions": [0,0,224,1],
+          "import palette interval": [1,8],
+          "used by": [["TODO",0]]
+        },
+        "darkking2": { "parent": "darkking1", "used by": [["TODO",0]] },
+        "meta_block2": { "parent": "meta_block1", "used by": [["TODO",0]] }
+      }
+    },
+    {
+      "names": [ "darkking1" ],
+      "border_color": [0, 0, 0, 255],
+      "border_size": 0,
+      "layout": [
+        [
+          "darkking1"
+        ],
+        [
+          "meta_block1"
+        ]
+      ],
+      "images": {
+        "darkking1": {
+          "dimensions": [0,0,224,80],
+          "import palette interval": [1,8],
+          "used by": [["TODO",0]]
+        },
+        "meta_block1": {
+          "dimensions": [0,0,224,1],
+          "import palette interval": [1,8],
+          "used by": [["TODO",0]]
+        }
+      }
+    },
+    {
+      "names": [ "darkking2" ],
+      "border_color": [0, 0, 0, 255],
+      "border_size": 0,
+      "layout": [
+        [
+          "darkking1"
+        ],
+        [
+          "meta_block1"
+        ]
+      ],
+      "images": {
+        "darkking1": {
+          "dimensions": [0,0,224,80],
+          "import palette interval": [1,8],
+          "used by": [["TODO",0]]
+        },
+        "meta_block1": {
+          "dimensions": [0,0,224,1],
+          "import palette interval": [1,8],
+          "used by": [["TODO",0]]
+        }
+      }
+    }
+  ]
+}

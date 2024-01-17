@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../../../schema/spiffy-buttons.schema.json",
+  "button-groups": [
+    {
+      "group-fish-key": "pronoun",
+      "buttons": [
+        {
+          "fish-subkey": "him",
+          "img": "pronoun-him.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "her",
+          "img": "pronoun-her.png"
+        }
+      ]
+    }
+  ]
+}

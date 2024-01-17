@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../schema/game-sprite-manifest.schema.json",
+  "1": {
+    "type": "Player Character Sprite",
+    "name": "Benjamin",
+    "folder name": "benjamin",
+    "view-only": true,
+    "input": {
+      "bmp": {
+        "dims": [104, 64],
+        "overview-scale-factor": 1
+      },
+      "png": {
+        "dims": [104, 64],
+        "overview-scale-factor": 1
+      }
+    },
+    "output": [ ".bmp" ]
+  },
+  "2": {
+    "type": "Dark King Boss Sprite",
+    "name": "Dark King",
+    "folder name": "darkking",
+    "view-only": true,
+    "archive": true,
+    "input": {
+      "bmp": [
+        {
+          "name": "darkking1",
+          "dims": [224, 81],
+          "overview-scale-factor": 1
+        },
+        {
+          "name": "darkking2",
+          "dims": [224, 81],
+          "overview-scale-factor": 1
+        },
+        {
+          "name": "darkking",
+          "dims": [224, 162],
+          "overview-scale-factor": 1
+        }
+      ],
+      "png": {
+        "dims": [224, 162],
+        "overview-scale-factor": 1
+      }
+    },
+    "output": [ ".bmp" ]
+  }
+}

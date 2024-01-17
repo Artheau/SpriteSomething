@@ -1,0 +1,72 @@
+{
+	"$schema": "../../../../../schema/png-layout.schema.json",
+	"comment":
+	[
+		"This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",
+		"will also be the pose that is used to import the image.  For this reason, some poses will be out of order",
+		"and this is intentional because a pose might be mirrored in its first occurance"
+	],
+	"layouts": [
+		{
+			"names": [ "trace" ],
+			"border_color": [0,0,0,0],
+			"border_size": 0,
+			"layout": [
+		    [ "dead", "dead1", "dead2", "dead3", "dead4", "dead5", "dead6", "dead7", "dead8", "dead9", "dead10", "dead11", "dead12", "dead13", "dead14", "dead15", "dead16" ]
+		  ],
+		  "images": {
+		    "dead": {
+		      "dimensions": [0,0,45,17],
+		      "used by": [["TODO",0]]
+		    },
+
+				"dead1": { "dimensions": [0,0,43,22], "parent": "dead", "used by": [["TODO",0]] },
+				"dead2": { "dimensions": [0,0,39,30], "parent": "dead1", "used by": [["TODO",0]] },
+				"dead3": { "dimensions": [0,0,33,30], "parent": "dead2", "used by": [["TODO",0]] },
+				"dead4": { "dimensions": [0,0,32,35], "parent": "dead3", "used by": [["TODO",0]] },
+				"dead5": { "dimensions": [0,0,32,23], "parent": "dead4", "used by": [["TODO",0]] },
+				"dead6": { "dimensions": [0,0,30,34], "parent": "dead5", "used by": [["TODO",0]] },
+				"dead7": { "dimensions": [0,0,26,32], "parent": "dead6", "used by": [["TODO",0]] },
+				"dead8": { "dimensions": [0,0,26,31], "parent": "dead7", "used by": [["TODO",0]] },
+				"dead9": { "dimensions": [0,0,26,30], "parent": "dead8", "used by": [["TODO",0]] },
+				"dead10": { "dimensions": [0,0,25,37], "parent": "dead9", "used by": [["TODO",0]] },
+				"dead11": { "dimensions": [0,0,25,37], "parent": "dead10", "used by": [["TODO",0]] },
+				"dead12": { "dimensions": [0,0,25,36], "parent": "dead11", "used by": [["TODO",0]] },
+				"dead13": { "dimensions": [0,0,25,34], "parent": "dead12", "used by": [["TODO",0]] },
+				"dead14": { "dimensions": [0,0,25,32], "parent": "dead13", "used by": [["TODO",0]] },
+				"dead15": { "dimensions": [0,0,25,29], "parent": "dead14", "used by": [["TODO",0]] },
+				"dead16": { "dimensions": [0,0,30,49], "parent": "dead15", "used by": [["TODO",0]] }
+		  }
+		},
+		{
+			"names": [ "tracecoat" ],
+			"border_color": [0,0,0,0],
+			"border_size": 0,
+			"layout": [
+		    [ "dead", "dead1", "dead2", "dead3", "dead4", "dead5", "dead6", "dead7", "dead8", "dead9", "dead10", "dead11", "dead12", "dead13", "dead14", "dead15" ]
+		  ],
+		  "images": {
+		    "dead": {
+		      "dimensions": [0,0,43,17],
+		      "used by": [["TODO",0]]
+		    },
+
+				"dead1": { "dimensions": [0,0,43,22], "parent": "dead", "used by": [["TODO",0]] },
+				"dead2": { "dimensions": [0,0,39,30], "parent": "dead1", "used by": [["TODO",0]] },
+				"dead3": { "dimensions": [0,0,33,30], "parent": "dead2", "used by": [["TODO",0]] },
+				"dead4": { "dimensions": [0,0,33,30], "parent": "dead3", "used by": [["TODO",0]] },
+				"dead5": { "dimensions": [0,0,32,37], "parent": "dead4", "used by": [["TODO",0]] },
+				"dead6": { "dimensions": [0,0,31,37], "parent": "dead5", "used by": [["TODO",0]] },
+				"dead7": { "dimensions": [0,0,29,38], "parent": "dead6", "used by": [["TODO",0]] },
+				"dead8": { "dimensions": [0,0,29,38], "parent": "dead7", "used by": [["TODO",0]] },
+				"dead9": { "dimensions": [0,0,26,36], "parent": "dead8", "used by": [["TODO",0]] },
+				"dead10": { "dimensions": [0,0,29,34], "parent": "dead9", "used by": [["TODO",0]] },
+				"dead11": { "dimensions": [0,0,28,38], "parent": "dead10", "used by": [["TODO",0]] },
+				"dead12": { "dimensions": [0,0,28,30], "parent": "dead11", "used by": [["TODO",0]] },
+				"dead13": { "dimensions": [0,0,28,27], "parent": "dead12", "used by": [["TODO",0]] },
+				"dead14": { "dimensions": [0,0,26,37], "parent": "dead13", "used by": [["TODO",0]] },
+				"dead15": { "dimensions": [0,0,30,34], "parent": "dead14", "used by": [["TODO",0]] }
+		  }
+		}
+	]
+}

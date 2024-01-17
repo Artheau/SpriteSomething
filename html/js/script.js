@@ -18,11 +18,11 @@ function readTextFile(file) {
     }
   };
 
-  // Get the thing
-  rawFile.open("GET", file, false);
-  rawFile.send(null);
+	// Get the thing
+	rawFile.open("GET", file, false);
+	rawFile.send(null);
 
-  return allText;
+	return allText;
 }
 
 function forkMe() {
@@ -45,9 +45,9 @@ function forkMe() {
 }
 
 function init(mode = "index") {
-  // Index
-  if (mode == "index") {
-    forkMe();
+	// Index
+	if (mode == "index") {
+		forkMe();
 
     // Version
     let VERSION = readTextFile(
