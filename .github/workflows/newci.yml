@@ -261,6 +261,9 @@ jobs:
         python-version: [
           "3.12"
         ]
+        pillow-version: [
+          "10.2.0"
+        ]
 
     steps:
       # checkout commit
@@ -282,7 +285,7 @@ jobs:
       - name: 🔽Download AppVersion Artifact
         uses: actions/download-artifact@v4.1.1
         with:
-          name: appversion-build-${{ matrix.os-name }}
+          name: appversion-build-${{ matrix.os-name }}-py${{ matrix.python-version }}-pil${{ matrix.pillow-version }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
 
       # download ubuntu archive artifact
@@ -413,6 +416,12 @@ jobs:
           # ubuntu-latest,  # ubuntu-22.04
           ubuntu-22.04,
         ]
+        python-version: [
+          "3.12"
+        ]
+        pillow-version: [
+          "10.2.0"
+        ]
 
     steps:
       # checkout commit
@@ -426,7 +435,7 @@ jobs:
       - name: 🔽Download AppVersion Artifact
         uses: actions/download-artifact@v4.1.1
         with:
-          name: appversion-build-${{ matrix.os-name }}
+          name: appversion-build-${{ matrix.os-name }}-py${{ matrix.python-version }}-pil${{ matrix.pillow-version }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
       # Prepare Pages
       - name: 🌎->📦Prepare GitHub Pages
