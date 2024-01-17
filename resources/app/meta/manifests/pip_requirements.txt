@@ -1,6 +1,6 @@
 wheel
 apng
 numpy
-pillow==6.2.2
+pillow
 pyyaml
 setuptools
