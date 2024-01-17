@@ -279,8 +279,8 @@ class GameParent():
         self.current_background_title = image_title
 
     def update_background_image(self):
-		if len(list(self.background_datas["title"].keys())) > 0:
-	        self.set_background(self.current_background_title)
+        if len(list(self.background_datas["title"].keys())) > 0:
+            self.set_background(self.current_background_title)
 
     def make_player_sprite(self, sprite_filename, sprite_name):
         return self.make_sprite_by_number(0x01, sprite_filename, sprite_name)
