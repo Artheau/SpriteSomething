@@ -1,4 +1,4 @@
-import math # for gcd
+import math  # for gcd
 import itertools
 import os
 import struct
@@ -20,7 +20,7 @@ def lcm(x, y):
     # least common multiple
     return x * y // math.gcd(x, y)
 
-  
+
 def filename_scrub(filename):
     # clean filenames
     # prevents untowards things like spaces in filenames,

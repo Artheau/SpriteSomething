@@ -1,6 +1,9 @@
 name: 🔨Build
 description: Build app
 inputs:
+  calling-job:
+    required: true
+    description: Job that's calling this one
   os-name:
     required: true
     description: OS to run on
@@ -14,9 +17,9 @@ inputs:
 #########
 # actions
 #########
-# actions/checkout@v4.0.0
-# actions/download-artifact@v3.0.2
-# actions/upload-artifact@v3.1.3
+# actions/checkout@v4.1.1
+# actions/download-artifact@v4.1.1
+# actions/upload-artifact@v4.1.0
 # Artheau/SpriteSomething/get-parent-dir
 # JackMcKew/pyinstaller-action-linux@0.1.4
 # JackMcKew/pyinstaller-action-windows@0.1.2
@@ -31,7 +34,7 @@ runs:
       run: |
         echo "✔️Checkout commit"
     - name: ✔️Checkout commit
-      uses: actions/checkout@v4.0.0
+      uses: actions/checkout@v4.1.1
 
     # get parent dir
     - name: 📁Get Parent Directory
@@ -43,15 +46,15 @@ runs:
       uses: ./.github/actions/get-parent-dir
 
     # download pipline
-    - name: 🔽Download PipLine
-      shell: bash
-      run: |
-        echo "🔽Download PipLine"
-    - name: 🔽Download PipLine
-      uses: actions/download-artifact@v3.0.2
-      with:
-        name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
-        path: ./resources/user/meta/manifests
+    # - name: 🔽Download PipLine
+    #   shell: bash
+    #   run: |
+    #     echo "🔽Download PipLine"
+    # - name: 🔽Download PipLine
+    #   uses: actions/download-artifact@v4.1.1
+    #   with:
+    #     name: pipline-build-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
+    #     path: ./resources/user/meta/manifests
 
     # try to get UPX
     - name: 💬Get UPX
@@ -96,9 +99,9 @@ runs:
       run: |
         echo "🔼Upload AppVersion Artifact"
     - name: 🔼Upload AppVersion Artifact
-      uses: actions/upload-artifact@v3.1.3
+      uses: actions/upload-artifact@v4.1.0
       with:
-        name: appversion-${{ inputs.os-name }}
+        name: appversion-${{ inputs.calling-job }}-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./resources/app/meta/manifests/app_version.txt
 
     # run build.py
@@ -136,9 +139,9 @@ runs:
         echo "🔼Upload Problem Children Artifact"
     - name: 🔼Upload Problem Children Artifact
       if: failure()
-      uses: actions/upload-artifact@v3.1.3
+      uses: actions/upload-artifact@v4.1.0
       with:
-        name: problemchildren-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: problemchildren-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./resources/app/meta/manifests/excluded_dlls.json
         if-no-files-found: warn # 'warn' or 'ignore' are also available, defaults to `warn`
 
@@ -160,8 +163,8 @@ runs:
       run: |
         echo "🔼Upload Binary Artifact"
     - name: 🔼Upload Binary Artifact
-      uses: actions/upload-artifact@v3.1.3
+      uses: actions/upload-artifact@v4.1.0
       with:
-        name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: binary-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ${{ steps.parentDir.outputs.parentDir }}/artifact
         if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
