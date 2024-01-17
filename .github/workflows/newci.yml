@@ -282,7 +282,7 @@ jobs:
       - name: 🔽Download AppVersion Artifact
         uses: actions/download-artifact@v4.1.1
         with:
-          name: appversion-${{ matrix.os-name }}
+          name: appversion-build-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
 
       # download ubuntu archive artifact
@@ -426,7 +426,7 @@ jobs:
       - name: 🔽Download AppVersion Artifact
         uses: actions/download-artifact@v4.1.1
         with:
-          name: appversion-${{ matrix.os-name }}
+          name: appversion-build-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
       # Prepare Pages
       - name: 🌎->📦Prepare GitHub Pages
