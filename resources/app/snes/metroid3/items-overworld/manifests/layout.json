@@ -1,0 +1,470 @@
+{
+  "$schema": "../../../../../schema/png-layout.schema.json",
+  "comment": [],
+  "border_color": [0, 0, 127, 255],
+  "border_size": 1,
+  "layout": [
+    [
+      "bomb_off", "bomb_on",
+      "gravity_off", "gravity_on",
+      "spring_off", "spring_on",
+      "varia_off", "varia_on"
+    ],
+    [
+      "boots_off", "boots_on",
+      "screw_off", "screw_on",
+      "space_off", "space_on",
+      "morph_off", "morph_on"
+    ],
+    [
+      "grapple_off", "grapple_on",
+      "xray_off", "xray_on",
+      "speed_off", "speed_on",
+      "charge_off", "charge_on"
+    ],
+    [
+      "ice_off", "ice_on",
+      "wave_off", "wave_on",
+      "plasma_off", "plasma_on",
+      "spazer_off", "spazer_on"
+    ],
+    [
+      "reserve_off", "reserve_on",
+      "blank","blank",
+      "blank","blank",
+      "blank","blank"
+    ]
+  ],
+  "images": {
+    "bomb_off": {
+      "description": "Bomb Dim",
+      "dimensions": [1, 1, 17, 17],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "bomb_on": {
+      "description": "Bomb Bright",
+      "dimensions": [ 19, 1, 35, 17 ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "gravity_off": {
+      "description": "Gravity Dim",
+      "dimensions": [ 37, 1, 53, 17 ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "gravity_on": {
+      "description": "Gravity Bright",
+      "dimensions": [ 55, 1, 71, 17 ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "spring_off": {
+      "description": "Spring Ball Dim",
+      "dimensions": [ 89, 1, 105, 17 ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "spring_on": {
+      "description": "Spring Ball Bright",
+      "dimensions": [
+        91,
+        1,
+        107,
+        17
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "varia_off": {
+      "description": "Varia Suit Dim",
+      "dimensions": [
+        109,
+        1,
+        125,
+        17
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "varia_on": {
+      "description": "Varia Suit Bright",
+      "dimensions": [
+        127,
+        1,
+        143,
+        17
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "boots_off": {
+      "description": "Hi-Jump Boots Dim",
+      "dimensions": [
+        1,
+        19,
+        17,
+        35
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "boots_on": {
+      "description": "Hi-Jump Boots Bright",
+      "dimensions": [
+        19,
+        19,
+        35,
+        35
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "screw_off": {
+      "description": "Screw Attack Dim",
+      "dimensions": [
+        37,
+        19,
+        53,
+        35
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "screw_on": {
+      "description": "Screw Attack Bright",
+      "dimensions": [
+        55,
+        19,
+        71,
+        35
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "space_off": {
+      "description": "Space Jump Dim",
+      "dimensions": [
+        73,
+        19,
+        89,
+        35
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "space_on": {
+      "description": "Space Jump Bright",
+      "dimensions": [
+        91,
+        19,
+        107,
+        35
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "morph_off": {
+      "description": "Morph Ball Dim",
+      "dimensions": [
+        109,
+        19,
+        125,
+        35
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "morph_on": {
+      "description": "Morph Ball Bright",
+      "dimensions": [
+        127,
+        19,
+        143,
+        35
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "grapple_off": {
+      "description": "Grapple Beam Dim",
+      "dimensions": [
+        1,
+        37,
+        17,
+        53
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "grapple_on": {
+      "description": "Grapple Beam Bright",
+      "dimensions": [
+        19,
+        37,
+        35,
+        53
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "xray_off": {
+      "description": "X-Ray Scope Dim",
+      "dimensions": [
+        37,
+        37,
+        53,
+        53
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "xray_on": {
+      "description": "X-Ray Scope Bright",
+      "dimensions": [
+        55,
+        37,
+        71,
+        53
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "speed_off": {
+      "description": "Speed Booster Dim",
+      "dimensions": [
+        73,
+        37,
+        89,
+        53
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "speed_on": {
+      "description": "Speed Booster Bright",
+      "dimensions": [
+        91,
+        37,
+        107,
+        53
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "charge_off": {
+      "description": "Charge Beam Dim",
+      "dimensions": [
+        109,
+        37,
+        125,
+        53
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "charge_on": {
+      "description": "Charge Beam Bright",
+      "dimensions": [
+        127,
+        37,
+        143,
+        53
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "ice_off": {
+      "description": "Ice Beam Dim",
+      "dimensions": [
+        1,
+        55,
+        17,
+        71
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "ice_on": {
+      "description": "Ice Beam Bright",
+      "dimensions": [
+        19,
+        55,
+        35,
+        71
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "wave_off": {
+      "description": "Wave Beam Dim",
+      "dimensions": [
+        37,
+        55,
+        53,
+        71
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "wave_on": {
+      "description": "Wave Beam Bright",
+      "dimensions": [
+        55,
+        55,
+        71,
+        71
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "plasma_off": {
+      "description": "Plasma Beam Dim",
+      "dimensions": [
+        73,
+        55,
+        89,
+        71
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "plasma_on": {
+      "description": "Plasma Beam Bright",
+      "dimensions": [
+        91,
+        55,
+        107,
+        71
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "spazer_off": {
+      "description": "Spazer Beam Dim",
+      "dimensions": [
+        109,
+        55,
+        125,
+        71
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "spazer_on": {
+      "description": "Spazer Beam Bright",
+      "dimensions": [
+        127,
+        55,
+        143,
+        71
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "reserve_off": {
+      "description": "Reserve Tank Dim",
+      "dimensions": [
+        1,
+        73,
+        17,
+        89
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "reserve_on": {
+      "description": "Reserve Tank Bright",
+      "dimensions": [
+        19,
+        73,
+        35,
+        89
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    },
+    "blank": {
+      "description": "Blank",
+      "dimensions": [
+        37,
+        73,
+        53,
+        89
+      ],
+      "import palette interval": [ 0, 0 ],
+      "used by": [
+        [ "0x00", 0 ]
+      ]
+    }
+  }
+}

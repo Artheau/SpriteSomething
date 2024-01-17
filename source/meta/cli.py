@@ -85,10 +85,10 @@ class CLIMainFrame():
                 # sys.exit(1)
             self.randomize_into_ROM(
                 inject=True,
-                dest_filename=dest_filename,
-                source_filename=source_filename,
-                source_filepath=source_filepath,
-                sprite_filepath=sprite_filepath
+                # dest_filename=dest_filename,
+                # source_filename=source_filename,
+                # source_filepath=source_filepath,
+                # sprite_filepath=sprite_filepath
             )
         else:    #we're injecting the loaded sprite into one game file
             if not isinstance(source_filename, str):
@@ -196,7 +196,7 @@ class CLIMainFrame():
         #    since the GUI has extra dialogue boxes and stuff
         """
         print(f"   Exporting '{self.sprite.classic_name}' Sprite as {os.path.splitext(export_filename)[1].upper()} to {export_filename}")
-        self.sprite.save_as(export_filename)
+        self.sprite.save_as(export_filename, self.game.name)
 
     def copy_into_ROM(self, inject=False, dest_filename=None, source_filename=None):
         """
@@ -273,7 +273,20 @@ class CLIMainFrame():
                 for r,_,f in os.walk(sprite_filepath):
                     for file in f:
                         _,file_extension = os.path.splitext(file)
-                        if file_extension.lower() in [".png",".zspr",".sfc",".smc",".rdc"]:
+                        if file_extension.lower() in [
+                            #FIXME: Supported filetypes
+                            ".png",     # Main input
+                            ".4bpp",    # Raw
+                            ".zspr",    # Z3Link
+                            ".sfc",     # SNES
+                            ".smc",     # SNES
+                            ".nes",     # NES
+                            ".bmp",     # FFMQBen
+                            ".zip",     # Mo3Player
+                            ".aspr",    # ASPR (WIP)
+                            ".zhx",     # ZHX (WIP)
+                            ".rdc"      # Z3Link/M3Samus
+                        ]:
                             sprite_filenames.append(os.path.join(r,file))
             elif os.path.isfile(sprite_filepath):
                 sprite_filenames.append(sprite_filepath)
@@ -283,11 +296,11 @@ class CLIMainFrame():
 
     def randomize_into_ROM(
         self,
-        inject=False,
-        dest_filename=None,
-        source_filename=None,
-        source_filepath=None,
-        sprite_filepath=None
+        # inject=False,
+        # dest_filename=None,
+        # source_filename=None,
+        # source_filepath=None,
+        # sprite_filepath=None
     ):
         """
         #try to randomize a sprite and inject it

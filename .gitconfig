@@ -1,0 +1,6 @@
+[filter "tabspace4"]
+    smudge = unexpand --tabs=4 --first-only
+    clean = expand --tabs=4 --initial
+[filter "tabspace2"]
+    smudge = unexpand --tabs=2 --first-only
+    clean = expand --tabs=2 --initial

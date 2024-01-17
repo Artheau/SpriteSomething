@@ -40,7 +40,7 @@ def process_module_output(lines):
                 )
             )
             return
-            # exit(1)
+            # sys.exit(1)
         # if it's already satisfied or building a wheel, print version data
         elif "already satisfied" in line or \
             "Building wheel" in line or \
