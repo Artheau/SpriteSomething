@@ -21,8 +21,14 @@ jobs:
     #  os & python versions
     strategy:
       matrix:
-        os-name: [ubuntu-latest]
-        python-version: [3.8]
+        # should run on latest explicit ubuntu version
+        os-name: [
+          # ubuntu-latest,  # ubuntu-22.04
+          ubuntu-22.04,
+        ]
+        python-version: [
+          "3.12"
+        ]
 
     name: Notify Discord of new Release
     runs-on: ${{ matrix.os-name }}

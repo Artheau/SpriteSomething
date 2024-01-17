@@ -198,9 +198,11 @@ jobs:
 
     strategy:
       matrix:
+        # should run on latest explicit ubuntu version
         # should run on all LATEST OS
         os-name: [
-          ubuntu-latest,
+          # ubuntu-latest,  # ubuntu-22.04
+          ubuntu-22.04,
           macos-latest,
           windows-latest
         ]
@@ -251,7 +253,11 @@ jobs:
 
     strategy:
       matrix:
-        os-name: [ubuntu-latest]
+        # should run on latest explicit ubuntu version
+        os-name: [
+          # ubuntu-latest,  # ubuntu-22.04
+          ubuntu-22.04,
+        ]
         python-version: [
           "3.12"
         ]
@@ -283,7 +289,8 @@ jobs:
       - name: 🔽Download Ubuntu Archive Artifact
         uses: actions/download-artifact@v4.1.1
         with:
-          name: archive-ubuntu-latest
+          # should run on latest explicit ubuntu version
+          name: archive-ubuntu-22.04
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux
 
       # download macos archive artifact
@@ -401,7 +408,11 @@ jobs:
 
     strategy:
       matrix:
-        os-name: [ubuntu-latest]
+        # should run on latest explicit ubuntu version
+        os-name: [
+          # ubuntu-latest,  # ubuntu-22.04
+          ubuntu-22.04,
+        ]
 
     steps:
       # checkout commit
@@ -437,7 +448,11 @@ jobs:
 
     strategy:
       matrix:
-        os-name: [ubuntu-latest]
+        # should run on latest explicit ubuntu version
+        os-name: [
+          # ubuntu-latest,  # ubuntu-22.04
+          ubuntu-22.04,
+        ]
 
     steps:
       # checkout commit
