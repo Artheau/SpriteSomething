@@ -9,6 +9,19 @@
         "dims": [ 876, 2543 ],
         "overview-scale-factor": 1
       }
-    }
+    },
+    "output": [ ".rdc" ]
+  },
+  "2": {
+    "type": "",
+    "name": "Overworld Item Sprites",
+    "folder name": "items-overworld",
+    "view-only": true,
+    "input": {
+      "png": {
+        "dims": [ 144, 90 ]
+      }
+    },
+    "output": []
   }
 }

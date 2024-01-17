@@ -1,12 +1,12 @@
 {
-  "$schema": "../../../schema/app-names.schema.json",
-  "pre": [
-    "Enchanted"
-  ],
-  "noun": [
-    "Baton"
-  ],
-  "post": [
-    "the low temperatures did not affect me"
-  ]
+	"$schema": "../../../schema/app-names.schema.json",
+	"pre": [
+		"Enchanted"
+	],
+	"noun": [
+		"Baton"
+	],
+	"post": [
+		"the low temperatures did not affect me"
+	]
 }

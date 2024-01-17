@@ -1,43 +1,43 @@
 {
-  "$schema": "../../../../../../resources/app/snes/metroid3/samus/manifests/samus-language.schema.json",
-  "section": {
-    "aiming": "Aiming",
-    "facing": "Facing",
-    "suit": "Suit",
-    "variant": "Variant",
-    "cannon-port": "Cannon Port"
-  },
-  "Aiming": {
-    "up": "Arriba",
-    "diag_up": "Diagonal hacia Arriba",
-    "neutral": "Neutral",
-    "shoot": "Disparar",
-    "diag_down": "Diagonal hacia Abajo",
-    "down": "Abajo"
-  },
-  "Facing": {
-    "left": "Izquierda",
-    "right": "Derecha"
-  },
-  "Suit": {
-    "power": "Traje Chozo",
-    "varia": "Traje Climático",
-    "gravity": "Traje Gravitatorio"
-  },
-  "Variant": {
-    "none": "Ninguno",
-    "standard": "Estándar",
-    "charge": "Rayo Recargar",
-    "speed_boost": "Aceleración",
-    "speed_squat": "Sentadilla con Energía",
-    "hyper": "Hiperrayo",
-    "heat": "Calor",
-    "xray": "Radiografía",
-    "sepia": "Sepia",
-    "door": "Puerta"
-  },
-  "Cannon Port": {
-    "no": "Cerrado",
-    "yes": "Abierto"
-  }
+	"$schema": "../../../../../../resources/app/snes/metroid3/samus/manifests/samus-language.schema.json",
+	"section": {
+		"aiming": "Aiming",
+		"facing": "Facing",
+		"suit": "Suit",
+		"variant": "Variant",
+		"cannon-port": "Cannon Port"
+	},
+	"Aiming": {
+		"up": "Arriba",
+		"diag_up": "Diagonal hacia Arriba",
+		"neutral": "Neutral",
+		"shoot": "Disparar",
+		"diag_down": "Diagonal hacia Abajo",
+		"down": "Abajo"
+	},
+	"Facing": {
+		"left": "Izquierda",
+		"right": "Derecha"
+	},
+	"Suit": {
+		"power": "Traje Chozo",
+		"varia": "Traje Climático",
+		"gravity": "Traje Gravitatorio"
+	},
+	"Variant": {
+		"none": "Ninguno",
+		"standard": "Estándar",
+		"charge": "Rayo Recargar",
+		"speed_boost": "Aceleración",
+		"speed_squat": "Sentadilla con Energía",
+		"hyper": "Hiperrayo",
+		"heat": "Calor",
+		"xray": "Radiografía",
+		"sepia": "Sepia",
+		"door": "Puerta"
+	},
+	"Cannon Port": {
+		"no": "Cerrado",
+		"yes": "Abierto"
+	}
 }
