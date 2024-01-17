@@ -434,6 +434,12 @@ class SpriteSomethingMainFrame(tk.Frame):
               ),
               (None,None,None),
               (
+                  self.fish.translate("meta","menu","export.patch"),
+                  "patch",
+                  self.export_patch
+              ),
+              (None,None,None),
+              (
                   self.fish.translate("meta","menu","export.frame-as-png"),
                   "frame-as-png",
                   self.export_frame_as_png
@@ -1665,6 +1671,9 @@ class SpriteSomethingMainFrame(tk.Frame):
         #alias to inject into a directory of game files
         '''
         self.copy_into_ROM_bulk(inject=True)
+
+    def export_patch(self):
+        self.sprite.export_patch()
 
     def export_frame_as_png(self):
         '''

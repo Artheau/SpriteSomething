@@ -293,13 +293,13 @@ class Layout():
 
         #FIXME: Extrapolate layoutlib.py to <console>/<game>/<sprite>/layout.py
         tmp = {}
+        palette_block = None
         for block_name in [
             "meta_block",
             "meta_block1",
             "meta_block2"
         ]:
             if block_name in all_images:
-                palette_block = None
                 if f"ffmq{os.sep}benjamin" in self.filename:
                     meta_block = all_images[block_name].transpose(Image.FLIP_TOP_BOTTOM)
                     palette_block = meta_block.crop(self.coord_calc((0,0),(8,1)))
@@ -309,8 +309,20 @@ class Layout():
                     palette_block = meta_block.transpose(Image.FLIP_LEFT_RIGHT)
                     # tmp[block_name] = palette_block
                     # palette_block.show()
-                if palette_block:
-                    all_images["palette_block"] = palette_block
+
+        if "stock_palette" in self.data:
+            stock_palette = self.data["stock_palette"]
+            rows = len(stock_palette)
+            cols = len(stock_palette[0])
+            flat_palette = []
+            for row in stock_palette:
+                for col in row:
+                    flat_palette.append(tuple(col))
+            palette_block = Image.new('RGB',(cols,rows),0)
+            palette_block.putdata(flat_palette)
+
+        if palette_block:
+            all_images["palette_block"] = palette_block
 
         master_palettes = list(
             all_images["palette_block"].convert("RGB").getdata()) \

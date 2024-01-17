@@ -1,11 +1,18 @@
 {
   "section": {
-    "facing": "Facing"
+    "facing": "Facing",
+    "palette": "Palette"
   },
   "Facing": {
     "up": "Up",
     "left": "Left",
     "down": "Down",
     "right": "Right"
+  },
+  "Palette": {
+    "green": "Green",
+    "blue": "Blue",
+    "red": "Red",
+    "gold": "Gold"
   }
 }

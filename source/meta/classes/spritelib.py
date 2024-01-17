@@ -103,11 +103,15 @@ class SpriteParent():
 
     def inject_into_ROM(self, rom):
         #return the injected ROM
-        raise AssertionError("called export_to_ROM() on Sprite base class")
+        raise AssertionError("called inject_into_ROM() on Sprite base class")
+
+    def export_patch(self):
+        #return the exported patch
+        return False
 
     def get_rdc_export_blocks(self):
         #return the binary blocks that are used to pack the RDC format
-        raise AssertionError("called get_sprite_export_blocks() on Sprite base class")
+        raise AssertionError("called get_rdc_export_blocks() on Sprite base class")
 
     def get_palette(self, palette_type, default_range, frame_number):
         #in most cases the child class will override this in order to provide functionality to things like spiffy buttons
