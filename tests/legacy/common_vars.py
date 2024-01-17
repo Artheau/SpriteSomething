@@ -9,7 +9,7 @@ if not os.path.exists("source"):
 	if not os.path.exists("source"):
 		raise AssertionError("cannot find the root folder from test_common.py")
 
-sys.path.append(os.getcwd())    #append the root folder to the python path, for imports
+sys.path.append(os.getcwd())		#append the root folder to the python path, for imports
 
 
 LINK_RESOURCE_SUBPATH = os.path.join("snes", "zelda3","link")
