@@ -9,11 +9,19 @@
     "M3 Y-Faster Hack",
     "Metroid: Redesign"
   ],
+  "mother3": [
+    "EARTH BOUND",
+    "MOTHER-2"
+  ],
+  "smb3": [
+    "MARIO 3"
+  ],
   "zelda3": [
     "ZSM",
     "ZELDANODENSETSU",
     "VT ",
     "ER ",
-    "THE LEGEND OF ZELDA"
+    "THE LEGEND OF ZELDA",
+    "ALTTPRAC"
   ]
 }

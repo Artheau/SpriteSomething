@@ -1,0 +1,85 @@
+{
+    "$schema": "../../../../schema/game-sprite-manifest.schema.json",
+    "1": {
+        "type": "Player Character Sprite",
+        "name": "Player",
+        "folder name": "player",
+        "view-only": true,
+        "archive": true,
+        "input": {
+            "png": [
+                {
+                    "name": "001",
+                    "dims": [64,96]
+                },
+                {
+                    "name": "005",
+                    "dims": [64,96]
+                },
+                {
+                    "name": "006",
+                    "dims": [64,96]
+                },
+                {
+                    "name": "007",
+                    "dims": [128,192]
+                },
+                {
+                    "name": "008",
+                    "dims": [64,96]
+                },
+                {
+                    "name": "014",
+                    "dims": [64,96]
+                },
+                {
+                    "name": "015",
+                    "dims": [128,64]
+                },
+                {
+                    "name": "016",
+                    "dims": [96,64]
+                },
+                {
+                    "name": "017",
+                    "dims": [64,96]
+                },
+                {
+                    "name": "021",
+                    "dims": [64,96]
+                },
+                {
+                    "name": "027",
+                    "dims": [64,64]
+                },
+                {
+                    "name": "335",
+                    "dims": [64,96]
+                },
+                {
+                    "name": "362",
+                    "dims": [64,96]
+                },
+                {
+                    "name": "378",
+                    "dims": [64,64]
+                },
+                {
+                    "name": "437",
+                    "dims": [64,96]
+                },
+                {
+                    "name": "457",
+                    "dims": [96,64]
+                }
+            ],
+            "zip": {
+                "filesize": [
+                    215550,
+                    217088
+                ]
+            }
+        },
+        "output": []
+    }
+}

@@ -9,16 +9,16 @@
   },
   {
     "title": "Master Build Status",
-    "keyword": "github/workflow/status",
-    "query": "Test,%20Build,%20Deploy%20Release,%20Deploy%20Pages/master",
+    "keyword": "github/actions/workflow/status",
+    "query": "newci.yml?branch=master",
     "left": "master build",
     "logo": "github",
     "url": "https://github.com/Artheau/SpriteSomething/tree/master"
   },
   {
     "title": "Stable Build Status",
-    "keyword": "github/workflow/status",
-    "query": "Test,%20Build,%20Deploy%20Release,%20Deploy%20Pages/stable",
+    "keyword": "github/actions/workflow/status",
+    "query": "newci.yml?branch=stable",
     "left": "stable build",
     "logo": "github",
     "url": "https://github.com/Artheau/SpriteSomething/tree/stable"

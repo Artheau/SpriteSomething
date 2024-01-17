@@ -9,14 +9,16 @@ from source.meta.common import common
 from string import ascii_uppercase, digits
 from . import rom_extract, rom_inject, rdc_export
 
+
 class Sprite(SpriteParent):
-	def __init__(self, filename, manifest_dict, my_subpath):
-		super().__init__(filename, manifest_dict, my_subpath)
+	def __init__(self, filename, manifest_dict, my_subpath, sprite_name=""):
+		super().__init__(filename, manifest_dict, my_subpath, sprite_name)
 		self.load_plugins()
 
-		self.overhead = False	 #Samus is sideview, so only left/right direction buttons should show
+		# Samus is sideview, so only left/right direction buttons should show
+		self.overhead = False
 
-		#TODO: Make file select and ship be animations in the big list, or tie to the ship background
+		# TODO: Make file select and ship be animations in the big list, or tie to the ship background
 		# self.plugins += [
 		# 	("File Select Preview",None,None),
 		# 	("Ship Preview",None,None)
@@ -24,17 +26,18 @@ class Sprite(SpriteParent):
 
 	def import_cleanup(self):
 		self.load_plugins()
-		self.images["transparent"] = Image.new("RGBA",(0,0),0)
+		self.images["transparent"] = Image.new("RGBA", (0, 0), 0)
 		self.equipment = self.plugins.equipment_test(False)
+		# print(self.equipment)
 		self.images = dict(self.images,**self.equipment)
 
 	def import_from_ROM(self, rom):
-		#The history of the Samus import code is a story I will tell to my children
+		# The history of the Samus import code is a story I will tell to my children
 		self.images = rom_extract.rom_extract(self, rom)
 		self.master_palette = list(self.images["palette_block"].getdata())
 
 	def inject_into_ROM(self, spiffy_dict, rom):
-		#The history of the Samus export code is a story I will tell to my grandchildren
+		# The history of the Samus export code is a story I will tell to my grandchildren
 		return rom_inject.rom_inject(self, spiffy_dict, rom)
 
 	def get_stamp(self):
@@ -175,7 +178,7 @@ class Sprite(SpriteParent):
 		return [(SAMUS_EXPORT_BLOCK_TYPE,rdc_export.get_raw_rdc_samus_block(self))]
 
 	def get_colors_from_master(self, color_set):
-		#for internal class use.	For general use, call get_timed_palette()
+		# for internal class use.	For general use, call get_timed_palette()
 		color_set_switcher = {
 			"power": [0,15],
 			"base": [0,15],
@@ -204,7 +207,7 @@ class Sprite(SpriteParent):
 			ship_color_body, ship_color_window, ship_glow_color = self.get_colors_from_master("ship")
 
 			if variant_type.lower() == "outro" or variant_type.lower() == "intro":
-				#11 customizable colors
+				# 11 customizable colors
 				ship_palette = []
 				ship_palette.append(tuple(channel+72 for channel in ship_color_body))
 				ship_palette.append(tuple(25/21*channel for channel in ship_color_body))
@@ -217,7 +220,7 @@ class Sprite(SpriteParent):
 				ship_palette.append(ship_color_window)
 				ship_palette.append(tuple(0.7*channel for channel in ship_color_window))
 				ship_palette.append(tuple(0.4*channel for channel in ship_color_window))
-				#and then 4 colors that are part of the underrigging which aren't coded to customize
+				# and then 4 colors that are part of the underrigging which aren't coded to customize
 				ship_palette.extend([(48,48,72),(16,16,40),(0,0,0),(0,0,0)])
 				if variant_type.lower() == "intro":
 					timed_palette = [(0, ship_palette)]
@@ -226,7 +229,7 @@ class Sprite(SpriteParent):
 					timed_palette.append((0, ship_palette))
 
 			else:		 #standard ship colors with underglow
-				#11 customizable colors
+				# 11 customizable colors
 				ship_palette = []
 				ship_palette.append(ship_color_body)
 				ship_palette.append(tuple(16/21*channel for channel in ship_color_body))
@@ -239,9 +242,9 @@ class Sprite(SpriteParent):
 				ship_palette.append(ship_color_window)
 				ship_palette.append(tuple(0.7*channel for channel in ship_color_window))
 				ship_palette.append(tuple(0.4*channel for channel in ship_color_window))
-				#and then 3 colors that are part of the underrigging which aren't coded to customize
+				# and then 3 colors that are part of the underrigging which aren't coded to customize
 				ship_palette.extend([(48,48,72),(16,16,40),(0,0,0)])
-				#then 1 more color for the underglow
+				# then 1 more color for the underglow
 				timed_palette = [(5, ship_palette + common.palette_pull_towards_color([ship_glow_color], (0,0,0), abs(float(7-i)/7.0))) for i in range(14)]
 
 		elif variant_type.lower() == "standard":
@@ -298,7 +301,7 @@ class Sprite(SpriteParent):
 				timed_palette.append((shift["index"],common.palette_shift(base_palette,shift["color"])))
 
 		elif variant_type.lower().replace("_"," ") == "speed squat":
-			#i = 0 1 2 3 2 1 0 2 3 2 1 0 1 2...
+			# i = 0 1 2 3 2 1 0 2 3 2 1 0 1 2...
 			timed_palette.extend([(1,common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(i)/4.0)) for i in range(4)])
 			timed_palette.extend([(1,common.palette_pull_towards_color(base_palette,(0xFF,0xFF,0xFF),float(i)/4.0)) for i in [2,1]])
 
@@ -358,7 +361,7 @@ class Sprite(SpriteParent):
 				timed_palette.append((palette_indexes[i], common.palette_pull_towards_color(death_palette,(0xFF,0xFF,0xFF),float(i)/8.0)))
 
 		elif variant_type.lower() == "flash":
-			#in the ROM, the flash timing is technically coded as "2", but that looks abnormally fast if rendered outside the ROM,
+			# in the ROM, the flash timing is technically coded as "2", but that looks abnormally fast if rendered outside the ROM,
 			# so maybe there is some hidden code in the ROM that doubles that before it is used
 			FLASH_TIMING = 4
 			flash_master_palette = self.get_colors_from_master("flash")
@@ -411,7 +414,7 @@ class Sprite(SpriteParent):
 			# FIXME: English
 			raise AssertionError(f"unrecognized palette request: {overall_type}, {variant_type}")
 
-		#now scrub the palette to get rid of floats and numbers that are too large/small
+		# now scrub the palette to get rid of floats and numbers that are too large/small
 		return [(time,[(max(0,min(255,int(color_plane))) for color_plane in color) for color in palette]) for (time,palette) in timed_palette]
 
 	def get_projectile_priority(self, projectiles=["power_beam"]):
@@ -556,14 +559,14 @@ class Sprite(SpriteParent):
 		return return_tiles
 
 	def get_alternative_direction(self, animation, direction):
-		#suggest an alternative direction, which can be referenced if the original direction doesn't have an animation
+		# suggest an alternative direction, which can be referenced if the original direction doesn't have an animation
 		direction_dict = self.animations[animation]
 		split_string = direction.split("_aim_")
 		facing = split_string[0]
 		aiming = split_string[1] if len(split_string) > 1 else ""
 
-		#now start searching for this facing and aiming in the JSON dict
-		#start going down the list of alternative aiming if a pose does not have the original
+		# now start searching for this facing and aiming in the JSON dict
+		# start going down the list of alternative aiming if a pose does not have the original
 		ALTERNATIVES = {
 			"up": "diag_up",
 			"diag_up": "shoot",
@@ -578,19 +581,19 @@ class Sprite(SpriteParent):
 			else:		#now we are really screwed, so just do anything
 				return next(iter(direction_dict.keys()))
 
-		#if things went well, we are here
+		# if things went well, we are here
 		return "_aim_".join([facing,aiming])
 
 	def concatenate_facing_and_aiming(self, facing, aiming):
 		return "_aim_".join([facing,aiming])
 
 	def get_palette(self, palettes, default_range=[], frame_number=0):
-		#get the actual list of associated palettes
+		# get the actual list of associated palettes
 		palette_timing_list = self.get_timed_palette_converter(palettes)
-		#figure out the timing
+		# figure out the timing
 		palette_timing_progression = list(itertools.accumulate([duration for (duration,_) in palette_timing_list]))
 
-		#if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
+		# if the last palette has "zero" duration, indicating to freeze on that palette, and we are past that point
 		if palette_timing_list[-1][0] == 0 and frame_number >= palette_timing_progression[-1]:
 			palette_number = -1		#use the last palette
 		elif palette_timing_progression[-1] == 0 and frame_number < 0:	 #can happen if someone switches from a dynamic palette to a static palette, and then backsteps a lot
@@ -599,7 +602,7 @@ class Sprite(SpriteParent):
 			mod_frames = frame_number % palette_timing_progression[-1]
 			palette_number = palette_timing_progression.index(min([x for x in palette_timing_progression if x >= mod_frames]))
 
-		#now actually get that specific palette
+		# now actually get that specific palette
 		_,palette = palette_timing_list[palette_number]
 
 		return palette
@@ -610,25 +613,25 @@ class Sprite(SpriteParent):
 		return palette_duration
 
 	def get_timed_palette_converter(self, palette_list):
-		#used to interface the new palette string format with the older get_timed_palette function.
+		# used to interface the new palette string format with the older get_timed_palette function.
 		# could be refactored into the main code later, if coding time was not a valuable resource
 
 		overall_type, variant_type = "power", "standard"	 #defaults unless we are told otherwise
 		for palette_string in palette_list:
 			if palette_string.endswith("_suit"):
-				#if we've got a suit base
+				# if we've got a suit base
 				# [power|varia|gravity]
 				overall_type = palette_string.replace("_suit","")
 			if palette_string.endswith("_variant"):
-				#if we've got a variant
+				# if we've got a variant
 				this_variant = palette_string.replace("_variant","")
-				#if it's not currently set to base
+				# if it's not currently set to base
 				if variant_type not in ["standard"]:
-					#if we're not trying to set it to these low-priority ones
+					# if we're not trying to set it to these low-priority ones
 					if this_variant not in ["xray"]:
-						#set it
+						# set it
 						variant_type = this_variant
-				#else, move it away from standard
+				# else, move it away from standard
 				else:
 					variant_type = this_variant
 

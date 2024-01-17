@@ -1,8 +1,10 @@
 import common
 import distutils.dir_util     # for copying trees
+from glob import glob
 import os                     # for env vars
 import stat                   # for file stats
 import subprocess             # do stuff at the shell level
+import sys
 from git_clean import git_clean
 from shutil import copy, make_archive, move, rmtree  # file manipulation
 
@@ -105,6 +107,21 @@ def prepare_release():
                       os.path.join("..", "artifact", BUILD_FILENAME),
                       os.path.join(".", BUILD_FILENAME)
                   )
+
+                  # if lib folder
+                  if os.path.exists(os.path.join(".", "artifact", "lib")):
+                      move(
+                          os.path.join("..", "artifact", "lib"),
+                          os.path.join(".", "lib")
+                      )
+                  # if .dlls
+                  for f in glob(os.path.join(".", "artifact", "*.dll")):
+                      if os.path.exists(os.path.join(".", f)):
+                          move(
+                              os.path.join("..", "artifact", f),
+                              os.path.join(".", f)
+                          )
+
                   # Make Linux/Mac binary executable
                   if "linux" in env["OS_NAME"] or \
                       "ubuntu" in env["OS_NAME"] or \
@@ -157,7 +174,7 @@ def prepare_release():
   print(f"Git tag:        {env['GITHUB_TAG']}")
 
   if (len(BUILD_FILENAMES) == 0) or (ZIP_FILENAME == ""):
-      exit(1)
+      sys.exit(1)
 
 
 def main():

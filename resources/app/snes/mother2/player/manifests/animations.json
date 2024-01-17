@@ -1,0 +1,255 @@
+{
+	"$schema": "../../../../../schema/animations.schema.json",
+	"sets": [
+		{
+			"names": [ "001","005","006" ],
+			"animations": {
+				"Stand": {
+					"up": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_up",  "pos": [0,0]}	]	}
+					],
+					"diag_upright": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_upright",  "pos": [0,0]}	]	}
+					],
+					"right": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_right",  "pos": [0,0]}	]	}
+					],
+					"diag_downright": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_downright",  "pos": [0,0]}	]	}
+					],
+					"down": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_down",  "pos": [0,0]}	]	}
+					],
+					"diag_downleft": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_downleft",  "pos": [0,0]}	]	}
+					],
+					"left": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_left",  "pos": [0,0]}	]	}
+					],
+					"diag_upleft": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_upleft",  "pos": [0,0]}	]	}
+					]
+				},
+				"Walk": {
+					"up": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_up",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_up1",  "pos": [0,0]}	]	}
+					],
+					"diag_upright": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_upright",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_upright1",  "pos": [0,0]}	]	}
+					],
+					"right": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_right",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_right1",  "pos": [0,0]}	]	}
+					],
+					"diag_downright": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_downright",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_downright1",  "pos": [0,0]}	]	}
+					],
+					"down": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_down",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_down1",  "pos": [0,0]}	]	}
+					],
+					"diag_downleft": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_downleft",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_downleft1",  "pos": [0,0]}	]	}
+					],
+					"left": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_left",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_left1",  "pos": [0,0]}	]	}
+					],
+					"diag_upleft": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_upleft",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_upleft1",  "pos": [0,0]}	]	}
+					]
+				}
+			}
+		},
+		{
+			"names": [ "007" ],
+			"animations": {
+				"Drive": {
+					"up": [
+						{	"frames": 10,	"tiles": [	{"image": "drive_up",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "drive_up1",  "pos": [0,0]}	]	}
+					],
+					"right": [
+						{	"frames": 10,	"tiles": [	{"image": "drive_right",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "drive_right1",  "pos": [0,0]}	]	}
+					],
+					"down": [
+						{	"frames": 10,	"tiles": [	{"image": "drive_down",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "drive_down1",  "pos": [0,0]}	]	}
+					],
+					"left": [
+						{	"frames": 10,	"tiles": [	{"image": "drive_left",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "drive_left1",  "pos": [0,0]}	]	}
+					]
+				}
+			}
+		},
+		{
+			"names": [ "008", "437" ],
+			"animations": {
+				"Walk": {
+					"up": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_up",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_up1",  "pos": [0,0]}	]	}
+					],
+					"right": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_right",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_right1",  "pos": [0,0]}	]	}
+					],
+					"down": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_down",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_down1",  "pos": [0,0]}	]	}
+					],
+					"left": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_left",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_left1",  "pos": [0,0]}	]	}
+					]
+				},
+				"Walk2": {
+					"up": [
+						{	"frames": 10,	"tiles": [	{"image": "walk2_up",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk2_up1",  "pos": [0,0]}	]	}
+					],
+					"down": [
+						{	"frames": 10,	"tiles": [	{"image": "walk2_down",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk2_down1",  "pos": [0,0]}	]	}
+					]
+				},
+				"Walk3": {
+					"down": [
+						{	"frames": 10,	"tiles": [	{"image": "walk3_down",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk3_down1",  "pos": [0,0]}	]	}
+					],
+					"up": [
+						{	"frames": 10,	"tiles": [	{"image": "walk3_up",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk3_up1",  "pos": [0,0]}	]	}
+					]
+				}
+			}
+		},
+		{
+			"names": [ "014", "017", "021", "335", "362" ],
+			"animations": {
+				"Whatever": {
+					"right": [
+						{	"frames": 10,	"tiles": [	{"image": "whatever",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever1",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever2",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever3",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever4",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever5",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever6",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever7",  "pos": [0,0]}	]	}
+					]
+				}
+			}
+		},
+		{
+			"names": [ "015" ],
+			"animations": {
+				"Sleep": {
+					"right": [
+						{	"frames": 10,	"tiles": [	{"image": "sleep",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "sleep1",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "sleep2",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "sleep3",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "sleep4",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "sleep5",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "sleep6",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "sleep7",  "pos": [0,0]}	]	}
+					]
+				}
+			}
+		},
+		{
+			"names": [ "016", "457" ],
+			"animations": {
+				"Lay1": {
+					"left": [
+						{	"frames": 10,	"tiles": [	{"image": "lay1_left",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "lay1_left1",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "lay1_left2",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "lay1_left3",  "pos": [0,0]}	]	}
+					]
+				},
+				"Lay2": {
+					"left": [
+						{	"frames": 10,	"tiles": [	{"image": "lay2_left",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "lay2_left1",  "pos": [0,0]}	]	}
+					]
+				},
+				"Lay3": {
+					"right": [
+						{	"frames": 10,	"tiles": [	{"image": "lay3_right",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "lay3_right1",  "pos": [0,0]}	]	}
+					]
+				}
+			}
+		},
+		{
+			"names": [ "027" ],
+			"animations": {
+				"Walk": {
+					"up": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_up",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_up1",  "pos": [0,0]}	]	}
+					],
+					"right": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_right",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_right1",  "pos": [0,0]}	]	}
+					],
+					"down": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_down",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_down1",  "pos": [0,0]}	]	}
+					],
+					"left": [
+						{	"frames": 10,	"tiles": [	{"image": "walk_left",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk_left1",  "pos": [0,0]}	]	}
+					]
+				},
+				"Walk2": {
+					"up": [
+						{	"frames": 10,	"tiles": [	{"image": "walk2_up",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk2_up1",  "pos": [0,0]}	]	}
+					],
+					"down": [
+						{	"frames": 10,	"tiles": [	{"image": "walk2_down",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk2_down1",  "pos": [0,0]}	]	}
+					]
+				},
+				"Walk3": {
+					"down": [
+						{	"frames": 10,	"tiles": [	{"image": "walk3_down",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk3_down1",  "pos": [0,0]}	]	}
+					],
+					"up": [
+						{	"frames": 10,	"tiles": [	{"image": "walk3_up",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "walk3_up1",  "pos": [0,0]}	]	}
+					]
+				}
+			}
+		},
+		{
+			"names": [ "378" ],
+			"animations": {
+				"Whatever": {
+					"right": [
+						{	"frames": 10,	"tiles": [	{"image": "whatever",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever1",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever2",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever3",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever4",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever5",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever6",  "pos": [0,0]}	]	},
+						{	"frames": 10,	"tiles": [	{"image": "whatever7",  "pos": [0,0]}	]	}
+					]
+				}
+			}
+		}
+	]
+}

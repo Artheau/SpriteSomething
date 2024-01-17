@@ -103,6 +103,21 @@ def process_command_line_args():
         help="Source Filepath for directory of Sprite Files",
         metavar="<spr_filepath>",
         default=None)
+    parser.add_argument("--convert-filepath",
+        dest="convert-filepath",
+        help="Source Filepath for directory of Sprite Files",
+        metavar="<convert_filepath>",
+        default=None)
+    parser.add_argument("--convert-from",
+        dest="convert-from",
+        help="Filetype of Sprite Files to convert from",
+        metavar="<convert_from>",
+        default=None)
+    parser.add_argument("--convert-to",
+        dest="convert-to",
+        help="Filetype of Sprite Files to convert to",
+        metavar="<convert_to>",
+        default=None)
     parser.add_argument("--sprite",
         dest="sprite",
         help="A sprite file to load upon opening",

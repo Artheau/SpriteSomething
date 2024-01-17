@@ -1,0 +1,38 @@
+{
+  "section": {
+    "facing": "Facing",
+    "mail": "Palette",
+    "sword": "Sword",
+    "axe": "Axe",
+    "bomb": "Bomb",
+    "claw": "Claw"
+  },
+  "Facing": {
+    "up": "Up",
+    "left": "Left",
+    "down": "Down",
+    "right": "Right"
+  },
+  "Palette": {
+    "blue": "Default",
+    "petrified": "Petrified"
+  },
+  "Sword": {
+    "none": "None",
+    "yes": "Yes"
+  },
+  "Axe": {
+    "none": "None",
+    "yes": "Yes"
+  },
+  "Bomb": {
+    "none": "None",
+    "bomb1": "Bomb",
+    "bomb2": "Jumbo Bomb",
+    "bomb3": "Mega Grenade"
+  },
+  "Claw": {
+    "none": "None",
+    "claw3": "Dragon Claw"
+  }
+}

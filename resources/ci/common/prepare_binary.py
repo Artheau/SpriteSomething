@@ -1,8 +1,10 @@
 import common
 import distutils.dir_util     # for copying trees
+from glob import glob
 import os                     # for env vars
 import stat                   # for file stats
 import subprocess             # do stuff at the shell level
+import sys
 from shutil import copy, make_archive, move, rmtree  # file manipulation
 
 
@@ -32,7 +34,6 @@ def prepare_binary():
 
     for BUILD_FILENAME in BUILD_FILENAMES:
         DEST_FILENAME = common.prepare_filename(BUILD_FILENAME)
-        DEST_FILENAME = os.path.join("..", "artifact", os.path.basename(DEST_FILENAME))
 
         print(f"OS Name:        {env['OS_NAME']}")
         print(f"OS Version:     {env['OS_VERSION']}")
@@ -40,12 +41,27 @@ def prepare_binary():
         print(f"Dest Filename:  {DEST_FILENAME}")
         if not BUILD_FILENAME == "":
             print("Build Filesize: " + common.file_size(BUILD_FILENAME))
+        else:
+            sys.exit(1)
+
+        if not BUILD_FILENAME == "":
             move(
                 os.path.join(".", BUILD_FILENAME),
-                DEST_FILENAME
+                os.path.join("..", "artifact", BUILD_FILENAME)
             )
-        else:
-            exit(1)
+            # if lib folder
+            if os.path.exists(os.path.join(".", "lib")):
+                move(
+                    os.path.join(".", "lib"),
+                    os.path.join("..", "artifact", "lib")
+                )
+            # if .dlls
+            for f in glob(os.path.join(".", "*.dll")):
+                if os.path.exists(os.path.join(".", f)):
+                    move(
+                        os.path.join(".", f),
+                        os.path.join("..", "artifact", f)
+                    )
 
 
 def main():

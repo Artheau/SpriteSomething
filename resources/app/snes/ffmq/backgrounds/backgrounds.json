@@ -1,0 +1,65 @@
+{
+  "backgrounds": [
+    {
+      "filename": "aquaria-frozen.png",
+      "title": "Aquaria (Frozen)"
+    },
+    {
+      "filename": "aquaria-house.png",
+      "title": "Aquaria (House)"
+    },
+    {
+      "filename": "battle.png",
+      "title": "Battle Scene"
+    },
+    {
+      "filename": "battle-dark-king.0.png",
+      "title": "Boss Arena: Dark King"
+    },
+    {
+      "filename": "boss-dark-king.png",
+      "title": "Boss Room: Dark King"
+    },
+    {
+      "filename": "dungeon-bone.png",
+      "title": "Dungeon: Bone Dungeon"
+    },
+    {
+      "filename": "dungeon-gianttree.png",
+      "title": "Dungeon: Giant Tree"
+    },
+    {
+      "filename": "dungeon-lavadome.png",
+      "title": "Dungeon: Lava Dome"
+    },
+    {
+      "filename": "dungeon-volcano.png",
+      "title": "Dungeon: Volcano"
+    },
+    {
+      "filename": "fireburg-house.png",
+      "title": "Fireburg (House)"
+    },
+    {
+      "filename": "fireburg.png",
+      "title": "Fireburg: Exterior"
+    },
+    {
+      "filename": "focus-tower.png",
+      "title": "Focus Tower"
+    },
+    {
+      "filename": "foresta-house.png",
+      "title": "Foresta (House)"
+    },
+    {
+      "filename": "hero-chest-room.png",
+      "title": "Hero Chest Room",
+      "origin": [120, 78]
+    },
+    {
+      "filename": "ow-bonedungeon.png",
+      "title": "Overworld: Bone Dungeon"
+    }
+  ]
+}

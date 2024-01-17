@@ -6,12 +6,12 @@ from source.meta.classes.spritelib import SpriteParent
 
 class SpriteParentTestVersion(SpriteParent):
 	#the unit test should not depend on the layout class
-	def load_layout(self):
+	def load_layout(self, sprite_name):
 		#TODO: Make a fake interface to test this
 		return None
 
 	#the unit test should not depend on the particular sprite data files
-	def load_animations(self):
+	def load_animations(self, sprite_name):
 		#TODO: Make a fake interface to test this
 		return None
 
@@ -63,7 +63,7 @@ class SpriteParentTestVersion(SpriteParent):
 		#TODO
 		return None
 
-	def save_as(self, filename):
+	def save_as(self, filename, game_name):
 		#TODO
 		return None
 
@@ -98,7 +98,7 @@ class TestSpriteParent(unittest.TestCase):
 		filename = self.__FILENAME
 		manifest_dict = {"name": self.__TEST_NAME}
 		my_subpath = self.__SUBPATH
-		self.sprite = SpriteParentTestVersion(filename, manifest_dict, my_subpath)
+		self.sprite = SpriteParentTestVersion(filename, manifest_dict, my_subpath, "")
 
 	def test_name_assigned(self):
 		self.assertEqual(self.sprite.classic_name, self.__TEST_NAME)
@@ -186,14 +186,14 @@ class TestSpriteParent(unittest.TestCase):
 	###############################
 	# testing SpriteParent.get_alternative_direction()
 	###############################
-	
+
 	def test_get_alternative_direction(self):
 		dummy_animation = "DUMMY_KEY"
 		dummy_direction = "south by southwest"
 		self.sprite.animations = {dummy_animation: {dummy_direction: None}}
 		direction = self.sprite.get_alternative_direction(dummy_animation, None)
 		self.assertEqual(direction, dummy_direction)
-		
+
 	###############################
 	# testing SpriteParent.get_alternate_tile()
 	###############################
@@ -207,7 +207,7 @@ class TestSpriteParent(unittest.TestCase):
 	###############################
 
 	def test_get_rdc_meta_data_block(self):
-		#regression test.  I don't understand RDC format.
+		#regression test.	I don't understand RDC format.
 		self.sprite.metadata = {
 			"sprite.name": "Baby Got Back",
 			"author.name": "Sir Mix-A-Lot",

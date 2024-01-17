@@ -1,28 +1,28 @@
 import math # for gcd
 import itertools
-import numpy as np
 import os
 import struct
 import re
-from PIL import Image, ImageChops
 
-# are these images the same?
+try:
+    import numpy as np
+    from PIL import Image, ImageChops
+except ModuleNotFoundError as e:
+    print(e)
 
 
 def equal(image1, image2):
+    # are these images the same?
     return ImageChops.difference(image1, image2).getbbox() is None
-
-# least common multiple
 
 
 def lcm(x, y):
     # least common multiple
     return x * y // math.gcd(x, y)
 
-# clean filenames
-
-
+  
 def filename_scrub(filename):
+    # clean filenames
     # prevents untowards things like spaces in filenames,
     #  to improve compatibility
     new_filename = str(filename).lower()
@@ -34,10 +34,9 @@ def filename_scrub(filename):
 
     return new_filename
 
-# get all resources from app folder & user folder
-
 
 def get_all_resources(subdir=None, desired_filename=None):
+    # get all resources from app folder & user folder
     file_list = []
 
     if subdir is not None and desired_filename is None:
@@ -95,10 +94,9 @@ def gather_all_from_resource_subdirectory(subdir):
                     file_list.append(filename)
     return file_list
 
-# apply a palette to an image
-
 
 def apply_palette(image, palette):
+    # apply a palette to an image
     if image is None:
         pass
         # print("Not a valid image to apply palette to!")
@@ -147,13 +145,13 @@ def convert_555_to_rgb(color, recurse=True):
         "convert_555_to_rgb() called with doubly-iterable argument")
 
 
-# expects (r,g,b) tuples in a list, returns big endian 2-byte colors in a list
 def convert_to_555(palette):
+    # expects (r,g,b) tuples in a list, returns big endian 2-byte colors in a list
     return [single_convert_to_555(color) for color in palette]
 
 
-# expects an (r,g,b) tuple, returns a big endian 2-byte value
 def single_convert_to_555(color):
+    # expects an (r,g,b) tuple, returns a big endian 2-byte value
     red, green, blue = [snescolor_eighth(x) for x in color]
     return (blue * 1024) + \
         (green * 32) + \
@@ -472,6 +470,7 @@ def from_u32(buffer):
 
 def main():
     print(f"Called main() on utility library {__file__}")
+
 
 if __name__ == "__main__":
     main()

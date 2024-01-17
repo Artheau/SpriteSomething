@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../../schema/game-sprite-manifest.schema.json",
+  "1": {
+    "type": "Player Character Sprite",
+    "name": "Loto-3",
+    "folder name": "loto3",
+    "view-only": true,
+    "input": {
+      "png": {
+        "dims": [176, 130],
+        "overview-scale-factor": 1
+      }
+    },
+    "output": []
+  },
+  "2": {
+    "type": "Player Character Sprite",
+    "name": "Loto-5",
+    "folder name": "loto5",
+    "view-only": true,
+    "input": {
+      "png": {
+        "dims": [176, 176],
+        "overview-scale-factor": 1
+      }
+    },
+    "output": []
+  }
+}

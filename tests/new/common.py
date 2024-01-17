@@ -45,28 +45,35 @@ for platID in os.listdir(SOURCEPATH):
                             "sprites": {}
                         }
                         # print(f"> {gameID}")
-                        for spriteID in os.listdir(GAMEPATH):
-                            # ignore meta, __pycache__
-                            if spriteID not in ["meta", "varia", "__pycache__"]:
-                                SPRITEPATH = os.path.join(GAMEPATH, spriteID)
-                                if os.path.isdir(SPRITEPATH):
-                                    SHEETSPATH = os.path.join(rsourceApp, spriteID, "sheets")
-                                    DATA[platID]["games"][gameID]["sprites"][spriteID] = {
-                                        "paths": {
-                                            "source": SPRITEPATH,
-                                            "resource": {
-                                                "subpath": os.path.join(rsourceSub, spriteID),
-                                                "app": os.path.join(rsourceApp, spriteID),
-                                                "sheet": {
-                                                    "root": SHEETSPATH
-                                                },
-                                                "sheetexts": {}
-                                            }
+                        with open(os.path.join(rsourceApp, "manifests", "manifest.json"), "r", encoding="utf-8") as gameManifest:
+                            spriteData = json.load(gameManifest)
+                            for [spriteID, spriteManifest] in spriteData.items():
+                                if spriteID not in ["$schema"]:
+                                    spriteFolder = spriteManifest["folder name"]
+                                    is_archive = bool("is-archive" in spriteManifest and spriteManifest["is-archive"])
+                                    view_only = bool("view-only" in spriteManifest and spriteManifest["view-only"])
+                                    SPRITEPATH = os.path.join(GAMEPATH, spriteFolder)
+                                    if os.path.isdir(SPRITEPATH):
+                                        SHEETSPATH = os.path.join(rsourceApp, spriteFolder, "sheets")
+                                        DATA[platID]["games"][gameID]["sprites"][spriteFolder] = {
+                                            "paths": {
+                                                "source": SPRITEPATH,
+                                                "resource": {
+                                                    "subpath": os.path.join(rsourceSub, spriteFolder),
+                                                    "app": os.path.join(rsourceApp, spriteFolder),
+                                                    "sheet": {
+                                                        "root": SHEETSPATH
+                                                    },
+                                                    "sheetexts": {}
+                                                }
+                                            },
+                                            "input": spriteManifest["input"],
+                                            "is-archive": is_archive,
+                                            "view-only": view_only
                                         }
-                                    }
-                                    for sheet in os.listdir(SHEETSPATH):
-                                        if f"{spriteID}." in sheet:
-                                            DATA[platID]["games"][gameID]["sprites"][spriteID]["paths"]["resource"]["sheetexts"][os.path.splitext(sheet)[1][1::]] = os.path.join(SHEETSPATH, sheet)
-                                    # print(f">  {spriteID}")
+                                        for sheet in os.listdir(SHEETSPATH):
+                                            if f"{spriteFolder}." in sheet:
+                                                DATA[platID]["games"][gameID]["sprites"][spriteFolder]["paths"]["resource"]["sheetexts"][os.path.splitext(sheet)[1][1::]] = os.path.join(SHEETSPATH, sheet)
+                                        # print(f">  {spriteFolder}")
 
 # print(json.dumps(DATA, indent=2))

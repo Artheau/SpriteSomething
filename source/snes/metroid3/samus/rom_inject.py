@@ -6,6 +6,7 @@ import json
 import os
 import copy
 from PIL import Image
+from json.decoder import JSONDecodeError
 from source.meta.common import common
 
 # FIXME: English
@@ -14,7 +15,7 @@ def rom_inject(player_sprite, spiffy_dict, old_rom, verbose=False):
 	rom = copy.deepcopy(old_rom)	#for safety we are going to deepcopy the ROM, in case we need to bail
 
 	#this'll check VT rando Tournament Flag
-	tournament_flag = rom.read(0x180213, 2) == 1
+	tournament_flag = (float(rom.get_size_in_MB()) > 1.5) and (rom.read(0x180213, 2) == 1)
 	#this'll check combo Tournament Flag
 	if rom.type() == "EXHIROM" and not tournament_flag:
 		config = rom.read_from_snes_address(0x80FF52, 2)
@@ -43,7 +44,11 @@ def rom_inject(player_sprite, spiffy_dict, old_rom, verbose=False):
 		app_overrides_path = os.path.join(".","resources","user","meta","manifests","overrides.json")
 		if os.path.exists(app_overrides_path):
 			with open(app_overrides_path) as json_file:
-				data = json.load(json_file)
+				data = {}
+				try:
+					data = json.load(json_file)
+				except JSONDecodeError as e:
+					raise ValueError("User App Overrides manifest malformed!")
 				if "iddqd" in data.keys():
 					iddqd = data["iddqd"]
 
@@ -1258,7 +1263,11 @@ def assign_palettes(samus,rom):
 	palette_writers_path = os.path.join(".","resources","user","snes","metroid3","samus","manifests","palette_writers.json")
 	if os.path.exists(palette_writers_path):
 		with open(palette_writers_path) as json_file:
-			data = json.load(json_file)
+			data = {}
+			try:
+				data = json.load(json_file)
+			except JSONDecodeError as e:
+				raise ValueError("Palette Writers manifest malformed: " + "metroid3/samus")
 			for k,v in data.items():
 				do_write[k] = v
 

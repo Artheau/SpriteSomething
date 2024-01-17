@@ -1,0 +1,16 @@
+{
+    "section": {
+      "facing": "Facing",
+      "pronoun": "Pronouns"
+    },
+    "Facing": {
+      "up": "Up",
+      "left": "Left",
+      "down": "Down",
+      "right": "Right"
+    },
+    "Pronouns": {
+      "him": "He/Him/His",
+      "her": "She/Her/Hers"
+    }
+  }

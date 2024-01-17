@@ -1,0 +1,86 @@
+{
+    "$schema": "../../../../../schema/spiffy-buttons.schema.json",
+    "button-groups": [
+      {
+        "group-fish-key": "mail",
+        "buttons": [
+          {
+            "meta": "blank"
+          },
+          {
+            "fish-subkey": "blue",
+            "img": "mail-blue.png",
+            "default": true
+          },
+          {
+            "fish-subkey": "petrified",
+            "img": "mail-petrified.png"
+          }
+        ]
+      },
+      {
+        "group-fish-key": "sword",
+        "buttons": [
+          {
+            "fish-subkey": "none",
+            "img": "no-thing.png",
+            "default": true
+          },
+          {
+            "fish-subkey": "yes",
+            "img": "yes-thing.png"
+          }
+        ]
+      },
+      {
+        "group-fish-key": "axe",
+        "buttons": [
+          {
+            "fish-subkey": "none",
+            "img": "no-thing.png",
+            "default": true
+          },
+          {
+            "fish-subkey": "yes",
+            "img": "yes-thing.png"
+          }
+        ]
+      },
+      {
+        "group-fish-key": "bomb",
+        "buttons": [
+          {
+            "fish-subkey": "none",
+            "img": "no-thing.png",
+            "default": true
+          },
+          {
+            "fish-subkey": "bomb1",
+            "img": "bomb1.png"
+          },
+          {
+            "fish-subkey": "bomb2",
+            "img": "bomb2.png"
+          },
+          {
+            "fish-subkey": "bomb3",
+            "img": "bomb3.png"
+          }
+        ]
+      },
+      {
+        "group-fish-key": "claw",
+        "buttons": [
+          {
+            "fish-subkey": "none",
+            "img": "no-thing.png",
+            "default": true
+          },
+          {
+            "fish-subkey": "claw3",
+            "img": "claw3.png"
+          }
+        ]
+      }
+    ]
+  }

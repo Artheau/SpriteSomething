@@ -1,0 +1,203 @@
+{
+    "$schema": "../../../../../schema/png-layout.schema.json",
+    "border_color": [0, 0, 127, 0],
+    "border_size": 1,
+    "layout": [
+      [
+        "small_stand", "small_walk",
+        "small_jump",
+        "small_run", "small_run1",
+        "small_fly", "small_skid",
+        "small_pipe",
+        "small_hold", "small_hold1",
+        "small_kick", "small_slide",
+        "small_swim", "small_swim1", "small_swim2", "small_swim3",
+        "small_climb", "small_die",
+        "null_block1"
+      ],
+      [
+        "super_stand",
+        "super_walk", "super_walk1",
+        "super_crouch", "super_jump",
+        "super_run", "super_run1",
+        "super_launch", "super_fly", "super_skid",
+        "super_pipe", "super_pipe1",
+        "super_hold", "super_hold1", "super_hold2",
+        "super_kick", "super_slide",
+        "super_swim", "super_swim1", "super_swim2", "super_swim3",
+        "super_climb",
+        "null_block2"
+      ],
+      [
+        "super_flip", "super_flip1", "super_flip2", "super_flip3",
+        "super_flip4", "super_flip5", "super_flip6", "super_flip7",
+        "super_flip8",
+        "null_block3",
+        "super_opening",
+        "super_opening1",
+        "null_block2"
+      ],
+      [
+        "tail_stand",
+        "tail_walk", "tail_walk1",
+        "tail_crouch",
+        "tail_jump",
+        "tail_descend", "tail_descend1",
+        "tail_run", "tail_run1",
+        "tail_launch",
+        "tail_fly", "tail_fly1", "tail_fly2",
+        "tail_skid", "tail_pipe",
+        "tail_spin", "tail_pipe1",
+        "null_block4"
+      ],
+      [
+        "tail_hold", "tail_hold1", "tail_hold2",
+        "tail_kick", "tail_slide",
+        "tail_swim", "tail_swim1", "tail_swim2", "tail_swim3",
+        "tail_climb",
+        "tail_flip", "tail_flip1", "tail_flip2", "tail_flip3",
+        "tail_flip4", "tail_flip5", "tail_flip6", "tail_flip7",
+        "null_block5"
+      ],
+      [
+        "frog_stand",
+        "frog_walk", "frog_walk1",
+        "frog_pipe",
+        "null_block2", "null_block2",
+        "frog_hold", "frog_hold1", "frog_hold2",
+        "frog_kick",
+        "frog_swim", "frog_swim1", "frog_swim2",
+        "frog_swim3", "frog_swim4", "frog_swim5",
+        "frog_swim6", "frog_swim7", "frog_swim8",
+        "frog_swim9", "frog_swim10",
+        "null_block6"
+      ],
+      [
+        "tanooki_stand",
+        "tanooki_walk", "tanooki_walk1",
+        "tanooki_crouch",
+        "tanooki_jump",
+        "tanooki_descend", "tanooki_descend1",
+        "tanooki_run", "tanooki_run1",
+        "tanooki_launch",
+        "tanooki_fly", "tanooki_fly1", "tanooki_fly2",
+        "tanooki_skid", "tanooki_pipe",
+        "tanooki_spin", "tanooki_pipe1",
+        "null_block4"
+      ],
+      [
+        "tanooki_hold", "tanooki_hold1", "tanooki_hold2",
+        "tanooki_kick", "tanooki_slide",
+        "tanooki_swim", "tanooki_swim1", "tanooki_swim2", "tanooki_swim3",
+        "tanooki_climb",
+        "tanooki_flip", "tanooki_flip1", "tanooki_flip2", "tanooki_flip3",
+        "tanooki_flip4", "tanooki_flip5", "tanooki_flip6", "tanooki_flip7",
+        "null_block5"
+      ],
+      [
+        "hammer_stand", "hammer_walk", "hammer_walk1", "hammer_crouch", "hammer_jump",
+        "hammer_run", "hammer_run1", "hammer_run2",
+        "hammer_fly", "hammer_skid", "hammer_pipe",
+        "hammer_hold", "hammer_hold1", "hammer_hold2",
+        "hammer_kick", "hammer_slide",
+        "hammer_swim", "hammer_swim1", "hammer_swim2", "hammer_swim3",
+        "hammer_climb",
+        "null_block2"
+      ],
+      [
+        "hammer_flip", "hammer_flip1", "hammer_flip2", "hammer_flip3",
+        "hammer_flip4", "hammer_flip5", "hammer_flip6", "hammer_flip7",
+        "hammer_hammer", "hammer_hammer1",
+        "hammer_item", "hammer_item1", "hammer_item2", "hammer_item3"
+      ],
+      [
+        "map_small", "null_block2",
+        "map_die", "null_block2", "null_block2",
+        "map_super", "null_block2",
+        "map_p", "map_p1", "null_block2", "null_block2",
+        "map_frog", "map_frog1", "map_frog2",
+        "map_tanooki", "map_tanooki1", "map_tanooki2",
+        "map_hammer", "map_hammer1",
+        "map_cloud", "null_block2", "null_block2", "map_m", "map_l"
+      ],
+      [
+        "map_small1", "null_block2",
+        "map_small2", "null_block7"
+      ]
+    ],
+    "images": {
+      "small_stand": {
+        "dimensions": [0, 0, 16, 16],
+        "used by": []
+      },
+      "small_walk":   { "parent": "small_stand", "used by": [] },
+      "small_jump":   { "parent": "small_stand", "used by": [] },
+      "small_run":    { "parent": "small_stand", "used by": [] },
+      "small_run1":   { "parent": "small_run", "used by": [] },
+      "small_fly":    { "parent": "small_stand", "used by": [] },
+      "small_skid":   { "parent": "small_stand", "used by": [] },
+      "small_pipe":   { "parent": "small_stand", "used by": [] },
+      "small_hold":   { "parent": "small_stand", "used by": [] },
+      "small_hold1":  { "parent": "small_hold", "used by": [] },
+      "small_kick":   { "parent": "small_stand", "used by": [] },
+      "small_slide":  { "parent": "small_stand", "used by": [] },
+      "small_swim":   { "parent": "small_stand", "used by": [] },
+      "small_swim1":  { "parent": "small_swim", "used by": [] },
+      "small_swim2":  { "parent": "small_swim", "used by": [] },
+      "small_swim3":  { "parent": "small_swim", "used by": [] },
+      "small_climb":  { "parent": "small_stand", "used by": [] },
+      "small_die":    { "parent": "small_stand", "used by": [] },
+
+      "super_stand":  { "dimensions": [0,23,16,28], "used by": [] },
+      "super_walk":   { "parent": "super_stand", "used by": [] },
+      "super_walk1":  { "parent": "super_stand", "used by": [] },
+      "super_crouch": { "parent": "super_stand", "used by": [] },
+      "super_jump":   { "parent": "super_stand", "used by": [] },
+      "super_run":    { "dimensions": [91,23,109,51], "used by": [] },
+      "super_run1":   { "parent": "super_run", "used by": [] },
+      "super_launch": { "parent": "super_run", "used by": [] },
+      "super_fly":    { "parent": "super_run", "used by": [] },
+      "super_skid":   { "parent": "super_stand", "used by": [] },
+      "super_pipe":   { "parent": "super_stand", "used by": [] },
+      "super_pipe1":  { "parent": "super_stand", "used by": [] },
+      "super_hold":   { "parent": "super_stand", "used by": [] },
+      "super_hold1":  { "parent": "super_run", "used by": [] },
+      "super_slide":  { "parent": "super_stand", "used by": [] },
+      "super_swim":   { "parent": "super_run", "used by": [] },
+      "super_swim1":  { "parent": "super_run", "used by": [] },
+      "super_swim2":  { "parent": "super_run", "used by": [] },
+      "super_swim3":  { "parent": "super_run", "used by": [] },
+      "super_climb":  { "parent": "super_stand", "used by": [] },
+
+      "null_block1":  {
+        "dimensions": [324, 0, 490, 16],
+        "description": "End of row 1",
+        "used by": []
+      },
+      "null_block2": {
+        "dimensions": [0,0,1,0],
+        "description": "End of rows 2 & 3 & 9",
+        "used by": []
+      },
+      "null_block3": {
+        "dimensions": [0,0,1,0],
+        "description": "Middle of row 3",
+        "used by": []
+      },
+      "null_block4": {
+        "dimensions": [0,0,1,0],
+        "description": "End of row 4 (3 null_block2)",
+        "used by": []
+      },
+      "null_block5": {
+        "dimensions": [0,0,1,0],
+        "description": "End of rows 5 & 6 (2 null_block2)",
+        "used by": []
+      },
+      "null_block6": {
+        "dimensions": [0,0,1,0],
+        "description": "End of bottom row",
+        "used by": []
+      }
+    }
+  }

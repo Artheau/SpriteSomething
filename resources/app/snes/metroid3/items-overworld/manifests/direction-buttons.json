@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../../schema/spiffy-buttons.schema.json",
+  "button-groups": [
+    {
+      "group-fish-key": "facing",
+      "buttons": []
+    }
+  ]
+}
