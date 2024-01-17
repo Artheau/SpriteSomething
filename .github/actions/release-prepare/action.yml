@@ -46,7 +46,7 @@ runs:
     - name: 🔽Download Binary Artifact
       uses: actions/download-artifact@v4.1.1
       with:
-        name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: binary-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./
 
     # download appversion artifact

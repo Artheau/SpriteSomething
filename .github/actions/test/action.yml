@@ -30,7 +30,7 @@ runs:
     - name: 🔽Download PipLine
       uses: actions/download-artifact@v4.1.1
       with:
-        name: pipline-test-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: pipline-test-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
 
     # start virtual display driver & run tests
@@ -104,5 +104,5 @@ runs:
       if: failure()
       uses: actions/upload-artifact@v4.1.0
       with:
-        name: failures-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: failures-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./failures

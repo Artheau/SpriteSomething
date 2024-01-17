@@ -50,7 +50,7 @@ runs:
     - name: 🔽Download PipLine
       uses: actions/download-artifact@v4.1.1
       with:
-        name: pipline-build-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: pipline-build-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
 
     # try to get UPX
@@ -138,7 +138,7 @@ runs:
       if: failure()
       uses: actions/upload-artifact@v4.1.0
       with:
-        name: problemchildren-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: problemchildren-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./resources/app/meta/manifests/excluded_dlls.json
         if-no-files-found: warn # 'warn' or 'ignore' are also available, defaults to `warn`
 
@@ -162,6 +162,6 @@ runs:
     - name: 🔼Upload Binary Artifact
       uses: actions/upload-artifact@v4.1.0
       with:
-        name: binary-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: binary-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ${{ steps.parentDir.outputs.parentDir }}/artifact
         if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
