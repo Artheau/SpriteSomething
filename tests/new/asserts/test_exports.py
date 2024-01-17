@@ -237,4 +237,4 @@ if __name__ == "__main__":
         print("EXPORTS")
         print('.' * 70)
 
-    unittest.main()
+    unittest.main(warnings="ignore")

@@ -1,4 +1,4 @@
-import fractions  # for gcd
+import math # for gcd
 import itertools
 import numpy as np
 import os
@@ -16,7 +16,8 @@ def equal(image1, image2):
 
 
 def lcm(x, y):
-    return x * y // fractions.gcd(x, y)
+    # least common multiple
+    return x * y // math.gcd(x, y)
 
 # clean filenames
 
