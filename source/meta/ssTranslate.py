@@ -6,12 +6,11 @@ from source.meta.common import common
 
 class BabelFish():
     def __init__(self,subpath=["meta"],lang=None):
-        localization_string = locale.getdefaultlocale()[0] #get set localization
+        localization_string = locale.getlocale()[0].lower() #get set localization
         self.locale = localization_string[:2] if lang is None else lang #let caller override localization
         self.langs = ["en"] #start with English
         if(not self.locale == "en"): #add localization
             self.langs.append(self.locale)
-
         self.lang_defns = {} #collect translations
         self.add_translation_file() #start with default translation file
 
