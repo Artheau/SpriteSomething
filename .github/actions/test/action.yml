@@ -14,24 +14,24 @@ inputs:
 #########
 # actions
 #########
-# actions/checkout@v4.0.0
-# actions/download-artifact@v3.0.2
-# actions/upload-artifact@v3.1.3
+# actions/checkout@v4.1.1
+# actions/download-artifact@v4.1.1
+# actions/upload-artifact@v4.1.0
 # coactions/setup-xvfb@v1.0.1
 
 runs:
   using: "composite"
   steps:
     # download pipline
-    - name: 🔽Download PipLine
-      shell: bash
-      run: |
-        echo "🔽Download PipLine"
-    - name: 🔽Download PipLine
-      uses: actions/download-artifact@v3.0.2
-      with:
-        name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
-        path: ./resources/user/meta/manifests
+    # - name: 🔽Download PipLine
+    #   shell: bash
+    #   run: |
+    #     echo "🔽Download PipLine"
+    # - name: 🔽Download PipLine
+    #   uses: actions/download-artifact@v4.1.1
+    #   with:
+    #     name: pipline-test-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
+    #     path: ./resources/user/meta/manifests
 
     # start virtual display driver & run tests
     - name: 🖥️Start virtual display driver & Test (!Windows)
@@ -102,7 +102,7 @@ runs:
         echo "🔼Upload Failures"
     - name: 🔼Upload Failures
       if: failure()
-      uses: actions/upload-artifact@v3.1.3
+      uses: actions/upload-artifact@v4.1.0
       with:
-        name: failures-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: failures-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./failures
