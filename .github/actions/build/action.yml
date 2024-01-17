@@ -50,7 +50,7 @@ runs:
     - name: 🔽Download PipLine
       uses: actions/download-artifact@v4.1.1
       with:
-        name: pipline-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
+        name: pipline-build-${{ inputs.os-name }}-${{ inputs.python-version }}-${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests
 
     # try to get UPX
