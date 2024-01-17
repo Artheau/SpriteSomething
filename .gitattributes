@@ -1,26 +1,28 @@
 # Explicitly declare text files you want to always be normalized and converted
 # to native line endings on checkout.
 # JavaScript
-*.js text
+*.js text filter=tabspace2
 # Markdown
 *.md text
 # Shell script
-*.sh text
+*.sh text filter=tabspace2
 # python script
-*.py text
+*.py text filter=tabspace2
+# python spec
+*.spec text filter=tabspace2
 # Cascading Style Sheets
-*.css text
+*.css text filter=tabspace2
 # Disabled files
-*.off text
+*.off text filter=tabspace2
 # Plain-text
 *.txt text
 # Yet Another Markup Language
 *.yml text
 *.yaml text
 # HyperText Markup Language
-*.html text
+*.html text filter=tabspace2
 # JavaScript Object Notation
-*.json text
+*.json text filter=tabspace2
 
 # Denote all files that are truly binary and should not be modified.
 # Icon
@@ -33,3 +35,6 @@
 *.rdc binary
 # Zarby Sprite
 *.zspr binary
+
+# Make SPEC files highlight as Python files
+*.spec linguist-language=Python

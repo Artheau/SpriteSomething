@@ -63,7 +63,7 @@ class SpriteParentTestVersion(SpriteParent):
 		#TODO
 		return None
 
-	def save_as(self, filename):
+	def save_as(self, filename, game_name):
 		#TODO
 		return None
 
@@ -207,7 +207,7 @@ class TestSpriteParent(unittest.TestCase):
 	###############################
 
 	def test_get_rdc_meta_data_block(self):
-		#regression test.  I don't understand RDC format.
+		#regression test.	I don't understand RDC format.
 		self.sprite.metadata = {
 			"sprite.name": "Baby Got Back",
 			"author.name": "Sir Mix-A-Lot",

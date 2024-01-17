@@ -1,0 +1,237 @@
+{
+  "$schema": "../../../../../schema/animations.schema.json",
+  "Bomb": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "bomb_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "bomb_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Gravity Suit": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "gravity_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "gravity_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Spring Ball": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "spring_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "spring_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Varia Suit": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "varia_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "varia_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Hi-Jump Boots": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "boots_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "boots_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Screw Attack": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "screw_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "screw_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Space Jump": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "space_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "space_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Morph Ball": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "morph_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "morph_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Grapple Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "grapple_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "grapple_on", "pos": [0,0]} ] }
+    ]
+  },
+  "X-Ray Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "xray_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "xray_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Speed Booster": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "speed_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "speed_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Charge Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "charge_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "charge_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Ice Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "ice_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "ice_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Wave Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "wave_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "wave_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Plasma Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "plasma_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "plasma_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Spazer Beam": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "spazer_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "spazer_on", "pos": [0,0]} ] }
+    ]
+  },
+  "Reserve Tank": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "reserve_off", "pos": [0,0]} ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [ {"image": "reserve_on", "pos": [0,0]} ] }
+    ]
+  },
+  "All": {
+    "right": [
+      { "frames": 10, "displacement": [0,0], "tiles": [
+        {"image": "bomb_off",       "pos": [  0, 0]},
+        {"image": "gravity_off",    "pos": [ 16, 0]},
+        {"image": "spring_off",     "pos": [ 32, 0]},
+        {"image": "varia_off",      "pos": [ 48, 0]},
+        {"image": "boots_off",      "pos": [ 64, 0]},
+        {"image": "screw_off",      "pos": [ 80, 0]},
+        {"image": "space_off",      "pos": [ 96, 0]},
+        {"image": "morph_off",      "pos": [114, 0]},
+        {"image": "grapple_off",    "pos": [  0,16]},
+        {"image": "xray_off",       "pos": [ 16,16]},
+        {"image": "speed_off",      "pos": [ 32,16]},
+        {"image": "charge_off",     "pos": [ 48,16]},
+        {"image": "ice_off",        "pos": [ 64,16]},
+        {"image": "wave_off",       "pos": [ 80,16]},
+        {"image": "plasma_off",     "pos": [ 96,16]},
+        {"image": "spazer_off",     "pos": [114,16]},
+        {"image": "reserve_off",    "pos": [  0,32]}
+      ] },
+      { "frames": 10, "displacement": [0,0], "tiles": [
+        {"image": "bomb_on",       "pos": [  0, 0]},
+        {"image": "gravity_on",    "pos": [ 16, 0]},
+        {"image": "spring_on",     "pos": [ 32, 0]},
+        {"image": "varia_on",      "pos": [ 48, 0]},
+        {"image": "boots_on",      "pos": [ 64, 0]},
+        {"image": "screw_on",      "pos": [ 80, 0]},
+        {"image": "space_on",      "pos": [ 96, 0]},
+        {"image": "morph_on",      "pos": [114, 0]},
+        {"image": "grapple_on",    "pos": [  0,16]},
+        {"image": "xray_on",       "pos": [ 16,16]},
+        {"image": "speed_on",      "pos": [ 32,16]},
+        {"image": "charge_on",     "pos": [ 48,16]},
+        {"image": "ice_on",        "pos": [ 64,16]},
+        {"image": "wave_on",       "pos": [ 80,16]},
+        {"image": "plasma_on",     "pos": [ 96,16]},
+        {"image": "spazer_on",     "pos": [114,16]},
+        {"image": "reserve_on",    "pos": [  0,32]}
+      ] }
+    ]
+  },
+  "Binary Sheet": {
+    "right": [
+      {
+        "frames": 10,
+        "displacement": [0,0],
+        "tiles": [
+          { "image": "bomb_off",    "pos": [   0,  0 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "bomb_off",    "pos": [  16,  0 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "bomb_on",     "pos": [  32,  0 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "bomb_on",     "pos": [  48,  0 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "gravity_off", "pos": [  64,  0 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "gravity_off", "pos": [  80,  0 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "gravity_on",  "pos": [  96,  0 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "gravity_on",  "pos": [ 114,  0 ], "crop": [  0,  8, 16, 16 ] },
+
+          { "image": "spring_off",  "pos": [   0,  8 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "spring_off",  "pos": [  16,  8 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "spring_on",   "pos": [  32,  8 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "spring_on",   "pos": [  48,  8 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "varia_on",    "pos": [  64,  8 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "varia_on",    "pos": [  80,  8 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "varia_off",   "pos": [  96,  8 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "varia_off",   "pos": [ 114,  8 ], "crop": [  0,  8, 16, 16 ] },
+
+          { "image": "boots_off",   "pos": [   0, 16 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "boots_off",   "pos": [  16, 16 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "boots_on",    "pos": [  32, 16 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "boots_on",    "pos": [  48, 16 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "screw_off",   "pos": [  64, 16 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "screw_off",   "pos": [  80, 16 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "screw_on",    "pos": [  96, 16 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "screw_on",    "pos": [ 114, 16 ], "crop": [  0,  8, 16, 16 ] },
+
+          { "image": "space_on",    "pos": [   0, 24 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "space_on",    "pos": [  16, 24 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "space_off",   "pos": [  32, 24 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "space_off",   "pos": [  48, 24 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "morph_on",    "pos": [  64, 24 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "morph_on",    "pos": [  80, 24 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "morph_off",   "pos": [  96, 24 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "morph_off",   "pos": [ 114, 24 ], "crop": [  0,  8, 16, 16 ] },
+
+          { "image": "grapple_on",  "pos": [   0, 32 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "grapple_on",  "pos": [  16, 32 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "grapple_off", "pos": [  32, 32 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "grapple_off", "pos": [  48, 32 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "xray_off",    "pos": [  64, 32 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "xray_off",    "pos": [  80, 32 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "xray_on",     "pos": [  96, 32 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "xray_on",     "pos": [ 114, 32 ], "crop": [  0,  8, 16, 16 ] },
+
+          { "image": "speed_off",   "pos": [   0, 40 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "speed_off",   "pos": [  16, 40 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "speed_on",    "pos": [  32, 40 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "speed_on",    "pos": [  48, 40 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "charge_on",   "pos": [  64, 40 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "charge_on",   "pos": [  80, 40 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "charge_off",  "pos": [  96, 40 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "charge_off",  "pos": [ 114, 40 ], "crop": [  0,  8, 16, 16 ] },
+
+          { "image": "ice_on",    "pos": [   0, 48 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "ice_on",    "pos": [  16, 48 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "ice_off",   "pos": [  32, 48 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "ice_off",   "pos": [  48, 48 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "wave_on",   "pos": [  64, 48 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "wave_on",   "pos": [  80, 48 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "wave_off",  "pos": [  96, 48 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "wave_off",  "pos": [ 114, 48 ], "crop": [  0,  8, 16, 16 ] },
+
+          { "image": "plasma_on",   "pos": [   0, 56 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "plasma_on",   "pos": [  16, 56 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "plasma_off",  "pos": [  32, 56 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "plasma_off",  "pos": [  48, 56 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "spazer_on",   "pos": [  64, 56 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "spazer_on",   "pos": [  80, 56 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "spazer_off",  "pos": [  96, 56 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "spazer_off",  "pos": [ 114, 56 ], "crop": [  0,  8, 16, 16 ] },
+
+          { "image": "reserve_on",  "pos": [   0, 64 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "reserve_on",  "pos": [  16, 64 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "reserve_off", "pos": [  32, 64 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "reserve_off", "pos": [  48, 64 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "blank",       "pos": [  64, 64 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "blank",       "pos": [  80, 64 ], "crop": [  0,  8, 16, 16 ] },
+          { "image": "blank",       "pos": [  96, 64 ], "crop": [  0,  0, 16,  8 ] },
+          { "image": "blank",       "pos": [ 114, 64 ], "crop": [  0,  8, 16, 16 ] }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "../manifests/items-overworld-language.schema.json",
+  "section": {
+    "facing": "Facing",
+    "area": "Area"
+  },
+  "Facing": {
+  },
+  "Area": {
+    "one": "One",
+    "two": "Crateria 2",
+    "three": "Green/Red Brinstar/Tourian",
+    "four": "Wrecked Ship/Norfair",
+    "five": "Crateria 1/Maridia"
+  }
+}
