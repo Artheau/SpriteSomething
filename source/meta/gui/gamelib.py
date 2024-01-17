@@ -239,7 +239,8 @@ class GameParent():
                     if "origin" in background:
                         self.background_datas["origin"][background["title"]] = background["origin"]
         background_prettynames = list(self.background_datas["title"].keys())
-        self.background_selection.set(random.choice(background_prettynames))
+        if len(background_prettynames):
+            self.background_selection.set(random.choice(background_prettynames))
 
         background_dropdown = tk.ttk.Combobox(background_panel, state="readonly", values=background_prettynames, name="background_dropdown")
         background_dropdown.configure(width=BACKGROUND_DROPDOWN_WIDTH, exportselection=0, textvariable=self.background_selection)
@@ -260,7 +261,18 @@ class GameParent():
               image_filename = self.background_datas["title"][image_title]
             elif image_title in self.background_datas["filename"]:
               image_filename = image_title
-            self.raw_background = Image.open(common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename))
+            background_file = common.get_resource(
+              [
+                self.console_name,
+                self.internal_name,
+                "backgrounds"
+              ],
+              image_filename
+            )
+            if background_file:
+              self.raw_background = Image.open(common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename))
+            else:
+              return
             #this doesn't work yet; not sure how to hook it
             if "origin" in self.background_datas:
                 if image_title in self.background_datas["origin"]:
@@ -298,7 +310,7 @@ class GameParent():
             source_subpath = f"source.{self.console_name}.{self.internal_name}.{folder_name}"
             sprite_module = importlib.import_module(f"{source_subpath}.sprite")
             resource_subpath = os.path.join(self.console_name,self.internal_name,folder_name)
-            sprite = sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],resource_subpath)
+            sprite = sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],resource_subpath,folder_name)
 
             try:
                 animationlib = importlib.import_module(f"{source_subpath}.animation")
