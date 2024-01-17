@@ -23,15 +23,15 @@ runs:
   using: "composite"
   steps:
     # download pipline
-    - name: 🔽Download PipLine
-      shell: bash
-      run: |
-        echo "🔽Download PipLine"
-    - name: 🔽Download PipLine
-      uses: actions/download-artifact@v4.1.1
-      with:
-        name: pipline-test-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
-        path: ./resources/user/meta/manifests
+    # - name: 🔽Download PipLine
+    #   shell: bash
+    #   run: |
+    #     echo "🔽Download PipLine"
+    # - name: 🔽Download PipLine
+    #   uses: actions/download-artifact@v4.1.1
+    #   with:
+    #     name: pipline-test-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
+    #     path: ./resources/user/meta/manifests
 
     # start virtual display driver & run tests
     - name: 🖥️Start virtual display driver & Test (!Windows)
