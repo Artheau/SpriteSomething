@@ -255,8 +255,25 @@ class Layout():
                                                         self.data["border_size"] + vert_shift  +y1-row_y_min))
                     this_image.paste(cropped_image,(x0-xmin,y0-ymin+vert_shift))
                 if scale:
-                    this_image = this_image.resize(  ((xmax-xmin)//scale,  (ymax-ymin)//scale)  )
-                master_width += xmax-xmin+2*self.data["border_size"] + max(spacer,0)
+                    if hasattr(Image, "Resampling"):
+                        # PIL > 6.2.2
+                        this_image = this_image.resize(
+                            (
+                                (xmax - xmin) // scale,
+                                (ymax - ymin) // scale
+                            ),
+                            Image.Resampling.NEAREST
+                        )
+                    else:
+                        # PIL <= 6.2.2
+                        this_image = this_image.resize(
+                            (
+                                (xmax - xmin) // scale,
+                                (ymax - ymin) // scale
+                            )
+                        )
+                master_width += xmax - xmin + 2 * \
+                    self.data["border_size"] + max(spacer, 0)
 
                 all_images[image_name] = this_image
 
