@@ -329,8 +329,23 @@ class Layout():
                     this_image.paste(
                         cropped_image, (x0 - xmin, y0 - ymin + vert_shift))
                 if scale:
-                    this_image = this_image.resize(
-                        ((xmax - xmin) // scale, (ymax - ymin) // scale))
+                    if hasattr(Image, "Resampling"):
+                        # PIL > 6.2.2
+                        this_image = this_image.resize(
+                            (
+                                (xmax - xmin) // scale,
+                                (ymax - ymin) // scale
+                            ),
+                            Image.Resampling.NEAREST
+                        )
+                    else:
+                        # PIL <= 6.2.2
+                        this_image = this_image.resize(
+                            (
+                                (xmax - xmin) // scale,
+                                (ymax - ymin) // scale
+                            )
+                        )
                 master_width += xmax - xmin + 2 * \
                     self.data["border_size"] + max(spacer, 0)
 
