@@ -1,4 +1,5 @@
 wheel
 numpy
 pillow
+pyyaml
 setuptools
