@@ -82,8 +82,8 @@ class Layout():
         extra_area = self.get_property("extra area", image_name)
         shift = self.get_property("shift", image_name)
         border_color = tuple(self.data["border_color"])
-        if len(border_color) == 4 and image.mode != "RGBA":
-            border_color = tuple(list(border_color)[0:3])
+        # if len(border_color) == 4 and image.mode != "RGBA":
+        #     border_color = tuple(list(border_color)[0:3])
 
         scale = self.get_property("scale", image_name)
         if scale:
@@ -108,11 +108,9 @@ class Layout():
                             dimensions[3] - (image.size[1] - origin[1])        #bottom
         )
 
-        image_with_border = None
         if image.mode != "RGBA":
-            image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0))
-        else:
-            image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0,0))
+            image = image.convert("RGBA")
+        image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0,0))
 
         origin = (origin[0] + border[0], origin[1] + border[1])
         if extra_area is not None:     #we need to block off some areas that can't actually be used
@@ -172,8 +170,8 @@ class Layout():
         current_x_position = 0
         for image, origin in image_list:
             border_color = self.data["border_color"]
-            if len(border_color) == 4 and image.mode != "RGBA":
-                border_color = tuple(list(border_color)[0:3])
+            if image.mode != "RGBA":
+                image = image.convert("RGBA")
 
             border = (
                                 0,                                                        #left
