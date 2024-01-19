@@ -53,23 +53,50 @@ class Sprite(SpriteParent):
 
         return this_palette
 
+    def inject_into_ROM(self, spiffy_dict, rom):
+        #return the injected ROM
+        # get megadata
+        patch_manifest_path = os.path.join(
+            "resources",
+            "app",
+            self.resource_subpath,
+            "manifests",
+            "patch.json"
+        )
+        megadata = {}
+        if os.path.isfile(patch_manifest_path):
+            with open(patch_manifest_path) as patch_manifest:
+                megadata = json.load(patch_manifest)
+        megadata["modified"] = False
+        if "sprites" in megadata:
+            for sprite in megadata["sprites"]:
+                megadata["sprites"][sprite]["patch"] = []
+                megadata["sprites"][sprite]["modified"] = False
 
-    def export_patch(self):
-        verbose = False
-        importedCRCs = {}   # calculate imported CRCs for comparison
+        megadata["sprites"] = self.get_2bpp(megadata["sprites"])
 
-        # these are the vanilla CRCs for the sprite data
-        vanillaCRCs = {
-            "baby": int(0xEDA1184A),
-            "link": int(0xCA195F8A)
-        }
+        game_name = rom.get_name()
 
-        # this is the wrapper for IPS files
-        ipsParts = {
-            "header": bytes(ord(x) for x in "PATCH"),
-            "footer": bytes(ord(x) for x in "EOF")
-        }
+        if "NAYRU" in game_name:
+            gameID = "ages"
+        elif "DIN" in game_name:
+            gameID = "seasons"
 
+        for sprite in megadata["sprites"]:
+            if "global" in megadata["sprites"][sprite]["ips"]["header"]:
+                spriteHeader = megadata["sprites"][sprite]["ips"]["header"]["global"]
+            elif gameID in megadata["sprites"][sprite]["ips"]["header"]:
+                spriteHeader = megadata["sprites"][sprite]["ips"]["header"][gameID]
+            sprite_addr = int("0x" + (spriteHeader[0] + spriteHeader[1] + spriteHeader[2]).replace("0x", ""), 16)
+            sprite_len = int("0x" + (spriteHeader[3] + spriteHeader[4]).replace("0x", ""), 16)
+            rom.bulk_write(
+                sprite_addr,
+                megadata["sprites"][sprite]["patch"],
+                sprite_len
+            )
+        return rom
+
+    def get_2bpp(self, sprites):
         # vanilla palette for Link sprites
         vanillaPalette = [
             (0xFF, 0xFF, 0xFF, 0xFF),
@@ -85,18 +112,60 @@ class Sprite(SpriteParent):
                 for i in range(0, 8):
                     pixel = img.getpixel((x + i, y + j))
                     if pixel in vanillaPalette:
+                        # print(f"Adding Index: {vanillaPalette.index(pixel)}")
                         row.append(vanillaPalette.index(pixel))
-                    elif pixel == (0,0,0,0):
+                    elif len(pixel) >= 4 and pixel[3] == 0:
+                        # print("Adding Index: 0*")
                         row.append(0)
                     else:
+                        # print(f"Adding Pixel: {pixel}")
                         row.append(pixel)
+                        exit()
                 rowLow = 0
                 rowHigh = 0
+                # print(type(row[i]))
                 for i in range(0, 8):
                     rowLow |= (row[i] & 1) << (7 - i)
                     rowHigh |= ((row[i] & 2) >> 1) << (7 - i)
                 byteArr = [*byteArr, rowLow, rowHigh]
             return byteArr
+        # get input image
+        imgfile = self.get_master_PNG_image()
+        imgfile = imgfile.convert("RGBA")
+
+        # get pixel data
+        # build patch files
+        spriteIDs = sprites.keys()
+        for sprite in spriteIDs:
+            print(f"Examining {sprite.capitalize()} Data")
+            for y in range(*sprites[sprite]["sheet_range"]["y"]):
+                for x in range(*sprites[sprite]["sheet_range"]["x"]):
+                    for y2 in range(*sprites[sprite]["sheet_range"]["y2"]):
+                        if sprite == "link":
+                            if y == 272 and x >= 56:
+                                continue
+                        sprites[sprite]["patch"] = appendBlock(
+                            imgfile,
+                            sprites[sprite]["patch"],
+                            x,
+                            y + y2
+                        )
+
+        return sprites
+
+    def export_patch(self):
+        verbose = False
+        vanillaCRCs = {}    # hold vanilla CRCs for sprite data
+        importedCRCs = {}   # calculate imported CRCs for comparison
+
+        patch_fmt = "ips"
+
+        patch_parts = {
+            "ips": {
+                "header": bytes(ord(x) for x in "PATCH"),
+                "footer": bytes(ord(x) for x in "EOF")
+            }
+        }
 
         # port of encode function
         def encode(byteArr):
@@ -108,38 +177,29 @@ class Sprite(SpriteParent):
 
         # do the thing
         # gather all the things!
-        megadata = {
-            "modified": False,
-            "sprites":{
-                "baby": {
-                    "patch": [],
-                    "range": {
-                        "y":    range(272, 288,  16),
-                        "x":    range( 64, 128,   8),
-                        "y2":   range(  0,  16,   8)
-                    },
-                    "modified": False
-                },
-                "link": {
-                    "patch": [],
-                    "range": {
-                        "y":    range(  0, 288, 16),
-                        "x":    range(  0, 128,  8),
-                        "y2":   range(  0,  16,  8)
-                    },
-                    "modified": False
-                }
-            },
-            "games": {
-                "ages": {
-                    "patch": [*ipsParts["header"]]
-                },
-                "seasons": {
-                    "patch": [*ipsParts["header"]]
-                }
-            }
-        }
 
+        # get megadata
+        patch_manifest_path = os.path.join(
+            "resources",
+            "app",
+            self.resource_subpath,
+            "manifests",
+            "patch.json"
+        )
+        megadata = {}
+        if os.path.isfile(patch_manifest_path):
+            with open(patch_manifest_path) as patch_manifest:
+                megadata = json.load(patch_manifest)
+        megadata["modified"] = False
+        if "sprites" in megadata:
+            for sprite in megadata["sprites"]:
+                megadata["sprites"][sprite]["patch"] = []
+                megadata["sprites"][sprite]["modified"] = False
+        megadata["games"] = {}
+        for gameID in ["ages","seasons"]:
+            megadata["games"][gameID] = { "patch": [] }
+
+        # print(megadata)
         spriteIDs = list(megadata["sprites"].keys())    # get sprite names
         gameIDs = list(megadata["games"].keys())        # get game names
 
@@ -156,38 +216,28 @@ class Sprite(SpriteParent):
         if not os.path.isdir(outputDir):
             os.makedirs(outputDir)
 
+        # get a slug for naming stuff
+        basename = os.path.splitext(os.path.basename(self.filename))[0]
+
         # get input image
         imgfile = self.get_master_PNG_image()
         imgfile = imgfile.convert("RGBA")
 
-        # get a slug for naming stuff
-        basename = os.path.splitext(os.path.basename(self.filename))[0]
-
         # get pixel data
         # build patch files
-        for sprite in spriteIDs:
-            print(f"Examining {sprite.capitalize()} Data")
-            for y in megadata["sprites"][sprite]["range"]["y"]:
-                for x in megadata["sprites"][sprite]["range"]["x"]:
-                    for y2 in megadata["sprites"][sprite]["range"]["y2"]:
-                        if sprite == "link":
-                            if y == 272 and x >= 56:
-                                continue
-                        megadata["sprites"][sprite]["patch"] = appendBlock(
-                            imgfile,
-                            megadata["sprites"][sprite]["patch"],
-                            x,
-                            y + y2
-                        )
+        megadata["sprites"] = self.get_2bpp(megadata["sprites"])
 
         # check to see if it's modded data
         for sprite in spriteIDs:
+            vanillaCRCs[sprite] = int(megadata["sprites"][sprite]["bin"]["vanilla_crc"], 16)
             importedCRCs[sprite] = crc32(bytes(megadata["sprites"][sprite]["patch"]))
             megadata["sprites"][sprite]["modified"] = importedCRCs[sprite] != vanillaCRCs[sprite]
             # if it's been modded, print a message
             if megadata["sprites"][sprite]["modified"]:
                 print(f"Modded {sprite.capitalize()}")
                 megadata["modified"] = True
+            else:
+                print(f"Vanilla {sprite.capitalize()}")
             # output binary data if verbose for good measure
             if megadata["sprites"][sprite]["modified"] or verbose:
                 with open(
@@ -203,38 +253,40 @@ class Sprite(SpriteParent):
         if megadata["modified"]:
             print({"vanilla":vanillaCRCs,"imported":importedCRCs})
 
-        # if modified, build game patches
-        spriteHeaders = {
-            "link": [0x06, 0x80, 0x00, 0x22, 0xE0],
-            "baby": [0x06, 0xAC, 0xA0, 0x01, 0x00]
-        }
         for sprite in spriteIDs:
             if megadata["sprites"][sprite]["modified"]:
-                print(f"Building {sprite.capitalize()} IPS")
+                print(f"Building {sprite.capitalize()} {patch_fmt.upper()}")
                 for gameID in gameIDs:
-                    if sprite == "baby":
-                        spriteHeaders["baby"][2] = 0xA0 if gameID == "ages" else 0x40
+                    spriteHeader = []
+                    if "global" in megadata["sprites"][sprite]["ips"]["header"]:
+                        spriteHeader = megadata["sprites"][sprite]["ips"]["header"]["global"]
+                    elif gameID in megadata["sprites"][sprite]["ips"]["header"]:
+                        spriteHeader = megadata["sprites"][sprite]["ips"]["header"][gameID]
+                    spriteHeader = [int(x, 16) for x in spriteHeader]
+                    megadata["games"][gameID]["patch"] = [
+                        *patch_parts[patch_fmt]["header"]
+                    ]
                     megadata["games"][gameID]["patch"] = [
                         *megadata["games"][gameID]["patch"],
-                        *spriteHeaders[sprite]
+                        *spriteHeader
                     ]
                     megadata["games"][gameID]["patch"] = [
                         *megadata["games"][gameID]["patch"],
                         *megadata["sprites"][sprite]["patch"]
                     ]
+                    megadata["games"][gameID]["patch"] = [
+                        *megadata["games"][gameID]["patch"],
+                        *patch_parts[patch_fmt]["footer"]
+                    ]
 
         # put footer on patches
         # if modified, write patches
         for gameID in gameIDs:
-            megadata["games"][gameID]["patch"] = [
-                *megadata["games"][gameID]["patch"],
-                *ipsParts["footer"]
-            ]
             if megadata["sprites"][sprite]["modified"]:
                 with open(
                     os.path.join(
                         outputDir,
-                        f"{basename}_{gameID}.ips"
+                        f"{basename}_{gameID}.{patch_fmt}"
                     ),
                     "wb"
                 ) as ipsFile:
