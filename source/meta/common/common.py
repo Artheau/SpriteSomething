@@ -100,7 +100,7 @@ def apply_palette(image, palette):
     if image is None:
         pass
         # print("Not a valid image to apply palette to!")
-    if image.mode == "P":
+    if image.mode == "P" and len(palette):
         flat_palette = [0 for _ in range(3 * 256)]
         flat_palette[3:3 * len(palette) +
                      3] = [x for color in palette for x in color]
