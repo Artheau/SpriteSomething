@@ -103,8 +103,8 @@
       "R2:L",
       "R2:R",
       "R3:L",
-      "palette_block",
-      "R4","R5","R6","R7"
+      "R3:span", "R4:span","R5:span","R6:span",
+      "palette_block"
     ]
   ],
   "images": {
@@ -283,15 +283,15 @@
     "R2:L": { "dimensions": [0,0,8,16], "import palette interval": [0,4], "grid": "R2:left" },
     "R2:R": { "parent": "R2:L", "grid": "R2:right" },
     "R3:L": { "dimensions": [0,0,8,16], "import palette interval": [0,4], "grid": "R3:left" },
+    "R3:span": { "parent": "walkUp", "grid": "R4" },
+    "R4:span": { "parent": "walkUp", "grid": "R4" },
+    "R5:span": { "parent": "walkUp", "grid": "R5" },
+    "R6:span": { "parent": "walkUp", "grid": "R6" },
     "palette_block": {
         "dimensions": [0,15,8,16],
         "shift": [-4,0],
         "grid": "R3:right"
     },
-    "R4": { "parent": "walkUp", "grid": "R4" },
-    "R5": { "parent": "walkUp", "grid": "R5" },
-    "R6": { "parent": "walkUp", "grid": "R6" },
-    "R7": { "parent": "walkUp", "grid": "R7" },
 
     "S0": { "parent": "walkUp", "grid": "S0" },
     "S1": { "parent": "walkUp", "grid": "S1" },

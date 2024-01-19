@@ -106,14 +106,14 @@ class Sprite(SpriteParent):
                 row = []
                 for i in range(0, 8):
                     pixel = img.getpixel((x + i, y + j))
-                    if pixel in vanillaPalette:
-                        # print(f"Adding Index: {vanillaPalette.index(pixel)}")
-                        row.append(vanillaPalette.index(pixel))
-                    elif len(pixel) >= 4 and pixel[3] == 0:
+                    if len(pixel) >= 4 and pixel[3] == 0:
                         # print("Adding Index: 0*")
                         row.append(0)
+                    elif pixel[:3] in vanillaPalette:
+                        # print(f"Adding Index: {vanillaPalette.index(pixel[:3])}")
+                        row.append(vanillaPalette.index(pixel[:3]))
                     else:
-                        # print(f"Adding Pixel: {pixel}")
+                        print(f"Adding Pixel: {pixel}")
                         row.append(pixel)
                         exit()
                 rowLow = 0
@@ -149,7 +149,7 @@ class Sprite(SpriteParent):
         return sprites
 
     def export_patch(self):
-        verbose = False
+        verbose = True
         vanillaCRCs = {}    # hold vanilla CRCs for sprite data
         importedCRCs = {}   # calculate imported CRCs for comparison
 

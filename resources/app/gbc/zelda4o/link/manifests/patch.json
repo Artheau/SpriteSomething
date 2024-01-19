@@ -2,7 +2,8 @@
     "sprites": {
         "baby": {
             "bin": {
-                "vanilla_crc": "0xEDA1184A"
+                "vanilla_crc": "0xA731C9A6",
+                "white_crc": "0xEDA1184A"
             },
             "ips": {
                 "header": {
@@ -18,13 +19,14 @@
             },
             "sheet_range": {
                 "y":    [272,288, 16],
-                "x":    [ 64,128,  8],
+                "x":    [ 56,120,  8],
                 "y2":   [  0, 16,  8]
             }
         },
         "link": {
             "bin": {
-                "vanilla_crc": "0xCA195F8A"
+                "vanilla_crc": "0xF97AC235",
+                "white_crc": "0xCA195F8A"
             },
             "ips": {
                 "header": {
