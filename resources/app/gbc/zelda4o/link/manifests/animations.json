@@ -14,6 +14,34 @@
       { "frames": 20, "tiles": [ { "image": "walkUp" } ] }
     ]
   },
+  "Stand (Mermaid)": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "L0" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "L2" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "L2", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "L1" } ] }
+    ]
+  },
+  "Stand (Baby)": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "R3:span" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "R5:span" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "R5:span", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "R4:span" } ] }
+    ]
+  },
   "Walk": {
     "down": [
       { "frames": 20, "tiles": [ { "image": "walkDown" } ] },
@@ -60,6 +88,42 @@
       { "frames": 20, "tiles": [ { "image": "walkRight1_S2" } ] }
     ]
   },
+  "Walk (Mermaid)": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "L0" } ] },
+      { "frames": 20, "tiles": [ { "image": "L0", "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "L2" } ] },
+      { "frames": 20, "tiles": [ { "image": "L3" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "L2", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "L3", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "L1" } ] },
+      { "frames": 20, "tiles": [ { "image": "L1", "flip": "h" } ] }
+    ]
+  },
+  "Walk (Baby)": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "R3:span" } ] },
+      { "frames": 20, "tiles": [ { "image": "R3:span", "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "R5:span" } ] },
+      { "frames": 20, "tiles": [ { "image": "R6:span" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "R5:span", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "R6:span", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "R4:span" } ] },
+      { "frames": 20, "tiles": [ { "image": "R4:span", "flip": "h" } ] }
+    ]
+  },
   "Block (Shield 1)": {
     "down": [
       { "frames": 20, "tiles": [ { "image": "blockDown_S1" } ] },
@@ -94,7 +158,7 @@
       { "frames": 20, "tiles": [ { "image": "swimLeft1" } ] }
     ]
   },
-  "Tread Water": {
+  "Tread water": {
     "down": [
       { "frames": 20, "tiles": [
         { "image": "treadWaterDown" },
@@ -118,6 +182,42 @@
       { "frames": 20, "tiles": [ { "image": "treadWaterUp1" } ] }
     ]
   },
+  "Attack": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "walkDown" } ] },
+      { "frames": 20, "tiles": [ { "image": "I2" } ] },
+      { "frames": 20, "tiles": [ { "image": "I3" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "walkLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "I4" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushLeft1" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "walkLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "I4", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushLeft1", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "I0" } ] },
+      { "frames": 20, "tiles": [ { "image": "I1" } ] }
+    ]
+  },
+  "Attack (Mermaid)": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "L0" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "L2" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "L2", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "L1" } ] }
+    ]
+  },
   "Dive": {
     "right": [
       { "frames": 20, "tiles": [
@@ -127,6 +227,70 @@
       { "frames": 20, "tiles": [
         { "image": "dive1" },
         { "image": "dive1", "pos": [8,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Jump": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "walkDown" } ] },
+      { "frames": 20, "tiles": [
+        { "image": "G1:L", "flip": "v" },
+        { "image": "G1:L", "pos": [8,0], "flip": "both" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "G0:L", "flip": "v" },
+        { "image": "G0:L", "pos": [8,0], "flip": "both" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "G0:R", "flip": "v" },
+        { "image": "G0:R", "pos": [8,0], "flip": "both" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "walkLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpLeft1" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpLeft", "flip": "both" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "walkLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpLeft1", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpLeft", "flip": "v" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+      { "frames": 20, "tiles": [
+        { "image": "G0:L" },
+        { "image": "G0:L", "pos": [8,0], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "G0:R" },
+        { "image": "G0:R", "pos": [8,0], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "G1:L" },
+        { "image": "G1:L", "pos": [8,0], "flip": "h" }
+      ] }
+    ]
+  },
+  "Glide": {
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "M3:R" },
+        { "image": "M3:R", "pos": [8,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "M4" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "M4", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [
+        { "image": "M3:L" },
+        { "image": "M3:L", "pos": [8,0], "flip": "h" }
       ] }
     ]
   },
@@ -151,10 +315,16 @@
       { "frames": 20, "tiles": [ {"image": "carryDown", "flip": "h" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image":"carryLeft" } ] }
+      { "frames": 20, "tiles": [ { "image": "carryLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "I5" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image":"carryLeft", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "carryLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "I5", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "pushUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushUp", "flip": "h" } ] }
     ]
   },
   "Push": {
@@ -169,6 +339,52 @@
     "up": [
       { "frames": 20, "tiles": [ { "image": "pushUp" } ] },
       { "frames": 20, "tiles": [ { "image": "pushUp", "flip": "h" } ] }
+    ]
+  },
+  "Press": {
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "F2:R" },
+        { "image": "F2:R", "pos": [8,0], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "F3:L" },
+        { "image": "F3:L", "pos": [8,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "F4" } ] },
+      { "frames": 20, "tiles": [ { "image": "F5" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "F4", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "F5", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "F0" } ] },
+      { "frames": 20, "tiles": [ { "image": "F1", "flip": "h" } ] }
+    ]
+  },
+  "Pull": {
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "F2:L" },
+        { "image": "F2:L", "pos": [8,0], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "F6" } ] },
+      { "frames": 20, "tiles": [ { "image": "F7" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "F6", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "F7", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [
+        { "image": "F3:R" },
+        { "image": "F3:R", "pos": [8,0], "flip": "h" }
+      ] }
     ]
   },
   "Item get": {
@@ -188,6 +404,60 @@
     "right": [
       { "frames": 20, "background": "file-select.png", "origin": [80,62], "tiles": [ { "image": "walkDown" } ] },
       { "frames": 20, "tiles": [ { "image": "walkDown", "flip": "h" } ] }
+    ]
+  },
+  "Shovel": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "K2" } ] },
+      { "frames": 20, "tiles": [ { "image": "K3" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "K4" } ] },
+      { "frames": 20, "tiles": [ { "image": "K5" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "K4", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "K5", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "K0" } ] },
+      { "frames": 20, "tiles": [ { "image": "K1" } ] }
+    ]
+  },
+  "Flute": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "I6" } ] },
+      { "frames": 20, "tiles": [ { "image": "I7" } ] }
+    ]
+  },
+  "Magnetic Gloves": {
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "I3" } ] },
+      { "frames": 20, "tiles": [ { "image": "N0" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "pushLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushLeft1" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "pushLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "pushLeft1", "flip": "h" } ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "I1" } ] },
+      { "frames": 20, "tiles": [ { "image": "N1" } ] }
+    ]
+  },
+  "Harp of Ages": {
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "play" },
+        { "image": "harp", "pos": [-4,0] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "play1" },
+        { "image": "harp", "pos": [-4,0] }
+      ] }
     ]
   },
   "Asleep": {

@@ -149,7 +149,7 @@ class Sprite(SpriteParent):
         return sprites
 
     def export_patch(self):
-        verbose = True
+        verbose = False
         vanillaCRCs = {}    # hold vanilla CRCs for sprite data
         importedCRCs = {}   # calculate imported CRCs for comparison
 

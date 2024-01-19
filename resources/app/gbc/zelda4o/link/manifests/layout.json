@@ -18,7 +18,7 @@
     [
       "walkDown","standDown",
       "pushLeft","pushLeft1",
-      "play","instrument","play1",
+      "play","harp","play1",
       "carryDown1",
       "squish",
       "dead"
@@ -123,7 +123,7 @@
     "pushLeft": { "parent": "walkUp", "grid": "B2" },
     "pushLeft1": { "parent": "pushLeft", "grid": "B3" },
     "play": { "parent": "walkUp", "grid": "B4" },
-    "instrument": { "dimensions": [0,0,8,16], "import palette interval": [0,4], "grid": "B5:left" },
+    "harp": { "dimensions": [0,0,8,16], "import palette interval": [0,4], "grid": "B5:left" },
     "play1": { "parent": "play", "grid": "B5:right,B6:left" },
     "carryDown1": { "dimensions": [0,0,8,16], "import palette interval": [0,4], "grid": "B6:right" },
     "squish": { "dimensions": [0,0,8,16], "import palette interval": [0,4], "grid": "B7:left" },
