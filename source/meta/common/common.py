@@ -107,16 +107,7 @@ def apply_palette(image, palette):
         alpha_mask = image.point(lambda x: 0 if x == 0 else 1, mode="1")
         image.putpalette(flat_palette)
         image = image.convert('RGBA')
-        new_alpha = True
-        if new_alpha:
-            array = np.array(image, dtype=np.ubyte)
-            bg_color = palette[0]
-            mask = (array[:,:,:3] == bg_color).all(axis=2)
-            alpha = np.where(mask, 0, 255)
-            array[:,:,-1] = alpha
-            image = Image.fromarray(np.ubyte(array))
-        else:
-            image.putalpha(alpha_mask)
+        image.putalpha(alpha_mask)
     return image
 
 

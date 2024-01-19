@@ -98,12 +98,7 @@ class Sprite(SpriteParent):
 
     def get_2bpp(self, sprites):
         # vanilla palette for Link sprites
-        vanillaPalette = [
-            (0xFF, 0xFF, 0xFF, 0xFF),
-            (0x00, 0x00, 0x00, 0xFF),
-            (0x10, 0xAD, 0x42, 0xFF),
-            (0xFF, 0xD6, 0x8C, 0xFF)
-        ]
+        vanillaPalette = self.link_globals["green_palette"]
 
         # port of appendBlock function
         def appendBlock(img, byteArr, x, y):

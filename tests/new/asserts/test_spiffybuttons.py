@@ -51,33 +51,43 @@ class SpiffyButtonAudit(unittest.TestCase):
                         print(heading)
                         print("-" * 70)
                     palettes = []
-                    if spriteID == "link":
-                        palettes = [
-                          [],
-                          ["power_gloves"],
-                          ["titan_gloves"],
-                          ["blue_mail", "titan_gloves"],
-                          ["blue_mail", "power_gloves"],
-                          ["blue_mail"],
-                          ["red_mail"],
-                          ["red_mail", "power_gloves"],
-                          ["red_mail", "titan_gloves"],
-                          ["titan_gloves"],
-                        ]
-                    elif spriteID == "samus":
-                        palettes = [
-                            [],
-                            ["varia_suit"],
-                            ["varia_suit","xray_variant"],
-                            ["gravity_suit","xray_variant"],
-                            ["gravity_suit"],
-                            [],
-                            ["hyper_variant"],
-                            ["xray_variant"],
-                            [],
-                            ["sepia_variant"],
-                            ["door_variant"],
-                        ]
+                    test_palettes = {
+                        "snes": {
+                            "metroid3": {
+                                "samus": [
+                                    [],
+                                    ["varia_suit"],
+                                    ["varia_suit","xray_variant"],
+                                    ["gravity_suit","xray_variant"],
+                                    ["gravity_suit"],
+                                    [],
+                                    ["hyper_variant"],
+                                    ["xray_variant"],
+                                    [],
+                                    ["sepia_variant"],
+                                    ["door_variant"],
+                                ]
+                            },
+                            "zelda3": {
+                                "link": [
+                                    [],
+                                    ["power_gloves"],
+                                    ["titan_gloves"],
+                                    ["blue_mail", "titan_gloves"],
+                                    ["blue_mail", "power_gloves"],
+                                    ["blue_mail"],
+                                    ["red_mail"],
+                                    ["red_mail", "power_gloves"],
+                                    ["red_mail", "titan_gloves"],
+                                    ["titan_gloves"],
+                                ]
+                            }
+                        }
+                    }
+                    if platID in test_palettes:
+                        if gameID in test_palettes[platID]:
+                            if spriteID in test_palettes[platID][gameID]:
+                                palettes = test_palettes[platID][gameID][spriteID]
                     self.run_palette_audit(palettes)
 
     def run_palette_audit(self, PALETTES_TO_CHECK):
