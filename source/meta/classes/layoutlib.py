@@ -81,9 +81,7 @@ class Layout():
         original_dimensions = self.get_property("dimensions", image_name)
         extra_area = self.get_property("extra area", image_name)
         shift = self.get_property("shift", image_name)
-        border_color = tuple(self.data["border_color"])
-        # if len(border_color) == 4 and image.mode != "RGBA":
-        #     border_color = tuple(list(border_color)[0:3])
+        border_color = self.data["border_color"]
 
         scale = self.get_property("scale", image_name)
         if scale:
@@ -108,10 +106,10 @@ class Layout():
                             dimensions[3] - (image.size[1] - origin[1])        #bottom
         )
 
-        if image.mode != "RGBA":
-            image = image.convert("RGBA")
-        image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0,0))
-
+        fill_color = (0,0,0)
+        if image.mode == "RGBA":
+            fill_color = (0,0,0,0)
+        image_with_border = ImageOps.expand(image,border=border,fill=fill_color)
         origin = (origin[0] + border[0], origin[1] + border[1])
         if extra_area is not None:     #we need to block off some areas that can't actually be used
             mask = Image.new("RGBA", (dimensions[2]-dimensions[0],dimensions[3]-dimensions[1]), tuple(border_color))
@@ -130,7 +128,9 @@ class Layout():
                                                     self.data["border_size"]
         )
 
-        image_with_border = ImageOps.expand(image_with_border,border=border_with_spacer,fill=border_color)     #hard border around the actual draw space
+        if image_with_border.mode != "RGBA":
+            border_color = (*border_color[:3],)
+        image_with_border = ImageOps.expand(image_with_border,border=border_with_spacer,fill=tuple(border_color))     #hard border around the actual draw space
         origin = tuple(x+self.data["border_size"] for x in origin)
 
         if shift is not None:
@@ -169,16 +169,15 @@ class Layout():
 
         current_x_position = 0
         for image, origin in image_list:
-            border_color = self.data["border_color"]
-            if image.mode != "RGBA":
-                image = image.convert("RGBA")
-
             border = (
                                 0,                                                        #left
                                 -origin[1]-y_min,                            #top
                                 0,                                                        #right
                                 origin[1]+y_max-image.size[1]    #bottom
             )
+            border_color = self.data["border_color"]
+            if image.mode != "RGBA":
+                border_color = border_color[:3]
             bordered_image = ImageOps.expand(image,border=border,fill=tuple(border_color))
             collage.paste(bordered_image, (current_x_position,0))
 
@@ -334,10 +333,17 @@ class Layout():
             all_images["palette_block"] = palette_block
 
         master_palettes = []
-        if "palette_block" in all_images:
-            master_palettes = list(
-                all_images["palette_block"].convert("RGB").getdata()
-            )
+        if "palette_block" in all_images and "palette_block" in self.data["images"]:
+            palette_rgb = list(all_images["palette_block"].convert("RGB").getdata())
+            palette_rgba = list(all_images["palette_block"].convert("RGBA").getdata())
+            if "shift" in self.data["images"]["palette_block"]:
+                shift = self.data["images"]["palette_block"]["shift"]
+                if shift[0] < 0:
+                    palette_rgb = palette_rgb[shift[0]*-1:]
+                    palette_rgba = palette_rgba[shift[0]*-1:]
+            if palette_rgba[0][3] == 0:
+                palette_rgb[0] = (255,0,255)
+            master_palettes = palette_rgb
 
         if len(master_palettes):
             for image_name, this_image in all_images.items():
