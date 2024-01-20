@@ -102,5 +102,22 @@
         }
       ]
     }
-  ]
+  ],
+  "tests": {
+    "Stand": {
+      "frame": 0,
+      "selections": [
+        [],
+        ["power_gloves"],
+        ["titan_gloves"],
+        ["blue_mail","titan_gloves"],
+        ["blue_mail","power_gloves"],
+        ["blue_mail"],
+        ["red_mail"],
+        ["red_mail","power_gloves"],
+        ["red_mail","titan_gloves"],
+        ["titan_gloves"]
+      ]
+    }
+  }
 }

@@ -98,5 +98,23 @@
         }
       ]
     }
-  ]
+  ],
+  "tests": {
+    "Stand": {
+      "frame": 0,
+      "selections": [
+        [],
+        ["varia_suit"],
+        ["varia_suit","xray_variant"],
+        ["gravity_suit","xray_variant"],
+        ["gravity_suit"],
+        [],
+        ["hyper_variant"],
+        ["xray_variant"],
+        [],
+        ["sepia_variant"],
+        ["door_variant"]
+      ]
+    }
+  }
 }

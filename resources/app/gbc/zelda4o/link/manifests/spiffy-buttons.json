@@ -96,5 +96,27 @@
         }
       ]
     }
-  ]
+  ],
+  "tests": {
+    "Stand": {
+      "frame": 0,
+      "selections": [
+        [],
+        ["blue_palette"],
+        ["red_palette"],
+        ["gold_palette"]
+      ]
+    },
+    "Attack": {
+      "frame": 4,
+      "selections": [
+        [],
+        ["sword_weapon"],
+        ["charge_weapon"],
+        ["rod_weapon"],
+        ["cane_weapon"],
+        ["biggoron_weapon"]
+      ]
+    }
+  }
 }

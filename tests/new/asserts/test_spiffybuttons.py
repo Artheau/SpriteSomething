@@ -50,47 +50,33 @@ class SpiffyButtonAudit(unittest.TestCase):
                         heading = ("%s/%s/%s" % (self.platID, self.gameID, self.spriteID))
                         print(heading)
                         print("-" * 70)
-                    palettes = []
-                    test_palettes = {
-                        "snes": {
-                            "metroid3": {
-                                "samus": [
-                                    [],
-                                    ["varia_suit"],
-                                    ["varia_suit","xray_variant"],
-                                    ["gravity_suit","xray_variant"],
-                                    ["gravity_suit"],
-                                    [],
-                                    ["hyper_variant"],
-                                    ["xray_variant"],
-                                    [],
-                                    ["sepia_variant"],
-                                    ["door_variant"],
-                                ]
-                            },
-                            "zelda3": {
-                                "link": [
-                                    [],
-                                    ["power_gloves"],
-                                    ["titan_gloves"],
-                                    ["blue_mail", "titan_gloves"],
-                                    ["blue_mail", "power_gloves"],
-                                    ["blue_mail"],
-                                    ["red_mail"],
-                                    ["red_mail", "power_gloves"],
-                                    ["red_mail", "titan_gloves"],
-                                    ["titan_gloves"],
-                                ]
-                            }
-                        }
-                    }
-                    if platID in test_palettes:
-                        if gameID in test_palettes[platID]:
-                            if spriteID in test_palettes[platID][gameID]:
-                                palettes = test_palettes[platID][gameID][spriteID]
-                    self.run_palette_audit(palettes)
+                    spiffy_manifest_path = os.path.join(
+                        "resources",
+                        "app",
+                        platID,
+                        gameID,
+                        spriteID,
+                        "manifests",
+                        "spiffy-buttons.json"
+                    )
+                    found_spiffytests = False
+                    if os.path.isfile(spiffy_manifest_path):
+                        with open(spiffy_manifest_path) as spiffy_manifest:
+                            spiffy_json = json.load(spiffy_manifest)
+                            if "tests" in spiffy_json:
+                                for [animation_name, animation_data] in list(spiffy_json["tests"].items()):
+                                    found_spiffytests = True
+                                    frame = animation_data["frame"] if "frame" in animation_data else 0
+                                    palettes = animation_data["selections"] if "selections" in animation_data else []
+                                    self.run_palette_audit(
+                                        animation_name,
+                                        frame,
+                                        palettes
+                                    )
+                    if not found_spiffytests:
+                        self.run_palette_audit()
 
-    def run_palette_audit(self, PALETTES_TO_CHECK):
+    def run_palette_audit(self, animation_name="Stand", frame=0, PALETTES_TO_CHECK=[]):
         spriteData = DATA[self.platID]["games"][self.gameID]["sprites"][self.spriteID]
         if spriteData["view-only"]:
             print(f"{self.spriteID} is a WIP!")
@@ -113,7 +99,7 @@ class SpiffyButtonAudit(unittest.TestCase):
 
         old_image = None
         for i,_ in enumerate(PALETTES_TO_CHECK):
-            new_image = sprite["import"][importExt].get_image("Stand", "right", 0, PALETTES_TO_CHECK[i], 0)[0]
+            new_image = sprite["import"][importExt].get_image(animation_name, "right", frame, PALETTES_TO_CHECK[i], 0)[0]
             if old_image is not None:
                 with self.subTest(new_palette = PALETTES_TO_CHECK[i], old_palette = PALETTES_TO_CHECK[i-1]):
                     self.assertFalse(self.image_is_same(old_image,new_image))

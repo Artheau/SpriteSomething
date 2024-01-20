@@ -33,5 +33,15 @@
         }
       ]
     }
-  ]
+  ],
+  "tests": {
+    "Stand (Small)": {
+      "frame": 0,
+      "selections": [
+        [],
+        ["luigi_brother"],
+        ["fire_brother"]
+      ]
+    }
+  }
 }
