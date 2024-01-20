@@ -654,5 +654,90 @@
     "right": [
       { "frames": 20, "tiles": [ { "image": "awake" } ] }
     ]
+  },
+  "Snow's LADX Convertor": {
+    "right": [
+      { "frames": 20, "origin": [1,1], "background": "z4o-z4.png", "tiles": [
+        { "image": "walkDown",  "pos": [  0,  0] },
+        { "image": "walkUp",    "pos": [ 16,  0] },
+        { "image": "standLeft", "pos": [ 32,  0] },
+        { "image": "walkLeft",  "pos": [ 48,  0] },
+        { "image": "swimLeft",  "pos": [ 64,  0] },
+        { "image": "swimLeft1", "pos": [ 80,  0] },
+        { "image": "K2",        "pos": [ 96,  0] },
+        { "image": "K3",        "pos": [112,  0] },
+
+        { "image": "I3",        "pos": [  0, 16] },
+        { "image": "I1",        "pos": [ 16, 16] },
+        { "image": "pushLeft1", "pos": [ 32, 16] },
+        { "image": "K4",        "pos": [ 48, 16] },
+        { "image": "I2",        "pos": [ 64, 16] },
+        { "image": "I0",        "pos": [ 80, 16] },
+        { "image": "I4",        "pos": [ 96, 16] },
+        { "image": "itemGet",   "pos": [112, 16] },
+
+        { "image": "F3:L",      "pos": [  0, 32] },
+        { "image": "F2:R",      "pos": [  8, 32] },
+        { "image": "F1",        "pos": [ 16, 32] },
+        { "image": "pushUp",    "pos": [ 32, 32] },
+        { "image": "F5",        "pos": [ 48, 32] },
+        { "image": "F4",        "pos": [ 64, 32] },
+        { "image": "dead",      "pos": [ 80, 32] },
+        { "image": "F3:R",      "pos": [ 88, 32] },
+        { "image": "F6",        "pos": [ 96, 32] },
+        { "image": "F7",        "pos": [112, 32] },
+
+        { "image": "G1:L",      "pos": [  0, 48], "flip": "v" },
+        { "image": "G0:L",      "pos": [  8, 48], "flip": "v" },
+        { "image": "G0:R",      "pos": [ 16, 48], "flip": "v" },
+        { "image": "jumpLeft",  "pos": [ 24, 48] },
+        { "image": "jumpLeft1", "pos": [ 40, 48] },
+        { "image": "F2:L",      "pos": [ 56, 48] },
+        { "image": "carryDown", "pos": [ 64, 48] },
+        { "image": "F0",        "pos": [ 80, 48] },
+        { "image": "carryLeft", "pos": [ 96, 48] },
+        { "image": "I5",        "pos": [112, 48] },
+
+        { "image": "walkDown_S1",   "pos": [  0, 64], "crop": [0,0,8,16] },
+        { "image": "walkDown1_S1",  "pos": [  8, 64], "crop": [0,0,8,16] },
+        { "image": "blockDown_S1",  "pos": [ 16, 64] },
+        { "image": "blockDown1_S1", "pos": [ 32, 64] },
+        { "image": "blockDown_S2",  "pos": [ 48, 64] },
+        { "image": "blockDown1_S2", "pos": [ 64, 64] },
+        { "image": "blockLeft",     "pos": [ 80, 64] },
+        { "image": "blockLeft1",    "pos": [ 96, 64] },
+        { "image": "blockRight1",   "pos": [112, 64] },
+
+        { "image": "instrumentGet", "pos": [  0, 80] },
+        { "image": "instrumentGet", "pos": [  8, 80] },
+        { "image": "walkRight_S1",  "pos": [ 16, 80], "crop": [0,0,8,16] },
+        { "image": "walkRight1_S1", "pos": [ 24, 80], "crop": [0,0,8,16] },
+        { "image": "walkRight_S2",  "pos": [ 32, 80] },
+        { "image": "walkRight1_S2", "pos": [ 48, 80] },
+        { "image": "blockUp",       "pos": [ 64, 80] },
+        { "image": "blockUp1",      "pos": [ 80, 80] },
+        { "image": "K5",            "pos": [ 96, 80] },
+        { "image": "K0",            "pos": [112, 80] },
+
+        { "image": "walkUp_S1",     "pos": [  0, 96], "crop": [8,0,16,16] },
+        { "image": "walkUp1_S1",    "pos": [  8, 96], "crop": [8,0,16,16] },
+        { "image": "treadWaterDown","pos": [ 16, 96] },
+        { "image": "treadWaterDown1","pos":[ 24, 96] },
+        { "image": "treadWaterLeft","pos": [ 32, 96] },
+        { "image": "treadWaterUp",  "pos": [ 48, 96] },
+        { "image": "K1",            "pos": [ 64, 96] },
+        { "image": "treadWaterLeft1","pos": [ 80, 96] },
+        { "image": "treadWaterUp1", "pos":[ 96, 96] },
+        { "image": "dive",          "pos": [112, 96] },
+        { "image": "dive1",         "pos": [120, 96] },
+
+        { "image": "fall",          "pos": [  0,112] },
+        { "image": "fall1",         "pos": [ 16,112] },
+        { "image": "standDown",     "pos": [ 40,112] },
+        { "image": "standLeft",     "pos": [ 64,112], "crop": [0,0,12,16], "flip": "h" },
+        { "image": "play1",         "pos": [112,112], "crop": [8,0,16,16] },
+        { "image": "instrumentGet", "pos": [120,112] }
+      ] }
+    ]
   }
 }
