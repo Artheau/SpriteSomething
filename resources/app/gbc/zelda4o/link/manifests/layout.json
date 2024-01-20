@@ -8,6 +8,22 @@
   ],
   "border_color": [0, 0, 0, 255],
   "border_size": 0,
+  "pseudoimages": [
+    "MAGNET0",
+    "MAGNET1",
+    "MAGNET2",
+    "MAGNET3",
+    "SLING0",
+    "SLING1",
+    "SLING2",
+    "WEAPON0",
+    "WEAPON1",
+    "WEAPON2",
+    "charge_weapon0",
+    "charge_weapon2",
+    "sword_weapon0",
+    "sword_weapon2"
+  ],
   "layout": [
     [
       "walkUp", "pushUp",
