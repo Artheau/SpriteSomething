@@ -25,6 +25,76 @@
           "img": "palette-gold.png"
         }
       ]
+    },
+    {
+      "group-fish-key": "weapon",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "sword",
+          "img": "weapon-sword.png"
+        },
+        {
+          "fish-subkey": "charge",
+          "img": "weapon-charge.png"
+        },
+        {
+          "fish-subkey": "rod",
+          "img": "weapon-rod.png"
+        },
+        {
+          "fish-subkey": "ore",
+          "img": "weapon-ore.png"
+        },
+        {
+          "fish-subkey": "cane",
+          "img": "weapon-cane.png"
+        },
+        {
+          "fish-subkey": "biggoron",
+          "img": "weapon-biggoron.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "magnet",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "blue",
+          "img": "magnet-blue.png"
+        },
+        {
+          "fish-subkey": "red",
+          "img": "magnet-red.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "sling",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "blue",
+          "img": "sling-blue.png"
+        },
+        {
+          "fish-subkey": "red",
+          "img": "sling-red.png"
+        }
+      ]
     }
   ]
 }

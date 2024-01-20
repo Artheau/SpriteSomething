@@ -53,6 +53,65 @@ class Sprite(SpriteParent):
 
         return this_palette
 
+    def get_alternate_tile(self, image_name, palettes):
+        '''
+        Get alternate tile to replace requested tile
+        '''
+        slugs = {}
+        found_alt = ""
+        for palette in palettes:
+            if '_' in palette:
+                slugs[
+                    palette[
+                        palette.rfind('_')+1:
+                    ]
+                ] = palette[
+                    :palette.rfind('_')
+                ]
+        for item in ["WEAPON","MAGNET","SLING"]:
+            if image_name.startswith(item):
+                if item.lower() in slugs:
+                    found_alt = True
+                    image_name = image_name.replace(
+                        item,
+                        slugs[item.lower()] + '_' + item.lower()
+                    ) if not "none_" + item.lower() in palettes else \
+                    "transparent"
+        if "accessories" in slugs:
+            for item, default in [
+                    ("ITEM","pendant"),
+                    ("CRYSTAL","crystal"),
+                    ("BUSH_SHADOW","main_shadow")
+                ]:
+                if image_name.startswith(item):
+                    found_alt = True
+                    image_name = default.lower() if \
+                        not "none_accessories" in palettes else \
+                        "transparent"
+            for item in ["BUSH","BOOK"]:
+                if image_name.startswith(item):
+                    found_alt = True
+                    image_name = image_name.lower() if \
+                        not "none_accessories" in palettes else \
+                        "transparent"
+        if found_alt:
+            return self.images[image_name]
+        if True:
+            #TODO: Track down why this function is being called without
+            # spiffy button info during sprite load
+            return Image.new("RGBA",(0,0),0)
+        # FIXME: English
+        raise AssertionError(f"Could not locate tile with name {image_name}")
+
+    def import_cleanup(self):
+        '''
+        Post-import cleanup
+        '''
+        self.load_plugins()
+        self.equipment = self.plugins.equipment_test(False)
+        if hasattr(self, "images"):
+            self.images = dict(self.images,**self.equipment)
+
     def inject_into_ROM(self, spiffy_dict, rom):
         #return the injected ROM
         # get megadata

@@ -167,8 +167,8 @@ def equipment_test(save=False):
                     "resources",
                     "user",
                     "snes",
-                    "ffmq",
-                    "benjamin",
+                    "zelda3",
+                    "link",
                     "sheets",
                     icon + ".png"
                 )

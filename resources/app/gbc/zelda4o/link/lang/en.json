@@ -1,7 +1,10 @@
 {
   "section": {
     "facing": "Facing",
-    "palette": "Palette"
+    "palette": "Palette",
+    "weapon": "Weapon",
+    "magnet": "Magnet",
+    "sling": "Slingshot"
   },
   "Facing": {
     "up": "Up",
@@ -14,5 +17,25 @@
     "blue": "Blue",
     "red": "Red",
     "gold": "Gold"
+  },
+  "Weapon": {
+    "none": "None",
+    "biggoron": "Biggoron Sword",
+    "cane": "Cane of Somaria",
+    "charge": "Charge",
+    "ore": "Fool's Ore",
+    "rod": "Rod of Seasons",
+    "seed": "Seed Shooter",
+    "sword": "Sword"
+  },
+  "Magnet": {
+    "none": "None",
+    "blue": "Blue",
+    "red": "Red"
+  },
+  "Slingshot": {
+    "none": "None",
+    "blue": "Slingshot",
+    "red": "Hyper Slingshot"
   }
 }

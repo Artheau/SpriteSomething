@@ -185,26 +185,82 @@
   "Attack": {
     "down": [
       { "frames": 20, "tiles": [ { "image": "walkDown" } ] },
-      { "frames": 20, "tiles": [ { "image": "I2" } ] },
-      { "frames": 20, "tiles": [ { "image": "I3" } ] }
+      { "frames": 20, "tiles": [
+        { "image": "I2" },
+        { "image": "WEAPON2", "pos": [-23,-2], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "I3" },
+        { "image": "WEAPON1", "pos": [-13,15], "flip": "both" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "I3" },
+        { "image": "WEAPON0", "pos": [7,16], "flip": "v" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "I3" },
+        { "image": "WEAPON0", "pos": [7,15], "flip": "v" }
+      ] }
     ],
     "left": [
       { "frames": 20, "tiles": [ { "image": "walkLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "I4" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushLeft1" } ] }
+      { "frames": 20, "tiles": [
+        { "image": "I4" },
+        { "image": "WEAPON0", "pos": [4,-24] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "pushLeft1" },
+        { "image": "WEAPON1", "pos": [-13,-21], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "pushLeft1" },
+        { "image": "WEAPON2", "pos": [-24,0], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "pushLeft1" },
+        { "image": "WEAPON2", "pos": [-20,0], "flip": "h" }
+      ] }
     ],
     "right": [
       { "frames": 20, "tiles": [ { "image": "walkLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "I4", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushLeft1", "flip": "h" } ] }
+      { "frames": 20, "tiles": [
+        { "image": "I4", "flip": "h" },
+        { "image": "WEAPON0", "pos": [4,-24] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "pushLeft1", "flip": "h" },
+        { "image": "WEAPON1", "pos": [13,-21] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "pushLeft1", "flip": "h" },
+        { "image": "WEAPON2", "pos": [16,0] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "pushLeft1", "flip": "h" },
+        { "image": "WEAPON2", "pos": [12,0] }
+      ] }
     ],
     "up": [
       { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "I0" } ] },
-      { "frames": 20, "tiles": [ { "image": "I1" } ] }
+      { "frames": 20, "tiles": [
+        { "image": "I0" },
+        { "image": "WEAPON2", "pos": [16,-4] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "I1" },
+        { "image": "WEAPON1", "pos": [13,-21] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "I1" },
+        { "image": "WEAPON0", "pos": [0,-24] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "I1" },
+        { "image": "WEAPON0", "pos": [0,-20] }
+      ] }
     ]
   },
-  "Attack (Mermaid)": {
+  "Attack (Mermaid) (WIP)": {
     "down": [
       { "frames": 20, "tiles": [ { "image": "L0" } ] }
     ],
@@ -216,6 +272,80 @@
     ],
     "up": [
       { "frames": 20, "tiles": [ { "image": "L1" } ] }
+    ]
+  },
+  "Sword primed": {
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "walkDown" },
+        { "image": "sword_weapon0", "pos": [7,14], "flip": "v" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walkDown", "flip": "h" },
+        { "image": "sword_weapon0", "pos": [7,14], "flip": "v" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walkDown" },
+        { "image": "charge_weapon0", "pos": [7,14], "flip": "v" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walkDown", "flip": "h" },
+        { "image": "charge_weapon0", "pos": [7,14], "flip": "v" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [
+        { "image": "standLeft" },
+        { "image": "sword_weapon2", "pos": [-20,0], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walkLeft" },
+        { "image": "sword_weapon2", "pos": [-20,0], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "standLeft" },
+        { "image": "charge_weapon2", "pos": [-20,0], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walkLeft" },
+        { "image": "charge_weapon2", "pos": [-20,0], "flip": "h" }
+      ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [
+        { "image": "standLeft", "flip": "h" },
+        { "image": "sword_weapon2", "pos": [12,0] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walkLeft", "flip": "h" },
+        { "image": "sword_weapon2", "pos": [12,0] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "standLeft", "flip": "h" },
+        { "image": "charge_weapon2", "pos": [12,0] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walkLeft", "flip": "h" },
+        { "image": "charge_weapon2", "pos": [12,0] }
+      ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [
+        { "image": "walkUp" },
+        { "image": "sword_weapon0", "pos": [0,-20] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walkUp", "flip": "h" },
+        { "image": "sword_weapon0", "pos": [0,-20] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walkUp" },
+        { "image": "charge_weapon0", "pos": [0,-20] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walkUp", "flip": "h" },
+        { "image": "charge_weapon0", "pos": [0,-20] }
+      ] }
     ]
   },
   "Dive": {
@@ -294,6 +424,9 @@
       ] }
     ]
   },
+  "Riding Ricky (WIP)": {},
+  "Riding Moosh (WIP)": {},
+  "Riding Dimitri (WIP)": {},
   "Fall": {
     "right": [
       { "frames": 20, "tiles": [ { "image": "fall" } ] },
@@ -327,7 +460,7 @@
       { "frames": 20, "tiles": [ { "image": "pushUp", "flip": "h" } ] }
     ]
   },
-  "Push": {
+  "Move (WIP)": {
     "left": [
       { "frames": 20, "tiles": [ { "image": "pushLeft" } ] },
       { "frames": 20, "tiles": [ { "image": "pushLeft1" } ] }
@@ -341,7 +474,7 @@
       { "frames": 20, "tiles": [ { "image": "pushUp", "flip": "h" } ] }
     ]
   },
-  "Press": {
+  "Push": {
     "down": [
       { "frames": 20, "tiles": [
         { "image": "F2:R" },
@@ -430,24 +563,7 @@
       { "frames": 20, "tiles": [ { "image": "I7" } ] }
     ]
   },
-  "Magnetic Gloves": {
-    "down": [
-      { "frames": 20, "tiles": [ { "image": "I3" } ] },
-      { "frames": 20, "tiles": [ { "image": "N0" } ] }
-    ],
-    "left": [
-      { "frames": 20, "tiles": [ { "image": "pushLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushLeft1" } ] }
-    ],
-    "right": [
-      { "frames": 20, "tiles": [ { "image": "pushLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushLeft1", "flip": "h" } ] }
-    ],
-    "up": [
-      { "frames": 20, "tiles": [ { "image": "I1" } ] },
-      { "frames": 20, "tiles": [ { "image": "N1" } ] }
-    ]
-  },
+  "Fool's Ore (WIP)": {},
   "Harp of Ages": {
     "down": [
       { "frames": 20, "tiles": [
@@ -457,6 +573,75 @@
       { "frames": 20, "tiles": [
         { "image": "play1" },
         { "image": "harp", "pos": [-4,0] }
+      ] }
+    ]
+  },
+  "Magnetic Gloves": {
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "MAGNET0", "pos": [3,15] },
+        { "image": "I3" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "MAGNET1", "pos": [3,15] },
+        { "image": "N0" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [
+        { "image": "MAGNET2", "pos": [-6,4] },
+        { "image": "pushLeft" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "MAGNET3", "pos": [-6,4] },
+        { "image": "pushLeft1" }
+      ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [
+        { "image": "MAGNET2", "pos": [14,4], "flip": "h" },
+        { "image": "pushLeft", "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "MAGNET3", "pos": [14,4], "flip": "h" },
+        { "image": "pushLeft1", "flip": "h" }
+      ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [
+        { "image": "MAGNET0", "pos": [-3,-7], "flip": "v" },
+        { "image": "I1" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "MAGNET1", "pos": [-3,-7], "flip": "v" },
+        { "image": "N1" }
+      ] }
+    ]
+  },
+  "Seed Shooter (WIP)": {},
+  "Slingshot": {
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "SLING0", "pos": [7,10] },
+        { "image": "I3" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [
+        { "image": "pushLeft1" },
+        { "image": "SLING2", "pos": [-11,-3] }
+      ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [
+        { "image": "pushLeft1", "flip": "h" },
+        { "image": "SLING2", "pos": [11,-3], "flip": "h" }
+      ] }
+    ],
+    "up": [
+      { "frames": 20, "tiles": [
+        { "image": "I1" },
+        { "image": "SLING1", "pos": [0,-12] }
       ] }
     ]
   },
