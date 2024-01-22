@@ -679,7 +679,7 @@
         { "image": "F3:L",      "pos": [  0, 32] },
         { "image": "F2:R",      "pos": [  8, 32] },
         { "image": "F1",        "pos": [ 16, 32] },
-        { "image": "pushUp",    "pos": [ 32, 32] },
+        { "image": "F0",        "pos": [ 32, 32] },
         { "image": "F5",        "pos": [ 48, 32] },
         { "image": "F4",        "pos": [ 64, 32] },
         { "image": "dead",      "pos": [ 80, 32] },
@@ -694,7 +694,7 @@
         { "image": "jumpLeft1", "pos": [ 40, 48] },
         { "image": "F2:L",      "pos": [ 56, 48] },
         { "image": "carryDown", "pos": [ 64, 48] },
-        { "image": "F0",        "pos": [ 80, 48] },
+        { "image": "pushUp",    "pos": [ 80, 48] },
         { "image": "carryLeft", "pos": [ 96, 48] },
         { "image": "I5",        "pos": [112, 48] },
 
@@ -706,10 +706,10 @@
         { "image": "blockDown1_S2", "pos": [ 64, 64] },
         { "image": "blockLeft",     "pos": [ 80, 64] },
         { "image": "blockLeft1",    "pos": [ 96, 64] },
-        { "image": "blockRight1",   "pos": [112, 64] },
+        { "image": "blockRight",    "pos": [112, 64] },
 
-        { "image": "instrumentGet", "pos": [  0, 80] },
-        { "image": "instrumentGet", "pos": [  8, 80] },
+        { "image": "I7",            "pos": [  0, 80], "crop": [0,0,8,16] },
+        { "image": "blockRight1",   "pos": [  8, 80], "crop": [8,0,16,16] },
         { "image": "walkRight_S1",  "pos": [ 16, 80], "crop": [0,0,8,16] },
         { "image": "walkRight1_S1", "pos": [ 24, 80], "crop": [0,0,8,16] },
         { "image": "walkRight_S2",  "pos": [ 32, 80] },
@@ -732,10 +732,11 @@
         { "image": "dive1",         "pos": [120, 96] },
 
         { "image": "fall",          "pos": [  0,112] },
-        { "image": "fall1",         "pos": [ 16,112] },
+        { "image": "fall1",         "pos": [ 20,112] },
+        { "image": "fall2",         "pos": [ 36,112], "crop": [0,0,4,16] },
         { "image": "standDown",     "pos": [ 40,112] },
-        { "image": "standLeft",     "pos": [ 64,112], "crop": [0,0,12,16], "flip": "h" },
-        { "image": "play1",         "pos": [112,112], "crop": [8,0,16,16] },
+        { "image": "standLeft",     "pos": [ 63,112], "crop": [0,0,12,16], "flip": "h" },
+        { "image": "I7",            "pos": [112,112], "crop": [8,0,16,16] },
         { "image": "instrumentGet", "pos": [120,112] }
       ] }
     ]
