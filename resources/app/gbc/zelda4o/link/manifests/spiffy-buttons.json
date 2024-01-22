@@ -23,6 +23,34 @@
         {
           "fish-subkey": "gold",
           "img": "palette-gold.png"
+        },
+        {
+          "meta": "newline"
+        },
+        {
+          "meta": "blank"
+        },
+        {
+          "#fish-subkey": "invertgreen",
+          "#img": "palette-green.png"
+        },
+        {
+            "meta": "blank"
+          },
+          {
+          "fish-subkey": "invertblue",
+          "img": "palette-invertblue.png"
+        },
+        {
+          "fish-subkey": "invertred",
+          "img": "palette-invertred.png"
+        },
+        {
+          "#fish-subkey": "invertgold",
+          "#img": "palette-gold.png"
+        },
+        {
+          "meta": "blank"
         }
       ]
     },
@@ -93,6 +121,37 @@
         {
           "fish-subkey": "red",
           "img": "sling-red.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "accessories",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png"
+        },
+        {
+          "fish-subkey": "yes",
+          "img": "yes-thing.png",
+          "default": true
+        }
+      ]
+    },
+    {
+      "group-fish-key": "halo",
+      "buttons": [
+        {
+            "meta": "blank"
+        },
+        {
+          "fish-subkey": "blue",
+          "img": "time-past.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "pink",
+          "img": "time-future.png"
         }
       ]
     }

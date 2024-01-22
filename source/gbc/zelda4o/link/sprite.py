@@ -2,6 +2,7 @@ import importlib
 import itertools
 import json
 import os
+import random
 from base64 import b64encode
 from binascii import crc32
 from PIL import Image
@@ -17,39 +18,63 @@ class Sprite(SpriteParent):
 
         self.link_globals = {
             "green_palette": [
-                (0xFF, 0xFF, 0xFF),
-                (0x00, 0x00, 0x00),
-                (0x10, 0xAD, 0x42),   # changes
-                (0xFF, 0xD6, 0x8C)
+                (0xFF, 0xFF, 0xFF),   # white
+                (0x00, 0x00, 0x00),   # border
+                (0x10, 0xAD, 0x42),   # mail
+                (0xFF, 0xD6, 0x8C)    # skin
             ],
             "blue_palette": [
-                (0xFF, 0xFF, 0xFF),
-                (0x00, 0x00, 0x00),
-                (0x18, 0x84, 0xFF),   # changes
-                (0xFF, 0xD6, 0x8C)
+                (0xFF, 0xFF, 0xFF),   # white
+                (0x00, 0x00, 0x00),   # border
+                (0x18, 0x84, 0xFF),   # mail
+                (0xFF, 0xD6, 0x8C)    # skin
             ],
             "red_palette": [
-                (0xFF, 0xFF, 0xFF),
-                (0x00, 0x00, 0x00),
-                (0xFF, 0x08, 0x29),   # changes
-                (0xFF, 0xD6, 0x8C)
+                (0xFF, 0xFF, 0xFF),   # white
+                (0x00, 0x00, 0x00),   # border
+                (0xFF, 0x08, 0x29),   # mail
+                (0xFF, 0xD6, 0x8C)    # skin
             ],
             "gold_palette": [
-                (0xFF, 0xFF, 0xFF),
-                (0x00, 0x00, 0x00),
-                (0xFF, 0x7B, 0x08),   # changes
-                (0xFF, 0xD6, 0x8C)
-            ]
+                (0xFF, 0xFF, 0xFF),   # white
+                (0x00, 0x00, 0x00),   # border
+                (0xFF, 0x7B, 0x08),   # mail
+                (0xFF, 0xD6, 0x8C)    # skin
+            ],
+            # "invertgreen_palette": [
+            #     (0xFF, 0xFF, 0xFF),   # white
+            #     (0x10, 0xFF, 0x42),   # border
+            #     (0x10, 0xAD, 0x42),   # mail
+            #     (0x00, 0x00, 0x00)    # skin
+            # ],
+            "invertblue_palette": [
+                (0xFF, 0xFF, 0xFF),   # white
+                (0x73, 0xAD, 0xFF),   # border
+                (0x00, 0x00, 0xFF),   # mail
+                (0x00, 0x00, 0x00)    # skin
+            ],
+            "invertred_palette": [
+                (0xFF, 0xFF, 0xFF),   # white
+                (0xFF, 0xB5, 0x31),   # border
+                (0xDE, 0x00, 0x00),   # mail
+                (0x00, 0x00, 0x00)    # skin
+            ],
+            # "invertgold_palette": [
+            #     (0xFF, 0xFF, 0xFF),   # white
+            #     (0xFF, 0xCD, 0x08),   # border
+            #     (0xFF, 0x7B, 0x08),   # mail
+            #     (0x00, 0x00, 0x00)    # skin
+            # ]
         }
         self.master_palette = self.link_globals["green_palette"]
 
     def get_palette(self, palettes, default_range=[], frame_number=0):
         this_palette = []
-        palette = "green"
-        for color in ["blue","red","gold"]:
-            if f"{color}_palette" in palettes:
-                palette = color
-        this_palette = self.link_globals[f"{palette}_palette"]
+        palette = "green_palette"
+        for sent_palette in palettes:
+            if "_palette" in sent_palette and sent_palette in self.link_globals:
+                palette = sent_palette
+        this_palette = self.link_globals[palette]
 
         return this_palette
 
@@ -68,9 +93,9 @@ class Sprite(SpriteParent):
                 ] = palette[
                     :palette.rfind('_')
                 ]
-        for item in ["WEAPON","MAGNET","SLING"]:
+        for item in ["WEAPON","MAGNET","SLING","HALO"]:
             if image_name.startswith(item):
-                if item.lower() in slugs:
+                if item.lower() in slugs and not found_alt:
                     found_alt = True
                     image_name = image_name.replace(
                         item,
@@ -79,17 +104,25 @@ class Sprite(SpriteParent):
                     "transparent"
         if "accessories" in slugs:
             for item, default in [
-                    ("ITEM","pendant"),
-                    ("CRYSTAL","crystal"),
+                    ("ITEM","sword_weapon0"),
+                    ("INSTRUMENT","essence0"),
+                    ("ESSENCE_BG","essence_bgblue"),
+                    ("ESSENCE","essence0"),
                     ("BUSH_SHADOW","main_shadow")
                 ]:
-                if image_name.startswith(item):
+                if image_name.startswith(item) and not found_alt:
                     found_alt = True
-                    image_name = default.lower() if \
-                        not "none_accessories" in palettes else \
-                        "transparent"
+                    if not "none_accessories" in palettes:
+                        image_name = default.lower()
+                        if item == "ESSENCE" and False:
+                            essenceIDs = [x for x in range(18)]
+                            essenceIDs.remove(8)
+                            essenceIDs.remove(17)
+                            image_name = "essence" + str(random.choice(essenceIDs))
+                    else:
+                        image_name = "transparent"
             for item in ["BUSH","BOOK"]:
-                if image_name.startswith(item):
+                if image_name.startswith(item) and not found_alt:
                     found_alt = True
                     image_name = image_name.lower() if \
                         not "none_accessories" in palettes else \

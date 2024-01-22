@@ -347,7 +347,7 @@ class AnimationEngineParent():
                             button_list.append((None,None,None,None))
                         elif "meta" in button and button["meta"] == "blank": #a blank space, baby
                             button_list.append((None,"",None,None))
-                        else:
+                        elif "fish-subkey" in button:
                             default = button["default"] if "default" in button else False
                             disabled = group["disabled"] if "disabled" in group else False
                             button_list.append((button["fish-subkey"],button["img"],default,disabled))

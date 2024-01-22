@@ -4,7 +4,9 @@
     "palette": "Palette",
     "weapon": "Weapon",
     "magnet": "Magnet",
-    "sling": "Slingshot"
+    "sling": "Slingshot",
+    "accessories": "Accessories",
+    "halo": "Time Travel"
   },
   "Facing": {
     "up": "Up",
@@ -16,7 +18,11 @@
     "green": "Green",
     "blue": "Blue",
     "red": "Red",
-    "gold": "Gold"
+    "gold": "Gold",
+    "invertgreen": "Inverted Green",
+    "invertblue": "Inverted Blue",
+    "invertred": "Inverted Red",
+    "invertgold": "Inverted Gold"
   },
   "Weapon": {
     "none": "None",
@@ -37,5 +43,13 @@
     "none": "None",
     "blue": "Slingshot",
     "red": "Hyper Slingshot"
+  },
+  "Accessories": {
+    "none": "None",
+    "yes": "Yes"
+  },
+  "Time Travel": {
+    "blue": "Past",
+    "pink": "Future"
   }
 }
