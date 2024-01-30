@@ -129,6 +129,8 @@ def round_to_nearest_eight(val):
 def convert_555_to_rgb(color, recurse=True):
     # converts either a single color or a list of colors in 555 format to
     #  their RGB 3-tuple equivalents
+    if color is None:
+        return (0, 0, 0, 0)
     try:
         iter(color)
     except TypeError:

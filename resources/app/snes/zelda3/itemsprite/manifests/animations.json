@@ -1,10 +1,10 @@
 {
   "$schema": "../../../../../schema/animations.schema.json",
-  "Triforce Piece": {
+  "Item Sprite": {
     "right": [
       {
         "frames": 10000, "tiles": [
-          { "image": "triforcepiece", "pos": [0,0] }
+          { "image": "item_sprite_receipt", "pos": [0,0] }
         ]
       }
     ]
@@ -13,97 +13,97 @@
     "right": [
       {
         "frames": 2, "background": "home.png", "origin": [192,128], "tiles": [
-          { "image": "triforcepiece", "pos": [0,-3] },
+          { "image": "item_sprite_receipt", "pos": [0,-3] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-3] },
+          { "image": "item_sprite_receipt", "pos": [0,-3] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-4] },
+          { "image": "item_sprite_receipt", "pos": [0,-4] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-5] },
+          { "image": "item_sprite_receipt", "pos": [0,-5] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-6] },
+          { "image": "item_sprite_receipt", "pos": [0,-6] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-7] },
+          { "image": "item_sprite_receipt", "pos": [0,-7] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-8] },
+          { "image": "item_sprite_receipt", "pos": [0,-8] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-9] },
+          { "image": "item_sprite_receipt", "pos": [0,-9] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-10] },
+          { "image": "item_sprite_receipt", "pos": [0,-10] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-11] },
+          { "image": "item_sprite_receipt", "pos": [0,-11] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-12] },
+          { "image": "item_sprite_receipt", "pos": [0,-12] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-13] },
+          { "image": "item_sprite_receipt", "pos": [0,-13] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-14] },
+          { "image": "item_sprite_receipt", "pos": [0,-14] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-15] },
+          { "image": "item_sprite_receipt", "pos": [0,-15] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 2, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-16] },
+          { "image": "item_sprite_receipt", "pos": [0,-16] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
       {
         "frames": 25, "tiles": [
-          { "image": "triforcepiece", "pos": [0,-17] },
+          { "image": "item_sprite_receipt", "pos": [0,-17] },
           { "image": "open_chest", "pos": [0,0] }
         ]
       },
@@ -118,7 +118,7 @@
     "right": [
       {
         "frames": 10000, "tiles": [
-          { "image": "triforcepiece", "pos": [6,0] },
+          { "image": "item_sprite_receipt", "pos": [6,0] },
           { "image": "get_link", "pos": [0,0] }
         ]
       }

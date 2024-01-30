@@ -14,10 +14,10 @@
   "16": {
     "type": "Icon",
     "name": "Triforce Piece",
-    "folder name": "triforcepiece",
+    "folder name": "itemsprite",
     "input": {
       "png": {
-        "dims": [ 16, 16 ]
+        "dims": [ 49, 16 ]
       }
     }
   }
