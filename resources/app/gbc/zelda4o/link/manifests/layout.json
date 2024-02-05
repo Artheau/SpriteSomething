@@ -9,6 +9,13 @@
   "border_color": [0, 0, 0, 255],
   "border_size": 0,
   "pseudoimages": [
+    "ESSENCE",
+    "HALO0",
+    "HALO1",
+    "HALO2",
+    "HALO3",
+    "INSTRUMENT",
+    "ITEM",
     "MAGNET0",
     "MAGNET1",
     "MAGNET2",
@@ -19,10 +26,23 @@
     "WEAPON0",
     "WEAPON1",
     "WEAPON2",
+    "aura0",
+    "aura1",
+    "aura2",
+    "aura3",
     "charge_weapon0",
     "charge_weapon2",
+    "essence_bgblue",
+    "essence_bgorange",
+    "portal0",
+    "portal1",
+    "portal2",
+    "portal3",
+    "portal4",
+    "portal5",
     "sword_weapon0",
-    "sword_weapon2"
+    "sword_weapon2",
+    "tall_grass"
   ],
   "layout": [
     [
