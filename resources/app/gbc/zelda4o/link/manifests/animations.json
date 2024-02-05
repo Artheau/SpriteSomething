@@ -2423,5 +2423,32 @@
         { "image": "instrumentGet", "pos": [120,112] }
       ] }
     ]
+  },
+  "Snow's LADX Convertor: Page 2": {
+    "right": [
+      { "frames": 20, "origin": [1,1], "background": "empty (white).png", "tiles": [
+        { "image": "sleep", "pos": [0,0] },
+        { "image": "awake", "pos": [16,0] },
+        { "image": "standLeft", "pos": [32,1], "flip": "h", "crop": [0,0,16,10] },
+        { "image": "awake", "pos": [32,9], "crop": [0,9,16,16] },
+        { "image": "F5", "pos": [47, 0], "flip": "h", "crop": [0,0,8,10] },
+        { "image": "awake", "pos": [48,9], "crop": [8,9,16,16] },
+
+        { "image": "K6", "pos": [0,16] },
+        { "image": "K7", "pos": [16,16] },
+
+        { "image": "Q3", "pos": [0,32] },
+
+        { "image": "walkUp", "pos": [0,48] },
+        { "image": "fall3", "pos": [16,48] },
+        { "image": "fall4", "pos": [24,48] },
+        { "image": "fall5", "pos": [40,48] },
+        { "image": "fall6", "pos": [56,48] },
+        { "image": "fall7", "pos": [72,48] },
+        { "image": "walkUp", "pos": [80,48] },
+        { "image": "standDown", "pos": [96,48] },
+        { "image": "instrumentGet", "pos": [112,48] }
+      ] }
+    ]
   }
 }

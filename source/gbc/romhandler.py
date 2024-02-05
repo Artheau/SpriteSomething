@@ -14,6 +14,7 @@ class RomHandlerParent():
     def __init__(self, filename):
         #internal constants
         self._HEADER_SIZE = 0x150
+        self._MEGABIT = 0x20000
 
         #figure out if it has a header by inferring from the overall file size
         file_size = os.path.getsize(filename)
@@ -45,6 +46,9 @@ class RomHandlerParent():
             # if self._rom_is_headered and not strip_header:
             #     file.write(self._header)
             file.write(self._contents)
+
+    def get_size_in_MB(self):
+        return self._rom_size/(8*self._MEGABIT)
 
     def read(self,addr,encoding):
         #expects a ROM address and an encoding

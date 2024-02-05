@@ -710,8 +710,9 @@ class SpriteParent():
         if len(self.animations):
             if animation in self.animations:
                 direction_dict = self.animations[animation]
-                if direction in direction_dict:
-                    directions = direction_dict[direction]
+                if direction not in direction_dict:
+                    direction = list(direction_dict.keys())[0]
+                directions = direction_dict[direction]
         return directions
 
     def get_alternative_direction(self, animation, direction):
