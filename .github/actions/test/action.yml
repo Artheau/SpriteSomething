@@ -16,7 +16,7 @@ inputs:
 #########
 # actions/checkout@v4.1.1
 # actions/download-artifact@v4.1.1
-# actions/upload-artifact@v4.1.0
+# actions/upload-artifact@v4.3.0
 # coactions/setup-xvfb@v1.0.1
 
 runs:
@@ -102,7 +102,7 @@ runs:
         echo "🔼Upload Failures"
     - name: 🔼Upload Failures
       if: failure()
-      uses: actions/upload-artifact@v4.1.0
+      uses: actions/upload-artifact@v4.3.0
       with:
         name: failures-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./failures
