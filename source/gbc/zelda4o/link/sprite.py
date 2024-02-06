@@ -7,6 +7,7 @@ from base64 import b64encode
 from binascii import crc32
 from PIL import Image
 from source.meta.classes.spritelib import SpriteParent
+from source.meta.classes.patch.ipslib import IPSFile, Record
 from source.meta.common import common
 
 from . import plugins
@@ -518,3 +519,134 @@ class Sprite(SpriteParent):
                             patchData += patch
                         yamlFile.write("    0x0: " + encode(patchData) + "\n")
         print()
+
+    def export_IPS(self):
+        patch_file = IPSFile()
+
+        # get megadata
+        patch_manifest_path = os.path.join(
+            "resources",
+            "app",
+            self.resource_subpath,
+            "manifests",
+            "patch.json"
+        )
+        megadata = {}
+        if os.path.isfile(patch_manifest_path):
+            with open(patch_manifest_path) as patch_manifest:
+                megadata = json.load(patch_manifest)
+        megadata["modified"] = False
+        if "sprites" in megadata:
+            for sprite in megadata["sprites"]:
+                megadata["sprites"][sprite]["patch"] = {}
+                megadata["sprites"][sprite]["modified"] = False
+        megadata["games"] = {}
+        for gameID in [
+            "ladx"
+        ]:
+            megadata["games"][gameID] = { "patch": [] }
+
+        # print(megadata)
+        spriteIDs = ["LADX"]
+        gameIDs = ["ladx"]
+
+        # make output dir
+        #FIXME: Get output dir from user
+        outputDir = os.path.join(
+            "resources",
+            "user",
+            "gbc",
+            "zelda4o",
+            "link",
+            "sheets"
+        )
+        if not os.path.isdir(outputDir):
+            os.makedirs(outputDir)
+
+        # get a slug for naming stuff
+        basename = os.path.splitext(os.path.basename(self.filename))[0]
+
+        # check to see if it's modded data
+        first_patch = True
+        for sprite in spriteIDs:
+            print(f"Examining {myString(sprite).ucfirst()} Data")
+            for patch in megadata["sprites"][sprite]["ips"]:
+                # get input image
+                if not first_patch:
+                    continue
+                # first_patch = False
+                imgfile = None
+                if "address" in patch:
+                    if "sheet" in patch and patch["sheet"][0][0] != "master":
+                        animation = patch["sheet"][0][0]
+                        direction = patch["sheet"][0][1] if len(patch["sheet"][0]) > 1 else ""
+                        print(f" Loading: '{animation}/{direction}' for '{patch['note']}'")
+                        imgfile = self.get_image(
+                            animation,
+                            direction,
+                            0,
+                            [],
+                            0
+                        )[0]
+                    else:
+                        print(f" Loading 'Master PNG' for '{patch['note']}'")
+                        imgfile = self.get_master_PNG_image()
+                    imgfile = imgfile.convert("RGBA")
+
+                if imgfile:
+                    # get pixel data
+                    # build patch files
+                    if patch["note"] not in megadata["sprites"][sprite]["patch"]:
+                        megadata["sprites"][sprite]["patch"][patch["note"]] = []
+                    megadata["sprites"].update(
+                        {
+                            patch['note']: self.get_2bpp(
+                                megadata["sprites"],
+                                sprite,
+                                patch["note"],
+                                patch["sheet"][1],
+                                imgfile
+                            )
+                        }
+                    )
+        for sprite in spriteIDs:
+            patch_fmt = "ips"
+            print(f"Building {myString(sprite).ucfirst()} {patch_fmt.upper()}")
+            for gameID in gameIDs:
+                patches = 0
+                header_added = False
+                for patch in megadata["sprites"][sprite]["ips"]:
+                    patches = patches + 1
+                    if patches not in [1]:
+                        continue
+                    patch_note = patch["note"]
+                    if "address" in patch:
+                        for address in patch["address"]:
+                            if gameID in address["games"]:
+                                print(
+                                    f" Adding '{patch_note}' " +
+                                    f"[{sprite}] " +
+                                    f"for '{gameID}' " +
+                                    f"{address['locations']}"
+                                )
+                                for locationData in address["locations"]:
+                                    location = locationData.replace("0x","")
+                                    patch_file.add_record(
+                                        int(location,16),
+                                        megadata["sprites"][sprite]["patch"][patch["note"]]
+                                    )
+
+        patch_file.print_summary()
+        print(patch_file.get_binary())
+        patch_file.save(f"./{basename}_{gameID}_test.{patch_fmt}")
+
+if __name__ == "__main__":
+    sprite = Sprite(
+        "./resources/app/gbc/zelda4o/link/sheets/link.png",
+        {
+            "name": "Link",
+            "folder name": "link"
+        },
+        "gbc/zelda4o/link"
+    )
+    sprite.export_IPS()
