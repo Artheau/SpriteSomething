@@ -11,6 +11,9 @@ class IPSFile():
     def add_record(self, offset=0, data=[], length=0):
         if length == 0:
             length = len(data)
+        if not isinstance(offset, int):
+            if "0x" in offset:
+                offset = int(offset, 16)
         if offset + length > self._MAXBYTES:
             raise AssertionError(f"{offset}+{length} is out of bounds!")
         self.records.append(Record(offset, data, length))
@@ -77,11 +80,37 @@ class Record():
 
     def get_pretty_offset(self):
         offset = self.offset
-        offset = "0x" + "".join([str(x).zfill(2) for x in offset])
+        # print("Self:", offset)
+        offset = "".join([str(x).zfill(2) for x in offset])
+        # print("Join:", offset)
+        offset = int(offset)
+        # print("INT:", offset)
+        offset = hex(offset)
+        # print("HEX:", offset)
+        if offset.startswith("0x"):
+            offset = offset[2:]
+        offset = offset.upper()
+        offset = str(offset).zfill(6)
+        # print("ZFILL(6):", offset)
+        offset = "0x" + offset
+        # print("Hexify:", offset)
         return offset
     def get_pretty_length(self):
         length = self.length
-        length = "0x" + "".join([str(x).zfill(2) for x in length])
+        # print("Self:", length)
+        length = "".join([str(x).zfill(2) for x in length])
+        # print("Join:", length)
+        length = int(length)
+        # print("INT:", length)
+        length = hex(length)
+        # print("HEX:", length)
+        if length.startswith("0x"):
+            length = length[2:]
+        length = length.upper()
+        length = str(length).zfill(4)
+        # print("ZFILL(4):", length)
+        length = "0x" + length
+        # print("Hexify:", length)
         return length
     def get_summary(self):
         return f"{self.get_pretty_offset()}[{self.get_pretty_length()}]"
@@ -95,13 +124,30 @@ class Record():
 
 if __name__ == "__main__":
     patch = IPSFile()
-    patch.add_record(0,[64])
-    patch.add_record(1,[128])
-    patch.add_record(2,[2,4])
+    for i in range(8):
+        patch.add_record(i,[i,pow(2,i)])
+    for i in range(8,18):
+        patch.add_record(i,[2*i])
+    patch.add_record("0x030000",[2])
+    patch.add_record("0x0B0000",[4])
+    # patch.add_record("0x000002",[6])
+    # patch.add_record("0x000020",[6])
+    # patch.add_record("0x000200",[6])
+    # patch.add_record("0x002000",[6])
+    # patch.add_record("0x020000",[6])
+    # patch.add_record("0x200000",[6])
+    patch.add_record("0x00000A",[6])
+    patch.add_record("0x0000A0",[6])
+    patch.add_record("0x000A00",[6])
+    patch.add_record("0x00A000",[6])
+    patch.add_record("0x0A0000",[6])
+    patch.add_record("0xA00000",[6])
+    # print(int("0x00A000",16))
     print(patch.get_bytearray())
     print(patch.get_array())
     print(patch.get_dict())
     print(patch.get_binary())
     print(patch.get_records())
+    patch.print_summary()
 
     patch.save("./patch.ips")

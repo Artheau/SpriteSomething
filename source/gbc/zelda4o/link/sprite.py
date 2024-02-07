@@ -617,7 +617,7 @@ class Sprite(SpriteParent):
                 header_added = False
                 for patch in megadata["sprites"][sprite]["ips"]:
                     patches = patches + 1
-                    if patches not in [1]:
+                    if patches not in [1,3]:
                         continue
                     patch_note = patch["note"]
                     if "address" in patch:
@@ -630,9 +630,9 @@ class Sprite(SpriteParent):
                                     f"{address['locations']}"
                                 )
                                 for locationData in address["locations"]:
-                                    location = locationData.replace("0x","")
+                                    print(locationData)
                                     patch_file.add_record(
-                                        int(location,16),
+                                        locationData,
                                         megadata["sprites"][sprite]["patch"][patch["note"]]
                                     )
 
