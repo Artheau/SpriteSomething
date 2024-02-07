@@ -19,6 +19,10 @@
         {
           "fish-subkey": "gravity",
           "img": "suit-gravity.png"
+        },
+        {
+            "fish-subkey": "gty",
+            "img": "suit-gty.png"
         }
       ]
     },
