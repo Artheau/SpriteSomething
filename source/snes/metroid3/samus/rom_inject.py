@@ -1182,7 +1182,7 @@ def implement_spin_attack(samus,rom):
 														[0xA9, 0x8D0001, 0x9A, 0x0A],
 														[0x22, NEW_SUBROUTINE_LOCATION, 0xEA, 0xEA],"1311")
 
-	#unpausing while spinjumping
+	#unpausing while walljumping
 	'''
 	org $91E8AF
 	JSL CheckNewScrewAttack : RTS
