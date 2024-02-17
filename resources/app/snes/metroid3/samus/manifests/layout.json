@@ -800,21 +800,24 @@
     "stand_left1": {
       "parent": "stand_left",
       "used by": [
-        ["0x02", 1]
+        ["0x02", 1],
+        ["0x8A", 1]
       ]
     },
 
     "stand_left2": {
       "parent": "stand_left",
       "used by": [
-        ["0x02", 2]
+        ["0x02", 2],
+        ["0x8A", 2]
       ]
     },
 
     "stand_left3": {
       "parent": "stand_left",
       "used by": [
-        ["0x02", 3]
+        ["0x02", 3],
+        ["0x8A", 3]
       ]
     },
 
@@ -822,28 +825,32 @@
       "description": "While standing with low health, begins to breathe heavily",
       "parent": "stand_left",
       "used by": [
-        ["0x02", 5]
+        ["0x02", 5],
+        ["0x8A", 5]
       ]
     },
 
     "stand_left_heavy1": {
       "parent": "stand_left_heavy",
       "used by": [
-        ["0x02", 6]
+        ["0x02", 6],
+        ["0x8A", 6]
       ]
     },
 
     "stand_left_heavy2": {
       "parent": "stand_left_heavy",
       "used by": [
-        ["0x02", 7]
+        ["0x02", 7],
+        ["0x8A", 7]
       ]
     },
 
     "stand_left_heavy3": {
       "parent": "stand_left_heavy",
       "used by": [
-        ["0x02", 8]
+        ["0x02", 8],
+        ["0x8A", 8]
       ]
     },
 
@@ -861,21 +868,24 @@
     "stand_right1": {
       "parent": "stand_right",
       "used by": [
-        ["0x01", 1]
+        ["0x01", 1],
+        ["0x89", 1]
       ]
     },
 
     "stand_right2": {
       "parent": "stand_right",
       "used by": [
-        ["0x01", 2]
+        ["0x01", 2],
+        ["0x89", 2]
       ]
     },
 
     "stand_right3": {
       "parent": "stand_right",
       "used by": [
-        ["0x01", 3]
+        ["0x01", 3],
+        ["0x89", 3]
       ]
     },
 
@@ -883,28 +893,32 @@
       "description": "While standing with low health, begins to breathe heavily",
       "parent": "stand_right",
       "used by": [
-        ["0x01", 5]
+        ["0x01", 5],
+        ["0x89", 5]
       ]
     },
 
     "stand_right_heavy1": {
       "parent": "stand_right_heavy",
       "used by": [
-        ["0x01", 6]
+        ["0x01", 6],
+        ["0x89", 6]
       ]
     },
 
     "stand_right_heavy2": {
       "parent": "stand_right_heavy",
       "used by": [
-        ["0x01", 7]
+        ["0x01", 7],
+        ["0x89", 7]
       ]
     },
 
     "stand_right_heavy3": {
       "parent": "stand_right_heavy",
       "used by": [
-        ["0x01", 8]
+        ["0x01", 8],
+        ["0x89", 8]
       ]
     },
 
