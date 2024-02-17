@@ -1182,6 +1182,31 @@ def implement_spin_attack(samus,rom):
 														[0xA9, 0x8D0001, 0x9A, 0x0A],
 														[0x22, NEW_SUBROUTINE_LOCATION, 0xEA, 0xEA],"1311")
 
+	#unpausing while walljumping
+	'''
+	org $91E8AF
+	JSL CheckNewScrewAttack : RTS
+
+	org $9B805B
+	CheckNewScrewAttack:
+	BIT #$0200 ; check for space jump (the accumulator is already set to equipped items ($09A2))
+	BNE +
+	LDA config_spinattack ; flag to enable new spin attack
+	BEQ +
+	LDA #$0031 : STA $910A96 : RTL ; new spin attack (STA $910A96 instead of STA $0A96 to preserve timing)
+	+
+	LDA #$0017 : STA $0A96 : RTL ; old screw attack
+	'''
+	UNPAUSE_CODE = [0x89, 0x00, 0x02,
+					0xD0, 0x0E,
+					0xAF, 0xFE, 0x93, 0x9B,
+					0xF0, 0x08,
+					0xA9, 0x31, 0x00, 0x8F, 0x96, 0x0A, 0x91, 0x6B,
+					0xA9, 0x17, 0x00, 0x8D, 0x96, 0x0A, 0x6B]
+	rom.bulk_write_to_snes_address(NEW_SUBROUTINE_LOCATION+91,UNPAUSE_CODE,26)
+	success_code = success_code and rom._apply_single_fix_to_snes_address(0x91E8AF,
+														[0xA9, 0x8D0017, 0x96],
+														[0x22, NEW_SUBROUTINE_LOCATION+91, 0x60],"131")
 	return success_code
 
 def insert_file_select_graphics(samus,rom):
