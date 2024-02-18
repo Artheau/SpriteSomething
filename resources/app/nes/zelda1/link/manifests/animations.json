@@ -1,0 +1,113 @@
+{
+  "$schema": "../../../../../schema/animations.schema.json",
+  "Stand": {
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "walkUp" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "walkRight1_S1", "flip": "h" } ] }
+    ],
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
+        { "image": "walkDown_S1" }
+      ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "walkRight1_S1" } ] }
+    ]
+  },
+  "Walk": {
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkUp", "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight1_S1", "pos": [-1,0], "flip": "h" } ] }
+    ],
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
+        { "image": "walkDown_S1" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "standDown", "pos": [9,0], "crop": [0,0,8,16], "flip": "h" },
+        { "image": "walkDown1_S1" }
+      ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight1_S1", "pos": [-1,0] } ] }
+    ]
+  },
+  "Attack (Wooden Shield)": {
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackUp" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "walkRight1_S1", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackRight", "pos": [1,0], "flip": "h" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "walkRight1_S1" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackRight", "pos": [1,0] } ] }
+    ]
+  },
+  "Death": {
+    "up": [
+      { "frames": 20, "tiles": [
+        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
+        { "image": "walkDown_S1" }
+      ] },
+
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
+      { "frames": 20, "tiles": [
+        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
+        { "image": "walkDown_S1" }
+      ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
+      { "frames": 20, "tiles": [
+        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
+        { "image": "walkDown_S1" }
+      ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
+      { "frames": 20, "tiles": [
+        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
+        { "image": "walkDown_S1" }
+      ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
+      { "frames": 20, "tiles": [
+        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
+        { "image": "walkDown_S1" }
+      ] },
+
+      { "frames": 20, "tiles": [
+        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16], "palette": "greyscale_mail" },
+        { "image": "walkDown_S1", "palette": "greyscale_mail" }
+      ] }
+    ]
+  },
+  "File Select": {
+    "up": [
+      { "frames": 20,
+        "background": "file-select.png",
+        "origin": [0,0],
+        "tiles": [
+          { "image": "standDown", "pos": [48,51] },
+          { "image": "standDown", "pos": [48,75] },
+          { "image": "standDown", "pos": [48,99] }
+        ]
+      }
+    ]
+  }
+}

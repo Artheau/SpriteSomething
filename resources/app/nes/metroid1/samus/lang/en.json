@@ -1,0 +1,25 @@
+{
+  "section": {
+    "facing": "Facing",
+    "aiming": "Aiming",
+    "suit": "Suit",
+    "missile-mode": "Missile"
+  },
+  "Facing": {
+    "left": "Left",
+    "right": "Right"
+  },
+  "Aiming": {
+    "up": "Up",
+    "neutral": "Neutral",
+    "shoot": "Shoot"
+  },
+  "Suit": {
+    "power": "Power Suit",
+    "varia": "Varia Suit"
+  },
+  "Missile": {
+    "no": "Off",
+    "yes": "On"
+  }
+}

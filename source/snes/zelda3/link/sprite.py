@@ -478,7 +478,7 @@ class Sprite(SpriteParent):
             palette_indices = [0x10,0x20]
         else:
             #start with green mail and modify it as needed
-            palette_indices = list(range(1,16))
+            palette_indices = list(range(1,range_end))
             for i,_ in enumerate(palette_indices):
 
                 if palette_indices[i] == 0x0D:
@@ -487,10 +487,12 @@ class Sprite(SpriteParent):
                     elif "titan_gloves" in palettes:
                         palette_indices[i] = 0x20
 
-                if palette_indices[i] in range(0,16):
+                if palette_indices[i] in range(0,range_end):
                     if "blue_mail" in palettes:
+                        #skip to second row
                         palette_indices[i] += 16
                     elif "red_mail" in palettes:
+                        #skip to third row
                         palette_indices[i] += 32
 
         if palette_indices:

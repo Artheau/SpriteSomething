@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schema/game-sprite-manifest.schema.json",
+  "1": {
+    "type": "Player Character Sprite",
+    "name": "Samus",
+    "folder name": "samus",
+    "view-only": true,
+    "input": {
+      "png": {
+        "dims": [232,44],
+        "overview-scale-factor": 1
+      }
+    },
+    "output": []
+  }
+}

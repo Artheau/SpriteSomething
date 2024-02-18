@@ -98,8 +98,14 @@ def gather_all_from_resource_subdirectory(subdir):
 def apply_palette(image, palette):
     # apply a palette to an image
     if image is None:
-        pass
         # print("Not a valid image to apply palette to!")
+        return image
+    if palette is None:
+        # print("Not a valid palette to apply to this image!")
+        return image
+
+    # if image.mode != "P":
+    #     image = image.convert('P')
     if image.mode == "P" and len(palette):
         flat_palette = [0 for _ in range(3 * 256)]
         flat_palette[3:3 * len(palette) +

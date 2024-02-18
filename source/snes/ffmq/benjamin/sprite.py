@@ -45,7 +45,8 @@ class Sprite(SpriteParent):
         else:
             palette_indices = list(range(1,range_end))     #start with normal mail and modify it as needed
 
-        if palette_indices:
+        if palette_indices and \
+            len(self.master_palette) >= len(palette_indices):
             for i,_ in enumerate(palette_indices):
                 this_palette[i] = self.master_palette[palette_indices[i]]
 

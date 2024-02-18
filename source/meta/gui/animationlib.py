@@ -182,7 +182,7 @@ class AnimationEngineParent():
             self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
         else:
             pass
-#            print("Pose image not found to update animation!")
+            # print("Pose image not found to update animation!")
 
     def get_pose_number_from_frames(self, frame_number):
         mod_frames = frame_number % self.frame_progression_table[-1]
@@ -263,13 +263,11 @@ class AnimationEngineParent():
 #            print("Current animation (%s) not found!" % current_animation)
             pose_image,offset = None,(0,0)
 
-        if pose_number is not None:
-            self.step_number_label.config(text=str(pose_number+1))
-        if pose_list:
-            self.step_total_label.config(text=str(len(pose_list)))
-            tile_list_text = ""
         if pose_number is not None and pose_list:
+            tile_list_text = ""
             pose = pose_list[pose_number]
+            self.step_number_label.config(text=str(pose_number+1))
+            self.step_total_label.config(text=str(len(pose_list)))
             tile_list_text += "Name: <none>"
             if "#name" in pose:
                 tile_list_text = tile_list_text.replace("<none>", pose["#name"])
@@ -288,7 +286,9 @@ class AnimationEngineParent():
                         "vh": "180-rotation"
                     }
                     flip = flip_switcher.get(tile["flip"]) if tile["flip"] in flip_switcher else ""
-                    tile_list_text += ' ' + flip
+                    tile_list_text += f" {flip}"
+                if "name" in tile:
+                    tile_list_text += f" '{tile['name']}'"
                 tile_list_text += "\n"
             self.tiles_list_label.config(text=tile_list_text)
 
@@ -416,9 +416,10 @@ class AnimationEngineParent():
     def export_frame_as_PNG(self, filename):
         #TODO: should this be factored out to the sprite class as some kind of export_as_PNG(animation, direction, ..., filename) call?
         current_image, _ = self.get_current_image()
-        new_size = tuple(int(dim*self.zoom_getter()) for dim in current_image.size)
-        img_to_save = current_image.resize(new_size,resample=Image.NEAREST)
-        img_to_save.save(filename)
+        if current_image:
+            new_size = tuple(int(dim*self.zoom_getter()) for dim in current_image.size)
+            img_to_save = current_image.resize(new_size,resample=Image.NEAREST)
+            img_to_save.save(filename)
 
     def export_animation_as_collage(self, filename, orientation="horizontal"):
         #TODO: use the displayed palette

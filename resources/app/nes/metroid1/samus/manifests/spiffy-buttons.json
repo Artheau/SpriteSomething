@@ -1,0 +1,42 @@
+{
+    "$schema": "../../../../../schema/spiffy-buttons.schema.json",
+    "button-groups": [
+      {
+        "group-fish-key": "suit",
+        "buttons": [
+          {
+            "fish-subkey": "power",
+            "img": "suit-power.png",
+            "default": true
+          },
+          {
+            "fish-subkey": "varia",
+            "img": "suit-varia.png"
+          }
+        ]
+      },
+      {
+        "group-fish-key": "missile-mode",
+        "buttons": [
+          {
+            "fish-subkey": "no",
+            "img": "no-thing.png",
+            "default": true
+          },
+          {
+            "fish-subkey": "yes",
+            "img": "missile-yes.png"
+          }
+        ]
+      }
+    ],
+    "tests": {
+      "Stand": {
+        "frame": 0,
+        "selections": [
+          [],
+          ["varia_suit"]
+        ]
+      }
+    }
+  }

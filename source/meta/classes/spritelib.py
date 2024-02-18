@@ -640,7 +640,12 @@ class SpriteParent():
             if new_palette:
                 palettes.append(new_palette)
 
-            base_image = self.images[tile_info["image"]] if tile_info["image"] in self.images else self.get_alternate_tile(tile_info["image"], palettes)
+            image_name = tile_info["image"] if tile_info["image"] in self.images else ""
+            base_image = None
+            if image_name == "":
+                base_image = self.get_alternate_tile(tile_info["image"], palettes)
+            else:
+                base_image = self.images[image_name]
             if base_image == None:
                 pass
 #                print("Base image not found!")
@@ -671,7 +676,10 @@ class SpriteParent():
             default_range = self.layout.get_property("import palette interval", tile_info["image"])
             this_palette = self.get_palette(palettes, default_range, frame_number)
 
-            base_image = common.apply_palette(base_image, this_palette)
+            # if not a pseudoimage
+            if "pseudoimages" not in self.layout.data or \
+                "pseudoimages" in self.layout.data and image_name not in self.layout.data["pseudoimages"]:
+                base_image = common.apply_palette(base_image, this_palette)
 
             if "pos" not in tile_info:
                 tile_info["pos"] = [0,0]
@@ -705,21 +713,22 @@ class SpriteParent():
         return returnvalue
 
     def get_pose_list(self, animation, direction):
-        directions = []
+        poses = []
 
+        if animation in self.animations:
+            direction = self.get_alternative_direction(animation, direction)
+            if direction and direction in self.animations[animation]:
+                poses = self.animations[animation][direction]
+
+        return poses
+
+    def get_alternative_direction(self, animation, direction):
         if len(self.animations):
             if animation in self.animations:
                 direction_dict = self.animations[animation]
                 if direction not in direction_dict:
-                    direction = list(direction_dict.keys())[0]
-                directions = direction_dict[direction]
-        return directions
-
-    def get_alternative_direction(self, animation, direction):
-        direction_dict = None
-        if len(self.animations):
-            direction_dict = self.animations[animation]
-        return next(iter(direction_dict.keys())) if direction_dict else None
+                    direction = next(iter(direction_dict.keys()))
+        return direction
 
     def assemble_tiles_to_completed_image(self, tile_list):
         if tile_list:     #have to check this because some animations include "empty" poses
@@ -737,11 +746,17 @@ class SpriteParent():
             for new_image, (x, y) in tile_list:
                 # the third argument is the transparency mask, so it is not
                 #  redundant to use the same variable name twice
-                working_image.paste(
-                    new_image,
-                    (x - min_x, y - min_y),
-                    new_image
-                )
+                if new_image.mode == "RGBA":
+                    working_image.paste(
+                        new_image,
+                        (x - min_x, y - min_y),
+                        new_image
+                    )
+                else:
+                    working_image.paste(
+                        new_image,
+                        (x - min_x, y - min_y)
+                    )
             return working_image, (min_x, min_y)
         else:
             # blank image and dummy offset

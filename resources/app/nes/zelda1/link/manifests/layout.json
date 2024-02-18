@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../../../schema/png-layout.schema.json",
+  "comment": [
+    "This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",
+    "will also be the pose that is used to import the image.  For this reason, some poses will be out of order",
+    "and this is intentional because a pose might be mirrored in its first occurance (grapple), or perhaps",
+    "the way that it will be present in the ROM is different before and after modification (e.g. screw attack)"
+  ],
+  "border_color": [217, 87, 99, 255],
+  "border_size": 0,
+  "layout": [
+    [
+      "palette_block",
+      "null_block"
+    ],
+    [
+      "standDown",
+      "walkDown_S1",
+      "walkDown1_S1",
+      "walkUp",
+      "walkRight_S1",
+      "walkRight1_S1",
+      "walkDown_S2",
+      "walkRight_S2",
+      "walkRight1_S2",
+      "attackDown",
+      "attackUp",
+      "attackRight",
+      "itemGet"
+    ]
+  ],
+  "images": {
+    "palette_block":    { "dimensions": [0,0,12,1] },
+    "null_block":       { "dimensions": [0,0,161,1] },
+
+    "standDown":        { "dimensions": [0,0,16,16], "import palette interval": [1,4] },
+    "walkDown_S1":      { "dimensions": [0,0,9,16], "import palette interval": [1,4]  },
+    "walkDown1_S1":     { "dimensions": [0,0,10,16], "import palette interval": [1,4] },
+    "walkUp":           { "parent": "standDown" },
+    "walkRight_S1":     { "parent": "standDown" },
+    "walkRight1_S1":    { "dimensions": [0,0,18,16], "import palette interval": [1,4] },
+    "walkDown_S2":      { "parent": "walkDown_S1" },
+    "walkRight_S2":     { "parent": "walkDown_S1" },
+    "walkRight1_S2":    { "parent": "walkDown1_S1" },
+    "attackDown":       { "dimensions": [0,0,17,16], "import palette interval": [1,4] },
+    "attackUp":         { "parent": "standDown" },
+    "attackRight":      { "parent": "standDown" },
+    "itemGet":          { "parent": "walkDown_S1" }
+  }
+}

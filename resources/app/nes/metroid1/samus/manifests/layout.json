@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../../../schema/png-layout.schema.json",
+  "comment": [
+    "This file in some cases has a very specific ordering.  For instance, the first instance of any used_by list",
+    "will also be the pose that is used to import the image.  For this reason, some poses will be out of order",
+    "and this is intentional because a pose might be mirrored in its first occurance (grapple), or perhaps",
+    "the way that it will be present in the ROM is different before and after modification (e.g. screw attack)"
+  ],
+  "border_color": [217, 87, 99, 255],
+  "border_size": 0,
+  "layout": [
+    [
+      "loader",
+      "aimRight",
+      "walkLeft",
+      "walkLeft1",
+      "walkLeft2",
+      "aimUp",
+      "kickLeg",
+      "cannon",
+      "standLeft",
+      "jump",
+      "spin",
+      "morph",
+      "explode"
+    ],
+    [
+      "null_block",
+      "palette_block"
+    ]
+  ],
+  "images": {
+    "loader":           { "dimensions": [0,0,16,40], "import palette interval": [1,4] },
+    "aimRight":         { "dimensions": [0,0,24,40], "import palette interval": [1,4] },
+    "walkLeft":         { "dimensions": [0,0,16,40], "import palette interval": [1,4] },
+    "walkLeft1":        { "dimensions": [0,0,24,40], "import palette interval": [1,4] },
+    "walkLeft2":        { "dimensions": [0,0,24,40], "import palette interval": [1,4] },
+    "aimUp":            { "dimensions": [0,0,16,40], "import palette interval": [1,4] },
+    "kickLeg":          { "dimensions": [0,0,16,40], "import palette interval": [1,4] },
+    "cannon":           { "dimensions": [0,0, 8,40], "import palette interval": [1,4] },
+    "standLeft":        { "dimensions": [0,0,16,40], "import palette interval": [1,4] },
+    "jump":             { "dimensions": [0,0,16,40], "import palette interval": [1,4] },
+    "spin":             { "dimensions": [0,0,24,40], "import palette interval": [1,4] },
+    "morph":            { "dimensions": [0,0,16,40], "import palette interval": [1,4] },
+    "explode":          { "dimensions": [0,0,16,40], "import palette interval": [1,4] },
+    "null_block":       { "dimensions": [0,0,228,4], "import palette interval": [1,0] },
+    "palette_block":    { "dimensions": [0,0,4,4] }
+  }
+}

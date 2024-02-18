@@ -349,12 +349,14 @@ class Layout():
             for image_name, this_image in all_images.items():
                 if not image_name in [
                     "transparent",
-                    "meta_block",
-                    "meta_block1",
-                    "meta_block2",
                     "palette_block"
                 ]:
+                    if "meta_block" in image_name \
+                        or "null_block" in image_name:
+                        continue
                     import_palette = self.get_property("import palette interval", image_name)
+                    if not import_palette:
+                        raise AssertionError(f"Import Palette Interval not found for image '{image_name}'!")
                     palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]     #flatten the RGB values
                     palette = palette + palette[:3]*(256-(len(palette)//3))
                     palette_seed = Image.new("P", (1,1))
