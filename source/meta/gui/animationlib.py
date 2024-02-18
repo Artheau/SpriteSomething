@@ -219,7 +219,7 @@ class AnimationEngineParent():
                     "Tanooki",
                     "Hammer",
                     "Cloud",
-                    "Marker"
+                    "Clear"
                 ]
                 for check in mario_checks:
                     if not check_passed and check in self.current_animation:

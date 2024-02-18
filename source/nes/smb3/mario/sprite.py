@@ -15,34 +15,60 @@ class Sprite(SpriteParent):
         super().__init__(filename, manifest_dict, my_subpath, _)
         self.load_plugins()
 
-        self.mario_globals = {}
-        self.mario_globals["mario_palette"] = [
-            # (  0,  0,  0),
-            (  0,  0,  0),  # outline
-            (178, 50, 38),  # shirt color
-            (254,206,199),  # skin color
-        ]
-        self.mario_globals["luigi_palette"] = [
-            # (  0,  0,  0),
-            (  0,  0,  0),  # outline
-            ( 98,226, 64),  # shirt color
-            (254,206,199),  # skin color
-        ]
-        self.mario_globals["fire_palette"] = [
-            # (  0,  0,  0),
-            (178, 50, 38),  # outline
-            ( 35, 77, 90),  # shirt color
-            (254,206,199),  # skin color
-        ]
+        self.mario_globals = {
+            "mario_palette": [
+                # (  0,  0,  0),
+                (  0,  0,  0),  # outline
+                (181, 49, 32),  # shirt color
+                (254,204,197),  # skin color
+            ],
+            "luigi_palette": [
+                # (  0,  0,  0),
+                (  0,  0,  0),  # outline
+                ( 92,228, 48),  # shirt color
+                (254,204,197),  # skin color
+            ],
+            "fire_palette": [
+                # (  0,  0,  0),
+                (181, 49, 32),  # outline
+                (234,158, 32),  # shirt color
+                (254,204,197),  # skin color
+            ],
+            "frog_palette": [
+                # (  0,  0,  0),
+                (  0,  0,  0),  # outline
+                (  0,  0,  0),  # nothing
+                (254,204,197),  # skin color
+                (  0,  0,  0),  # nothing
+                ( 98,226, 64),  # frog
+            ],
+            "tanooki_palette": [
+                # (  0,  0,  0),
+                (  0,  0,  0),  # outline
+                (152, 78,  0),  # tanooki costume
+                (254,204,197),  # skin color
+            ],
+            "statue_palette": [
+                # (  0,  0,  0),
+                (  0,  0,  0),  # outline
+                (173,173,173),  # tanooki statue "skin/light"
+                (102,102,102),  # tanooki statue "dark"
+            ],
+            "hammer_palette": [
+                # (  0,  0,  0),
+                (  0,  0,  0),  # outline
+                (  0,  0,  0),  # nothing
+                (232,157, 52),  # hammer "skin"
+                (255,255,255),  # hammer "light"
+            ]
+        }
+
         self.mario_globals["global_palette"] = [
             # (  0,  0,  0),
             (  0,  0,  0),
-            ( 98,226, 64),  # frog
             (152, 78, 15),  # tanooki costume
-            ( 99, 99, 99),  # tanooki statue "dark"
-            (173,173,173),  # tanooki statue "skin/light"
-            (255,255,255),  # hammer "light"
-            (232,157, 52),  # hammer "skin"
+            (  0,  0,  0),  # nothing
+            (255,255,255),  # white
         ]
 
     def import_from_ROM(self, rom: RomHandlerParent):
@@ -114,14 +140,20 @@ class Sprite(SpriteParent):
         for i in range(1,range_end):
             this_palette.append((0,0,0))
 
+        found_scheme = False
         for scheme in [
             "mario",
             "luigi",
             "fire",
-            "global"
+            "frog",
+            "tanooki",
+            "statue",
+            "hammer",
+            "global",
         ]:
-            if f"{scheme}_brother" in palettes:
+            if (not found_scheme) and (f"{scheme}_brother" in palettes and f"{scheme}_palette" in self.mario_globals):
                 this_palette = self.mario_globals[f"{scheme}_palette"]
+                found_scheme = True
 
         if len(this_palette) < 1:
             palette_indices = list(range(1,range_end))     #start with normal mail and modify it as needed
