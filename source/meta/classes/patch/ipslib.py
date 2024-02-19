@@ -34,12 +34,24 @@ class IPSFile():
         return arr
 
     def get_bytearray(self):
-        arr = [ord(x) for x in self._HEADER]
+        arr = []
         for record in self.get_records():
-            arr = [*arr,*record.offset]
-            arr = [*arr,*record.length]
-            arr = [*arr,*record.data]
-        arr = [*arr,*[ord(x) for x in self._FOOTER]]
+            offset = [
+                int(x,16) for x in wrap(
+                    record.get_pretty_offset().replace("0x",""),
+                    2
+                )
+            ]
+            length = [
+                int(x,16) for x in wrap(
+                    record.get_pretty_length().replace("0x",""),
+                    2
+                )
+            ]
+            data = record.data
+            arr = [*arr,*offset]
+            arr = [*arr,*length]
+            arr = [*arr,*data]
         return arr
 
     def get_dict(self):
@@ -52,7 +64,30 @@ class IPSFile():
         return dct
 
     def get_binary(self):
-        return bytes(self.get_bytearray())
+        arr = []
+        for record in self.get_records():
+            arr = [*arr,*record.data]
+        return bytes(arr)
+
+    def get_patch(self):
+        return bytes(
+            [
+                *[ord(x) for x in self._HEADER],
+                *self.get_bytearray(),
+                *[ord(x) for x in self._FOOTER]
+            ]
+        )
+
+    def apply_patch(self, rom):
+        rom = list(rom)
+        for record in self.get_records():
+            offset = int("".join([x for x in record.offset]))
+            length = int("".join([x for x in record.length]))
+            data = record.data
+            for i in range(0,length):
+                rom[offset+i] = data[i]
+        rom = bytes(rom)
+        return rom
 
     def print_summary(self):
         for record in self.get_records():
@@ -60,18 +95,22 @@ class IPSFile():
 
     def save(self, filename=""):
         with open(filename, "wb") as file:
+            file.write(self.get_patch())
+
+    def save_bin(self, filename=""):
+        with open(filename, "wb") as file:
             file.write(self.get_binary())
 
 class Record():
     def __init__(self, offset, data, length):
         self.offset = [
-            int(x) for x in wrap(
+            str(x) for x in wrap(
                 str(offset).zfill(6),
                 2
             )
         ]
         self.length = [
-            int(x) for x in wrap(
+            str(x) for x in wrap(
                 str(length).zfill(4),
                 2
             )
@@ -81,7 +120,7 @@ class Record():
     def get_pretty_offset(self):
         offset = self.offset
         # print("Self:", offset)
-        offset = "".join([str(x).zfill(2) for x in offset])
+        offset = "".join([str(x) for x in offset])
         # print("Join:", offset)
         offset = int(offset)
         # print("INT:", offset)
@@ -98,7 +137,7 @@ class Record():
     def get_pretty_length(self):
         length = self.length
         # print("Self:", length)
-        length = "".join([str(x).zfill(2) for x in length])
+        length = "".join([str(x) for x in length])
         # print("Join:", length)
         length = int(length)
         # print("INT:", length)
@@ -123,6 +162,8 @@ class Record():
         return f"{offset}[{length}]: {self.data}"
 
 if __name__ == "__main__":
+    return
+
     patch = IPSFile()
     for i in range(8):
         patch.add_record(i,[i,pow(2,i)])
@@ -130,24 +171,24 @@ if __name__ == "__main__":
         patch.add_record(i,[2*i])
     patch.add_record("0x030000",[2])
     patch.add_record("0x0B0000",[4])
-    # patch.add_record("0x000002",[6])
-    # patch.add_record("0x000020",[6])
-    # patch.add_record("0x000200",[6])
-    # patch.add_record("0x002000",[6])
-    # patch.add_record("0x020000",[6])
-    # patch.add_record("0x200000",[6])
+    patch.add_record("0x000002",[6])
+    patch.add_record("0x000020",[6])
+    patch.add_record("0x000200",[6])
+    patch.add_record("0x002000",[6])
+    patch.add_record("0x020000",[6])
+    patch.add_record("0x200000",[6])
     patch.add_record("0x00000A",[6])
     patch.add_record("0x0000A0",[6])
     patch.add_record("0x000A00",[6])
     patch.add_record("0x00A000",[6])
     patch.add_record("0x0A0000",[6])
     patch.add_record("0xA00000",[6])
-    # print(int("0x00A000",16))
-    print(patch.get_bytearray())
-    print(patch.get_array())
-    print(patch.get_dict())
-    print(patch.get_binary())
-    print(patch.get_records())
+    # print(patch.get_patch())
+    # print(patch.get_bytearray())
+    # print(patch.get_array())
+    # print(patch.get_dict())
+    # print(patch.get_binary())
+    # print(patch.get_records())
     patch.print_summary()
 
     patch.save("./patch.ips")

@@ -1,6 +1,7 @@
 import importlib
 import itertools
 import json
+import pathlib
 import os
 import random
 from base64 import b64encode
@@ -617,8 +618,8 @@ class Sprite(SpriteParent):
                 header_added = False
                 for patch in megadata["sprites"][sprite]["ips"]:
                     patches = patches + 1
-                    if patches not in [1,3]:
-                        continue
+                    # if patches not in [1,3]:
+                    #     continue
                     patch_note = patch["note"]
                     if "address" in patch:
                         for address in patch["address"]:
@@ -636,9 +637,11 @@ class Sprite(SpriteParent):
                                         megadata["sprites"][sprite]["patch"][patch["note"]]
                                     )
 
-        patch_file.print_summary()
-        print(patch_file.get_binary())
         patch_file.save(f"./{basename}_{gameID}_test.{patch_fmt}")
+        patch_file.save_bin(f"./{basename}_{gameID}_test.bin")
+        rom = pathlib.Path(os.path.join("ladx.gbc")).read_bytes()
+        rom = patch_file.apply_patch(rom)
+        pathlib.Path(os.path.join("ladx-patched.gbc")).write_bytes(rom)
 
 if __name__ == "__main__":
     sprite = Sprite(
