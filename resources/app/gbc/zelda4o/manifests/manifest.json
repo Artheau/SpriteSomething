@@ -10,6 +10,6 @@
         "overview-scale-factor": 1
       }
     },
-    "output": [ ".gbc" ]
+    "output": [ ".gbc", ".gb" ]
   }
 }

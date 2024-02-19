@@ -281,6 +281,8 @@ class CLIMainFrame():
                             ".sfc",     # SNES
                             ".smc",     # SNES
                             ".nes",     # NES
+                            ".gbc",     # GBC
+                            ".gb",      # GB
                             ".bmp",     # FFMQBen
                             ".zip",     # Mo3Player
                             ".aspr",    # ASPR (WIP)

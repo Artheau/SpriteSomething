@@ -123,7 +123,8 @@ def autodetect(sprite_filename):
 
     for [console, console_types] in {
         "snes": [ ".sfc", ".smc" ],
-        "nes": [ ".nes" ]
+        "nes": [ ".nes" ],
+        "gbc": [ ".gbc", ".gb" ]
     }.items():
         if file_extension.lower() in console_types:
             print(f"Detected: {console.upper()} game file")

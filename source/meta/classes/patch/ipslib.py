@@ -78,14 +78,16 @@ class IPSFile():
             ]
         )
 
-    def apply_patch(self, rom):
-        rom = list(rom)
+    def apply_patch(self, rom_bytes):
+        rom = list(rom_bytes)
+        rom_length = len(rom)
         for record in self.get_records():
             offset = int("".join([x for x in record.offset]))
             length = int("".join([x for x in record.length]))
             data = record.data
-            for i in range(0,length):
-                rom[offset+i] = data[i]
+            if offset+length <= rom_length:
+                for i in range(0,length):
+                    rom[offset+i] = data[i]
         rom = bytes(rom)
         return rom
 
@@ -162,7 +164,7 @@ class Record():
         return f"{offset}[{length}]: {self.data}"
 
 if __name__ == "__main__":
-    return
+    exit(1)
 
     patch = IPSFile()
     for i in range(8):

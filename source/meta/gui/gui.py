@@ -436,7 +436,8 @@ class SpriteSomethingMainFrame(tk.Frame):
               (
                   self.fish.translate("meta","menu","export.patch"),
                   "patch",
-                  self.export_patch
+                  None
+                #   self.export_patch
               ),
               (None,None,None),
               (
@@ -1614,7 +1615,7 @@ class SpriteSomethingMainFrame(tk.Frame):
     #query user for directory to inject sprite into
     def copy_into_ROM_bulk(self, inject=False):
         source_filepath = None
-        supported_consoles = [ "pc", "nes", "snes" ]
+        supported_consoles = [ "pc", "nes", "snes", "gb", "gbc" ]
         if self.sprite.view_only and self.game.console_name in supported_consoles:
             supported_consoles.remove(self.game.console_name)
 
@@ -1636,6 +1637,8 @@ class SpriteSomethingMainFrame(tk.Frame):
             default_exts = [ ".nes" ]
         elif self.game.console_name == "snes":
             default_exts = [ ".smc", ".sfc" ]
+        elif self.game.console_name == "gbc":
+            default_exts [ ".gb", ".gbc" ]
 
         for r,_,f in os.walk(source_filepath):
             for file in f:
