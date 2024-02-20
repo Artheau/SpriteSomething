@@ -384,7 +384,7 @@ class Sprite(SpriteParent):
         if megadata["modified"]:
             with open(
                 os.path.join(
-                    f"./{basename}_{gameID}_test.yaml"
+                    f"./{basename}_{gameID}.yaml"
                 ),
                 "w"
             ) as yamlFile:

@@ -19,25 +19,24 @@ class Sprite(SpriteParent):
             "mario_palette": [
                 # (  0,  0,  0),
                 (  0,  0,  0),  # outline
-                (181, 49, 32),  # shirt color
                 (254,204,197),  # skin color
+                (181, 49, 32),  # shirt color
             ],
             "luigi_palette": [
                 # (  0,  0,  0),
                 (  0,  0,  0),  # outline
-                ( 92,228, 48),  # shirt color
                 (254,204,197),  # skin color
+                ( 92,228, 48),  # shirt color
             ],
             "fire_palette": [
                 # (  0,  0,  0),
                 (181, 49, 32),  # outline
-                (234,158, 32),  # shirt color
                 (254,204,197),  # skin color
+                (234,158, 32),  # shirt color
             ],
             "frog_palette": [
                 # (  0,  0,  0),
                 (  0,  0,  0),  # outline
-                (  0,  0,  0),  # nothing
                 (254,204,197),  # skin color
                 (  0,  0,  0),  # nothing
                 ( 98,226, 64),  # frog
@@ -45,18 +44,25 @@ class Sprite(SpriteParent):
             "tanooki_palette": [
                 # (  0,  0,  0),
                 (  0,  0,  0),  # outline
-                (152, 78,  0),  # tanooki costume
-                (254,204,197),  # skin color
+                (254,206,199),  # skin color
+                (  0,  0,  0),  # nothing
+                (  0,  0,  0),  # nothing
+                (152, 78, 17),  # tanooki costume
             ],
             "statue_palette": [
                 # (  0,  0,  0),
                 (  0,  0,  0),  # outline
                 (173,173,173),  # tanooki statue "skin/light"
+                (  0,  0,  0),  # nothing
+                (  0,  0,  0),  # nothing
                 (102,102,102),  # tanooki statue "dark"
             ],
             "hammer_palette": [
                 # (  0,  0,  0),
                 (  0,  0,  0),  # outline
+                (  0,  0,  0),  # nothing
+                (  0,  0,  0),  # nothing
+                (  0,  0,  0),  # nothing
                 (  0,  0,  0),  # nothing
                 (232,157, 52),  # hammer "skin"
                 (255,255,255),  # hammer "light"
