@@ -72,7 +72,7 @@ def get_resource(subdir=None, desired_filename=None):
         subdir = os.path.join(*subdir)
 
     file_list = get_all_resources(subdir, desired_filename)
-    if not file_list:
+    if not file_list and "arrow-" not in desired_filename and "-thing" not in desired_filename:
         print(subdir, desired_filename, "not found!")
     return file_list[0] if file_list else None
 

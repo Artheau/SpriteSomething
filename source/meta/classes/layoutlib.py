@@ -15,9 +15,9 @@ from source.meta.common import common
 
 class Layout():
     def __init__(self, filename, sprite_name=""):
+        layout_path = filename.replace(os.sep, '/')
+        layout_path = layout_path[layout_path.find("app/")+len("app/"):]
         if not filename or not os.path.isfile(filename):
-            layout_path = self.filename.replace(os.sep, '/')
-            layout_path = layout_path[layout_path.find("app/")+len("app/"):]
             raise AssertionError(f"Layout not found: {layout_path}")
         with open(filename) as inFile:
             self.data = []
@@ -26,7 +26,7 @@ class Layout():
             except JSONDecodeError as e:
                 raise ValueError("Layout manifest malformed: " + filename)
         self.reverse_lookup = {}
-        print(f"Finding Layouts! [{sprite_name}]")
+        print(f"Finding Layouts! [{layout_path.replace('/manifests/layout.json','')}]")
         if "layouts" in self.data:
             for layout in self.data["layouts"]:
                 if "names" in layout and sprite_name in layout["names"]:

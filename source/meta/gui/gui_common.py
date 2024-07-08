@@ -66,6 +66,7 @@ def create_extraction_chooser(console_name,game_names):
         cols = 2
         for game_name in game_names:
             sprite_name = ""
+            #FIXME: Hack for Quad Rando
             if game_name in ["metroid1","zelda1"]:
                 console_name = "nes"
             elif game_name in ["metroid3","zelda3"]:

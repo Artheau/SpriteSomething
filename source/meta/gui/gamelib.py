@@ -255,7 +255,10 @@ def autodetect(sprite_filename):
             # FIXME: English
             raise AssertionError(f"Filetype of '{file_extension.upper()[1:]}' for '{sprite_filename}' not supported!")
 
-    print(f"Detected: {game.internal_name}/{sprite.internal_name}/{selected_sheet}!")
+    detected = f"{game.internal_name}/{sprite.internal_name}"
+    if selected_sheet != "":
+        detected += f"/{selected_sheet}"
+    print(f"Detected: {detected}!")
 
     return game, sprite, animation_assist
 

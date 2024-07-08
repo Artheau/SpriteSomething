@@ -96,7 +96,11 @@ class RomHandlerParent():
             print(f"Cannot recognize the makeup byte of this ROM: {hex(makeup_byte)}.")
 
         #information about onboard RAM/SRAM and enhancement chips lives here
-        #rom_type_byte = self._read_from_internal_header(0x16, 1)
+        rom_type_byte = self._read_from_internal_header(0x16, 1)
+        exBit = int(str(rom_type_byte)[:1])
+        coBit = int(str(rom_type_byte)[1:])
+        self._extra_hardware = exBit
+        self._co_processor = coBit
 
         #can also retrieve SRAM size if desired
         #self._SRAM_size = 0x400 << self._read_from_internal_header(0x18,1)
@@ -267,9 +271,11 @@ class RomHandlerParent():
                 pc_address = (bank-0x80)*0x8000 + (offset-0x8000)
             elif bank not in [0x7E, 0x7F] and offset >= 0x8000:    #slowrom block
                 pc_address = (bank+0x80)*0x8000 + (offset-0x8000)
+            elif bank in [0xD1,0xD2,0xD3,0xD4,0xD5,0xD6]:   #Quad Rando block
+                pc_address = (bank-0xA5)*0x8000 + (offset-0x8000)
             else:
                                 # FIXME: English
-                raise AssertionError(f"Function convert_to_pc_address() called on address {hex(addr)}, but this does not map to ROM.")
+                raise AssertionError(f"Function convert_to_pc_address() called on address {hex(addr)}, but this does not map to ROM. Bank: ${bank} 0x{hex(bank).upper()[2:]}")
 
         elif self._type == RomType.EXHIROM:
             if bank >= 0xC0:              #the fastrom block
@@ -336,6 +342,41 @@ class RomHandlerParent():
             return raw_name.decode("ascii")
         except:
             return raw_name
+
+    def get_extrahardware(self):
+        rom_types = [
+            "ROM",
+            "ROM+RAM",
+            "ROM+RAM+Battery",
+            "ROM+CoProcessor",
+            "ROM+CoProcessor+RAM",
+            "ROM+CoProcessor+RAM+Battery",
+            "ROM+CoProcessor+Battery",
+        ]
+        if self._extra_hardware:
+            rom_type = rom_types[self._extra_hardware]
+            if "CoProcessor" in rom_type:
+                co_processor = self.get_coprocessor()
+                rom_type = rom_type.replace("CoProcessor",co_processor)
+            return rom_type
+        else:
+            return None
+
+    def get_coprocessor(self):
+        coprocessors = [
+            "DSP 1-4",
+            "GSU SuperFX",
+            "OBC1",
+            "SA-1",
+            "S-DD1",
+            "S-RTC",
+            "Other SGB/BSX",
+            "Custom"
+        ]
+        if self._co_processor:
+            return coprocessors[self._co_processor]
+        else:
+            return None
 
     def add_header(self):
         self._rom_is_headered = True
