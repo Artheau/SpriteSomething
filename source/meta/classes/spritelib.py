@@ -389,12 +389,17 @@ class SpriteParent():
                     charClass = alphabetsJSON[key][alphaVersion]["charClass"] if "charClass" in alphabetsJSON[key][alphaVersion] else ""
 
         if isinstance(addrs, dict):
-            addrs = addrs[rom.type().lower()]
+            if rom.type().lower() in addrs:
+                addrs = addrs[rom.type().lower()]
+            else:
+                addrs = None
         return [bigText, addrs, charClass]
 
     def translate_author(self, rom):
         name = ""
         [bigText, addrs, _] = self.get_alphabet(rom)
+        if not addrs:
+            return ""
 
         names = {}
         for addr in addrs:

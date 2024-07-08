@@ -61,9 +61,15 @@ def create_extraction_chooser(console_name,game_names):
         game_chooser.geometry("320x100")
         game_selector = tk.StringVar(game_chooser)
         game_buttons = []
-        i = 1
+        row  = 0
+        col  = 0
+        cols = 2
         for game_name in game_names:
             sprite_name = ""
+            if game_name in ["metroid1","zelda1"]:
+                console_name = "nes"
+            elif game_name in ["metroid3","zelda3"]:
+                console_name = "snes"
             with open(common.get_resource([console_name,game_name,"manifests"],"manifest.json")) as f:
                 manifest = {}
                 try:
@@ -75,16 +81,20 @@ def create_extraction_chooser(console_name,game_names):
                 game_chooser,
                 width=16,
                 height=1,
-                text=sprite_name,
+                text=game_name + "/" + sprite_name,
                 command=partial(choose_game,game_name)
             )
-            game_button.grid(row=1,column=i,sticky=tk.NSEW)
+            game_button.grid(row=row,column=col,sticky=tk.NSEW)
             game_buttons.append(game_button)
-            i += 1
+            if col % cols == 0:
+                row += 1
+                col = 0
+            else:
+                col += 1
         game_chooser.grid_rowconfigure(0,weight=1)
         game_chooser.grid_rowconfigure(2,weight=1)
         game_chooser.grid_columnconfigure(0,weight=1)
-        game_chooser.grid_columnconfigure(i,weight=1)
+        game_chooser.grid_columnconfigure(col,weight=1)
         game_chooser.wait_window()
         selected_game = game_selector.get()
     else:
