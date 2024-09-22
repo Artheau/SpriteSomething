@@ -18,6 +18,7 @@
     "green": "Green Mail",
     "blue": "Blue Mail",
     "red": "Red Mail",
+    "yellow": "Yellow Mail",
     "bunny": "Bunny Palette"
   },
   "Sword": {
@@ -25,13 +26,20 @@
     "fighter": "Fighter's Sword",
     "master": "Master Sword",
     "tempered": "Tempered Sword",
-    "gold": "Golden Sword"
+    "gold": "Golden Sword",
+    "iron": "Iron Sword",
+    "long": "Long Sword",
+    "dragon": "Dragon Sword",
+    "blood": "Blood Sword",
+    "master2": "Master Sword"
   },
   "Shield": {
     "none": "No Shield",
     "fighter": "Fighter's Shield",
     "fire": "Fire Shield",
-    "mirror": "Mirror Shield"
+    "mirror": "Mirror Shield",
+    "triforce": "Triforce Shield",
+    "mirror2": "Mirror Shield"
   },
   "Gloves": {
     "none": "No Gloves",

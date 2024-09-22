@@ -3,7 +3,7 @@
 
 import tkinter as tk
 import random
-import json
+from pyjson5 import load as json_load
 import itertools
 from json.decoder import JSONDecodeError
 from PIL import Image, ImageTk
@@ -334,7 +334,7 @@ class AnimationEngineParent():
             with open(spiffy_manifest) as f:
                 spiffy_list = {}
                 try:
-                    spiffy_list = json.load(f)
+                    spiffy_list = json_load(f)
                 except JSONDecodeError as e:
                     raise ValueError("Spiffy Buttons Manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
 
@@ -348,9 +348,20 @@ class AnimationEngineParent():
                         elif "meta" in button and button["meta"] == "blank": #a blank space, baby
                             button_list.append((None,"",None,None))
                         elif "fish-subkey" in button:
-                            default = button["default"] if "default" in button else False
-                            disabled = group["disabled"] if "disabled" in group else False
-                            button_list.append((button["fish-subkey"],button["img"],default,disabled))
+                            is_doi_subkey = button["fish-subkey"] in [
+                                "yellow",
+                                "mirror2",
+                                "triforce",
+                                "blood",
+                                "dragon",
+                                "iron",
+                                "long",
+                                "master2"
+                            ]
+                            if (self.sprite.subtype == "doi") or (self.sprite.subtype != "doi" and not is_doi_subkey):
+                                default = button["default"] if "default" in button else False
+                                disabled = group["disabled"] if "disabled" in group else False
+                                button_list.append((button["fish-subkey"],button["img"],default,disabled))
                     button_group.adds(button_list,fish)
 
         return spiffy_buttons
@@ -365,7 +376,7 @@ class AnimationEngineParent():
             with open(direction_manifest) as f:
                 direction_list = {}
                 try:
-                    direction_list = json.load(f)
+                    direction_list = json_load(f)
                 except JSONDecodeError as e:
                     raise ValueError("Direction Buttons Manifest malformed: " + self.game.internal_name + "/" + self.sprite.internal_name)
                 for group in direction_list["button-groups"]:

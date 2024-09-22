@@ -142,6 +142,7 @@ class SpriteParent():
                 layout_resources,
                 sprite_name
             )
+            self.subtype = self.layout.subtype
         else:
             layout_path = self.resource_subpath.replace(os.sep, '/') + "/manifests/layout.json"
             raise AssertionError(f"Layout not found: {layout_path}")
@@ -643,7 +644,18 @@ class SpriteParent():
                     new_palette = palette_info_location["palette"]
 
             if new_palette:
-                palettes.append(new_palette)
+                if new_palette not in palettes:
+                    palettes.append(new_palette)
+
+            # ps = {}
+            # for p in palettes:
+            #     pKey = p[p.find("_")+1:]
+            #     pVal = p[:p.find("_")]
+            #     ps[pKey] = pVal
+            # palettes = []
+            # for [pKey, pVal] in ps.items():
+            #     palettes.append(f"{pVal}_{pKey}")
+            # print(palettes)
 
             image_name = tile_info["image"] if tile_info["image"] in self.images else ""
             base_image = None

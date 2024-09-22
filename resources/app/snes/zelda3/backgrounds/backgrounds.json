@@ -153,6 +153,11 @@
     {
       "filename": "worldmap.png",
       "title": "World Map"
+    },
+    {
+      "filename": "doi-characterselect.1.png",
+      "title": "Dungeons of Infinity: Character Select",
+      "origin": [0,0]
     }
   ]
 }

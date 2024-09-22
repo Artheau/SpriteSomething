@@ -1,5 +1,6 @@
 wheel
 numpy
 pillow
+pyjson5
 pyyaml
 setuptools

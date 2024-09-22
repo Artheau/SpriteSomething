@@ -24,13 +24,13 @@ class Sprite(SpriteParent):
 
         self.link_globals = {}
         self.link_globals["zap_palette"] = [
-#                (    0,    0,    0),
-                (    0,    0,    0),
+#                (  0,  0,  0),
+                (  0,  0,  0),
                 (208,184, 24),
                 (136,112,248),
-                (    0,    0,    0),
+                (  0,  0,  0),
                 (208,192,248),
-                (    0,    0,    0),
+                (  0,  0,  0),
                 (208,192,248),
 
                 (112, 88,224),
@@ -41,6 +41,25 @@ class Sprite(SpriteParent):
                 ( 72, 56,144),
                 (120, 48,160),
                 (248,248,248)
+        ]
+        # FIXME: Z3DoI
+        self.link_globals["yellow_mail"] = [
+                # (  0,  0,  0),
+                (248,248,248),
+                (240,216, 64),
+                (184,104, 32),
+                (240,160,104),
+                ( 40, 40, 40),
+                (248,120,  0),
+                (192, 24, 32),
+                (232, 96,176),
+                (171,160,  0),
+                (255,242,  0),
+                (171,160,  0),
+                (255,242,  0),
+                (224,144, 80),
+                (136, 88, 40),
+                (192,128,240)
         ]
         self.link_globals["sword_palette"] = [
             #blade, border, hilt
@@ -206,7 +225,7 @@ class Sprite(SpriteParent):
                         not "none_accessories" in palettes else \
                         "transparent"
         if found_alt:
-            return self.images[image_name]
+            return self.images[image_name] if image_name in self.images else self.images["transparent"]
         if True:
             #TODO: Track down why this function is being called without
             # spiffy button info during sprite load
@@ -490,15 +509,22 @@ class Sprite(SpriteParent):
                 if palette_indices[i] in range(0,range_end):
                     if "blue_mail" in palettes:
                         #skip to second row
-                        palette_indices[i] += 16
+                        palette_indices[i] += 16 * (2-1)
                     elif "red_mail" in palettes:
                         #skip to third row
-                        palette_indices[i] += 32
+                        palette_indices[i] += 16 * (3-1)
+                    elif "yellow_mail" in palettes:
+                        #FIXME: Z3DoI
+                        #skip to fifth row
+                        palette_indices[i] += 16 * (5-1)
 
         if palette_indices:
             for i,_ in enumerate(palette_indices):
                 this_palette[i] = self.master_palette[palette_indices[i]]
-
+        if len(set(this_palette)) <= 1:
+            #FIXME: Z3DoI
+            if "yellow_mail" in palettes:
+                this_palette = self.link_globals["yellow_mail"]
         return this_palette
 
     def get_binary_sprite_sheet(self):

@@ -40,6 +40,7 @@ class Layout():
                     else:
                         self.reverse_lookup[tuple(image_ref)] = [image_name]
         self.filename = filename
+        self.subtype = None
 
     def get_image_name(self, animation, pose, force=None):
         if type(animation) is int:
@@ -206,19 +207,20 @@ class Layout():
 
             this_row_images = []
             for image_name in row:     #for every image referenced explicitly in the layout
-                image = all_images[image_name]
+                if image_name in all_images:
+                    image = all_images[image_name]
 
-                xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
-                if not image:        #there was no image there to grab, so make a blank image
-                    image = Image.new("RGBA", (xmax-xmin,ymax-ymin), 0)
+                    xmin,ymin,xmax,ymax = self.get_bounding_box(image_name)
+                    if not image:        #there was no image there to grab, so make a blank image
+                        image = Image.new("RGBA", (xmax-xmin,ymax-ymin), 0)
 
-                palette = self.get_property("import palette interval", image_name)
-                palette = master_palette[palette[0]:palette[1]] if palette else []
+                    palette = self.get_property("import palette interval", image_name)
+                    palette = master_palette[palette[0]:palette[1]] if palette else []
 
-                image = common.apply_palette(image, palette)
-                bordered_image, origin = self.add_borders_and_scale(image, (-xmin,-ymin), image_name)
+                    image = common.apply_palette(image, palette)
+                    bordered_image, origin = self.add_borders_and_scale(image, (-xmin,-ymin), image_name)
 
-                this_row_images.append((bordered_image, origin))
+                    this_row_images.append((bordered_image, origin))
 
             collage = self.make_horizontal_collage(this_row_images)
             all_collages.append(collage)
@@ -336,6 +338,13 @@ class Layout():
         if "palette_block" in all_images and "palette_block" in self.data["images"]:
             palette_rgb = list(all_images["palette_block"].convert("RGB").getdata())
             palette_rgba = list(all_images["palette_block"].convert("RGBA").getdata())
+            is_doi = len(set(palette_rgb[:16])) > 1 and \
+                len(set(palette_rgba[:16])) > 1
+            if is_doi:
+                self.subtype = "doi"
+            if self.subtype == "doi":
+                palette_rgb = palette_rgb[16:] + palette_rgb[:16]
+                palette_rgba = palette_rgba[16:] + palette_rgba[:16]
             if "shift" in self.data["images"]["palette_block"]:
                 shift = self.data["images"]["palette_block"]["shift"]
                 if shift[0] < 0:
@@ -349,6 +358,7 @@ class Layout():
             for image_name, this_image in all_images.items():
                 if not image_name in [
                     "transparent",
+                    "doi_palette_block",
                     "palette_block"
                 ]:
                     if "meta_block" in image_name \

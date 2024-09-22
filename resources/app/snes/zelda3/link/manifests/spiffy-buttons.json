@@ -19,6 +19,10 @@
         {
           "fish-subkey": "red",
           "img": "mail-red.png"
+        },
+        {
+          "fish-subkey": "yellow",
+          "img": "mail-yellow.png"
         }
       ]
     },
@@ -45,6 +49,32 @@
         {
           "fish-subkey": "gold",
           "img": "sword-butter.png"
+        },
+        {
+          "meta": "newline"
+        },
+        {
+          "meta": "blank"
+        },
+        {
+          "fish-subkey": "iron",
+          "img": "sword-iron.png"
+        },
+        {
+          "fish-subkey": "long",
+          "img": "sword-long.png"
+        },
+        {
+          "fish-subkey": "dragon",
+          "img": "sword-dragon.png"
+        },
+        {
+          "fish-subkey": "blood",
+          "img": "sword-blood.png"
+        },
+        {
+          "fish-subkey": "master2",
+          "img": "sword-master2.png"
         }
       ]
     },
@@ -67,6 +97,14 @@
         {
           "fish-subkey": "mirror",
           "img": "shield-mirror.png"
+        },
+        {
+          "fish-subkey": "triforce",
+          "img": "shield-triforce.png"
+        },
+        {
+          "fish-subkey": "mirror2",
+          "img": "shield-mirror2.png"
         }
       ]
     },
