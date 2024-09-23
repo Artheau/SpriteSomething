@@ -209,8 +209,8 @@ class SpriteParent():
 
     def import_from_PNG(self):
         with Image.open(self.filename) as master:
-            self.images, self.master_palette = self.layout.extract_all_images_from_master(
-                master)
+            self.images, self.master_palette = self.layout.extract_all_images_from_master(master)
+            self.subtype = self.layout.subtype
 
     def import_from_RDC(self):
         with open(self.filename, "rb") as file:

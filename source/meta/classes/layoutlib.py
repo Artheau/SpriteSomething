@@ -345,6 +345,9 @@ class Layout():
             if self.subtype == "doi":
                 palette_rgb = palette_rgb[16:] + palette_rgb[:16]
                 palette_rgba = palette_rgba[16:] + palette_rgba[:16]
+            else:
+                palette_rgb = palette_rgb[16:]
+                palette_rgba = palette_rgba[16:]
             if "shift" in self.data["images"]["palette_block"]:
                 shift = self.data["images"]["palette_block"]["shift"]
                 if shift[0] < 0:
