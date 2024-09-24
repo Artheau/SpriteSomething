@@ -48,6 +48,7 @@ class SpriteParent():
         self.overview_scale_factor = 2
         self.overhead = True
         self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
+        self.wip = bool(("wip" in manifest_dict) and (manifest_dict["wip"]))
         if "input" in manifest_dict:
             self.inputs = [f".{x}" for x in manifest_dict["input"].keys()]
             if "png" in manifest_dict["input"]:

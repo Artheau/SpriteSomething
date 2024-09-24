@@ -4,6 +4,7 @@
     "type": "Player Character Sprite",
     "name": "Mario",
     "folder name": "mario",
+    "wip": true,
     "input": {
       "png": {
         "dims": [ 490, 370 ]
