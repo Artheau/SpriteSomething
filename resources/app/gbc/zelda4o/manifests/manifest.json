@@ -4,6 +4,7 @@
     "type": "Player Character Sprite",
     "name": "Link",
     "folder name": "link",
+    "wip": true,
     "input": {
       "png": {
         "dims": [128, 288],
