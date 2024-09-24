@@ -82,6 +82,8 @@ class SpriteParent():
         self.load_layout(sprite_name)
         self.load_animations(sprite_name)
         self.import_from_filename()
+        if self.subtype and self.subtype == "doi":
+            self.wip = True
 
     #to make a new sprite class, you must write code for all of the functions in this section below.
     ############################# BEGIN ABSTRACT CODE ##############################
