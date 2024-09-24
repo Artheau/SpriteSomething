@@ -362,8 +362,9 @@ class Layout():
             else:
                 palette_rgb = palette_rgb[green_start:]
                 palette_rgba = palette_rgba[green_start:]
-            if palette_rgba[0][3] == 0:
-                palette_rgb[0] = (255,0,255)
+            if 0 in palette_rgba and 3 in palette_rgba[0]:
+                if palette_rgba[0][3] == 0:
+                    palette_rgb[0] = (255,0,255)
             master_palettes = palette_rgb
             # print("Master Palettes:")
             # n_cols = 16

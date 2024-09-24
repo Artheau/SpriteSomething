@@ -21,7 +21,7 @@ def get_doi_equipement(save=False):
     icon_specs = {}
     for filename in ["doi-swords.png","doi-shields.png"]:
         #get equipment image
-        equipment_image = Image.open(
+        with Image.open(
             common.get_resource(
                 [
                     "snes",
@@ -31,72 +31,71 @@ def get_doi_equipement(save=False):
                 ],
                 filename
             )
-        )
+        ) as equipment_image:
+            if "swords" in filename:
+                #the swords are at the same x-coordinate but have differing y-values, set up these y-values
+                swords = [
+                    ("basic",   32*0),
+                    ("iron",    32*1),
+                    ("long",    32*2),
+                    ("dragon",  32*3),
+                    ("blood",   32*4),
+                    ("master2", 32*5),
+                ]
 
-        if "swords" in filename:
-            #the swords are at the same x-coordinate but have differing y-values, set up these y-values
-            swords = [
-                ("basic",   32*0),
-                ("iron",    32*1),
-                ("long",    32*2),
-                ("dragon",  32*3),
-                ("blood",   32*4),
-                ("master2", 32*5),
-            ]
+                #tuples for fun stuff; first is top-left origin, second is width,height
+                coords = [
+                    ((  0,0),( 8,16)),
+                    ((  8,0),( 8,16)),
+                    (( 16,0),(16,16)),
+                    (( 32,0),(16,16)),
+                    (( 48,0),(19, 8)),
+                    (( 48,8),(16, 8)),
+                    (( 64,8),(16, 8)),
+                    (( 80,0),(16,16)),
+                    (( 96,0),(16,16)),
+                    ((112,6),(16,18)),
+                    ((128,3),( 8,21)),
+                    ((136,0),( 8,16)),
+                    ((144,0),(16,16)),
+                    ((160,0),(16, 8))
+                ]
+                #cycle through coordinate info
+                for i,_ in enumerate(coords):
+                    #cycle through swords and y-offsets
+                    for j,_ in enumerate(swords):
+                        origin,dims = coords[i]
+                        x,y = origin
+                        level,y_offset = swords[j]
+                        icon_specs[level + "_sword" + str(i)] = [
+                            filename,
+                            coord_calc(
+                                (
+                                    x,
+                                    y+y_offset
+                                ),
+                                dims
+                            )
+                        ]
 
-            #tuples for fun stuff; first is top-left origin, second is width,height
-            coords = [
-                ((  0,0),( 8,16)),
-                ((  8,0),( 8,16)),
-                (( 16,0),(16,16)),
-                (( 32,0),(16,16)),
-                (( 48,0),(19, 8)),
-                (( 48,8),(16, 8)),
-                (( 64,8),(16, 8)),
-                (( 80,0),(16,16)),
-                (( 96,0),(16,16)),
-                ((112,6),(16,18)),
-                ((128,3),( 8,21)),
-                ((136,0),( 8,16)),
-                ((144,0),(16,16)),
-                ((160,0),(16, 8))
-            ]
-            #cycle through coordinate info
-            for i,_ in enumerate(coords):
-                #cycle through swords and y-offsets
-                for j,_ in enumerate(swords):
-                    origin,dims = coords[i]
-                    x,y = origin
-                    level,y_offset = swords[j]
-                    icon_specs[level + "_sword" + str(i)] = [
-                        filename,
-                        coord_calc(
-                            (
-                                x,
-                                y+y_offset
-                            ),
-                            dims
-                        )
-                    ]
-
-        if "shields" in filename:
-            #shields
-            shields = [
-                ("wooden",      16*0),
-                ("triforce",    16*1),
-                ("mirror2",     16*2),
-                ("golden",      16*3),
-            ]
-            #cycle through x-coordinates
-            for i in range(4):
-                #cycle through shields and y-offsets
-                for j,_ in enumerate(shields):
-                    level,y_offset = shields[j]
-                    origin = (i*16,0+y_offset)
-                    icon_specs[level + "_shield" + str(i)] = [
-                        filename,
-                        coord_calc(origin,(16,16))
-                    ]
+            if "shields" in filename:
+                #shields
+                shields = [
+                    ("wooden",      16*0),
+                    ("triforce",    16*1),
+                    ("mirror2",     16*2),
+                    ("golden",      16*3),
+                ]
+                #cycle through x-coordinates
+                for i in range(4):
+                    #cycle through shields and y-offsets
+                    for j,_ in enumerate(shields):
+                        level,y_offset = shields[j]
+                        origin = (i*16,0+y_offset)
+                        icon_specs[level + "_shield" + str(i)] = [
+                            filename,
+                            coord_calc(origin,(16,16))
+                        ]
     return icon_specs
 
 def equipment_test(save=False):
