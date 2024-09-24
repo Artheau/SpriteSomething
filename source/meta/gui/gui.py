@@ -673,6 +673,12 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.attach_both_panels()       #remake the GUI panels
         self.load_plugins()
         self.initialize_sprite_animation()
+        if self.sprite.wip:
+            messagebox.showwarning(
+                "Work in Progress!",
+                f"{self.game.name}/{self.sprite.classic_name} Sprites don't have full functionality yet." + "\n"
+                "Your mileage may vary."
+            )
 
     def attach_both_panels(self):
         #this same function can also be used to re-create the panels
