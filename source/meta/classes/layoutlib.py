@@ -336,18 +336,6 @@ class Layout():
 
         master_palettes = []
         if "palette_block" in all_images and "palette_block" in self.data["images"]:
-            palette_rgb = list(all_images["palette_block"].convert("RGB").getdata())
-            palette_rgba = list(all_images["palette_block"].convert("RGBA").getdata())
-            is_doi = len(set(palette_rgb[:16])) > 1 and \
-                len(set(palette_rgba[:16])) > 1
-            if is_doi:
-                self.subtype = "doi"
-            if self.subtype == "doi":
-                palette_rgb = palette_rgb[16:] + palette_rgb[:16]
-                palette_rgba = palette_rgba[16:] + palette_rgba[:16]
-            else:
-                palette_rgb = palette_rgb[16:]
-                palette_rgba = palette_rgba[16:]
             if "shift" in self.data["images"]["palette_block"]:
                 shift = self.data["images"]["palette_block"]["shift"]
                 if shift[0] != 0:
@@ -360,11 +348,27 @@ class Layout():
                         )
                     )
                     all_images["palette_block"] = palette_block
-            rgba_data = list(all_images["palette_block"].convert("RGBA").getdata())
-            rgb_data = list(all_images["palette_block"].convert("RGB").getdata())
-            if rgba_data[0][3] == 0:
-                rgb_data[0] = (255,0,255)
-            master_palettes = rgb_data
+            palette_rgb = list(all_images["palette_block"].convert("RGB").getdata())
+            palette_rgba = list(all_images["palette_block"].convert("RGBA").getdata())
+            is_doi = os.path.join("zelda3","link") in self.filename and \
+                len(set(palette_rgb[:16])) > 1 and \
+                len(set(palette_rgba[:16])) > 1
+            if is_doi:
+                self.subtype = "doi"
+            green_start = 16
+            if self.subtype == "doi":
+                palette_rgb = palette_rgb[green_start:] + palette_rgb[0:green_start]
+                palette_rgba = palette_rgba[green_start:] + palette_rgba[0:green_start]
+            else:
+                palette_rgb = palette_rgb[green_start:]
+                palette_rgba = palette_rgba[green_start:]
+            if palette_rgba[0][3] == 0:
+                palette_rgb[0] = (255,0,255)
+            master_palettes = palette_rgb
+            # print("Master Palettes:")
+            # n_cols = 16
+            # for i in range(0, len(master_palettes), n_cols):
+            #     print([i / n_cols + 1,*master_palettes[i:i+n_cols]])
         else:
             master_palettes = []
 

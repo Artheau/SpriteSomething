@@ -484,47 +484,72 @@ class Sprite(SpriteParent):
         this_palette = []
         range_end = 16
         if "gloves" in palettes:
+            # print("Gloves Palette")
             range_end = 2 + 1
         for i in range(1,range_end):
             this_palette.append((0,0,0))
 
         if "zap_mail" in palettes:
+            # print("Zap Palette from Globals")
             this_palette = self.link_globals["zap_palette"]
         elif "bunny_mail" in palettes:
             #use the bunny colors, skipping the transparency color
+            # print("Bunny Palette")
             palette_indices = range(0x31,0x40)
         elif "gloves" in palettes:
+            # print("Gloves Palette")
             palette_indices = [0x10,0x20]
         else:
             #start with green mail and modify it as needed
+            # print("Green Mail")
             palette_indices = list(range(1,range_end))
             for i,_ in enumerate(palette_indices):
 
                 if palette_indices[i] == 0x0D:
                     if "power_gloves" in palettes:
+                        # print("Power Gloves")
                         palette_indices[i] = 0x10
                     elif "titan_gloves" in palettes:
+                        # print("Titan Gloves")
                         palette_indices[i] = 0x20
 
                 if palette_indices[i] in range(0,range_end):
                     if "blue_mail" in palettes:
+                        #Blue Mail
                         #skip to second row
-                        palette_indices[i] += 16 * (2-1)
+                        # print("Blue Mail")
+                        row = 2
+                        palette_indices[i] += range_end * (row-1)
                     elif "red_mail" in palettes:
+                        #Red Mail
                         #skip to third row
-                        palette_indices[i] += 16 * (3-1)
+                        # print("Red Mail")
+                        row = 3
+                        palette_indices[i] += range_end * (row-1)
                     elif "yellow_mail" in palettes:
                         #FIXME: Z3DoI
+                        #Yellow Mail
                         #skip to fifth row
-                        palette_indices[i] += 16 * (5-1)
-
+                        # print("Yellow Mail")
+                        row = 5
+                        palette_indices[i] += range_end * (row-1)
+        # print("DOI:",self.subtype == "doi")
+        # print("Master Palette:")
+        # n_cols = 16
+        # for i in range(0, len(self.master_palette), n_cols):
+        #     print(*self.master_palette[i:i+n_cols])
+        # print("Palette Indices:",len(palette_indices),palette_indices)
+        # print("Initialized Palette:",len(this_palette),this_palette)
         if palette_indices:
             for i,_ in enumerate(palette_indices):
                 this_palette[i] = self.master_palette[palette_indices[i]]
         if len(set(this_palette)) <= 1:
             #FIXME: Z3DoI
             if "yellow_mail" in palettes:
+                # print("Yellow Mail from Globals")
                 this_palette = self.link_globals["yellow_mail"]
+        # print("New Palette:",len(this_palette),this_palette)
+        # print("")
         return this_palette
 
     def get_binary_sprite_sheet(self):
