@@ -57,6 +57,10 @@
           "meta": "blank"
         },
         {
+          "fish-subkey": "basic",
+          "img": "sword-fighters.png"
+        },
+        {
           "fish-subkey": "iron",
           "img": "sword-iron.png"
         },
@@ -99,12 +103,26 @@
           "img": "shield-mirror.png"
         },
         {
+          "meta": "newline"
+        },
+        {
+          "meta": "blank"
+        },
+        {
+          "fish-subkey": "wooden",
+          "img": "shield-fire.png"
+        },
+        {
           "fish-subkey": "triforce",
           "img": "shield-triforce.png"
         },
         {
           "fish-subkey": "mirror2",
           "img": "shield-mirror2.png"
+        },
+        {
+          "fish-subkey": "golden",
+          "img": "shield-mirror.png"
         }
       ]
     },

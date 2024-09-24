@@ -27,6 +27,7 @@
     "master": "Master Sword",
     "tempered": "Tempered Sword",
     "gold": "Golden Sword",
+    "basic": "Basic Sword",
     "iron": "Iron Sword",
     "long": "Long Sword",
     "dragon": "Dragon Sword",
@@ -38,8 +39,10 @@
     "fighter": "Fighter's Shield",
     "fire": "Fire Shield",
     "mirror": "Mirror Shield",
+    "wooden": "Wooden Shield",
     "triforce": "Triforce Shield",
-    "mirror2": "Mirror Shield"
+    "mirror2": "Mirror Shield",
+    "golden": "Golden Shield"
   },
   "Gloves": {
     "none": "No Gloves",

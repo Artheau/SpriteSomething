@@ -350,14 +350,17 @@ class AnimationEngineParent():
                         elif "fish-subkey" in button:
                             is_doi_subkey = button["fish-subkey"] in [
                                 "yellow",
-                                "mirror2",
+                                "wooden",
                                 "triforce",
+                                "mirror2",
+                                "basic",
                                 "blood",
                                 "dragon",
                                 "iron",
                                 "long",
                                 "master2"
                             ]
+                            is_doi_subkey = is_doi_subkey or (group_key == "shield" and button["fish-subkey"] == "golden")
                             if (self.sprite.subtype == "doi") or (self.sprite.subtype != "doi" and not is_doi_subkey):
                                 default = button["default"] if "default" in button else False
                                 disabled = group["disabled"] if "disabled" in group else False
