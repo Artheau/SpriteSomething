@@ -97,11 +97,11 @@ class RomHandlerParent():
 
         #information about onboard RAM/SRAM and enhancement chips lives here
         rom_type_byte = self._read_from_internal_header(0x16, 1)
-        exBit = int(str(rom_type_byte)[:1])
-        coBit = int(str(rom_type_byte)[1:])
-        self._extra_hardware = exBit
-        self._co_processor = coBit
-
+        exBit = len(str(rom_type_byte)) > 0 and int(str(rom_type_byte)[:1]) or None
+        coBit = len(str(rom_type_byte)) > 1 and int(str(rom_type_byte)[1:]) or None
+        self._extra_hardware = exBit and exBit or None
+        self._co_processor = coBit and coBit or None
+        
         #can also retrieve SRAM size if desired
         #self._SRAM_size = 0x400 << self._read_from_internal_header(0x18,1)
 
