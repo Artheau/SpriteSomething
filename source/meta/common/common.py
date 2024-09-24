@@ -100,6 +100,10 @@ def apply_palette(image, palette):
     if image is None:
         pass
         # print("Not a valid image to apply palette to!")
+    if len(palette) < 1:
+        image = image.convert('RGBA')
+        return image
+        # print("Not a valid palette to apply!")
     if image.mode == "P":
         flat_palette = [0 for _ in range(3 * 256)]
         flat_palette[3:3 * len(palette) +

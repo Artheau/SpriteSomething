@@ -324,22 +324,22 @@ class Layout():
         if palette_block:
             all_images["palette_block"] = palette_block
 
-        palette_block = all_images["palette_block"]
-        if "images" in self.data and \
-            "palette_block" in self.data["images"] and \
-            "shift" in self.data["images"]["palette_block"]:
-            shift = self.data["images"]["palette_block"]["shift"]
-            if shift[0] != 0:
-                palette_block = all_images["palette_block"]
-                palette_block = palette_block.crop(
-                    (
-                        abs(shift[0]),
-                        0,
-                        *palette_block.size
-                    )
-                )
-                all_images["palette_block"] = palette_block
         if "palette_block" in all_images:
+            palette_block = all_images["palette_block"]
+            if "images" in self.data and \
+                "palette_block" in self.data["images"] and \
+                "shift" in self.data["images"]["palette_block"]:
+                shift = self.data["images"]["palette_block"]["shift"]
+                if shift[0] != 0:
+                    palette_block = all_images["palette_block"]
+                    palette_block = palette_block.crop(
+                        (
+                            abs(shift[0]),
+                            0,
+                            *palette_block.size
+                        )
+                    )
+                    all_images["palette_block"] = palette_block
             rgba_data = list(all_images["palette_block"].convert("RGBA").getdata())
             rgb_data = list(all_images["palette_block"].convert("RGB").getdata())
             if rgba_data[0][3] == 0:
