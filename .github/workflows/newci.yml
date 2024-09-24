@@ -7,8 +7,8 @@ on: [push, pull_request]
 #########
 # actions
 #########
-# actions/checkout@v4.1.1
-# actions/download-artifact@v4.1.1
+# actions/checkout@v4.1.7
+# actions/download-artifact@v4.1.8
 # actions/create-release
 # actions/upload-release-asset
 # Artheau/SpriteSomething/get-parent-dir
@@ -56,10 +56,10 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.7
       # install python
       - name: 💿Install Python
-        uses: actions/setup-python@v5.0.0
+        uses: actions/setup-python@v5.2.0
         with:
           python-version: ${{ matrix.python-version }}
       # python version
@@ -121,7 +121,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.7
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -172,7 +172,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.7
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -228,7 +228,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.7
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -268,7 +268,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.7
 
       # install dependencies via pip
       - name: 💿Install Dependencies via pip
@@ -283,14 +283,14 @@ jobs:
 
       # download appversion artifact
       - name: 🔽Download AppVersion Artifact
-        uses: actions/download-artifact@v4.1.1
+        uses: actions/download-artifact@v4.1.8
         with:
           name: appversion-build-${{ matrix.os-name }}-py${{ matrix.python-version }}-pil${{ matrix.pillow-version }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
 
       # download ubuntu archive artifact
       - name: 🔽Download Ubuntu Archive Artifact
-        uses: actions/download-artifact@v4.1.1
+        uses: actions/download-artifact@v4.1.8
         with:
           # should run on latest explicit ubuntu version
           name: archive-ubuntu-22.04-py${{ matrix.python-version }}-pil${{ matrix.pillow-version }}
@@ -298,14 +298,14 @@ jobs:
 
       # download macos archive artifact
       - name: 🔽Download MacOS Archive Artifact
-        uses: actions/download-artifact@v4.1.1
+        uses: actions/download-artifact@v4.1.8
         with:
           name: archive-macos-latest-py${{ matrix.python-version }}-pil${{ matrix.pillow-version }}
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/macos
 
       # download windows archive artifact
       - name: 🔽Download Windows Archive Artifact
-        uses: actions/download-artifact@v4.1.1
+        uses: actions/download-artifact@v4.1.8
         with:
           name: archive-windows-latest-py${{ matrix.python-version }}-pil${{ matrix.pillow-version }}
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/windows
@@ -426,14 +426,14 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.7
       # get parent dir
       - name: 📁Get Parent Directory
         id: parentDir
         uses: ./.github/actions/get-parent-dir
       # download appversion artifact
       - name: 🔽Download AppVersion Artifact
-        uses: actions/download-artifact@v4.1.1
+        uses: actions/download-artifact@v4.1.8
         with:
           name: appversion-build-${{ matrix.os-name }}-py${{ matrix.python-version }}-pil${{ matrix.pillow-version }}
           path: ${{ steps.parentDir.outputs.parentDir }}/build
@@ -444,7 +444,7 @@ jobs:
           python ./resources/ci/common/prepare_pages.py
       # upload pages artifact for later step
       - name: 🔼Upload Pages Artifact
-        uses: actions/upload-artifact@v4.3.0
+        uses: actions/upload-artifact@v4.4.0
         with:
           name: pages-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/pages
@@ -466,10 +466,10 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.1.7
       # download pages artifact
       - name: 🔽Download Pages Artifact
-        uses: actions/download-artifact@v4.1.1
+        uses: actions/download-artifact@v4.1.8
         with:
           name: pages-${{ matrix.os-name }}
           path: ./

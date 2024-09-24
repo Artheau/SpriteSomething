@@ -15,8 +15,8 @@ inputs:
 # actions
 #########
 # Artheau/SpriteSomething/get-parent-dir
-# actions/checkout@v4.1.1
-# actions/download-artifact@v4.1.1
+# actions/checkout@v4.1.7
+# actions/download-artifact@v4.1.8
 
 runs:
   using: "composite"
@@ -27,7 +27,7 @@ runs:
       run: |
         echo "✔️Checkout commit"
     - name: ✔️Checkout commit
-      uses: actions/checkout@v4.1.1
+      uses: actions/checkout@v4.1.7
 
     # get parent dir
     - name: 📁Get Parent Directory
@@ -44,14 +44,14 @@ runs:
       run: |
         echo "🔽Download Binary Artifact"
     - name: 🔽Download Binary Artifact
-      uses: actions/download-artifact@v4.1.1
+      uses: actions/download-artifact@v4.1.8
       with:
         name: binary-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./
 
     # download appversion artifact
     - name: 🔽Download AppVersion Artifact
-      uses: actions/download-artifact@v4.1.1
+      uses: actions/download-artifact@v4.1.8
       with:
         name: appversion-build-${{ matrix.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ${{ steps.parentDir.outputs.parentDir }}/build
@@ -74,7 +74,7 @@ runs:
       run: |
         echo "🔼Upload Archive Artifact"
     - name: 🔼Upload Archive Artifact
-      uses: actions/upload-artifact@v4.3.0
+      uses: actions/upload-artifact@v4.4.0
       with:
         name: archive-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ${{ steps.parentDir.outputs.parentDir }}/deploy

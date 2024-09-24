@@ -541,12 +541,12 @@ class Sprite(SpriteParent):
                 ["AA","AB"]
             )
             for column in range(8)]:
-            # AB7 holds the palette block so use null_block instead
-            image_name = image_name if image_name != "AB7" else "null_block"
+            image_name = image_name if image_name != "AB7" else "transparent"
+            image = self.images[image_name]
             raw_image = common.convert_to_4bpp(
-                self.images[image_name],
+                image,
                 (0,0),
-                (0,0,16,16),
+                (0,0,image.size[0],image.size[1]),
                 None
             )
             top_half_of_rows += bytes(raw_image[:0x40])

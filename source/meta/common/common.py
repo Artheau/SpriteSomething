@@ -100,15 +100,13 @@ def gather_all_from_resource_subdirectory(subdir):
 def apply_palette(image, palette):
     # apply a palette to an image
     if image is None:
+        pass
         # print("Not a valid image to apply palette to!")
+    if len(palette) < 1:
+        image = image.convert('RGBA')
         return image
-    if palette is None:
-        # print("Not a valid palette to apply to this image!")
-        return image
-
-    # if image.mode != "P":
-    #     image = image.convert('P')
-    if image.mode == "P" and len(palette):
+        # print("Not a valid palette to apply!")
+    if image.mode == "P":
         flat_palette = [0 for _ in range(3 * 256)]
         flat_palette[3:3 * len(palette) +
                      3] = [x for color in palette for x in color]
@@ -312,6 +310,9 @@ def convert_to_4bpp(image, offset, dimensions, extra_area):
         ymin += offset[1]
         xmax += offset[0]
         ymax += offset[1]
+        w = image.size[0]
+        h = image.size[1]
+        # print(f"({w},{h})")
         x_chad_length = (xmax - xmin) % 16
         y_chad_length = (ymax - ymin) % 16
         for y in range(ymin, ymax - 15, 16):

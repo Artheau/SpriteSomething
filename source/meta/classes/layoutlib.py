@@ -350,12 +350,23 @@ class Layout():
                 palette_rgba = palette_rgba[16:]
             if "shift" in self.data["images"]["palette_block"]:
                 shift = self.data["images"]["palette_block"]["shift"]
-                if shift[0] < 0:
-                    palette_rgb = palette_rgb[shift[0]*-1:]
-                    palette_rgba = palette_rgba[shift[0]*-1:]
-            if palette_rgba[0][3] == 0:
-                palette_rgb[0] = (255,0,255)
-            master_palettes = palette_rgb
+                if shift[0] != 0:
+                    palette_block = all_images["palette_block"]
+                    palette_block = palette_block.crop(
+                        (
+                            abs(shift[0]),
+                            0,
+                            *palette_block.size
+                        )
+                    )
+                    all_images["palette_block"] = palette_block
+            rgba_data = list(all_images["palette_block"].convert("RGBA").getdata())
+            rgb_data = list(all_images["palette_block"].convert("RGB").getdata())
+            if rgba_data[0][3] == 0:
+                rgb_data[0] = (255,0,255)
+            master_palettes = rgb_data
+        else:
+            master_palettes = []
 
         if len(master_palettes):
             for image_name, this_image in all_images.items():
