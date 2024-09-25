@@ -350,19 +350,21 @@ class Layout():
                     all_images["palette_block"] = palette_block
             palette_rgb = list(all_images["palette_block"].convert("RGB").getdata())
             palette_rgba = list(all_images["palette_block"].convert("RGBA").getdata())
-            is_doi = os.path.join("zelda3","link") in self.filename and \
+            is_z3link = os.path.join("zelda3","link") in self.filename
+            is_doi = is_z3link and \
                 len(set(palette_rgb[:16])) > 1 and \
                 len(set(palette_rgba[:16])) > 1
             if is_doi:
                 self.subtype = "doi"
-            green_start = 16
-            if self.subtype == "doi":
-                palette_rgb = palette_rgb[green_start:] + palette_rgb[0:green_start]
-                palette_rgba = palette_rgba[green_start:] + palette_rgba[0:green_start]
-            else:
-                palette_rgb = palette_rgb[green_start:]
-                palette_rgba = palette_rgba[green_start:]
-            if 0 in palette_rgba and 3 in palette_rgba[0]:
+            if is_z3link:
+                green_start = 16
+                if self.subtype == "doi":
+                    palette_rgb = palette_rgb[green_start:] + palette_rgb[0:green_start]
+                    palette_rgba = palette_rgba[green_start:] + palette_rgba[0:green_start]
+                else:
+                    palette_rgb = palette_rgb[green_start:]
+                    palette_rgba = palette_rgba[green_start:]
+            if len(palette_rgba) > 0 and len(palette_rgba[0]) > 3:
                 if palette_rgba[0][3] == 0:
                     palette_rgb[0] = (255,0,255)
             master_palettes = palette_rgb

@@ -4,6 +4,7 @@ import weakref    #because memory leaks are stupid
 import tkinter as tk
 import json
 import os
+import traceback
 import locale
 from PIL import Image, ImageTk
 from functools import partial

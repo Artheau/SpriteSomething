@@ -192,12 +192,18 @@ class Sprite(SpriteParent):
             "ship": [101,104]
         }
         colors = None
-        master_palette_indexes = color_set_switcher.get(color_set.lower().replace(' ',"").replace('-',"").replace('_',""))
+        master_palette_indexes = color_set_switcher.get(
+            color_set.lower()
+            .replace(' ',"")
+            .replace('-',"")
+            .replace('_',"")
+        )
         if master_palette_indexes:
             if len(master_palette_indexes) == 1:
                 colors = self.master_palette[master_palette_indexes[0]]
             if len(master_palette_indexes) == 2:
                 colors = self.master_palette[master_palette_indexes[0]:master_palette_indexes[1]]
+            print("FOUND INDEXES:",color_set,len(master_palette_indexes),colors)
         elif color_set == "gty":
             colors = [
                 ( 64, 64,  0),
