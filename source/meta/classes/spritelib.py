@@ -873,7 +873,7 @@ class SpriteParent():
         if file_extension.lower() in [".png", ".bmp"]:
             return self.save_as_PNG(filename)
         elif hasattr(self, save_as_funcname):
-            return partial(getattr(self, save_as_funcname), filename)
+            return getattr(self, save_as_funcname)(filename)
         elif file_extension.lower() in self.outputs:
             print(f"{file_extension.upper()[1:]} not yet available by GUI for '{game_name}' / '{self.classic_name}' Sprites!")
             return
