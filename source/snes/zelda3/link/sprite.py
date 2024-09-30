@@ -90,7 +90,7 @@ class Sprite(SpriteParent):
         return_images = []
 
         #cycle through mail levels
-        for i,mail in enumerate(["green","blue","red"]):
+        for i,mail in enumerate(["green","blue","red","yellow","cursed"]):
             #get a container for tile lists
             tile_list = {}
             #get Bunny tile list for Stand:down to grab the bunny head
@@ -116,6 +116,8 @@ class Sprite(SpriteParent):
                 dest_img.paste(src_img,(7,6))
                 #resize using nearest neighbor to 400% because that's what Cross' tracker uses
                 dest_img = dest_img.resize((32*4,32*4),Image.NEAREST)
+                if mail == "cursed":
+                    dest_img = dest_img.convert('LA').convert('RGBA')
                 #save to disk
                 filename = "tunic"
                 if tileset_id == "bunny":
@@ -261,6 +263,7 @@ class Sprite(SpriteParent):
         '''
         self.master_palette = [(0,0,0) for _ in range(0x40)]     #initialize the palette
         #main palettes
+        #FIXME: Z3DoI is expecting to find Yellow Mail
         converted_palette_data = [int.from_bytes(palette_data[i:i+2], byteorder='little') \
                                                             for i in range(0,len(palette_data),2)]
         for i in range(4):
@@ -293,7 +296,14 @@ class Sprite(SpriteParent):
                     read_pointer = 0x400*i+0x40*column+offset
                     raw_tile = pixel_data[read_pointer:read_pointer+0x20]
                     pastable_tile = common.image_from_bitplanes(raw_tile)
-                    this_image.paste(pastable_tile,position)
+                    if pastable_tile:
+                        this_image.paste(pastable_tile,position)
+                    else:
+                        print(f"Warning: {image_name} not loadable")
+                        #FIXME: Z3DoI, probably DoI if these are having issues
+                        #Bottom row of tiles is broke
+                        #This affects Attack (down & up), Dash (down) and crystalGet
+                        self.subtype = "doi"
                 self.images[image_name] = this_image
 
     def get_rdc_export_blocks(self):
@@ -540,14 +550,14 @@ class Sprite(SpriteParent):
         #     print(*self.master_palette[i:i+n_cols])
         # print("Palette Indices:",len(palette_indices),palette_indices)
         # print("Initialized Palette:",len(this_palette),this_palette)
+        #FIXME: Z3DoI
+        if "yellow_mail" in palettes:
+            # print("Yellow Mail from Globals")
+            this_palette = self.link_globals["yellow_mail"]
         if palette_indices:
             for i,_ in enumerate(palette_indices):
-                this_palette[i] = self.master_palette[palette_indices[i]]
-        if len(set(this_palette)) <= 1:
-            #FIXME: Z3DoI
-            if "yellow_mail" in palettes:
-                # print("Yellow Mail from Globals")
-                this_palette = self.link_globals["yellow_mail"]
+                if palette_indices[i] <= len(self.master_palette):
+                    this_palette[i] = self.master_palette[palette_indices[i]]
         # print("New Palette:",len(this_palette),this_palette)
         # print("")
         return this_palette

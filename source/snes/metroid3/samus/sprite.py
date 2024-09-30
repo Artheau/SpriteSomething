@@ -203,7 +203,7 @@ class Sprite(SpriteParent):
                 colors = self.master_palette[master_palette_indexes[0]]
             if len(master_palette_indexes) == 2:
                 colors = self.master_palette[master_palette_indexes[0]:master_palette_indexes[1]]
-            print("FOUND INDEXES:",color_set,len(master_palette_indexes),colors)
+            # print("FOUND INDEXES:",color_set,len(master_palette_indexes),colors)
         elif color_set == "gty":
             colors = [
                 ( 64, 64,  0),

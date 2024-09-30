@@ -350,6 +350,7 @@ class AnimationEngineParent():
                         elif "fish-subkey" in button:
                             is_doi_subkey = button["fish-subkey"] in [
                                 "yellow",
+                                "cursed",
                                 "wooden",
                                 "triforce",
                                 "mirror2",

@@ -718,6 +718,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.attach_left_panel()
         self.attach_right_panel()
         self.create_status_bar()
+        self.status_bar.set("%s", f"{self.game.name}: \"{self.sprite.classic_name}\"")
 
     def attach_left_panel(self):
         '''

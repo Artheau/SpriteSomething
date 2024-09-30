@@ -259,6 +259,8 @@ def autodetect(sprite_filename):
     if selected_sheet != "":
         detected += f"/{selected_sheet}"
     print(f"Detected: {detected}!")
+    if sprite.subtype == "doi":
+        game.name += ": Dungeons of Infinity"
 
     return game, sprite, animation_assist
 

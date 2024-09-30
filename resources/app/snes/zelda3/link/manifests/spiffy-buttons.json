@@ -23,6 +23,10 @@
         {
           "fish-subkey": "yellow",
           "img": "mail-yellow.png"
+        },
+        {
+          "fish-subkey": "cursed",
+          "img": "mail-cursed.png"
         }
       ]
     },

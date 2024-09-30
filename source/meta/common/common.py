@@ -290,10 +290,11 @@ def convert_tile_from_bitplanes(raw_tile):
 
 def image_from_bitplanes(raw_tile):
     # fromarray expects column major format, so have to switch the axes
-    return Image.fromarray(
-        convert_tile_from_bitplanes(raw_tile).swapaxes(0, 1),
-        'P'
-    )
+    if raw_tile:
+        return Image.fromarray(
+            convert_tile_from_bitplanes(raw_tile).swapaxes(0, 1),
+            'P'
+        )
 
 
 def convert_to_4bpp(image, offset, dimensions, extra_area):
