@@ -66,12 +66,12 @@
       { "frames": 20, "tiles": [ { "image": "downWalkShieldRight" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "sideWalkShieldStand", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "sideWalkShieldMove", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [8,4] }, { "image": "sideWalkShieldStand", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [7,4] },  { "image": "sideWalkShieldMove", "flip": "h" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "sideWalkShieldStand" } ] },
-      { "frames": 20, "tiles": [ { "image": "sideWalkShieldMove" } ] }
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [0,4] }, { "image": "sideWalkShieldStand" } ] },
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [1,4] }, { "image": "sideWalkShieldMove" } ] }
     ],
     "up": [
       { "frames": 20, "tiles": [ { "image": "upWalkShieldLeft" } ] },
@@ -79,7 +79,7 @@
     ]
   },
   "Walk (Shield 2)": {
-    "note": ["#FIXME: Needs Up, Down"],
+    "#note": ["#FIXME: Needs Up, Down"],
     "left": [
       { "frames": 20, "tiles": [ { "image": "sideWalkBigShieldStand", "flip": "h" } ] },
       { "frames": 20, "tiles": [ { "image": "sideWalkBigShieldMove", "flip": "h" } ] }
@@ -127,24 +127,24 @@
   },
   "Block (Shield 1)": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "downWalkShieldLeftHold" } ] },
-      { "frames": 20, "tiles": [ { "image": "downWalkShieldRightHold" } ] }
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [1,5] }, { "image": "downWalkShieldLeftHold" } ] },
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [1,4] }, { "image": "downWalkShieldRightHold" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "sideWalkBigShieldStandHold", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "sideWalkBigShieldMoveHold", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "SHIELD1", "pos": [0,3] }, { "image": "sideWalkBigShieldStandHold", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "SHIELD1", "pos": [0,4] }, { "image": "sideWalkBigShieldMoveHold", "flip": "h" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "sideWalkBigShieldStandHold" } ] },
-      { "frames": 20, "tiles": [ { "image": "sideWalkBigShieldMoveHold" } ] }
+      { "frames": 20, "tiles": [ { "image": "SHIELD1", "pos": [13,3] }, { "image": "sideWalkBigShieldStandHold" } ] },
+      { "frames": 20, "tiles": [ { "image": "SHIELD1", "pos": [13,4] }, { "image": "sideWalkBigShieldMoveHold" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "upWalkShieldLeftHold" } ] },
-      { "frames": 20, "tiles": [ { "image": "upWalkShieldRightHold" } ] }
+      { "frames": 20, "tiles": [ { "image": "upWalkShieldLeftHold" }, { "image": "SHIELD2", "pos": [4,0] } ] },
+      { "frames": 20, "tiles": [ { "image": "upWalkShieldRightHold" }, { "image": "SHIELD2", "pos": [4,1] } ] }
     ]
   },
   "Block (Shield 2)": {
-    "note": ["#FIXME: Needs Up, Left, Right"],
+    "#note": ["#FIXME: Needs Up, Left, Right"],
     "down": [
       { "frames": 20, "tiles": [ {"image": "downWalkBigShieldLeftHold" } ] },
       { "frames": 20, "tiles": [ {"image": "downWalkBigShieldRightHold" } ] }
@@ -234,6 +234,7 @@
         { "image": "WEAPON1", "pos": [13,-21] }
       ] },
       { "frames": 20, "tiles": [
+        { "image": "SHIELD0", "pos": [1,4] },
         { "image": "sideHoldItem", "flip": "h" },
         { "image": "WEAPON2", "pos": [16,0] }
       ] },
@@ -463,7 +464,7 @@
     ]
   },
   "Move (WIP)": {
-    "note": ["#FIXME: Needs Down"],
+    "#note": ["#FIXME: Needs Down"],
     "left": [
       { "frames": 20, "tiles": [ { "image": "sideHold" } ] },
       { "frames": 20, "tiles": [ { "image": "sideHoldItem" } ] }

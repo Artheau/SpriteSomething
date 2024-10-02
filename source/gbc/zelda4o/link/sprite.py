@@ -76,6 +76,38 @@ class Sprite(SpriteParent):
         }
         self.master_palette = self.link_globals["green_palette"]
 
+    def get_representative_images(self, style):
+        '''
+        Generate preview image set
+        '''
+        return_images = []
+        return_images += super().get_representative_images(style)
+
+        if style.lower() in ["snow"]:
+            return_images += self.get_defined_images(style.lower(), return_images)
+
+        return return_images
+
+    def get_defined_images(self, style, return_images):
+        bgfilename = f"{style}.png"
+        bgimg = Image.new("RGBA",(16*4,16*6),(0,0,0,0))
+        if "sprite.name" in self.metadata and self.metadata["sprite.name"]:
+            sprite_save_name = self.metadata["sprite.name"].lower()
+        else:
+            # FIXME: English
+            sprite_save_name = "unknown"
+
+        for i,_ in enumerate(return_images):
+            img = return_images[i][1]
+            pose_coords = (0, 0)
+            if len(return_images[i]) > 2:
+                pose_coords = tuple(return_images[i][2])
+            bgimg.paste(img,pose_coords,img)
+        bgimg = bgimg.resize((bgimg.size[0] * 2, bgimg.size[1] * 2), Image.NEAREST)
+        return_images.append(("-".join([sprite_save_name,bgfilename]),bgimg))
+        return_images = return_images[-1:]
+        return return_images
+
     def get_palette(self, palettes, default_range=[], frame_number=0):
         this_palette = []
         palette = "green_palette"
@@ -101,7 +133,7 @@ class Sprite(SpriteParent):
                 ] = palette[
                     :palette.rfind('_')
                 ]
-        for item in ["WEAPON","MAGNET","SLING","HALO"]:
+        for item in ["WEAPON","SHIELD","BOOMERANG","MAGNET","SLING","HALO"]:
             if image_name.startswith(item):
                 if item.lower() in slugs and not found_alt:
                     found_alt = True

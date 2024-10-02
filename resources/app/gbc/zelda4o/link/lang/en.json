@@ -3,8 +3,10 @@
     "facing": "Facing",
     "palette": "Palette",
     "weapon": "Weapon",
+    "shield": "Shield",
     "magnet": "Magnet",
     "sling": "Slingshot",
+    "boomerang": "Boomerang",
     "accessories": "Accessories",
     "halo": "Time Travel"
   },
@@ -28,11 +30,19 @@
     "none": "None",
     "biggoron": "Biggoron Sword",
     "cane": "Cane of Somaria",
-    "charge": "Charge",
+    "charge": "Charged Sword",
+    "master": "Master Sword",
+    "noble": "Noble Sword",
     "ore": "Fool's Ore",
     "rod": "Rod of Seasons",
     "seed": "Seed Shooter",
-    "sword": "Sword"
+    "wooden": "Wooden Sword"
+  },
+  "Shield": {
+    "none": "None",
+    "wooden": "Wooden Shield",
+    "iron": "Iron Shield",
+    "mirror": "Mirror Shield"
   },
   "Magnet": {
     "none": "None",
@@ -43,6 +53,11 @@
     "none": "None",
     "blue": "Slingshot",
     "red": "Hyper Slingshot"
+  },
+  "Boomerang": {
+    "none": "None",
+    "normal": "Boomerang",
+    "magical": "Magical Boomerang"
   },
   "Accessories": {
     "none": "None",

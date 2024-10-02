@@ -917,7 +917,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         #if we've only got one representative image
         if len(image_list) == 1:
             #get the data
-            filename, image = image_list[0]
+            filename, image, _ = image_list[0]
             #ask for destination
             filename = filedialog.asksaveasfilename(
                 initialfile=filename,

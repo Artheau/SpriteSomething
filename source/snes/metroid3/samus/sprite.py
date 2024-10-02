@@ -602,7 +602,15 @@ class Sprite(SpriteParent):
             elif facing in direction_dict:     #no aim was available, try the pure facing
                 return facing
             else:        #now we are really screwed, so just do anything
-                return next(iter(direction_dict.keys()))
+                return next(
+                    iter(
+                        [
+                            x for x in list(
+                                direction_dict.keys()
+                            ) if "#" not in x
+                        ]
+                    )
+                )
 
         # if things went well, we are here
         return "_aim_".join([facing,aiming])

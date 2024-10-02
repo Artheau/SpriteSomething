@@ -733,7 +733,15 @@ class SpriteParent():
             if animation in self.animations:
                 direction_dict = self.animations[animation]
                 if direction not in direction_dict:
-                    direction = next(iter(direction_dict.keys()))
+                    direction = next(
+                        iter(
+                            [
+                                x for x in list(
+                                    direction_dict.keys()
+                                ) if "#" not in x
+                            ]
+                        )
+                    )
         return direction
 
     def assemble_tiles_to_completed_image(self, tile_list):
