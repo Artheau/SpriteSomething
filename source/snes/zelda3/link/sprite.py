@@ -276,27 +276,32 @@ class Sprite(SpriteParent):
             self.master_palette[0x10+0x10*i] = glove_color
 
         palette_block = Image.new('RGBA',(8,num_palettes * 2),0)
-        is_z3link = os.path.join("zelda3","link") in self.filename
+        is_z3link = os.path.join("zelda3","link") in self.filename or self.internal_name == "link"
         is_doi = is_z3link and len(self.master_palette) == 80
         pblock_data = self.master_palette
-        palette_block.putdata(pblock_data)
         if is_z3link:
             # print("Is Z3Link")
             null_palette = [(0,0,0,0) for _ in range(0x10)]
             if not is_doi:
                 # print("Is NOT DoI")
+                # Get G B R
+                gbr_mails = self.master_palette[0x10 * 0:0x10 * 3]
+                # Get Bunny
+                bun_mail = self.master_palette[0x10 * 3:0x10 * 4]
+                # Y G B R Bun
                 pblock_data = [
                     *null_palette,
-                    *list(palette_block.getdata())[:0x10 * (num_palettes - 1)]
+                    *gbr_mails,
+                    *bun_mail
                 ]
             else:
                 self.subtype = "doi"
                 # Get G B R
-                gbr_mails = pblock_data[:0x10 * 3]
+                gbr_mails = self.master_palette[:0x10 * 3]
                 # Get Yellow
-                y_mail = pblock_data[0x10 * 3:0x10 * 4]
+                y_mail = self.master_palette[0x10 * 3:0x10 * 4]
                 # Get Bunny
-                bun_mail = pblock_data[0x10 * 4:0x10 * 5]
+                bun_mail = self.master_palette[0x10 * 4:0x10 * 5]
                 # Y G B R Bun
                 pblock_data = [
                     *y_mail,
@@ -304,10 +309,13 @@ class Sprite(SpriteParent):
                     *bun_mail
                 ]
         pblock_mod = len(pblock_data) % 16
+        # print("Import from Binary")
+        # print("Set Palette Block")
+        # print("Pre-Mod:",len(pblock_data),pblock_mod)
         if pblock_mod:
+            # print("Modding")
             pblock_data = pblock_data[:len(pblock_data) - (pblock_mod)]
-        # print(pblock_data)
-        # print(len(pblock_data))
+        # print("Post-Mod:",len(pblock_data))
         palette_block.putdata(pblock_data)
 
         self.images = {}
@@ -438,9 +446,11 @@ class Sprite(SpriteParent):
             # not including the transparency or gloves colors
             converted_palette = common.convert_to_555(self.master_palette)
             for i in range(4):
+                snes_offset = i
+                palette_offset = 4 if i == 3 and len(self.master_palette) == 80 else i
                 rom.write_to_snes_address(
-                    0x1BD308+0x1E*i,
-                    converted_palette[0x10*i+1:0x10*i+0x10],
+                    0x1BD308+0x1E*snes_offset,
+                    converted_palette[0x10*palette_offset+1:0x10*palette_offset+0x10],
                     0x0F*"2"
                 )
             #the glove colors are placed into $1BEDF5-$1BEDF8

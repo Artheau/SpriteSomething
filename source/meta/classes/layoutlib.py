@@ -357,23 +357,24 @@ class Layout():
             if is_doi:
                 self.subtype = "doi"
             if is_z3link:
-                green_start = 16
+                green_start = 0x10
                 bunny_start = green_start * 4
+                bunny_end = bunny_start + 0x10
                 if self.subtype == "doi":
                     # Get Yellow
                     yellow_rgb = palette_rgb[0:green_start]
                     yellow_rgba = palette_rgba[0:green_start]
                     # Get Bunny
-                    bunny_rgb = palette_rgb[bunny_start:]
-                    bunny_rgba = palette_rgba[bunny_start:]
+                    bunny_rgb = palette_rgb[bunny_start:bunny_end]
+                    bunny_rgba = palette_rgba[bunny_start:bunny_end]
                     # G B R Y Bun
                     palette_rgb = palette_rgb[green_start:bunny_start] + yellow_rgb + bunny_rgb
                     palette_rgba = palette_rgba[green_start:bunny_start] + yellow_rgba + bunny_rgba
                 else:
                     # Remove dead Yellow
                     # G B R Bun
-                    palette_rgb = palette_rgb[green_start:]
-                    palette_rgba = palette_rgba[green_start:]
+                    palette_rgb = palette_rgb[green_start:bunny_end]
+                    palette_rgba = palette_rgba[green_start:bunny_end]
             if len(palette_rgba) > 0 and len(palette_rgba[0]) > 3:
                 if palette_rgba[0][3] == 0:
                     palette_rgb[0] = (255,0,255)
