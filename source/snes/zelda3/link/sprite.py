@@ -261,12 +261,13 @@ class Sprite(SpriteParent):
         '''
         Import imagery from binary data
         '''
-        self.master_palette = [(0,0,0) for _ in range(0x40)]     #initialize the palette
+        num_palettes = 5
+        self.master_palette = [(0,0,0) for _ in range(0x10 * num_palettes)]     #initialize the palette
         #main palettes
         #FIXME: Z3DoI is expecting to find Yellow Mail
         converted_palette_data = [int.from_bytes(palette_data[i:i+2], byteorder='little') \
                                                             for i in range(0,len(palette_data),2)]
-        for i in range(4):
+        for i in range(num_palettes):
             palette = common.convert_555_to_rgb(converted_palette_data[0x0F*i:0x0F*(i+1)])
             self.master_palette[0x10*i+1:0x10*(i+1)] = palette
         #glove colors
@@ -274,9 +275,40 @@ class Sprite(SpriteParent):
             glove_color = common.convert_555_to_rgb(converted_palette_data[-2+i])
             self.master_palette[0x10+0x10*i] = glove_color
 
-        palette_block = Image.new('RGB',(8,8),0)
-        palette_block.putdata(self.master_palette)
-        palette_block = palette_block.convert('RGBA')
+        palette_block = Image.new('RGBA',(8,num_palettes * 2),0)
+        is_z3link = os.path.join("zelda3","link") in self.filename
+        is_doi = is_z3link and len(self.master_palette) == 80
+        pblock_data = self.master_palette
+        palette_block.putdata(pblock_data)
+        if is_z3link:
+            # print("Is Z3Link")
+            null_palette = [(0,0,0,0) for _ in range(0x10)]
+            if not is_doi:
+                # print("Is NOT DoI")
+                pblock_data = [
+                    *null_palette,
+                    *list(palette_block.getdata())[:0x10 * (num_palettes - 1)]
+                ]
+            else:
+                self.subtype = "doi"
+                # Get G B R
+                gbr_mails = pblock_data[:0x10 * 3]
+                # Get Yellow
+                y_mail = pblock_data[0x10 * 3:0x10 * 4]
+                # Get Bunny
+                bun_mail = pblock_data[0x10 * 4:0x10 * 5]
+                # Y G B R Bun
+                pblock_data = [
+                    *y_mail,
+                    *gbr_mails,
+                    *bun_mail
+                ]
+        pblock_mod = len(pblock_data) % 16
+        if pblock_mod:
+            pblock_data = pblock_data[:len(pblock_data) - (pblock_mod)]
+        # print(pblock_data)
+        # print(len(pblock_data))
+        palette_block.putdata(pblock_data)
 
         self.images = {}
         self.images["palette_block"] = palette_block
@@ -299,11 +331,11 @@ class Sprite(SpriteParent):
                     if pastable_tile:
                         this_image.paste(pastable_tile,position)
                     else:
-                        print(f"Warning: {image_name} not loadable")
+                        print(f"🟡WARNING: {image_name}:[{offset}:{position}] not loadable")
                         #FIXME: Z3DoI, probably DoI if these are having issues
                         #Bottom row of tiles is broke
                         #This affects Attack (down & up), Dash (down) and crystalGet
-                        self.subtype = "doi"
+                        # self.subtype = "doi"
                 self.images[image_name] = this_image
 
     def get_rdc_export_blocks(self):
@@ -578,6 +610,7 @@ class Sprite(SpriteParent):
             for column in range(8)]:
             image_name = image_name if image_name != "AB7" else "transparent"
             image = self.images[image_name]
+            image.name = image_name
             raw_image = common.convert_to_4bpp(
                 image,
                 (0,0),
@@ -601,16 +634,31 @@ class Sprite(SpriteParent):
         Get binary palettes
         '''
         raw_palette_data = bytearray()
-        colors_555 = common.convert_to_555(self.master_palette)
+        # G B R
+        gbr_mails = self.master_palette[:0x10 * 3]
+        # Collect Yellow
+        y_mail = []
+        # Collect Bunny
+        bun_mail = self.master_palette[0x10 * 3:0x10 * 4]
+        if self.subtype == "doi":
+            y_mail = bun_mail
+            bun_mail = self.master_palette[0x10 * 4:]
+        # G B R Y Bun
+        bin_palettes = [*gbr_mails, *y_mail, *bun_mail]
+        colors_555 = common.convert_to_555(bin_palettes)
+        # n = 16
+        # for i, e in enumerate(colors_555, 1):
+        #     print("0x"+hex(e).upper()[2:].rjust(4,"0"), ["", "\n"][i % n == 0], end="")
 
         # Mail and bunny palettes
+        palettes = int(len(bin_palettes) / 0x10)
         raw_palette_data.extend(
             itertools.chain.from_iterable(
                 [
                     common.as_u16(
                         c
                     )
-                    for i in range(4)
+                    for i in range(palettes)
                     for c in colors_555[
                         0x10*i+1:0x10*i+0x10
                     ]

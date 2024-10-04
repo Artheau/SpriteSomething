@@ -325,6 +325,8 @@ class SpriteParent():
             palette_data_length = int.from_bytes(
                 data[19:21], byteorder='little', signed=False)
             offset = 29
+            print(f"Pixel Data:   {str(pixel_data_length).rjust(5)} bytes @ 0x{hex(pixel_data_offset).upper()[2:].rjust(4,'0')}")
+            print(f"Palette Data: {str(palette_data_length).rjust(5)} bytes @ 0x{hex(palette_data_offset).upper()[2:].rjust(4,'0')}")
 
             '''
  4 (header) +
@@ -358,6 +360,7 @@ class SpriteParent():
                     self.metadata[key] = str(raw_string_slice,encoding="utf-16-le")
                 offset += i+byte_size     #have to add another byte_size to go over the null terminator
 
+            print(json.dumps(self.metadata, indent=2))
             pixel_data = data[pixel_data_offset:pixel_data_offset+pixel_data_length]
             palette_data = data[palette_data_offset:palette_data_offset+palette_data_length]
             self.import_from_binary_data(pixel_data,palette_data)
@@ -586,19 +589,20 @@ class SpriteParent():
         palette_doc += header
 
         if fmt == "aspr":
-          for paletteID in ["green","blue","red","bunny","gloves"]:
-            palette_doc.append(f"{paletteID}:")
-            if paletteID != "gloves":
-              palette_doc.append(f"    col0: " + str((0,0,0)))
-            for [colID, color] in enumerate(self.get_palette([paletteID])):
-              colNum = colID
-              if paletteID == "gloves":
-                colNum = ["power","titan"][colNum]
-              else:
-                colNum += 1
-                colNum = f"col{hex(colNum)[2:].upper()}"
-              color = f"    {colNum}: " + str(color)
-              palette_doc.append(color)
+          for paletteID in ["green_mail","blue_mail","red_mail","yellow_mail" if self.subtype == "doi" else None,"bunny_mail","gloves"]:
+            if paletteID:
+              palette_doc.append(f"{paletteID}:")
+              if paletteID != "gloves":
+                palette_doc.append(f"    col0: " + str((0,0,0)))
+              for [colID, color] in enumerate(self.get_palette([paletteID])):
+                colNum = colID
+                if paletteID == "gloves":
+                  colNum = ["power","titan"][colNum]
+                else:
+                  colNum += 1
+                  colNum = f"col{hex(colNum)[2:].upper()}"
+                color = f"    {colNum}: " + str(color)
+                palette_doc.append(color)
         else:
           palette_doc.append(clrfmt((0,0,0)))
           for color in self.get_palette([paletteID]):
@@ -917,22 +921,34 @@ class SpriteParent():
 
             write_buffer.extend(HEADER_STRING)
             write_buffer.extend(common.as_u8(VERSION))
+
             checksum_start = len(write_buffer); write_buffer.extend(QUAD_BYTE_NULL_CHAR)
+
             sprite_sheet_pointer = len(write_buffer); write_buffer.extend(QUAD_BYTE_NULL_CHAR)
-            write_buffer.extend(common.as_u16(len(sprite_sheet)))
+            pixel_data_length = len(sprite_sheet)
+            write_buffer.extend(common.as_u16(pixel_data_length))
+
             palettes_pointer = len(write_buffer); write_buffer.extend(QUAD_BYTE_NULL_CHAR)
-            write_buffer.extend(common.as_u16(len(palettes)))
+            palette_data_length = len(palettes)
+            write_buffer.extend(common.as_u16(palette_data_length))
+
             write_buffer.extend(common.as_u16(SPRITE_TYPE))
+
             write_buffer.extend(RESERVED_BYTES)
+
             write_buffer.extend(self.metadata["sprite.name"].encode('utf-16-le'))
             write_buffer.extend(DOUBLE_BYTE_NULL_CHAR)
             write_buffer.extend(self.metadata["author.name"].encode('utf-16-le'))
             write_buffer.extend(DOUBLE_BYTE_NULL_CHAR)
             write_buffer.extend(self.metadata["author.name-short"].encode('ascii'))
             write_buffer.extend(SINGLE_BYTE_NULL_CHAR)
-            write_buffer[sprite_sheet_pointer:sprite_sheet_pointer+4] = common.as_u32(len(write_buffer))
+
+            pixel_data_offset = len(write_buffer)
+            write_buffer[sprite_sheet_pointer:sprite_sheet_pointer+4] = common.as_u32(pixel_data_offset)
             write_buffer.extend(sprite_sheet)
-            write_buffer[palettes_pointer:palettes_pointer+4] = common.as_u32(len(write_buffer))
+
+            palette_data_offset = len(write_buffer)
+            write_buffer[palettes_pointer:palettes_pointer+4] = common.as_u32(palette_data_offset)
             write_buffer.extend(palettes)
 
             checksum = (sum(write_buffer) + 0xFF + 0xFF) % 0x10000
@@ -940,6 +956,10 @@ class SpriteParent():
 
             write_buffer[checksum_start:checksum_start+2] = common.as_u16(checksum)
             write_buffer[checksum_start+2:checksum_start+4] = common.as_u16(checksum_complement)
+
+            print(f"Pixel Data:   {str(pixel_data_length).rjust(5)} bytes @ 0x{hex(pixel_data_offset).upper()[2:].rjust(4,'0')}")
+            print(f"Palette Data: {str(palette_data_length).rjust(5)} bytes @ 0x{hex(palette_data_offset).upper()[2:].rjust(4,'0')}")
+            print(json.dumps(self.metadata,indent=2))
 
             with open(filename, "wb") as zspr_file:
                 zspr_file.write(write_buffer)

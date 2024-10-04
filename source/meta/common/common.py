@@ -300,6 +300,9 @@ def image_from_bitplanes(raw_tile):
 def convert_to_4bpp(image, offset, dimensions, extra_area):
     # have to process these differently so that 16x16 tiles canbe correctly
     #  reconstructed
+    # print(image.mode, image.name, image.size)
+    if image.mode != "P":
+        image = image.convert('P')
     top_row = []
     bottom_row = []
     small_tiles = []

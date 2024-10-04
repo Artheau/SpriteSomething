@@ -95,7 +95,7 @@ def autodetect_png(sprite_filename):
 def autodetect(sprite_filename):
     selected_sheet = ""
     print("---")
-    print("Autodetecting!")
+    print(f"Autodetecting: {sprite_filename}")
 
     game, sprite, animation_assist = None, None, None
 

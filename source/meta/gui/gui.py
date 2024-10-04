@@ -1435,9 +1435,11 @@ class SpriteSomethingMainFrame(tk.Frame):
                 ),
             )
         )
+        filename = filename.replace("\\", os.path.sep)
+        filename = filename.replace("/", os.path.sep)
         if filename:
             #if we've got a filename, set the working dir and load the sprite
-            self.working_dirs["file.open"] = filename[:filename.rfind('/')]
+            self.working_dirs["file.open"] = filename[:filename.rfind(os.path.sep)]
             self.load_sprite(filename)
             return True              #report success to caller, if they care
         return False             #we didn't open anything

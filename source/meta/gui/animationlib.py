@@ -416,7 +416,7 @@ class AnimationEngineParent():
     def update_overview_panel(self):
         image = self.sprite.get_master_PNG_image()
         if image:
-            scaled_image = image.resize(tuple(int(x*self.overview_scale_factor) for x in image.size))
+            scaled_image = image.resize(tuple(int(x*self.overview_scale_factor) for x in image.size), Image.NEAREST)
 
             if hasattr(self,"overview_ID") and self.overview_ID is not None:
                 del self.overview_image
