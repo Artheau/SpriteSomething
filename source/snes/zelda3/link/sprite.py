@@ -242,7 +242,7 @@ class Sprite(SpriteParent):
         self.load_plugins()
         self.equipment = self.plugins.equipment_test(False)
         if hasattr(self, "images"):
-            self.images["transparent"] = Image.new("RGBA",(0,0),0)
+            self.images["transparent"] = Image.new("RGBA",(16,16),0)
             self.images = dict(self.images,**self.equipment)
 
     def import_from_ROM(self, rom):

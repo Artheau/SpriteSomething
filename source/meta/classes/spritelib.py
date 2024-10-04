@@ -325,6 +325,7 @@ class SpriteParent():
             palette_data_length = int.from_bytes(
                 data[19:21], byteorder='little', signed=False)
             offset = 29
+            print(f"ZSPR Data:    {str(len(data)).rjust(5)} bytes")
             print(f"Pixel Data:   {str(pixel_data_length).rjust(5)} bytes @ 0x{hex(pixel_data_offset).upper()[2:].rjust(4,'0')}")
             print(f"Palette Data: {str(palette_data_length).rjust(5)} bytes @ 0x{hex(palette_data_offset).upper()[2:].rjust(4,'0')}")
 
@@ -957,6 +958,7 @@ class SpriteParent():
             write_buffer[checksum_start:checksum_start+2] = common.as_u16(checksum)
             write_buffer[checksum_start+2:checksum_start+4] = common.as_u16(checksum_complement)
 
+            print(f"ZSPR Data:    {str(len(write_buffer)).rjust(5)} bytes")
             print(f"Pixel Data:   {str(pixel_data_length).rjust(5)} bytes @ 0x{hex(pixel_data_offset).upper()[2:].rjust(4,'0')}")
             print(f"Palette Data: {str(palette_data_length).rjust(5)} bytes @ 0x{hex(palette_data_offset).upper()[2:].rjust(4,'0')}")
             print(json.dumps(self.metadata,indent=2))
