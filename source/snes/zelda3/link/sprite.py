@@ -524,7 +524,7 @@ class Sprite(SpriteParent):
         '''
         palette_indices = None
         this_palette = []
-        range_end = 16
+        range_end = 0x10
         if "gloves" in palettes:
             # print("Gloves Palette")
             range_end = 2 + 1
@@ -534,10 +534,6 @@ class Sprite(SpriteParent):
         if "zap_mail" in palettes:
             # print("Zap Palette from Globals")
             this_palette = self.link_globals["zap_palette"]
-        elif "bunny_mail" in palettes:
-            #use the bunny colors, skipping the transparency color
-            # print("Bunny Palette")
-            palette_indices = range(0x31,0x40)
         elif "gloves" in palettes:
             # print("Gloves Palette")
             palette_indices = [0x10,0x20]
@@ -571,9 +567,16 @@ class Sprite(SpriteParent):
                     elif "yellow_mail" in palettes:
                         #FIXME: Z3DoI
                         #Yellow Mail
-                        #skip to fifth row
+                        #skip to fourth row
                         # print("Yellow Mail")
-                        row = 5
+                        row = 4
+                        palette_indices[i] += range_end * (row-1)
+                    elif "bunny_mail" in palettes:
+                        #FIXME: Z3DoI
+                        #Bunny Mail
+                        #skip to fourth row; fifth if DoI
+                        # print("Bunny Mail")
+                        row = 5 if self.subtype == "doi" else 4
                         palette_indices[i] += range_end * (row-1)
         # print("DOI:",self.subtype == "doi")
         # print("Master Palette:")
