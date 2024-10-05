@@ -28,7 +28,15 @@ class AnimationEngineParent():
 
         self.animations = self.sprite.animations
         if len(self.animations):
-            self.current_animation = next(iter(self.animations.keys()))
+            self.current_animation = next(
+                iter(
+                    [
+                        x for x in list(
+                            self.animations.keys()
+                        ) if "#" not in x
+                    ]
+                )
+            )
         else:
             print(f"🟡WARNING: No animations defined to set to object: {self.game.internal_name}/{self.sprite.internal_name}")
 

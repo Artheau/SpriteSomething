@@ -102,18 +102,19 @@ def apply_palette(image, palette):
     if image is None:
         pass
         # print("Not a valid image to apply palette to!")
-    if len(palette) < 1:
-        image = image.convert('RGBA')
-        return image
-        # print("Not a valid palette to apply!")
-    if image.mode == "P":
-        flat_palette = [0 for _ in range(3 * 256)]
-        flat_palette[3:3 * len(palette) +
-                     3] = [x for color in palette for x in color]
-        alpha_mask = image.point(lambda x: 0 if x == 0 else 1, mode="1")
-        image.putpalette(flat_palette)
-        image = image.convert('RGBA')
-        image.putalpha(alpha_mask)
+    if palette:
+        if len(palette) < 1:
+            image = image.convert('RGBA')
+            return image
+            # print("Not a valid palette to apply!")
+        if image.mode == "P":
+            flat_palette = [0 for _ in range(3 * 256)]
+            flat_palette[3:3 * len(palette) +
+                         3] = [x for color in palette for x in color]
+            alpha_mask = image.point(lambda x: 0 if x == 0 else 1, mode="1")
+            image.putpalette(flat_palette)
+            image = image.convert('RGBA')
+            image.putalpha(alpha_mask)
     return image
 
 

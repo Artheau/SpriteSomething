@@ -51,7 +51,15 @@ class Sprite(SpriteParent):
                     print("Direction Dict: %s" % (direction_dict.keys()))
                 else:
                     print("Direction Dict: %s" % (direction_dict))
-                return next(iter(direction_dict.keys()))
+                return next(
+                    iter(
+                        [
+                            x for x in list(
+                                direction_dict.keys()
+                            ) if "#" not in x
+                        ]
+                    )
+                )
 
         #if things went well, we are here
         return "_aim_".join([facing,aiming])

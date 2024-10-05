@@ -35,9 +35,9 @@
           "#img": "palette-green.png"
         },
         {
-            "meta": "blank"
-          },
-          {
+          "meta": "blank"
+        },
+        {
           "fish-subkey": "invertblue",
           "img": "palette-invertblue.png"
         },
@@ -63,12 +63,26 @@
           "default": true
         },
         {
-          "fish-subkey": "sword",
-          "img": "weapon-sword.png"
+          "fish-subkey": "wooden",
+          "img": "weapon-wooden.png"
+        },
+        {
+          "fish-subkey": "noble",
+          "img": "weapon-noble.png"
+        },
+        {
+          "fish-subkey": "master",
+          "img": "weapon-master.png"
         },
         {
           "fish-subkey": "charge",
           "img": "weapon-charge.png"
+        },
+        {
+          "meta": "newline"
+        },
+        {
+          "meta": "blank"
         },
         {
           "fish-subkey": "rod",
@@ -85,6 +99,28 @@
         {
           "fish-subkey": "biggoron",
           "img": "weapon-biggoron.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "shield",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "wooden",
+          "img": "shield-wooden.png"
+        },
+        {
+          "fish-subkey": "iron",
+          "img": "shield-iron.png"
+        },
+        {
+          "fish-subkey": "mirror",
+          "img": "shield-mirror.png"
         }
       ]
     },
@@ -121,6 +157,24 @@
         {
           "fish-subkey": "red",
           "img": "sling-red.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "boomerang",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "normal",
+          "img": "boomerang-normal.png"
+        },
+        {
+          "fish-subkey": "magical",
+          "img": "boomerang-magical.png"
         }
       ]
     },

@@ -2,348 +2,351 @@
   "$schema": "../../../../../schema/animations.schema.json",
   "Stand": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "walkDown" } ] }
+      { "frames": 20, "tiles": [ { "image": "downWalk" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "standLeft" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideWalkStand" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "standLeft", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideWalkStand", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] }
+      { "frames": 20, "tiles": [ { "image": "upWalk" } ] }
     ]
   },
   "Stand (Mermaid)": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "L0" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidDown" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "L2" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidSideArmForward" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "L2", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidSideArmForward", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "L1" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidUp" } ] }
     ]
   },
   "Stand (Baby)": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "R3:span" } ] }
+      { "frames": 20, "tiles": [ { "image": "babyLinkDown" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "R5:span" } ] }
+      { "frames": 20, "tiles": [ { "image": "babyLinkSideMove" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "R5:span", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "babyLinkSideMove", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "R4:span" } ] }
+      { "frames": 20, "tiles": [ { "image": "babyLinkUp" } ] }
     ]
   },
   "Walk": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "walkDown" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkDown", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "downWalk" } ] },
+      { "frames": 20, "tiles": [ { "image": "downWalk", "flip": "h" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "standLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkLeft" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideWalkStand" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideWalkMove" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "standLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkLeft", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideWalkStand", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideWalkMove", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkUp", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "upWalk" } ] },
+      { "frames": 20, "tiles": [ { "image": "upWalk", "flip": "h" } ] }
     ]
   },
   "Walk (Shield 1)": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "walkDown_S1" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkDown1_S1" } ] }
+      { "frames": 20, "tiles": [ { "image": "downWalkShieldLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "downWalkShieldRight" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight1_S1", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [8,4] }, { "image": "sideWalkShieldStand", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [7,4] },  { "image": "sideWalkShieldMove", "flip": "h" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight1_S1" } ] }
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [0,4] }, { "image": "sideWalkShieldStand" } ] },
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [1,4] }, { "image": "sideWalkShieldMove" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "walkUp_S1" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkUp1_S1" } ] }
+      { "frames": 20, "tiles": [ { "image": "upWalkShieldLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "upWalkShieldRight" } ] }
     ]
   },
   "Walk (Shield 2)": {
+    "#note": ["#FIXME: Needs Up, Down"],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "walkRight_S2", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight1_S2", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideWalkBigShieldStand", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideWalkBigShieldMove", "flip": "h" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "walkRight_S2" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight1_S2" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideWalkBigShieldStand" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideWalkBigShieldMove" } ] }
     ]
   },
   "Walk (Mermaid)": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "L0" } ] },
-      { "frames": 20, "tiles": [ { "image": "L0", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidDown" } ] },
+      { "frames": 20, "tiles": [ { "image": "mermaidDown", "flip": "h" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "L2" } ] },
-      { "frames": 20, "tiles": [ { "image": "L3" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidSideArmForward" } ] },
+      { "frames": 20, "tiles": [ { "image": "mermaidSideArmBackward" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "L2", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "L3", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidSideArmForward", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "mermaidSideArmBackward", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "L1" } ] },
-      { "frames": 20, "tiles": [ { "image": "L1", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "mermaidUp", "flip": "h" } ] }
     ]
   },
   "Walk (Baby)": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "R3:span" } ] },
-      { "frames": 20, "tiles": [ { "image": "R3:span", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "babyLinkDown" } ] },
+      { "frames": 20, "tiles": [ { "image": "babyLinkDown", "flip": "h" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "R5:span" } ] },
-      { "frames": 20, "tiles": [ { "image": "R6:span" } ] }
+      { "frames": 20, "tiles": [ { "image": "babyLinkSideMove" } ] },
+      { "frames": 20, "tiles": [ { "image": "babyLinkSideStand" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "R5:span", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "R6:span", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "babyLinkSideMove", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "babyLinkSideStand", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "R4:span" } ] },
-      { "frames": 20, "tiles": [ { "image": "R4:span", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "babyLinkUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "babyLinkUp", "flip": "h" } ] }
     ]
   },
   "Block (Shield 1)": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "blockDown_S1" } ] },
-      { "frames": 20, "tiles": [ { "image": "blockDown1_S1" } ] }
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [1,5] }, { "image": "downWalkShieldLeftHold" } ] },
+      { "frames": 20, "tiles": [ { "image": "SHIELD0", "pos": [1,4] }, { "image": "downWalkShieldRightHold" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "blockRight", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "blockRight1", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "SHIELD1", "pos": [0,3] }, { "image": "sideWalkBigShieldStandHold", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "SHIELD1", "pos": [0,4] }, { "image": "sideWalkBigShieldMoveHold", "flip": "h" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "blockRight" } ] },
-      { "frames": 20, "tiles": [ { "image": "blockRight1" } ] }
+      { "frames": 20, "tiles": [ { "image": "SHIELD1", "pos": [13,3] }, { "image": "sideWalkBigShieldStandHold" } ] },
+      { "frames": 20, "tiles": [ { "image": "SHIELD1", "pos": [13,4] }, { "image": "sideWalkBigShieldMoveHold" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "blockUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "blockUp1" } ] }
+      { "frames": 20, "tiles": [ { "image": "upWalkShieldLeftHold" }, { "image": "SHIELD2", "pos": [4,0] } ] },
+      { "frames": 20, "tiles": [ { "image": "upWalkShieldRightHold" }, { "image": "SHIELD2", "pos": [4,1] } ] }
     ]
   },
   "Block (Shield 2)": {
+    "#note": ["#FIXME: Needs Up, Left, Right"],
     "down": [
-      { "frames": 20, "tiles": [ {"image": "blockDown_S2" } ] },
-      { "frames": 20, "tiles": [ {"image": "blockDown1_S2" } ] }
+      { "frames": 20, "tiles": [ {"image": "downWalkBigShieldLeftHold" } ] },
+      { "frames": 20, "tiles": [ {"image": "downWalkBigShieldRightHold" } ] }
     ]
   },
   "Swim": {
     "right": [
-      { "frames": 20, "tiles": [ { "image": "swimLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "swimLeft1", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "swimUnderwaterFrame1", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "swimUnderwaterFrame2", "flip": "h" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "swimLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "swimLeft1" } ] }
+      { "frames": 20, "tiles": [ { "image": "swimUnderwaterFrame1" } ] },
+      { "frames": 20, "tiles": [ { "image": "swimUnderwaterFrame2" } ] }
     ]
   },
   "Tread water": {
     "down": [
       { "frames": 20, "tiles": [
-        { "image": "treadWaterDown" },
-        { "image": "treadWaterDown", "pos": [8,0], "flip": "h" }
+        { "image": "swimDownFrame1" },
+        { "image": "swimDownFrame1", "pos": [8,0], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "treadWaterDown1" },
-        { "image": "treadWaterDown1", "pos": [8,0], "flip": "h" }
+        { "image": "swimDownFrame2" },
+        { "image": "swimDownFrame2", "pos": [8,0], "flip": "h" }
       ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "treadWaterLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "treadWaterLeft1" } ] }
+      { "frames": 20, "tiles": [ { "image": "swimSideFrame1" } ] },
+      { "frames": 20, "tiles": [ { "image": "swimSideFrame2" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "treadWaterLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "treadWaterLeft1", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "swimSideFrame1", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "swimSideFrame2", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "treadWaterUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "treadWaterUp1" } ] }
+      { "frames": 20, "tiles": [ { "image": "swimUpFrame1" } ] },
+      { "frames": 20, "tiles": [ { "image": "swimUpFrame2" } ] }
     ]
   },
   "Attack": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "walkDown" } ] },
+      { "frames": 20, "tiles": [ { "image": "downWalk" } ] },
       { "frames": 20, "tiles": [
-        { "image": "I2" },
+        { "image": "aimBottomLeft" },
         { "image": "WEAPON2", "pos": [-23,-2], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "I3" },
+        { "image": "aimBottom" },
         { "image": "WEAPON1", "pos": [-13,15], "flip": "both" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "I3" },
+        { "image": "aimBottom" },
         { "image": "WEAPON0", "pos": [7,16], "flip": "v" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "I3" },
+        { "image": "aimBottom" },
         { "image": "WEAPON0", "pos": [7,15], "flip": "v" }
       ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "walkLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideWalkMove" } ] },
       { "frames": 20, "tiles": [
-        { "image": "I4" },
+        { "image": "aimTopLeft" },
         { "image": "WEAPON0", "pos": [4,-24] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "pushLeft1" },
+        { "image": "sideHoldItem" },
         { "image": "WEAPON1", "pos": [-13,-21], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "pushLeft1" },
+        { "image": "sideHoldItem" },
         { "image": "WEAPON2", "pos": [-24,0], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "pushLeft1" },
+        { "image": "sideHoldItem" },
         { "image": "WEAPON2", "pos": [-20,0], "flip": "h" }
       ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "walkLeft", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideWalkMove", "flip": "h" } ] },
       { "frames": 20, "tiles": [
-        { "image": "I4", "flip": "h" },
+        { "image": "aimTopLeft", "flip": "h" },
         { "image": "WEAPON0", "pos": [4,-24] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "pushLeft1", "flip": "h" },
+        { "image": "sideHoldItem", "flip": "h" },
         { "image": "WEAPON1", "pos": [13,-21] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "pushLeft1", "flip": "h" },
+        { "image": "SHIELD0", "pos": [1,4] },
+        { "image": "sideHoldItem", "flip": "h" },
         { "image": "WEAPON2", "pos": [16,0] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "pushLeft1", "flip": "h" },
+        { "image": "sideHoldItem", "flip": "h" },
         { "image": "WEAPON2", "pos": [12,0] }
       ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "upWalk" } ] },
       { "frames": 20, "tiles": [
-        { "image": "I0" },
+        { "image": "aimTopRight" },
         { "image": "WEAPON2", "pos": [16,-4] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "I1" },
+        { "image": "aimTop" },
         { "image": "WEAPON1", "pos": [13,-21] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "I1" },
+        { "image": "aimTop" },
         { "image": "WEAPON0", "pos": [0,-24] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "I1" },
+        { "image": "aimTop" },
         { "image": "WEAPON0", "pos": [0,-20] }
       ] }
     ]
   },
   "Attack (Mermaid) (WIP)": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "L0" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidDown" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "L2" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidSideArmForward" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "L2", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidSideArmForward", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "L1" } ] }
+      { "frames": 20, "tiles": [ { "image": "mermaidUp" } ] }
     ]
   },
   "Sword primed": {
     "down": [
       { "frames": 20, "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "sword_weapon0", "pos": [7,14], "flip": "v" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "walkDown", "flip": "h" },
+        { "image": "downWalk", "flip": "h" },
         { "image": "sword_weapon0", "pos": [7,14], "flip": "v" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "charge_weapon0", "pos": [7,14], "flip": "v" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "walkDown", "flip": "h" },
+        { "image": "downWalk", "flip": "h" },
         { "image": "charge_weapon0", "pos": [7,14], "flip": "v" }
       ] }
     ],
     "left": [
       { "frames": 20, "tiles": [
-        { "image": "standLeft" },
+        { "image": "sideWalkStand" },
         { "image": "sword_weapon2", "pos": [-20,0], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "walkLeft" },
+        { "image": "sideWalkMove" },
         { "image": "sword_weapon2", "pos": [-20,0], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "standLeft" },
+        { "image": "sideWalkStand" },
         { "image": "charge_weapon2", "pos": [-20,0], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "walkLeft" },
+        { "image": "sideWalkMove" },
         { "image": "charge_weapon2", "pos": [-20,0], "flip": "h" }
       ] }
     ],
     "right": [
       { "frames": 20, "tiles": [
-        { "image": "standLeft", "flip": "h" },
+        { "image": "sideWalkStand", "flip": "h" },
         { "image": "sword_weapon2", "pos": [12,0] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "walkLeft", "flip": "h" },
+        { "image": "sideWalkMove", "flip": "h" },
         { "image": "sword_weapon2", "pos": [12,0] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "standLeft", "flip": "h" },
+        { "image": "sideWalkStand", "flip": "h" },
         { "image": "charge_weapon2", "pos": [12,0] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "walkLeft", "flip": "h" },
+        { "image": "sideWalkMove", "flip": "h" },
         { "image": "charge_weapon2", "pos": [12,0] }
       ] }
     ],
     "up": [
       { "frames": 20, "tiles": [
-        { "image": "walkUp" },
+        { "image": "upWalk" },
         { "image": "sword_weapon0", "pos": [0,-20] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "walkUp", "flip": "h" },
+        { "image": "upWalk", "flip": "h" },
         { "image": "sword_weapon0", "pos": [0,-20] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "walkUp" },
+        { "image": "upWalk" },
         { "image": "charge_weapon0", "pos": [0,-20] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "walkUp", "flip": "h" },
+        { "image": "upWalk", "flip": "h" },
         { "image": "charge_weapon0", "pos": [0,-20] }
       ] }
     ]
@@ -351,76 +354,76 @@
   "Dive": {
     "right": [
       { "frames": 20, "tiles": [
-        { "image": "dive" },
-        { "image": "dive", "pos": [8,0], "flip": "h" }
+        { "image": "diveFrame1" },
+        { "image": "diveFrame1", "pos": [8,0], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "dive1" },
-        { "image": "dive1", "pos": [8,0], "flip": "h" }
+        { "image": "diveFrame2" },
+        { "image": "diveFrame2", "pos": [8,0], "flip": "h" }
       ] }
     ]
   },
   "Jump": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "walkDown" } ] },
+      { "frames": 20, "tiles": [ { "image": "downWalk" } ] },
       { "frames": 20, "tiles": [
-        { "image": "G1:L", "flip": "v" },
-        { "image": "G1:L", "pos": [8,0], "flip": "both" }
+        { "image": "jumpTop", "flip": "v" },
+        { "image": "jumpTop", "pos": [8,0], "flip": "both" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "G0:L", "flip": "v" },
-        { "image": "G0:L", "pos": [8,0], "flip": "both" }
+        { "image": "jumpBack", "flip": "v" },
+        { "image": "jumpBack", "pos": [8,0], "flip": "both" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "G0:R", "flip": "v" },
-        { "image": "G0:R", "pos": [8,0], "flip": "both" }
+        { "image": "jumpFront", "flip": "v" },
+        { "image": "jumpFront", "pos": [8,0], "flip": "both" }
       ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "walkLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "jumpLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "jumpLeft1" } ] },
-      { "frames": 20, "tiles": [ { "image": "jumpLeft", "flip": "both" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideWalkMove" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpSide" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpUpsideDown" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpSide", "flip": "both" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "walkLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "jumpLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "jumpLeft1", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "jumpLeft", "flip": "v" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideWalkMove", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpSide", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpUpsideDown", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "jumpSide", "flip": "v" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "upWalk" } ] },
       { "frames": 20, "tiles": [
-        { "image": "G0:L" },
-        { "image": "G0:L", "pos": [8,0], "flip": "h" }
+        { "image": "jumpBack" },
+        { "image": "jumpBack", "pos": [8,0], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "G0:R" },
-        { "image": "G0:R", "pos": [8,0], "flip": "h" }
+        { "image": "jumpFront" },
+        { "image": "jumpFront", "pos": [8,0], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "G1:L" },
-        { "image": "G1:L", "pos": [8,0], "flip": "h" }
+        { "image": "jumpTop" },
+        { "image": "jumpTop", "pos": [8,0], "flip": "h" }
       ] }
     ]
   },
   "Glide": {
     "down": [
       { "frames": 20, "tiles": [
-        { "image": "M3:R" },
-        { "image": "M3:R", "pos": [8,0], "flip": "h" }
+        { "image": "capeDown" },
+        { "image": "capeDown", "pos": [8,0], "flip": "h" }
       ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "M4" } ] }
+      { "frames": 20, "tiles": [ { "image": "capeSide" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "M4", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "capeSide", "flip": "h" } ] }
     ],
     "up": [
       { "frames": 20, "tiles": [
-        { "image": "M3:L" },
-        { "image": "M3:L", "pos": [8,0], "flip": "h" }
+        { "image": "capeUp" },
+        { "image": "capeUp", "pos": [8,0], "flip": "h" }
       ] }
     ]
   },
@@ -429,94 +432,95 @@
   "Riding Dimitri (WIP)": {},
   "Fall": {
     "right": [
-      { "frames": 20, "tiles": [ { "image": "fall" } ] },
-      { "frames": 20, "tiles": [ { "image": "fall1" } ] },
-      { "frames": 20, "tiles": [ { "image": "fall2" } ] }
+      { "frames": 20, "tiles": [ { "image": "falling" } ] },
+      { "frames": 20, "tiles": [ { "image": "fallingfurther" } ] },
+      { "frames": 20, "tiles": [ { "image": "fallingalltheway" } ] }
     ]
   },
   "Dead": {
     "down": [
       { "frames": 20, "tiles": [
-        {"image": "dead" },
-        {"image": "dead", "pos": [8,0], "flip": "h" }
+        {"image": "linkDown" },
+        {"image": "linkDown", "pos": [8,0], "flip": "h" }
       ] }
     ]
   },
   "Carry": {
     "down": [
-      { "frames": 20, "tiles": [ {"image": "carryDown" } ] },
-      { "frames": 20, "tiles": [ {"image": "carryDown", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ {"image": "downCarryWalk" } ] },
+      { "frames": 20, "tiles": [ {"image": "downCarryWalk", "flip": "h" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "carryLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "I5" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideCarryStand" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideCarryMove" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "carryLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "I5", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideCarryStand", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideCarryMove", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "pushUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushUp", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "upCarryWalk" } ] },
+      { "frames": 20, "tiles": [ { "image": "upCarryWalk", "flip": "h" } ] }
     ]
   },
   "Move (WIP)": {
+    "#note": ["#FIXME: Needs Down"],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "pushLeft" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushLeft1" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideHold" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideHoldItem" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "pushLeft", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushLeft1", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideHold", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideHoldItem", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "pushUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "pushUp", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "upCarryWalk" } ] },
+      { "frames": 20, "tiles": [ { "image": "upCarryWalk", "flip": "h" } ] }
     ]
   },
   "Push": {
     "down": [
       { "frames": 20, "tiles": [
-        { "image": "F2:R" },
-        { "image": "F2:R", "pos": [8,0], "flip": "h" }
+        { "image": "downGrab" },
+        { "image": "downGrab", "pos": [8,0], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "F3:L" },
-        { "image": "F3:L", "pos": [8,0], "flip": "h" }
+        { "image": "downPush" },
+        { "image": "downPush", "pos": [8,0], "flip": "h" }
       ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "F4" } ] },
-      { "frames": 20, "tiles": [ { "image": "F5" } ] }
+      { "frames": 20, "tiles": [ { "image": "sidePush" } ] },
+      { "frames": 20, "tiles": [ { "image": "sidePushMove" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "F4", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "F5", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "sidePush", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "sidePushMove", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "F0" } ] },
-      { "frames": 20, "tiles": [ { "image": "F1", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "upPushLeft" } ] },
+      { "frames": 20, "tiles": [ { "image": "upPushRight", "flip": "h" } ] }
     ]
   },
   "Pull": {
     "down": [
       { "frames": 20, "tiles": [
-        { "image": "F2:L" },
-        { "image": "F2:L", "pos": [8,0], "flip": "h" }
+        { "image": "upPull" },
+        { "image": "upPull", "pos": [8,0], "flip": "h" }
       ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "F6" } ] },
-      { "frames": 20, "tiles": [ { "image": "F7" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideGrab" } ] },
+      { "frames": 20, "tiles": [ { "image": "sidePull" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "F6", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "F7", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideGrab", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "sidePull", "flip": "h" } ] }
     ],
     "up": [
       { "frames": 20, "tiles": [
-        { "image": "F3:R" },
-        { "image": "F3:R", "pos": [8,0], "flip": "h" }
+        { "image": "downPull" },
+        { "image": "downPull", "pos": [8,0], "flip": "h" }
       ] }
     ]
   },
@@ -524,7 +528,7 @@
     "down": [
       { "frames": 20, "tiles": [
         { "image": "ITEM", "pos": [0,-28] },
-        { "image": "itemGet" }
+        { "image": "showItemRightHand" }
       ] }
     ]
   },
@@ -532,8 +536,8 @@
     "down": [
       { "frames": 20, "tiles": [
         { "image": "INSTRUMENT", "pos": [0,-14] },
-        { "image": "instrumentGet" },
-        { "image": "instrumentGet", "pos": [8,0], "flip": "h" }
+        { "image": "showItemBothHands" },
+        { "image": "showItemBothHands", "pos": [8,0], "flip": "h" }
       ] }
     ]
   },
@@ -541,14 +545,14 @@
     "down": [
       { "frames": 20, "tiles": [
         { "image": "ESSENCE", "pos": [0,-14] },
-        { "image": "instrumentGet" },
-        { "image": "instrumentGet", "pos": [8,0], "flip": "h" },
+        { "image": "showItemBothHands" },
+        { "image": "showItemBothHands", "pos": [8,0], "flip": "h" },
         { "image": "essence_bgblue", "pos": [-8,-22] }
       ] },
       { "frames": 20, "tiles": [
         { "image": "ESSENCE", "pos": [0,-14] },
-        { "image": "instrumentGet" },
-        { "image": "instrumentGet", "pos": [8,0], "flip": "h" },
+        { "image": "showItemBothHands" },
+        { "image": "showItemBothHands", "pos": [8,0], "flip": "h" },
         { "image": "essence_bgorange", "pos": [-8,-22] }
       ] }
     ]
@@ -556,11 +560,11 @@
   "Ages: Time Travel": {
     "down": [
       { "frames": 20, "background": "empty.png", "origin": [72,64], "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "portal0", "pos": [0,8] }
       ] },
       { "frames": 20, "name": "pillar0", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "portal1", "pos": [0,8] },
         { "image": "HALO0", "name": "pillar2", "pos": [6,-2] },
         { "image": "HALO0", "name": "pillar4", "pos": [6,-4] },
@@ -580,11 +584,11 @@
         { "image": "HALO0", "name": "pillar32", "pos": [6,-32] }
       ] },
       { "frames": 20, "name": "pillar1", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "portal1", "pos": [0,8] }
       ] },
       { "frames": 20, "name": "pillar_halo1", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "portal1", "pos": [0,8] },
         { "image": "HALO0", "name": "pillar2", "pos": [6,-2] },
         { "image": "HALO0", "name": "pillar4", "pos": [6,-4] },
@@ -604,11 +608,11 @@
         { "image": "HALO0", "name": "pillar32", "pos": [6,-32] }
       ] },
       { "frames": 20, "name": "pillar2", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "portal1", "pos": [0,8] }
       ] },
       { "frames": 20, "name": "pillar_halo2", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "portal2", "pos": [-8,8] },
         { "image": "HALO0", "name": "pillar2", "pos": [6,-2] },
         { "image": "HALO0", "name": "pillar4", "pos": [6,-4] },
@@ -628,11 +632,11 @@
         { "image": "HALO0", "name": "pillar32", "pos": [6,-32] }
       ] },
       { "frames": 20, "name": "pillar3", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "portal2", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo3", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "portal2", "pos": [-8,8] },
         { "image": "HALO1", "name": "pillar0", "pos": [4,0] },
         { "image": "HALO1", "name": "pillar2", "pos": [4,-2] },
@@ -653,11 +657,11 @@
         { "image": "HALO1", "name": "pillar32", "pos": [4,-32] }
       ] },
       { "frames": 20, "name": "pillar4", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "portal2", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo4", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO2", "name": "pillar2", "pos": [0,14] },
         { "image": "HALO2", "name": "pillar4", "pos": [0,12] },
         { "image": "HALO2", "name": "pillar6", "pos": [0,10] },
@@ -685,7 +689,7 @@
         { "image": "portal3", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo4b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO2", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO2", "name": "pillar4", "pos": [8,12], "flip": "h" },
         { "image": "HALO2", "name": "pillar6", "pos": [8,10], "flip": "h" },
@@ -713,7 +717,7 @@
         { "image": "portal3", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo5", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO2", "name": "pillar2", "pos": [0,14] },
         { "image": "HALO2", "name": "pillar4", "pos": [0,12] },
         { "image": "HALO2", "name": "pillar6", "pos": [0,10] },
@@ -741,7 +745,7 @@
         { "image": "portal3", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo5b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO2", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO2", "name": "pillar4", "pos": [8,12], "flip": "h" },
         { "image": "HALO2", "name": "pillar6", "pos": [8,10], "flip": "h" },
@@ -769,7 +773,7 @@
         { "image": "portal3", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo6", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
         { "image": "HALO4", "name": "pillar4", "pos": [-7,-4] },
@@ -780,7 +784,7 @@
         { "image": "portal4", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo6b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [8,4], "flip": "h" },
         { "image": "HALO4", "name": "pillar4", "pos": [8,-4], "flip": "h" },
@@ -791,7 +795,7 @@
         { "image": "portal4", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo7", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
         { "image": "HALO4", "name": "pillar4", "pos": [-7,-4] },
@@ -802,7 +806,7 @@
         { "image": "portal4", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo7b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [8,4], "flip": "h" },
         { "image": "HALO4", "name": "pillar4", "pos": [8,-4], "flip": "h" },
@@ -813,7 +817,7 @@
         { "image": "portal4", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo8", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
         { "image": "HALO3", "name": "pillar4", "pos": [-4,12] },
         { "image": "HALO3", "name": "pillar6", "pos": [-4,10] },
@@ -841,7 +845,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo8b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO3", "name": "pillar4", "pos": [8,12], "flip": "h" },
         { "image": "HALO3", "name": "pillar6", "pos": [8,10], "flip": "h" },
@@ -869,7 +873,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo9", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
         { "image": "HALO3", "name": "pillar4", "pos": [-4,12] },
         { "image": "HALO3", "name": "pillar6", "pos": [-4,10] },
@@ -897,7 +901,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo9b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO3", "name": "pillar4", "pos": [8,12], "flip": "h" },
         { "image": "HALO3", "name": "pillar6", "pos": [8,10], "flip": "h" },
@@ -925,7 +929,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo10", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
         { "image": "HALO4", "name": "pillar4", "pos": [-7,-4] },
@@ -936,7 +940,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo10b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [8,4], "flip": "h" },
         { "image": "HALO4", "name": "pillar4", "pos": [8,-4], "flip": "h" },
@@ -947,7 +951,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo11", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
         { "image": "HALO4", "name": "pillar4", "pos": [-7,-4] },
@@ -958,7 +962,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo11b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [8,4], "flip": "h" },
         { "image": "HALO4", "name": "pillar4", "pos": [8,-4], "flip": "h" },
@@ -969,7 +973,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo12", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
         { "image": "HALO3", "name": "pillar4", "pos": [-4,12] },
         { "image": "HALO3", "name": "pillar6", "pos": [-4,10] },
@@ -997,7 +1001,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo12b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO3", "name": "pillar4", "pos": [8,12], "flip": "h" },
         { "image": "HALO3", "name": "pillar6", "pos": [8,10], "flip": "h" },
@@ -1025,7 +1029,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo13", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
         { "image": "HALO3", "name": "pillar4", "pos": [-4,12] },
         { "image": "HALO3", "name": "pillar6", "pos": [-4,10] },
@@ -1053,7 +1057,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo13b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO3", "name": "pillar4", "pos": [8,12], "flip": "h" },
         { "image": "HALO3", "name": "pillar6", "pos": [8,10], "flip": "h" },
@@ -1081,7 +1085,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo14", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
         { "image": "HALO4", "name": "pillar4", "pos": [-7,-4] },
@@ -1092,7 +1096,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo14b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,5] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [8,4], "flip": "h" },
@@ -1104,7 +1108,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo15", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
         { "image": "HALO4", "name": "pillar4", "pos": [-7,-4] },
@@ -1115,7 +1119,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo15b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-1] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [8,4], "flip": "h" },
@@ -1127,7 +1131,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo16", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
         { "image": "HALO3", "name": "pillar4", "pos": [-4,12] },
         { "image": "HALO3", "name": "pillar6", "pos": [-4,10] },
@@ -1155,7 +1159,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo16b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-6] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO3", "name": "pillar4", "pos": [8,12], "flip": "h" },
@@ -1184,7 +1188,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo17", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
         { "image": "HALO3", "name": "pillar4", "pos": [-4,12] },
         { "image": "HALO3", "name": "pillar6", "pos": [-4,10] },
@@ -1212,7 +1216,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo17b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-12] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO3", "name": "pillar4", "pos": [8,12], "flip": "h" },
@@ -1241,7 +1245,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo18", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
         { "image": "HALO4", "name": "pillar4", "pos": [-7,-4] },
@@ -1252,7 +1256,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo18b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-17] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [8,4], "flip": "h" },
@@ -1264,7 +1268,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo19", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,3] },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
@@ -1276,7 +1280,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo19b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-21] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [8,4], "flip": "h" },
@@ -1288,7 +1292,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo20", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-2] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
         { "image": "HALO3", "name": "pillar4", "pos": [-4,12] },
@@ -1317,7 +1321,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo20b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-25] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO3", "name": "pillar4", "pos": [8,12], "flip": "h" },
@@ -1346,7 +1350,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo21", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-7] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
         { "image": "HALO3", "name": "pillar4", "pos": [-4,12] },
@@ -1375,7 +1379,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo21b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-29] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO3", "name": "pillar4", "pos": [8,12], "flip": "h" },
@@ -1404,7 +1408,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo22", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-12] },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
@@ -1416,7 +1420,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo22b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-33] },
         { "image": "aura3", "pos": [0,5] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
@@ -1429,7 +1433,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo23", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-17] },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
@@ -1441,7 +1445,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo23b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-37] },
         { "image": "aura3", "pos": [0,1] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
@@ -1454,7 +1458,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo24", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-17] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
         { "image": "HALO3", "name": "pillar4", "pos": [-4,12] },
@@ -1483,7 +1487,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo24b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-42] },
         { "image": "aura3", "pos": [0,-4] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
@@ -1513,7 +1517,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo25", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-22] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
         { "image": "HALO3", "name": "pillar4", "pos": [-4,12] },
@@ -1542,7 +1546,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo25b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-47] },
         { "image": "aura3", "pos": [0,-8] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
@@ -1572,7 +1576,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo26", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-27] },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
         { "image": "HALO4", "name": "pillar2", "pos": [-7,4] },
@@ -1584,7 +1588,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo26b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-52] },
         { "image": "aura3", "pos": [0,-13] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
@@ -1597,7 +1601,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo27", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-32] },
         { "image": "aura3", "pos": [8,2] },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
@@ -1610,7 +1614,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo27b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-57] },
         { "image": "aura3", "pos": [0,-17] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
@@ -1623,7 +1627,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo28", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-37] },
         { "image": "aura3", "pos": [8,-3] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
@@ -1653,7 +1657,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo28b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-62] },
         { "image": "aura3", "pos": [0,-25] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
@@ -1683,7 +1687,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo29", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-42] },
         { "image": "aura3", "pos": [8,-9] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
@@ -1713,7 +1717,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo29b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [-5,-67] },
         { "image": "aura3", "pos": [0,-29] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
@@ -1743,7 +1747,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo30", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-47] },
         { "image": "aura3", "pos": [8,-14] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
@@ -1773,7 +1777,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo30b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [0,-33] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
         { "image": "HALO3", "name": "pillar4", "pos": [8,12], "flip": "h" },
@@ -1802,7 +1806,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo31", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-52] },
         { "image": "aura3", "pos": [8,-14] },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
@@ -1815,7 +1819,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo31b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [0,-37] },
         { "image": "aura3", "pos": [-5,5] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
@@ -1828,7 +1832,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo32", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-57] },
         { "image": "aura3", "pos": [8,-19] },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
@@ -1841,7 +1845,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo32b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [0,-37] },
         { "image": "aura3", "pos": [-5,1] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
@@ -1854,7 +1858,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo33", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-62] },
         { "image": "aura3", "pos": [8,-24] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
@@ -1884,7 +1888,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo33b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [0,-37] },
         { "image": "aura3", "pos": [-5,-4] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
@@ -1914,7 +1918,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo34", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-67] },
         { "image": "aura3", "pos": [8,-28] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
@@ -1944,7 +1948,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo34b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [0,-37] },
         { "image": "aura3", "pos": [-5,-8] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
@@ -1974,7 +1978,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo35", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-72] },
         { "image": "aura3", "pos": [8,-33] },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
@@ -1987,7 +1991,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo35b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [0,-47] },
         { "image": "aura3", "pos": [-5,-13] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
@@ -2000,7 +2004,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo36", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-37] },
         { "image": "aura3", "pos": [13,1] },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
@@ -2013,7 +2017,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo36b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [0,-52] },
         { "image": "aura3", "pos": [-5,-17] },
         { "image": "HALO4", "name": "pillar1", "pos": [7,12], "flip": "h", "crop": [0,0,16,4] },
@@ -2026,7 +2030,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo37", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-42] },
         { "image": "aura3", "pos": [13,-3] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
@@ -2056,7 +2060,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo37b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [0,-57] },
         { "image": "aura3", "pos": [-5,-21] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
@@ -2086,7 +2090,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo38", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-47] },
         { "image": "aura3", "pos": [13,-9] },
         { "image": "HALO3", "name": "pillar2", "pos": [-4,14] },
@@ -2116,7 +2120,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo38b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [0,-62] },
         { "image": "aura3", "pos": [-5,-25] },
         { "image": "HALO3", "name": "pillar2", "pos": [8,14], "flip": "h" },
@@ -2146,7 +2150,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo39", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [8,-52] },
         { "image": "aura3", "pos": [13,-14] },
         { "image": "HALO4", "name": "pillar1", "pos": [-7,12], "crop": [0,0,16,4] },
@@ -2159,7 +2163,7 @@
         { "image": "portal5", "pos": [-8,8] }
       ] },
       { "frames": 20, "name": "pillar_halo39b", "tiles": [
-        { "image": "walkDown" },
+        { "image": "downWalk" },
         { "image": "aura3", "pos": [0,-67] },
         { "image": "aura3", "pos": [-5,-29] },
         { "image": "aura3", "pos": [0,5] },
@@ -2176,44 +2180,44 @@
   },
   "File Select": {
     "right": [
-      { "frames": 20, "background": "file-select.png", "origin": [80,62], "tiles": [ { "image": "walkDown" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkDown", "flip": "h" } ] }
+      { "frames": 20, "background": "file-select.png", "origin": [80,62], "tiles": [ { "image": "downWalk" } ] },
+      { "frames": 20, "tiles": [ { "image": "downWalk", "flip": "h" } ] }
     ]
   },
   "Shovel": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "K2" } ] },
-      { "frames": 20, "tiles": [ { "image": "K3" } ] }
+      { "frames": 20, "tiles": [ { "image": "downShovelPrepare" } ] },
+      { "frames": 20, "tiles": [ { "image": "downShovelUse" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "K4" } ] },
-      { "frames": 20, "tiles": [ { "image": "K5" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideShovelPrepare" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideShovelUse" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "K4", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "K5", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "sideShovelPrepare", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "sideShovelUse", "flip": "h" } ] }
     ],
     "up": [
-      { "frames": 20, "tiles": [ { "image": "K0" } ] },
-      { "frames": 20, "tiles": [ { "image": "K1" } ] }
+      { "frames": 20, "tiles": [ { "image": "upShovelPrepare" } ] },
+      { "frames": 20, "tiles": [ { "image": "upShovelUse" } ] }
     ]
   },
   "Flute": {
     "down": [
-      { "frames": 20, "tiles": [ { "image": "I6" } ] },
-      { "frames": 20, "tiles": [ { "image": "I7" } ] }
+      { "frames": 20, "tiles": [ { "image": "playFluteFrame1" } ] },
+      { "frames": 20, "tiles": [ { "image": "playFluteFrame2" } ] }
     ]
   },
   "Fool's Ore (WIP)": {},
   "Harp of Ages": {
     "down": [
       { "frames": 20, "tiles": [
-        { "image": "play" },
-        { "image": "harp", "pos": [-4,0] }
+        { "image": "harpHold" },
+        { "image": "itemHarp", "pos": [-4,0] }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "play1" },
-        { "image": "harp", "pos": [-4,0] }
+        { "image": "harpPlay" },
+        { "image": "itemHarp", "pos": [-4,0] }
       ] }
     ]
   },
@@ -2221,41 +2225,41 @@
     "down": [
       { "frames": 20, "tiles": [
         { "image": "MAGNET0", "pos": [3,15] },
-        { "image": "I3" }
+        { "image": "aimBottom" }
       ] },
       { "frames": 20, "tiles": [
         { "image": "MAGNET1", "pos": [3,15] },
-        { "image": "N0" }
+        { "image": "aimDown" }
       ] }
     ],
     "left": [
       { "frames": 20, "tiles": [
         { "image": "MAGNET2", "pos": [-6,4] },
-        { "image": "pushLeft" }
+        { "image": "sideHold" }
       ] },
       { "frames": 20, "tiles": [
         { "image": "MAGNET3", "pos": [-6,4] },
-        { "image": "pushLeft1" }
+        { "image": "sideHoldItem" }
       ] }
     ],
     "right": [
       { "frames": 20, "tiles": [
         { "image": "MAGNET2", "pos": [14,4], "flip": "h" },
-        { "image": "pushLeft", "flip": "h" }
+        { "image": "sideHold", "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
         { "image": "MAGNET3", "pos": [14,4], "flip": "h" },
-        { "image": "pushLeft1", "flip": "h" }
+        { "image": "sideHoldItem", "flip": "h" }
       ] }
     ],
     "up": [
       { "frames": 20, "tiles": [
         { "image": "MAGNET0", "pos": [-3,-7], "flip": "v" },
-        { "image": "I1" }
+        { "image": "aimTop" }
       ] },
       { "frames": 20, "tiles": [
         { "image": "MAGNET1", "pos": [-3,-7], "flip": "v" },
-        { "image": "N1" }
+        { "image": "aimUp" }
       ] }
     ]
   },
@@ -2264,24 +2268,24 @@
     "down": [
       { "frames": 20, "tiles": [
         { "image": "SLING0", "pos": [7,10] },
-        { "image": "I3" }
+        { "image": "aimBottom" }
       ] }
     ],
     "left": [
       { "frames": 20, "tiles": [
-        { "image": "pushLeft1" },
+        { "image": "sideHoldItem" },
         { "image": "SLING2", "pos": [-11,-3] }
       ] }
     ],
     "right": [
       { "frames": 20, "tiles": [
-        { "image": "pushLeft1", "flip": "h" },
+        { "image": "sideHoldItem", "flip": "h" },
         { "image": "SLING2", "pos": [11,-3], "flip": "h" }
       ] }
     ],
     "up": [
       { "frames": 20, "tiles": [
-        { "image": "I1" },
+        { "image": "aimTop" },
         { "image": "SLING1", "pos": [0,-12] }
       ] }
     ]
@@ -2290,164 +2294,164 @@
     "down": [
       { "frames": 20, "tiles": [
         { "image": "tall_grass", "pos": [1,9] },
-        { "image": "walkDown" }
+        { "image": "downWalk" }
       ] },
       { "frames": 20, "tiles": [
         { "image": "tall_grass", "pos": [-1,9], "flip": "h" },
-        { "image": "walkDown", "flip": "h" }
+        { "image": "downWalk", "flip": "h" }
       ] }
     ],
     "left": [
       { "frames": 20, "tiles": [
         { "image": "tall_grass", "pos": [1,9] },
-        { "image": "standLeft" }
+        { "image": "sideWalkStand" }
       ] },
       { "frames": 20, "tiles": [
         { "image": "tall_grass", "pos": [-1,9], "flip": "h" },
-        { "image": "walkLeft" }
+        { "image": "sideWalkMove" }
       ] }
     ],
     "right": [
       { "frames": 20, "tiles": [
         { "image": "tall_grass", "pos": [-1,9], "flip": "h" },
-        { "image": "standLeft", "flip": "h" }
+        { "image": "sideWalkStand", "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
         { "image": "tall_grass", "pos": [1,9] },
-        { "image": "walkLeft", "flip": "h" }
+        { "image": "sideWalkMove", "flip": "h" }
       ] }
     ],
     "up": [
       { "frames": 20, "tiles": [
         { "image": "tall_grass", "pos": [1,9] },
-        { "image": "walkUp" }
+        { "image": "upWalk" }
       ] },
       { "frames": 20, "tiles": [
         { "image": "tall_grass", "pos": [-1,9], "flip": "h" },
-        { "image": "walkUp", "flip": "h" }
+        { "image": "upWalk", "flip": "h" }
       ] }
     ]
   },
   "Asleep": {
     "right": [
-      { "frames": 20, "tiles": [ { "image": "sleep" } ] }
+      { "frames": 20, "tiles": [ { "image": "sleepBed" } ] }
     ]
   },
   "Awake": {
     "right": [
-      { "frames": 20, "tiles": [ { "image": "awake" } ] }
+      { "frames": 20, "tiles": [ { "image": "wakeUpBed" } ] }
     ]
   },
   "Snow's LADX Convertor": {
     "right": [
       { "frames": 20, "origin": [1,1], "background": "z4o-z4.png", "tiles": [
-        { "image": "walkDown",  "pos": [  0,  0] },
-        { "image": "walkUp",    "pos": [ 16,  0] },
-        { "image": "standLeft", "pos": [ 32,  0] },
-        { "image": "walkLeft",  "pos": [ 48,  0] },
-        { "image": "swimLeft",  "pos": [ 64,  0] },
-        { "image": "swimLeft1", "pos": [ 80,  0] },
-        { "image": "K2",        "pos": [ 96,  0] },
-        { "image": "K3",        "pos": [112,  0] },
+        { "image": "downWalk",  "pos": [  0,  0] },
+        { "image": "upWalk",    "pos": [ 16,  0] },
+        { "image": "sideWalkStand", "pos": [ 32,  0] },
+        { "image": "sideWalkMove",  "pos": [ 48,  0] },
+        { "image": "swimUnderwaterFrame1",  "pos": [ 64,  0] },
+        { "image": "swimUnderwaterFrame2", "pos": [ 80,  0] },
+        { "image": "downShovelPrepare",        "pos": [ 96,  0] },
+        { "image": "downShovelUse",        "pos": [112,  0] },
 
-        { "image": "I3",        "pos": [  0, 16] },
-        { "image": "I1",        "pos": [ 16, 16] },
-        { "image": "pushLeft1", "pos": [ 32, 16] },
-        { "image": "K4",        "pos": [ 48, 16] },
-        { "image": "I2",        "pos": [ 64, 16] },
-        { "image": "I0",        "pos": [ 80, 16] },
-        { "image": "I4",        "pos": [ 96, 16] },
-        { "image": "itemGet",   "pos": [112, 16] },
+        { "image": "aimBottom",        "pos": [  0, 16] },
+        { "image": "aimTop",        "pos": [ 16, 16] },
+        { "image": "sideHoldItem", "pos": [ 32, 16] },
+        { "image": "sideShovelPrepare",        "pos": [ 48, 16] },
+        { "image": "aimBottomLeft",        "pos": [ 64, 16] },
+        { "image": "aimTopRight",        "pos": [ 80, 16] },
+        { "image": "aimTopLeft",        "pos": [ 96, 16] },
+        { "image": "showItemRightHand",   "pos": [112, 16] },
 
-        { "image": "F3:L",      "pos": [  0, 32] },
-        { "image": "F2:R",      "pos": [  8, 32] },
-        { "image": "F1",        "pos": [ 16, 32] },
-        { "image": "F0",        "pos": [ 32, 32] },
-        { "image": "F5",        "pos": [ 48, 32] },
-        { "image": "F4",        "pos": [ 64, 32] },
-        { "image": "dead",      "pos": [ 80, 32] },
-        { "image": "F3:R",      "pos": [ 88, 32] },
-        { "image": "F6",        "pos": [ 96, 32] },
-        { "image": "F7",        "pos": [112, 32] },
+        { "image": "downPush",      "pos": [  0, 32] },
+        { "image": "downGrab",      "pos": [  8, 32] },
+        { "image": "upPushRight",        "pos": [ 16, 32] },
+        { "image": "upPushLeft",        "pos": [ 32, 32] },
+        { "image": "sidePushMove",        "pos": [ 48, 32] },
+        { "image": "sidePush",        "pos": [ 64, 32] },
+        { "image": "linkDown",      "pos": [ 80, 32] },
+        { "image": "downPull",      "pos": [ 88, 32] },
+        { "image": "sideGrab",        "pos": [ 96, 32] },
+        { "image": "sidePull",        "pos": [112, 32] },
 
-        { "image": "G1:L",      "pos": [  0, 48], "flip": "v" },
-        { "image": "G0:L",      "pos": [  8, 48], "flip": "v" },
-        { "image": "G0:R",      "pos": [ 16, 48], "flip": "v" },
-        { "image": "jumpLeft",  "pos": [ 24, 48] },
-        { "image": "jumpLeft1", "pos": [ 40, 48] },
-        { "image": "F2:L",      "pos": [ 56, 48] },
-        { "image": "carryDown", "pos": [ 64, 48] },
-        { "image": "pushUp",    "pos": [ 80, 48] },
-        { "image": "carryLeft", "pos": [ 96, 48] },
-        { "image": "I5",        "pos": [112, 48] },
+        { "image": "jumpTop",      "pos": [  0, 48], "flip": "v" },
+        { "image": "jumpBack",      "pos": [  8, 48], "flip": "v" },
+        { "image": "jumpFront",      "pos": [ 16, 48], "flip": "v" },
+        { "image": "jumpSide",  "pos": [ 24, 48] },
+        { "image": "jumpUpsideDown", "pos": [ 40, 48] },
+        { "image": "upPull",      "pos": [ 56, 48] },
+        { "image": "downCarryWalk", "pos": [ 64, 48] },
+        { "image": "upCarryWalk",    "pos": [ 80, 48] },
+        { "image": "sideCarryStand", "pos": [ 96, 48] },
+        { "image": "sideCarryMove",        "pos": [112, 48] },
 
-        { "image": "walkDown_S1",   "pos": [  0, 64], "crop": [0,0,8,16] },
-        { "image": "walkDown1_S1",  "pos": [  8, 64], "crop": [0,0,8,16] },
-        { "image": "blockDown_S1",  "pos": [ 16, 64] },
-        { "image": "blockDown1_S1", "pos": [ 32, 64] },
-        { "image": "blockDown_S2",  "pos": [ 48, 64] },
-        { "image": "blockDown1_S2", "pos": [ 64, 64] },
-        { "image": "blockLeft",     "pos": [ 80, 64] },
-        { "image": "blockLeft1",    "pos": [ 96, 64] },
-        { "image": "blockRight",    "pos": [112, 64] },
+        { "image": "downWalkShieldLeft",   "pos": [  0, 64], "crop": [0,0,8,16] },
+        { "image": "downWalkShieldRight",  "pos": [  8, 64], "crop": [0,0,8,16] },
+        { "image": "downWalkShieldLeftHold",  "pos": [ 16, 64] },
+        { "image": "downWalkShieldRightHold", "pos": [ 32, 64] },
+        { "image": "downWalkBigShieldLeftHold",  "pos": [ 48, 64] },
+        { "image": "downWalkBigShieldRightHold", "pos": [ 64, 64] },
+        { "image": "sideWalkShieldStandHold",     "pos": [ 80, 64] },
+        { "image": "sideWalkShieldMoveHold",    "pos": [ 96, 64] },
+        { "image": "sideWalkBigShieldStandHold",    "pos": [112, 64] },
 
-        { "image": "I7",            "pos": [  0, 80], "crop": [0,0,8,16] },
-        { "image": "blockRight1",   "pos": [  8, 80], "crop": [8,0,16,16] },
-        { "image": "walkRight_S1",  "pos": [ 16, 80], "crop": [0,0,8,16] },
-        { "image": "walkRight1_S1", "pos": [ 24, 80], "crop": [0,0,8,16] },
-        { "image": "walkRight_S2",  "pos": [ 32, 80] },
-        { "image": "walkRight1_S2", "pos": [ 48, 80] },
-        { "image": "blockUp",       "pos": [ 64, 80] },
-        { "image": "blockUp1",      "pos": [ 80, 80] },
-        { "image": "K5",            "pos": [ 96, 80] },
-        { "image": "K0",            "pos": [112, 80] },
+        { "image": "playFluteFrame2",            "pos": [  0, 80], "crop": [0,0,8,16] },
+        { "image": "sideWalkBigShieldMoveHold",   "pos": [  8, 80], "crop": [8,0,16,16] },
+        { "image": "sideWalkShieldStand",  "pos": [ 16, 80], "crop": [0,0,8,16] },
+        { "image": "sideWalkShieldMove", "pos": [ 24, 80], "crop": [0,0,8,16] },
+        { "image": "sideWalkBigShieldStand",  "pos": [ 32, 80] },
+        { "image": "sideWalkBigShieldMove", "pos": [ 48, 80] },
+        { "image": "upWalkShieldLeftHold",       "pos": [ 64, 80] },
+        { "image": "upWalkShieldRightHold",      "pos": [ 80, 80] },
+        { "image": "sideShovelUse",            "pos": [ 96, 80] },
+        { "image": "upShovelPrepare",            "pos": [112, 80] },
 
-        { "image": "walkUp_S1",     "pos": [  0, 96], "crop": [8,0,16,16] },
-        { "image": "walkUp1_S1",    "pos": [  8, 96], "crop": [8,0,16,16] },
-        { "image": "treadWaterDown","pos": [ 16, 96] },
-        { "image": "treadWaterDown1","pos":[ 24, 96] },
-        { "image": "treadWaterLeft","pos": [ 32, 96] },
-        { "image": "treadWaterUp",  "pos": [ 48, 96] },
-        { "image": "K1",            "pos": [ 64, 96] },
-        { "image": "treadWaterLeft1","pos": [ 80, 96] },
-        { "image": "treadWaterUp1", "pos":[ 96, 96] },
-        { "image": "dive",          "pos": [112, 96] },
-        { "image": "dive1",         "pos": [120, 96] },
+        { "image": "upWalkShieldLeft",     "pos": [  0, 96], "crop": [8,0,16,16] },
+        { "image": "upWalkShieldRight",    "pos": [  8, 96], "crop": [8,0,16,16] },
+        { "image": "swimDownFrame1","pos": [ 16, 96] },
+        { "image": "swimDownFrame2","pos":[ 24, 96] },
+        { "image": "swimSideFrame1","pos": [ 32, 96] },
+        { "image": "swimUpFrame1",  "pos": [ 48, 96] },
+        { "image": "upShovelUse",            "pos": [ 64, 96] },
+        { "image": "swimSideFrame2","pos": [ 80, 96] },
+        { "image": "swimUpFrame2", "pos":[ 96, 96] },
+        { "image": "diveFrame1",          "pos": [112, 96] },
+        { "image": "diveFrame2",         "pos": [120, 96] },
 
-        { "image": "fall",          "pos": [  0,112] },
-        { "image": "fall1",         "pos": [ 20,112] },
-        { "image": "fall2",         "pos": [ 36,112], "crop": [0,0,4,16] },
-        { "image": "standDown",     "pos": [ 40,112] },
-        { "image": "standLeft",     "pos": [ 63,112], "crop": [0,0,12,16], "flip": "h" },
-        { "image": "I7",            "pos": [112,112], "crop": [8,0,16,16] },
-        { "image": "instrumentGet", "pos": [120,112] }
+        { "image": "falling",          "pos": [  0,112] },
+        { "image": "fallingfurther",         "pos": [ 20,112] },
+        { "image": "fallingalltheway",         "pos": [ 36,112], "crop": [0,0,4,16] },
+        { "image": "downStand",     "pos": [ 40,112] },
+        { "image": "sideWalkStand",     "pos": [ 63,112], "crop": [0,0,12,16], "flip": "h" },
+        { "image": "playFluteFrame2",            "pos": [112,112], "crop": [8,0,16,16] },
+        { "image": "showItemBothHands", "pos": [120,112] }
       ] }
     ]
   },
   "Snow's LADX Convertor: Page 2": {
     "right": [
       { "frames": 20, "origin": [1,1], "background": "empty (white).png", "tiles": [
-        { "image": "sleep", "pos": [0,0] },
-        { "image": "awake", "pos": [16,0] },
-        { "image": "standLeft", "pos": [32,1], "flip": "h", "crop": [0,0,16,10] },
-        { "image": "awake", "pos": [32,9], "crop": [0,9,16,16] },
-        { "image": "F5", "pos": [47, 0], "flip": "h", "crop": [0,0,8,10] },
-        { "image": "awake", "pos": [48,9], "crop": [8,9,16,16] },
+        { "image": "sleepBed", "pos": [0,0] },
+        { "image": "wakeUpBed", "pos": [16,0] },
+        { "image": "sideWalkStand", "pos": [32,1], "flip": "h", "crop": [0,0,16,10] },
+        { "image": "wakeUpBed", "pos": [32,9], "crop": [0,9,16,16] },
+        { "image": "sidePushMove", "pos": [47, 0], "flip": "h", "crop": [0,0,8,10] },
+        { "image": "wakeUpBed", "pos": [48,9], "crop": [8,9,16,16] },
 
-        { "image": "K6", "pos": [0,16] },
-        { "image": "K7", "pos": [16,16] },
+        { "image": "sleepGround", "pos": [0,16] },
+        { "image": "wakeUpGround", "pos": [16,16] },
 
-        { "image": "Q3", "pos": [0,32] },
+        { "image": "mooshUp", "pos": [0,32] },
 
-        { "image": "walkUp", "pos": [0,48] },
-        { "image": "fall3", "pos": [16,48] },
-        { "image": "fall4", "pos": [24,48] },
-        { "image": "fall5", "pos": [40,48] },
-        { "image": "fall6", "pos": [56,48] },
-        { "image": "fall7", "pos": [72,48] },
-        { "image": "walkUp", "pos": [80,48] },
-        { "image": "standDown", "pos": [96,48] },
-        { "image": "instrumentGet", "pos": [112,48] }
+        { "image": "upWalk", "pos": [0,48] },
+        { "image": "spinning0", "pos": [16,48] },
+        { "image": "spinning45", "pos": [24,48] },
+        { "image": "spinning90", "pos": [40,48] },
+        { "image": "spinning135", "pos": [56,48] },
+        { "image": "spinning180", "pos": [72,48] },
+        { "image": "upWalk", "pos": [80,48] },
+        { "image": "downStand", "pos": [96,48] },
+        { "image": "showItemBothHands", "pos": [112,48] }
       ] }
     ]
   }

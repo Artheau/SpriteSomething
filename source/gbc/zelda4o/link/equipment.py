@@ -30,6 +30,7 @@ def equipment_test(save=False):
             "equipment.png"
         )
     )
+    equipment_image = equipment_image.convert('RGBA')
 
     equipment = {}
 
@@ -38,13 +39,15 @@ def equipment_test(save=False):
 
     #the weapons are at the same x-coordinate but have differing y-values, set up these y-values
     weapons = [
-        ("sword",0),
-        ("charge",24),
-        ("rod",48),
-        ("cane",72),
-        ("seed",96),
-        ("biggoron",120),
-        ("ore",144)
+        ("wooden",      24 * 0),
+        ("noble",       24 * 1),
+        ("master",      24 * 2),
+        ("charge",      24 * 3),
+        ("rod",         24 * 4),
+        ("cane",        24 * 5),
+        ("seed",        24 * 6),
+        ("biggoron",    24 * 7),
+        ("ore",         24 * 8)
     ]
 
     #tuples for fun stuff; first is top-left origin, second is width,height
@@ -60,7 +63,8 @@ def equipment_test(save=False):
             origin,dims = coords[i]
             x,y = origin
             level,y_offset = weapons[j]
-            icon_specs[level + "_weapon" + str(i)] = coord_calc(
+            weapon_key = level + "_weapon" + str(i)
+            icon_specs[weapon_key] = coord_calc(
                 (
                     x,
                     y+y_offset
@@ -68,34 +72,67 @@ def equipment_test(save=False):
                 dims
             )
 
+    #the shields are at the same x-coordinate but have differing y-values, set up these y-values
+    shields = [
+        ("wooden",  214 + (12 * 0)),
+        ("iron",    214 + (12 * 1)),
+        ("mirror",  214 + (12 * 2)),
+    ]
+
+    #tuples for fun stuff; first is top-left origin, second is width,height
+    coords = [
+        ((  0,0),(12,12)),
+        (( 12,0),(12,12)),
+        (( 24,0),(12,12))
+    ]
+    #cycle through coordinate info
+    for i,_ in enumerate(coords):
+        #cycle through swords and y-offsets
+        for j,_ in enumerate(shields):
+            origin,dims = coords[i]
+            x,y = origin
+            level,y_offset = shields[j]
+            shield_key = level + "_shield" + str(i)
+            icon_specs[shield_key] = coord_calc(
+                (
+                    x,
+                    y+y_offset
+                ),
+                dims
+            )
+
+
     #next row is some inventory stuff
     inventory = {
-        "blue_magnet0": (( 0,168),(16, 8)),
-        "blue_magnet1": ((16,168),(16, 8)),
-        "tall_grass":   ((32,168),(16,8)),
-        "red_magnet0":  (( 0,176),(16, 8)),
-        "red_magnet1":  ((16,176),(16, 8)),
-        "blue_magnet2": (( 0,184),( 8,16)),
-        "blue_magnet3": (( 8,184),( 8,16)),
-        "red_magnet2":  ((16,184),( 8,16)),
-        "red_magnet3":  ((24,184),( 8,16)),
-        "minecart0":    (( 0,200),(16,16)),
-        "minecart1":    ((16,200),(16,16)),
-        "minecart2":    ((32,200),(16,16)),
-        "blue_sling0":  (( 0,216),( 8,16)),
-        "blue_sling1":  (( 8,216),( 8,16)),
-        "blue_sling2":  ((16,216),(16,16)),
-        "red_sling0":   (( 0,232),( 8,16)),
-        "red_sling1":   (( 8,232),( 8,16)),
-        "red_sling2":   ((16,232),(16,16)),
+        "blue_magnet0": (( 0,12 * 21),(16, 8)),
+        "blue_magnet1": ((16,12 * 21),(16, 8)),
+        "tall_grass":   ((32,12 * 21),(16,8)),
+        "red_magnet0":  (( 0,(12 * 21) + (8 * 1)),(16, 8)),
+        "red_magnet1":  ((16,(12 * 21) + (8 * 1)),(16, 8)),
+        "blue_magnet2": (( 0,(12 * 21) + (8 * 2)),( 8,16)),
+        "blue_magnet3": (( 8,(12 * 21) + (8 * 2)),( 8,16)),
+        "red_magnet2":  ((16,(12 * 21) + (8 * 2)),( 8,16)),
+        "red_magnet3":  ((24,(12 * 21) + (8 * 2)),( 8,16)),
+        "minecart0":    (( 0,(12 * 21) + (8 * 4)),(16,16)),
+        "minecart1":    ((16,(12 * 21) + (8 * 4)),(16,16)),
+        "minecart2":    ((32,(12 * 21) + (8 * 4)),(16,16)),
+        "blue_sling0":  (( 0,(12 * 21) + (8 * 6)),( 8,16)),
+        "blue_sling1":  (( 8,(12 * 21) + (8 * 6)),( 8,16)),
+        "blue_sling2":  ((16,(12 * 21) + (8 * 6)),(16,16)),
+        "red_sling0":   (( 0,(12 * 21) + (8 * 8)),( 8,16)),
+        "red_sling1":   (( 8,(12 * 21) + (8 * 8)),( 8,16)),
+        "red_sling2":   ((16,(12 * 21) + (8 * 8)),(16,16)),
     }
     #add some inventory stuff
     for key in inventory:
         origin,dims = inventory[key]
         icon_specs[key] = coord_calc(origin,dims)
 
+    icon_specs["normal_boomerang"] = coord_calc((31,300),(8,16))
+    icon_specs["magical_boomerang"] = coord_calc((39,300),(8,16))
+
     # essences
-    essence_start = (0,248)
+    essence_start = (0,((16 * 20) + 4 + (8 * 1)))
     i = 0
     for row in range(6):
         for col in range(3):
@@ -108,8 +145,8 @@ def equipment_test(save=False):
 
     # essence acquire
     essence_props = {
-        "essence_bgorange": ((0,344),(32,32)),
-        "essence_bgblue":   ((0,376),(32,32))
+        "essence_bgorange": ((0,((16 * 26) + 4 + (8 * 1))),(32,32)),
+        "essence_bgblue":   ((0,((16 * 28) + 4 + (8 * 1))),(32,32)),
     }
     for key in essence_props:
         origin,dims = essence_props[key]
@@ -118,12 +155,12 @@ def equipment_test(save=False):
     # Ages: Time Travel stuff
     # portals
     portal_props = {
-        "portal0": (( 0,408),(16,16)),
-        "portal1": ((16,408),(16,16)),
-        "portal2": (( 0,424),(32,16)),
-        "portal3": (( 0,440),(32,16)),
-        "portal4": (( 0,456),(32,16)),
-        "portal5": (( 0,472),(32,16))
+        "portal0": (( 0,((16 * 30) + 4 + (8 * 1))),(16,16)),
+        "portal1": ((16,((16 * 30) + 4 + (8 * 1))),(16,16)),
+        "portal2": (( 0,((16 * 31) + 4 + (8 * 1))),(32,16)),
+        "portal3": (( 0,((16 * 32) + 4 + (8 * 1))),(32,16)),
+        "portal4": (( 0,((16 * 33) + 4 + (8 * 1))),(32,16)),
+        "portal5": (( 0,((16 * 34) + 4 + (8 * 1))),(32,16))
     }
     for key in portal_props:
         origin,dims = portal_props[key]
@@ -131,11 +168,11 @@ def equipment_test(save=False):
 
     # halos
     halo_props = [
-        ((0,488),( 4,2)),
-        ((0,491),( 8,2)),
-        ((9,491),( 8,2)),
-        ((5,488),(12,2)),
-        ((0,494),(15,8))
+        ((0,((16 * 30) + 4 + (8 * 1))),( 4,2)),
+        ((0,((16 * 30) + 4 + 3 + (8 * 1))),( 8,2)),
+        ((9,((16 * 30) + 4 + 3 + (8 * 1))),( 8,2)),
+        ((5,((16 * 30) + 4 + (8 * 1))),(12,2)),
+        ((0,((16 * 30) + 4 + 6 + (8 * 1))),(15,8))
     ]
     for color in ["pink","blue"]:
         for [i, halo] in enumerate(halo_props):
@@ -149,15 +186,15 @@ def equipment_test(save=False):
 
     # auras
     aura_props = [
-        (( 0,504),( 8,16)),
-        (( 8,504),( 8,16)),
-        ((16,504),( 8,16)),
-        ((24,504),( 8,16)),
-        ((32,504),( 8,16)),
-        (( 0,520),(16,16)),
-        ((16,520),(16,16)),
-        (( 0,536),(16,16)),
-        ((16,536),(16,16))
+        (( 0,((16 * 36) + 4 + (8 * 1))),( 8,16)),
+        (( 8,((16 * 36) + 4 + (8 * 1))),( 8,16)),
+        ((16,((16 * 36) + 4 + (8 * 1))),( 8,16)),
+        ((24,((16 * 36) + 4 + (8 * 1))),( 8,16)),
+        ((32,((16 * 36) + 4 + (8 * 1))),( 8,16)),
+        (( 0,((16 * 37) + 4 + (8 * 1))),(16,16)),
+        ((16,((16 * 37) + 4 + (8 * 1))),(16,16)),
+        (( 0,((16 * 38) + 4 + (8 * 1))),(16,16)),
+        ((16,((16 * 38) + 4 + (8 * 1))),(16,16))
     ]
     for [i, coords] in enumerate(aura_props):
         key = "aura" + str(i)

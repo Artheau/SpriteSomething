@@ -69,7 +69,15 @@ class Sprite(SpriteParent):
                 # print(f"USING FACING, {facing}")
                 break
             elif len(direction_dict.keys()) > 0:   #now we are really screwed, so just do anything
-                alt_direction = next(iter(direction_dict.keys()))
+                alt_direction = next(
+                    iter(
+                        [
+                            x for x in list(
+                                direction_dict.keys()
+                            ) if "#" not in x
+                        ]
+                    )
+                )
                 # print(f"USING FIRST, {alt_direction}")
                 break
             else:
