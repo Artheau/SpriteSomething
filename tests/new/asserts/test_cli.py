@@ -53,7 +53,6 @@ class CLIAudit(unittest.TestCase):
 
         defaultargs = {
             "cli": "1",
-            "lang": None,
             "mode": None,
             "export-filename": None,
             "dest-filename": None,
