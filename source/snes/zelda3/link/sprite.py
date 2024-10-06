@@ -236,6 +236,25 @@ class Sprite(SpriteParent):
         palette_data.extend(rom.bulk_read_from_snes_address(0x1BEDF5,4))    #the glove colors
         self.import_from_binary_data(pixel_data,palette_data)
 
+        pixel_data = rom.bulk_read_from_snes_address(0x10F000,0x7000)       #an item sheet
+        for i,row in enumerate(itertools.chain(ascii_uppercase, ["AA","AB"])):
+            for column in range(8):
+                this_image = Image.new("P",(16,16),0)
+                image_name = f"{row}{column}"
+                planes = 3
+                for offset, position in [
+                    (0x0000*planes,(0,0)),
+                    (0x0008*planes,(8,0)),
+                    (0x0080*planes,(0,8)),
+                    (0x0088*planes,(8,8))
+                ]:
+                    read_pointer = 0x100*planes*i+(16*planes)*column+offset
+                    raw_tile = pixel_data[read_pointer:read_pointer+(8*planes)]
+                    # print(image_name,offset,position)
+                    pastable_tile = common.image_from_bitplanes_base(raw_tile)
+                    this_image.paste(pastable_tile,position)
+                self.images[image_name] = this_image
+
     def import_from_binary_data(self,pixel_data,palette_data):
         '''
         Import imagery from binary data
@@ -265,15 +284,16 @@ class Sprite(SpriteParent):
                 image_name = f"{row}{column}"
                 if image_name == "AB7":
                     image_name = "null_block"
+                planes = 4
                 for offset, position in [
-                    (0x0000,(0,0)),
-                    (0x0020,(8,0)),
-                    (0x0200,(0,8)),
-                    (0x0220,(8,8))
+                    (0x0000*planes,(0,0)),
+                    (0x0008*planes,(8,0)),
+                    (0x0080*planes,(0,8)),
+                    (0x0088*planes,(8,8))
                 ]:
-                    read_pointer = 0x400*i+0x40*column+offset
-                    raw_tile = pixel_data[read_pointer:read_pointer+0x20]
-                    pastable_tile = common.image_from_bitplanes(raw_tile)
+                    read_pointer = 0x100*planes*i+(16*planes)*column+offset
+                    raw_tile = pixel_data[read_pointer:read_pointer+(8*planes)]
+                    pastable_tile = common.image_from_bitplanes_base(raw_tile)
                     this_image.paste(pastable_tile,position)
                 self.images[image_name] = this_image
 
@@ -299,7 +319,7 @@ class Sprite(SpriteParent):
         tournament_flag = (float(rom.get_size_in_MB()) > 1.5) and \
             (rom.read(0x180213, 2) == 1)
         #this'll check combo Tournament Flag
-        if rom.type() == "EXHIROM" and not tournament_flag:
+        if rom.get_type() == "EXHIROM" and not tournament_flag:
             config = rom.read_from_snes_address(0x80FF52, 2)
             fieldvals = {}
             fieldvals["gamemode"] = [ "singleworld", "multiworld" ]

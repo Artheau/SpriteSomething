@@ -86,5 +86,5 @@ def get_sprite_pose(sprite, rom, animation_ID, pose, bounding_box, upper=True,lo
     add_flattened_tiles(rom.get_default_vram_data().items())
     add_flattened_tiles(DMA_writes.items())
 
-    constructed_image = common.image_from_raw_data(tilemaps, constructed_VRAM_data, bounding_box)
+    constructed_image = common.image_from_raw_data_base(tilemaps, constructed_VRAM_data, bounding_box)
     return constructed_image

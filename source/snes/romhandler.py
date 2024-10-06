@@ -101,7 +101,7 @@ class RomHandlerParent():
         coBit = len(str(rom_type_byte)) > 1 and int(str(rom_type_byte)[1:]) or None
         self._extra_hardware = exBit and exBit or None
         self._co_processor = coBit and coBit or None
-        
+
         #can also retrieve SRAM size if desired
         #self._SRAM_size = 0x400 << self._read_from_internal_header(0x18,1)
 
@@ -332,7 +332,7 @@ class RomHandlerParent():
 
         return self._rom_size
 
-    def type(self):
+    def get_type(self):
         #to see if the rom is lorom, hirom, etc.
         return self._type.name
 

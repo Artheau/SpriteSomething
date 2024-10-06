@@ -366,7 +366,7 @@ class SpriteParent():
         rom_name = rom.get_name()
         is_zsm = "ZSM" in rom_name
         bigText = { "": [0x00, 0x00 ] }
-        addrs = { rom.type().lower(): [ "SNES0x00" ] }
+        addrs = { rom.get_type().lower(): [ "SNES0x00" ] }
         charClass = ""
 
         alphabetsPath = common.get_resource([self.resource_subpath, "..", "manifests"], "alphabets.json")
@@ -390,8 +390,8 @@ class SpriteParent():
                     charClass = alphabetsJSON[key][alphaVersion]["charClass"] if "charClass" in alphabetsJSON[key][alphaVersion] else ""
 
         if isinstance(addrs, dict):
-            if rom.type().lower() in addrs:
-                addrs = addrs[rom.type().lower()]
+            if rom.get_type().lower() in addrs:
+                addrs = addrs[rom.get_type().lower()]
             else:
                 addrs = None
         return [bigText, addrs, charClass]
