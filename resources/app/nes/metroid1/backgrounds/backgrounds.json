@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../../schema/backgrounds.schema.json",
+  "backgrounds": [
+    {
+      "filename": "empty (white).png",
+      "title": "Empty (white)"
+    },
+    {
+      "filename": "empty.png",
+      "title": "Empty (black)"
+    },
+    {
+      "filename": "transparent.png",
+      "title": "Empty (transparent)"
+    },
+    {
+      "filename": "start.png",
+      "title": "Start Screen",
+      "origin": [120,144]
+    },
+    {
+      "filename": "kraids-lair.png",
+      "title": "Kraid's Lair",
+      "origin": [120,81]
+    },
+    {
+      "filename": "norfair.png",
+      "title": "Norfair",
+      "origin": [120,81]
+    },
+    {
+      "filename": "ridleys-lair.png",
+      "title": "Ridley's Lair",
+      "origin": [120,81]
+    },
+    {
+      "filename": "tourian.png",
+      "title": "Tourian",
+      "origin": [120,81]
+    }
+  ]
+}

@@ -39,11 +39,29 @@ _test_macro.py
 # no get pip
 get-pip.py
 
+# no gameboy files
+*.gb
+*.gbc
+*.gba
+*.sgb
+
+# no nes files
+*.nes
+
 # no super nintendo files
 *.smc
 
 # no super famicom files
 *.sfc
+
+# no save files
+*.srm
+*.sav
+
+# no patches
+*.ips
+*.bps
+*.bin
 
 # no gamefiles
 gamefiles/

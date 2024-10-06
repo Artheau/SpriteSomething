@@ -1,0 +1,45 @@
+{
+  "default": {
+    "images": [
+      ["Stand", "down"]
+    ]
+  },
+  "upgraded": {
+    "images": [
+      ["Attack", "right", 3, ["red_palette", "master_weapon", "mirror_shield"]]
+    ]
+  },
+  "snow": {
+    "images": [
+      [ "Attack", "right", 3, [], 0, [0,0] ],
+      [ "Attack", "right", 3, ["wooden_shield"], 0, [16,0] ],
+      [ "Attack", "right", 3, ["iron_shield"], 0, [32,0] ],
+      [ "Attack", "right", 3, ["mirror_shield"], 0, [48,0] ],
+
+      [ "Attack", "right", 3, ["blue_palette"], 0, [0,16] ],
+      [ "Attack", "right", 3, ["blue_palette","wooden_shield"], 0, [16,16] ],
+      [ "Attack", "right", 3, ["blue_palette","iron_shield"], 0, [32,16] ],
+      [ "Attack", "right", 3, ["blue_palette","mirror_shield"], 0, [48,16] ],
+
+      [ "Attack", "right", 3, ["red_palette"], 0, [0,32] ],
+      [ "Attack", "right", 3, ["red_palette","wooden_shield"], 0, [16,32] ],
+      [ "Attack", "right", 3, ["red_palette","iron_shield"], 0, [32,32] ],
+      [ "Attack", "right", 3, ["red_palette","mirror_shield"], 0, [48,32] ],
+
+      [ "Attack", "right", 3, ["gold_palette"], 0, [0,48] ],
+      [ "Attack", "right", 3, ["gold_palette","wooden_shield"], 0, [16,48] ],
+      [ "Attack", "right", 3, ["gold_palette","iron_shield"], 0, [32,48] ],
+      [ "Attack", "right", 3, ["gold_palette","mirror_shield"], 0, [48,48] ],
+
+      [ "Attack", "right", 3, ["invertblue_palette"], 0, [0,64] ],
+      [ "Attack", "right", 3, ["invertblue_palette","wooden_shield"], 0, [16,64] ],
+      [ "Attack", "right", 3, ["invertblue_palette","iron_shield"], 0, [32,64] ],
+      [ "Attack", "right", 3, ["invertblue_palette","mirror_shield"], 0, [48,64] ],
+
+      [ "Attack", "right", 3, ["invertred_palette"], 0, [0,80] ],
+      [ "Attack", "right", 3, ["invertred_palette","wooden_shield"], 0, [16,80] ],
+      [ "Attack", "right", 3, ["invertred_palette","iron_shield"], 0, [32,80] ],
+      [ "Attack", "right", 3, ["invertred_palette","mirror_shield"], 0, [48,80] ]
+    ]
+  }
+}

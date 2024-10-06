@@ -48,6 +48,7 @@ class SpriteParent():
         self.overview_scale_factor = 2
         self.overhead = True
         self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
+        self.wip = bool(("wip" in manifest_dict) and (manifest_dict["wip"]))
         if "input" in manifest_dict:
             self.inputs = [f".{x}" for x in manifest_dict["input"].keys()]
             if "png" in manifest_dict["input"]:
@@ -103,11 +104,15 @@ class SpriteParent():
 
     def inject_into_ROM(self, rom):
         #return the injected ROM
-        raise AssertionError("called export_to_ROM() on Sprite base class")
+        raise AssertionError("called inject_into_ROM() on Sprite base class")
+
+    def export_patch(self):
+        #return the exported patch
+        return False
 
     def get_rdc_export_blocks(self):
         #return the binary blocks that are used to pack the RDC format
-        raise AssertionError("called get_sprite_export_blocks() on Sprite base class")
+        raise AssertionError("called get_rdc_export_blocks() on Sprite base class")
 
     def get_palette(self, palette_type, default_range, frame_number):
         #in most cases the child class will override this in order to provide functionality to things like spiffy buttons
@@ -188,8 +193,9 @@ class SpriteParent():
         elif file_extension.lower() == '.zspr':
             self.import_from_ZSPR()
         elif file_extension.lower() in [
-            '.sfc', '.smc',  # SNES RomHandler
-            '.nes'           # NES RomHandler
+            '.sfc', '.smc',     # SNES RomHandler
+            '.nes',             # NES RomHandler
+            '.gbc',             # GBC RomHandler
         ]:
             # dynamic import
             rom_path, _ = os.path.split(self.resource_subpath)
@@ -360,7 +366,7 @@ class SpriteParent():
         rom_name = rom.get_name()
         is_zsm = "ZSM" in rom_name
         bigText = { "": [0x00, 0x00 ] }
-        addrs = { rom.type().lower(): [ "SNES0x00" ] }
+        addrs = { rom.get_type().lower(): [ "SNES0x00" ] }
         charClass = ""
 
         alphabetsPath = common.get_resource([self.resource_subpath, "..", "manifests"], "alphabets.json")
@@ -384,12 +390,17 @@ class SpriteParent():
                     charClass = alphabetsJSON[key][alphaVersion]["charClass"] if "charClass" in alphabetsJSON[key][alphaVersion] else ""
 
         if isinstance(addrs, dict):
-            addrs = addrs[rom.type().lower()]
+            if rom.get_type().lower() in addrs:
+                addrs = addrs[rom.get_type().lower()]
+            else:
+                addrs = None
         return [bigText, addrs, charClass]
 
     def translate_author(self, rom):
         name = ""
         [bigText, addrs, _] = self.get_alphabet(rom)
+        if not addrs:
+            return ""
 
         names = {}
         for addr in addrs:
@@ -635,7 +646,12 @@ class SpriteParent():
             if new_palette:
                 palettes.append(new_palette)
 
-            base_image = self.images[tile_info["image"]] if tile_info["image"] in self.images else self.get_alternate_tile(tile_info["image"], palettes)
+            image_name = tile_info["image"] if tile_info["image"] in self.images else ""
+            base_image = None
+            if image_name == "":
+                base_image = self.get_alternate_tile(tile_info["image"], palettes)
+            else:
+                base_image = self.images[image_name]
             if base_image == None:
                 pass
 #                print("Base image not found!")
@@ -666,7 +682,10 @@ class SpriteParent():
             default_range = self.layout.get_property("import palette interval", tile_info["image"])
             this_palette = self.get_palette(palettes, default_range, frame_number)
 
-            base_image = common.apply_palette(base_image, this_palette)
+            # if not a pseudoimage
+            if "pseudoimages" not in self.layout.data or \
+                "pseudoimages" in self.layout.data and image_name not in self.layout.data["pseudoimages"]:
+                base_image = common.apply_palette(base_image, this_palette)
 
             if "pos" not in tile_info:
                 tile_info["pos"] = [0,0]
@@ -700,20 +719,30 @@ class SpriteParent():
         return returnvalue
 
     def get_pose_list(self, animation, direction):
-        directions = []
+        poses = []
 
+        if animation in self.animations:
+            direction = self.get_alternative_direction(animation, direction)
+            if direction and direction in self.animations[animation]:
+                poses = self.animations[animation][direction]
+
+        return poses
+
+    def get_alternative_direction(self, animation, direction):
         if len(self.animations):
             if animation in self.animations:
                 direction_dict = self.animations[animation]
-                if direction in direction_dict:
-                    directions = direction_dict[direction]
-        return directions
-
-    def get_alternative_direction(self, animation, direction):
-        direction_dict = None
-        if len(self.animations):
-            direction_dict = self.animations[animation]
-        return next(iter(direction_dict.keys())) if direction_dict else None
+                if direction not in direction_dict:
+                    direction = next(
+                        iter(
+                            [
+                                x for x in list(
+                                    direction_dict.keys()
+                                ) if "#" not in x
+                            ]
+                        )
+                    )
+        return direction
 
     def assemble_tiles_to_completed_image(self, tile_list):
         if tile_list:     #have to check this because some animations include "empty" poses
@@ -731,11 +760,17 @@ class SpriteParent():
             for new_image, (x, y) in tile_list:
                 # the third argument is the transparency mask, so it is not
                 #  redundant to use the same variable name twice
-                working_image.paste(
-                    new_image,
-                    (x - min_x, y - min_y),
-                    new_image
-                )
+                if new_image.mode == "RGBA":
+                    working_image.paste(
+                        new_image,
+                        (x - min_x, y - min_y),
+                        new_image
+                    )
+                else:
+                    working_image.paste(
+                        new_image,
+                        (x - min_x, y - min_y)
+                    )
             return working_image, (min_x, min_y)
         else:
             # blank image and dummy offset
@@ -832,7 +867,7 @@ class SpriteParent():
         if file_extension.lower() in [".png", ".bmp"]:
             return self.save_as_PNG(filename)
         elif hasattr(self, save_as_funcname):
-            return partial(getattr(self, save_as_funcname), filename)
+            return getattr(self, save_as_funcname)(filename)
         elif file_extension.lower() in self.outputs:
             print(f"{file_extension.upper()[1:]} not yet available by GUI for '{game_name}' / '{self.classic_name}' Sprites!")
             return

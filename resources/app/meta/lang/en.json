@@ -10,6 +10,7 @@
     "export.inject": "Inject into Game File",
     "export.inject-new": "Copy to new Game File",
     "export.inject-bulk": "Inject into directory of Game Files",
+    "export.patch": "Binary Patch",
     "export.frame-as-png": "Frame as PNG",
     "export.animation-as-gif": "Animation as GIF",
     "export.animation-as-hcollage": "Animation as Horizontal Collage",

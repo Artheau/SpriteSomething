@@ -24,7 +24,8 @@
   "Suit": {
     "power": "Power Suit",
     "varia": "Varia Suit",
-    "gravity": "Gravity Suit"
+    "gravity": "Gravity Suit",
+    "gty": "Gty Suit"
   },
   "Variant": {
     "standard": "Standard",

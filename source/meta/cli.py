@@ -32,9 +32,9 @@ class CLIMainFrame():
         # sys.exit(0)
     def mode_convert(self, command_line_args):
         """Convert a batch of sprite files of like type to like type"""
-        src_filepath = command_line_args["src-filepath"] if "src-filepath" in command_line_args else "."
-        convert_from = command_line_args["convert-from"] if "convert-from" in command_line_args else "zspr"
-        convert_to = command_line_args["convert-to"] if "convert-to" in command_line_args else "rdc"
+        src_filepath = command_line_args["src-filepath"] if "src-filepath" in command_line_args and command_line_args["src-filepath"] is not None else "."
+        convert_from = command_line_args["convert-from"] if "convert-from" in command_line_args and command_line_args["convert-from"] is not None else "zspr"
+        convert_to = command_line_args["convert-to"] if "convert-to" in command_line_args and command_line_args["convert-to"] is not None else "rdc"
 
         if convert_from.startswith("."):
             convert_from = convert_from[1:]
@@ -281,6 +281,8 @@ class CLIMainFrame():
                             ".sfc",     # SNES
                             ".smc",     # SNES
                             ".nes",     # NES
+                            ".gbc",     # GBC
+                            ".gb",      # GB
                             ".bmp",     # FFMQBen
                             ".zip",     # Mo3Player
                             ".aspr",    # ASPR (WIP)

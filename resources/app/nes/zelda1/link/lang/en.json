@@ -1,0 +1,17 @@
+{
+  "section": {
+    "facing": "Facing",
+    "mail": "Ring"
+  },
+  "Facing": {
+    "up": "Up",
+    "left": "Left",
+    "down": "Down",
+    "right": "Right"
+  },
+  "Ring": {
+    "green": "Green Mail",
+    "blue": "Blue Ring",
+    "red": "Red Ring"
+  }
+}

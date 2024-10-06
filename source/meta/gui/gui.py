@@ -434,6 +434,13 @@ class SpriteSomethingMainFrame(tk.Frame):
               ),
               (None,None,None),
               (
+                  self.fish.translate("meta","menu","export.patch"),
+                  "patch",
+                  None
+                #   self.export_patch
+              ),
+              (None,None,None),
+              (
                   self.fish.translate("meta","menu","export.frame-as-png"),
                   "frame-as-png",
                   self.export_frame_as_png
@@ -666,6 +673,12 @@ class SpriteSomethingMainFrame(tk.Frame):
         self.attach_both_panels()       #remake the GUI panels
         self.load_plugins()
         self.initialize_sprite_animation()
+        if self.sprite.wip:
+            messagebox.showwarning(
+                "Work in Progress!",
+                f"{self.game.name}/{self.sprite.classic_name} Sprites don't have full functionality yet." + "\n"
+                "Your mileage may vary."
+            )
 
     def attach_both_panels(self):
         #this same function can also be used to re-create the panels
@@ -904,7 +917,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         #if we've only got one representative image
         if len(image_list) == 1:
             #get the data
-            filename, image = image_list[0]
+            filename, image, _ = image_list[0]
             #ask for destination
             filename = filedialog.asksaveasfilename(
                 initialfile=filename,
@@ -1608,7 +1621,7 @@ class SpriteSomethingMainFrame(tk.Frame):
     #query user for directory to inject sprite into
     def copy_into_ROM_bulk(self, inject=False):
         source_filepath = None
-        supported_consoles = [ "pc", "nes", "snes" ]
+        supported_consoles = [ "pc", "nes", "snes", "gb", "gbc" ]
         if self.sprite.view_only and self.game.console_name in supported_consoles:
             supported_consoles.remove(self.game.console_name)
 
@@ -1630,6 +1643,8 @@ class SpriteSomethingMainFrame(tk.Frame):
             default_exts = [ ".nes" ]
         elif self.game.console_name == "snes":
             default_exts = [ ".smc", ".sfc" ]
+        elif self.game.console_name == "gbc":
+            default_exts [ ".gb", ".gbc" ]
 
         for r,_,f in os.walk(source_filepath):
             for file in f:
@@ -1665,6 +1680,9 @@ class SpriteSomethingMainFrame(tk.Frame):
         #alias to inject into a directory of game files
         '''
         self.copy_into_ROM_bulk(inject=True)
+
+    def export_patch(self):
+        self.sprite.export_patch()
 
     def export_frame_as_png(self):
         '''

@@ -28,7 +28,15 @@ class AnimationEngineParent():
 
         self.animations = self.sprite.animations
         if len(self.animations):
-            self.current_animation = next(iter(self.animations.keys()))
+            self.current_animation = next(
+                iter(
+                    [
+                        x for x in list(
+                            self.animations.keys()
+                        ) if "#" not in x
+                    ]
+                )
+            )
         else:
             print(f"🟡WARNING: No animations defined to set to object: {self.game.internal_name}/{self.sprite.internal_name}")
 
@@ -182,7 +190,7 @@ class AnimationEngineParent():
             self.active_images.append(scaled_image)     #if you skip this part, then the auto-destructor will get rid of your picture!
         else:
             pass
-#            print("Pose image not found to update animation!")
+            # print("Pose image not found to update animation!")
 
     def get_pose_number_from_frames(self, frame_number):
         mod_frames = frame_number % self.frame_progression_table[-1]
@@ -212,6 +220,22 @@ class AnimationEngineParent():
                     self.spiffy_dict["mail_var"].set("bunny")
                 elif self.spiffy_dict["mail_var"].get() == "bunny": #reset to green palette when switching back to a non-bunny animation
                     self.spiffy_dict["mail_var"].set("green")
+            if "brother_var" in self.spiffy_dict:
+                check_passed = False
+                mario_checks = [
+                    "Frog",
+                    "Tanooki",
+                    "Hammer",
+                    "Cloud",
+                    "Clear"
+                ]
+                for check in mario_checks:
+                    if not check_passed and check in self.current_animation:
+                        check_passed = True
+                if check_passed:
+                    self.spiffy_dict["brother_var"].set("global")
+                elif self.spiffy_dict["brother_var"].get() == "global":
+                    self.spiffy_dict["brother_var"].set("mario")
             palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
 
             self.pose_number = self.get_pose_number_from_frames(current_frame)
@@ -247,13 +271,11 @@ class AnimationEngineParent():
 #            print("Current animation (%s) not found!" % current_animation)
             pose_image,offset = None,(0,0)
 
-        if pose_number is not None:
-            self.step_number_label.config(text=str(pose_number+1))
-        if pose_list:
-            self.step_total_label.config(text=str(len(pose_list)))
-            tile_list_text = ""
         if pose_number is not None and pose_list:
+            tile_list_text = ""
             pose = pose_list[pose_number]
+            self.step_number_label.config(text=str(pose_number+1))
+            self.step_total_label.config(text=str(len(pose_list)))
             tile_list_text += "Name: <none>"
             if "#name" in pose:
                 tile_list_text = tile_list_text.replace("<none>", pose["#name"])
@@ -272,7 +294,9 @@ class AnimationEngineParent():
                         "vh": "180-rotation"
                     }
                     flip = flip_switcher.get(tile["flip"]) if tile["flip"] in flip_switcher else ""
-                    tile_list_text += ' ' + flip
+                    tile_list_text += f" {flip}"
+                if "name" in tile:
+                    tile_list_text += f" '{tile['name']}'"
                 tile_list_text += "\n"
             self.tiles_list_label.config(text=tile_list_text)
 
@@ -331,7 +355,7 @@ class AnimationEngineParent():
                             button_list.append((None,None,None,None))
                         elif "meta" in button and button["meta"] == "blank": #a blank space, baby
                             button_list.append((None,"",None,None))
-                        else:
+                        elif "fish-subkey" in button:
                             default = button["default"] if "default" in button else False
                             disabled = group["disabled"] if "disabled" in group else False
                             button_list.append((button["fish-subkey"],button["img"],default,disabled))
@@ -400,9 +424,10 @@ class AnimationEngineParent():
     def export_frame_as_PNG(self, filename):
         #TODO: should this be factored out to the sprite class as some kind of export_as_PNG(animation, direction, ..., filename) call?
         current_image, _ = self.get_current_image()
-        new_size = tuple(int(dim*self.zoom_getter()) for dim in current_image.size)
-        img_to_save = current_image.resize(new_size,resample=Image.NEAREST)
-        img_to_save.save(filename)
+        if current_image:
+            new_size = tuple(int(dim*self.zoom_getter()) for dim in current_image.size)
+            img_to_save = current_image.resize(new_size,resample=Image.NEAREST)
+            img_to_save.save(filename)
 
     def export_animation_as_collage(self, filename, orientation="horizontal"):
         #TODO: use the displayed palette

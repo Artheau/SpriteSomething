@@ -1,0 +1,220 @@
+{
+    "sprites": {
+        "baby": {
+            "bin": {
+                "vanilla_crc": "0xA731C9A6",
+                "white_crc": "0xEDA1184A"
+            },
+            "ips": [
+                {
+                    "note": "Baby Sheet",
+                    "address": [
+                        {
+                            "games": [ "ages" ],
+                            "locations": [
+                                "0x06ACA0"
+                            ]
+                        },
+                        {
+                            "games": [ "seasons" ],
+                            "locations": [
+                                "0x06AC40"
+                            ]
+                        }
+                    ],
+                    "sheet": [
+                        [ "master" ],
+                        {
+                            "y":    [272,288, 16],
+                            "x":    [ 56,120,  8],
+                            "y2":   [  0, 16,  8],
+                            "notes": [
+                                "(56,272) to (120,288)"
+                            ]
+                        }
+                    ],
+                    "length": "0x0100"
+                }
+            ]
+        },
+        "link": {
+            "bin": {
+                "vanilla_crc": "0xF97AC235",
+                "white_crc": "0xCA195F8A"
+            },
+            "ips": [
+                {
+                    "note": "Main Sheet",
+                    "address": [
+                        {
+                            "games": [ "ages", "seasons" ],
+                            "locations": [
+                                "0x068000"
+                            ]
+                        }
+                    ],
+                    "sheet": [
+                        [ "master" ],
+                        {
+                            "y":    [  0,288, 16],
+                            "x":    [  0,128,  8],
+                            "y2":   [  0, 16,  8],
+                            "notes": [
+                                "(0,0) to (128,288)"
+                            ]
+                        }
+                    ],
+                    "length": "0x22E0"
+                }
+            ]
+        },
+        "LADX": {
+            "bin": { "vanilla_crc": "0xDB88BDED" },
+            "ips": [
+                {
+                    "note": "File Select",
+                    "address": [
+                        {
+                            "games": [ "la", "ladx" ],
+                            "locations": [
+                                "0x030000",
+                                "0x0B0000"
+                            ]
+                        }
+                    ],
+                    "sheet": [
+                        [ "Stand", "down" ],
+                        {
+                            "y":    [  0, 16, 16],
+                            "x":    [  0, 16,  8],
+                            "y2":   [  0, 16,  8],
+                            "notes": [
+                                "(0,0) to (16,16)"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "note": "Main Sheet",
+                    "address": [
+                        {
+                            "games": [ "la", "ladx" ],
+                            "locations": [
+                                "0x031800",
+                                "0x0B1800"
+                            ]
+                        }
+                    ],
+                    "sheet": [
+                        [ "Snow's LADX Convertor" ],
+                        {
+                            "y":    [  0,128, 16],
+                            "x":    [  0,128,  8],
+                            "y2":   [  0, 16,  8],
+                            "notes": [
+                                "(0,0) to (128,128)"
+                            ]
+                        }
+                    ],
+                    "length": "0x1000"
+                },
+                {
+                    "note": "Bed Sheet",
+                    "address": [
+                        {
+                            "games": [ "la","ladx" ],
+                            "locations": [
+                                "0x038D00",
+                                "0x0B8D00"
+                            ]
+                        }
+                    ],
+                    "sheet": [
+                        [ "Snow's LADX Convertor: Page 2" ],
+                        {
+                            "y":    [  0, 16, 16],
+                            "x":    [  0, 56,  8],
+                            "y2":   [  0, 16,  8],
+                            "notes": [
+                                "(0,0) to (56,16)"
+                            ]
+                        }
+                    ],
+                    "length": "0x00E0"
+                },
+                {
+                    "note": "Cutscene Link: Shipwrecked",
+                    "address": [
+                        {
+                            "games": [ "la","ladx" ],
+                            "locations": [
+                                "0x041500",
+                                "0x0C1500"
+                            ]
+                        }
+                    ],
+                    "sheet": [
+                        [ "Snow's LADX Convertor: Page 2" ],
+                        {
+                            "y":    [ 16, 32, 16],
+                            "x":    [  0, 32,  8],
+                            "y2":   [  0, 16,  8],
+                            "notes": [
+                                "(0,16) to (32,32)"
+                            ]
+                        }
+                    ],
+                    "length": "0x0080"
+                },
+                {
+                    "note": "Cutscene Link: Sitting with Marin",
+                    "#address": [
+                        {
+                            "games": [ "la","ladx" ],
+                            "locations": [
+                                "0x042708",
+                                "0x0C2708"
+                            ]
+                        }
+                    ],
+                    "sheet": [
+                        [ "Snow's LADX Convertor: Page 2" ],
+                        {
+                            "y":    [ 32, 48, 16],
+                            "x":    [  0, 16,  8],
+                            "y2":   [  0, 16,  8],
+                            "notes": [
+                                "(0,32) to (16,48)"
+                            ]
+                        }
+                    ],
+                    "length": "0x0040"
+                },
+                {
+                    "note": "Misc with Falling",
+                    "address": [
+                        {
+                            "games": [ "la","ladx" ],
+                            "locations": [
+                                "0x04B500",
+                                "0x0CB500"
+                            ]
+                        }
+                    ],
+                    "sheet": [
+                        [ "Snow's LADX Convertor: Page 2" ],
+                        {
+                            "y":    [ 48, 64, 16],
+                            "x":    [  0,120,  8],
+                            "y2":   [  0, 16,  8],
+                            "notes": [
+                                "(0,48) to (120,64)"
+                            ]
+                        }
+                    ],
+                    "length": "0x01E0"
+                }
+            ]
+        }
+    }
+}

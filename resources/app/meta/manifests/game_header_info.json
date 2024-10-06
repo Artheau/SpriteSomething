@@ -1,5 +1,8 @@
 {
   "$schema": "../../../schema/game-header-info.schema.json",
+  "metroid1": [
+    "MOTHER BRAIN"
+  ],
   "metroid3": [
     "ZSM",
     "      SM RANDOMIZER  ",
@@ -7,7 +10,9 @@
     "Hyper Metroid",
     "SMRv",
     "M3 Y-Faster Hack",
-    "Metroid: Redesign"
+    "Metroid: Redesign",
+    "SUPERMETROID MAPRANDO",
+    "MOTHER BRAIN"
   ],
   "mother3": [
     "EARTH BOUND",
@@ -16,12 +21,16 @@
   "smb3": [
     "MARIO 3"
   ],
+  "zelda1": [
+    "MOTHER BRAIN"
+  ],
   "zelda3": [
     "ZSM",
     "ZELDANODENSETSU",
     "VT ",
     "ER ",
     "THE LEGEND OF ZELDA",
-    "ALTTPRAC"
+    "ALTTPRAC",
+    "MOTHER BRAIN"
   ]
 }

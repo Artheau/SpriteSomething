@@ -15,9 +15,9 @@ from source.meta.common import common
 
 class Layout():
     def __init__(self, filename, sprite_name=""):
+        layout_path = filename.replace(os.sep, '/')
+        layout_path = layout_path[layout_path.find("app/")+len("app/"):]
         if not filename or not os.path.isfile(filename):
-            layout_path = self.filename.replace(os.sep, '/')
-            layout_path = layout_path[layout_path.find("app/")+len("app/"):]
             raise AssertionError(f"Layout not found: {layout_path}")
         with open(filename) as inFile:
             self.data = []
@@ -26,7 +26,7 @@ class Layout():
             except JSONDecodeError as e:
                 raise ValueError("Layout manifest malformed: " + filename)
         self.reverse_lookup = {}
-        print(f"Finding Layouts! [{sprite_name}]")
+        print(f"Finding Layouts! [{layout_path.replace('/manifests/layout.json','')}]")
         if "layouts" in self.data:
             for layout in self.data["layouts"]:
                 if "names" in layout and sprite_name in layout["names"]:
@@ -81,7 +81,7 @@ class Layout():
         original_dimensions = self.get_property("dimensions", image_name)
         extra_area = self.get_property("extra area", image_name)
         shift = self.get_property("shift", image_name)
-        border_color = tuple(self.data["border_color"])
+        border_color = self.data["border_color"]
 
         scale = self.get_property("scale", image_name)
         if scale:
@@ -106,7 +106,10 @@ class Layout():
                             dimensions[3] - (image.size[1] - origin[1])        #bottom
         )
 
-        image_with_border = ImageOps.expand(image,border=border,fill=(0,0,0,0))
+        fill_color = (0,0,0)
+        if image.mode == "RGBA":
+            fill_color = (0,0,0,0)
+        image_with_border = ImageOps.expand(image,border=border,fill=fill_color)
         origin = (origin[0] + border[0], origin[1] + border[1])
         if extra_area is not None:     #we need to block off some areas that can't actually be used
             mask = Image.new("RGBA", (dimensions[2]-dimensions[0],dimensions[3]-dimensions[1]), tuple(border_color))
@@ -125,7 +128,9 @@ class Layout():
                                                     self.data["border_size"]
         )
 
-        image_with_border = ImageOps.expand(image_with_border,border=border_with_spacer,fill=border_color)     #hard border around the actual draw space
+        if image_with_border.mode != "RGBA":
+            border_color = (*border_color[:3],)
+        image_with_border = ImageOps.expand(image_with_border,border=border_with_spacer,fill=tuple(border_color))     #hard border around the actual draw space
         origin = tuple(x+self.data["border_size"] for x in origin)
 
         if shift is not None:
@@ -170,7 +175,10 @@ class Layout():
                                 0,                                                        #right
                                 origin[1]+y_max-image.size[1]    #bottom
             )
-            bordered_image = ImageOps.expand(image,border=border,fill=tuple(self.data["border_color"]))
+            border_color = self.data["border_color"]
+            if image.mode != "RGBA":
+                border_color = border_color[:3]
+            bordered_image = ImageOps.expand(image,border=border,fill=tuple(border_color))
             collage.paste(bordered_image, (current_x_position,0))
 
             current_x_position += image.size[0]
@@ -293,13 +301,13 @@ class Layout():
 
         #FIXME: Extrapolate layoutlib.py to <console>/<game>/<sprite>/layout.py
         tmp = {}
+        palette_block = None
         for block_name in [
             "meta_block",
             "meta_block1",
             "meta_block2"
         ]:
             if block_name in all_images:
-                palette_block = None
                 if f"ffmq{os.sep}benjamin" in self.filename:
                     meta_block = all_images[block_name].transpose(Image.FLIP_TOP_BOTTOM)
                     palette_block = meta_block.crop(self.coord_calc((0,0),(8,1)))
@@ -309,23 +317,57 @@ class Layout():
                     palette_block = meta_block.transpose(Image.FLIP_LEFT_RIGHT)
                     # tmp[block_name] = palette_block
                     # palette_block.show()
-                if palette_block:
-                    all_images["palette_block"] = palette_block
 
-        master_palettes = list(
-            all_images["palette_block"].convert("RGB").getdata()) \
-            if "palette_block" in all_images else []
+        if "stock_palette" in self.data:
+            stock_palette = self.data["stock_palette"]
+            rows = len(stock_palette)
+            cols = len(stock_palette[0])
+            flat_palette = []
+            for row in stock_palette:
+                for col in row:
+                    flat_palette.append(tuple(col))
+            palette_block = Image.new('RGB',(cols,rows),0)
+            palette_block.putdata(flat_palette)
+
+        if palette_block:
+            all_images["palette_block"] = palette_block
+
+        if "palette_block" in all_images:
+            palette_block = all_images["palette_block"]
+            if "images" in self.data and \
+                "palette_block" in self.data["images"] and \
+                "shift" in self.data["images"]["palette_block"]:
+                shift = self.data["images"]["palette_block"]["shift"]
+                if shift[0] != 0:
+                    palette_block = all_images["palette_block"]
+                    palette_block = palette_block.crop(
+                        (
+                            abs(shift[0]),
+                            0,
+                            *palette_block.size
+                        )
+                    )
+                    all_images["palette_block"] = palette_block
+            rgba_data = list(all_images["palette_block"].convert("RGBA").getdata())
+            rgb_data = list(all_images["palette_block"].convert("RGB").getdata())
+            if rgba_data[0][3] == 0:
+                rgb_data[0] = (255,0,255)
+            master_palettes = rgb_data
+        else:
+            master_palettes = []
 
         if len(master_palettes):
             for image_name, this_image in all_images.items():
                 if not image_name in [
                     "transparent",
-                    "meta_block",
-                    "meta_block1",
-                    "meta_block2",
                     "palette_block"
                 ]:
+                    if "meta_block" in image_name \
+                        or "null_block" in image_name:
+                        continue
                     import_palette = self.get_property("import palette interval", image_name)
+                    if not import_palette:
+                        raise AssertionError(f"Import Palette Interval not found for image '{image_name}'!")
                     palette = [x for color in master_palettes[import_palette[0]:import_palette[1]] for x in color]     #flatten the RGB values
                     palette = palette + palette[:3]*(256-(len(palette)//3))
                     palette_seed = Image.new("P", (1,1))

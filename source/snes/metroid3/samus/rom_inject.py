@@ -17,7 +17,7 @@ def rom_inject(player_sprite, spiffy_dict, old_rom, verbose=False):
 	#this'll check VT rando Tournament Flag
 	tournament_flag = (float(rom.get_size_in_MB()) > 1.5) and (rom.read(0x180213, 2) == 1)
 	#this'll check combo Tournament Flag
-	if rom.type() == "EXHIROM" and not tournament_flag:
+	if rom.get_type() == "EXHIROM" and not tournament_flag:
 		config = rom.read_from_snes_address(0x80FF52, 2)
 		fieldvals = {}
 		fieldvals["gamemode"] = [ "singleworld", "multiworld" ]

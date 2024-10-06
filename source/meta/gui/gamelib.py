@@ -123,7 +123,8 @@ def autodetect(sprite_filename):
 
     for [console, console_types] in {
         "snes": [ ".sfc", ".smc" ],
-        "nes": [ ".nes" ]
+        "nes": [ ".nes" ],
+        "gbc": [ ".gbc", ".gb" ]
     }.items():
         if file_extension.lower() in console_types:
             print(f"Detected: {console.upper()} game file")
@@ -254,7 +255,10 @@ def autodetect(sprite_filename):
             # FIXME: English
             raise AssertionError(f"Filetype of '{file_extension.upper()[1:]}' for '{sprite_filename}' not supported!")
 
-    print(f"Detected: {game.internal_name}/{sprite.internal_name}/{selected_sheet}!")
+    detected = f"{game.internal_name}/{sprite.internal_name}"
+    if selected_sheet != "":
+        detected += f"/{selected_sheet}"
+    print(f"Detected: {detected}!")
 
     return game, sprite, animation_assist
 
@@ -322,7 +326,7 @@ def get_game_class_of_type(console_name,game_name):
         game_module = importlib.import_module(f"{source_subpath}.game")
     except ModuleNotFoundError as e:
         raise ModuleNotFoundError(f"Game module not found: {source_subpath}.game")
-    return game_module.Game()
+    return game_module.Game(os.path.join(console_name,game_name))
 
 class GameParent():
     #parent class for games to inherit
@@ -330,12 +334,13 @@ class GameParent():
     #to make a new game class, you must write code for all of the functions in this section below.
     ############################# BEGIN ABSTRACT CODE ##############################
 
-    def __init__(self):
+    def __init__(self, my_subpath=""):
         self.name = "Game Parent Class"    #to be replaced by a name like "Super Metroid"
         self.internal_name = "meta"        #to be replaced by the specific folder name that this app uses, e.g. "metroid3"
         self.plugins = None
         self.has_plugins = None
         self.console_name = "snes" #to be replaced by the console that the game is native to, assuming SNES for now
+        self.resource_subpath = my_subpath
         self.inputs = []
         self.outputs = []
         if os.path.isfile(os.path.join("resources","app",self.console_name,"manifests","manifest.json")):
@@ -379,7 +384,7 @@ class GameParent():
         background_label.grid(row=0, column=1)
         self.background_selection = tk.StringVar(background_panel)
 
-        background_manifests = common.get_all_resources([self.console_name,self.internal_name,"backgrounds"],"backgrounds.json")
+        background_manifests = common.get_all_resources([self.resource_subpath,"backgrounds"],"backgrounds.json")
         for background_manifest in background_manifests:
             with open(background_manifest) as f:
                 background_data = []
@@ -392,6 +397,16 @@ class GameParent():
                     self.background_datas["title"][background["title"]] = background["filename"]
                     if "origin" in background:
                         self.background_datas["origin"][background["title"]] = background["origin"]
+        if len(self.background_datas["filename"]) == 0:
+            backgrounds_path = os.path.join("resources","app",self.resource_subpath,"backgrounds")
+            if os.path.isdir(backgrounds_path):
+                backgrounds = os.listdir(backgrounds_path)
+                for background in backgrounds:
+                    prettyname = os.path.splitext(background)[0]
+                    prettyname = [x[:1].upper() + x[1:] for x in prettyname.split(" ")]
+                    prettyname = " ".join(prettyname)
+                    self.background_datas["filename"][background] = prettyname
+                    self.background_datas["title"][prettyname] = background
         background_prettynames = list(self.background_datas["title"].keys())
         if len(background_prettynames):
             self.background_selection.set(random.choice(background_prettynames))

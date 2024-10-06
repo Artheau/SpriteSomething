@@ -1,0 +1,38 @@
+Green Mail:          FFFFFF,000000,10AD42,FFD68C
+Blue Mail:           FFFFFF,000000,1884FF,FFD68C
+Red Mail:            FFFFFF,000000,FF0829,FFD68C
+Gold Mail:           FFFFFF,000000,FF7B08,FFD68C
+Equipment Sword:     FFFFFF,000000,3BB470,FCE6C6
+Charged Sword:       FFFFFF,F8C56E,9C3900,000000
+LADX Sword:          FFFFFF,000000,339EBF,E9ACA3
+Lt Grey Items:       FFFFFF,8888A0,283050,000000 : Bombs, Shield, Top half Hookshot, Bottom half Magic Rod, Bottom half Shovel, Small Key
+Lt Red Items:        FFFFFF,FF3173,940042,000000 : Boomerang, Ocarina
+Dk Brown Items:      F8F8A8,C87020,703002,000000 : Bow, Powder, Boots, Feather
+Blue Items:          FFFFFF,70A8F8,0000F8,000000 : Flippers, Compass
+Dk Red Items:        FFFFFF,F81858,700028,000000 : Bottom half Hookshot, Top half Magical Rod
+Power Bracelet L1:   9878A0,381850,000000,000000
+Power Bracelet L2:   F81858,700028,000000,000000
+Lt Brown Items:      FFFFFF,E7C642,000000,000000 : Dungeon Entrance Keys, Broom
+Dungeon Items:       F8F8A8,D8A820,885000,000000 : Map, Nightmare Key
+Bananas:             FFFFFF,F7F729,B5A500,000000
+Inverted Grey Items: FFFFFF,ADADBD,ADADBD,000000 : Dog Food
+Dk Grey Items:       FFFFFF,283050,000000,000000 : Fish Hook
+Hibiscus:            FFFFFF,F8B060,E81830,000000
+
+[6B0829,EF0818,FFD68C,000000],[FF7321,21ADFF,42FF00,000000],[FFFFFF,8C8CA5,293152,000000],[8C8CA5,293152,000000,000000] # 0[?] 1[?] 10[Grey] 11[Dk Grey]
+[FFEF7B,F76321,AD0000,000000],[BD6339,F76321,AD0000,000000],[FFFF8C,BD0029,420021,000000],[BD0029,420021,000000,000000] # 2[?] 3[?] 12[Red] 13[Dk Red]
+[FFEF7B,BD6339,7B3929,000000],[FFEF7B,E79400,A56300,000000],[FFFF8C,CE7321,733121,000000] # 4[?] 5[?] 14[Brown] 15[?]
+[C6E7EF,1884AD,10316B,000000],[FFEF7B,FF0000,5ADE21,000000],[],[FFFFFF,FFFFFF,109408,000000] # 6[?] 7[?] 16[?] 17[Dk Green]
+[FFFFFF,000000,10AD42,FFD68C],[FFFFFF,000000,1884FF,FFD68C] # 8[GreenMail] 9[BlueMail] 18 19
+[FFFFFF,000000,FF0829,FFD68C],[FFFFFF,000000,FF7B08,FFD68C] # A[RedMail] B[GoldMail] 1A 1B
+[FFFFFF,73ADFF,0000FF,000000],[FFFFFF,FFB531,DE0000,000000],[F8F8A8,000000,A7A39E,F0EFED],[000000,000000,000000,000000] # C[Blues] D[Charged] 1C[Lt Grey] 1D[Dk Gold]
+[FFFF8C,E79400,9C4210,000000],[6394FF,31BDEF,3973A5,B53184],[FFFF8C,FF195A,730029,000000],[000000,000000,000000,000000] # E[?] F[?] 1E[Lt Red] 1F[?]
+
+LADX:
+Grey:    L-1 Sword, L-2 Sword, L-1 Shield, L-2 Shield, Bomb, Top half Hookshot, Bottom half Magical Rod, Bottom half Shovel
+Dk Grey: L-1 Bracelet
+Dk Red:  L-2 Bracelet
+Charged: Map, Dungeon Entrance Keys, Nightmare Key
+Red:     Flute, Bottom half Hookshot, Top half Magic Rod, Boomerang
+Brown:   Powder, Bow, Feather, Top half Shovel
+Lt Grey: Stone Wall, Stone Tablet, Small Key

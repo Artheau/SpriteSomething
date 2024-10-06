@@ -1,0 +1,32 @@
+{
+    "$schema": "../../../../../schema/spiffy-buttons.schema.json",
+    "button-groups": [
+      {
+        "group-fish-key": "mail",
+        "buttons": [
+          {
+            "fish-subkey": "green",
+            "img": "mail-green.png",
+            "default": true
+          },
+          {
+            "fish-subkey": "blue",
+            "img": "mail-blue.png"
+          },
+          {
+            "fish-subkey": "red",
+            "img": "mail-red.png"
+          }
+        ]
+      }
+    ],
+    "tests": {
+      "Stand": {
+        "frame": 0,
+        "selections": [
+          [],
+          ["varia_suit"]
+        ]
+      }
+    }
+  }

@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../../schema/backgrounds.schema.json",
+  "backgrounds": [
+    {
+      "filename": "start.png",
+      "title": "Start Screen",
+      "origin": [120,80]
+    },
+    {
+      "filename": "sword-cave.0.png",
+      "title": "Sword Cave",
+      "origin": [111,152]
+    },
+    {
+      "filename": "file-select.png",
+      "title": "File Select",
+      "origin": [0,0]
+    }
+  ]
+}

@@ -1,0 +1,235 @@
+{
+  "$schema": "../../../../../schema/spiffy-buttons.schema.json",
+  "button-groups": [
+    {
+      "group-fish-key": "palette",
+      "buttons": [
+        {
+          "meta": "blank"
+        },
+        {
+          "fish-subkey": "green",
+          "img": "palette-green.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "blue",
+          "img": "palette-blue.png"
+        },
+        {
+          "fish-subkey": "red",
+          "img": "palette-red.png"
+        },
+        {
+          "fish-subkey": "gold",
+          "img": "palette-gold.png"
+        },
+        {
+          "meta": "newline"
+        },
+        {
+          "meta": "blank"
+        },
+        {
+          "#fish-subkey": "invertgreen",
+          "#img": "palette-green.png"
+        },
+        {
+          "meta": "blank"
+        },
+        {
+          "fish-subkey": "invertblue",
+          "img": "palette-invertblue.png"
+        },
+        {
+          "fish-subkey": "invertred",
+          "img": "palette-invertred.png"
+        },
+        {
+          "#fish-subkey": "invertgold",
+          "#img": "palette-gold.png"
+        },
+        {
+          "meta": "blank"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "weapon",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "wooden",
+          "img": "weapon-wooden.png"
+        },
+        {
+          "fish-subkey": "noble",
+          "img": "weapon-noble.png"
+        },
+        {
+          "fish-subkey": "master",
+          "img": "weapon-master.png"
+        },
+        {
+          "fish-subkey": "charge",
+          "img": "weapon-charge.png"
+        },
+        {
+          "meta": "newline"
+        },
+        {
+          "meta": "blank"
+        },
+        {
+          "fish-subkey": "rod",
+          "img": "weapon-rod.png"
+        },
+        {
+          "fish-subkey": "ore",
+          "img": "weapon-ore.png"
+        },
+        {
+          "fish-subkey": "cane",
+          "img": "weapon-cane.png"
+        },
+        {
+          "fish-subkey": "biggoron",
+          "img": "weapon-biggoron.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "shield",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "wooden",
+          "img": "shield-wooden.png"
+        },
+        {
+          "fish-subkey": "iron",
+          "img": "shield-iron.png"
+        },
+        {
+          "fish-subkey": "mirror",
+          "img": "shield-mirror.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "magnet",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "blue",
+          "img": "magnet-blue.png"
+        },
+        {
+          "fish-subkey": "red",
+          "img": "magnet-red.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "sling",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "blue",
+          "img": "sling-blue.png"
+        },
+        {
+          "fish-subkey": "red",
+          "img": "sling-red.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "boomerang",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "normal",
+          "img": "boomerang-normal.png"
+        },
+        {
+          "fish-subkey": "magical",
+          "img": "boomerang-magical.png"
+        }
+      ]
+    },
+    {
+      "group-fish-key": "accessories",
+      "buttons": [
+        {
+          "fish-subkey": "none",
+          "img": "no-thing.png"
+        },
+        {
+          "fish-subkey": "yes",
+          "img": "yes-thing.png",
+          "default": true
+        }
+      ]
+    },
+    {
+      "group-fish-key": "halo",
+      "buttons": [
+        {
+            "meta": "blank"
+        },
+        {
+          "fish-subkey": "blue",
+          "img": "time-past.png",
+          "default": true
+        },
+        {
+          "fish-subkey": "pink",
+          "img": "time-future.png"
+        }
+      ]
+    }
+  ],
+  "tests": {
+    "Stand": {
+      "frame": 0,
+      "selections": [
+        [],
+        ["blue_palette"],
+        ["red_palette"],
+        ["gold_palette"]
+      ]
+    },
+    "Attack": {
+      "frame": 4,
+      "selections": [
+        [],
+        ["wooden_weapon"],
+        ["charge_weapon"],
+        ["rod_weapon"],
+        ["cane_weapon"],
+        ["biggoron_weapon"]
+      ]
+    }
+  }
+}
