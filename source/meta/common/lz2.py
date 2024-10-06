@@ -10,10 +10,20 @@ class LZ2CommandException(Exception):
         self.message = message
         if isinstance(message, list):
             self.message = "\n".join(message)
+        if isinstance(message, dict):
+            self.message = [
+                "Index:     " + str(message["index"]),
+                "A[Index]:  " + hex(message["a"][message["index"]]),
+                "High Bits: " + hex(message["high"]),
+                "Low Bits:  " + hex(message["low"]),
+                "---",
+                "Output:    " + str(["0x" + format(byte, '02x').upper() for byte in message["b"]])
+            ]
+            self.message = "\n".join(self.message)
         self.payload = payload
 
     def __str__(self):
-        return str(self.message)
+        return "\n".join(["An illegal command has occurred", str(self.message)])
 
 
 def decompress(a):
@@ -70,15 +80,13 @@ def decompress(a):
                 b.append(b[b_index+i])
         else:
             raise LZ2CommandException(
-                [
-                    "An illegal command has occurred",
-                    index,
-                    a[index].hex(),
-                    high.hex(),
-                    low.hex(),
-                    "---",
-                    b.hex()
-                ]
+                {
+                    "index": index,
+                    "a": a,
+                    "b": b,
+                    "low": low,
+                    "high": high
+                }
             )
     return b
 
@@ -99,6 +107,14 @@ def decompress_to_file(src_filename, dest_filename=None):
     b = decompress_from_file(src_filename)
     with open(dest_filename, "wb") as file:
         file.write(b)
+    # Now, for icing on the cake:
+    #  Convert 3BPP -> 4BPP
+    #  Convert 4BPP -> PNG
+    # Then:
+    #  Convert PNG  -> 4BPP
+    #  Convert 4BPP -> 3BPP
+    #  Compress using LZ2
+    #  Save to disk or inject into game file
 
 
 if __name__ == "__main__":
