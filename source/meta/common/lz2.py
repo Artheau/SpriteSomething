@@ -7,7 +7,7 @@ from pathlib import Path
 
 class LZ2CommandException(Exception):
     def __init__(self, message, payload=None):
-        self.message = ""
+        self.message = message
         if isinstance(message, list):
             self.message = "\n".join(message)
         self.payload = payload
