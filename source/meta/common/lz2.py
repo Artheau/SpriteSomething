@@ -96,7 +96,6 @@ def decompress_to_file(src_filename, dest_filename=None):
         if not os.path.isdir(dest_dir):
             os.makedirs(dest_dir)
         dest_filename = os.path.join(dest_dir, dest_filename)
-        dest_filename = dest_filename
     b = decompress_from_file(src_filename)
     with open(dest_filename, "wb") as file:
         file.write(b)
