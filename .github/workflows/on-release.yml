@@ -9,7 +9,7 @@ on:
 #########
 # actions
 #########
-# actions/checkout@v4.1.7
+# actions/checkout@v4.2.0
 # actions/setup-python@v5.2.0
 
 # stuff to do
@@ -35,7 +35,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
       # install python
       - name: 💿Install python
         uses: actions/setup-python@v5.2.0

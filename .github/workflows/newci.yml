@@ -7,7 +7,7 @@ on: [push, pull_request]
 #########
 # actions
 #########
-# actions/checkout@v4.1.7
+# actions/checkout@v4.2.0
 # actions/download-artifact@v4.1.8
 # actions/create-release
 # actions/upload-release-asset
@@ -56,7 +56,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
       # install python
       - name: 💿Install Python
         uses: actions/setup-python@v5.2.0
@@ -121,7 +121,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -172,7 +172,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -228,7 +228,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -268,7 +268,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
 
       # install dependencies via pip
       - name: 💿Install Dependencies via pip
@@ -426,7 +426,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
       # get parent dir
       - name: 📁Get Parent Directory
         id: parentDir
@@ -466,7 +466,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.0
       # download pages artifact
       - name: 🔽Download Pages Artifact
         uses: actions/download-artifact@v4.1.8
