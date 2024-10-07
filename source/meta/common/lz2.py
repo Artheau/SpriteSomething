@@ -226,6 +226,7 @@ def decompress(a):
 
 
 def convert_3bpp_to_png(src_filename):
+    print(f" 3BPPtoPNG:     {src_filename}", end="")
     # FIXME: In the end, we just want the Power Star for the TFP implementation
     with open(src_filename, "rb") as file:
         layout = layoutlib.Layout(
@@ -331,12 +332,19 @@ def convert_3bpp_to_png(src_filename):
             palette_preview.paste(image,(0,image.size[1]*i))
             i += 1
             dest_filename = os.path.join(
-                os.path.dirname(src_filename),
+                os.path.dirname(src_filename).replace(
+                    os.path.join("","app",""),
+                    os.path.join("","user","")
+                ),
                 os.path.splitext(os.path.basename(src_filename))[0]
             )
             dest_filename = f"{dest_filename}_p-{paletteID}.png"
             image.save(dest_filename)
-        palette_preview.save(dest_filename.replace(f"p-{paletteID}", "p-preview"))
+        dest_filename = dest_filename.replace(f"p-{paletteID}", "p-preview")
+        print(f" -> {dest_filename}")
+        palette_preview.save(dest_filename)
+        return dest_filename
+    return False
 
 
 def decompress_from_file(src_filename):
@@ -348,14 +356,20 @@ def decompress_to_file(src_filename, dest_filename=None):
     if not dest_filename:
         dest_dir = os.path.dirname(
             src_filename
-        ).replace(os.path.join("","app",""),os.path.join("","user",""))
+        ).replace(
+            os.path.join("","app",""),
+            os.path.join("","user","")
+        )
         dest_filename = f"u_{os.path.splitext(os.path.basename(src_filename))[0]}.bin"
         if not os.path.isdir(dest_dir):
             os.makedirs(dest_dir)
         dest_filename = os.path.join(dest_dir, dest_filename)
     b = decompress_from_file(src_filename)
+    print(f" Decompressing: {src_filename} -> {dest_filename}")
     with open(dest_filename, "wb") as file:
         file.write(b)
+        return dest_filename
+    return False
 
 
 def compress_from_file(src_filename):
@@ -369,12 +383,17 @@ def compress_to_file(src_filename, dest_filename=None):
             src_filename
         ).replace(os.path.join("","app",""),os.path.join("","user",""))
         dest_filename = f"{os.path.splitext(os.path.basename(src_filename))[0]}.bin".replace("u_","c_")
+        if dest_filename[:2] != "c_":
+            dest_filename = f"c_{dest_filename}"
         if not os.path.isdir(dest_dir):
             os.makedirs(dest_dir)
         dest_filename = os.path.join(dest_dir, dest_filename)
     b = compress_from_file(src_filename)
+    print(f" Compressing: {src_filename} -> {dest_filename}")
     with open(dest_filename, "wb") as file:
         file.write(b)
+        return dest_filename
+    return False
 
 
 if __name__ == "__main__":

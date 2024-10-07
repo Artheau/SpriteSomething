@@ -140,6 +140,11 @@ def process_command_line_args():
                             "link.zspr"
                             )
         )
+    parser.add_argument("--lz2-mode",
+        dest="lz2-mode",
+        help="Mode for LZ2 De/Compression",
+        metavar="<lz2_mode>",
+        default=None)
 
     command_line_args = vars(parser.parse_args())
     return command_line_args

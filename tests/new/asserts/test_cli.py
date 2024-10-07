@@ -45,9 +45,11 @@ class CLIAudit(unittest.TestCase):
             "sheets"
         )
         spriteFile = ""
-        for ext in ["png","bmp"]:
+        for ext in ["png","bmp","bin"]:
             if os.path.isfile(os.path.join(spritePath, f"{self.spriteID}.{ext}")):
                 spriteFile = os.path.join(spritePath, f"{self.spriteID}.{ext}")
+            if os.path.isfile(os.path.join(spritePath, f"triforce.{ext}")):
+                spriteFile = os.path.join(spritePath, f"triforce.{ext}")
 
         self.assertTrue(spriteFile != "")
 
@@ -60,6 +62,7 @@ class CLIAudit(unittest.TestCase):
             "src-filepath": None,
             "sprite": spriteFile
         }
+
         # Diags
         args = defaultargs
         args["mode"] = "diags"
@@ -68,6 +71,26 @@ class CLIAudit(unittest.TestCase):
 
         print("")
         print("*" * 50)
+
+        # 3BPP Stuff
+        if spriteFile.endswith(".bin"):
+            args = defaultargs
+            args["mode"] = "3bpp"
+            print("3BPP CONVERSIONS")
+
+            args["lz2-mode"] = "de"
+            mainframe = cli.CLIMainFrame(args)
+            print("---")
+
+            args["lz2-mode"] = "comp"
+            mainframe = cli.CLIMainFrame(args)
+            print("---")
+
+            args["lz2-mode"] = "png"
+            mainframe = cli.CLIMainFrame(args)
+            print("---")
+
+            return
 
         # Export Link as PNG
         args = defaultargs

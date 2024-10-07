@@ -12,6 +12,7 @@ import sys     # exit
 from json.decoder import JSONDecodeError
 from source.meta.common import common
 from source.meta.common import constants as CONST
+from source.meta.common import lz2
 from source.meta.gui import gamelib
 from source.meta.gui.gui_common import get_sprites
 from source.meta import ssDiagnostics as diags
@@ -25,16 +26,53 @@ class CLIMainFrame():
     """make a class that's similar to the GUI class"""
     # FIXME: Filled with English
 
+    def get_arg(self, args, key, default=None):
+        arg = args[key] if key in args and args[key] is not None else default
+        if arg:
+            if "filepath" in key:
+                arg = arg.replace("/",os.path.sep).replace("\\",os.path.sep)
+        return arg
+
     def mode_diag(self):
         """Run SpriteSomething diagnostics"""
         print("\n".join(diags.output()))
         return 0
         # sys.exit(0)
+    def mode_3bpp(self, command_line_args):
+        """De/Compress a 3BPP file or convert to/from PNG"""
+        src_filepath = self.get_arg(command_line_args, "src-filepath", self.get_arg(command_line_args, "sprite"))
+        lz2_mode = self.get_arg(command_line_args, "lz2-mode")
+        if lz2_mode:
+            # print(" " + json.dumps({"lz2_mode":lz2_mode, "src_filepath":src_filepath}))
+            if (os.path.basename(src_filepath)[:2] != "u_") and (lz2_mode[:2] == "de"):
+                # decompress
+                dest_filepath = lz2.decompress_to_file(src_filepath)
+            elif (os.path.basename(src_filepath)[:2] != "c_") and (lz2_mode[:4] == "comp"):
+                # compress
+                dest_filepath = lz2.compress_to_file(src_filepath)
+            elif lz2_mode.startswith("png"):
+                dest_filepath = ""
+                if (os.path.basename(src_filepath)[:2] != "u_"):
+                    # decompress
+                    dest_filepath = lz2.decompress_to_file(src_filepath)
+                else:
+                    dest_filepath = src_filepath
+                # convert to png
+                dest_filepath = lz2.convert_3bpp_to_png(dest_filepath)
+            elif lz2_mode.startswith("bin"):
+                # convert to binary
+                pass
+            else:
+                print(" Refused to do the thing!")
+        else:
+            print(" No LZ2 Mode provided!")
+            return 1
+
     def mode_convert(self, command_line_args):
         """Convert a batch of sprite files of like type to like type"""
-        src_filepath = command_line_args["src-filepath"] if "src-filepath" in command_line_args and command_line_args["src-filepath"] is not None else "."
-        convert_from = command_line_args["convert-from"] if "convert-from" in command_line_args and command_line_args["convert-from"] is not None else "zspr"
-        convert_to = command_line_args["convert-to"] if "convert-to" in command_line_args and command_line_args["convert-to"] is not None else "rdc"
+        src_filepath = self.get_arg(command_line_args, "src-filepath", ".")
+        convert_from = self.get_arg(command_line_args, "convert-from", "zspr")
+        convert_to = self.get_arg(command_line_args, "convert-from", "rdc")
 
         if convert_from.startswith("."):
             convert_from = convert_from[1:]
@@ -43,8 +81,14 @@ class CLIMainFrame():
 
         for filename in os.listdir(os.path.join(src_filepath)):
             if os.path.isfile(os.path.join(src_filepath, filename)) and os.path.splitext(filename)[1][1:] == convert_from:
-                self.load_sprite(os.path.join(src_filepath, filename))
-                self.save_file_as(os.path.join(src_filepath, filename).replace(f".{convert_from}", f".{convert_to}"))
+                if convert_from == "bin":
+                    command_line_args["mode"] = "3bpp"
+                    command_line_args["src-filepath"] = os.path.join(src_filepath, filename)
+                    self.mode_3bpp(command_line_args)
+                else:
+                    self.load_sprite(os.path.join(src_filepath, filename))
+                    self.save_file_as(os.path.join(src_filepath, filename).replace(f".{convert_from}", f".{convert_to}"))
+
     def mode_export(self, export_filename):
         """Export sprite"""
         export_filename = export_filename if export_filename is not None and export_filename != "None" else "export.png"
@@ -60,14 +104,14 @@ class CLIMainFrame():
         if not os.path.isdir(dest_default_path):    #make directories to get the designated destination if necessary
             os.makedirs(dest_default_path)
 
-        dest_filename = "dest-filename" in command_line_args and command_line_args["dest-filename"] or dest_filename    #if we've provide a destination, set it
-        source_filename = "src-filename" in command_line_args and command_line_args["src-filename"] or source_filename    #if we've provided a source, set it
+        dest_filename = self.get_arg(command_line_args, "dest-filename", dest_filename)    #if we've provide a destination, set it
+        source_filename = self.get_arg(command_line_args, "src-filename", source_filename) #if we've provided a source, set it
         if "-bulk" in mode:    #if we're injecting into many game files
             # SpriteSomething.[py|exe] --cli=1 --mode=inject-bulk --src-filepath=resources/zelda3/gamefiles/inject
             source_filepath = os.path.join("resources","user",self.game.console_name,self.game.internal_name,"gamefiles","inject")    #default inject location | user_resources/snes/zelda3/gamefiles/inject/*.*
-            source_filepath = "src-filepath" in command_line_args or source_filepath    #if we've provided a source directory, set it
+            source_filepath = self.get_arg(command_line_args, "src-filepath", source_filepath) #if we've provided a source directory, set it
             if "-random" in mode:    #if we're injecting random sprites, get the directory
-                sprite_filepath = "spr-filepath" in command_line_args or None
+                sprite_filepath = self.get_arg(command_line_args, "spr-filepath")
                 # SpriteSomething.[py|exe] --cli=1 --mode=inject-bulk-random --src-filepath=user_resources/zelda3/gamefiles/inject \
                 #    --spr-filepath=resource/zelda3/link/official
                 if sprite_filepath is None:
@@ -78,7 +122,7 @@ class CLIMainFrame():
             else:
                 self.copy_into_ROM_bulk(source_filepath=source_filepath)
         elif "-random" in mode:    #we're injecting a random sprite into one game file
-            sprite_filepath = "spr-filepath" in command_line_args and command_line_args["spr-filepath"] or None
+            sprite_filepath = self.get_arg(command_line_args, "spr-filepath")
             if sprite_filepath is None:
                 print("   Sprite filepath not provided!")
                 return 1
@@ -126,7 +170,15 @@ class CLIMainFrame():
                 return
                 # return 0
             else:
-                self.load_sprite(command_line_args["sprite"])    #we're loading a sprite!
+                process_3bpp = mode == "3bpp" or \
+                    (
+                        mode == "convert" and (
+                            (self.get_arg(command_line_args, "convert-from") == "bin") or \
+                            (self.get_arg(command_line_args, "convert-to") == "bin")
+                        )
+                    )
+                if not process_3bpp:
+                    self.load_sprite(command_line_args["sprite"])    #we're loading a sprite!
 
                 if mode == "export":    #we're exporting as PNG/ZSPR/RDC based on the filetype provided, default to "export.png"
                     # SpriteSomething.[py|exe] --cli=1 --mode=export --export-filename=export.[png|zspr|rdc]
@@ -135,6 +187,9 @@ class CLIMainFrame():
                     # return 0
                 elif mode == "convert":
                     self.mode_convert(command_line_args)
+                    return
+                elif mode == "3bpp":
+                    self.mode_3bpp(command_line_args)
                     return
                 elif "inject" in mode:    #we're injecting a [single|random] sprite into game file(s)
                     # SpriteSomething.[py|exe] --cli=1 --mode=inject --dest-filename=resources/zelda3/gamefiles/export/export.sfc \
