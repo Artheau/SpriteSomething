@@ -63,6 +63,8 @@ get-pip.py
 *.bps
 *.bin
 
+!resources/app/snes/zelda3/triforcepiece/sheets/*.bin
+
 # no gamefiles
 gamefiles/
 

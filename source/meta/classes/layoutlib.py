@@ -10,6 +10,7 @@ import json
 import os
 from json.decoder import JSONDecodeError
 from PIL import Image, ImageOps, ImageDraw
+from string import ascii_uppercase, digits
 from source.meta.common import common
 
 
@@ -79,6 +80,8 @@ class Layout():
         #from the layout data, get all the different pieces of the image, and then assemble them together
         #into a proper rectangular image
         original_dimensions = self.get_property("dimensions", image_name)
+        if not original_dimensions:
+            original_dimensions = 0,0,*image.size
         extra_area = self.get_property("extra area", image_name)
         shift = self.get_property("shift", image_name)
         border_color = self.data["border_color"]
@@ -120,7 +123,7 @@ class Layout():
 
             image_with_border.paste(mask,mask=mask)
 
-        spacer = self.data["images"][image_name]["spacer"] if "spacer" in self.data["images"][image_name] else 0
+        spacer = self.data["images"][image_name]["spacer"] if image_name in self.data["images"] and "spacer" in self.data["images"][image_name] else 0
         border_with_spacer = (
                                                     self.data["border_size"]-min(spacer,0),
                                                     self.data["border_size"],
@@ -199,6 +202,38 @@ class Layout():
                 current_y += image.size[1]
 
         return collage
+
+    def export_these_images_to_PNG(self, all_images, master_palette):
+        all_collages = []
+        new_row = False
+        this_row = ""
+        prev_row = ""
+        this_row_images = []
+
+        for cellID, image in all_images.items():
+            this_row = cellID[:1]
+            this_col = cellID[1:]
+            origin = (ascii_uppercase.find(this_row),this_col)
+            if this_row != prev_row:
+                if len(this_row_images):
+                    collage = self.make_horizontal_collage(this_row_images)
+                    all_collages.append(collage)
+                this_row_images = []
+            xmin,ymin,xmax,ymax = self.get_bounding_box(cellID)
+            palette = self.get_property("import palette interval", cellID)
+            palette = [0,len(master_palette)]
+            palette = master_palette[palette[0]:palette[1]] if palette else []
+            image = common.apply_palette(image, palette)
+            bordered_image, origin = self.add_borders_and_scale(image, (-xmin,-ymin), cellID)
+            this_row_images.append((bordered_image, origin))
+
+            prev_row = this_row
+
+        collage = self.make_horizontal_collage(this_row_images)
+        all_collages.append(collage)
+
+        full_layout = self.make_vertical_collage(all_collages)
+        return full_layout
 
     def export_all_images_to_PNG(self, all_images, master_palette):
         all_collages = []
@@ -400,7 +435,10 @@ class Layout():
         return xmin,ymin,xmax,ymax
 
     def get_raw_bounding_box(self,image_name):
-        xmin,ymin,xmax,ymax = self.get_property("dimensions", image_name)
+        if self.get_property("dimensions", image_name):
+            xmin,ymin,xmax,ymax = self.get_property("dimensions", image_name)
+        else:
+            xmin,ymin,xmax,ymax = 0,0,*self.images[image_name].size
         extra_area = self.get_property("extra area", image_name)
         if extra_area:
             for x0,y0,x1,y1 in extra_area:

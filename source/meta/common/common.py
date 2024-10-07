@@ -384,8 +384,9 @@ def get_single_raw_tile_base(image, planes):
     # Here transpose() is used because otherwise we get column-major
     #  format in getdata(), which is not helpful
     return convert_indexed_tile_to_bitplanes_base(
-        image.transpose(Image.TRANSPOSE).getdata(),
-        planes
+        image.transpose(
+            Image.TRANSPOSE
+        ).getdata()
     )
 
 
