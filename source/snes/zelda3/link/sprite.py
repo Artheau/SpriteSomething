@@ -18,7 +18,7 @@ class Sprite(SpriteParent):
     '''
     Link Sprite Object
     '''
-    def __init__(self, filename, manifest_dict, my_subpath, sprite_name=None, verbose=False):
+    def __init__(self, filename, manifest_dict, my_subpath, sprite_name=None, verbose=True):
         super().__init__(filename, manifest_dict, my_subpath, sprite_name, verbose)
         self.load_plugins()
 

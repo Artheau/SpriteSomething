@@ -7,7 +7,7 @@ class Sprite(SpriteParent):
     '''
     Sprite
     '''
-    def __init__(self, filename, manifest_dict, my_subpath, _=None, verbose=False):
+    def __init__(self, filename, manifest_dict, my_subpath, _=None, verbose=True):
         super().__init__(filename, manifest_dict, my_subpath, _, verbose)
         self.load_plugins()
         self.overhead = False
