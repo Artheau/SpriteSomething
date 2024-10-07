@@ -89,6 +89,8 @@ class CLIAudit(unittest.TestCase):
             args["lz2-mode"] = "png"
             mainframe = cli.CLIMainFrame(args)
             print("---")
+            print("")
+            print("*" * 50)
 
             return
 
