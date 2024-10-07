@@ -11,8 +11,8 @@ from . import rom_extract, rom_inject, rdc_export
 
 
 class Sprite(SpriteParent):
-    def __init__(self, filename, manifest_dict, my_subpath, sprite_name=""):
-        super().__init__(filename, manifest_dict, my_subpath, sprite_name)
+    def __init__(self, filename, manifest_dict, my_subpath, sprite_name=None, verbose=False):
+        super().__init__(filename, manifest_dict, my_subpath, sprite_name, verbose)
         self.load_plugins()
 
         # Samus is sideview, so only left/right direction buttons should show

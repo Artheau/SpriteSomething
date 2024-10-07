@@ -221,7 +221,8 @@ class ExportAudit(unittest.TestCase):
                             "input": spriteData["input"]
                         },
                         spriteData["paths"]["resource"]["subpath"],
-                        self.spriteID
+                        self.spriteID,
+                        False
                     )
                 },
                 "export": {}

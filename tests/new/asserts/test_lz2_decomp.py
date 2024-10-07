@@ -7,7 +7,7 @@ global VERBOSE
 VERBOSE = True
 # VERBOSE = False
 
-class LZ2Audit(unittest.TestCase):
+class LZ2DecompressionAudit(unittest.TestCase):
     def set_Up(self, *args):
         pass
 

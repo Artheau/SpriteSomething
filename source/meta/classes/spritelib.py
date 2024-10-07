@@ -29,7 +29,7 @@ from source.meta.common import common
 
 class SpriteParent():
     # parent class for sprites to inherit
-    def __init__(self, filename, manifest_dict, my_subpath, sprite_name=""):
+    def __init__(self, filename, manifest_dict, my_subpath, sprite_name="", verbose=True):
         self.classic_name = manifest_dict["name"]  # e.g. "Samus" or "Link"
         # the path to this sprite's subfolder in resources
         self.resource_subpath = my_subpath
@@ -79,7 +79,7 @@ class SpriteParent():
 
         self.plugins = None
         self.has_plugins = False
-        self.load_layout(sprite_name)
+        self.load_layout(sprite_name, verbose)
         self.load_animations(sprite_name)
         self.import_from_filename()
 
@@ -133,7 +133,7 @@ class SpriteParent():
 
     #the functions below here are special to the parent class and do not need to be overwritten, unless you see a reason
 
-    def load_layout(self, sprite_name=""):
+    def load_layout(self, sprite_name="", verbose=False):
         layout_resources = common.get_resource(
             [self.resource_subpath, "manifests"],
             "layout.json"
@@ -141,7 +141,8 @@ class SpriteParent():
         if layout_resources:
             self.layout = layoutlib.Layout(
                 layout_resources,
-                sprite_name
+                sprite_name,
+                verbose
             )
         else:
             layout_path = self.resource_subpath.replace(os.sep, '/') + "/manifests/layout.json"

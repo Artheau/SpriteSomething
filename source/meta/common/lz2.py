@@ -32,6 +32,134 @@ class LZ2CommandException(Exception):
         return "\n".join(["An illegal command has occurred", str(self.message)])
 
 
+def compress(a):
+    if not isinstance(a, bytearray):
+        raise TypeError("Input data is not a bytearray!")
+    index = 0
+    b = bytearray()
+    dic = {}
+
+    BYTE_LIMIT = 0xFFFF
+    if len(a) > BYTE_LIMIT:
+        raise IndexError(f"This compression algorithm only supports lengths up to {BYTE_LIMIT} (two bytes). It may fail after that length.")
+
+    prev_command = 9
+    prev_direct_address = 0
+    prev_length = 0
+
+    while index < len(a):
+        # Our commands are: direct write(000), repeat next byte (001), repeat next two bytes (010), increasing repeat next byte (011), and read from output buffer (100)
+        # These are CCCL LLLL, with the length = L+1 for all of them
+        # we also have long command: 111C CCLL LLLL LLLL, where C is the true command
+        length = 0
+        command = 0
+
+        # this could be done way faster, but considering the amount of data we're compressing, IDGAF
+        # I'm going to take the very simple route of looking for the maximum bytes that can be encoded with each method, and take the one that encodes the most following bytes.
+
+        for i in range(1,0x0400):
+            if index+i < len(a) and a[index+i] == a[index] + i:
+                if i > max(1,length):
+                    length = i
+                    command = 3
+            else:
+                break
+
+        for i in range(1,0x0400):
+            if index+i < len(a) and a[index + i%2] == a[index + i]:
+
+                if i > max(2,length):
+                    length = i
+                    command = 2
+            else:
+                break
+
+        for i in range(1,0x0400):
+            if index+i < len(a) and a[index] == a[index+i]:
+                if i > 1:
+                    length = i
+                    command = 1
+            else:
+                break
+
+        address = 0
+
+        # this will be a very slow part of the compression. If we need to make compression faster, start here
+        # important that i never equals index. Otherwise this'll just try to pass out the entire buffer as though you already know it
+
+        for i in range(index-1):
+            if a[i] == a[index]:
+                # note that this can go beyond the current buffer.
+                # For example, if we have a pattern like FF 77 11 FF 77 11 FF 11 C2, then once you get to the fourth byte, you'll want to repeat from index 0 for 5 bytes
+                for j in range(len(a) - index):
+                    if a[i+j] == a[index+j]:
+                        if j > max(2,length):
+                            address = i
+                            length = j
+                            command = 4
+                    else:
+                        break
+
+        if (prev_command == 0 and index == len(a) -1) or (prev_command == 0 and command != 0):
+            if prev_command == 0 and command != 0:
+                prev_length -= 1
+            if prev_length >= 0x001F:
+                b.append((0x00E0 + (prev_length >>8)))
+                b.append(prev_length & 0x00FF)
+            else:
+                b.append(prev_length)
+            for i in range(prev_length+1):
+                b.append(a[prev_direct_address + i])
+            if index == len(a)-1:
+                break
+
+        elif prev_command == 0 and command == 0:
+            prev_length += 1
+            index += 1
+            continue
+        elif command == 0:
+            prev_command = 0
+            prev_length = 1
+            prev_direct_address = index
+            index += 1
+            continue
+
+        prev_command = command
+
+        length = min(length, 0x0400)
+
+        if length >= 0x001F:
+            outputbyte = 0x00E0 + (command << 2) + (length >> 8)
+            outputbyteb = length & 0x00FF
+            b.append(outputbyte)
+            b.append(outputbyteb)
+        else:
+            output_byte = (command<<5) + length
+            b.append(output_byte)
+
+        if command == 1 or command == 2 or command == 3:
+            b.append(a[index])
+        if command == 2:
+            # two words!
+            b.append(a[index+1])
+        if command == 4:
+            # little endian for Z3's decompression, so we need to reverse the order of these bytes
+            if address > 0x00FF:
+                # append the low bits first
+                b.append(address & 0x00FF)
+                # And then the high bits
+                b.append(address >> 8)
+            else:
+                b.append(address)
+                b.append(0)
+
+        index += length + 1
+
+    b.append(0x00FF)
+
+    return b
+
+
 def decompress(a):
     if not isinstance(a, bytearray):
         raise TypeError("Input data is not a bytearray!")
@@ -98,7 +226,7 @@ def decompress(a):
 
 
 def convert_3bpp_to_png(src_filename):
-    #FIXME: In the end, we just want the Power Star for the TFP implementation
+    # FIXME: In the end, we just want the Power Star for the TFP implementation
     with open(src_filename, "rb") as file:
         layout = layoutlib.Layout(
             os.path.join(
@@ -110,7 +238,9 @@ def convert_3bpp_to_png(src_filename):
                 "triforcepiece",
                 "manifests",
                 "layout.json"
-            )
+            ),
+            "",
+            False
         )
         images = {}
         data_3bpp = bytearray(file.read())
@@ -228,24 +358,32 @@ def decompress_to_file(src_filename, dest_filename=None):
         file.write(b)
 
 
+def compress_from_file(src_filename):
+    with open(src_filename, "rb") as file:
+        return compress(bytearray(file.read()))
+
+
+def compress_to_file(src_filename, dest_filename=None):
+    if not dest_filename:
+        dest_dir = os.path.dirname(
+            src_filename
+        ).replace(os.path.join("","app",""),os.path.join("","user",""))
+        dest_filename = f"{os.path.splitext(os.path.basename(src_filename))[0]}.bin".replace("u_","c_")
+        if not os.path.isdir(dest_dir):
+            os.makedirs(dest_dir)
+        dest_filename = os.path.join(dest_dir, dest_filename)
+    b = compress_from_file(src_filename)
+    with open(dest_filename, "wb") as file:
+        file.write(b)
+
+
 if __name__ == "__main__":
-    # Compressed 3BPP -> Decompressed 3BPP
-    decompress_to_file(
+    #  Compress 3BPP
+    compress_to_file(
         os.path.join(
+            ".",
             "resources",
             "app",
-            "snes",
-            "zelda3",
-            "triforcepiece",
-            "sheets",
-            "triforce.bin"
-        )
-    )
-    # Decompressed 3BPP -> PNG
-    convert_3bpp_to_png(
-        os.path.join(
-            "resources",
-            "user",
             "snes",
             "zelda3",
             "triforcepiece",
@@ -253,7 +391,6 @@ if __name__ == "__main__":
             "u_triforce.bin"
         )
     )
-    # Now, for icing on the cake:
     #  Convert PNG  -> 4BPP
     #  Convert 4BPP -> 3BPP
     #  Compress using LZ2
