@@ -411,6 +411,7 @@ if __name__ == "__main__":
         )
     )
     #  Convert PNG  -> 4BPP
+    #FIXME: See source.meta.classes.layoutlib:extract_these_images_from_master
     #  Convert 4BPP -> 3BPP
     #  Compress using LZ2
     #  Save to disk or inject into game file

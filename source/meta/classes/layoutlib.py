@@ -267,6 +267,14 @@ class Layout():
         w, h = dims
         return (x1,x2,w+x1,h+x2)
 
+    def extract_these_images_from_master(self, master_image):
+        all_images = {}
+        #FIXME:
+        # cycle through rows (16px high),       A -> AB
+        # cycle through each row (16px wide),   0 -> 7
+        # save each 16x16 cell with cellID as key in all_images
+        # send all_images to something like source.app.snes.zelda3.link.sprite:get_binary_sprite_sheet
+
     def extract_all_images_from_master(self, master_image):
         all_images = {}
         master_height = 0
