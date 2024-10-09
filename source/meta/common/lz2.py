@@ -9,6 +9,7 @@ from string import ascii_uppercase, digits
 import itertools
 from source.meta.common import common
 from ..classes import layoutlib
+from ..classes import spritelib
 
 
 class LZ2CommandException(Exception):
@@ -313,7 +314,7 @@ def convert_3bpp_to_png(src_filename):
         i = 0
         for paletteID, palette in palettes.items():
             image = layout.export_these_images_to_PNG(layout.images, palette)
-            scale = 4 if True else 1
+            scale = 4 if False else 1
             if scale != 1:
                 image = image.resize(
                     (
@@ -396,13 +397,87 @@ def compress_to_file(src_filename, dest_filename=None):
     return False
 
 
+def convert_png_to_3bpp(src_filename):
+    print(f" PNGto3BPP:     {src_filename}", end="")
+    dest_filename = os.path.join(
+        ".",
+        "resources",
+        "user",
+        "snes",
+        "zelda3",
+        "triforcepiece",
+        "sheets",
+        "triforce.3bpp"
+    )
+    print(f" -> {dest_filename}")
+
+    # FIXME: In the end, we just want the Power Star for the TFP implementation
+    with Image.open(src_filename) as file:
+        layout = layoutlib.Layout(
+            os.path.join(
+                ".",
+                "resources",
+                "app",
+                "snes",
+                "zelda3",
+                "triforcepiece",
+                "manifests",
+                "layout.json"
+            ),
+            "",
+            False
+        )
+        all_images, _ = layout.extract_these_images_from_master(file)
+        data_4bpp = []
+        for image_name, image in all_images.items():
+            image = image.convert('P')
+            data_4bpp += common.convert_to_4bpp(image, (0,0), (0,0,16,16), None)
+        with open(
+            dest_filename.replace(".3bpp",".4bpp"),
+            "wb"
+        ) as file_4bpp:
+            file_4bpp.write(bytearray(data_4bpp))
+
+        pixel_data = bytearray(data_4bpp)
+        data_3bpp = bytearray()
+        for row_num, row_id in enumerate(itertools.chain(ascii_uppercase, ["AA", "AB"])):
+            for col_num in range(8):
+                image_name = f"{row_id}{col_num}"
+                raw_tile = None
+                planes = 4
+                for offset, position in [
+                    (0x0000*planes, (0, 0)),
+                    (0x0008*planes, (8, 0)),
+                    (0x0080*planes, (0, 8)),
+                    (0x0088*planes, (8, 8))
+                ]:
+                    read_pointer = 0x100*planes*row_num+(16*planes)*col_num+offset
+                    raw_tile = pixel_data[read_pointer:read_pointer+(8*planes)]
+                    if len(raw_tile) == 0:
+                        break
+                    if raw_tile:
+                        print(image_name)
+                        data_3bpp += common.image_from_bitplanes_base(raw_tile, 3).tobytes()
+
+        with open(
+            dest_filename,
+            "wb"
+        ) as file_3bpp:
+            file_3bpp.write(data_3bpp)
+
+
 if __name__ == "__main__":
-    #  Compress 3BPP
-    compress_to_file(
+    # Compressed 3BPP -> Decompressed 3BPP
+    # Decompressed 3BPP -> [3BPP -> 4BPP] -> PNG
+    # PNG -> [PNG -> 4BPP] -> [4BPP -> 3BPP] -> Decompressed 3BPP
+    # Decompressed 3BPP -> Compressed 3BPP
+
+    # Decompressed 3BPP -> [3BPP -> 4BPP] -> PNG
+    convert_3bpp_to_png(
         os.path.join(
             ".",
             "resources",
-            "app",
+            "user",
             "snes",
             "zelda3",
             "triforcepiece",
@@ -410,8 +485,21 @@ if __name__ == "__main__":
             "u_triforce.bin"
         )
     )
-    #  Convert PNG  -> 4BPP
+
+    # PNG -> [PNG -> 4BPP] -> [4BPP -> 3BPP] -> Decompressed 3BPP
     #FIXME: See source.meta.classes.layoutlib:extract_these_images_from_master
+    convert_png_to_3bpp(
+        os.path.join(
+            ".",
+            "resources",
+            "user",
+            "snes",
+            "zelda3",
+            "triforcepiece",
+            "sheets",
+            "u_triforce_p-2.png"
+        )
+    )
     #  Convert 4BPP -> 3BPP
     #  Compress using LZ2
     #  Save to disk or inject into game file

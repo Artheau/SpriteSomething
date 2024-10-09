@@ -274,10 +274,11 @@ def convert_tile_from_bitplanes_base(raw_tile):
     # an attempt to make this ugly process mildly efficient
     tile = np.zeros((8, 8), dtype=np.uint8)
 
-    tile[:, 4] = raw_tile[31:15:-2]
-    tile[:, 5] = raw_tile[30:14:-2]
-    tile[:, 6] = raw_tile[15::-2]
-    tile[:, 7] = raw_tile[14::-2]
+    bits = len(raw_tile)
+    if bits >= 0o30: tile[:, 4] = raw_tile[bits- 1: bits-17 : -2]
+    if bits >= 0o30: tile[:, 5] = raw_tile[bits- 2: bits-18 : -2]
+    if bits >= 0o30: tile[:, 6] = raw_tile[bits-17:         : -int(bits/16)]
+    if bits >= 0o40: tile[:, 7] = raw_tile[     14:         : -int(bits/16)]
 
     shaped_tile = tile.reshape(8, 8, 1)
 
@@ -289,15 +290,29 @@ def convert_tile_from_bitplanes_base(raw_tile):
     return returnvalue
 
 
-def image_from_bitplanes_base(raw_tile):
+def image_from_bitplanes_base(raw_tile, planes=4):
     # fromarray expects column major format, so have to switch the axes
-    if len(raw_tile) == 24:
-        a_planes = raw_tile[:16]
-        b_planes = raw_tile[16:]
-        raw_tile = a_planes
-        for b_plane in b_planes:
-            raw_tile.append(b_plane)
+    is_3bpp = len(raw_tile) == 0o30
+    is_4bpp = len(raw_tile) == 0o40
+    if is_3bpp:
+        lo_planes = raw_tile[:16]
+        hi_planes = raw_tile[16:]
+        raw_tile = lo_planes
+        for hi_plane in hi_planes:
+            raw_tile.append(hi_plane)
             raw_tile.append(0x00)
+    if planes == 3 and is_4bpp:
+        lo_planes = raw_tile[:16]
+        hi_planes = raw_tile[16:]
+        print(f"1/2: {lo_planes}")
+        print(f"3/4: {hi_planes}")
+        # nuke plane 4
+        raw_tile = lo_planes
+        for i, hi_plane in enumerate(hi_planes):
+            plane_id = 3 if i % 2 != 0 else 4
+            if plane_id == 4:
+                raw_tile.append(hi_plane)
+        print(f"Raw: {raw_tile}")
     return Image.fromarray(
         convert_tile_from_bitplanes_base(raw_tile).swapaxes(0, 1),
         'P'

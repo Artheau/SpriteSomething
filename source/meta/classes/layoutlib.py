@@ -270,10 +270,20 @@ class Layout():
     def extract_these_images_from_master(self, master_image):
         all_images = {}
         #FIXME:
-        # cycle through rows (16px high),       A -> AB
-        # cycle through each row (16px wide),   0 -> 7
-        # save each 16x16 cell with cellID as key in all_images
         # send all_images to something like source.app.snes.zelda3.link.sprite:get_binary_sprite_sheet
+        for i, row in enumerate(itertools.chain(ascii_uppercase, ["AA", "AB"])):
+            if i * 16 < master_image.size[1]:
+                for column in range(8):
+                    image_name = f"{row}{column}"
+                    this_image = Image.new("RGBA", (16, 16), (0,0,0,0))
+                    origin = (16*column,16*i)
+                    this_image.paste(
+                        master_image.crop((*origin,16+origin[0],16+origin[1])),
+                        (0,0)
+                    )
+                    all_images[image_name] = this_image
+        # all_images["transparent"] = Image.new("RGBA", (16,16), (0,0,0,0))
+        return all_images, []
 
     def extract_all_images_from_master(self, master_image):
         all_images = {}
