@@ -249,7 +249,7 @@ def get_raw_pose(samus, image_name):
 	dimensions = samus.layout.get_property("dimensions",image_name)
 	extra_area = samus.layout.get_property("extra area",image_name)
 	xmin,ymin,_,_ = samus.layout.get_raw_bounding_box(image_name)
-	return common.convert_to_4bpp(samus.images[image_name], (-xmin,-ymin), dimensions, extra_area)
+	return common.convert_image_to_4bpp(samus.images[image_name], (-xmin,-ymin), dimensions, extra_area)
 
 def reassign_gun_tilemaps(samus,rom):
 	TILE = 0xDF	 #the new location for the gun tile
@@ -341,8 +341,8 @@ def write_dma_data(samus,rom):
 	left_dest = death_freespace.get(0x4000)
 	right_dest = death_freespace.get(0x4000)
 	#wiring in the DMA this way so that it does not have to adhere to the top row/bottom row stuff
-	left_DMA = list(itertools.chain.from_iterable(common.convert_to_4bpp(death_image_left, (0,0), (0,16*i,128,16*(i+1)),None) for i in range(16)))
-	right_DMA = list(itertools.chain.from_iterable(common.convert_to_4bpp(death_image_right, (0,0), (0,16*i,128,16*(i+1)),None) for i in range(16)))
+	left_DMA = list(itertools.chain.from_iterable(common.convert_image_to_4bpp(death_image_left, (0,0), (0,16*i,128,16*(i+1)),None) for i in range(16)))
+	right_DMA = list(itertools.chain.from_iterable(common.convert_image_to_4bpp(death_image_right, (0,0), (0,16*i,128,16*(i+1)),None) for i in range(16)))
 	rom.bulk_write_to_snes_address(left_dest, left_DMA, 0x4000)
 	rom.bulk_write_to_snes_address(right_dest, right_DMA, 0x4000)
 
@@ -1224,14 +1224,14 @@ def insert_file_select_graphics(samus,rom):
 	file_select_graphics_block.paste(file_select_piping.crop((16,8,24,24)),(104,8))	#side
 	file_select_graphics_block.paste(file_select_piping.crop((0,16,8,24)),(96,16))	#corner
 
-	file_select_DMA = common.convert_to_4bpp(file_select_graphics_block, (0,0), (0,0,128,16),None)
-	file_select_DMA.extend(common.convert_to_4bpp(file_select_graphics_block, (0,0), (0,16,128,32),None)[:0x200])
+	file_select_DMA = common.convert_image_to_4bpp(file_select_graphics_block, (0,0), (0,0,128,16),None)
+	file_select_DMA.extend(common.convert_image_to_4bpp(file_select_graphics_block, (0,0), (0,16,128,32),None)[:0x200])
 
 	rom.bulk_write_to_snes_address(file_select_data_location + 0x1A00,file_select_DMA,0x600)
 
-	stray_missile_DMA = common.convert_to_4bpp(stray_missile_image, (0,0), (0,0,8,8), None)
+	stray_missile_DMA = common.convert_image_to_4bpp(stray_missile_image, (0,0), (0,0,8,8), None)
 	rom.bulk_write_to_snes_address(file_select_data_location + 0x1900,stray_missile_DMA,0x20)
-	stray_missilehead_DMA = common.convert_to_4bpp(stray_missilehead_image, (0,0), (0,0,8,8), None)
+	stray_missilehead_DMA = common.convert_image_to_4bpp(stray_missilehead_image, (0,0), (0,0,8,8), None)
 	rom.bulk_write_to_snes_address(file_select_data_location + 0x1980,stray_missilehead_DMA,0x20)
 
 	return True

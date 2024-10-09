@@ -7,6 +7,7 @@ from pathlib import Path
 from PIL import Image
 from string import ascii_uppercase, digits
 import itertools
+import numpy as np
 from source.meta.common import common
 from ..classes import layoutlib
 from ..classes import spritelib
@@ -226,8 +227,9 @@ def decompress(a):
     return b
 
 
-def convert_3bpp_to_png(src_filename):
-    print(f" 3BPPtoPNG:     {src_filename}", end="")
+def convert_3bpp_to_png(src_filename, dest_filename=None, verbose=False):
+    if verbose:
+        print(f" 3BPPtoPNG:     {src_filename.ljust(70)}", end="")
     # FIXME: In the end, we just want the Power Star for the TFP implementation
     with open(src_filename, "rb") as file:
         layout = layoutlib.Layout(
@@ -263,9 +265,7 @@ def convert_3bpp_to_png(src_filename):
                     read_pointer = 0x100*planes*i+(16*planes)*column+offset
                     raw_tile = pixel_data[read_pointer:read_pointer+(8*planes)]
                     if raw_tile:
-                        pastable_tile = common.image_from_bitplanes_base(
-                            raw_tile
-                        )
+                        pastable_tile = common.image_from_bitplanes_base(raw_tile)
                         this_image.paste(pastable_tile, position)
                 if raw_tile:
                     images[image_name] = this_image
@@ -342,7 +342,8 @@ def convert_3bpp_to_png(src_filename):
             dest_filename = f"{dest_filename}_p-{paletteID}.png"
             image.save(dest_filename)
         dest_filename = dest_filename.replace(f"p-{paletteID}", "p-preview")
-        print(f" -> {dest_filename}")
+        if verbose:
+            print(f" -> {dest_filename}")
         palette_preview.save(dest_filename)
         return dest_filename
     return False
@@ -353,7 +354,7 @@ def decompress_from_file(src_filename):
         return decompress(bytearray(file.read()))
 
 
-def decompress_to_file(src_filename, dest_filename=None):
+def decompress_to_file(src_filename, dest_filename=None, verbose=False):
     if not dest_filename:
         dest_dir = os.path.dirname(
             src_filename
@@ -366,7 +367,8 @@ def decompress_to_file(src_filename, dest_filename=None):
             os.makedirs(dest_dir)
         dest_filename = os.path.join(dest_dir, dest_filename)
     b = decompress_from_file(src_filename)
-    print(f" Decompressing: {src_filename} -> {dest_filename}")
+    if verbose:
+        print(f" Decompressing: {src_filename.ljust(70)} -> {dest_filename}")
     with open(dest_filename, "wb") as file:
         file.write(b)
         return dest_filename
@@ -378,11 +380,14 @@ def compress_from_file(src_filename):
         return compress(bytearray(file.read()))
 
 
-def compress_to_file(src_filename, dest_filename=None):
+def compress_to_file(src_filename, dest_filename=None, verbose=False):
     if not dest_filename:
         dest_dir = os.path.dirname(
             src_filename
-        ).replace(os.path.join("","app",""),os.path.join("","user",""))
+        ).replace(
+            os.path.join("","app",""),
+            os.path.join("","user","")
+        )
         dest_filename = f"{os.path.splitext(os.path.basename(src_filename))[0]}.bin".replace("u_","c_")
         if dest_filename[:2] != "c_":
             dest_filename = f"c_{dest_filename}"
@@ -390,26 +395,28 @@ def compress_to_file(src_filename, dest_filename=None):
             os.makedirs(dest_dir)
         dest_filename = os.path.join(dest_dir, dest_filename)
     b = compress_from_file(src_filename)
-    print(f" Compressing: {src_filename} -> {dest_filename}")
+    if verbose:
+        print(f" Compressing:   {src_filename.ljust(70)} -> {dest_filename}")
     with open(dest_filename, "wb") as file:
         file.write(b)
         return dest_filename
     return False
 
 
-def convert_png_to_3bpp(src_filename):
-    print(f" PNGto3BPP:     {src_filename}", end="")
-    dest_filename = os.path.join(
-        ".",
-        "resources",
-        "user",
-        "snes",
-        "zelda3",
-        "triforcepiece",
-        "sheets",
-        "triforce.3bpp"
-    )
-    print(f" -> {dest_filename}")
+def convert_png_to_3bpp(src_filename, dest_filename=None, verbose=False):
+    if dest_filename is None:
+        dest_filename = os.path.join(
+            ".",
+            "resources",
+            "user",
+            "snes",
+            "zelda3",
+            "triforcepiece",
+            "sheets",
+            "triforce.3bpp"
+        )
+    if verbose:
+        print(f" PNGto3BPP:     {src_filename.ljust(70)} -> {dest_filename}")
 
     # FIXME: In the end, we just want the Power Star for the TFP implementation
     with Image.open(src_filename) as file:
@@ -429,9 +436,27 @@ def convert_png_to_3bpp(src_filename):
         )
         all_images, _ = layout.extract_these_images_from_master(file)
         data_4bpp = []
-        for image_name, image in all_images.items():
-            image = image.convert('P')
-            data_4bpp += common.convert_to_4bpp(image, (0,0), (0,0,16,16), None)
+        planes = 4
+        for row_num, row_id in enumerate(itertools.chain(ascii_uppercase, ["AA", "AB"])):
+            top_halves = []
+            low_halves = []
+            for col_num in range(8):
+                image_name = f"{row_id}{col_num}"
+                if image_name in all_images:
+                    image = all_images[image_name]
+                    image = image.convert('P')
+                    image_4bpp = common.convert_image_to_4bpp(image, (0,0), (0,0,16,16), None)
+                    for top_half in image_4bpp[:0x10*planes]:
+                        top_halves.append(top_half)
+                    for low_half in image_4bpp[0x10*planes:]:
+                        low_halves.append(low_half)
+                else:
+                    break
+            for half_tile in top_halves:
+                data_4bpp.append(half_tile)
+            for half_tile in low_halves:
+                data_4bpp.append(half_tile)
+
         with open(
             dest_filename.replace(".3bpp",".4bpp"),
             "wb"
@@ -441,65 +466,75 @@ def convert_png_to_3bpp(src_filename):
         pixel_data = bytearray(data_4bpp)
         data_3bpp = bytearray()
         for row_num, row_id in enumerate(itertools.chain(ascii_uppercase, ["AA", "AB"])):
+            top_halves = []
+            low_halves = []
             for col_num in range(8):
                 image_name = f"{row_id}{col_num}"
                 raw_tile = None
                 planes = 4
-                for offset, position in [
+                to_planes = 3
+                for tile_num, (offset, position) in enumerate([
                     (0x0000*planes, (0, 0)),
                     (0x0008*planes, (8, 0)),
                     (0x0080*planes, (0, 8)),
                     (0x0088*planes, (8, 8))
-                ]:
+                ]):
                     read_pointer = 0x100*planes*row_num+(16*planes)*col_num+offset
                     raw_tile = pixel_data[read_pointer:read_pointer+(8*planes)]
                     if len(raw_tile) == 0:
                         break
-                    if raw_tile:
-                        print(image_name)
-                        data_3bpp += common.image_from_bitplanes_base(raw_tile, 3).tobytes()
+                    if False:
+                        print(f"{image_name}[{tile_num}]", end="")
+                    tile_3bpp = common.convert_tile_from_4bpp_to_3bpp(raw_tile)
+                    if tile_num in [0,1]:
+                        top_halves.append(tile_3bpp)
+                    if tile_num in [2,3]:
+                        low_halves.append(tile_3bpp)
+            if len(top_halves):
+                for tile in top_halves:
+                    data_3bpp += tile
+            if len(low_halves):
+                for tile in low_halves:
+                    data_3bpp += tile
 
         with open(
             dest_filename,
             "wb"
         ) as file_3bpp:
             file_3bpp.write(data_3bpp)
+            return dest_filename
+        return False
 
 
 if __name__ == "__main__":
     # Compressed 3BPP -> Decompressed 3BPP
-    # Decompressed 3BPP -> [3BPP -> 4BPP] -> PNG
-    # PNG -> [PNG -> 4BPP] -> [4BPP -> 3BPP] -> Decompressed 3BPP
-    # Decompressed 3BPP -> Compressed 3BPP
-
-    # Decompressed 3BPP -> [3BPP -> 4BPP] -> PNG
-    convert_3bpp_to_png(
+    data_u3bpp_from_data_c3bpp = decompress_to_file(
         os.path.join(
             ".",
             "resources",
-            "user",
+            "app",
             "snes",
             "zelda3",
             "triforcepiece",
             "sheets",
-            "u_triforce.bin"
-        )
+            "triforce.bin"
+        ),
+        None,
+        True
     )
 
+    # Decompressed 3BPP -> [3BPP -> 4BPP] -> PNG
+    png_from_data_u3bpp = convert_3bpp_to_png(data_u3bpp_from_data_c3bpp, None, True)
+
     # PNG -> [PNG -> 4BPP] -> [4BPP -> 3BPP] -> Decompressed 3BPP
-    #FIXME: See source.meta.classes.layoutlib:extract_these_images_from_master
-    convert_png_to_3bpp(
-        os.path.join(
-            ".",
-            "resources",
-            "user",
-            "snes",
-            "zelda3",
-            "triforcepiece",
-            "sheets",
-            "u_triforce_p-2.png"
-        )
+    data_3bpp_from_png = convert_png_to_3bpp(
+        png_from_data_u3bpp.replace(
+            "p-preview.png",
+            "p-2.png"
+        ),
+        None,
+        True
     )
-    #  Convert 4BPP -> 3BPP
+
     #  Compress using LZ2
-    #  Save to disk or inject into game file
+    compress_to_file(data_3bpp_from_png, None, True)

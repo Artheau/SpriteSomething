@@ -375,7 +375,7 @@ class Sprite(SpriteParent):
                         #AB7 is special, because the palette block sits there
                         # in the PNG, so this can't be actually used
                         image_name = "null_block"
-                    raw_image_data = common.convert_to_4bpp(
+                    raw_image_data = common.convert_image_to_4bpp(
                         self.images[image_name],
                         (0,0),
                         (0,0,16,16),
@@ -537,7 +537,7 @@ class Sprite(SpriteParent):
             for column in range(8)]:
             image_name = image_name if image_name != "AB7" else "transparent"
             image = self.images[image_name]
-            raw_image = common.convert_to_4bpp(
+            raw_image = common.convert_image_to_4bpp(
                 image,
                 (0,0),
                 (0,0,image.size[0],image.size[1]),
