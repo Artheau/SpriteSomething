@@ -406,14 +406,10 @@ def compress_to_file(src_filename, dest_filename=None, verbose=False):
 def convert_png_to_3bpp(src_filename, dest_filename=None, verbose=False):
     if dest_filename is None:
         dest_filename = os.path.join(
-            ".",
-            "resources",
-            "user",
-            "snes",
-            "zelda3",
-            "triforcepiece",
-            "sheets",
-            "triforce.3bpp"
+            src_filename.replace(
+                os.path.join("","app",""),
+                os.path.join("","user","")
+            ).replace(".png",".3bpp")
         )
     if verbose:
         print(f" PNGto3BPP:     {src_filename.ljust(70)} -> {dest_filename}")
@@ -507,8 +503,8 @@ def convert_png_to_3bpp(src_filename, dest_filename=None, verbose=False):
 
 
 if __name__ == "__main__":
-    # Compressed 3BPP -> Decompressed 3BPP
-    data_u3bpp_from_data_c3bpp = decompress_to_file(
+    # PNG to u3BPP
+    u3bpp_from_png = convert_png_to_3bpp(
         os.path.join(
             ".",
             "resources",
@@ -517,24 +513,10 @@ if __name__ == "__main__":
             "zelda3",
             "triforcepiece",
             "sheets",
-            "triforce.bin"
+            "triforcepiece.png"
         ),
         None,
         True
     )
-
-    # Decompressed 3BPP -> [3BPP -> 4BPP] -> PNG
-    png_from_data_u3bpp = convert_3bpp_to_png(data_u3bpp_from_data_c3bpp, None, True)
-
-    # PNG -> [PNG -> 4BPP] -> [4BPP -> 3BPP] -> Decompressed 3BPP
-    data_3bpp_from_png = convert_png_to_3bpp(
-        png_from_data_u3bpp.replace(
-            "p-preview.png",
-            "p-2.png"
-        ),
-        None,
-        True
-    )
-
-    #  Compress using LZ2
-    compress_to_file(data_3bpp_from_png, None, True)
+    # u3BPP -> c3BPP
+    compress_to_file(u3bpp_from_png, None, True)

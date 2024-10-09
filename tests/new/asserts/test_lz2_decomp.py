@@ -94,9 +94,9 @@ class LZ2DecompressionAudit(unittest.TestCase):
         )
         print(f"png  -> ubin : ", end="")
         if passed:
-            print("C3BPPs  do match")
+            print("c3BPPs  do match")
         else:
-            print("C3BPPs  do NOT match!")
+            print("c3BPPs  do NOT match!")
         try:
             self.assertTrue(passed)
         except AssertionError as e:
