@@ -19,11 +19,23 @@ class LZ2CommandException(Exception):
         if isinstance(message, list):
             self.message = "\n".join(message)
         if isinstance(message, dict):
+            opcodes = [
+                "Direct Write",
+                "Byte Fill",
+                "Word Fill",
+                "Incresting Fill",
+                "Repeat",
+                "NOOP",
+                "NOOP",
+                "Long Code"
+            ]
+            opcode = opcodes[message["high"]] if message["high"] < len(opcodes) else "???"
             self.message = [
-                "Index:     " + str(message["index"]),
-                "A[Index]:  " + hex(message["a"][message["index"]]),
-                "High Bits: " + hex(message["high"]),
-                "Low Bits:  " + hex(message["low"]),
+                "Index:     " + f"${str(message['index'])}; 0x" + format(message["index"], '04x').upper(),
+                "A[Index]:  " + "0x" + format(message["a"][message["index"]], '04x').upper(),
+                "OpCode:    " + str(opcode),
+                "High Bits: " + "0x" + format(message["high"], '04x').upper(),
+                "Low Bits:  " + "0x" + format(message["low"], '04x').upper(),
                 "---",
                 "Output:    " + str(["0x" + format(byte, '02x').upper() for byte in message["b"]])
             ]
@@ -162,10 +174,10 @@ def compress(a):
     return b
 
 
-def decompress(a):
+def decompress(a, offset=0x00):
     if not isinstance(a, bytearray):
         raise TypeError("Input data is not a bytearray!")
-    index = 0
+    index = offset
     b = bytearray()
 
     while index < len(a):
@@ -175,45 +187,46 @@ def decompress(a):
             break
 
         high = a[index] >> 5
-        high &= 0x7
+        high &= 0x07
         low = a[index] & 0x1F
 
         index += 1
 
         # long command. 000C CCLL LLLL LLLL
-        if high == 0x7:
+        if high == 0x07:
             high = a[index-1] >> 2
-            high &= 0x7
+            high &= 0x07
             low = int.from_bytes(a[index-1:index+1], "big") & 0x03FF
             index += 1
 
         # direct write, copy L +1 bytes
-        if high == 0x0:
+        if high == 0x00:
             for _ in range(low+1):
                 b.append(a[index])
                 index += 1
         # byte fill, copy next byte L+1 times
-        elif high == 0x1:
+        elif high == 0x01:
             for _ in range(low+1):
                 b.append(a[index])
             index += 1
         # word fill, copy next 2 bytes in sequence until L+1 bytes are copied
-        elif high == 0x2:
+        elif high == 0x02:
             for i in range(low+1):
                 b.append(a[index + i % 2])
             index += 2
         # increasing fill, copy next byte, but add 1 each time, for L+1 times
-        elif high == 0x3:
+        elif high == 0x03:
             for i in range(low+1):
                 b.append(i+a[index])
             index += 1
         # repeat, use next two bytes as an address in the output buffer to copy L+1 sequence of bytes from
-        elif high == 0x4:
+        elif high == 0x04:
             b_index = int.from_bytes(a[index:index+2], "little")
             fo = a[index:index+2]
             index += 2
             for i in range(low+1):
-                b.append(b[b_index+i])
+                if b_index+i < len(b):
+                    b.append(b[b_index+i])
         else:
             raise LZ2CommandException(
                 {
@@ -349,12 +362,12 @@ def convert_3bpp_to_png(src_filename, dest_filename=None, verbose=False):
     return False
 
 
-def decompress_from_file(src_filename):
+def decompress_from_file(src_filename, dest_filename=None, verbose=False, offset=0x00):
     with open(src_filename, "rb") as file:
-        return decompress(bytearray(file.read()))
+        return decompress(bytearray(file.read()), offset)
 
 
-def decompress_to_file(src_filename, dest_filename=None, verbose=False):
+def decompress_to_file(src_filename, dest_filename=None, verbose=False, offset=0x00):
     if not dest_filename:
         dest_dir = os.path.dirname(
             src_filename
@@ -366,9 +379,11 @@ def decompress_to_file(src_filename, dest_filename=None, verbose=False):
         if not os.path.isdir(dest_dir):
             os.makedirs(dest_dir)
         dest_filename = os.path.join(dest_dir, dest_filename)
-    b = decompress_from_file(src_filename)
     if verbose:
-        print(f" Decompressing: {src_filename.ljust(70)} -> {dest_filename}")
+        print(f" Decompressing: {src_filename.ljust(70)} -> ", end="")
+    b = decompress_from_file(src_filename, dest_filename, verbose, offset)
+    if verbose:
+        print(dest_filename)
     with open(dest_filename, "wb") as file:
         file.write(b)
         return dest_filename
@@ -503,20 +518,21 @@ def convert_png_to_3bpp(src_filename, dest_filename=None, verbose=False):
 
 
 if __name__ == "__main__":
-    # PNG to u3BPP
-    u3bpp_from_png = convert_png_to_3bpp(
-        os.path.join(
-            ".",
-            "resources",
-            "app",
-            "snes",
-            "zelda3",
-            "triforcepiece",
-            "sheets",
-            "triforcepiece.png"
-        ),
-        None,
-        True
-    )
-    # u3BPP -> c3BPP
-    compress_to_file(u3bpp_from_png, None, True)
+    if False:
+        # PNG to u3BPP
+        u3bpp_from_png = convert_png_to_3bpp(
+            os.path.join(
+                ".",
+                "resources",
+                "app",
+                "snes",
+                "zelda3",
+                "triforcepiece",
+                "sheets",
+                "triforcepiece.png"
+            ),
+            None,
+            True
+        )
+        # u3BPP -> c3BPP
+        compress_to_file(u3bpp_from_png, None, True)

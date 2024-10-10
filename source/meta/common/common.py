@@ -28,7 +28,7 @@ def filename_scrub(filename):
     new_filename = str(filename).lower()
     new_filename = re.sub(r" ", "-", new_filename)  # no spaces
     # no weird things in the name
-    new_filename = re.sub(r"[\%\$\^\:\']", "", new_filename)
+    new_filename = re.sub(r"[\%\$\^\:\(\)']", "", new_filename)
     # no weird things at beginning of name
     new_filename = re.sub(r"^[^A-Za-z0-9]+", "", new_filename)
 
