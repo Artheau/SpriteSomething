@@ -588,7 +588,7 @@ class Sprite(SpriteParent):
                         # print("Bunny Mail")
                         row = 5 if self.subtype == "doi" else 4
                         palette_indices[i] += range_end * (row-1)
-        # print("DOI:",self.subtype == "doi")
+        # print("DoI:",self.subtype == "doi")
         # print("Master Palette:")
         # n_cols = 16
         # for i in range(0, len(self.master_palette), n_cols):

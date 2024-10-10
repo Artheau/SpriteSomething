@@ -8388,7 +8388,7 @@
       }
     ]
   },
-  "DOI Character Select": {
+  "DoI Character Select": {
     "down": [
       {
         "pose": 0, "frames": 10000, "origin": [0,0], "tiles": [
@@ -8425,7 +8425,7 @@
       }
     ]
   },
-  "DOI Palette Block": {
+  "DoI Palette Block": {
     "right": [
       {
         "pose": 0, "frames": 10000, "tiles": [
