@@ -2040,6 +2040,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             "[Auximines](https://metroidfanon.fandom.com/wiki/Super_Justin_Bailey) for initial inspiration for custom Super Metroid sprites",
             "[Giga Otomia](http://www.twitch.tv/gigaotomia) for Final Fantasy Mystic Quest/Benjamin background scenes",
             "[karafruit](http://github.com/ardnaxelarak) for initial Zelda Oracles/Link support",
+            "[Murder Who](http://github.com/murderwho) for implementing the LZ2 algorithm",
             "[Pneumatic](http://twitch.tv/pneumaticgaming) for datastamp for Super Metroid/Samus sprites",
             "",
             "Based on:",

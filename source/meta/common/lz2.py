@@ -7,10 +7,24 @@ from pathlib import Path
 from PIL import Image
 from string import ascii_uppercase, digits
 import itertools
+import json
 import numpy as np
 from source.meta.common import common
 from ..classes import layoutlib
 from ..classes import spritelib
+
+
+global OPCODES
+OPCODES = [
+    "Direct Write",
+    "Byte Fill",
+    "Word Fill",
+    "Increasing Fill",
+    "Repeat",
+    "NOOP5",
+    "NOOP6",
+    "Long Code"
+]
 
 
 class LZ2CommandException(Exception):
@@ -19,25 +33,17 @@ class LZ2CommandException(Exception):
         if isinstance(message, list):
             self.message = "\n".join(message)
         if isinstance(message, dict):
-            opcodes = [
-                "Direct Write",
-                "Byte Fill",
-                "Word Fill",
-                "Incresting Fill",
-                "Repeat",
-                "NOOP",
-                "NOOP",
-                "Long Code"
-            ]
-            opcode = opcodes[message["high"]] if message["high"] < len(opcodes) else "???"
+            opcode = OPCODES[message["high"]] if message["high"] < len(OPCODES) else "???"
             self.message = [
-                "Index:     " + f"${str(message['index'])}; 0x" + format(message["index"], '04x').upper(),
-                "A[Index]:  " + "0x" + format(message["a"][message["index"]], '04x').upper(),
+                "Index:     " + f"${str(message['index'])}; " + common.pretty_hex(message["index"], 4),
+                "A[Index]:  " + common.pretty_hex(message["a"][message["index"]], 4),
                 "OpCode:    " + str(opcode),
-                "High Bits: " + "0x" + format(message["high"], '04x').upper(),
-                "Low Bits:  " + "0x" + format(message["low"], '04x').upper(),
+                "High Bits: " + common.pretty_hex(message["high"], 4),
+                "Low Bits:  " + common.pretty_hex(message["low"], 4),
                 "---",
-                "Output:    " + str(["0x" + format(byte, '02x').upper() for byte in message["b"]])
+                "Len(A)     " + common.pretty_hex(len(message["a"]), 6),
+                "Len(B)     " + common.pretty_hex(len(message["b"]), 6),
+                "Output:    " + str([common.pretty_hex(byte, 2) for byte in message["b"]])
             ]
             self.message = "\n".join(self.message)
         self.payload = payload
@@ -48,14 +54,14 @@ class LZ2CommandException(Exception):
 
 def compress(a):
     if not isinstance(a, bytearray):
-        raise TypeError("Input data is not a bytearray!")
+        raise TypeError(f"Input data is not a bytearray [{type(a)}]!")
     index = 0
     b = bytearray()
     dic = {}
 
     BYTE_LIMIT = 0xFFFF
     if len(a) > BYTE_LIMIT:
-        raise IndexError(f"This compression algorithm only supports lengths up to {BYTE_LIMIT} (two bytes). It may fail after that length.")
+        raise IndexError(f"This compression algorithm only supports lengths up to {common.pretty_hex(BYTE_LIMIT,4)} (two bytes). It may fail after that length. {common.pretty_hex(len(a))} was sent.")
 
     prev_command = 9
     prev_direct_address = 0
@@ -174,16 +180,58 @@ def compress(a):
     return b
 
 
-def decompress(a, offset=0x00):
+def decompress(a, dest_filename=None, offset=0x00, end=0x00):
     if not isinstance(a, bytearray):
         raise TypeError("Input data is not a bytearray!")
+    if offset > len(a):
+        raise IndexError(f"Offset [{common.pretty_hex(offset,6)}] beyond bounds of input [{common.pretty_hex(len(a),6)}]!")
+    # if end is before offset, treat it as a length instead
+    if end < offset:
+        end = offset + end
+    if end > len(a):
+        raise IndexError(f"End [{common.pretty_hex(offset,6)}] beyond bounds of input [{common.pretty_hex(len(a),6)}]!")
+    opcodes = []
     index = offset
-    b = bytearray()
+    b = bytearray() # one run until we reach 0xFF
+    c = bytearray() # multiple runs until we reach some known locations
+    d = bytearray() # all of what we found
 
+    sheet_id = 0
+    len_b = 0
     while index < len(a):
         # first three bits are the command, last 5 bits are the length
         if a[index] == 0xFF:
             # then we are finished
+            len_b = len(b)
+            if len(b):
+                d += b
+                if end == offset:
+                    start = common.pretty_hex(index - len(b),6)
+                    if "X" not in start:
+                        print(f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}-{common.pretty_hex(index,6)}")
+                        with open(os.path.splitext(dest_filename)[0] + f"-GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
+                            this_file.write(b)
+                            c += b
+                            b = bytearray()
+                        if index == 0x0C20B3:
+                            start = "3BPP"
+                            with open(os.path.splitext(dest_filename)[0] + f"-GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
+                                this_file.write(c)
+                                c = bytearray()
+                        if index == 0x0C3AE0:
+                            start = "4BPP"
+                            with open(os.path.splitext(dest_filename)[0] + f"-GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
+                                this_file.write(c)
+                                c = bytearray()
+                else:
+                    b = bytearray()
+            sheet_id += 1
+            index += 1
+            if index >= len(a):
+                return d
+
+        if index == 0xC3AE1:
+            # print("DONE!")
             break
 
         high = a[index] >> 5
@@ -217,7 +265,10 @@ def decompress(a, offset=0x00):
         # increasing fill, copy next byte, but add 1 each time, for L+1 times
         elif high == 0x03:
             for i in range(low+1):
-                b.append(i+a[index])
+                if i + a[index] < 256:
+                    b.append(i+a[index])
+                else:
+                    raise IndexError(i,a[index],i+a[index])
             index += 1
         # repeat, use next two bytes as an address in the output buffer to copy L+1 sequence of bytes from
         elif high == 0x04:
@@ -228,6 +279,8 @@ def decompress(a, offset=0x00):
                 if b_index+i < len(b):
                     b.append(b[b_index+i])
         else:
+            with open(os.path.splitext(dest_filename)[0] + "-error.gfx", "wb") as error_file:
+                error_file.write(b)
             raise LZ2CommandException(
                 {
                     "index": index,
@@ -237,7 +290,22 @@ def decompress(a, offset=0x00):
                     "high": high
                 }
             )
-    return b
+        opcodes.append(f"{OPCODES[high].ljust(20,'.')}{common.pretty_hex(low,2)}")
+
+    opcodes = [
+        "St: " + common.pretty_hex(offset, 6),
+        "End:" + common.pretty_hex(index-1,6),
+        "#A: " + common.pretty_hex(len(a), 6),
+        "#B: " + common.pretty_hex(len_b,  6),
+        # *opcodes,
+        "St: " + common.pretty_hex(offset, 6),
+        "End:" + common.pretty_hex(index-1,6),
+        "#A: " + common.pretty_hex(len(a), 6),
+        "#B: " + common.pretty_hex(len_b,  6)
+    ]
+    # print(json.dumps(opcodes,indent=2))
+
+    return d
 
 
 def convert_3bpp_to_png(src_filename, dest_filename=None, verbose=False):
@@ -364,18 +432,18 @@ def convert_3bpp_to_png(src_filename, dest_filename=None, verbose=False):
 
 def decompress_from_file(src_filename, dest_filename=None, verbose=False, offset=0x00):
     with open(src_filename, "rb") as file:
-        return decompress(bytearray(file.read()), offset)
+        return decompress(bytearray(file.read()), dest_filename, offset)
 
 
 def decompress_to_file(src_filename, dest_filename=None, verbose=False, offset=0x00):
-    if not dest_filename:
+    if dest_filename is None:
         dest_dir = os.path.dirname(
             src_filename
         ).replace(
             os.path.join("","app",""),
             os.path.join("","user","")
         )
-        dest_filename = f"u_{os.path.splitext(os.path.basename(src_filename))[0]}.bin"
+        dest_filename = f"{os.path.splitext(os.path.basename(src_filename))[0]}.gfx"
         if not os.path.isdir(dest_dir):
             os.makedirs(dest_dir)
         dest_filename = os.path.join(dest_dir, dest_filename)
@@ -403,9 +471,7 @@ def compress_to_file(src_filename, dest_filename=None, verbose=False):
             os.path.join("","app",""),
             os.path.join("","user","")
         )
-        dest_filename = f"{os.path.splitext(os.path.basename(src_filename))[0]}.bin".replace("u_","c_")
-        if dest_filename[:2] != "c_":
-            dest_filename = f"c_{dest_filename}"
+        dest_filename = f"{os.path.splitext(os.path.basename(src_filename))[0]}.bin"
         if not os.path.isdir(dest_dir):
             os.makedirs(dest_dir)
         dest_filename = os.path.join(dest_dir, dest_filename)
@@ -518,6 +584,30 @@ def convert_png_to_3bpp(src_filename, dest_filename=None, verbose=False):
 
 
 if __name__ == "__main__":
+    offset = "#_11B800" # to D0
+    # offset = "#_18829B" # D1
+    if offset[:2] == "#_":
+        dasm_addr_bank          = offset[2:4]                   # #_ is junk, next two digits is Bank Number
+        dasm_addr_bank_offset   = int(dasm_addr_bank) * 0x8000  # Bank Number * 0x8000 for start of Bank
+        dasm_addr_target_offset = int(offset[4:],16)            # Rest is offset within Bank
+        dasm_addr_target        = dasm_addr_bank_offset + dasm_addr_target_offset   # Add Start of Bank to offset within Bank
+        dasm_addr_target += 0x28000
+        offset = dasm_addr_target
+    decompress_to_file(
+        os.path.join(
+            ".",
+            "resources",
+            "user",
+            "snes",
+            "zelda3",
+            "link",
+            "gamefiles",
+            "alttp_jp10.sfc"
+        ),
+        None,
+        False,
+        offset
+    )
     if False:
         # PNG to u3BPP
         u3bpp_from_png = convert_png_to_3bpp(

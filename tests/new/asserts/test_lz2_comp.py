@@ -3,9 +3,20 @@ import os
 import filecmp
 from source.meta.common import lz2
 
+global SOLID_ALGO
+SOLID_ALGO = False
+
+global LABEL
+LABEL = True
+# LABEL = False
+
 global VERBOSE
-VERBOSE = True
-# VERBOSE = False
+# VERBOSE = True
+VERBOSE = False
+
+global CHILD_VERBOSE
+# CHILD_VERBOSE = True
+CHILD_VERBOSE = False
 
 class LZ2CompressionAudit(unittest.TestCase):
     def set_Up(self, *args):
@@ -26,9 +37,9 @@ class LZ2CompressionAudit(unittest.TestCase):
         """
 
         # Compress 3BPP
-        if False:
+        if VERBOSE:
             print("Compress 3BPP to File")
-        ubin_src_filepath = os.path.join(
+        gfx_src_filepath = os.path.join(
             ".",
             "resources",
             "app",
@@ -36,18 +47,18 @@ class LZ2CompressionAudit(unittest.TestCase):
             "zelda3",
             "triforcepiece",
             "sheets",
-            "u_triforce.bin"
+            "triforce.gfx"
         )
-        cbin_src_filepath = lz2.compress_to_file(ubin_src_filepath, None, False)
+        cgfx_src_filepath = lz2.compress_to_file(gfx_src_filepath, None, CHILD_VERBOSE)
 
         # Compare live comp to canned comp
         passed = filecmp.cmp(
             # canned comp
-            ubin_src_filepath,
+            gfx_src_filepath,
             # live comp
-            cbin_src_filepath
+            cgfx_src_filepath
         )
-        print("ubin  -> ucbin : ", end="")
+        print("gfx   -> cgfx : ", end="")
         if passed:
             print("Comps do match")
         else:
@@ -58,27 +69,27 @@ class LZ2CompressionAudit(unittest.TestCase):
             testErrors.append(str(e))
 
         # Decompress what we compressed
-        if False:
+        if VERBOSE:
             print("Decompress what we compressed")
-        ucbin_src_filepath = lz2.decompress_to_file(cbin_src_filepath, None, False)
+        ucgfx_src_filepath = lz2.decompress_to_file(cgfx_src_filepath, None, CHILD_VERBOSE)
 
         # Decompressed 3BPP -> PNG
-        if False:
+        if VERBOSE:
             print(" Convert that to PNG")
-        ucbin_png_filepath = lz2.convert_3bpp_to_png(ucbin_src_filepath, None, False).replace("p-preview","p-2")
+        ucgfx_png_filepath = lz2.convert_3bpp_to_png(ucgfx_src_filepath, None, CHILD_VERBOSE).replace("p-preview","p-2")
 
         passed = filecmp.cmp(
             # canned png
-            ucbin_png_filepath.replace(
+            ucgfx_png_filepath.replace(
                 os.path.join("","user",""),
                 os.path.join("","app","")
             ).replace(
-                "u_c_","u_"
+                "c_",""
             ),
             # live png
-            ucbin_png_filepath
+            ucgfx_png_filepath
         )
-        print("ucbin -> png   : ", end="")
+        print("ucgfx -> png  : ", end="")
         if passed:
             print("PNGs  do match")
         else:
@@ -90,11 +101,13 @@ class LZ2CompressionAudit(unittest.TestCase):
 
         if len(testErrors):
             # print(testErrors)
-            print("F" * (len(testErrors) - 1))
-            # self.assertTrue(False)
+            if SOLID_ALGO:
+                self.assertTrue(False)
+            else:
+                print("F" * (max(1, len(testErrors) - 1)))
 
 if __name__ == "__main__":
-    if VERBOSE:
+    if LABEL:
         print("LZ2 COMPRESSION")
         print('.' * 70)
 
