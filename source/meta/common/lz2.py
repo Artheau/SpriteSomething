@@ -34,7 +34,7 @@ class LZ2CommandException(Exception):
             self.message = "\n".join(message)
         if isinstance(message, dict):
             opcode      = OPCODES[message["high"]] if message["high"] < len(OPCODES) else "???"
-            bank        = int(message["index"] / 0x8000) - 1
+            bank        = int(message["index"] / 0x8000) 
             bank_offset = (bank + 1) * 0x8000
             offset      = int(message["index"] - bank_offset)
             self.message = [
@@ -203,8 +203,11 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
     c = bytearray() # multiple runs until we reach some known locations
     d = bytearray() # all of what we found
 
+    start_of_sheet = index
     sheet_id = 0
     len_b = 0
+    
+    
     while index < len(a):
         # first three bits are the command, last 5 bits are the length
         if a[index] == 0xFF:
@@ -213,7 +216,8 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
             if len(b):
                 d += b
                 if end == offset:
-                    start = common.pretty_hex(index - len(b),6)
+                    start = common.pretty_hex(start_of_sheet,6)
+                    start_of_sheet = index + 1
                     if "X" not in start:
                         msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}"
                         msg = msg_start + f"-{common.pretty_hex(index,6)}"
@@ -616,13 +620,13 @@ if __name__ == "__main__":
             offset = dasm_addr_target
         if True:
             dasm_addr_bank           = offset[2:4]                                      #_ is junk, next two digits is Bank Number
-            dasm_addr_bank_offset    = (int(dasm_addr_bank) + 1) * 0x8000               # Bank Number * 0x8000 for start of Bank +0x8000 for start of Banks
+            dasm_addr_bank_offset    = (int(dasm_addr_bank, 16)-1) * 0x8000                 # Bank Number * 0x8000 for start of Bank +0x8000 for start of Banks
             dasm_addr_target_offset  = int(offset[4:],16)                               # Rest is offset within Bank
             dasm_addr_target         = dasm_addr_bank_offset + dasm_addr_target_offset  # Add Start of Bank to offset within Bank
-            dasm_addr_target        += 0x20000                                          #FIXME: ??? Why do I seem to need this to make it do anything???
             if False:
                 dasm_addr_target    += 0x0200                                           # Add 0x0200 if headered
             offset = dasm_addr_target
+
     #TODO: Why is there an 0x04D4 difference between JP & US???
     decompress_to_file(
         os.path.join(
