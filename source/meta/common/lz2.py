@@ -33,7 +33,10 @@ class LZ2CommandException(Exception):
         if isinstance(message, list):
             self.message = "\n".join(message)
         if isinstance(message, dict):
-            opcode = OPCODES[message["high"]] if message["high"] < len(OPCODES) else "???"
+            opcode      = OPCODES[message["high"]] if message["high"] < len(OPCODES) else "???"
+            bank        = int(message["index"] / 0x8000) - 1
+            bank_offset = (bank + 1) * 0x8000
+            offset      = int(message["index"] - bank_offset)
             self.message = [
                 "Index:     " + f"${str(message['index'])}; " + common.pretty_hex(message["index"], 4),
                 "A[Index]:  " + common.pretty_hex(message["a"][message["index"]], 4),
@@ -41,8 +44,12 @@ class LZ2CommandException(Exception):
                 "High Bits: " + common.pretty_hex(message["high"], 4),
                 "Low Bits:  " + common.pretty_hex(message["low"], 4),
                 "---",
-                "Len(A)     " + common.pretty_hex(len(message["a"]), 6),
-                "Len(B)     " + common.pretty_hex(len(message["b"]), 6),
+                "Bank:      " + str(bank),
+                "Offset:    " + common.pretty_hex(offset, 6),
+                "Notation:  " + f"#_{bank}{hex(offset)[2:].upper()}",
+                "---",
+                "Len(A):    " + common.pretty_hex(len(message["a"]), 6),
+                "Len(B):    " + common.pretty_hex(len(message["b"]), 6),
                 "Output:    " + str([common.pretty_hex(byte, 2) for byte in message["b"]])
             ]
             self.message = "\n".join(self.message)
@@ -208,19 +215,30 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
                 if end == offset:
                     start = common.pretty_hex(index - len(b),6)
                     if "X" not in start:
-                        print(f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}-{common.pretty_hex(index,6)}")
-                        with open(os.path.splitext(dest_filename)[0] + f"-GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
+                        msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}"
+                        msg = msg_start + f"-{common.pretty_hex(index,6)}"
+                        msg += f"-{common.pretty_hex(len(b),3)}"
+                        print(msg)
+                        with open(os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
                             this_file.write(b)
                             c += b
                             b = bytearray()
-                        if index == 0x0C20B3:
+                        if index in [   # End
+                            0x0C20B3,   # JP, CB
+                            0x0C27B9    # US
+                        ]:
                             start = "3BPP"
-                            with open(os.path.splitext(dest_filename)[0] + f"-GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
+                            msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}"
+                            with open(os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
                                 this_file.write(c)
                                 c = bytearray()
-                        if index == 0x0C3AE0:
+                        if index in [   # End
+                            0x0C3AE0,   # JP, D0
+                            0x0C3FB4    # US
+                        ]:
                             start = "4BPP"
-                            with open(os.path.splitext(dest_filename)[0] + f"-GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
+                            msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}"
+                            with open(os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
                                 this_file.write(c)
                                 c = bytearray()
                 else:
@@ -230,7 +248,10 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
             if index >= len(a):
                 return d
 
-        if index == 0xC3AE1:
+        if index in [
+            0x0C3AE1,   # JP
+            0x0C3FB5    # US
+        ]:
             # print("DONE!")
             break
 
@@ -584,15 +605,25 @@ def convert_png_to_3bpp(src_filename, dest_filename=None, verbose=False):
 
 
 if __name__ == "__main__":
-    offset = "#_11B800" # to D0
-    # offset = "#_18829B" # D1
+    offset = "#_11B800"
     if offset[:2] == "#_":
-        dasm_addr_bank          = offset[2:4]                   # #_ is junk, next two digits is Bank Number
-        dasm_addr_bank_offset   = int(dasm_addr_bank) * 0x8000  # Bank Number * 0x8000 for start of Bank
-        dasm_addr_target_offset = int(offset[4:],16)            # Rest is offset within Bank
-        dasm_addr_target        = dasm_addr_bank_offset + dasm_addr_target_offset   # Add Start of Bank to offset within Bank
-        dasm_addr_target += 0x28000
-        offset = dasm_addr_target
+        if False:
+            dasm_addr_bank           = offset[2:4]                                       # #_ is junk, next two digits is Bank Number
+            dasm_addr_bank_offset    = int(dasm_addr_bank) * 0x8000                      # Bank Number * 0x8000 for start of Bank
+            dasm_addr_target_offset  = int(offset[4:],16)                                # Rest is offset within Bank
+            dasm_addr_target         = dasm_addr_bank_offset + dasm_addr_target_offset   # Add Start of Bank to offset within Bank
+            dasm_addr_target        += 0x28000
+            offset = dasm_addr_target
+        if True:
+            dasm_addr_bank           = offset[2:4]                                      #_ is junk, next two digits is Bank Number
+            dasm_addr_bank_offset    = (int(dasm_addr_bank) + 1) * 0x8000               # Bank Number * 0x8000 for start of Bank +0x8000 for start of Banks
+            dasm_addr_target_offset  = int(offset[4:],16)                               # Rest is offset within Bank
+            dasm_addr_target         = dasm_addr_bank_offset + dasm_addr_target_offset  # Add Start of Bank to offset within Bank
+            dasm_addr_target        += 0x20000                                          #FIXME: ??? Why do I seem to need this to make it do anything???
+            if False:
+                dasm_addr_target    += 0x0200                                           # Add 0x0200 if headered
+            offset = dasm_addr_target
+    #TODO: Why is there an 0x04D4 difference between JP & US???
     decompress_to_file(
         os.path.join(
             ".",
@@ -602,7 +633,8 @@ if __name__ == "__main__":
             "zelda3",
             "link",
             "gamefiles",
-            "alttp_jp10.sfc"
+            # "alttp_jp10.sfc"
+            "alttp_us.sfc"
         ),
         None,
         False,
