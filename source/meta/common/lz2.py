@@ -34,7 +34,7 @@ class LZ2CommandException(Exception):
             self.message = "\n".join(message)
         if isinstance(message, dict):
             opcode      = OPCODES[message["high"]] if message["high"] < len(OPCODES) else "???"
-            bank        = int(message["index"] / 0x8000) 
+            bank        = int(message["index"] / 0x8000)
             bank_offset = (bank + 1) * 0x8000
             offset      = int(message["index"] - bank_offset)
             self.message = [
@@ -206,8 +206,8 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
     start_of_sheet = index
     sheet_id = 0
     len_b = 0
-    
-    
+
+
     while index < len(a):
         # first three bits are the command, last 5 bits are the length
         if a[index] == 0xFF:
@@ -233,16 +233,19 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
                         ]:
                             start = "3BPP"
                             msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}"
-                            with open(os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
+                            filename_3bpp = os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1]
+                            with open(filename_3bpp, "wb") as this_file:
                                 this_file.write(c)
                                 c = bytearray()
+                            convert_3bpp_to_png(filename_3bpp)
                         if index in [   # End
                             0x0C3AE0,   # JP, D0
                             0x0C3FB4    # US
                         ]:
                             start = "4BPP"
                             msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}"
-                            with open(os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
+                            filename_4bpp = os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1]
+                            with open(filename_4bpp, "wb") as this_file:
                                 this_file.write(c)
                                 c = bytearray()
                 else:
@@ -356,7 +359,13 @@ def convert_3bpp_to_png(src_filename, dest_filename=None, verbose=False):
         data_3bpp = bytearray(file.read())
 
         pixel_data = data_3bpp
-        for i, row in enumerate(itertools.chain(ascii_uppercase, ["AA", "AB"])):
+        row_ids = ascii_uppercase.split()
+        for one in ascii_uppercase:
+            for two in ascii_uppercase:
+                row_ids.append(f"{one}{two}")
+        for i, row in enumerate(
+            itertools.chain(row_ids)
+        ):
             for column in range(8):
                 this_image = Image.new("P", (16, 16), 0)
                 image_name = f"{row}{column}"
