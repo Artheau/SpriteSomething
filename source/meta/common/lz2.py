@@ -219,7 +219,7 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
                     start = common.pretty_hex(start_of_sheet,6)
                     start_of_sheet = index + 1
                     if "X" not in start:
-                        msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}"
+                        msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{start}"
                         msg = msg_start + f"-{common.pretty_hex(index,6)}"
                         msg += f"-{common.pretty_hex(len(b),3)}"
                         print(msg)
@@ -232,7 +232,7 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
                             0x0C27B9    # US
                         ]:
                             start = "3BPP"
-                            msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}"
+                            msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{start}"
                             filename_3bpp = os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1]
                             with open(filename_3bpp, "wb") as this_file:
                                 this_file.write(c)
@@ -243,14 +243,18 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
                             0x0C3FB4    # US
                         ]:
                             start = "4BPP"
-                            msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{start}"
+                            msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{start}"
                             filename_4bpp = os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1]
                             with open(filename_4bpp, "wb") as this_file:
                                 this_file.write(c)
                                 c = bytearray()
                 else:
                     b = bytearray()
+
             sheet_id += 1
+            if sheet_id == 0x0071:
+                sheet_id = 0x007F
+
             index += 1
             if index >= len(a):
                 return d

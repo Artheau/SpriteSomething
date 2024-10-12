@@ -212,8 +212,8 @@ class Layout():
         this_row_images = []
 
         for cellID, image in all_images.items():
-            this_row = cellID[:1]
-            this_col = cellID[1:]
+            this_row = "".join([x for x in cellID if x.isalpha()])
+            this_col = "".join([x for x in cellID if x.isnumeric()])
             origin = (ascii_uppercase.find(this_row),this_col)
             if this_row != prev_row:
                 if len(this_row_images):
