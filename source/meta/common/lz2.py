@@ -390,7 +390,7 @@ def convert_3bpp_to_png(src_filename, dest_filename=None, verbose=False):
                     images[image_name] = this_image
         layout.images = images
         palettes = {
-            "1": [  # Red, Grey
+            "1": [  # Red, Brown, Grey
                 (248, 248, 248),
                 (200, 88, 48),
                 (176, 40, 40),
@@ -408,7 +408,7 @@ def convert_3bpp_to_png(src_filename, dest_filename=None, verbose=False):
                 (248, 176, 80),
                 (184, 96, 40)
             ],
-            "4": [  # Green
+            "4": [  # Green, Yellow
                 (248, 248, 248),
                 (200, 48, 24),
                 (72, 144, 48),
