@@ -9,6 +9,7 @@ from string import ascii_uppercase, digits
 import itertools
 import json
 import numpy as np
+import re
 from source.meta.common import common
 from ..classes import layoutlib
 from ..classes import spritelib
@@ -188,15 +189,24 @@ def compress(a):
 
 
 def decompress(a, dest_filename=None, offset=0x00, end=0x00):
+    # if input is not bytearray, error
     if not isinstance(a, bytearray):
         raise TypeError("Input data is not a bytearray!")
+    # if offset is longer than input, error
     if offset > len(a):
         raise IndexError(f"Offset [{common.pretty_hex(offset,6)}] beyond bounds of input [{common.pretty_hex(len(a),6)}]!")
+    # if end is longer than input, error
+    if end > len(a):
+        raise IndexError(f"End [{common.pretty_hex(offset,6)}] beyond bounds of input [{common.pretty_hex(len(a),6)}]!")
+
+    # if end if 0x00, set to length of input
+    if end == 0x00:
+        end = len(a)
+
     # if end is before offset, treat it as a length instead
     if end < offset:
         end = offset + end
-    if end > len(a):
-        raise IndexError(f"End [{common.pretty_hex(offset,6)}] beyond bounds of input [{common.pretty_hex(len(a),6)}]!")
+
     opcodes = []
     index = offset
     b = bytearray() # one run until we reach 0xFF
@@ -207,56 +217,62 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
     sheet_id = 0
     len_b = 0
 
-
-    while index < len(a):
+    while index <= end:
         # first three bits are the command, last 5 bits are the length
         if a[index] == 0xFF:
             # then we are finished
             len_b = len(b)
             if len(b):
                 d += b
-                if end == offset:
-                    start = common.pretty_hex(start_of_sheet,6)
-                    start_of_sheet = index + 1
-                    if "X" not in start:
-                        msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{start}"
-                        msg = msg_start + f"-{common.pretty_hex(index,6)}"
-                        msg += f"-{common.pretty_hex(len(b),3)}"
-                        print(msg)
-                        with open(os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1], "wb") as this_file:
-                            this_file.write(b)
-                            c += b
-                            b = bytearray()
-                        if index in [   # End
-                            0x0C20B3,   # JP, CB
-                            0x0C27B9    # US
-                        ]:
-                            start = "3BPP"
-                            msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{start}"
-                            filename_3bpp = os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1]
-                            with open(filename_3bpp, "wb") as this_file:
-                                this_file.write(c)
-                                c = bytearray()
-                            convert_3bpp_to_png(filename_3bpp)
-                        if index in [   # End
-                            0x0C3AE0,   # JP, D0
-                            0x0C3FB4    # US
-                        ]:
-                            start = "4BPP"
-                            msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{start}"
-                            filename_4bpp = os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1]
-                            with open(filename_4bpp, "wb") as this_file:
-                                this_file.write(c)
-                                c = bytearray()
-                else:
-                    b = bytearray()
+                start = common.pretty_hex(start_of_sheet,6)
+                start_of_sheet = index + 1
+                msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{start}"
+                msg = msg_start + f"-{common.pretty_hex(index,6)}"
+                matches = None
+                if "GFX" in dest_filename:
+                    msg = os.path.splitext(os.path.basename(dest_filename))[0]
+                    pattern = r"\_([^-]+)"
+                    matches = re.search(pattern, msg)
+                    if matches:
+                        sheet_id = matches.group(1)
+                msg += f"-{common.pretty_hex(len(b),3)} : {common.pretty_hex(end)}"
+                print(msg)
+                this_dest_filename = (os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1]) if "GFX" not in dest_filename else ""
+                if this_dest_filename != "":
+                    with open(this_dest_filename, "wb") as this_file:
+                        this_file.write(b)
+                        c += b
+                if matches:
+                    sheet_id = int(sheet_id, 16)
+                b = bytearray()
+                if index in [   # End
+                    0x0C20B3,   # JP, CB
+                    0x0C27B9    # US
+                ]:
+                    start = "3BPP"
+                    msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{start}"
+                    filename_3bpp = os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1]
+                    with open(filename_3bpp, "wb") as this_file:
+                        this_file.write(c)
+                    c = bytearray()
+                    # convert_3bpp_to_png(filename_3bpp) #NOTE: Resource-intensive
+                if index in [   # End
+                    0x0C3AE0,   # JP, D0
+                    0x0C3FB4    # US
+                ]:
+                    start = "4BPP"
+                    msg_start = f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{start}"
+                    filename_4bpp = os.path.splitext(dest_filename)[0] + f"-{msg_start}" + os.path.splitext(dest_filename)[1]
+                    with open(filename_4bpp, "wb") as this_file:
+                        this_file.write(c)
+                    c = bytearray()
 
             sheet_id += 1
             if sheet_id == 0x0071:
                 sheet_id = 0x007F
 
             index += 1
-            if index >= len(a):
+            if index >= end:
                 return d
 
         if index in [
@@ -468,12 +484,12 @@ def convert_3bpp_to_png(src_filename, dest_filename=None, verbose=False):
     return False
 
 
-def decompress_from_file(src_filename, dest_filename=None, verbose=False, offset=0x00):
+def decompress_from_file(src_filename, dest_filename=None, verbose=False, offset=0x00, end=0x00):
     with open(src_filename, "rb") as file:
-        return decompress(bytearray(file.read()), dest_filename, offset)
+        return decompress(bytearray(file.read()), dest_filename, offset, end)
 
 
-def decompress_to_file(src_filename, dest_filename=None, verbose=False, offset=0x00):
+def decompress_to_file(src_filename, dest_filename=None, verbose=False, offset=0x00, end=0x00):
     if dest_filename is None:
         dest_dir = os.path.dirname(
             src_filename
@@ -486,8 +502,8 @@ def decompress_to_file(src_filename, dest_filename=None, verbose=False, offset=0
             os.makedirs(dest_dir)
         dest_filename = os.path.join(dest_dir, dest_filename)
     if verbose:
-        print(f" Decompressing: {src_filename.ljust(70)} -> ", end="")
-    b = decompress_from_file(src_filename, dest_filename, verbose, offset)
+        print(f" Decompressing: {src_filename.ljust(70)}[{common.pretty_hex(offset)}:{common.pretty_hex(end)}] -> ", end="")
+    b = decompress_from_file(src_filename, dest_filename, verbose, offset, end)
     if verbose:
         print(dest_filename)
     with open(dest_filename, "wb") as file:
@@ -621,42 +637,129 @@ def convert_png_to_3bpp(src_filename, dest_filename=None, verbose=False):
         return False
 
 
-if __name__ == "__main__":
-    offset = "#_11B800"
-    if offset[:2] == "#_":
-        if False:
-            dasm_addr_bank           = offset[2:4]                                       # #_ is junk, next two digits is Bank Number
-            dasm_addr_bank_offset    = int(dasm_addr_bank) * 0x8000                      # Bank Number * 0x8000 for start of Bank
-            dasm_addr_target_offset  = int(offset[4:],16)                                # Rest is offset within Bank
-            dasm_addr_target         = dasm_addr_bank_offset + dasm_addr_target_offset   # Add Start of Bank to offset within Bank
-            dasm_addr_target        += 0x28000
-            offset = dasm_addr_target
-        if True:
-            dasm_addr_bank           = offset[2:4]                                      #_ is junk, next two digits is Bank Number
-            dasm_addr_bank_offset    = (int(dasm_addr_bank, 16)-1) * 0x8000                 # Bank Number * 0x8000 for start of Bank +0x8000 for start of Banks
-            dasm_addr_target_offset  = int(offset[4:],16)                               # Rest is offset within Bank
-            dasm_addr_target         = dasm_addr_bank_offset + dasm_addr_target_offset  # Add Start of Bank to offset within Bank
-            if False:
-                dasm_addr_target    += 0x0200                                           # Add 0x0200 if headered
-            offset = dasm_addr_target
+def process_notation(notation):
+    dasm_addr_bank           = notation[2:4]                                    # #_ is junk, next two digits is Bank Number
+    dasm_addr_bank_offset    = (int(dasm_addr_bank, 16)-1) * 0x8000             # Bank Number * 0x8000 for start of Bank +0x8000 for start of Banks
+    dasm_addr_target_offset  = int(notation[4:],16)                             # Rest is offset within Bank
+    dasm_addr_target         = dasm_addr_bank_offset + dasm_addr_target_offset  # Add Start of Bank to offset within Bank
+    if False:
+        dasm_addr_target    += 0x0200                                           # Add 0x0200 if headered
+    return dasm_addr_target
 
-    #TODO: Why is there an 0x04D4 difference between JP & US???
-    decompress_to_file(
-        os.path.join(
-            ".",
-            "resources",
-            "user",
-            "snes",
-            "zelda3",
-            "link",
-            "gamefiles",
-            # "alttp_jp10.sfc"
-            "alttp_us.sfc"
-        ),
-        None,
-        False,
-        offset
+
+if __name__ == "__main__":
+    sfc_filename = os.path.join(
+        ".",
+        "resources",
+        "user",
+        "snes",
+        "zelda3",
+        "link",
+        "gamefiles",
+        "alttp_jp10.sfc"
+        # "alttp_us.sfc"
     )
+
+    if False:
+        offset = "#_11B800"
+        if offset[:2] == "#_":
+            offset = process_notation(offset)
+
+        decompress_to_file(
+            sfc_filename,
+            None,
+            False,
+            offset
+        )
+
+    if True:
+        GFX_SHEET_START     = "#_00CFC0"
+        BACKGROUND_LENGTH   = 0x0072
+        SPRITE_LENGTH       = 0x006B
+
+        background_sheets = []
+        sprite_sheets = []
+
+        offset = process_notation(GFX_SHEET_START)
+
+        with open(sfc_filename, "rb") as sfc_file:
+            a = sfc_file.read()
+
+        print(f"Start: ${offset}; {common.pretty_hex(offset,6)}")
+
+        for i in range(BACKGROUND_LENGTH+1):
+            background_sheets.append((a[offset] -1) * 0x8000)
+            offset += 1
+        print(f"BG:  ${offset}; {common.pretty_hex(offset,6)}")
+
+        for i in range(SPRITE_LENGTH+1):
+            sprite_sheets.append((a[offset] -1) * 0x8000)
+            offset += 1
+        print(f"Spr: ${offset}; {common.pretty_hex(offset,6)}")
+
+        for i in range(BACKGROUND_LENGTH+1):
+            background_sheets[i] += a[offset] * 0x100
+            offset += 1
+        print(f"BG:  ${offset}; {common.pretty_hex(offset,6)}")
+
+        for i in range(SPRITE_LENGTH+1):
+            sprite_sheets[i] += a[offset] * 0x100
+            offset += 1
+        print(f"Spr: ${offset}; {common.pretty_hex(offset,6)}")
+
+        for i in range(BACKGROUND_LENGTH+1):
+            background_sheets[i] += a[offset]
+            offset += 1
+        print(f"BG:  ${offset}; {common.pretty_hex(offset,6)}")
+
+        for i in range(SPRITE_LENGTH+1):
+            sprite_sheets[i] += a[offset]
+            offset += 1
+        print(f"Spr: ${offset}; {common.pretty_hex(offset,6)}")
+
+        print("BG:  ", [common.pretty_hex(x, 6) for x in background_sheets])
+        print("Spr: ", [common.pretty_hex(x, 6) for x in sprite_sheets])
+
+        sheet_id = 0
+        for start_addr in background_sheets:
+            end_addr = start_addr + (background_sheets[1] - background_sheets[0]) - 1
+            print(
+                f"Sheet: ${str(sheet_id).rjust(3,'0')}; {common.pretty_hex(sheet_id,3)}",
+                f"Start: ${start_addr}; {common.pretty_hex(start_addr,6)}",
+                f"End:   ${end_addr}; {common.pretty_hex(end_addr,6)}"
+            )
+            if False:
+                decompress_to_file(
+                    sfc_filename,
+                    sfc_filename.replace(
+                        os.path.basename(sfc_filename),
+                        f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{common.pretty_hex(start_addr,6)}-{common.pretty_hex(end_addr,6)}.gfx"
+                    ),
+                    False,
+                    start_addr,
+                    end_addr
+                )
+            sheet_id += 1
+        for start_addr in sprite_sheets:
+            end_addr = start_addr + (sprite_sheets[1] - sprite_sheets[0]) - 1
+            print(
+                f"Sheet: ${str(sheet_id).rjust(3,'0')}; {common.pretty_hex(sheet_id,3)}",
+                f"Start: ${start_addr}; {common.pretty_hex(start_addr,6)}",
+                f"End:   ${end_addr}; {common.pretty_hex(end_addr,6)}"
+            )
+            if False:
+                decompress_to_file(
+                    sfc_filename,
+                    sfc_filename.replace(
+                        os.path.basename(sfc_filename),
+                        f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{common.pretty_hex(start_addr,6)}-{common.pretty_hex(end_addr,6)}.gfx"
+                    ),
+                    False,
+                    start_addr,
+                    end_addr
+                )
+            sheet_id += 1
+
     if False:
         # PNG to u3BPP
         u3bpp_from_png = convert_png_to_3bpp(
