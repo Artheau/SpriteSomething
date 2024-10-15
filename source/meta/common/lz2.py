@@ -199,10 +199,17 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
     if end > len(a):
         raise IndexError(f"End [{common.pretty_hex(offset,6)}] beyond bounds of input [{common.pretty_hex(len(a),6)}]!")
 
-    # if end if 0x00, set to length of input
+    # if end is 0x00, set to length of input
     if end == 0x00:
         end = len(a)
 
+    one_shot = False
+
+    # if end is -1, end on first 0xff
+    if end == -1:
+        one_shot = True
+        end = len(a)
+    
     # if end is before offset, treat it as a length instead
     if end < offset:
         end = offset + end
@@ -272,15 +279,9 @@ def decompress(a, dest_filename=None, offset=0x00, end=0x00):
                 sheet_id = 0x007F
 
             index += 1
-            if index >= end:
+            if index >= end or one_shot:
                 return d
 
-        if index in [
-            0x0C3AE1,   # JP
-            0x0C3FB5    # US
-        ]:
-            # print("DONE!")
-            break
 
         high = a[index] >> 5
         high &= 0x07
@@ -721,43 +722,62 @@ if __name__ == "__main__":
         print("Spr: ", [common.pretty_hex(x, 6) for x in sprite_sheets])
 
         sheet_id = 0
-        for start_addr in background_sheets:
-            end_addr = start_addr + (background_sheets[1] - background_sheets[0]) - 1
+        for start_addr_index in range(len(background_sheets)):
+            start_addr = background_sheets[start_addr_index]
+            if start_addr_index < len(background_sheets)-1:
+                end_addr = background_sheets[start_addr_index] + (background_sheets[start_addr_index+1] - background_sheets[start_addr_index]) - 1
+            else:
+                end_addr = -1
+                
             print(
                 f"Sheet: ${str(sheet_id).rjust(3,'0')}; {common.pretty_hex(sheet_id,3)}",
                 f"Start: ${start_addr}; {common.pretty_hex(start_addr,6)}",
                 f"End:   ${end_addr}; {common.pretty_hex(end_addr,6)}"
             )
-            if False:
-                decompress_to_file(
-                    sfc_filename,
-                    sfc_filename.replace(
-                        os.path.basename(sfc_filename),
-                        f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{common.pretty_hex(start_addr,6)}-{common.pretty_hex(end_addr,6)}.gfx"
-                    ),
-                    False,
-                    start_addr,
-                    end_addr
-                )
+            if True:
+                try: 
+                    decompress_to_file(
+                        sfc_filename,
+                        sfc_filename.replace(
+                            os.path.basename(sfc_filename),
+                            f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{common.pretty_hex(start_addr,6)}-{common.pretty_hex(end_addr,6)}.gfx"
+                        ),
+                        False,
+                        start_addr,
+                        end_addr
+                    )
+                except LZ2CommandException as e:
+                    print(e)
+                
             sheet_id += 1
-        for start_addr in sprite_sheets:
-            end_addr = start_addr + (sprite_sheets[1] - sprite_sheets[0]) - 1
+        for start_addr_index in range(len(sprite_sheets)):
+            start_addr = sprite_sheets[start_addr_index]
+            if start_addr_index < len(sprite_sheets)-1:
+                end_addr = sprite_sheets[start_addr_index] + (sprite_sheets[start_addr_index+1] - sprite_sheets[start_addr_index]) - 1
+            else:
+                end_addr = -1
+
             print(
                 f"Sheet: ${str(sheet_id).rjust(3,'0')}; {common.pretty_hex(sheet_id,3)}",
                 f"Start: ${start_addr}; {common.pretty_hex(start_addr,6)}",
                 f"End:   ${end_addr}; {common.pretty_hex(end_addr,6)}"
             )
-            if False:
-                decompress_to_file(
-                    sfc_filename,
-                    sfc_filename.replace(
-                        os.path.basename(sfc_filename),
-                        f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{common.pretty_hex(start_addr,6)}-{common.pretty_hex(end_addr,6)}.gfx"
-                    ),
-                    False,
-                    start_addr,
-                    end_addr
-                )
+            if True:
+                try: 
+                    decompress_to_file(
+                        sfc_filename,
+                        sfc_filename.replace(
+                            os.path.basename(sfc_filename),
+                            f"GFX_{common.pretty_hex(sheet_id,2)[2:]}-{str(sheet_id).rjust(3,'0')}-{common.pretty_hex(start_addr,6)}-{common.pretty_hex(end_addr,6)}.gfx"
+                        ),
+                        False,
+                        start_addr,
+                        end_addr
+                    )
+                except LZ2CommandException as e:
+                    print(e)
+                    
+                 
             sheet_id += 1
 
     if False:
