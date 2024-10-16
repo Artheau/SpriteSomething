@@ -869,7 +869,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             x = event.x/self.current_zoom
             y = event.y/self.current_zoom
             self.coord_setter([x,y])
-            self.animation_engine.pos_text_label.config(text=f"({round(x)},{round(y)})")
+            self.animation_engine.pos_text_label.config(text=f"({common.round_down(x)},{common.round_down(y)})")
             self.update_sprite_animation()
         #hook this function to call when the canvas is left-clicked
         self.canvas.bind("<Button-1>", move_sprite)
@@ -1159,33 +1159,41 @@ class SpriteSomethingMainFrame(tk.Frame):
         widgetlib.right_align_grid_in_frame(control_section)
 
         def zoom_out(*args):
-            self.current_zoom = max(0.5, self.current_zoom - 0.1)
+            new_zoom = max(0.5, self.current_zoom - 0.1)
+            new_zoom = round(common.round_down(new_zoom, 2), 1)
+            self.current_zoom = new_zoom
             set_zoom_text()
             self.game.update_background_image()
             self.update_sprite_animation()
         def zoom_in(*args):
-            self.current_zoom = min(4.0, self.current_zoom + 0.1)
+            new_zoom = min(4.0, self.current_zoom + 0.1)
+            new_zoom = round(common.round_down(new_zoom, 2), 1)
+            self.current_zoom = new_zoom
             set_zoom_text()
             self.game.update_background_image()
             self.update_sprite_animation()
         def set_zoom_text():
-            self.zoom_factor.set('x' + str(round(self.current_zoom, 1)) + ' ')
+            self.zoom_factor.set(f"x{str(self.current_zoom)} ")
 
         def speed_down(*args):
-            self.current_speed = max(0.1, self.current_speed - 0.1)
+            new_speed = max(0.1, self.current_speed - 0.1)
+            new_speed = round(common.round_down(new_speed, 2), 1)
+            self.current_speed = new_speed
             set_speed_text()
         def speed_up(*args):
-            self.current_speed = min(2.0, self.current_speed + 0.1)
+            new_speed = min(2.0, self.current_speed + 0.1)
+            new_speed = round(common.round_down(new_speed, 2), 1)
+            self.current_speed = new_speed
             set_speed_text()
         def set_speed_text():
-            self.speed_factor.set(str(round(self.current_speed * 100)) + '%')
+            self.speed_factor.set(f"{str(int(self.current_speed * 100))}% ")
 
         if not hasattr(self,"current_zoom"):
             # starting zoom
-            self.current_zoom = 2
+            self.current_zoom = 2.0
         if not hasattr(self,"current_speed"):
             # starting speed
-            self.current_speed = 1
+            self.current_speed = 1.0
         if not hasattr(self,"frame_number"):
             # starting frame
             self.frame_number = 0
@@ -2124,17 +2132,44 @@ class SpriteSomethingMainFrame(tk.Frame):
     def exit(self):
         '''
         #exit sequence
+        If unsaved
+         Save before exit
+          Yes:    Save, do exit if save succeeds
+          No:     Don't Save, do exit
+          Cancel: Don't Save, don't exit
         '''
-        if self.unsaved_changes:
-            save_before_exit = messagebox.askyesnocancel(
+
+        # Do exit if we didn't change anything
+        do_exit = not self.unsaved_changes
+
+        # If we're not sure if we're exiting
+        if not do_exit:
+            # Ask if we need to save
+            do_save = messagebox.askyesnocancel(
                 self.app_title,
-                self.fish.translate("meta","dialogue","exit.save-before-exit")
+                self.fish.translate(
+                    "meta",
+                    "dialogue",
+                    "exit.save-before-exit"
+                )
             )
-            if save_before_exit is not None:              #didn't cancel
-                if save_before_exit:
+
+            # We hit Cancel: No Exit
+            if do_save is None:
+                do_exit = False
+            else:
+                # We didn't hit Cancel, figure out Yes/No
+                saved = False
+
+                # We hit Yes: Yes Save & Yes Exit
+                if do_save:
                     saved = self.save_file_as()
+                    do_exit = saved
+                    # If the save fails, ask if we still want to exit
                     if not saved:
-                        exit_anyway = messagebox.askyesno(
+                        # Yes: Exit
+                        # No:  Stay
+                        do_exit = messagebox.askyesno(
                             self.app_title,
                             self.fish.translate(
                                 "meta",
@@ -2142,10 +2177,11 @@ class SpriteSomethingMainFrame(tk.Frame):
                                 "exit.save-failed-during-exit-attempt"
                             )
                         )
-                        if not exit_anyway:
-                            #user bails because their file didn't save
-                            return
                 else:
+                    # We hit No: No Save but Yes Exit
+                    do_exit = True
+
+                if not saved and do_exit:
                     #TODO: can we add this humor somehow without forcing
                     # the user to close another dialogue box?
                     messagebox.showwarning(
@@ -2159,7 +2195,9 @@ class SpriteSomethingMainFrame(tk.Frame):
 
         self.save_working_dirs()
         self.save_ani_settings()
-        sys.exit(0)
+
+        if do_exit:
+            sys.exit(0)
 
     ######################### HELPER FUNCTIONS ARE BELOW HERE ###############
 
