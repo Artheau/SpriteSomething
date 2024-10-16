@@ -356,21 +356,31 @@ class AnimationEngineParent():
                         elif "meta" in button and button["meta"] == "blank": #a blank space, baby
                             button_list.append((None,"",None,None))
                         elif "fish-subkey" in button:
-                            is_doi_subkey = button["fish-subkey"] in [
-                                "yellow",
-                                "cursed",
-                                "wooden",
-                                "triforce",
-                                "mirror2",
-                                "basic",
-                                "blood",
-                                "dragon",
-                                "iron",
-                                "long",
-                                "master2"
+                            # Show if it's good for both
+                            is_both_subkey = button["fish-subkey"] in [
+                                "none","yes",
+                                "green","blue","red",
+                                "power","titan"
                             ]
-                            is_doi_subkey = is_doi_subkey or (group_key == "shield" and button["fish-subkey"] == "golden")
-                            if (self.sprite.subtype == "doi") or (self.sprite.subtype != "doi" and not is_doi_subkey):
+                            # Show Z3Link if Z3Link
+                            is_link_subkey = button["fish-subkey"] in [
+                                "fighter","fire","mirror",
+                                "fighter","master","tempered","gold"
+                            ]
+                            # Show only Z3DoI if Z3DoI
+                            is_doi_subkey = button["fish-subkey"] in [
+                                "yellow","cursed",
+                                "wooden","triforce","mirror2","golden",
+                                "basic","blood","dragon","iron","long","master2"
+                            ]
+                            if (
+                                self.sprite.subtype != "doi" and \
+                                (is_link_subkey or is_both_subkey)
+                            ) or \
+                            (
+                                self.sprite.subtype == "doi" and \
+                                (is_doi_subkey or is_both_subkey)
+                            ):
                                 default = button["default"] if "default" in button else False
                                 disabled = group["disabled"] if "disabled" in group else False
                                 button_list.append((button["fish-subkey"],button["img"],default,disabled))
@@ -537,7 +547,7 @@ class AnimationEngineParent():
                 1000.0 *   #millisecond conversion
                 max(
                     1.0/GIF_MAX_FRAMERATE,
-                    round(duration/(speed*ACTUAL_FRAMERATE), 2)
+                    common.round_down(duration/(speed*ACTUAL_FRAMERATE), 2)
                 )
                 for duration in durations
             ]

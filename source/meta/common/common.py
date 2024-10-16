@@ -1,4 +1,4 @@
-import math  # for gcd
+import math  # for gcd, rounding
 import itertools
 import os
 import struct
@@ -109,8 +109,10 @@ def apply_palette(image, palette):
             # print("Not a valid palette to apply!")
         if image.mode == "P":
             flat_palette = [0 for _ in range(3 * 256)]
-            flat_palette[3:3 * len(palette) +
-                         3] = [x for color in palette for x in color]
+            flat_palette[3:3 * len(palette) + 3] = [
+                x for color in palette
+                for x in color
+            ]
             alpha_mask = image.point(lambda x: 0 if x == 0 else 1, mode="1")
             image.putpalette(flat_palette)
             image = image.convert('RGBA')
@@ -129,8 +131,29 @@ def snescolor_eighth(val):
 
 
 def round_to_nearest_eight(val):
-    # take a value, divide by 8, floor it, contrain it, mult by 8
+    # take a value, divide by 8, floor it, constrain it, mult by 8
     return snescolor_eighth(val) * 8
+
+
+def pretty_hex(x, digits=2):
+    # displays a hex number with a specified number of digits
+    return '0x' + hex(x)[2:].upper().zfill(digits)
+
+
+def round_up(num,precision=0):
+    if precision == 0:
+        return math.ceil(num)
+
+    slide = pow(10,precision)
+    return math.ceil(num * slide) / slide
+
+
+def round_down(num,precision=0):
+    if precision == 0:
+        return math.floor(num)
+
+    slide = pow(10,precision)
+    return math.floor(num * slide) / slide
 
 
 def convert_555_to_rgb(color, recurse=True):
@@ -408,11 +431,6 @@ def convert_indexed_tile_to_bitplanes(indexed_tile):
     low_bitplanes = np.ravel(tile[:, 6:8])[::-1]
     high_bitplanes = np.ravel(tile[:, 4:6])[::-1]
     return np.append(low_bitplanes, high_bitplanes)
-
-
-def pretty_hex(x, digits=2):
-    # displays a hex number with a specified number of digits
-    return '0x' + hex(x)[2:].upper().zfill(digits)
 
 
 def palette_pull_towards_color(palette, pull_color, bias):
