@@ -19,7 +19,7 @@ inputs:
 #########
 # actions/checkout@v4.0.0
 # actions/setup-python@v5.2.0
-# actions/upload-artifact@v4.4.0
+# actions/upload-artifact@v4.4.3
 
 runs:
   using: "composite"
@@ -45,7 +45,7 @@ runs:
         cat ./resources/user/meta/manifests/pipline.txt
     # upload pipline
     - name: 🔼Upload PipLine
-      uses: actions/upload-artifact@v4.4.0
+      uses: actions/upload-artifact@v4.4.3
       with:
         name: pipline-${{ inputs.calling-job }}-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./resources/user/meta/manifests

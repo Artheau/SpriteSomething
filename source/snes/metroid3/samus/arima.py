@@ -10,7 +10,7 @@ Manage Paper Doll imagery
 # list of cells for varia
 import os
 from PIL import Image
-# from source.meta.common import common
+from source.meta.common import common
 
 base_path_user = os.path.join(
     ".",
@@ -133,15 +133,16 @@ def paperdoll_test(mode):
     '''
     Splice up cells
     '''
-    with Image.open(os.path.join(
-            "resources",
-            "app",
-            "snes",
-            "metroid3",
-            "samus",
-            "sheets",
-            "paperdoll",
-            "arima",
+    with Image.open(
+        common.get_resource(
+            [
+                "snes",
+                "metroid3",
+                "samus",
+                "sheets",
+                "paperdoll",
+                "arima"
+            ],
             "base.png"
         )
     ) as paperdoll_image:

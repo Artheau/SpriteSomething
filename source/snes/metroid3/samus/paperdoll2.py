@@ -5,6 +5,7 @@ New image splicer
 import os
 from string import ascii_uppercase
 from PIL import Image
+from source.meta.common import common
 
 export_folder = ""
 
@@ -328,17 +329,16 @@ def export_preview(workingdir=os.path.join(".")):
         )
         suit_img = suit_img.convert("RGBA")
         this_img = Image.open(
-            os.path.join(
-                ".",
-                "resources",
-                "app",
-                "snes",
-                "metroid3",
-                "samus",
-                "sheets",
-                "paperdoll",
-                "samus",
-                "input",
+            common.get_resource(
+                [
+                    "snes",
+                    "metroid3",
+                    "samus",
+                    "sheets",
+                    "paperdoll",
+                    "samus",
+                    "input"
+                ],
                 "screen.png"
             )
         )
@@ -364,18 +364,17 @@ def export_preview(workingdir=os.path.join(".")):
                 f"{label}.png"
             )
             if not os.path.isfile(label_path):
-                label_path = os.path.join(
-                    ".",
-                    "resources",
-                    "app",
-                    "snes",
-                    "metroid3",
-                    "samus",
-                    "sheets",
-                    "paperdoll",
-                    "samus",
-                    "input",
-                    "categories",
+                label_path = common.get_resource(
+                    [
+                        "snes",
+                        "metroid3",
+                        "samus",
+                        "sheets",
+                        "paperdoll",
+                        "samus",
+                        "input",
+                        "categories"
+                    ],
                     f"{label}.png"
                 )
             if os.path.isfile(label_path):
@@ -404,17 +403,16 @@ def export_preview(workingdir=os.path.join(".")):
         ]:
             if icon in suit_type:
                 icon_img = Image.open(
-                    os.path.join(
-                        ".",
-                        "resources",
-                        "app",
-                        "snes",
-                        "metroid3",
-                        "samus",
-                        "sheets",
-                        "paperdoll",
-                        "samus",
-                        "input",
+                    common.get_resource(
+                        [
+                            "snes",
+                            "metroid3",
+                            "samus",
+                            "sheets",
+                            "paperdoll",
+                            "samus",
+                            "input"
+                        ],
                         "icons.png"
                     )
                 )

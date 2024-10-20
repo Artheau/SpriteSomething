@@ -5,6 +5,7 @@ Inventory Items
 import os
 from string import ascii_uppercase
 from PIL import Image
+from source.meta.common import common
 
 export_folder = ""
 
@@ -93,17 +94,16 @@ def applyInventoryLabels(workingdir):
     Apply Inventory Labels
     '''
     clean_img = Image.open(
-        os.path.join(
-            ".",
-            "resources",
-            "app",
-            "snes",
-            "metroid3",
-            "samus",
-            "sheets",
-            "paperdoll",
-            "samus",
-            "input",
+        common.get_resource(
+            [
+                "snes",
+                "metroid3",
+                "samus",
+                "sheets",
+                "paperdoll",
+                "samus",
+                "input"
+            ],
             "binary-inventory-clean.png"
         )
     )
@@ -116,18 +116,17 @@ def applyInventoryLabels(workingdir):
             f"{item}.png"
         )
         if not os.path.isfile(item_path):
-            item_path = os.path.join(
-                ".",
-                "resources",
-                "app",
-                "snes",
-                "metroid3",
-                "samus",
-                "sheets",
-                "paperdoll",
-                "samus",
-                "input",
-                "items",
+            item_path = common.get_resource(
+                [
+                    "snes",
+                    "metroid3",
+                    "samus",
+                    "sheets",
+                    "paperdoll",
+                    "samus",
+                    "input",
+                    "items"
+                ],
                 f"{item}.png"
             )
         item_img = Image.open(item_path)
@@ -170,18 +169,17 @@ def applyInventoryLabels(workingdir):
             f"{cat}.png"
         )
         if not os.path.isfile(cat_path):
-            cat_path = os.path.join(
-                ".",
-                "resources",
-                "app",
-                "snes",
-                "metroid3",
-                "samus",
-                "sheets",
-                "paperdoll",
-                "samus",
-                "input",
-                "categories",
+            cat_path = common.get_resource(
+                [
+                    "snes",
+                    "metroid3",
+                    "samus",
+                    "sheets",
+                    "paperdoll",
+                    "samus",
+                    "input",
+                    "categories"
+                ],
                 f"{cat}.png"
             )
         cat_img = Image.open(cat_path)

@@ -16,14 +16,13 @@ def pseudoimages_test(save=False):
     for filename in filenames:
         icon = filename[:filename.rfind('.')]
         pseudo_image = Image.open(
-            os.path.join(
-                ".",
-                "resources",
-                "app",
-                "snes",
-                "ffmq",
-                "darkking",
-                "sheets",
+            common.get_resource(
+                [
+                    "snes",
+                    "ffmq",
+                    "darkking",
+                    "sheets"
+                ],
                 filename
             )
         )

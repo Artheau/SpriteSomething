@@ -63,7 +63,8 @@
     },
     "prepare_discord_notif": {
       "colors": {
-        "miketrethewey": "0xFFAF00",
+        "minnietrethewey": "0xC8A0C8",
+        "miketrethewey": "0xC8A0C8",
         "artheau": "0x344A44",
         "github": "0xFFFFFF"
       },

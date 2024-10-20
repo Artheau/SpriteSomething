@@ -112,7 +112,7 @@ class CLIMainFrame():
         print("    Downloading Sprites")    #get ALttPR sprites
         if mode == "get-alttpr-sprites":
             # SpriteSomething.[py|exe] --cli=1 --mode=get-alttpr-sprites
-            self.load_sprite(os.path.join("resources","app","snes","zelda3","link","sheets","link.zspr"))    #load Link
+            self.load_sprite(common.get_resource(["snes","zelda3","link","sheets"],"link.zspr")) #load Link
             get_sprites(self,"Official ALttPR","snes/zelda3/link/sheets/official","http://alttpr.com/sprites",False)    #get ALttPR sprites; # FIXME: Do we want this in the sprite class or somewhere else?
 
     def __init__(self, command_line_args):

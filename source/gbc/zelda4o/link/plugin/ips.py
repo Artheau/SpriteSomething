@@ -2,6 +2,7 @@ import os   # manage filesystem operations
 
 from base64 import b64encode    # for YAML file
 from binascii import crc32      # for vanilla check
+from source.meta.common import common
 
 from PIL import Image    # get Pillow to open the image
 
@@ -106,13 +107,13 @@ def doTheThing(filename, verbose=False):
         os.makedirs(outputDir)
 
     # get input image
-    imgpath = os.path.join(
-        "resources",
-        "app",
-        "gbc",
-        "zelda4o",
-        "link",
-        "sheets",
+    imgpath = common.get_resource(
+        [
+            "gbc",
+            "zelda4o",
+            "link",
+            "sheets"
+        ],
         filename
     )
     if os.path.isfile(imgpath):

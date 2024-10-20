@@ -9,7 +9,7 @@ on:
 #########
 # actions
 #########
-# actions/checkout@v4.1.7
+# actions/checkout@v4.2.1
 # actions/setup-python@v5.2.0
 
 # stuff to do
@@ -23,8 +23,8 @@ jobs:
       matrix:
         # should run on latest explicit ubuntu version
         os-name: [
-          # ubuntu-latest,  # ubuntu-22.04
-          ubuntu-22.04,
+          # ubuntu-latest,  # ubuntu-24.04
+          ubuntu-24.04
         ]
         python-version: [
           "3.12"
@@ -35,7 +35,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.1
       # install python
       - name: 💿Install python
         uses: actions/setup-python@v5.2.0
