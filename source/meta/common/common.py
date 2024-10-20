@@ -55,9 +55,11 @@ def get_all_resources(subdir=None, desired_filename=None):
         if subdir:
             directory = os.path.join(directory, subdir)
         if os.path.isdir(directory):
-            for filename in os.listdir(directory):
-                if filename == desired_filename:
-                    file_list.append(os.path.join(directory, filename))
+            desired_path = os.path.join(directory, desired_filename)
+            is_file = os.path.isfile(desired_path)
+            is_dir  = os.path.isdir(desired_path)
+            if is_file or is_dir:
+                file_list.append(desired_path)
 
     return file_list
 
@@ -75,6 +77,27 @@ def get_resource(subdir=None, desired_filename=None):
     if not file_list and "arrow-" not in desired_filename and "-thing" not in desired_filename:
         print(subdir, desired_filename, "not found!")
     return file_list[0] if file_list else None
+
+
+# get local resource
+def get_local_resource(self, rtype="app", subdir=None, filename=None):
+    resource = self.get_resource(subdir, filename)
+    if os.path.join("",rtype,"") in resource:
+        return resource
+    return None
+
+
+# set local user resource
+def set_user_resource(self, subdir=None, filename=None, mode="w", data=None):
+    # sprite_user_resource_path = os.path.join(".", "resources", "user", self.resource_subpath)
+    user_resource_path = os.path.join(".", "resources", "user")
+    if os.path.isdir(user_resource_path):
+        if not os.path.isdir(os.path.join(user_resource_path, *subdir)):
+            os.path.makedirs(os.path.join(user_resource_path, *subdir))
+        with open(os.path.join(user_resource_path, *subdir, filename), mode) as user_file:
+            user_file.write(data)
+            return True
+    return False
 
 
 def gather_all_from_resource_subdirectory(subdir):

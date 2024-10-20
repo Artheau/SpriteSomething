@@ -7,7 +7,7 @@ on: [push, pull_request]
 #########
 # actions
 #########
-# actions/checkout@v4.1.7
+# actions/checkout@v4.2.1
 # actions/download-artifact@v4.1.8
 # actions/create-release
 # actions/upload-release-asset
@@ -19,7 +19,7 @@ on: [push, pull_request]
 # runners
 # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners
 #########
-# ubuntu-latest,  ubuntu-22.04, ubuntu-20.04
+# ubuntu-latest,  ubuntu-24.04, ubuntu-22.04
 # macos-latest,   macos-12
 # windows-latest, windows-2022
 
@@ -34,9 +34,9 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          # ubuntu-latest,  # ubuntu-22.04
+          # ubuntu-latest,  # ubuntu-24.04
+          ubuntu-24.04,
           ubuntu-22.04,
-          ubuntu-20.04,
           macos-latest,   # macos-12
           windows-latest  # windows-2022
         ]
@@ -56,7 +56,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.1
       # install python
       - name: 💿Install Python
         uses: actions/setup-python@v5.2.0
@@ -98,9 +98,9 @@ jobs:
         # except Mac now since it's erroring out with tk in py3.8+
         # FIXME: is Mac happy now?
         os-name: [
-          # ubuntu-latest,  # ubuntu-22.04
+          # ubuntu-latest,  # ubuntu-24.04
+          ubuntu-24.04,
           ubuntu-22.04,
-          ubuntu-20.04,
           macos-latest,
           windows-latest
         ]
@@ -121,7 +121,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.1
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -149,9 +149,9 @@ jobs:
       matrix:
         # should run on all OS
         os-name: [
-          # ubuntu-latest,  # ubuntu-22.04
+          # ubuntu-latest,  # ubuntu-24.04
+          ubuntu-24.04,
           ubuntu-22.04,
-          ubuntu-20.04,
           macos-latest,   # macos-12
           windows-latest  # windows-2022
         ]
@@ -172,7 +172,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.1
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -201,8 +201,8 @@ jobs:
         # should run on latest explicit ubuntu version
         # should run on all LATEST OS
         os-name: [
-          # ubuntu-latest,  # ubuntu-22.04
-          ubuntu-22.04,
+          # ubuntu-latest,  # ubuntu-24.04
+          ubuntu-24.04,
           macos-latest,
           windows-latest
         ]
@@ -228,7 +228,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.1
       # install
       - name: 💿Call Install
         uses: ./.github/actions/install
@@ -255,8 +255,8 @@ jobs:
       matrix:
         # should run on latest explicit ubuntu version
         os-name: [
-          # ubuntu-latest,  # ubuntu-22.04
-          ubuntu-22.04,
+          # ubuntu-latest,  # ubuntu-24.04
+          ubuntu-24.04
         ]
         python-version: [
           "3.12"
@@ -268,7 +268,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.1
 
       # install dependencies via pip
       - name: 💿Install Dependencies via pip
@@ -293,7 +293,7 @@ jobs:
         uses: actions/download-artifact@v4.1.8
         with:
           # should run on latest explicit ubuntu version
-          name: archive-ubuntu-22.04-py${{ matrix.python-version }}-pil${{ matrix.pillow-version }}
+          name: archive-ubuntu-24.04-py${{ matrix.python-version }}-pil${{ matrix.pillow-version }}
           path: ${{ steps.parentDir.outputs.parentDir }}/deploy/linux
 
       # download macos archive artifact
@@ -413,8 +413,8 @@ jobs:
       matrix:
         # should run on latest explicit ubuntu version
         os-name: [
-          # ubuntu-latest,  # ubuntu-22.04
-          ubuntu-22.04,
+          # ubuntu-latest,  # ubuntu-24.04
+          ubuntu-24.04
         ]
         python-version: [
           "3.12"
@@ -426,7 +426,7 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.1
       # get parent dir
       - name: 📁Get Parent Directory
         id: parentDir
@@ -444,7 +444,7 @@ jobs:
           python ./resources/ci/common/prepare_pages.py
       # upload pages artifact for later step
       - name: 🔼Upload Pages Artifact
-        uses: actions/upload-artifact@v4.4.0
+        uses: actions/upload-artifact@v4.4.3
         with:
           name: pages-${{ matrix.os-name }}
           path: ${{ steps.parentDir.outputs.parentDir }}/pages
@@ -459,14 +459,14 @@ jobs:
       matrix:
         # should run on latest explicit ubuntu version
         os-name: [
-          # ubuntu-latest,  # ubuntu-22.04
-          ubuntu-22.04,
+          # ubuntu-latest,  # ubuntu-24.04
+          ubuntu-24.04
         ]
 
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4.2.1
       # download pages artifact
       - name: 🔽Download Pages Artifact
         uses: actions/download-artifact@v4.1.8

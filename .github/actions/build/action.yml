@@ -17,9 +17,9 @@ inputs:
 #########
 # actions
 #########
-# actions/checkout@v4.1.7
+# actions/checkout@v4.2.1
 # actions/download-artifact@v4.1.8
-# actions/upload-artifact@v4.4.0
+# actions/upload-artifact@v4.4.3
 # Artheau/SpriteSomething/get-parent-dir
 # JackMcKew/pyinstaller-action-linux@0.1.4
 # JackMcKew/pyinstaller-action-windows@0.1.2
@@ -34,7 +34,7 @@ runs:
       run: |
         echo "✔️Checkout commit"
     - name: ✔️Checkout commit
-      uses: actions/checkout@v4.1.7
+      uses: actions/checkout@v4.2.1
 
     # get parent dir
     - name: 📁Get Parent Directory
@@ -99,7 +99,7 @@ runs:
       run: |
         echo "🔼Upload AppVersion Artifact"
     - name: 🔼Upload AppVersion Artifact
-      uses: actions/upload-artifact@v4.4.0
+      uses: actions/upload-artifact@v4.4.3
       with:
         name: appversion-${{ inputs.calling-job }}-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./resources/app/meta/manifests/app_version.txt
@@ -139,7 +139,7 @@ runs:
         echo "🔼Upload Problem Children Artifact"
     - name: 🔼Upload Problem Children Artifact
       if: failure()
-      uses: actions/upload-artifact@v4.4.0
+      uses: actions/upload-artifact@v4.4.3
       with:
         name: problemchildren-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ./resources/app/meta/manifests/excluded_dlls.json
@@ -163,7 +163,7 @@ runs:
       run: |
         echo "🔼Upload Binary Artifact"
     - name: 🔼Upload Binary Artifact
-      uses: actions/upload-artifact@v4.4.0
+      uses: actions/upload-artifact@v4.4.3
       with:
         name: binary-${{ inputs.os-name }}-py${{ inputs.python-version }}-pil${{ inputs.pillow-version }}
         path: ${{ steps.parentDir.outputs.parentDir }}/artifact

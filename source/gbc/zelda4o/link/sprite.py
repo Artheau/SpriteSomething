@@ -308,11 +308,11 @@ class Sprite(SpriteParent):
         patch_file = IPSFile()
 
         # get megadata
-        patch_manifest_path = os.path.join(
-            "resources",
-            "app",
-            self.resource_subpath,
-            "manifests",
+        patch_manifest_path = common.get_resource(
+            [
+                self.resource_subpath,
+                "manifests"
+            ],
             "patch.json"
         )
         megadata = {}

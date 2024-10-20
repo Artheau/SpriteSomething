@@ -11,6 +11,29 @@ def main():   # main entry point
     command_line_args = process_command_line_args()   # get commandline args
     # determine if we're running the CLI
     isCLI = command_line_args["cli"]
+    inSprite = "sprite" in command_line_args and not command_line_args["sprite"] is None
+    isBundle = "bundle" in command_line_args and not command_line_args["bundle"] is None
+    if isBundle and not inSprite:
+        for sep in ["\\","/"]:
+            if sep in command_line_args["bundle"]:
+                bundle = command_line_args["bundle"].split(sep)
+                if len(bundle):
+                    for ext in [
+                        "zspr",
+                        "bmp",
+                        "png",
+                        "zip"
+                    ]:
+                        spritefile_test = os.path.join(
+                            ".",
+                            "resources",
+                            "app",
+                            *bundle,
+                            "sheets",
+                            f"{bundle[2]}.{ext}"
+                        )
+                        if os.path.isfile(spritefile_test):
+                            command_line_args["sprite"] = spritefile_test
     # determine if we're running diagnostics
     isDiags = "mode" in command_line_args and \
         not command_line_args["mode"] is None and \
@@ -118,28 +141,18 @@ def process_command_line_args():
         help="Filetype of Sprite Files to convert to",
         metavar="<convert_to>",
         default=None)
+    parser.add_argument("--bundle",
+        dest="bundle",
+        help="A bundled sprite to load upon opening in console/game/sprite format",
+        metavar="<bundle>",
+        default="snes/zelda3/link"
+    )
     parser.add_argument("--sprite",
         dest="sprite",
         help="A sprite file to load upon opening",
         metavar="<sprite_filename>",
-#       default=os.path.join("resources",
-#                           "app",
-#                           "snes",
-#                           "metroid3",
-#                           "samus",
-#                           "sheets",
-#                           "samus.png"
-#                           )
-#       )
-        default=os.path.join("resources",
-                            "app",
-                            "snes",
-                            "zelda3",
-                            "link",
-                            "sheets",
-                            "link.zspr"
-                            )
-        )
+        default=None
+    )
 
     command_line_args = vars(parser.parse_args())
     return command_line_args

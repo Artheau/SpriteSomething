@@ -83,6 +83,29 @@ class SpriteParent():
         self.load_animations(sprite_name)
         self.import_from_filename()
 
+    # get/set sprite resources
+    # get local resource
+    def get_resource(self, rtype="app", subdir=None, filename=None):
+        resource_path = [self.resource_subpath]
+        if subdir:
+            resource_path = [*resource_path, *subdir]
+        return common.get_local_resource(rtype, resource_path, filename)
+
+
+    # get local user resource
+    def get_user_resource(self, subdir=None, filename=None):
+        return self.get_resource("user", subdir, filename)
+
+
+    # set local user resource
+    def set_user_resource(self, subdir=None, filename=None, mode="w", data=None):
+        return common.set_user_resource(self.resource_subpath, filename, mode, data)
+
+
+    # get local app resource
+    def get_app_resource(self, subdir=None, filename=None):
+        return self.get_resource("app", subdir, filename)
+
     #to make a new sprite class, you must write code for all of the functions in this section below.
     ############################# BEGIN ABSTRACT CODE ##############################
 

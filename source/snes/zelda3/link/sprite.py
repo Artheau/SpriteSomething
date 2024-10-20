@@ -123,12 +123,8 @@ class Sprite(SpriteParent):
             # FIXME: English
             sprite_save_name = "unknown"
         bgimg = Image.open(
-            os.path.join(
-                ".",
-                "resources",
-                "app",
-                self.resource_subpath,
-                "sheets",
+            self.get_app_resource(
+                ["sheets"],
                 bgfilename
             )
         ).convert("RGBA")

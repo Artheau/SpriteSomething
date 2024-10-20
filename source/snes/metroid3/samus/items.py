@@ -5,6 +5,7 @@ Item Overworld Icons
 import os
 from string import ascii_letters
 from PIL import Image
+from source.meta.common import common
 
 export_folder = ""
 
@@ -117,19 +118,17 @@ def applyItemSprites(workingdir):
                     f"{itemName}_{state}.png"
                 )
                 if not os.path.isfile(item_path):
-                    item_path = os.path.join(
-                        ".",
-                        "resources",
-                        "app",
-                        "snes",
-                        "metroid3",
-                        "samus",
-                        "sheets",
-                        "paperdoll",
-                        "samus",
-                        "input",
-                        "items",
-                        "sprites",
+                    item_path = common.get_resource(
+                        [
+                            "metroid3",
+                            "samus",
+                            "sheets",
+                            "paperdoll",
+                            "samus",
+                            "input",
+                            "items",
+                            "sprites"
+                        ],
                         f"{itemName}_{state}.png"
                     )
                 item_img = Image.open(item_path)

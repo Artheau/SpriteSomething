@@ -333,13 +333,25 @@ class SpriteSomethingMainFrame(tk.Frame):
         not_consoles = []
         not_games = []
         self.openable_filetypes = [ ".png" ]
-        with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
+        with open(common.get_resource(
+            [
+                "meta",
+                "manifests"
+            ],
+            "not_consoles.json"
+        )) as f:
             not_consoles = []
             try:
                 not_consoles = json.load(f)
             except JSONDecodeError as e:
                 raise ValueError("Not Consoles manifest malformed!")
-        with open(os.path.join("resources","app","meta","manifests","not_games.json")) as f:
+        with open(common.get_resource(
+            [
+                "meta",
+                "manifests"
+            ],
+            "not_games.json"
+        )) as f:
             not_games = []
             try:
                 not_games = json.load(f)

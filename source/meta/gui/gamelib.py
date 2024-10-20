@@ -56,7 +56,13 @@ def autodetect_nes(sprite_filename):
 
 def autodetect_png(sprite_filename):
         not_consoles = []
-        with open(os.path.join("resources","app","meta","manifests","not_consoles.json")) as f:
+        with open(common.get_resource(
+            [
+                "meta",
+                "manifests"
+            ],
+            "not_consoles.json"
+        )) as f:
             not_consoles = []
             try:
                 not_consoles = json.load(f)
@@ -100,7 +106,15 @@ def autodetect(sprite_filename):
     game, sprite, animation_assist = None, None, None
 
     not_games = []
-    with open(os.path.join("resources","app","meta","manifests","not_games.json")) as f:
+    with open(
+        common.get_resource(
+            [
+                "meta",
+                "manifests"
+            ],
+            "not_games.json"
+        )
+    ) as f:
         not_games = []
         try:
             not_games = json.load(f)
@@ -326,6 +340,7 @@ def get_game_class_of_type(console_name,game_name):
         game_module = importlib.import_module(f"{source_subpath}.game")
     except ModuleNotFoundError as e:
         raise ModuleNotFoundError(f"Game module not found: {source_subpath}.game")
+    # console/game
     return game_module.Game(os.path.join(console_name,game_name))
 
 class GameParent():
@@ -366,6 +381,29 @@ class GameParent():
             self.has_plugins = True
         except ModuleNotFoundError as err:
             pass #not terribly interested right now
+
+    # get/set game resources
+    # get local resource
+    def get_resource(self, rtype="app", subdir=None, filename=None):
+        resource_path = [self.resource_subpath]
+        if subdir:
+            resource_path = [*resource_path, *subdir]
+        return common.get_local_resource(rtype, resource_path, filename)
+
+
+    # get local user resource
+    def get_user_resource(self, subdir=None, filename=None):
+        return self.get_resource("user", subdir, filename)
+
+
+    # set local user resource
+    def set_user_resource(self, subdir=None, filename=None, mode="w", data=None):
+        return common.set_user_resource(self.resource_subpath, filename, mode, data)
+
+
+    # get local app resource
+    def get_app_resource(self, subdir=None, filename=None):
+        return self.get_resource("app", subdir, filename)
 
     def attach_background_panel(self, parent, canvas, zoom_getter, frame_getter, fish):
         #for now, accepting frame_getter as an argument because maybe the child class has animated backgrounds or something
@@ -430,7 +468,8 @@ class GameParent():
               image_filename = self.background_datas["title"][image_title]
             elif image_title in self.background_datas["filename"]:
               image_filename = image_title
-            if common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename):
+            if image_filename:
+              if common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename):
                 self.raw_background = Image.open(common.get_resource([self.console_name,self.internal_name,"backgrounds"],image_filename))
             #this doesn't work yet; not sure how to hook it
             if "origin" in self.background_datas:
@@ -473,6 +512,7 @@ class GameParent():
                 sprite_module = importlib.import_module(f"{source_subpath}.sprite")
             except ModuleNotFoundError as e:
                 raise ModuleNotFoundError(f"Sprite module not found: {source_subpath}.sprite")
+            # console, game, sprite
             resource_subpath = os.path.join(self.console_name,self.internal_name,folder_name)
             sprite = sprite_module.Sprite(sprite_filename,manifest[str(sprite_number)],resource_subpath,sprite_name)
 

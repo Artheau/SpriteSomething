@@ -26,7 +26,7 @@ with(open(manifest_path, encoding="utf-8")) as ci_settings_file:
 
 UBUNTU_VERSIONS = CI_SETTINGS["common"]["common"]["ubuntu"]
 DEFAULT_EVENT = "event"
-DEFAULT_REPO_SLUG = '/'.join(CI_SETTINGS["common"]["common"]["repo"])
+DEFAULT_REPO_SLUG = CI_SETTINGS["common"]["common"]["repo"]["username"] + "/" + CI_SETTINGS["common"]["common"]["repo"]["repository"]
 FILENAME_CHECKS = CI_SETTINGS["common"]["common"]["filenames"]
 FILESIZE_CHECK = int(CI_SETTINGS["common"]["common"]["filesize"]) * 1024 * 1024
 
