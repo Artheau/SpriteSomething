@@ -114,9 +114,13 @@ class SpriteParent():
     def load_plugins(self):
         normalized_path = os.path.normpath(self.resource_subpath)
         module_subname = normalized_path.replace(os.path.sep, '.')
-        plugins_module = self.import_module(f"source.{module_subname}.plugins")
-        self.plugins = plugins_module.Plugins(self)
-        self.has_plugins = True
+        try:
+            plugins_module = self.import_module(f"source.{module_subname}.plugins")
+            if plugins_module:
+                self.plugins = plugins_module.Plugins(self)
+                self.has_plugins = True
+        except ModuleNotFoundError as e:
+            print(e)
 
     #FIXME: English
     def import_from_ROM(self, rom):
@@ -1061,8 +1065,8 @@ class SpriteParent():
         #TODO: factor this out to a common source file
         try:
             return importlib.import_module(module_name)
-        except ModuleNotFoundError as err:
-            raise AssertionError(f"ModuleNotFoundError in spritelib.py: {err}")
+        except ModuleNotFoundError as e:
+            print(e)
 
 
 def main():
