@@ -12,8 +12,8 @@ from .plugin import ips
 # FIXME: English
 
 class Plugins(PluginsParent):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, sprite):
+        super().__init__(sprite)
         plugins = [
             ("Output IPS Patches",None,partial(ips.doTheThing, "linkwhite.png")),
             # ("Equipment",None,equipment.equipment_test),

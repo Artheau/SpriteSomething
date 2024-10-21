@@ -1488,7 +1488,7 @@ class SpriteSomethingMainFrame(tk.Frame):
             savetypes = tuple(savetypes)
 
             filename = ""
-            if "sprite.name" in self.sprite.metadata:
+            if "sprite.name" in self.sprite.metadata and self.sprite.metadata["sprite.name"] != "":
                 filename = self.sprite.metadata["sprite.name"]
             else:
                 # FIXME: English
@@ -1719,7 +1719,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         )
 
         filename = ""
-        if "sprite.name" in self.sprite.metadata:
+        if "sprite.name" in self.sprite.metadata and self.sprite.metadata["sprite.name"] != "":
             filename = self.sprite.metadata["sprite.name"]
         else:
             filename = "unknown"
@@ -1834,7 +1834,7 @@ class SpriteSomethingMainFrame(tk.Frame):
         )
 
         filename = ""
-        if "sprite.name" in self.sprite.metadata:
+        if "sprite.name" in self.sprite.metadata and self.sprite.metadata["sprite.name"] != "":
             filename = self.sprite.metadata["sprite.name"]
         else:
             filename = "unknown"

@@ -3,9 +3,10 @@ from source.meta.common import common
 
 class PluginsParent():
     # plugins object
-    def __init__(self):
+    def __init__(self, sprite):
         # self.plugins is a list
         self.plugins = []
+        self.sprite = sprite
 
     # getter
     def get_plugins(self):

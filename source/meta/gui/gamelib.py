@@ -214,8 +214,14 @@ def autodetect(sprite_filename):
             print("Detected: ZSPR file")
             with open(sprite_filename,"rb") as file:
                 zspr_data = bytearray(file.read())
-            game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
-            sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename,"")
+                game = get_game_class_of_type("snes",get_game_type_from_zspr_data(zspr_data))
+                sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_zspr_data(zspr_data),sprite_filename,"")
+        # elif file_extension.lower() == ".rdc":
+        #     print("Detected: RDC file")
+        #     with open(sprite_filename,"rb") as file:
+        #         rdc_data = bytearray(file.read())
+        #         game = get_game_class_of_type("snes",get_game_type_from_rdc_data(rdc_data))
+        #         sprite, animation_assist = game.make_sprite_by_number(get_sprite_number_from_rdc_data(rdc_data),sprite_filename,"")
         elif file_extension.lower() == ".zip":
             print("Detected: ZIP file!")
             thisData = {

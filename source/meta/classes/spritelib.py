@@ -115,7 +115,7 @@ class SpriteParent():
         normalized_path = os.path.normpath(self.resource_subpath)
         module_subname = normalized_path.replace(os.path.sep, '.')
         plugins_module = self.import_module(f"source.{module_subname}.plugins")
-        self.plugins = plugins_module.Plugins()
+        self.plugins = plugins_module.Plugins(self)
         self.has_plugins = True
 
     #FIXME: English
@@ -821,7 +821,7 @@ class SpriteParent():
             # blank image and dummy offset
             return Image.new('RGBA', (1, 1), 0), (0, 0)
 
-    def get_image(self, animation, direction, pose, palettes, frame_number):
+    def get_image(self, animation="Stand", direction="right", pose=0, palettes=[], frame_number=0):
         #What I hope for this to do is to just retrieve a single PIL Image that corresponds to a particular pose in a particular animation using the specified list of palettes
         # e.g. get_image("Walk", "right", 2, ["red_mail", "master_sword"])
         #and it will return (Image, position_offset)

@@ -9,8 +9,8 @@ from . import pseudoimages
 
 # FIXME: English
 class Plugins(PluginsParent):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, sprite):
+        super().__init__(sprite)
         plugins = [
             ("Download SpriteSomething Unofficial Sprites",None,self.get_spritesomething_sprites)
         ]
