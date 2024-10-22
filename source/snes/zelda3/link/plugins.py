@@ -3,7 +3,9 @@ import os
 from tkinter import messagebox, filedialog
 import tkinter as tk
 import re
+import tempfile
 from functools import partial
+from PIL import Image, ImageTk
 from source.meta.common import common
 from source.meta.gui import gui_common
 from source.meta.classes.pluginslib import PluginsParent
@@ -49,40 +51,55 @@ class Plugins(PluginsParent):
         return success
 
     # create chooser for game files that have multiple sprite options for extraction
-    def create_slot_chooser(self, num_slots):
+    def create_slot_chooser(self, num_slots=0, orig_sheets=[]):
         def choose_sheet(sheet_name):
             sheet_selector.set(sheet_name)
             sheet_chooser.destroy()
 
         selected_sheet = None
-
-        orig_sheets = [
-            "Link",   "Girl", "Monkey",
-            "Frog",   "Fox",  "Penguin",
-            "Rabbit", "Wolf", "Mouse"
-        ]
-        sheets = []
-        for [slot_id, sheet] in enumerate(orig_sheets):
-            sheets.append("Slot " + str(slot_id+1) + f": {orig_sheets[slot_id]}")
+        sheets = orig_sheets
+        images = []
 
         if len(sheets) > 1:
             sheet_chooser = tk.Toplevel()
             #FIXME: English
             sheet_chooser.title("Choose Slot to Save to")
-            sheet_chooser.geometry("640x140")
+            sheet_chooser.geometry("640x400")
             sheet_selector = tk.StringVar(sheet_chooser)
             sheet_buttons = []
             i = 1
             j = 1
             cols = 3
-            for sheet_name in sheets:
-                label = os.path.basename(sheet_name)
+            for [sheet_id, sheet] in enumerate(sheets):
+                label = f"Slot {sheet_id+1}\n"
+                if "sprite.name" in sheet:
+                    label += sheet["sprite.name"]
+                if "author.name" in sheet:
+                    label += "\n"
+                    label += sheet["author.name"]
+                image = sheet["image"] if "image" in sheet and sheet["image"] else None
+                if image:
+                    row = 1
+                    col = 2
+                    head_cell = image.crop((16*(col-1),16*(row-1),16*(col),16*(row)))
+                    row = 2
+                    col = 4
+                    body_cell = image.crop((16*(col-1),16*(row-1),16*(col),16*(row)))
+                    image = Image.new("RGBA", (16,24), (0,0,0,0))
+                    image.paste(body_cell, (0,8), body_cell)
+                    image.paste(head_cell, (0,0), head_cell)
+                    image = image.resize((image.size[0] * 2, image.size[1] * 2), Image.NEAREST)
+                    image = ImageTk.PhotoImage(image)
+                    images.append(image)
+                side = tk.BOTTOM
                 sheet_button = tk.Button(
                     sheet_chooser,
-                    width=16,
-                    height=1,
+                    width=24,
+                    height=6,
+                    image=image,
                     text=label,
-                    command=partial(choose_sheet,sheet_name)
+                    compound=side,
+                    command=partial(choose_sheet,sheet_id)
                 )
                 sheet_button.grid(row=i,column=j,sticky=tk.NSEW)
                 sheet_buttons.append(sheet_button)
@@ -105,6 +122,8 @@ class Plugins(PluginsParent):
         if not self.sprite.subtype == "doi":
             return
 
+        tempdir = None
+        tempdirObj = None
         zip_slug = ""
         if "sprite.name" in self.sprite.metadata and self.sprite.metadata["sprite.name"] != "":
             zip_slug = self.sprite.metadata["sprite.name"]
@@ -115,6 +134,8 @@ class Plugins(PluginsParent):
         window_title = "Save to Folder"
         if mode == "zipped":
             window_title += " for Archive"
+            tempdirObj = tempfile.TemporaryDirectory()
+            print("Zip Temp Dir:", tempdirObj)
         if mode == "slot":
             window_title = "Locate Zelda: Dungeons of Infinity Installation"
 
@@ -131,25 +152,56 @@ class Plugins(PluginsParent):
         )
 
         if mode == "slot":
+            orig_sheets = [
+                { "sprite.name": "Link",            "author.name": "Nintendo", "image": None },
+                { "sprite.name": "BS Girl",         "author.name": "InTheBeef", "image": None },
+                { "sprite.name": "Monkey",          "author.name": "", "image": None },
+                { "sprite.name": "Frog Link",       "author.name": "", "image": None },
+                { "sprite.name": "Fox Link",        "author.name": "InTheBeef", "image": None },
+                { "sprite.name": "Penguin Link",    "author.name": "Fish_waffle64", "image": None },
+                { "sprite.name": "Super Bunny",     "author.name": "TheOkayGuy", "image": None },
+                { "sprite.name": "Wolf Link",       "author.name": "Fish_waffle64/InTheBeef", "image": None },
+                { "sprite.name": "Mouse",           "author.name": "Malthaez", "image": None }
+            ]
+            characters_dir = os.path.join(zip_dir, "data", "characters")
+            for d in os.listdir(characters_dir):
+                if d.isnumeric() and int(d) >= 1 and int(d) <= 9:
+                    slot_dir = os.path.join(characters_dir, d)
+                    metadata_path = os.path.join(slot_dir, "metadata.json")
+                    if os.path.isfile(metadata_path):
+                        with open(metadata_path, "r") as metadata_file:
+                            metadata_json = json.load(metadata_file)
+                            orig_sheets[int(d) - 1] = metadata_json
+                    for f in os.listdir(slot_dir):
+                        if os.path.splitext(f)[1] == ".png":
+                            sprite_sheet = Image.open(os.path.join(slot_dir, f))
+                            orig_sheets[int(d) - 1]["image"] = sprite_sheet
+
             # get slot number
-            slot = self.create_slot_chooser(9)
+            slot = self.create_slot_chooser(9, orig_sheets)
             slot = re.match(r"(?:Slot )([\d+])(?:[: ]{2})(?:.*)", slot)
             if slot:
                 slot = slot.group(1)
-            zip_dir = os.path.join(
-                zip_dir,
-                "data",
-                "characters",
-                str(slot)
-            )
+                zip_dir = os.path.join(
+                    zip_dir,
+                    "data",
+                    "characters",
+                    str(slot)
+                )
+            else:
+                zip_dir = None
 
-        if zip_dir:
+        if tempdirObj:
+            tempdir = tempdirObj.name
+        else:
+            tempdir = zip_dir
+
+        if tempdir:
             #FIXME: Make temp files to put into archive
-            scratch_dir = os.path.join(zip_dir, "scratch") if mode == "zipped" else zip_dir
-            if not os.path.isdir(os.path.join(scratch_dir,"Pal")):
-                os.makedirs(os.path.join(scratch_dir,"Pal"))
+            if not os.path.isdir(os.path.join(tempdir,"Pal")):
+                os.makedirs(os.path.join(tempdir,"Pal"))
             sheet_save_path = os.path.join(
-                scratch_dir,
+                tempdir,
                 f"sCharacter_{zip_slug}.png"
             )
             sheet_save_success = self.sprite.save_as(sheet_save_path, "zelda3")
@@ -158,7 +210,7 @@ class Plugins(PluginsParent):
             if sheet_save_success:
                 doi_palette_block = self.sprite.get_image("DoI Palette Block")[0]
                 palette_save_path = os.path.join(
-                    scratch_dir,
+                    tempdir,
                     "Pal",
                     f"sPalette_{zip_slug}.png"
                 )
@@ -167,7 +219,7 @@ class Plugins(PluginsParent):
                 # print(f"Palette Save: {palette_save_success} to {palette_save_path}")
 
                 if palette_save_success:
-                    with open(os.path.join(scratch_dir,"metadata.json"), "w") as metadata_file:
+                    with open(os.path.join(tempdir,"metadata.json"), "w") as metadata_file:
                         metadata_file.write(json.dumps(self.sprite.metadata, indent=2))
 
                     if mode == "zipped":
@@ -180,17 +232,20 @@ class Plugins(PluginsParent):
                         archive_save_success = make_archive(
                             zip_path_slug,
                             "zip",
-                            root_dir=os.path.join(scratch_dir)
+                            root_dir=os.path.join(tempdir)
                         )
-                        rmtree(os.path.join(scratch_dir))
-                        messagebox.showinfo(
-                            "Save Complete",
-                            f"Saved archive to {zip_path_slug}.zip"
-                        )
+                        # print("Archive Success:",archive_save_success)
+
+                        if archive_save_success:
+                            messagebox.showinfo(
+                                "Save Complete",
+                                f"Saved archive to {zip_path_slug}.zip"
+                            )
+                            tempdirObj.cleanup()
                     else:
                         messagebox.showinfo(
                             "Save Complete",
-                            f"Saved files to {zip_dir}"
+                            f"Saved files to {tempdir}"
                         )
 
     def save_doi_as_zip(self):
