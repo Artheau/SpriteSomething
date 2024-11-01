@@ -95,8 +95,8 @@ class Plugins(PluginsParent):
                 side = tk.BOTTOM
                 sheet_button = tk.Button(
                     sheet_chooser,
-                    width=24,
-                    height=6,
+                    width=150,
+                    height=100,
                     image=image,
                     text=label,
                     compound=side,
@@ -106,7 +106,7 @@ class Plugins(PluginsParent):
                 sheet_buttons.append(sheet_button)
                 if j == cols:
                     i += 1
-                    j    = 1
+                    j  = 1
                 else:
                     j += 1
             sheet_chooser.grid_rowconfigure(0,weight=1)
