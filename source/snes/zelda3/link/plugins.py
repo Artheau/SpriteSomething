@@ -79,15 +79,16 @@ class Plugins(PluginsParent):
                     label += sheet["author.name"]
                 image = sheet["image"] if "image" in sheet and sheet["image"] else None
                 if image:
-                    row = 1
-                    col = 2
-                    head_cell = image.crop((16*(col-1),16*(row-1),16*(col),16*(row)))
-                    row = 2
-                    col = 4
-                    body_cell = image.crop((16*(col-1),16*(row-1),16*(col),16*(row)))
-                    image = Image.new("RGBA", (16,24), (0,0,0,0))
-                    image.paste(body_cell, (0,8), body_cell)
-                    image.paste(head_cell, (0,0), head_cell)
+                    if image.size == (128, 448):
+                        row = 1
+                        col = 2
+                        head_cell = image.crop((16*(col-1),16*(row-1),16*(col),16*(row)))
+                        row = 2
+                        col = 4
+                        body_cell = image.crop((16*(col-1),16*(row-1),16*(col),16*(row)))
+                        image = Image.new("RGBA", (16,24), (0,0,0,0))
+                        image.paste(body_cell, (0,8), body_cell)
+                        image.paste(head_cell, (0,0), head_cell)
                     image = image.resize((image.size[0] * 2, image.size[1] * 2), Image.NEAREST)
                     image = ImageTk.PhotoImage(image)
                     images.append(image)
@@ -152,16 +153,17 @@ class Plugins(PluginsParent):
         )
 
         if mode == "slot":
+            preview_path = os.path.join("resources", "app", self.sprite.resource_subpath, "sheets", "doi", "bundled")
             orig_sheets = [
-                { "sprite.name": "Link",            "author.name": "Nintendo", "image": None },
-                { "sprite.name": "BS Girl",         "author.name": "InTheBeef", "image": None },
-                { "sprite.name": "Monkey",          "author.name": "", "image": None },
-                { "sprite.name": "Frog Link",       "author.name": "", "image": None },
-                { "sprite.name": "Fox Link",        "author.name": "InTheBeef", "image": None },
-                { "sprite.name": "Penguin Link",    "author.name": "Fish_waffle64", "image": None },
-                { "sprite.name": "Super Bunny",     "author.name": "TheOkayGuy", "image": None },
-                { "sprite.name": "Wolf Link",       "author.name": "Fish_waffle64/InTheBeef", "image": None },
-                { "sprite.name": "Mouse",           "author.name": "Malthaez", "image": None }
+                { "sprite.name": "Link",            "author.name": "Nintendo",                  "image": Image.open(os.path.join(preview_path, "link.png")) },
+                { "sprite.name": "BS Girl",         "author.name": "InTheBeef",                 "image": Image.open(os.path.join(preview_path, "bsgirl.png")) },
+                { "sprite.name": "Monkey",          "author.name": "",                          "image": Image.open(os.path.join(preview_path, "link.png")) },
+                { "sprite.name": "Frog Link",       "author.name": "",                          "image": Image.open(os.path.join(preview_path, "frog.png")) },
+                { "sprite.name": "Fox Link",        "author.name": "InTheBeef",                 "image": Image.open(os.path.join(preview_path, "fox.png")) },
+                { "sprite.name": "Penguin Link",    "author.name": "Fish_waffle64",             "image": Image.open(os.path.join(preview_path, "penguin.png")) },
+                { "sprite.name": "Super Bunny",     "author.name": "TheOkayGuy",                "image": Image.open(os.path.join(preview_path, "superbunny.png")) },
+                { "sprite.name": "Wolf Link",       "author.name": "Fish_waffle64/InTheBeef",   "image": Image.open(os.path.join(preview_path, "wolf.png")) },
+                { "sprite.name": "Mouse",           "author.name": "Malthaez",                  "image": Image.open(os.path.join(preview_path, "mouse.png")) }
             ]
             characters_dir = os.path.join(zip_dir, "data", "characters")
             for d in os.listdir(characters_dir):
