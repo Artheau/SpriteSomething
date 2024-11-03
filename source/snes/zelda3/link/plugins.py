@@ -4,6 +4,7 @@ from tkinter import messagebox, filedialog
 import tkinter as tk
 import re
 import tempfile
+import time
 from functools import partial
 from PIL import Image, ImageTk
 from source.meta.common import common
@@ -114,9 +115,11 @@ class Plugins(PluginsParent):
             sheet_chooser.grid_columnconfigure(0,weight=1)
             sheet_chooser.grid_columnconfigure(i + 1,weight=1)
             sheet_chooser.wait_window()
-            selected_sheet = sheet_selector.get()
+            if sheet_selector.get():
+                selected_sheet = int(sheet_selector.get()) + 1
         else:
-            selected_sheet = random.choice(sheets)
+            selected_sheet = int(random.choice(sheets)) + 1
+        print(f"Saving to DoI Slot: {selected_sheet}")
         return selected_sheet
 
     def save_doi_to_folder(self, mode="folder"):
@@ -152,46 +155,76 @@ class Plugins(PluginsParent):
             title=window_title
         )
 
-        if mode == "slot":
-            preview_path = os.path.join("resources", "app", self.sprite.resource_subpath, "sheets", "doi", "bundled")
-            orig_sheets = [
-                { "sprite.name": "Link",            "author.name": "Nintendo",                  "image": Image.open(os.path.join(preview_path, "link.png")) },
-                { "sprite.name": "BS Girl",         "author.name": "InTheBeef",                 "image": Image.open(os.path.join(preview_path, "bsgirl.png")) },
-                { "sprite.name": "Monkey",          "author.name": "",                          "image": Image.open(os.path.join(preview_path, "link.png")) },
-                { "sprite.name": "Frog Link",       "author.name": "",                          "image": Image.open(os.path.join(preview_path, "frog.png")) },
-                { "sprite.name": "Fox Link",        "author.name": "InTheBeef",                 "image": Image.open(os.path.join(preview_path, "fox.png")) },
-                { "sprite.name": "Penguin Link",    "author.name": "Fish_waffle64",             "image": Image.open(os.path.join(preview_path, "penguin.png")) },
-                { "sprite.name": "Super Bunny",     "author.name": "TheOkayGuy",                "image": Image.open(os.path.join(preview_path, "superbunny.png")) },
-                { "sprite.name": "Wolf Link",       "author.name": "Fish_waffle64/InTheBeef",   "image": Image.open(os.path.join(preview_path, "wolf.png")) },
-                { "sprite.name": "Mouse",           "author.name": "Malthaez",                  "image": Image.open(os.path.join(preview_path, "mouse.png")) }
-            ]
-            characters_dir = os.path.join(zip_dir, "data", "characters")
-            for d in os.listdir(characters_dir):
-                if d.isnumeric() and int(d) >= 1 and int(d) <= 9:
-                    slot_dir = os.path.join(characters_dir, d)
-                    metadata_path = os.path.join(slot_dir, "metadata.json")
-                    if os.path.isfile(metadata_path):
-                        with open(metadata_path, "r") as metadata_file:
-                            metadata_json = json.load(metadata_file)
-                            orig_sheets[int(d) - 1] = metadata_json
-                    for f in os.listdir(slot_dir):
-                        if os.path.splitext(f)[1] == ".png":
-                            sprite_sheet = Image.open(os.path.join(slot_dir, f))
-                            orig_sheets[int(d) - 1]["image"] = sprite_sheet
-
-            # get slot number
-            slot = self.create_slot_chooser(9, orig_sheets)
-            slot = re.match(r"(?:Slot )([\d+])(?:[: ]{2})(?:.*)", slot)
-            if slot:
-                slot = slot.group(1)
-                zip_dir = os.path.join(
-                    zip_dir,
-                    "data",
-                    "characters",
-                    str(slot)
-                )
-            else:
-                zip_dir = None
+        if zip_dir:
+            if mode == "slot":
+                preview_path = os.path.join("resources", "app", self.sprite.resource_subpath, "sheets", "doi", "bundled")
+                orig_sheets = [
+                    { "sprite.name": "Link",            "author.name": "Nintendo",                  "image": Image.open(os.path.join(preview_path, "link.png")) },
+                    { "sprite.name": "BS Girl",         "author.name": "InTheBeef",                 "image": Image.open(os.path.join(preview_path, "bsgirl.png")) },
+                    { "sprite.name": "Monkey",          "author.name": "",                          "image": Image.open(os.path.join(preview_path, "link.png")) },
+                    { "sprite.name": "Frog Link",       "author.name": "",                          "image": Image.open(os.path.join(preview_path, "frog.png")) },
+                    { "sprite.name": "Fox Link",        "author.name": "InTheBeef",                 "image": Image.open(os.path.join(preview_path, "fox.png")) },
+                    { "sprite.name": "Penguin Link",    "author.name": "Fish_waffle64",             "image": Image.open(os.path.join(preview_path, "penguin.png")) },
+                    { "sprite.name": "Super Bunny",     "author.name": "TheOkayGuy",                "image": Image.open(os.path.join(preview_path, "superbunny.png")) },
+                    { "sprite.name": "Wolf Link",       "author.name": "Fish_waffle64/InTheBeef",   "image": Image.open(os.path.join(preview_path, "wolf.png")) },
+                    { "sprite.name": "Mouse",           "author.name": "Malthaez",                  "image": Image.open(os.path.join(preview_path, "mouse.png")) }
+                ]
+                characters_dir = os.path.join(zip_dir, "data", "characters")
+                for d in os.listdir(characters_dir):
+                    if d.isnumeric() and int(d) >= 1 and int(d) <= 9:
+                        slot_dir = os.path.join(characters_dir, d)
+                        metadata_path = os.path.join(slot_dir, "metadata.json")
+                        for f in os.listdir(slot_dir):
+                            if os.path.splitext(f)[1] == ".png":
+                                sprite_sheet = Image.open(os.path.join(slot_dir, f))
+                                orig_sheets[int(d) - 1] = {"image": sprite_sheet}
+                        if os.path.isfile(metadata_path):
+                            with open(metadata_path, "r") as metadata_file:
+                                metadata_json = json.load(metadata_file)
+                                orig_sheets[int(d) - 1].update(metadata_json)
+                # get slot number
+                slot = self.create_slot_chooser(9, orig_sheets)
+                if slot and int(slot) > 0:
+                    backups_dir = os.path.join(zip_dir,"data","characters","backups")
+                    if not os.path.isdir(backups_dir):
+                        os.makedirs(backups_dir)
+                    zip_dir = os.path.join(
+                        zip_dir,
+                        "data",
+                        "characters",
+                        str(slot)
+                    )
+                    if os.path.isdir(zip_dir):
+                        for r,d,f in os.walk(zip_dir):
+                            for filename in f:
+                                if os.path.splitext(filename)[1] == ".png":
+                                    blast_sprite = messagebox.askyesno(
+                                        f"Save to Slot {str(slot)}",
+                                        "Wait a little bit, dude, there's already a sprite there." + "\n\n" +
+                                        "Are you a bad enough dude to blast it anyway?"
+                                    )
+                                    if blast_sprite:
+                                        backup_sprite = messagebox.askyesno(
+                                            f"Save to Slot {str(slot)}",
+                                            "Okay. I'm chargin' Malaysia to blast it away!" + "\n\n" +
+                                            "Do you want to back that thang up so that you can save a copy of what's already there?"
+                                        )
+                                        if backup_sprite:
+                                            backup_path_slug = os.path.splitext(filename)[0].replace("sCharacter_","")
+                                            backup_path = os.path.join(backups_dir,backup_path_slug)
+                                            backup_path += time.strftime("_%Y%m%dT%H%M%S", time.gmtime())
+                                            backup_save_success = make_archive(
+                                                backup_path,
+                                                "zip",
+                                                root_dir=os.path.join(zip_dir)
+                                            )
+                                            if backup_save_success:
+                                                print(f"Backup saved to: {backup_path}")
+                                        rmtree(zip_dir)
+                                    else:
+                                        return
+                else:
+                    zip_dir = None
 
         if tempdirObj:
             tempdir = tempdirObj.name
