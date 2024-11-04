@@ -1,3 +1,4 @@
+import colorsys
 import json
 import os
 from tkinter import messagebox, filedialog
@@ -25,6 +26,7 @@ class Plugins(PluginsParent):
             ("Z3DoI: Save as Archive",None,self.save_doi_as_zip),
             ("Z3DoI: Save to Folder",None,self.save_doi_to_folder),
             ("Z3DoI: Save to Character Slot",None,self.save_doi_to_slot),
+            ("Z3DoI: Convert GBR -> GBRY",None,self.convert_gbr_gbry),
             ("Sheet Trawler",None,self.sheet_trawler)#,
             #("Equipment",None,self.equipment_test)
         ]
@@ -288,6 +290,51 @@ class Plugins(PluginsParent):
 
     def save_doi_to_slot(self):
         self.save_doi_to_folder(mode="slot")
+
+    def convert_gbr_gbry(self):
+        masterp = self.sprite.master_palette
+        paletteNames = ["green", "blue", "red"]
+        palNames = [
+            ["green", "blue"],
+            ["blue", "red"]
+        ]
+        if len(masterp) > 16 * 4:
+            paletteNames.append("yellow")
+            palNames.append(["red", "yellow"])
+        paletteNames.append("bunny")
+        palettes = {}
+        for paletteID, paletteName in enumerate(paletteNames):
+            palettes[paletteName] = masterp[paletteID*16:(paletteID+1)*16]
+        for [palNameOne, palNameTwo] in palNames:
+            print(f"Comparing {palNameOne} to {palNameTwo}")
+            i = 0
+            for [one, two] in zip(
+                palettes[palNameOne],
+                palettes[palNameTwo]
+            ):
+                o_hsv = list(
+                    colorsys.rgb_to_hsv(
+                        one[0]/255,
+                        one[1]/255,
+                        one[2]/255
+                    )
+                )
+                t_hsv = list(
+                    colorsys.rgb_to_hsv(
+                        two[0]/255,
+                        two[1]/255,
+                        two[2]/255
+                    )
+                )
+                o_hsv[0] = round(float(o_hsv[0]) * 360)
+                o_hsv[1] = round(float(o_hsv[1]) * 100)
+                o_hsv[2] = round(float(o_hsv[2]) * 100)
+                t_hsv[0] = round(float(t_hsv[0]) * 360)
+                t_hsv[1] = round(float(t_hsv[1]) * 100)
+                t_hsv[2] = round(float(t_hsv[2]) * 100)
+                if (i > 0) and (o_hsv != t_hsv):
+                    print(i,o_hsv,t_hsv)
+                i += 1
 
     def sheet_trawler(self):
         animations = json.load(open(common.get_resource(os.path.join("snes","zelda3","link","manifests"),"animations.json")))
