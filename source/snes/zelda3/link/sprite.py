@@ -78,7 +78,7 @@ class Sprite(SpriteParent):
 
         if style == "crossproduct":
             return_images += self.get_tracker_images()
-        elif style.lower() in ["spiffy", "hunk", "moechicken"]:
+        elif style.lower() in ["spiffy", "hunk", "moechicken", "doi"]:
             return_images += self.get_defined_images(style.lower(), return_images)
 
         return return_images
@@ -129,7 +129,7 @@ class Sprite(SpriteParent):
         return return_images
 
     def get_defined_images(self, style, return_images):
-        bgfilename = ""
+        bgfilename = None
 
         if style == "spiffy":
             bgfilename = "titlecard.png"
@@ -143,12 +143,19 @@ class Sprite(SpriteParent):
         else:
             # FIXME: English
             sprite_save_name = "unknown"
-        bgimg = Image.open(
-            self.get_app_resource(
-                ["sheets"],
-                bgfilename
-            )
-        ).convert("RGBA")
+        if bgfilename:
+            bgimg = Image.open(
+                self.get_app_resource(
+                    ["sheets"],
+                    bgfilename
+                )
+            ).convert("RGBA")
+        else:
+            bgfilename = f"{style}.png"
+            size = (256,256)
+            if style == "doi":
+                size = (144,24)
+            bgimg = Image.new(mode="RGBA", size=size)
         for i,_ in enumerate(return_images):
             img = return_images[i][1]
             pose_coords = (0, 0)

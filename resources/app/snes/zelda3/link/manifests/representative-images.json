@@ -171,5 +171,15 @@
       [ "Grab", "up", 3, [], 0, [180,223] ]
     ]
   },
+  "doi": {
+    "images": [
+      [ "Stand", "down", 0, [], 0,                      [  0,0] ],
+      [ "Stand", "down", 0, ["blue_mail"], 0,           [ 24,0] ],
+      [ "Stand", "down", 0, ["red_mail"],   0,          [ 48,0] ],
+      [ "Stand", "down", 0, ["yellow_mail"], 0,         [ 72,0] ],
+      [ "Stand", "down", 0, ["cursed_mail"], 0,         [ 96,0] ],
+      [ "Bunny stand", "down", 0, ["bunny_mail"], 0,    [120,0] ]
+    ]
+  },
   "crossproduct": {}
 }
