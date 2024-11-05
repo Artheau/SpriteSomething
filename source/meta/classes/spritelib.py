@@ -47,7 +47,6 @@ class SpriteParent():
         self.outputs = []
         self.overview_scale_factor = 2
         self.overhead = True
-        self.ignore_palette = False
         self.view_only = bool(("view-only" in manifest_dict) and (manifest_dict["view-only"]))
         self.wip = bool(("wip" in manifest_dict) and (manifest_dict["wip"]))
         if "input" in manifest_dict:
@@ -732,8 +731,7 @@ class SpriteParent():
             # if not a pseudoimage
             if "pseudoimages" not in self.layout.data or \
                 "pseudoimages" in self.layout.data and image_name not in self.layout.data["pseudoimages"]:
-                if not self.ignore_palette:
-                    base_image = common.apply_palette(base_image, this_palette)
+                base_image = common.apply_palette(base_image, this_palette)
                 if "cursed_mail" in palettes and len(image_name) > 0 and len(image_name) <= 3:
                     base_image = base_image.convert('LA')
                     base_image = base_image.convert('RGBA')

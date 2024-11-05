@@ -355,7 +355,6 @@ class Layout():
                 len(set(palette_rgb[:16])) > 1 and \
                 len(set(palette_rgba[:16])) > 1
             if is_doi:
-                self.ignore_palette = True
                 self.subtype = "doi"
             if is_z3link:
                 green_start = 0x10
