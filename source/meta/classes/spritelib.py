@@ -732,7 +732,7 @@ class SpriteParent():
             if "pseudoimages" not in self.layout.data or \
                 "pseudoimages" in self.layout.data and image_name not in self.layout.data["pseudoimages"]:
                 base_image = common.apply_palette(base_image, this_palette)
-                if "cursed_mail" in palettes and len(image_name) > 0 and len(image_name) <= 3:
+                if "cursed_mail" in palettes:
                     base_image = base_image.convert('LA')
                     base_image = base_image.convert('RGBA')
 
