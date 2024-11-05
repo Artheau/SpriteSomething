@@ -80,15 +80,15 @@ def get_resource(subdir=None, desired_filename=None):
 
 
 # get local resource
-def get_local_resource(self, rtype="app", subdir=None, filename=None):
-    resource = self.get_resource(subdir, filename)
+def get_local_resource(rtype="app", subdir=None, filename=None):
+    resource = get_resource(subdir, filename)
     if os.path.join("",rtype,"") in resource:
         return resource
     return None
 
 
 # set local user resource
-def set_user_resource(self, subdir=None, filename=None, mode="w", data=None):
+def set_user_resource(subdir=None, filename=None, mode="w", data=None):
     # sprite_user_resource_path = os.path.join(".", "resources", "user", self.resource_subpath)
     user_resource_path = os.path.join(".", "resources", "user")
     if os.path.isdir(user_resource_path):

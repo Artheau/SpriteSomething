@@ -26,7 +26,7 @@ class Plugins(PluginsParent):
             ("Z3DoI: Save as Archive",None,self.save_doi_as_zip),
             ("Z3DoI: Save to Folder",None,self.save_doi_to_folder),
             ("Z3DoI: Save to Character Slot",None,self.save_doi_to_slot),
-            ("Z3DoI: Convert GBR -> GBRY",None,self.convert_gbr_gbry),
+            ("Z3DoI: Make Yellow",None,self.make_yellow),
             ("Sheet Trawler",None,self.sheet_trawler)#,
             #("Equipment",None,self.equipment_test)
         ]
@@ -291,26 +291,35 @@ class Plugins(PluginsParent):
     def save_doi_to_slot(self):
         self.save_doi_to_folder(mode="slot")
 
-    def convert_gbr_gbry(self):
-        masterp = self.sprite.master_palette
+    def convert_gbr_gbry(self, palette_data):
+        # Assume we've got GBR
         paletteNames = ["green", "blue", "red"]
+        # Assume we've got G->B, B->R
         palNames = [
             ["green", "blue"],
             ["blue", "red"]
         ]
-        if len(masterp) > 16 * 4:
+        # If we've got more data
+        if len(palette_data) > (16 * 4):
+            # Add Y
             paletteNames.append("yellow")
+            # Add R->Y
             palNames.append(["red", "yellow"])
+
+        # Add Bun for completeness but don't actually use it...
         paletteNames.append("bunny")
+
+        # Make a dictionary for the notes
         palettes = {}
         for paletteID, paletteName in enumerate(paletteNames):
-            palettes[paletteName] = masterp[paletteID*16:(paletteID+1)*16]
+            palettes[paletteName] = palette_data[paletteID*16:(paletteID+1)*16]
         for [palNameOne, palNameTwo] in palNames:
             print(f"Comparing {palNameOne} to {palNameTwo}")
-            i = 0
-            for [one, two] in zip(
-                palettes[palNameOne],
-                palettes[palNameTwo]
+            for [i, [one, two]] in enumerate(
+                zip(
+                    palettes[palNameOne],
+                    palettes[palNameTwo]
+                )
             ):
                 o_hsv = list(
                     colorsys.rgb_to_hsv(
@@ -334,7 +343,38 @@ class Plugins(PluginsParent):
                 t_hsv[2] = round(float(t_hsv[2]) * 100)
                 if (i > 0) and (o_hsv != t_hsv):
                     print(i,o_hsv,t_hsv)
-                i += 1
+        print("")
+
+    def make_yellow(self):
+        # Get DoI Sheet
+        canned_img = Image.open(
+            common.get_local_resource(
+                "app",
+                [
+                    self.sprite.resource_subpath,
+                    "sheets"
+                ],
+                "link-doi.png"
+            )
+        )
+        # Get DoI Palette Block
+        canned_block = canned_img.crop((120,438,128,448))
+        canned_block = canned_block.convert("RGB")
+        # Get DoI Palette Block pixel data
+        cannedp = list(canned_block.getdata())
+        # Reorder pixel data
+        cannedp = [
+            *cannedp[16:64],    # GBR
+            *cannedp[  :16],    # Y
+            *cannedp[64:  ]     # Bun
+        ]
+
+        # Process notes for GBRY data
+        print("Canned DoI Sheet")
+        self.convert_gbr_gbry(cannedp)
+        # Process notes for loaded sprite
+        print(f"Loaded Sheet: {self.sprite.classic_name}/{self.sprite.metadata['sprite.name']}")
+        self.convert_gbr_gbry(self.sprite.master_palette)
 
     def sheet_trawler(self):
         animations = json.load(open(common.get_resource(os.path.join("snes","zelda3","link","manifests"),"animations.json")))
