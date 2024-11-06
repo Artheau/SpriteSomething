@@ -356,18 +356,17 @@ class Plugins(PluginsParent):
             
             transform = np.multiply(yr1,transform_mod)
                             
-            color = np.add(rx,transform)
+            color = np.add(rx,transform)        
+            # colour = rx + (y1-r1) * 0.5( (r1-b1)/(rx-bx) + (b1-g1)/(bx-gx) )
             
             color = colorsys.hsv_to_rgb(color[0],color[1],color[2])
             color = np.multiply(color, [255,255,255])
-            
-            
-            
-            print("[" + str(i) + "] : " + str(color))
-            print(str(base_palettes["yellow"][i]))
-    
-    
+            for index in range(3):
+                color[index] = color[index] % 255
+                color[index] = round(color[index])
 
+            print("[" + str(i) + "] : " + str(color))
+ 
     def make_yellow(self):
         # Get DoI Sheet
         canned_img = Image.open(
