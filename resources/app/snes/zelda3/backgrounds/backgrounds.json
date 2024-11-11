@@ -158,6 +158,150 @@
       "filename": "doi-characterselect.1.png",
       "title": "Dungeons of Infinity: Character Select",
       "origin": [0,0]
+    },
+    {
+      "filename": "doi/floors/01/room1.0.png",
+      "title": "DoI: Hyrule Castle: Room 1"
+    },
+    {
+      "filename": "doi/floors/01/room2.0.png",
+      "title": "DoI: Hyrule Castle: Room 2"
+    },
+    {
+      "filename": "doi/floors/01/room3.0.png",
+      "title": "DoI: Hyrule Castle: Room 3"
+    },
+    {
+      "filename": "doi/floors/02/room1.0.png",
+      "title": "DoI: Castle Basement: Room 1"
+    },
+    {
+      "filename": "doi/floors/02/room2.0.png",
+      "title": "DoI: Castle Basement: Room 2"
+    },
+    {
+      "filename": "doi/floors/03/room1.0.png",
+      "title": "DoI: Castle Prison: Room 1"
+    },
+    {
+      "filename": "doi/floors/03/room2.0.png",
+      "title": "DoI: Castle Prison: Room 2"
+    },
+    {
+      "filename": "doi/floors/03/boss1.0.png",
+      "title": "DoI: Castle Prison: Boss Arena 1"
+    },
+    {
+      "filename": "doi/floors/03/boss2.0.png",
+      "title": "DoI: Castle Prison: Boss Arena 2"
+    },
+    {
+      "filename": "doi/floors/04/room1.0.png",
+      "title": "DoI: Catacombs: Room 1"
+    },
+    {
+      "filename": "doi/floors/04/room2.0.png",
+      "title": "DoI: Catacombs: Room 2"
+    },
+    {
+      "filename": "doi/floors/05/room1.0.png",
+      "title": "DoI: Sewers: Room 1"
+    },
+    {
+      "filename": "doi/floors/05/room2.0.png",
+      "title": "DoI: Sewers: Room 2"
+    },
+    {
+      "filename": "doi/floors/06/pub1.0.png",
+      "title": "DoI: Rebel Village: Pub 1"
+    },
+    {
+      "filename": "doi/floors/06/pub2.0.png",
+      "title": "DoI: Rebel Village: Pub 2"
+    },
+    {
+      "filename": "doi/floors/06/exterior1.0.png",
+      "title": "DoI: Rebel Village: Exterior 1"
+    },
+    {
+      "filename": "doi/floors/06/saha1.0.png",
+      "title": "DoI: Rebel Village: Sahasrahla's Hut"
+    },
+    {
+      "filename": "doi/floors/07/room1.0.png",
+      "title": "DoI: Lanmola's Lair: Room 1"
+    },
+    {
+      "filename": "doi/floors/07/room2.0.png",
+      "title": "DoI: Lanmola's Lair: Room 2"
+    },
+    {
+      "filename": "doi/floors/07/boss1.0.png",
+      "title": "DoI: Lanmola's Lair: Boss Arena"
+    },
+    {
+      "filename": "doi/floors/08/room1.0.png",
+      "title": "DoI: Ancient Ruins: Room 1"
+    },
+    {
+      "filename": "doi/floors/08/room2.0.png",
+      "title": "DoI: Ancient Ruins: Room 2"
+    },
+    {
+      "filename": "doi/floors/09/room1.0.png",
+      "title": "DoI: Water Temple: Room 1"
+    },
+    {
+      "filename": "doi/floors/09/room2.0.png",
+      "title": "DoI: Water Temple: Room 2"
+    },
+    {
+      "filename": "doi/floors/10/cave1.0.png",
+      "title": "DoI: Dwarven Mining Town: Cave 1"
+    },
+    {
+      "filename": "doi/floors/10/pond1.0.png",
+      "title": "DoI: Dwarven Mining Town: Pond 1"
+    },
+    {
+      "filename": "doi/floors/10/pond2.0.png",
+      "title": "DoI: Dwarven Mining Town: Pond 2"
+    },
+    {
+      "filename": "doi/floors/11/room1.0.png",
+      "title": "DoI: Moldorm's Lair: Room 1"
+    },
+    {
+      "filename": "doi/floors/11/room2.0.png",
+      "title": "DoI: Moldorm's Lair: Room 2"
+    },
+    {
+      "filename": "doi/floors/11/boss1.0.png",
+      "title": "DoI: Moldorm's Lair: Boss Arena"
+    },
+    {
+      "filename": "doi/floors/12/room1.0.png",
+      "title": "DoI: Agahnim's Fotress: Room 1"
+    },
+    {
+      "filename": "doi/floors/12/room2.0.png",
+      "title": "DoI: Agahnim's Fotress: Room 2"
+    },
+    {
+      "filename": "doi/floors/12/room3.0.png",
+      "title": "DoI: Agahnim's Fotress: Room 3"
+    },
+    {
+      "filename": "doi/floors/12/room4.0.png",
+      "title": "DoI: Agahnim's Fotress: Room 4"
+    },
+    {
+      "filename": "doi/floors/13/preboss1.0.png",
+      "title": "DoI: Agahnim Fight: Pre-Boss"
+    },
+    {
+      "filename": "doi/floors/13/boss1.0.png",
+      "title": "DoI: Agahnim Fight: Boss Arena"
     }
   ]
 }
