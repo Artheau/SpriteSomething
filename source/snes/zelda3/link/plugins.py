@@ -6,6 +6,7 @@ import tkinter as tk
 import re
 import tempfile
 import time
+import numpy as np
 from functools import partial
 from PIL import Image, ImageTk
 from source.meta.common import common
@@ -292,59 +293,80 @@ class Plugins(PluginsParent):
         self.save_doi_to_folder(mode="slot")
 
     def convert_gbr_gbry(self, palette_data):
-        # Assume we've got GBR
+        masterp = self.sprite.master_palette
+        
+        paletteNames = ["green", "blue", "red", "yellow", "bunny"]
+        base_palettes = {}
+        
+        for paletteID, paletteName in enumerate(paletteNames):
+            base_palettes[paletteName] = palette_data[paletteID*16:(paletteID+1)*16]
+ 
         paletteNames = ["green", "blue", "red"]
-        # Assume we've got G->B, B->R
         palNames = [
             ["green", "blue"],
             ["blue", "red"]
         ]
-        # If we've got more data
-        if len(palette_data) > (16 * 4):
-            # Add Y
+       
+        if len(masterp) > 16 * 4:
             paletteNames.append("yellow")
-            # Add R->Y
             palNames.append(["red", "yellow"])
-
-        # Add Bun for completeness but don't actually use it...
         paletteNames.append("bunny")
-
-        # Make a dictionary for the notes
         palettes = {}
+        
+        
+        
         for paletteID, paletteName in enumerate(paletteNames):
-            palettes[paletteName] = palette_data[paletteID*16:(paletteID+1)*16]
-        for [palNameOne, palNameTwo] in palNames:
-            print(f"Comparing {palNameOne} to {palNameTwo}")
-            for [i, [one, two]] in enumerate(
-                zip(
-                    palettes[palNameOne],
-                    palettes[palNameTwo]
-                )
-            ):
-                o_hsv = list(
-                    colorsys.rgb_to_hsv(
-                        one[0]/255,
-                        one[1]/255,
-                        one[2]/255
-                    )
-                )
-                t_hsv = list(
-                    colorsys.rgb_to_hsv(
-                        two[0]/255,
-                        two[1]/255,
-                        two[2]/255
-                    )
-                )
-                o_hsv[0] = round(float(o_hsv[0]) * 360)
-                o_hsv[1] = round(float(o_hsv[1]) * 100)
-                o_hsv[2] = round(float(o_hsv[2]) * 100)
-                t_hsv[0] = round(float(t_hsv[0]) * 360)
-                t_hsv[1] = round(float(t_hsv[1]) * 100)
-                t_hsv[2] = round(float(t_hsv[2]) * 100)
-                if (i > 0) and (o_hsv != t_hsv):
-                    print(i,o_hsv,t_hsv)
-        print("")
+            palettes[paletteName] = masterp[paletteID*16:(paletteID+1)*16]
+        for i in range(16):
+            y1 = base_palettes["yellow"][i]
+            r1 = base_palettes["red"][i]
+            b1 = base_palettes["blue"][i]
+            g1 = base_palettes["green"][i]
+            
+            rx = palettes["red"][i]
+            bx = palettes["blue"][i]
+            gx = palettes["green"][i]
+            
+            y1 = colorsys.rgb_to_hsv(y1[0]/255,y1[1]/255,y1[2]/255)
+            r1 = colorsys.rgb_to_hsv(r1[0]/255,r1[1]/255,r1[2]/255)
+            b1 = colorsys.rgb_to_hsv(b1[0]/255,b1[1]/255,b1[2]/255)
+            g1 = colorsys.rgb_to_hsv(g1[0]/255,g1[1]/255,g1[2]/255)                
+            
+            rx = colorsys.rgb_to_hsv(rx[0]/255,rx[1]/255,rx[2]/255)
+            bx = colorsys.rgb_to_hsv(bx[0]/255,bx[1]/255,bx[2]/255)
+            gx = colorsys.rgb_to_hsv(gx[0]/255,gx[1]/255,gx[2]/255)                
+            
+            yr1 = np.subtract(y1,r1)
+            rb1 = np.subtract(r1,b1)
+            bg1 = np.subtract(b1,g1)
+            rbx = np.subtract(rx,bx)
+            bgx = np.subtract(bx,gx)
+            
+            rb1overrbx = rb1
+            bg1overrbx = bg1
+            
+            for index in range(3):
+                if rbx[index] != 0:
+                    rb1overrbx = rb1[index]/rbx[index]
+                if bgx[index] != 0:
+                    bg1overbgx = bg1[index]/bgx[index]
+            
+            transform_mod = np.add(rb1overrbx, bg1overbgx)
+            transform_mod = np.divide(transform_mod, [2,2,2])
+            
+            transform = np.multiply(yr1,transform_mod)
+                            
+            color = np.add(rx,transform)        
+            # colour = rx + (y1-r1) * 0.5( (r1-b1)/(rx-bx) + (b1-g1)/(bx-gx) )
+            
+            color = colorsys.hsv_to_rgb(color[0],color[1],color[2])
+            color = np.multiply(color, [255,255,255])
+            for index in range(3):
+                color[index] = color[index] % 255
+                color[index] = round(color[index])
 
+            print("[" + str(i) + "] : " + str(color))
+ 
     def make_yellow(self):
         # Get DoI Sheet
         canned_img = Image.open(
@@ -370,12 +392,8 @@ class Plugins(PluginsParent):
         ]
 
         # Process notes for GBRY data
-        print("Canned DoI Sheet")
         self.convert_gbr_gbry(cannedp)
-        # Process notes for loaded sprite
-        print(f"Loaded Sheet: {self.sprite.classic_name}/{self.sprite.metadata['sprite.name']}")
-        self.convert_gbr_gbry(self.sprite.master_palette)
-
+        
     def sheet_trawler(self):
         animations = json.load(open(common.get_resource(os.path.join("snes","zelda3","link","manifests"),"animations.json")))
         frames_by_animation = {}
