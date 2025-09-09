@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../../schema/backgrounds.schema.json",
+  "backgrounds": [
+    {
+      "filename": "empty (white).png",
+      "title": "Empty (white)"
+    },
+    {
+      "filename": "empty.png",
+      "title": "Empty (black)"
+    },
+    {
+      "filename": "transparent.png",
+      "title": "Empty (transparent)"
+    },
+    {
+      "filename": "greenscreen.png",
+      "title": "Green Screen"
+    }
+  ]
+}
