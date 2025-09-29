@@ -2,99 +2,75 @@
   "$schema": "../../../../../schema/animations.schema.json",
   "Stand": {
     "up": [
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] }
+      { "frames": 20, "tiles": [ { "image": "facingUp" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "walkRight1_S1", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] }
     ],
     "down": [
-      { "frames": 20, "tiles": [
-        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
-        { "image": "walkDown_S1" }
-      ] }
+      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "walkRight1_S1" } ] }
+      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] }
     ]
   },
   "Walk": {
     "up": [
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkUp", "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "facingUp", "flip": "h" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight1_S1", "pos": [-1,0], "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk2Profile", "flip": "h" } ] }
     ],
     "down": [
-      { "frames": 20, "tiles": [
-        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
-        { "image": "walkDown_S1" }
-      ] },
-      { "frames": 20, "tiles": [
-        { "image": "standDown", "pos": [9,0], "crop": [0,0,8,16], "flip": "h" },
-        { "image": "walkDown1_S1" }
-      ] }
+      { "frames": 20, "tiles": [ { "image": "walk1DownSmallshield" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk2DownSmallshield" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight1_S1", "pos": [-1,0] } ] }
+      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk2Profile" } ] }
     ]
   },
   "Attack (Wooden Shield)": {
     "up": [
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "attackUp" } ] }
+      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackingUp" } ] }
     ],
     "left": [
-      { "frames": 20, "tiles": [ { "image": "walkRight1_S1", "flip": "h" } ] },
-      { "frames": 20, "tiles": [ { "image": "attackRight", "pos": [1,0], "flip": "h" } ] }
+      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackingProfile", "pos": [1,0], "flip": "h" } ] }
     ],
     "right": [
-      { "frames": 20, "tiles": [ { "image": "walkRight1_S1" } ] },
-      { "frames": 20, "tiles": [ { "image": "attackRight", "pos": [1,0] } ] }
+      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackingProfile", "pos": [1,0] } ] }
     ]
   },
   "Death": {
     "up": [
-      { "frames": 20, "tiles": [
-        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
-        { "image": "walkDown_S1" }
-      ] },
+      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
 
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
-      { "frames": 20, "tiles": [
-        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
-        { "image": "walkDown_S1" }
-      ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
-      { "frames": 20, "tiles": [
-        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
-        { "image": "walkDown_S1" }
-      ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
-      { "frames": 20, "tiles": [
-        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
-        { "image": "walkDown_S1" }
-      ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "walkRight_S1", "flip": "h" } ] },
-      { "frames": 20, "tiles": [
-        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16] },
-        { "image": "walkDown_S1" }
-      ] },
+      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
 
-      { "frames": 20, "tiles": [
-        { "image": "standDown", "pos": [9,0], "crop": [8,0,16,16], "palette": "greyscale_mail" },
-        { "image": "walkDown_S1", "palette": "greyscale_mail" }
-      ] }
+      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
+
+      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
+
+      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
+
+      { "frames": 20, "tiles": [ { "image": "facingDownNoShield", "palette": "greyscale_mail" } ] }
     ]
   },
   "File Select": {
@@ -103,9 +79,9 @@
         "background": "file-select.png",
         "origin": [0,0],
         "tiles": [
-          { "image": "standDown", "pos": [48,51] },
-          { "image": "standDown", "pos": [48,75] },
-          { "image": "standDown", "pos": [48,99] }
+          { "image": "facingDownNoShield", "pos": [48,51] },
+          { "image": "facingDownNoShield", "pos": [48,75] },
+          { "image": "facingDownNoShield", "pos": [48,99] }
         ]
       }
     ]

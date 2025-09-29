@@ -32,10 +32,10 @@ class Sprite(SpriteParent):
             if palette_indices[i] in range(0,range_end):
                 if "blue_mail" in palettes:
                     #skip to second set
-                    palette_indices[i] += 4
+                    palette_indices[i] += range_end * 1
                 if "red_mail" in palettes:
                     #skip to third set
-                    palette_indices[i] += 8
+                    palette_indices[i] += range_end * 2
 
         if palette_indices:
             for i,_ in enumerate(palette_indices):

@@ -10,41 +10,44 @@
   "border_size": 0,
   "layout": [
     [
-      "palette_block",
-      "null_block"
+      "walk1Profile",
+      "walk2Profile",
+      "facingDownNoShield",
+      "facingUp",
+      "attackingProfile",
+      "attackingDown",
+      "attackingUp"
     ],
     [
-      "standDown",
-      "walkDown_S1",
-      "walkDown1_S1",
-      "walkUp",
-      "walkRight_S1",
-      "walkRight1_S1",
-      "walkDown_S2",
-      "walkRight_S2",
-      "walkRight1_S2",
-      "attackDown",
-      "attackUp",
-      "attackRight",
-      "itemGet"
+      "facingDownBigshield",
+      "walk1ProfileBigshield",
+      "walk2ProfileBigshield",
+      "walk1DownSmallshield",
+      "walk2DownSmallshield",
+      "liftingItem",
+      "null_block",
+      "palette_block"
     ]
   ],
   "images": {
-    "palette_block":    { "dimensions": [0,0,12,1] },
-    "null_block":       { "dimensions": [0,0,161,1] },
+    "liftingItem":            { "dimensions": [0,0,8,16], "import palette interval": [1,4] },
 
-    "standDown":        { "dimensions": [0,0,16,16], "import palette interval": [1,4] },
-    "walkDown_S1":      { "dimensions": [0,0,9,16], "import palette interval": [1,4]  },
-    "walkDown1_S1":     { "dimensions": [0,0,10,16], "import palette interval": [1,4] },
-    "walkUp":           { "parent": "standDown" },
-    "walkRight_S1":     { "parent": "standDown" },
-    "walkRight1_S1":    { "dimensions": [0,0,18,16], "import palette interval": [1,4] },
-    "walkDown_S2":      { "parent": "walkDown_S1" },
-    "walkRight_S2":     { "parent": "walkDown_S1" },
-    "walkRight1_S2":    { "parent": "walkDown1_S1" },
-    "attackDown":       { "dimensions": [0,0,17,16], "import palette interval": [1,4] },
-    "attackUp":         { "parent": "standDown" },
-    "attackRight":      { "parent": "standDown" },
-    "itemGet":          { "parent": "walkDown_S1" }
+    "walk1ProfileBigshield":  { "dimensions": [0,0,8,16], "import palette interval": [1,4] },
+
+    "walk1Profile":           { "dimensions": [0,0,16,16], "import palette interval": [1,4] },
+    "walk2Profile":           { "parent": "walk1Profile" },
+    "facingDownNoShield":     { "dimensions": [0,0,16,16], "import palette interval": [1,4] },
+    "facingUp":               { "dimensions": [0,0,16,16], "import palette interval": [1,4] },
+    "attackingProfile":       { "dimensions": [0,0,16,16], "import palette interval": [1,4] },
+    "attackingDown":          { "dimensions": [0,0,16,16], "import palette interval": [1,4] },
+    "attackingUp":            { "dimensions": [0,0,16,16], "import palette interval": [1,4] },
+
+    "walk2ProfileBigshield":  { "parent": "walk1ProfileBigshield" },
+    "walk1DownSmallshield":   { "dimensions": [0,0,8,16], "import palette interval": [1,4] },
+    "walk2DownSmallshield":   { "parent": "walk1DownSmallshield" },
+    "facingDownBigshield":    { "dimensions": [0,0,8,16], "import palette interval": [1,4] },
+
+    "null_block":       { "dimensions": [0,0,56,16] },
+    "palette_block":    { "dimensions": [0,0,8,8], "shift": [0,8] }
   }
 }

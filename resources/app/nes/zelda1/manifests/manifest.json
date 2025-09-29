@@ -7,8 +7,8 @@
     "view-only": true,
     "input": {
       "png": {
-        "dims": [173,17],
-        "overview-scale-factor": 1
+        "dims": [112,32],
+        "overview-scale-factor": 4
       }
     },
     "output": []
