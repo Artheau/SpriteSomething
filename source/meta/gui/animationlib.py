@@ -449,7 +449,6 @@ class AnimationEngineParent():
             if "frame" in orientation:
                 current_animation, displayed_direction, pose_number, palette_info, current_frame, pose_list = self.get_image_arguments_from_frame_number(self.frame_getter())
                 this_pose = pose_list[pose_number]
-                this_pose_tiles = this_pose["tiles"]
                 this_pose_tiles = self.sprite.get_tiles_for_pose(current_animation, displayed_direction, pose_number, palette_info, current_frame)
                 collage_width = 96
                 tile_height = 16
@@ -469,7 +468,7 @@ class AnimationEngineParent():
                 current_y_position += current_image.size[1]
 
                 tile_list_names = []
-                for (this_tile_image, _, tile_name) in this_pose_tiles:
+                for (this_tile_image, _, tile_name) in reversed(this_pose_tiles):
                     tile_list_names.append(tile_name)
                     bordered_tile_image = Image.new(
                         "RGBA",
