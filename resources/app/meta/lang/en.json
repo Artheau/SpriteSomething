@@ -61,6 +61,8 @@
     "export.inject-new.title": "Save Modified ROM As...",
     "export.inject-new.types": "Game Files",
     "export.frame-as-png": "Save Frame As...",
+    "export.frame-as-ecollage": "Save Exploded Frame Collage As...",
+    "export.animation-as-ecollage": "Save Exploded Collage As...",
     "export.animation-as-gif": "Save Animation As...",
     "export.animation-as-hcollage": "Save Horizontal Collage As...",
     "export.animation-as-vcollage": "Save Vertical Collage As...",

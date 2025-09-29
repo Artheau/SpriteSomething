@@ -748,6 +748,9 @@ class SpriteParent():
             direction = self.get_alternative_direction(animation, direction)
             if direction and direction in self.animations[animation]:
                 poses = self.animations[animation][direction]
+                for pose_number, pose in enumerate(poses):
+                    if "pose" not in pose:
+                        poses[pose_number]["pose"] = pose_number + 1
 
         return poses
 

@@ -6,7 +6,7 @@ import random
 import json
 import itertools
 from json.decoder import JSONDecodeError
-from PIL import Image, ImageTk, ImageDraw
+from PIL import Image, ImageTk, ImageDraw, ImageFont
 from source.meta.common import common
 from source.meta.gui import gui_common
 from source.meta.gui import widgetlib
@@ -236,7 +236,7 @@ class AnimationEngineParent():
                     self.spiffy_dict["brother_var"].set("global")
                 elif self.spiffy_dict["brother_var"].get() == "global":
                     self.spiffy_dict["brother_var"].set("mario")
-            palette_info = ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]  #I'm not convinced that this is the best way to do this
+            palette_info = self.get_current_spiffy_selections()
 
             self.pose_number = self.get_pose_number_from_frames(current_frame)
 
@@ -332,6 +332,9 @@ class AnimationEngineParent():
                 direction = "_aim_".join([direction, self.spiffy_dict["aiming_var"].get().lower()])
             return direction
         return "right"   #TODO: figure out a better way to handle the error case
+
+    def get_current_spiffy_selections(self):
+        return ['_'.join([value.get(), var_name.replace("_var","")]) for var_name, value in self.spiffy_dict.items()]
 
     #Minnie likes spiffy buttons
     def get_spiffy_buttons(self, parent, fish):
@@ -446,26 +449,83 @@ class AnimationEngineParent():
 
         # exploded
         if "exploded" in orientation:
+            displayed_direction = self.get_current_direction()
+            pose_list = self.get_current_pose_list(displayed_direction)
+            if not pose_list:
+                displayed_direction = self.sprite.get_alternative_direction(self.current_animation, displayed_direction)
+                pose_list = self.get_current_pose_list(displayed_direction)
+
             if "frame" in orientation:
-                current_animation, displayed_direction, pose_number, palette_info, current_frame, pose_list = self.get_image_arguments_from_frame_number(self.frame_getter())
-                this_pose = pose_list[pose_number]
-                this_pose_tiles = self.sprite.get_tiles_for_pose(current_animation, displayed_direction, pose_number, palette_info, current_frame)
-                collage_width = 96
-                tile_height = 16
-                meta_height = 16
-                current_image, _ = self.get_current_image()
-                collage_y_size = meta_height + current_image.size[1] + (len(this_pose_tiles) * (tile_height + 2))
-                collage = Image.new("RGBA",(collage_width,collage_y_size),(0,0,0,64))
-                ImageDraw.Draw(collage).text(
-                    (0,0),
-                    current_animation + " [" + str(pose_number) + "]",
-                    (0,0,0)
+                pose_number = self.get_pose_number_from_frames(self.frame_getter())
+                pose_list = [pose_list[pose_number]]
+
+            widest_tile = 0
+            tallest_tile = 0
+            longest_pose = 0
+            longest_tile_name = 0
+            meta_height = 16
+
+            current_animation = self.current_animation
+            palette_info = self.get_current_spiffy_selections()
+            frame_number = self.frame_getter()
+
+            for pose in pose_list:
+                if len(pose["tiles"]) > longest_pose:
+                    longest_pose = len(pose["tiles"])
+                pose_tiles = self.sprite.get_tiles_for_pose(
+                    current_animation,
+                    displayed_direction,
+                    pose["pose"]-1,
+                    palette_info,
+                    0
                 )
+                for pose_tile,_,tile_name in pose_tiles:
+                    if pose_tile.size[0] > widest_tile:
+                        widest_tile = pose_tile.size[0]
+                    if pose_tile.size[1] > tallest_tile:
+                        tallest_tile = pose_tile.size[1]
+                    if len(tile_name) > longest_tile_name:
+                        longest_tile_name = len(tile_name)
 
+            widest_pose = 96
+            widest_pose = widest_tile + (6 * longest_tile_name)
+
+            collage_width = widest_pose * len(pose_list)
+            composite_image, _ = self.get_current_image()
+            collage_y_size = meta_height + composite_image.size[1] + 2 + (longest_pose * (tallest_tile + 3))
+            collage = Image.new("RGBA",(collage_width,collage_y_size),(0,0,0,64))
+
+            font = ImageFont.truetype(common.get_resource(["meta","fonts"], "m3x6.ttf"), 16)
+
+            current_x_position = 1
+
+            for pose_number in range(len(pose_list)):
                 current_y_position = meta_height
+                this_pose_image, _ = self.sprite.get_image(
+                    current_animation,
+                    displayed_direction,
+                    pose_number,
+                    palette_info,
+                    frame_number
+                )
+                bordered_pose_image = Image.new("RGBA",(this_pose_image.size[0]+2,this_pose_image.size[1]+2),(255,0,255,255))
+                bordered_pose_image.paste(this_pose_image,(1,1))
 
-                collage.paste(current_image, (0, current_y_position))
-                current_y_position += current_image.size[1]
+                collage.paste(bordered_pose_image, (current_x_position, current_y_position))
+                current_y_position += bordered_pose_image.size[1]+1
+                ImageDraw.Draw(collage).text(
+                    (current_x_position,0),
+                    self.current_animation + " [" + str(pose_number) + "]",
+                    (255,255,255),
+                    font=font
+                )
+                this_pose_tiles = self.sprite.get_tiles_for_pose(
+                    current_animation,
+                    displayed_direction,
+                    pose_number,
+                    palette_info,
+                    frame_number
+                )
 
                 tile_list_names = []
                 for (this_tile_image, _, tile_name) in reversed(this_pose_tiles):
@@ -478,24 +538,19 @@ class AnimationEngineParent():
                     bordered_tile_image.paste(this_tile_image, (1,1))
                     collage.paste(
                         bordered_tile_image,
-                        (0,current_y_position)
+                        (current_x_position,current_y_position)
                     )
-                    current_y_position += 2
+                    current_y_position += 1
                     ImageDraw.Draw(
                         collage
                     ).text(
-                        (tile_height+(tile_height/4), current_y_position),
+                        (current_x_position+bordered_tile_image.size[0]+2, current_y_position),
                         tile_name,
-                        (0,0,0)
+                        (255,255,255),
+                        font=font
                     )
-                    current_y_position += tile_height
-                print(
-                    current_animation,
-                    displayed_direction,
-                    pose_number,
-                    palette_info
-                )
-                print(tile_list_names)
+                    current_y_position += max(bordered_tile_image.size[1], 16)
+                current_x_position += widest_pose
             else:
                 # exploded animation
                 pass
