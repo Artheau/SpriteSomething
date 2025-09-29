@@ -6,7 +6,7 @@ import random
 import json
 import itertools
 from json.decoder import JSONDecodeError
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw
 from source.meta.common import common
 from source.meta.gui import gui_common
 from source.meta.gui import widgetlib
@@ -432,17 +432,83 @@ class AnimationEngineParent():
     def export_animation_as_collage(self, filename, orientation="horizontal"):
         #TODO: use the displayed palette
         image_list = []
-
-        displayed_direction = self.get_current_direction()
-        pose_list = self.get_current_pose_list(displayed_direction)
-        if not pose_list:
-            displayed_direction = self.sprite.get_alternative_direction(self.current_animation, displayed_direction)
-            pose_list = self.get_current_pose_list(displayed_direction)
-
-        for pose_number in range(len(pose_list)):
-            image_list.append(self.sprite.get_image(self.current_animation, displayed_direction, pose_number, [], 0)) #TODO: incorporate palettes from spiffy buttons/animations.json, and meaningfully apply a palette number
-
         collage = None
+
+        if orientation in ["horizontal","vertical"]:
+            displayed_direction = self.get_current_direction()
+            pose_list = self.get_current_pose_list(displayed_direction)
+            if not pose_list:
+                displayed_direction = self.sprite.get_alternative_direction(self.current_animation, displayed_direction)
+                pose_list = self.get_current_pose_list(displayed_direction)
+
+            for pose_number in range(len(pose_list)):
+                image_list.append(self.sprite.get_image(self.current_animation, displayed_direction, pose_number, [], 0)) #TODO: incorporate palettes from spiffy buttons/animations.json, and meaningfully apply a palette number
+
+        # exploded
+        if "exploded" in orientation:
+            if "frame" in orientation:
+                current_animation, displayed_direction, pose_number, palette_info, current_frame, pose_list = self.get_image_arguments_from_frame_number(self.frame_getter())
+                this_pose = pose_list[pose_number]
+                this_pose_tiles = this_pose["tiles"]
+                this_pose_tiles = self.sprite.get_tiles_for_pose(current_animation, displayed_direction, pose_number, palette_info, current_frame)
+                collage_width = 96
+                tile_height = 16
+                meta_height = 16
+                current_image, _ = self.get_current_image()
+                collage_y_size = meta_height + current_image.size[1] + (len(this_pose_tiles) * (tile_height + 2))
+                collage = Image.new("RGBA",(collage_width,collage_y_size),(0,0,0,64))
+                ImageDraw.Draw(collage).text(
+                    (0,0),
+                    current_animation + " [" + str(pose_number) + "]",
+                    (0,0,0)
+                )
+
+                current_y_position = meta_height
+
+                collage.paste(current_image, (0, current_y_position))
+                current_y_position += current_image.size[1]
+
+                tile_list_names = []
+                for (this_tile_image, _, tile_name) in this_pose_tiles:
+                    tile_list_names.append(tile_name)
+                    bordered_tile_image = Image.new(
+                        "RGBA",
+                        (this_tile_image.size[0]+2,this_tile_image.size[1]+2),
+                        (255,0,255,255)
+                    )
+                    bordered_tile_image.paste(this_tile_image, (1,1))
+                    collage.paste(
+                        bordered_tile_image,
+                        (0,current_y_position)
+                    )
+                    current_y_position += 2
+                    ImageDraw.Draw(
+                        collage
+                    ).text(
+                        (tile_height+(tile_height/4), current_y_position),
+                        tile_name,
+                        (0,0,0)
+                    )
+                    current_y_position += tile_height
+                print(
+                    current_animation,
+                    displayed_direction,
+                    pose_number,
+                    palette_info
+                )
+                print(tile_list_names)
+            else:
+                # exploded animation
+                pass
+            collage = collage.resize(
+                (
+                    collage.size[0]*int(self.zoom_getter()),
+                    collage.size[1]*int(self.zoom_getter())
+                ),
+                resample=Image.NEAREST
+            )
+
+        # cohesive
         if orientation == "horizontal":
             #TODO: Factor this and the corresponding code in layoutlib.py out to common.py
             y_min = min([-origin[1] for image,origin in image_list])

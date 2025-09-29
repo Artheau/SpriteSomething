@@ -95,9 +95,11 @@ class SpriteSomethingMainFrame(tk.Frame):
             "export.source": "./",
             "export.sprite-as-rdc": "./",
             "export.frame-as-png": "./",
+            "export.frame-as-ecollage": "./",
             "export.animation-as-gif": "./",
             "export.animation-as-hcollage": "./",
             "export.animation-as-vcollage": "./",
+            "export.animation-as-ecollage": "./",
             "export.palette": "./"
         }
         #read saved working dirs file if it exists and set these
@@ -458,6 +460,11 @@ class SpriteSomethingMainFrame(tk.Frame):
                   self.export_frame_as_png
               ),
               (
+                  self.fish.translate("meta","menu","export.frame-as-ecollage"),
+                  None,
+                  partial(self.export_animation_as_collage,"exploded-frame")
+              ),
+              (
                   self.fish.translate("meta","menu","export.animation-as-gif"),
                   "animation-as-gif",
                   self.export_animation_as_gif
@@ -467,12 +474,16 @@ class SpriteSomethingMainFrame(tk.Frame):
                   "animation-as-hcollage",
                   partial(self.export_animation_as_collage,"horizontal")
               ),
-              # (
-              #     self.fish.translate("meta","menu","export.animation-as-vcollage"),
-              #     "animation-as-vcollage",
-              #     None
-              # ),
-              #partial(self.export_animation_as_collage,"vertical")),
+            #   (
+            #       self.fish.translate("meta","menu","export.animation-as-vcollage"),
+            #       "animation-as-vcollage",
+            #       partial(self.export_animation_as_collage,"vertical")
+            #   ),
+              (
+                  self.fish.translate("meta","menu","export.animation-as-ecollage"),
+                  None,
+                  partial(self.export_animation_as_collage,"exploded")
+              ),
               (None,None,None),
               (
                   self.fish.translate("meta","menu","export.sprite-4bpp"),

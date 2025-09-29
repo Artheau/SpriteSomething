@@ -714,7 +714,7 @@ class SpriteParent():
                 tile_info["pos"] = [0,0]
             position = [tile_info["pos"][i] + global_displacement[i] for i in range(2)]    #add the x and y coords
 
-            full_tile_list.append( (base_image,position) )
+            full_tile_list.append( (base_image,position,image_name) )
 
         return full_tile_list
 
@@ -769,10 +769,10 @@ class SpriteParent():
 
     def assemble_tiles_to_completed_image(self, tile_list):
         if tile_list:     #have to check this because some animations include "empty" poses
-            min_x = min([x for im,(x,y) in tile_list])
-            min_y = min([y for im,(x,y) in tile_list])
-            max_x = max([im.size[0]+x for im,(x,y) in tile_list])
-            max_y = max([im.size[1]+y for im,(x,y) in tile_list])
+            min_x = min([x for im,(x,y),_ in tile_list])
+            min_y = min([y for im,(x,y),_ in tile_list])
+            max_x = max([im.size[0]+x for im,(x,y),_ in tile_list])
+            max_y = max([im.size[1]+y for im,(x,y),_ in tile_list])
 
             # start out with a transparent image that is correctly sized
             working_image = Image.new(
@@ -780,7 +780,7 @@ class SpriteParent():
                 (max_x - min_x, max_y - min_y),
                 0
             )
-            for new_image, (x, y) in tile_list:
+            for new_image, (x, y), _ in tile_list:
                 # the third argument is the transparency mask, so it is not
                 #  redundant to use the same variable name twice
                 if new_image.mode == "RGBA":
