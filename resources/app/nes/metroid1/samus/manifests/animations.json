@@ -255,6 +255,235 @@
         { "image": "run2Shoulders", "pos": [ 0,-12] },
         { "image": "run2Torso",     "pos": [ 0, -4], "flip": "h" },
         { "image": "run2Legs",      "pos": [-8,  4], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "run1Head",      "pos": [ 0,-20], "flip": "h" },
+        { "image": "run1Shoulders", "pos": [ 0,-12] },
+        { "image": "jumpLegs",      "pos": [-8, -4], "flip": "h" },
+        { "image": "run2Torso",     "pos": [ 8, -4], "crop": [0,0,8,8], "flip": "h" },
+        { "image": "run2Legs",      "pos": [ 8,  4], "crop": [0,0,8,8], "flip": "h" }
+      ] }
+    ],
+    "left": [
+      { "frames": 20, "pose": 1, "tiles": [
+        { "image": "idleHead", "flip": "h" },
+        { "image": "firingTorso", "pos": [-8, 8], "flip": "h" },
+        { "image": "idleTorso",   "pos": [0,16], "flip": "h" },
+        { "image": "idleLegs",    "pos": [0,24] }
+      ] },
+      { "frames": 20, "pose": 2, "tiles": [
+        { "image": "idleHead",    "pos": [0,-4], "flip": "h" },
+        { "image": "firingTorso", "pos": [-8, 4], "flip": "h" },
+        { "image": "idleTorso",   "pos": [0,12], "flip": "h" },
+        { "image": "idleLegs",    "pos": [0,20] }
+      ] },
+      { "frames": 20, "pose": 3, "tiles": [
+        { "image": "idleHead",    "pos": [0,-8], "flip": "h" },
+        { "image": "firingTorso", "pos": [-8, 0], "flip": "h" },
+        { "image": "idleTorso",   "pos": [0, 8], "flip": "h" },
+        { "image": "idleLegs",    "pos": [0,16] }
+      ] },
+      { "frames": 20, "pose": 4, "tiles": [
+        { "image": "run2Head",      "pos": [ 0,-12] },
+        { "image": "run2Shoulders", "pos": [ 0, -4], "flip": "h" },
+        { "image": "run2Torso",     "pos": [ 0,  4] },
+        { "image": "run2Legs",      "pos": [ 0, 12] }
+      ] },
+      { "frames": 20, "pose": 5, "tiles": [
+        { "image": "run2Head",      "pos": [ 0,-16] },
+        { "image": "run2Shoulders", "pos": [ 0, -8], "flip": "h" },
+        { "image": "run2Torso",     "pos": [ 0,  0] },
+        { "image": "run2Legs",      "pos": [ 0,  8] }
+      ] },
+      { "frames": 20, "pose": 6, "tiles": [
+        { "image": "run2Head",      "pos": [ 0,-20] },
+        { "image": "run2Shoulders", "pos": [ 0,-12], "flip": "h" },
+        { "image": "run2Torso",     "pos": [ 0, -4] },
+        { "image": "run2Legs",      "pos": [ 0,  4] }
+      ] },
+      { "frames": 20, "pose": 7, "tiles": [
+        { "image": "run1Head",      "pos": [ 0,-20] },
+        { "image": "run1Shoulders", "pos": [ 0,-12], "flip": "h" },
+        { "image": "jumpLegs",      "pos": [ 8, -4] },
+        { "image": "run2Torso",     "pos": [ 0, -4], "crop": [0,0,8,8] },
+        { "image": "run2Legs",      "pos": [ 0,  4], "crop": [0,0,8,8] }
+      ] }
+    ]
+  },
+  "Spin Jump Launch (WIP)": {
+    "left": [
+      { "frames": 20, "tiles": [
+        { "image": "idleHead", "flip": "h" },
+        { "image": "idleShoulders", "pos": [0, 8], "flip": "h" },
+        { "image": "idleTorso",     "pos": [0,16], "flip": "h" },
+        { "image": "idleLegs",      "pos": [0,24] }
+      ] },
+      { "frames": 20, "name": "jump", "tiles": [
+        { "image": "spinJump1Top" },
+        { "image": "spinJump1Middle", "pos": [0, 8] },
+        { "image": "spinJump1Bottom", "pos": [0,16] }
+      ] },
+      { "frames": 20, "name": "spin", "tiles": [
+        { "image": "spinJump2Top",    "pos": [0,8] },
+        { "image": "spinJump2Bottom", "pos": [0,16] }
+      ] },
+      { "frames": 20, "name": "jumpInv", "tiles": [
+        { "image": "spinJump1Top",    "pos": [0,16], "flip": "both" },
+        { "image": "spinJump1Middle", "pos": [0, 8], "flip": "both" },
+        { "image": "spinJump1Bottom", "pos": [0, 0], "flip": "both" }
+      ] },
+      { "frames": 20, "name": "spinInv", "tiles": [
+        { "image": "spinJump2Top",    "pos": [-6,16], "flip": "both" },
+        { "image": "spinJump2Bottom", "pos": [-6, 8], "flip": "both" }
+      ] }
+    ]
+  },
+  "Spin Jump (WIP)": {
+    "left": [
+      { "frames": 20, "name": "jump", "tiles": [
+        { "image": "spinJump1Top" },
+        { "image": "spinJump1Middle", "pos": [0, 8] },
+        { "image": "spinJump1Bottom", "pos": [0,16] }
+      ] },
+      { "frames": 20, "name": "spin", "tiles": [
+        { "image": "spinJump2Top",    "pos": [0,8] },
+        { "image": "spinJump2Bottom", "pos": [0,16] }
+      ] },
+      { "frames": 20, "name": "jumpInv", "tiles": [
+        { "image": "spinJump1Top",    "pos": [0,16], "flip": "both" },
+        { "image": "spinJump1Middle", "pos": [0, 8], "flip": "both" },
+        { "image": "spinJump1Bottom", "pos": [0, 0], "flip": "both" }
+      ] },
+      { "frames": 20, "name": "spinInv", "tiles": [
+        { "image": "spinJump2Top",    "pos": [-6,16], "flip": "both" },
+        { "image": "spinJump2Bottom", "pos": [-6, 8], "flip": "both" }
+      ] }
+    ]
+  },
+  "Screw Attack (WIP)": {
+    "left": [
+      { "frames": 20, "name": "jump", "tiles": [
+        { "image": "spinJump1Top" },
+        { "image": "spinJump1Middle", "pos": [0, 8] },
+        { "image": "spinJump1Bottom", "pos": [0,16] }
+      ] },
+      { "frames": 20, "name": "jump", "tiles": [
+        { "image": "spinJump1Top", "palette": "screw1_variant" },
+        { "image": "spinJump1Middle", "pos": [0, 8], "palette": "screw1_variant" },
+        { "image": "spinJump1Bottom", "pos": [0,16], "palette": "screw1_variant" }
+      ] },
+      { "frames": 20, "name": "spin", "tiles": [
+        { "image": "spinJump2Top",    "pos": [0, 8], "palette": "screw1_variant" },
+        { "image": "spinJump2Bottom", "pos": [0,16], "palette": "screw1_variant" }
+      ] },
+      { "frames": 20, "name": "spin", "tiles": [
+        { "image": "spinJump2Top",    "pos": [0, 8], "palette": "screw2_variant" },
+        { "image": "spinJump2Bottom", "pos": [0,16], "palette": "screw2_variant" }
+      ] },
+      { "frames": 20, "name": "jumpInv", "tiles": [
+        { "image": "spinJump1Top",    "pos": [0,16], "flip": "both", "palette": "screw2_variant" },
+        { "image": "spinJump1Middle", "pos": [0, 8], "flip": "both", "palette": "screw2_variant" },
+        { "image": "spinJump1Bottom", "pos": [0, 0], "flip": "both", "palette": "screw2_variant" }
+      ] },
+      { "frames": 20, "name": "jumpInv", "tiles": [
+        { "image": "spinJump1Top",    "pos": [0,16], "flip": "both", "palette": "screw3_variant" },
+        { "image": "spinJump1Middle", "pos": [0, 8], "flip": "both", "palette": "screw3_variant" },
+        { "image": "spinJump1Bottom", "pos": [0, 0], "flip": "both", "palette": "screw3_variant" }
+      ] },
+      { "frames": 20, "name": "spinInv", "tiles": [
+        { "image": "spinJump2Top",    "pos": [-6,16], "flip": "both", "palette": "screw3_variant" },
+        { "image": "spinJump2Bottom", "pos": [-6, 8], "flip": "both", "palette": "screw3_variant" }
+      ] },
+      { "frames": 20, "name": "spinInv", "tiles": [
+        { "image": "spinJump2Top",    "pos": [-6,16], "flip": "both" },
+        { "image": "spinJump2Bottom", "pos": [-6, 8], "flip": "both" }
+      ] }
+    ]
+  },
+  "Morph Transition (WIP)": {
+    "right": [
+      { "frames": 20, "tiles": [
+        { "image": "run1Head", "flip": "h" },
+        { "image": "run1Shoulders", "pos": [0,8] },
+        { "image": "run1Torso",     "pos": [0,16], "flip": "h" },
+        { "image": "run1BackLeg",   "pos": [0,24], "flip": "h" }
+      ] },
+      { "frames": 20, "name": "jump", "tiles": [
+        { "image": "spinJump1Top", "flip": "h" },
+        { "image": "spinJump1Middle", "pos": [0, 8], "flip": "h" },
+        { "image": "spinJump1Bottom", "pos": [0,16], "flip": "h" }
+      ] },
+      { "frames": 20, "name": "ball0", "tiles": [
+        { "image": "morphBallTop",    "pos": [0, 0], "flip": "h" },
+        { "image": "morphBallBottom", "pos": [0, 8], "flip": "h" }
+      ] },
+      { "frames": 20, "name": "ball1", "tiles": [
+        { "image": "morphBallTop",    "pos": [0,12], "flip": "both" },
+        { "image": "morphBallBottom", "pos": [0, 4], "flip": "both" }
+      ] },
+      { "frames": 20, "name": "ball2", "tiles": [
+        { "image": "morphBallTop",    "pos": [0,13], "flip": "v" },
+        { "image": "morphBallBottom", "pos": [0, 5], "flip": "v" }
+      ] },
+      { "frames": 20, "name": "ball3", "tiles": [
+        { "image": "morphBallTop",    "pos": [0, 2] },
+        { "image": "morphBallBottom", "pos": [0,10] }
+      ] },
+      { "frames": 20, "name": "ball4", "tiles": [
+        { "image": "morphBallTop",    "pos": [0, 3] },
+        { "image": "morphBallBottom", "pos": [0,11] }
+      ] },
+      { "frames": 20, "name": "ball5", "tiles": [
+        { "image": "morphBallTop",    "pos": [0, 3], "flip": "h" },
+        { "image": "morphBallBottom", "pos": [0,11], "flip": "h" }
+      ] },
+      { "frames": 20, "name": "ball6", "tiles": [
+        { "image": "morphBallTop",    "pos": [0, 4], "flip": "h" },
+        { "image": "morphBallBottom", "pos": [0,12], "flip": "h" }
+      ] },
+      { "frames": 20, "name": "ball7", "tiles": [
+        { "image": "morphBallTop",    "pos": [0,16], "flip": "both" },
+        { "image": "morphBallBottom", "pos": [0, 8], "flip": "both" }
+      ] },
+      { "frames": 20, "name": "ball8", "tiles": [
+        { "image": "morphBallTop",    "pos": [0,17], "flip": "both" },
+        { "image": "morphBallBottom", "pos": [0, 9], "flip": "both" }
+      ] },
+      { "frames": 20, "name": "ball9", "tiles": [
+        { "image": "morphBallTop",    "pos": [0,18], "flip": "v" },
+        { "image": "morphBallBottom", "pos": [0,10], "flip": "v" }
+      ] },
+      { "frames": 20, "name": "ball10", "tiles": [
+        { "image": "morphBallTop",    "pos": [0, 8] },
+        { "image": "morphBallBottom", "pos": [0,16] }
+      ] },
+      { "frames": 20, "name": "ball11", "tiles": [
+        { "image": "morphBallTop",    "pos": [0, 8], "flip": "h" },
+        { "image": "morphBallBottom", "pos": [0,16], "flip": "h" }
+      ] },
+      { "frames": 20, "name": "ball12", "tiles": [
+        { "image": "morphBallTop",    "pos": [0,20], "flip": "both" },
+        { "image": "morphBallBottom", "pos": [0,12], "flip": "both" }
+      ] }
+    ]
+  },
+  "Morph Ball (WIP)": {
+    "right": [
+      { "frames": 20, "name": "ball11", "tiles": [
+        { "image": "morphBallTop",    "pos": [0, 8], "flip": "h" },
+        { "image": "morphBallBottom", "pos": [0,16], "flip": "h" }
+      ] },
+      { "frames": 20, "name": "ball12", "tiles": [
+        { "image": "morphBallTop",    "pos": [0,20], "flip": "both" },
+        { "image": "morphBallBottom", "pos": [0,12], "flip": "both" }
+      ] },
+      { "frames": 20, "name": "ball13", "tiles": [
+        { "image": "morphBallTop",    "pos": [0,20], "flip": "v" },
+        { "image": "morphBallBottom", "pos": [0,12], "flip": "v" }
+      ] },
+      { "frames": 20, "name": "ball10", "tiles": [
+        { "image": "morphBallTop",    "pos": [0, 8] },
+        { "image": "morphBallBottom", "pos": [0,16] }
       ] }
     ]
   }
