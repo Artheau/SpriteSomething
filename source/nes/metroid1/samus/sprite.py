@@ -125,4 +125,6 @@ class Sprite(SpriteParent):
                     if f"{check}_palette" in self.samus_globals:
                         this_palette = self.samus_globals[f"{check}_palette"]
 
+        this_palette = [(0,0,0)] + this_palette
+
         return this_palette

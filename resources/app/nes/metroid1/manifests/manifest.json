@@ -7,7 +7,7 @@
     "view-only": true,
     "input": {
       "png": {
-        "dims": [232,44],
+        "dims": [128,64],
         "overview-scale-factor": 1
       }
     },
