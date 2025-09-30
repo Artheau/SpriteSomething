@@ -16,27 +16,27 @@
     {
       "filename": "start.png",
       "title": "Start Screen",
-      "origin": [120,144]
+      "origin": [120,152]
     },
     {
       "filename": "kraids-lair.png",
       "title": "Kraid's Lair",
-      "origin": [120,81]
+      "origin": [120,89]
     },
     {
       "filename": "norfair.png",
       "title": "Norfair",
-      "origin": [120,81]
+      "origin": [120,89]
     },
     {
       "filename": "ridleys-lair.png",
       "title": "Ridley's Lair",
-      "origin": [120,81]
+      "origin": [120,89]
     },
     {
       "filename": "tourian.png",
       "title": "Tourian",
-      "origin": [120,81]
+      "origin": [120,89]
     }
   ]
 }
