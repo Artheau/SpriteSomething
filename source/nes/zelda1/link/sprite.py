@@ -8,6 +8,8 @@ from source.meta.common import common
 class Sprite(SpriteParent):
     def __init__(self, filename, manifest_dict, my_subpath, sprite_name=""):
         super().__init__(filename, manifest_dict, my_subpath, sprite_name)
+        self.load_plugins()
+
         self.link_globals = {
           "greyscale_mail": [
             (190,190,190),  # lt mail
@@ -15,6 +17,16 @@ class Sprite(SpriteParent):
             (117,117,117),  # dk mail
           ]
         }
+
+    def import_cleanup(self):
+        '''
+        Post-import cleanup
+        '''
+        self.load_plugins()
+        self.equipment = self.plugins.equipment_test(True)
+        if hasattr(self, "images"):
+            self.images["transparent"] = Image.new("RGBA",(0,0),0)
+            self.images = dict(self.images,**self.equipment)
 
     def get_palette(self, palettes, default_range=[], frame_number=0):
         '''

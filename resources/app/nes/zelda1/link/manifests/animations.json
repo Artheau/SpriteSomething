@@ -14,7 +14,7 @@
       { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] }
     ]
   },
-  "Walk": {
+  "Walk (Wooden Shield)": {
     "up": [
       { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
       { "frames": 20, "tiles": [ { "image": "facingUp", "flip": "h" } ] }
@@ -24,12 +24,54 @@
       { "frames": 20, "tiles": [ { "image": "walk2Profile", "flip": "h" } ] }
     ],
     "down": [
-      { "frames": 20, "tiles": [ { "image": "walk1DownSmallshield" } ] },
-      { "frames": 20, "tiles": [ { "image": "walk2DownSmallshield" } ] }
+      { "frames": 20, "tiles": [
+        { "image": "walk1DownSmallshield" },
+        { "image": "facingDownNoShield", "pos": [8,0], "crop": [8,0,16,16] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walk2DownSmallshield" },
+        { "image": "facingDownNoShield", "pos": [8,0], "crop": [0,0,8,16], "flip": "h" }
+      ] }
     ],
     "right": [
       { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
       { "frames": 20, "tiles": [ { "image": "walk2Profile" } ] }
+    ]
+  },
+  "Walk (Magical Shield)": {
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "facingUp", "flip": "h" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [
+        { "image": "walk1ProfileBigshield", "flip": "h" },
+        { "image": "walk1Profile", "pos": [8,0], "crop": [0,0,8,16], "flip": "h" }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walk2ProfileBigshield", "flip": "h" },
+        { "image": "walk2Profile", "pos": [8,0], "crop": [0,0,8,16], "flip": "h" }
+      ] }
+    ],
+    "down": [
+      { "frames": 20, "tiles": [
+        { "image": "facingDownBigshield" },
+        { "image": "facingDownNoShield", "pos": [8,0], "crop": [8,0,16,16] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "facingDownBigshield" },
+        { "image": "facingDownNoShield", "pos": [8,0], "crop": [0,0,8,16], "flip": "h" }
+      ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [
+        { "image": "walk1ProfileBigshield", "pos": [8,0] },
+        { "image": "walk1Profile", "crop": [0,0,8,16] }
+      ] },
+      { "frames": 20, "tiles": [
+        { "image": "walk2ProfileBigshield", "pos": [8,0] },
+        { "image": "walk2Profile", "crop": [0,0,8,16] }
+      ] }
     ]
   },
   "Attack (Wooden Shield)": {
@@ -41,36 +83,76 @@
       { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
       { "frames": 20, "tiles": [ { "image": "attackingProfile", "pos": [1,0], "flip": "h" } ] }
     ],
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackingDown" } ] }
+    ],
     "right": [
       { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
       { "frames": 20, "tiles": [ { "image": "attackingProfile", "pos": [1,0] } ] }
     ]
   },
+  "Attack (Magical Shield)": {
+    "up": [
+      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackingUp" } ] }
+    ],
+    "left": [
+      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackingProfile", "pos": [1,0], "flip": "h" } ] }
+    ],
+    "down": [
+      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackingDown" } ] }
+    ],
+    "right": [
+      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 20, "tiles": [ { "image": "attackingProfile", "pos": [1,0] } ] }
+    ]
+  },
+  "Item Get": {
+    "up": [
+      { "frames": 5, "background": "boss-eagle.png", "origin": [119,85], "tiles": [
+        { "image": "liftingItem" },
+        { "image": "liftingItem", "pos": [8,0], "flip": "h" },
+        { "image": "tfp_gold", "pos": [0,-13] }
+      ] },
+      { "frames": 5, "tiles": [
+        { "image": "liftingItem" },
+        { "image": "liftingItem", "pos": [8,0], "flip": "h" },
+        { "image": "tfp_blue", "pos": [0,-13] }
+      ] }
+    ]
+  },
   "Death": {
     "up": [
-      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
-      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
-      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
+      { "frames": 10, "tiles": [ { "image": "facingDownNoShield" } ] },
+      { "frames": 10, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 10, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 10, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
+
+      { "frames": 10, "tiles": [ { "image": "facingDownNoShield" } ] },
+      { "frames": 10, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 10, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 10, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
+
+      { "frames": 10, "tiles": [ { "image": "facingDownNoShield" } ] },
+      { "frames": 10, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 10, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 10, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
+
+      { "frames": 10, "tiles": [ { "image": "facingDownNoShield" } ] },
+      { "frames": 10, "tiles": [ { "image": "walk1Profile" } ] },
+      { "frames": 10, "tiles": [ { "image": "facingUp" } ] },
+      { "frames": 10, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
 
       { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
-      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
-      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
 
-      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
-      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
-      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
+      { "frames": 20, "tiles": [ { "image": "facingDownNoShield", "palette": "greyscale_mail" } ] },
 
-      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
-      { "frames": 20, "tiles": [ { "image": "walk1Profile" } ] },
-      { "frames": 20, "tiles": [ { "image": "facingUp" } ] },
-      { "frames": 20, "tiles": [ { "image": "walk1Profile", "flip": "h" } ] },
-
-      { "frames": 20, "tiles": [ { "image": "facingDownNoShield" } ] },
-
-      { "frames": 20, "tiles": [ { "image": "facingDownNoShield", "palette": "greyscale_mail" } ] }
+      { "frames": 10, "tiles": [ { "image": "pop_small" } ] },
+      { "frames": 20, "tiles": [ { "image": "pop_big" } ] },
+      { "frames": 100, "tiles": [ { "image": "transparent" } ] }
     ]
   },
   "File Select": {
