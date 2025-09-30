@@ -73,21 +73,21 @@
     "right": [
       { "frames": 20, "tiles": [
         { "image": "run1Head", "flip": "h" },
-
-        { "image": "run1Torso",   "pos": [0,16], "flip": "h" },
-        { "image": "run1BackLeg", "pos": [0,24], "flip": "h" }
+        { "image": "run1Shoulders", "pos": [0,8] },
+        { "image": "run1Torso",     "pos": [0,16], "flip": "h" },
+        { "image": "run1BackLeg",   "pos": [0,24], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
         { "image": "run2Head", "flip": "h" },
-
-        { "image": "run2Torso", "pos": [0,16], "flip": "h" },
-        { "image": "run2Legs",  "pos": [-8,24], "flip": "h" }
+        { "image": "run2Shoulders", "pos": [0,8] },
+        { "image": "run2Torso",     "pos": [0,16], "flip": "h" },
+        { "image": "run2Legs",      "pos": [-8,24], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
         { "image": "run3Head", "flip": "h" },
-
-        { "image": "run3Torso", "pos": [-8,16], "flip": "h" },
-        { "image": "run3Legs",  "pos": [ 0,24], "flip": "h" }
+        { "image": "run3Shoulders", "pos": [0,8] },
+        { "image": "run3Torso",     "pos": [-8,16], "flip": "h" },
+        { "image": "run3Legs",      "pos": [ 0,24], "flip": "h" }
       ] }
     ],
     "right_aim_shoot": [
@@ -113,21 +113,21 @@
     "left": [
       { "frames": 20, "tiles": [
         { "image": "run1Head" },
-
-        { "image": "run1Torso",   "pos": [0,16] },
-        { "image": "run1BackLeg", "pos": [8,24] }
+        { "image": "run1Shoulders", "pos": [0,8], "flip": "h" },
+        { "image": "run1Torso",     "pos": [0,16] },
+        { "image": "run1BackLeg",   "pos": [8,24] }
       ] },
       { "frames": 20, "tiles": [
         { "image": "run2Head" },
-
-        { "image": "run2Torso", "pos": [0,16] },
-        { "image": "run2Legs",  "pos": [0,24] }
+        { "image": "run2Shoulders", "pos": [0,8], "flip": "h" },
+        { "image": "run2Torso",     "pos": [0,16] },
+        { "image": "run2Legs",      "pos": [0,24] }
       ] },
       { "frames": 20, "tiles": [
         { "image": "run3Head" },
-
-        { "image": "run3Torso", "pos": [ 0,16] },
-        { "image": "run3Legs",  "pos": [ 0,24] }
+        { "image": "run3Shoulders", "pos": [0,8], "flip": "h" },
+        { "image": "run3Torso",     "pos": [ 0,16] },
+        { "image": "run3Legs",      "pos": [ 0,24] }
       ] }
     ],
     "left_aim_shoot": [
@@ -239,22 +239,22 @@
         { "image": "idleLegs",    "pos": [0,16], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "run2Head",  "pos": [ 0,-12], "flip": "h" },
-
-        { "image": "run2Torso", "pos": [ 0,  4], "flip": "h" },
-        { "image": "run2Legs",  "pos": [-8, 12], "flip": "h" }
+        { "image": "run2Head",      "pos": [ 0,-12], "flip": "h" },
+        { "image": "run2Shoulders", "pos": [ 0, -4] },
+        { "image": "run2Torso",     "pos": [ 0,  4], "flip": "h" },
+        { "image": "run2Legs",      "pos": [-8, 12], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "run2Head",  "pos": [ 0,-16], "flip": "h" },
-
-        { "image": "run2Torso", "pos": [ 0,  0], "flip": "h" },
-        { "image": "run2Legs",  "pos": [-8,  8], "flip": "h" }
+        { "image": "run2Head",      "pos": [ 0,-16], "flip": "h" },
+        { "image": "run2Shoulders", "pos": [ 0, -8] },
+        { "image": "run2Torso",     "pos": [ 0,  0], "flip": "h" },
+        { "image": "run2Legs",      "pos": [-8,  8], "flip": "h" }
       ] },
       { "frames": 20, "tiles": [
-        { "image": "run2Head",  "pos": [ 0,-20], "flip": "h" },
-
-        { "image": "run2Torso", "pos": [ 0, -4], "flip": "h" },
-        { "image": "run2Legs",  "pos": [-8,  4], "flip": "h" }
+        { "image": "run2Head",      "pos": [ 0,-20], "flip": "h" },
+        { "image": "run2Shoulders", "pos": [ 0,-12] },
+        { "image": "run2Torso",     "pos": [ 0, -4], "flip": "h" },
+        { "image": "run2Legs",      "pos": [-8,  4], "flip": "h" }
       ] }
     ]
   }
