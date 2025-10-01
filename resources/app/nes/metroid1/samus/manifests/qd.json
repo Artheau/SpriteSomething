@@ -1,0 +1,229 @@
+[
+  {
+    "set": 0,
+    "idx": 0,
+    "addresses": "0x6b0000",
+    "images": [
+      "run1Head",
+      "run2Head"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 5,
+    "addresses": "0x6B0050",
+    "images": [
+      "run3Head",
+      "jumpLegs",
+      "facingHead"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 11,
+    "addresses": "0x6b00b0",
+    "images": [
+      "explodingHead",
+      "idleHead"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 23,
+    "addresses": "0x6B0170",
+    "images": [
+      "idleWeapon"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 25,
+    "addresses": "0x6B0190",
+    "images": [
+      "facingShoulders",
+      "explodingShoulders",
+      "idleShoulders"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 32,
+    "addresses": "0x6b0200",
+    "images": [
+      "run1Torso",
+      "run2Torso"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 37,
+    "addresses": "0x6b0250",
+    "images": [
+      "run3Torso"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 41,
+    "addresses": "0x6B0290",
+    "images": [
+      "facingTorso",
+      "explodingTorso",
+      "idleTorso"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 49,
+    "addresses": "0x6b0310",
+    "images": [
+      "run1BackLeg",
+      "run2Legs",
+      "run3Legs"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 57,
+    "addresses": "0x6b0390",
+    "images": [
+      "facingLeg"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 59,
+    "addresses": "0x6B03B0",
+    "images": [
+      "idleLegs"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 64,
+    "addresses": "0x6b0400",
+    "images": [
+      "run1Shoulders",
+      "run2Shoulders",
+      "run3Shoulders"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 73,
+    "addresses": "0x6b0490",
+    "images": [
+      "firingTorso"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 80,
+    "addresses": "0x6B0500",
+    "images": [
+      "morphBallTop",
+      "spinJump1Top",
+      "spinJump2Top"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 96,
+    "addresses": "0x6B0600",
+    "images": [
+      "morphBallBottom",
+      "spinJump1Middle",
+      "spinJump2Bottom"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 105,
+    "addresses": "0x6b0690",
+    "images": [
+      "pointUpWeapon"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 114,
+    "addresses": "0x6b0720",
+    "images": [
+      "spinJump1Bottom"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 119,
+    "addresses": "0x6b0770",
+    "images": [
+      "pointUpShoulders",
+      "pointUpHead"
+    ]
+  },
+  {
+    "addresses": [
+      "0x68a285",
+      "0x68a2e8",
+      "0x69218c",
+      "0x6921ef",
+      "0x69a72c",
+      "0x69a7a5",
+      "0x6a2169",
+      "0x6a21a9",
+      "0x6aa0ff",
+      "0x6aa153"
+    ],
+    "palette": [
+      "base_colors"
+    ]
+  },
+  {
+    "addresses": [
+      "0x68a298",
+      "0x69219f",
+      "0x69a73f",
+      "0x6a217c",
+      "0x6aa112"
+    ],
+    "palette": [
+      "normal_colors"
+    ]
+  },
+  {
+    "addresses": [
+      "0x68a29e",
+      "0x6921a5",
+      "0x69a745",
+      "0x6a2182",
+      "0x6aa118"
+    ],
+    "palette": [
+      "missile_colors"
+    ]
+  },
+  {
+    "addresses": [
+      "0x68a2a4",
+      "0x6921ab",
+      "0x69a74b",
+      "0x6a2188",
+      "0x6aa11e"
+    ],
+    "palette": [
+      "varia_colors"
+    ]
+  },
+  {
+    "addresses": [
+      "0x68a2aa",
+      "0x6921b1",
+      "0x69a751",
+      "0x6a218e",
+      "0x6aa124"
+    ],
+    "palette": [
+      "varia_missile_colors"
+    ]
+  }
+]

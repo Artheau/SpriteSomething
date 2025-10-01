@@ -128,3 +128,68 @@ class Sprite(SpriteParent):
         this_palette = [(0,0,0)] + this_palette
 
         return this_palette
+
+    def get_binary_sprite_sheet(self, image_names):
+        if isinstance(image_names, str):
+            image_names = [image_names]
+
+        top_half_of_rows = bytearray()
+        bottom_half_of_rows = bytearray()
+
+        for image_name in image_names:
+            image = self.images[image_name]
+            raw_image = common.convert_to_4bpp(
+                image,
+                (0,0),
+                (0,0,image.size[0],image.size[1]),
+                None
+            )
+            top_half_of_rows += bytes(raw_image[:0x40])
+            bottom_half_of_rows += bytes(raw_image[0x40:])
+
+        return bytes(b for row_offset in range(0,len(top_half_of_rows),0x200) \
+                         for b in top_half_of_rows[
+                            row_offset:row_offset+0x200
+                        ]+
+                        bottom_half_of_rows[
+                            row_offset:row_offset+0x200
+                        ]
+                    )
+
+    def get_binary_palettes(self, palette_name=""):
+        '''
+        Get binary palettes
+        '''
+        raw_palette_data = bytearray()
+        colors_555 = common.convert_to_555(self.master_palette)
+
+        palette_names = [
+            "normal_colors",
+            "varia_colors",
+            "missile_colors",
+            "varia_missile_colors"
+        ]
+
+        start = 0
+        end = len(palette_names)
+        if palette_name != "":
+            if palette_name in palette_names:
+                start = palette_names.index(palette_name)
+                end = start + 1
+
+        # Mail palettes
+        raw_palette_data.extend(
+            itertools.chain.from_iterable(
+                [
+                    common.as_u16(
+                        c
+                    )
+                    for i in range(start, end)
+                    for c in colors_555[
+                        0x10*i+1:0x10*i+0x10
+                    ]
+                ]
+            )
+        )
+
+        return raw_palette_data

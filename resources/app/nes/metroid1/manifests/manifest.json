@@ -4,13 +4,12 @@
     "type": "Player Character Sprite",
     "name": "Samus",
     "folder name": "samus",
-    "view-only": true,
     "input": {
       "png": {
         "dims": [128,64],
         "overview-scale-factor": 1
       }
     },
-    "output": []
+    "output": [ ".png", ".qd" ]
   }
 }

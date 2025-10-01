@@ -12,6 +12,8 @@ except ModuleNotFoundError as e:
     print(e)
 
 import importlib
+import base64
+import io
 import json
 import os
 import tempfile
@@ -994,6 +996,65 @@ class SpriteParent():
                 rdc_file.write(block)
 
         return True     #indicate success to caller
+
+    def save_as_QD(self, filename):
+        qd = {
+            "name": "Unknown Sprite",
+            "category": self.classic_name,
+            "creator": "Unknown Author",
+            "originalBy": "",
+            "writes": []
+        }
+
+        if "sprite.name" in self.metadata and self.metadata["sprite.name"] != "":
+            qd["name"] = self.metadata["sprite.name"]
+        if "author.name" in self.metadata and self.metadata["author.name"] != "":
+            qd["creator"] = self.metadata["author.name"]
+
+        with open(common.get_resource([self.resource_subpath, "manifests"], "qd.json")) as qdManifestFile:
+            qdManifest = json.load(qdManifestFile)
+            for qdItem in qdManifest:
+                if "addresses" in qdItem:
+                    payload = None
+                    setID = None
+                    idxID = None
+
+                    if "set" in qdItem:
+                        setID = qdItem["set"]
+                    if "idx" in qdItem:
+                        idxID = qdItem["idx"]
+
+                    offsets = qdItem["addresses"]
+                    if isinstance(offsets, list) and len(offsets) == 1:
+                        offsets = offsets[0]
+
+                    if isinstance(offsets, str):
+                        offsets = [offsets]
+                    offsets = list(map(lambda x: x.upper().replace("0X","0x"), offsets))
+                    if len(offsets) == 1:
+                        offsets = offsets[0]
+                    qdWrite = {
+                        "offset": offsets
+                    }
+                    if setID is not None and idxID is not None:
+                        qdWrite["setAndIdx"] = f"Set {setID}, Idx {idxID}"
+
+                    if "images" in qdItem:
+                        image_names = qdItem["images"]
+                        qdWrite["images"] = image_names
+                        payload = self.get_binary_sprite_sheet(image_names)
+
+                    if "palette" in qdItem:
+                        palette = qdItem["palette"]
+                        qdWrite["palette"] = palette
+                        payload = self.get_binary_palettes(palette)
+
+                    qdWrite["length"] = payload and len(payload) or 0
+                    qdWrite["base64"] = payload and base64.b64encode(payload).decode("ascii") or ""
+                    qd["writes"].append(qdWrite)
+        print(qd)
+        with open(filename, "w+") as json_file:
+            json_file.write(json.dumps(qd, indent=2))
 
     def get_rdc_meta_data_block(self):
         title_name = self.metadata["sprite.name"]

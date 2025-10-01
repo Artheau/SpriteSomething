@@ -1,0 +1,90 @@
+[
+  {
+    "set": 0,
+    "idx": 8,
+    "addresses": "0x608e34",
+    "images": [
+      "liftingItem"
+    ]
+  },
+  {
+    "set": 0,
+    "idx": 16,
+    "addresses": "0x608eb4",
+    "images": [
+      "walk1ProfileBigshield"
+    ]
+  },
+  {
+    "set": 1,
+    "idx": 0,
+    "addresses": "0x61007f",
+    "images": [
+      "walk1Profile",
+      "walk2Profile",
+      "facingDownNoShield",
+      "facingUp",
+      "attackingProfile",
+      "attackingDown",
+      "attackingUp"
+    ]
+  },
+  {
+    "set": 1,
+    "idx": 84,
+    "addresses": "0x6105bf",
+    "images": [
+      "walk2ProfileBigshield"
+    ]
+  },
+  {
+    "set": 1,
+    "idx": 88,
+    "addresses": "0x6105ff",
+    "images": [
+      "walk1DownSmallshield",
+      "walk2DownSmallshield"
+    ]
+  },
+  {
+    "set": 1,
+    "idx": 96,
+    "addresses": "0x61067f",
+    "images": [
+      "facingDownBigshield"
+    ]
+  },
+  {
+    "addresses": [
+      "0x631314",
+      "0x631410",
+      "0x63150c",
+      "0x631608",
+      "0x631704",
+      "0x631800",
+      "0x6318f0",
+      "0x6319f0",
+      "0x631af0",
+      "0x631bf0",
+      "0x631cec",
+      "0x3d3804"
+    ],
+    "palette": "green_mail"
+  },
+  {
+    "addresses": "0x631cf0",
+    "palette": "blue_mail"
+  },
+  {
+    "addresses": [
+      "0x631cf4"
+    ],
+    "palette": "red_mail"
+  },
+  {
+    "addresses": [
+      "0x612287"
+    ],
+    "palette": "tunic_colors"
+  }
+]
