@@ -10,6 +10,6 @@
         "overview-scale-factor": 4
       }
     },
-    "output": [ ".png", ".rdc" ]
+    "output": [ ".png", ".rdc", ".qd" ]
   }
 }

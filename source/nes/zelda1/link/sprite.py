@@ -1,3 +1,4 @@
+import base64
 import importlib
 import io
 import itertools
@@ -119,14 +120,14 @@ class Sprite(SpriteParent):
         raw_palette_data = bytearray()
         colors_555 = common.convert_to_555(self.master_palette)
 
-        # Mail and bunny palettes
+        # Mail palettes
         raw_palette_data.extend(
             itertools.chain.from_iterable(
                 [
                     common.as_u16(
                         c
                     )
-                    for i in range(4)
+                    for i in range(3)
                     for c in colors_555[
                         0x10*i+1:0x10*i+0x10
                     ]
@@ -134,17 +135,58 @@ class Sprite(SpriteParent):
             )
         )
 
-        # Glove colors
-        raw_palette_data.extend(
-            itertools.chain.from_iterable(
-                [
-                    common.as_u16(
-                        colors_555[0x10*i+0x10]
-                    )
-                    for i in range(2)
-                ]
-            )
-        )
-
         return raw_palette_data
 
+    def save_as_QD(self, filename):
+        qd = {
+            "name": "Unknown Sprite",
+            "category": "Link",
+            "creator": "Unknown Author",
+            "originalBy": "Nintendo",
+            "writes": []
+        }
+
+        if "sprite.name" in self.metadata and self.metadata["sprite.name"] != "":
+            qd["name"] = self.metadata["sprite.name"]
+        if "author.name" in self.metadata and self.metadata["author.name"] != "":
+            qd["creator"] = self.metadata["author.name"]
+
+        for image_data in [
+            ["0x608E34",["liftingItem"]],
+            ["0x608EB4",["walk1ProfileBigshield"]],
+            [
+                "0x61007F",
+                [
+                    "walk1Profile",
+                    "walk2Profile",
+                    "facingDownNoShield",
+                    "facingUp",
+                    "attackingProfile",
+                    "attackingDown",
+                    "attackingUp"
+                ]
+            ],
+            ["0x6105BF",["walk2ProfileBigshield"]],
+            [
+                "0x6105FF",
+                [
+                    "walk1DownSmallshield",
+                    "walk2DownSmallshield"
+                ]
+            ],
+            ["0x61067F","facingDownBigshield"]
+        ]:
+            offset = image_data[0]
+            image_names = image_data[1]
+            image = self.get_binary_sprite_sheet(image_names)
+            qd["writes"].append(
+                {
+                    "offset": offset,
+                    "setAndIdx": "Set X, Idx Y",
+                    "length": len(image),
+                    "base64": base64.b64encode(image).decode("ascii")
+                }
+            )
+        print(qd)
+        with open(filename, "w+") as json_file:
+            json_file.write(json.dumps(qd, indent=2))
