@@ -297,11 +297,11 @@ class Sprite(SpriteParent):
         '''
         Build Link RDC blocks
         '''
-        LINK_EXPORT_BLOCK_TYPE = 1
+        Z3LINK_EXPORT_BLOCK_TYPE = 1
         block = io.BytesIO()
-        block.write(self.get_binary_sprite_sheet())
-        block.write(self.get_binary_palettes())
-        return [(LINK_EXPORT_BLOCK_TYPE, block.getvalue())]
+        block.write(self.get_binary_sprite_sheet()) # 0
+        block.write(self.get_binary_palettes())     # 1,2
+        return [(Z3LINK_EXPORT_BLOCK_TYPE, block.getvalue())]
 
     def inject_into_ROM(self, spiffy_dict, rom):
         '''

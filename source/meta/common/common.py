@@ -431,7 +431,7 @@ def get_single_raw_tile_base(image, planes):
     #  format in getdata(), which is not helpful
     return convert_indexed_tile_to_bitplanes_base(
         image.transpose(Image.TRANSPOSE).getdata(),
-        planes
+        # planes
     )
 
 

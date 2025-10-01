@@ -1,4 +1,5 @@
 import importlib
+import io
 import itertools
 import json
 from PIL import Image
@@ -27,6 +28,32 @@ class Sprite(SpriteParent):
         if hasattr(self, "images"):
             self.images["transparent"] = Image.new("RGBA",(0,0),0)
             self.images = dict(self.images,**self.equipment)
+
+    def get_rdc_export_blocks(self):
+        Z1LINK_EXPORT_BLOCK_TYPE = 2
+        block = io.BytesIO()
+        for image_names in [
+            ["liftingItem"],            # 0
+            ["walk1ProfileBigshield"],  # 1
+            [                           # 2
+                "walk1Profile",
+                "walk2Profile",
+                "facingDownNoShield",
+                "facingUp",
+                "attackingProfile",
+                "attackingDown",
+                "attackingUp"
+            ],
+            ["walk2ProfileBigshield"],  # 3
+            [                           # 4
+                "walk1DownSmallshield",
+                "walk2DownSmallshield"
+            ],
+            ["facingDownBigshield"]     # 5
+        ]:
+            block.write(self.get_binary_sprite_sheet(image_names))
+        block.write(self.get_binary_palettes()) # 6,7,8,9
+        return [(Z1LINK_EXPORT_BLOCK_TYPE, block.getvalue())]
 
     def get_palette(self, palettes, default_range=[], frame_number=0):
         '''
@@ -57,3 +84,67 @@ class Sprite(SpriteParent):
             this_palette = self.link_globals["greyscale_mail"]
 
         return this_palette
+
+    def get_binary_sprite_sheet(self, image_names):
+        if isinstance(image_names, str):
+            image_names = [image_names]
+
+        top_half_of_rows = bytearray()
+        bottom_half_of_rows = bytearray()
+
+        for image_name in image_names:
+            image = self.images[image_name]
+            raw_image = common.convert_to_4bpp(
+                image,
+                (0,0),
+                (0,0,image.size[0],image.size[1]),
+                None
+            )
+            top_half_of_rows += bytes(raw_image[:0x40])
+            bottom_half_of_rows += bytes(raw_image[0x40:])
+
+        return bytes(b for row_offset in range(0,len(top_half_of_rows),0x200) \
+                         for b in top_half_of_rows[
+                            row_offset:row_offset+0x200
+                        ]+
+                        bottom_half_of_rows[
+                            row_offset:row_offset+0x200
+                        ]
+                    )
+
+    def get_binary_palettes(self):
+        '''
+        Get binary palettes
+        '''
+        raw_palette_data = bytearray()
+        colors_555 = common.convert_to_555(self.master_palette)
+
+        # Mail and bunny palettes
+        raw_palette_data.extend(
+            itertools.chain.from_iterable(
+                [
+                    common.as_u16(
+                        c
+                    )
+                    for i in range(4)
+                    for c in colors_555[
+                        0x10*i+1:0x10*i+0x10
+                    ]
+                ]
+            )
+        )
+
+        # Glove colors
+        raw_palette_data.extend(
+            itertools.chain.from_iterable(
+                [
+                    common.as_u16(
+                        colors_555[0x10*i+0x10]
+                    )
+                    for i in range(2)
+                ]
+            )
+        )
+
+        return raw_palette_data
+
