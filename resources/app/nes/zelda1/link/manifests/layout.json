@@ -10,6 +10,8 @@
   "border_size": 0,
   "layout": [
     [
+      "liftingItem",
+      "walk1ProfileBigshield",
       "walk1Profile",
       "walk2Profile",
       "facingDownNoShield",
@@ -19,12 +21,10 @@
       "attackingUp"
     ],
     [
-      "facingDownBigshield",
-      "walk1ProfileBigshield",
       "walk2ProfileBigshield",
       "walk1DownSmallshield",
       "walk2DownSmallshield",
-      "liftingItem",
+      "facingDownBigshield",
       "null_block",
       "palette_block"
     ]
@@ -38,7 +38,6 @@
   ],
   "images": {
     "liftingItem":            { "dimensions": [0,0,8,16], "import palette interval": [1,4] },
-
     "walk1ProfileBigshield":  { "dimensions": [0,0,8,16], "import palette interval": [1,4] },
 
     "walk1Profile":           { "dimensions": [0,0,16,16], "import palette interval": [1,4] },
@@ -51,10 +50,11 @@
 
     "walk2ProfileBigshield":  { "parent": "walk1ProfileBigshield" },
     "walk1DownSmallshield":   { "dimensions": [0,0,8,16], "import palette interval": [1,4] },
+
     "walk2DownSmallshield":   { "parent": "walk1DownSmallshield" },
     "facingDownBigshield":    { "dimensions": [0,0,8,16], "import palette interval": [1,4] },
 
-    "null_block":       { "dimensions": [0,0,56,16] },
+    "null_block":       { "dimensions": [0,0,88,16] },
     "palette_block":    { "dimensions": [0,0,8,8], "shift": [0,8] }
   }
 }

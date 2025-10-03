@@ -404,7 +404,7 @@ def convert_tile_from_4bpp_to_2bpp(raw_tile, verbose=False):
         print(f"4 [{len(planes[3])}]: {planes[3]}")
 
     # Ignore planes 3 & 4
-    # Interleave planes 1 & 2
+    # Interleave planes 1 & Reversed 2
     raw_tile = []
     for p1, p2 in zip(planes[0], reversed(planes[1])):
         raw_tile.append(p1)
@@ -442,7 +442,7 @@ def image_from_bitplanes_base(raw_tile, planes=4):
     )
 
 
-def convert_image_to_4bpp(image, offset, dimensions, extra_area):
+def convert_image_to_4bpp(image, offset, dimensions, extra_area, planes=4):
     # have to process these differently so that 16x16 tiles canbe correctly
     #  reconstructed
     top_row = []
@@ -466,17 +466,17 @@ def convert_image_to_4bpp(image, offset, dimensions, extra_area):
                 # make a 16x16 tile from (x,y)
                 # tuples in left-up-right-bottom format
                 #  (it's ok if this crops an area not completely in the image)
-                top_row.extend(get_single_raw_tile_base(image.crop((x, y, x + 8, y + 8)), 4))
-                top_row.extend(get_single_raw_tile_base(image.crop((x + 8, y, x + 16, y + 8)), 4))
-                bottom_row.extend(get_single_raw_tile_base(image.crop((x, y + 8, x + 8, y + 16)), 4))
-                bottom_row.extend(get_single_raw_tile_base(image.crop((x + 8, y + 8, x + 16, y + 16)), 4))
+                top_row.extend(get_single_raw_tile_base(image.crop((x, y, x + 8, y + 8)), planes))
+                top_row.extend(get_single_raw_tile_base(image.crop((x + 8, y, x + 16, y + 8)), planes))
+                bottom_row.extend(get_single_raw_tile_base(image.crop((x, y + 8, x + 8, y + 16)), planes))
+                bottom_row.extend(get_single_raw_tile_base(image.crop((x + 8, y + 8, x + 16, y + 16)), planes))
             # check to see if xmax-xmin has a hanging chad
             if x_chad_length == 0:
                 pass  # no chad
             elif x_chad_length == 8:
                 # make two 8x8 tiles from (chad,y), (chad,y+8)
-                small_tiles.extend(get_single_raw_tile_base(image.crop((xmax - 8, y, xmax, y + 8)), 4))
-                small_tiles.extend(get_single_raw_tile_base(image.crop((xmax - 8, y + 8, xmax, y + 16)), 4))
+                small_tiles.extend(get_single_raw_tile_base(image.crop((xmax - 8, y, xmax, y + 8)), planes))
+                small_tiles.extend(get_single_raw_tile_base(image.crop((xmax - 8, y + 8, xmax, y + 16)), planes))
             else:
                 # FIXME: English
                 raise AssertionError(
@@ -489,15 +489,15 @@ def convert_image_to_4bpp(image, offset, dimensions, extra_area):
         elif y_chad_length == 8:
             for x in range(xmin, xmax - 15, 16):
                 # construct the big chads first from (x,chad), (x+8,chad)
-                small_tiles.extend(get_single_raw_tile_base(image.crop((x, ymax - 8, x + 8, ymax)), 4))
-                small_tiles.extend(get_single_raw_tile_base(image.crop((x + 8, ymax - 8, x + 16, ymax)), 4))
+                small_tiles.extend(get_single_raw_tile_base(image.crop((x, ymax - 8, x + 8, ymax)), planes))
+                small_tiles.extend(get_single_raw_tile_base(image.crop((x + 8, ymax - 8, x + 16, ymax)), planes))
             # now check for the bottom right chad
             y_chad_length = ymax - ymin % 16
             if x_chad_length == 0:
                 pass  # cool
             elif x_chad_length == 8:
                 # make the final chad
-                small_tiles.extend(get_single_raw_tile_base(image.crop((xmax - 8, ymax - 8, xmax, ymax)), 4))
+                small_tiles.extend(get_single_raw_tile_base(image.crop((xmax - 8, ymax - 8, xmax, ymax)), planes))
             else:
                 # FIXME: English
                 raise AssertionError(
@@ -511,23 +511,24 @@ def convert_image_to_4bpp(image, offset, dimensions, extra_area):
                 f"({xmin},{xmax}) are not divisible by 8")
 
     # even out the small tiles into the rest of the space
-    for pos in range(0, len(small_tiles), 0x40):
-        top_row.extend(small_tiles[pos:pos + 0x20])
-        bottom_row.extend(small_tiles[pos + 0x20:pos + 0x40])
+    for pos in range(0, len(small_tiles), (0x10 * planes)):
+        print(pos, 0x10 * planes, int(0x10 * (planes / 2)))
+        top_row.extend(small_tiles[pos:pos + int(0x10 * (planes / 2))])
+        bottom_row.extend(small_tiles[pos + int(0x10 * (planes / 2)):pos + int(0x10 * planes)])
 
     return top_row + bottom_row
 
 
-def get_single_raw_tile_base(image, planes):
+def get_single_raw_tile_base(image, planes=4):
     # Here transpose() is used because otherwise we get column-major
     #  format in getdata(), which is not helpful
     return convert_indexed_tile_to_bitplanes_base(
         image.transpose(Image.TRANSPOSE).getdata(),
-        # planes
+        planes
     )
 
 
-def convert_indexed_tile_to_bitplanes_base(indexed_tile):
+def convert_indexed_tile_to_bitplanes_base(indexed_tile, planes=4):
     # this should literally just be the inverse of
     #  convert_tile_from_bitplanes(), and so it was written in this way
     indexed_tile = np.array(indexed_tile, dtype=np.uint8).reshape(8, 8)
@@ -540,6 +541,9 @@ def convert_indexed_tile_to_bitplanes_base(indexed_tile):
     tile = shaped_tile.reshape(8, 8)
     low_bitplanes = np.ravel(tile[:, 6:8])[::-1]
     high_bitplanes = np.ravel(tile[:, 4:6])[::-1]
+    new_tile = np.append(low_bitplanes, high_bitplanes)
+    if planes == 2:
+        new_tile = convert_tile_from_4bpp_to_2bpp(new_tile)
     return np.append(low_bitplanes, high_bitplanes)
 
 

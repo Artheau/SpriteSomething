@@ -94,12 +94,15 @@ class Sprite(SpriteParent):
 
         for image_name in image_names:
             image = self.images[image_name]
+            planes = 2
             raw_image = common.convert_image_to_4bpp(
                 image,
                 (0,0),
                 (0,0,image.size[0],image.size[1]),
-                None
+                None,
+                planes
             )
+            print([image_name,raw_image])
             top_half_of_rows += bytes(raw_image[:0x40])
             bottom_half_of_rows += bytes(raw_image[0x40:])
 

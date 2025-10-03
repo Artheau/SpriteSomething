@@ -6,7 +6,7 @@
     "folder name": "link",
     "input": {
       "png": {
-        "dims": [112,32],
+        "dims": [128,32],
         "overview-scale-factor": 4
       }
     },

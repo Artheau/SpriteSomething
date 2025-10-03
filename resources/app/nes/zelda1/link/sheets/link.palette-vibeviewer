@@ -1,0 +1,33 @@
+{
+  "source": "VibeViewer",
+  "format": "nes",
+  "paletteCount": 4,
+  "colorsPerPalette": 4,
+  "activePaletteIndex": 0,
+  "palettes": [
+    [
+      "#000000",
+      "#85BC2F",
+      "#EF9A49",
+      "#9F4A00"
+    ],
+    [
+      "#000000",
+      "#D1D8FF",
+      "#EF9A49",
+      "#9F4A00"
+    ],
+    [
+      "#000000",
+      "#BD3C30",
+      "#EF9A49",
+      "#9F4A00"
+    ],
+    [
+      "#000000",
+      "#85BC2F",
+      "#EF9A49",
+      "#9F4A00"
+    ]
+  ]
+}

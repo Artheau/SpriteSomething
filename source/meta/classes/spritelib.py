@@ -641,22 +641,27 @@ class SpriteParent():
           for paletteID in ["green_mail","blue_mail","red_mail","bunny_mail"]:
             palette = self.get_palette([paletteID])
             this_palette = []
-            if len(palette) < 16:
-              for i in range(len(palette), 16):
+            divisor = 4
+            new_len = divisor
+            print(paletteID,len(palette),len(palette)%divisor,(len(palette)%divisor)+1)
+            if (len(palette) > divisor) and (len(palette) % divisor):
+              new_len = divisor * ((len(palette)%divisor)+1)
+            if new_len > len(palette):
+              for i in range(len(palette), new_len):
                 this_palette.append(common.html_color((0,0,0)))
             for _, color in enumerate(palette):
               this_palette.append(common.html_color(color))
             palettes.append(this_palette)
 
-            palette_doc = {
-              "source": "VibeViewer",
-              "format": self.console_id,
-              "paletteCount": len(palettes),
-              "colorsPerPalette": len(palettes[0]),
-              "activePaletteIndex": 0,
-              "palettes": palettes
-            }
-            palette_doc = json.dumps(palette_doc, indent=2).split("\n")
+          palette_doc = {
+            "source": "VibeViewer",
+            "format": self.console_id,
+            "paletteCount": len(palettes),
+            "colorsPerPalette": len(palettes[0]),
+            "activePaletteIndex": 0,
+            "palettes": palettes
+          }
+          palette_doc = json.dumps(palette_doc, indent=2).split("\n")
 
         with(open(filename, "w")) as palettes_file:
           palettes_file.write("\n".join(palette_doc))
