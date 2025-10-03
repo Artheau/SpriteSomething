@@ -22,7 +22,7 @@ def dma_banks(sprite):
 def death_bank(direction,sprite):
 	length = 0x3F60
 	image = rom_inject.compile_death_image(direction,sprite)
-	return bytes(itertools.chain.from_iterable(common.convert_to_4bpp(image,(0,0),(0,16*i,128,16*(i+1)),None) for i in range(16)))[:length]
+	return bytes(itertools.chain.from_iterable(common.convert_image_to_4bpp(image,(0,0),(0,16*i,128,16*(i+1)),None) for i in range(16)))[:length]
 
 def gun_port(sprite):
 	# Ten directions, times three levels of gun port opening.
@@ -63,11 +63,11 @@ def file_select(sprite):
 	file_select_missile_head = cursor_array.crop(( 8,24,16,32))
 
 	data = bytearray()
-	# Due to how convert_to_4bpp package the data we must first get a whole sheet row, then extract the third row (first 0x200 bytes)
-	data.extend(common.convert_to_4bpp(file_select_sprites,     (0,0),(0, 0,128,16),None))
-	data.extend(common.convert_to_4bpp(file_select_sprites,     (0,0),(0,16,128,32),None)[:0x200])
-	data.extend(common.convert_to_4bpp(file_select_missile,     (0,0),(0, 0,  8, 8),None))
-	data.extend(common.convert_to_4bpp(file_select_missile_head,(0,0),(0, 0,  8, 8),None))
+	# Due to how convert_image_to_4bpp package the data we must first get a whole sheet row, then extract the third row (first 0x200 bytes)
+	data.extend(common.convert_image_to_4bpp(file_select_sprites,     (0,0),(0, 0,128,16),None))
+	data.extend(common.convert_image_to_4bpp(file_select_sprites,     (0,0),(0,16,128,32),None)[:0x200])
+	data.extend(common.convert_image_to_4bpp(file_select_missile,     (0,0),(0, 0,  8, 8),None))
+	data.extend(common.convert_image_to_4bpp(file_select_missile_head,(0,0),(0, 0,  8, 8),None))
 	return data
 
 # Palettes are stored as just fifteen colors, not sixteen.

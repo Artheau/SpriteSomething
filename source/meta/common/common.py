@@ -28,7 +28,7 @@ def filename_scrub(filename):
     new_filename = str(filename).lower()
     new_filename = re.sub(r" ", "-", new_filename)  # no spaces
     # no weird things in the name
-    new_filename = re.sub(r"[\%\$\^\:\']", "", new_filename)
+    new_filename = re.sub(r"[\%\$\^\:\(\)']", "", new_filename)
     # no weird things at beginning of name
     new_filename = re.sub(r"^[^A-Za-z0-9]+", "", new_filename)
 
@@ -332,10 +332,11 @@ def convert_tile_from_bitplanes_base(raw_tile):
     # an attempt to make this ugly process mildly efficient
     tile = np.zeros((8, 8), dtype=np.uint8)
 
-    tile[:, 4] = raw_tile[31:15:-2]
-    tile[:, 5] = raw_tile[30:14:-2]
-    tile[:, 6] = raw_tile[15::-2]
-    tile[:, 7] = raw_tile[14::-2]
+    bits = len(raw_tile)
+    if bits >= 0o30: tile[:, 4] = raw_tile[bits- 1: bits-17 : -2]
+    if bits >= 0o30: tile[:, 5] = raw_tile[bits- 2: bits-18 : -2]
+    if bits >= 0o30: tile[:, 6] = raw_tile[bits-17:         : -int(bits/16)]
+    if bits >= 0o40: tile[:, 7] = raw_tile[     14:         : -int(bits/16)]
 
     shaped_tile = tile.reshape(8, 8, 1)
 
@@ -347,8 +348,87 @@ def convert_tile_from_bitplanes_base(raw_tile):
     return returnvalue
 
 
-def image_from_bitplanes_base(raw_tile):
+def convert_tile_from_3bpp_to_4bpp(raw_tile, verbose=False):
+    if verbose:
+        print(f" [3BPP [{len(raw_tile)}]]", end="")
+    lo_planes = raw_tile[:16]       # Get Planes 1 & 2
+    hi_planes = raw_tile[16:]       # Get Plane  3
+    raw_tile = lo_planes            # Save Lo Planes to tile
+    for hi_plane in hi_planes:      # Iterate over Plane 3
+        raw_tile.append(hi_plane)   # Save Plane 3
+        raw_tile.append(0x00)       # Save Empty Plane 4
+    if verbose:
+        print(" -> ", end="")
+        print(f"[4BPP [{len(raw_tile)}]]")
+    return raw_tile
+
+
+def convert_tile_from_4bpp_to_3bpp(raw_tile, verbose=False):
+    oneBPP = 8
+    planes = [
+        raw_tile[oneBPP*0   :oneBPP*1], # Plane 1
+        raw_tile[oneBPP*1   :oneBPP*2], # Plane 2
+        raw_tile[oneBPP*2   :oneBPP*3], # Plane 3
+        raw_tile[oneBPP*3   :oneBPP*4]  # Plane 4
+    ]
+    if verbose:
+        print(f" [4BPP [{len(raw_tile)}]]")
+        print(f"1 [{len(planes[0])}]: {planes[0]}")
+        print(f"2 [{len(planes[1])}]: {planes[1]}")
+        print(f"3 [{len(planes[2])}]: {planes[2]}")
+        print(f"4 [{len(planes[3])}]: {planes[3]}")
+    # nuke plane 4
+    raw_tile = planes[0] + planes[1]                        # Save Lo Planes to tile
+    for i, hi_plane in enumerate([planes[2], planes[3]]):   # Iterate over Hi Planes
+        plane_id = 3 if i % 2 != 0 else 4                   # Odd is Plane 3, Even is Plane 4
+        if plane_id == 3:                                   # If this is Plane 3
+            raw_tile.append(hi_plane)                       # Save Plane 3
+    if verbose:
+        print(f"Raw [{len(raw_tile)}]: {raw_tile}")
+    return raw_tile
+
+
+def convert_tile_from_4bpp_to_2bpp(raw_tile, verbose=False):
+    oneBPP = 8
+    planes = [
+        raw_tile[oneBPP*0   :oneBPP*1], # Plane 1
+        raw_tile[oneBPP*1   :oneBPP*2], # Plane 2
+        raw_tile[oneBPP*2   :oneBPP*3], # Plane 3
+        raw_tile[oneBPP*3   :oneBPP*4]  # Plane 4
+    ]
+    if verbose:
+        print(f" [4BPP [{len(raw_tile)}]]")
+        print(f"1 [{len(planes[0])}]: {planes[0]}")
+        print(f"2 [{len(planes[1])}]: {planes[1]}")
+        print(f"3 [{len(planes[2])}]: {planes[2]}")
+        print(f"4 [{len(planes[3])}]: {planes[3]}")
+
+    # Ignore planes 3 & 4
+    # Interleave planes 1 & 2
+    raw_tile = []
+    for p1, p2 in zip(planes[0], reversed(planes[1])):
+        raw_tile.append(p1)
+        raw_tile.append(p2)
+
+    if verbose:
+        print(f"Raw [{len(raw_tile)}]: {raw_tile}")
+    return raw_tile
+
+
+def image_from_bitplanes_base(raw_tile, planes=4):
     # fromarray expects column major format, so have to switch the axes
+    is_3bpp = len(raw_tile) == 0o30
+    is_4bpp = len(raw_tile) == 0o40
+    if is_3bpp:
+        # Upgrade from 3BPP to 4BPP
+        raw_tile = convert_tile_from_3bpp_to_4bpp(raw_tile)
+    if planes == 3 and is_4bpp:
+        # Downgrade from 4BPP to 3BPP
+        raw_tile = convert_tile_from_4bpp_to_3bpp(raw_tile)
+    if planes == 2:
+        # Downgrade from 4BPP to 2BPP
+        raw_tile = convert_tile_from_4bpp_to_2bpp(raw_tile)
+
     if len(raw_tile) == 24:
         a_planes = raw_tile[:16]
         b_planes = raw_tile[16:]
@@ -362,7 +442,7 @@ def image_from_bitplanes_base(raw_tile):
     )
 
 
-def convert_to_4bpp(image, offset, dimensions, extra_area):
+def convert_image_to_4bpp(image, offset, dimensions, extra_area):
     # have to process these differently so that 16x16 tiles canbe correctly
     #  reconstructed
     top_row = []

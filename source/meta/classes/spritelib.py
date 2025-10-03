@@ -229,9 +229,9 @@ class SpriteParent():
             rom_path = rom_path.replace(os.sep, '.')
             rom_module = self.import_module(f"source.{rom_path}.rom")
             self.import_from_ROM(rom_module.RomHandler(self.filename))
-        elif file_extension.lower() in filetypes:
-            print(f"{file_extension.upper()[1:]} not yet available by CLI for '{self.classic_name}' Sprites!")
-            return
+        # elif file_extension.lower() in filetypes:
+        #     print(f"{file_extension.upper()[1:]} not yet available by CLI for '{self.classic_name}' Sprites!")
+        #     return
         self.import_cleanup()
 
     def import_from_PNG(self):

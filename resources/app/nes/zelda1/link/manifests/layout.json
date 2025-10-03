@@ -29,6 +29,13 @@
       "palette_block"
     ]
   ],
+  "pseudoimages": [
+    "tfp_gold",
+    "pop_big",
+    "transparent",
+    "pop_small",
+    "tfp_blue"
+  ],
   "images": {
     "liftingItem":            { "dimensions": [0,0,8,16], "import palette interval": [1,4] },
 

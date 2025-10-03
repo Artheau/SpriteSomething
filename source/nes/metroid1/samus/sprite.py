@@ -138,7 +138,7 @@ class Sprite(SpriteParent):
 
         for image_name in image_names:
             image = self.images[image_name]
-            raw_image = common.convert_to_4bpp(
+            raw_image = common.convert_image_to_4bpp(
                 image,
                 (0,0),
                 (0,0,image.size[0],image.size[1]),
