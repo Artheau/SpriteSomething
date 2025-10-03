@@ -158,9 +158,21 @@ def round_to_nearest_eight(val):
     return snescolor_eighth(val) * 8
 
 
+def triplet_to_hex(triplet, digits=2):
+    return str(hex(triplet[0]))[2:].zfill(digits) + str(hex(triplet[1]))[2:].zfill(digits) + str(hex(triplet[2]))[2:].zfill(digits)
+
+
 def pretty_hex(x, digits=2):
+    if isinstance(x, list) or isinstance(x, tuple) and len(x) == 3:
+        x = '0x' + triplet_to_hex(x, digits)
+    else:
+        x = hex(x)
     # displays a hex number with a specified number of digits
-    return '0x' + hex(x)[2:].upper().zfill(digits)
+    return '0x' + x[2:].upper().zfill(digits)
+
+
+def html_color(x):
+    return '#' + pretty_hex(x)[2:]
 
 
 def round_up(num,precision=0):
@@ -449,11 +461,6 @@ def convert_indexed_tile_to_bitplanes_base(indexed_tile):
     low_bitplanes = np.ravel(tile[:, 6:8])[::-1]
     high_bitplanes = np.ravel(tile[:, 4:6])[::-1]
     return np.append(low_bitplanes, high_bitplanes)
-
-
-def pretty_hex(x, digits=2):
-    # displays a hex number with a specified number of digits
-    return '0x' + hex(x)[2:].upper().zfill(digits)
 
 
 def palette_pull_towards_color(palette, pull_color, bias):

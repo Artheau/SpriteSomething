@@ -35,6 +35,8 @@ class SpriteParent():
         self.classic_name = manifest_dict["name"]  # e.g. "Samus" or "Link"
         # the path to this sprite's subfolder in resources
         self.resource_subpath = my_subpath
+        print(self.resource_subpath)
+        self.console_id, self.game_id, _ = self.resource_subpath.split("/")
         self.internal_name = manifest_dict["folder name"]
         if sprite_name == "":
             sprite_name = self.internal_name
@@ -608,7 +610,7 @@ class SpriteParent():
         palette_doc += header
 
         if fmt == "aspr":
-          for paletteID in ["green","blue","red","bunny","gloves"]:
+          for paletteID in ["green_mail","blue_mail","red_mail","bunny_mail","gloves"]:
             palette_doc.append(f"{paletteID}:")
             if paletteID != "gloves":
               palette_doc.append(f"    col0: " + str((0,0,0)))
@@ -633,6 +635,28 @@ class SpriteParent():
             palette_doc.append("FFFFFFFF")
 
         palette_doc += footer
+
+        if fmt == "vibeviewer":
+          palettes = []
+          for paletteID in ["green_mail","blue_mail","red_mail","bunny_mail"]:
+            palette = self.get_palette([paletteID])
+            this_palette = []
+            if len(palette) < 16:
+              for i in range(len(palette), 16):
+                this_palette.append(common.html_color((0,0,0)))
+            for _, color in enumerate(palette):
+              this_palette.append(common.html_color(color))
+            palettes.append(this_palette)
+
+            palette_doc = {
+              "source": "VibeViewer",
+              "format": self.console_id,
+              "paletteCount": len(palettes),
+              "colorsPerPalette": len(palettes[0]),
+              "activePaletteIndex": 0,
+              "palettes": palettes
+            }
+            palette_doc = json.dumps(palette_doc, indent=2).split("\n")
 
         with(open(filename, "w")) as palettes_file:
           palettes_file.write("\n".join(palette_doc))

@@ -520,6 +520,11 @@ class SpriteSomethingMainFrame(tk.Frame):
                   self.fish.translate("meta","menu","export.palette-tileshop"),
                   "palette-tileshop",
                   partial(self.export_palette,"tileshop")
+              ),
+              (
+                  self.fish.translate("meta","menu","export.palette-vibeviewer"),
+                  "palette-vibeviewer",
+                  partial(self.export_palette,"vibeviewer")
               )
             ]
         )
