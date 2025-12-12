@@ -1,0 +1,151 @@
+{
+    "border_color": [
+        0,
+        0,
+        127,
+        255
+    ],
+    "border_size": 0,
+    "layout": [
+        [
+            "walkDown",
+            "walkDown1",
+            "walkDown2",
+            "walkUp",
+            "walkUp1",
+            "walkUp2",
+            "walkLeft",
+            "walkLeft1"
+        ],
+        [
+            "walkLeft2",
+            "poison",
+            "attackPhys",
+            "hurt",
+            "battleIdle",
+            "attackRH",
+            "attackLH",
+            "victory"
+        ],
+        [
+            "castLeft",
+            "castLeft1",
+            "downed",
+            "blinkDown",
+            "winkDown",
+            "blinkLeft",
+            "confusedDown",
+            "confusedUp"
+        ],
+        [
+            "angry",
+            "helloDown",
+            "helloDown1",
+            "helloUp",
+            "helloUp1",
+            "laugh",
+            "laugh1",
+            "fright"
+        ],
+        [
+            "scowlDown",
+            "scowlUp",
+            "scowlLeft",
+            "sideEye",
+            "wagFinger",
+            "wagFinger1",
+            "secretPose",
+            "tent"
+        ],
+        [
+            "chocoboRideLeft",
+            "chocoboRideLeft1",
+            "dead",
+            "null_block"
+        ],
+        [
+            "full_sheet"
+        ]
+    ],
+    "images": {
+        "walkDown": {
+            "dimensions": [
+                0,
+                0,
+                16,
+                24
+            ]
+        },
+        "walkDown1":    { "parent": "walkDown" },
+        "walkDown2":    { "parent": "walkDown" },
+        "walkUp":       { "parent": "walkDown" },
+        "walkUp1":      { "parent": "walkUp" },
+        "walkUp2":      { "parent": "walkUp" },
+        "walkLeft":     { "parent": "walkDown" },
+        "walkLeft1":    { "parent": "walkLeft" },
+
+        "walkLeft2":    { "parent": "walkLeft" },
+        "poison":       { "parent": "walkDown" },
+        "attackPhys":   { "parent": "walkDown" },
+        "hurt":         { "parent": "walkDown" },
+        "battleIdle":   { "parent": "walkDown" },
+        "attackRH":     { "parent": "walkDown" },
+        "attackLH":     { "parent": "walkDown" },
+        "victory":      { "parent": "walkDown" },
+
+        "castLeft":     { "parent": "walkDown" },
+        "castLeft1":    { "parent": "castLeft" },
+        "downed":       { "parent": "walkDown" },
+        "blinkDown":    { "parent": "walkDown" },
+        "winkDown":     { "parent": "walkDown" },
+        "blinkLeft":    { "parent": "walkDown" },
+        "confusedDown": { "parent": "walkDown" },
+        "confusedUp":   { "parent": "walkDown" },
+
+        "angry":        { "parent": "walkDown" },
+        "helloDown":    { "parent": "walkDown" },
+        "helloDown1":   { "parent": "helloDown" },
+        "helloUp":      { "parent": "walkDown" },
+        "helloUp1":     { "parent": "helloUp" },
+        "laugh":        { "parent": "walkDown" },
+        "laugh1":       { "parent": "laugh" },
+        "fright":       { "parent": "walkDown" },
+
+        "scowlDown":    { "parent": "walkDown" },
+        "scowlUp":      { "parent": "walkDown" },
+        "scowlLeft":    { "parent": "walkDown" },
+        "sideEye":      { "parent": "walkDown" },
+        "wagFinger":    { "parent": "walkDown" },
+        "wagFinger1":   { "parent": "wagFinger" },
+        "secretPose":   { "parent": "walkDown" },
+        "tent":         { "parent": "walkDown" },
+
+        "chocoboRideLeft":  { "parent": "walkDown" },
+        "chocoboRideLeft1": { "parent": "chocoboRideLeft" },
+        "dead": {
+            "dimensions": [
+                0,
+                0,
+                24,
+                24
+            ]
+        },
+        "null_block": {
+            "dimensions": [
+                0,
+                0,
+                72,
+                24
+            ]
+        },
+
+        "full_sheet": {
+            "dimensions": [
+                0,
+                0,
+                128,
+                144
+            ]
+        }
+    }
+}

@@ -1,0 +1,216 @@
+{
+    "Stand": {
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "walkDown1" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "walkLeft1" } ] }
+        ],
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "walkLeft1", "flip": "h" } ] }
+        ],
+        "up": [
+            { "frames": 20, "tiles": [ { "image": "walkUp1" } ] }
+        ]
+    },
+    "Walk": {
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "walkDown1" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkDown" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkDown1" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkDown2" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "walkLeft1" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkLeft" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkLeft1" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkLeft2" } ] }
+        ],
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "walkLeft1", "flip": "h" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkLeft", "flip": "h" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkLeft1", "flip": "h" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkLeft2", "flip": "h" } ] }
+        ],
+        "up": [
+            { "frames": 20, "tiles": [ { "image": "walkUp1" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkUp" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkUp1" } ] },
+            { "frames": 20, "tiles": [ { "image": "walkUp2" } ] }
+        ]
+    },
+    "Poison": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "poison" } ], "palette": "poison" }
+        ]
+    },
+    "Low Health": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "poison" } ] }
+        ]
+    },
+    "Physical Attack": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "attackPhys", "flip": "h" } ] },
+            { "frames": 20, "tiles": [ { "image": "attackRH", "flip": "h" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "attackPhys" } ] },
+            { "frames": 20, "tiles": [ { "image": "attackLH" } ] }
+        ]
+    },
+    "Hurt": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "hurt", "flip": "h" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "hurt" } ] }
+        ]
+    },
+    "Battle Idle": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "battleIdle", "flip": "h" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "battleIdle" } ] }
+        ]
+    },
+    "Victory": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "walkLeft1", "flip": "h" } ] },
+            { "frames": 20, "tiles": [ { "image": "victory", "flip": "h" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "walkLeft1" } ] },
+            { "frames": 20, "tiles": [ { "image": "victory" } ] }
+        ]
+    },
+    "Cast": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "castLeft", "flip": "h" } ] },
+            { "frames": 20, "tiles": [ { "image": "castLeft1", "flip": "h" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "castLeft" } ] },
+            { "frames": 20, "tiles": [ { "image": "castLeft1" } ] }
+        ]
+    },
+    "Downed": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "downed", "flip": "h" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "downed" } ] }
+        ]
+    },
+    "Confused": {
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "victory" } ] },
+            { "frames": 20, "tiles": [ { "image": "confusedDown" } ] },
+            { "frames": 20, "tiles": [ { "image": "victory", "flip": "h" } ] },
+            { "frames": 20, "tiles": [ { "image": "confusedUp" } ] }
+        ]
+    },
+    "Blink": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "walkLeft1", "flip": "h" } ] },
+            { "frames": 20, "tiles": [ { "image": "blinkLeft", "flip": "h" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "walkLeft1" } ] },
+            { "frames": 20, "tiles": [ { "image": "blinkLeft" } ] }
+        ],
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "walkDown1" } ] },
+            { "frames": 20, "tiles": [ { "image": "blinkDown" } ] }
+        ]
+    },
+    "Wink": {
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "walkDown1" } ] },
+            { "frames": 20, "tiles": [ { "image": "winkDown" }]}
+        ]
+    },
+    "Angry": {
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "angry" } ] }
+        ]
+    },
+    "Hello": {
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "helloDown" } ] },
+            { "frames": 20, "tiles": [ { "image": "helloDown1" } ] }
+        ],
+        "up": [
+            { "frames": 20, "tiles": [ { "image": "helloUp" } ] },
+            { "frames": 20, "tiles": [ { "image": "helloUp1" } ] }
+        ]
+    },
+    "Laugh": {
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "laugh" } ] },
+            { "frames": 20, "tiles": [ { "image": "laugh1" } ] }
+        ]
+    },
+    "Fright": {
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "fright" } ] }
+        ]
+    },
+    "Scowl": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "scowlLeft", "flip": "h" } ] }
+        ],
+        "up": [
+            { "frames": 20, "tiles": [ { "image": "scowlUp" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "scowlLeft" } ] }
+        ],
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "scowlDown" } ] }
+        ]
+    },
+    "Side Eye": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "sideEye", "flip": "h" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "sideEye" } ] }
+        ]
+    },
+    "Finger Wag": {
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "wagFinger" } ] },
+            { "frames": 20, "tiles": [ { "image": "wagFinger1" } ] }
+        ]
+    },
+    "Unused Pose": {
+        "down": [
+            { "frames": 20, "tiles": [ { "image": "secretPose" } ] }
+        ]
+    },
+    "Tent": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "tent" } ] }
+        ]
+    },
+    "Chocobo Ride": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "chocoboRideLeft", "flip": "h" } ] },
+            { "frames": 20, "tiles": [ { "image": "chocoboRideLeft1", "flip": "h" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "chocoboRideLeft" } ] },
+            { "frames": 20, "tiles": [ { "image": "chocoboRideLeft1" } ] }
+        ]
+    },
+    "Dead": {
+        "right": [
+            { "frames": 20, "tiles": [ { "image": "dead", "flip": "h" } ] }
+        ],
+        "left": [
+            { "frames": 20, "tiles": [ { "image": "dead" } ] }
+        ]
+    }
+}
