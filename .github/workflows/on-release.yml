@@ -9,8 +9,8 @@ on:
 #########
 # actions
 #########
-# actions/checkout@v4.2.1
-# actions/setup-python@v5.2.0
+# actions/checkout@v6.0.2
+# actions/setup-python@v6.2.0
 
 # stuff to do
 jobs:
@@ -35,10 +35,10 @@ jobs:
     steps:
       # checkout commit
       - name: ✔️Checkout commit
-        uses: actions/checkout@v4.2.1
+        uses: actions/checkout@v6.0.2
       # install python
       - name: 💿Install python
-        uses: actions/setup-python@v5.2.0
+        uses: actions/setup-python@v6.2.0
         with:
           python-version: ${{ matrix.python-version }}
           architecture: "x64"

@@ -27,8 +27,6 @@ def get_upx():
     UPX_DIR = os.path.join(".", "upx")
     if "osx" not in env["OS_NAME"]:
         if not os.path.isdir(UPX_DIR):
-            # get env vars
-            env = common.prepare_env()
             # set up download url
             UPX_VERSION = os.getenv("UPX_VERSION") or str(
                 CI_SETTINGS["common"]["get_upx"]["version"])

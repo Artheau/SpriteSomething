@@ -3,6 +3,7 @@
 
 import json
 import os   # for env vars
+import platform
 import stat  # file statistics
 import sys  # default system info
 from json.decoder import JSONDecodeError
@@ -62,6 +63,27 @@ def file_size(file_path):
         file_info = os.stat(file_path)
         return convert_bytes(file_info.st_size)
     return 0
+
+
+def get_dist():
+    dist = ""
+    try:
+        dist = platform.dist()
+    except:
+        dist = "N/A"
+    if dist == "N/A":
+        try:
+            dist = platform.linux_distribution()
+        except:
+            dist = "N/A"
+    if dist == "N/A":
+        try:
+            dist = platform.platform().split("-")
+            if "ubuntu" in dist or "Ubuntu" in dist:
+                dist = dist[-1]
+        except:
+            dist = "N/A"
+    return dist
 
 
 def prepare_env():
@@ -143,13 +165,14 @@ def prepare_env():
         OS_NAME = "windows"
     elif "darwin" in OS_NAME:
         OS_NAME = "osx"
-    elif "linux2" in OS_NAME:
+    elif "linux" in OS_NAME:
         OS_NAME = "linux"
 
     if '-' in OS_NAME:
         OS_VERSION = OS_NAME[OS_NAME.find('-')+1:]
         OS_NAME = OS_NAME[:OS_NAME.find('-')]
         if OS_NAME in ("linux", "ubuntu"):
+            OS_DIST = get_dist()
             if OS_VERSION in UBUNTU_VERSIONS:
                 OS_VERSION = UBUNTU_VERSIONS[OS_VERSION]
             OS_DIST = OS_VERSION
