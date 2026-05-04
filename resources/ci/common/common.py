@@ -69,16 +69,19 @@ def get_dist():
     dist = ""
     try:
         dist = platform.dist()
+        print(dist)
     except:
         dist = "N/A"
     if dist == "N/A":
         try:
             dist = platform.linux_distribution()
+            print(dist)
         except:
             dist = "N/A"
     if dist == "N/A":
         try:
             dist = platform.platform().split("-")
+            print(dist)
             if "ubuntu" in dist or "Ubuntu" in dist:
                 dist = dist[-1]
         except:

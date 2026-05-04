@@ -12,7 +12,10 @@ except ImportError as e:
     hasUTC = False
 
 if "windows" in platform.system().lower():
-  import pkg_resources
+  try:
+    import pkg_resources
+  except:
+    pass
 
 def diagpad(inbound):
   return inbound.ljust(len("SpriteSomething Version") + 5,'.')
